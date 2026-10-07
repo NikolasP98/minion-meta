@@ -1335,13 +1335,18 @@ without parser context.
 
 ### Final receipts
 
-The authoritative manifest is `readiness-notification-s5-source-2026-10-07.sha256` (v3), self-SHA-256
-`3d05d85990585beb499b3b085f80de035a3aff8e77129df25bf07f72af8f5109`, **50 paths**, verified 50 of 50
-against the worktree. v3 supersedes v2, which listed 49 paths and was **short by one**: see
-"Manifest curation shipped an incomplete file set" below. At those exact bytes:
+The authoritative manifest is `readiness-notification-s5-source-2026-10-07-v4.sha256` (v4), self-SHA-256
+`94194af3c323ddee...`, **50 paths**, verified 50 of 50 against the worktree. v4 supersedes v3 (same
+50 paths, one file's bytes changed) after the hosted lane found a second real defect; v3 superseded
+v2, which listed 49 paths and was **short by one**. Both earlier manifests are retained as published
+rather than rewritten, because a frozen manifest's bytes are themselves a receipt. See "Manifest
+curation shipped an incomplete file set" and "Unbounded work under a bounded budget" below. At these
+exact bytes:
 
 - combined CI-shaped lane, re-run against a freshly provisioned cluster: 18 files, 298 tests, 298
-  passed, 0 failed, 0 pending, 322s, validated as `{files:18, passed:298, skipped:0}`;
+  passed, 0 failed, 0 pending, 320s, validated as `{files:18, passed:298, skipped:0}`;
+- the **hosted** lane on the same bytes: 18 files, 298 tests, 298 passed, 0 failed, 0 skipped, 3m54s
+  — this is the qualification that matters, because neither defect below reproduced locally;
 - focused units: 8 files, 33 passed (30 before, plus the three new ordering regressions);
 - configured Hub check: 11,698 files, 0 errors, 0 warnings, 0 files with problems;
 - Prettier check clean across all 49 TypeScript/JSON paths, and `git diff --check` clean.
@@ -1384,6 +1389,44 @@ Two properties hid it, and both are the generalizable lesson:
    file already exists on `master` and every specifier resolved. v3 is therefore derived mechanically
    from `git diff --name-only $(git merge-base origin/master HEAD) HEAD`; the path set is now a
    projection of the branch rather than an assertion about it.
+
+### Unbounded work under a bounded budget
+
+The hosted lane found a second defect after the first fix landed, in this slice's own fixture
+`tests/fixtures/notification-audience/limit-cases.ts`. Only `audience-projection` failed, 7 of its 23
+cases, all clustered just past the projection transaction's `statement_timeout` of 10s.
+
+The 10,001-recipient case ran its index-negative control as `explain (analyze,buffers,format json)`
+over a deliberately **unindexed** authority query with roughly 20,000 `organization_members` rows,
+inside a probe that sets the same 10s budget the real projection uses. That is unbounded work
+measured against a bounded budget: about 5s of the case's 9s locally, which is 90% of budget with no
+headroom, and past the limit on a hosted runner, where the case took 13.6s and failed.
+
+Its failure then poisoned the suite. The dropped `idx_org_members_org` was restored only inside a
+`finally` block, so when that path did not complete the index stayed missing and every later case
+that reads the authority bundle exceeded the same 10s budget — six further failures with nothing
+wrong in them.
+
+What identified the cause as leaked state rather than slow hardware: cases 20 and 22 kept passing in
+under 200ms, and they are the only two that never read the authority bundle. Hardware slows
+everything; a missing index slows one path. The hosted runner was also measurably **faster** than the
+development machine on the pure-bulk 10,000-recipient case (4.0s against 6.4s), which rules out a
+capacity explanation outright.
+
+Two corrections, each removing a cause rather than widening a limit:
+
+- the probe asserts plan **shape** only — source sequential scans and chosen index names — so it now
+  runs `explain (format json)` and never executes the unindexed query. The case drops from 9021ms to
+  3734ms locally and 5292ms hosted, and the production 10s budget is left untouched everywhere. A
+  spec'd production bound is not a knob for making a test pass.
+- the index drop and the probe share one transaction that always rolls back, so PostgreSQL restores
+  the index itself. PostgreSQL DDL is transactional, so there is no cleanup statement whose own
+  failure can leave the index missing, and the case now asserts it is present afterwards.
+
+One method note for anyone validating this lane: running `audience-projection` alone is **not** a
+reproduction. In isolation it fails with a third, unrelated error from `setOutboxPlanState`
+(`notification_outbox_check`), because the suite depends on state the lane establishes. Validate
+through the full 18-file lane only.
 
 ### Combined CI-shaped lane
 
