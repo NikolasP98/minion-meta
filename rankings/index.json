@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T10:51:56.072Z",
+	"generatedAt": "2026-10-07T11:21:19.855Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20961,6 +20961,38 @@
 			"scoredAt": "2026-10-06T05:26:20.196Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged bugfix commit shown as deploy health with no indication of ongoing issues needing action.",
+			"evidence": [
+				"fix(nitter): serialize persistence and drain shutdown (#295)",
+				"status: unknown, tags: deployment only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T11:21:19.725Z"
+		},
+		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28989,20 +29021,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 5,
 				"implementation": 2
 			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The diagnosis indicates a possible recurring infra exec failure (exit-126/turns=0) that warrants monitoring before treating as actionable work.",
+			"rationale": "The quoted diagnosis indicates the underlying reconcile pipeline succeeded and the exit-126/turns=0 failure is a transient infra/runner exec issue recommended for simple retry, not a task needing a ranked goal.",
 			"evidence": [
-				"exit-126 with turns=0 for the claude provider process",
-				"recommendation: retry as-is, escalate only if recurring"
+				"reconcile pipeline itself completed its work",
+				"Recommendation: retry the run as-is",
+				"exit-126 with turns=0 ... infra/provider fault, not a task failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T10:53:57.340Z"
+			"scoredAt": "2026-10-07T11:21:19.725Z"
 		},
 		{
 			"key": "issue:minion-meta#575",
