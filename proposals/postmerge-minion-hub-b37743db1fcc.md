@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-b37743db1fcc
 title: "Post-merge finding — scan-gap in supabase/migrations/20261003170000_notification_audience_projection.sql (minion_hub)"
-status: draft
+status: review
 created: 2026-10-07
 updated: 2026-10-07
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `supabase/migrations/20261003170000_notification_audience_projection.sql`

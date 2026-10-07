@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-e73000965c43
 title: "Post-merge finding — scan-gap in src/lib/money/decimal-oracle.py (minion_hub)"
-status: draft
+status: review
 created: 2026-10-05
-updated: 2026-10-05
+updated: 2026-10-07
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `src/lib/money/decimal-oracle.py`
