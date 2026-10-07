@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-93789f3a94af
 title: "Post-merge finding — todo-handoff in src/lib/components/agents/AgentSettingsPanel.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-07
 updated: 2026-10-07
 repos: [minion-hub]
