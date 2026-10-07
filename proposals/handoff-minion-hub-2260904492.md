@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2260904492
 title: Handoff marker — src/lib/components/flow-editor/FlowExports.svelte (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-13ff7afd0042
 created: 2026-10-07
 updated: 2026-10-07
 repos: [minion-hub]
@@ -28,3 +29,12 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/flow-editor/FlowExports.svelte:30` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/flow-editor/FlowExports.svelte#L30
+
+## Reconciliation merge — 2026-10-07
+
+Mechanical duplicate of `postmerge-minion-hub-13ff7afd0042`, which quotes the
+identical `TODO(handoff): HC-040 — give agents/autonomous/[id]/+page.server.ts
+a depends()` marker at the same file/line. No unique content beyond the
+canonical finding. HC-040 is also already tracked by the approved proposal
+`2026-10-03-readiness-flow-export-ownership`. Tombstoned as merged; the
+canonical (`approved`) proposal is left untouched.

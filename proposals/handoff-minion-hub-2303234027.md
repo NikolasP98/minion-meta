@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2303234027
 title: Handoff marker — src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)
-status: draft
+status: review
+duplicate_candidate: postmerge-minion-hub-310f268c7aca
 created: 2026-09-16
 updated: 2026-10-07
 repos: [minion-hub]
@@ -32,3 +33,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L307
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:311` — the plan button is gated on pos:create, but server-side
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L311
+
+## Reconciliation note — 2026-10-07
+
+Two of the three markers above are verbatim duplicates of markers already
+quoted in existing `approved` proposals: line 303 ("the drawer still shows no
+LINKED POS TICKETS — spec §4.1") matches `postmerge-minion-hub-310f268c7aca`
+exactly, and line 307 ("spec §4.1 also lists reschedule...") matches
+`postmerge-minion-hub-2164a4547ea3` exactly. Not merged: the line 311 marker
+("the plan button is gated on pos:create, but server-side") is NOT covered by
+either existing proposal and is unique content. Flagged for human review
+rather than merged/closed outright; both candidate targets are `approved` and
+left untouched.
