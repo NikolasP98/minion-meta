@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T20:21:40.011Z",
+	"generatedAt": "2026-10-07T20:51:38.308Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18599,19 +18599,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 4
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "An automated infra-fault report (exit-126, turns=0) suggesting a transient runner issue that needs a human spot-check before further automation changes.",
+			"rationale": "Single transient infra-fault alert (agent exit-126, turns=0) needs human runner inspection to confirm recurrence before it becomes bounded dev work.",
 			"evidence": [
-				"claude-provider reconcile agent step exited 126 with turns=0",
-				"Recommendation: retry the run; add host-classifier signature if recurring"
+				"reconcile pipeline itself completed normally (599 proposals, branch pushed)",
+				"exit-126/turns=0 flagged as likely transient exec/permission runner fault, not a task-logic failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T20:24:02.628Z"
+			"scoredAt": "2026-10-07T20:51:38.161Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -20609,6 +20609,39 @@
 			"scoredAt": "2026-10-05T04:51:20.674Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c371d6639113",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "0706e420210c0b31a559be2122b366b36922bfdaa6e0aa279bbc94424f8ae350",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, narrowly-scoped TODO(handoff) dead-code finding with a clear definition of done and concrete fix directions.",
+			"evidence": [
+				"TODO(handoff): startBackupScheduler() has no call site anywhere in src/",
+				"status: approved",
+				"diagnosis includes concrete fix-direction steps and a definition of done"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T20:51:38.161Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d57706ece661",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22523,41 +22556,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T05:21:59.724Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c371d6639113",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "0706e420210c0b31a559be2122b366b36922bfdaa6e0aa279bbc94424f8ae350",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-meta-221859101"
-			],
-			"rationale": "A well-scoped, approved post-merge finding on dead/unwired backup-scheduler code with a clear diagnosis and fix direction.",
-			"evidence": [
-				"status: approved",
-				"TODO(handoff): startBackupScheduler() has no call site anywhere in src/",
-				"Fix direction: search references, wire call or remove file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T20:24:02.628Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c91882e7ec6a",
@@ -25112,6 +25110,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T16:51:42.501Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Deployment-health entry only surfaces a past commit message about an already-applied nitter fix with no described current deployment problem.",
+			"evidence": [
+				"summary is a commit log for 'serialize persistence and drain poller shutdown'",
+				"status: unknown, no explicit health issue stated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T20:51:38.161Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
