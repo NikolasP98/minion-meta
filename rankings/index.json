@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-07T06:53:00.441Z",
+	"generatedAt": "2026-10-07T07:22:01.860Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5640,8 +5640,8 @@
 			"repo": "minion_hub",
 			"title": "#437 fix(ui): readiness accessibility batch — mentions, overlays, calendar toolbar, date-range menu, role=button keys",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/437",
-			"sourceUpdatedAt": "2026-10-07T06:35:44Z",
-			"sourceFingerprint": "16751cf69f518f40155280be08af3672ef8d3e1e48a3db2e6be98dddda670c6f",
+			"sourceUpdatedAt": "2026-10-07T07:11:42Z",
+			"sourceFingerprint": "ae6fd14fefd7fd07298a64cdb4099c0c3b37a115a838c13bb216fbfd2c004d01",
 			"score": 56,
 			"band": "medium",
 			"axes": {
@@ -5650,25 +5650,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 9,
+				"implementation": 9
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"spec:2026-10-07-readiness-calendar-toolbar-coarse-pointer-spec",
-				"spec:2026-10-07-readiness-date-range-menu-keyboard-spec",
-				"proposal:2026-10-07-hub-readiness-ui-a11y-followups"
-			],
-			"rationale": "Well-evidenced accessibility fix batch with per-commit contracts and tests, draft only until the final HC-027 commit lands.",
+			"relatedKeys": [],
+			"rationale": "All five accessibility findings landed with per-finding contracts, failing-then-passing tests, and passing gates, leaving only merge/review as the remaining step.",
 			"evidence": [
-				"28 mounted + 63 native Chromium checks for HC-028",
-				"480/480 contrast pairs pass after HC-043 fix",
-				"draft until HC-027 lands"
+				"five findings (HC-043, HC-028, UI-002, HC-029, HC-027) each landed with a spec-hc0xx contract",
+				"lint:design/tokens and svelte-check gates passed per commit"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T06:52:29.491Z"
+			"scoredAt": "2026-10-07T07:22:01.687Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -7786,40 +7781,6 @@
 			"scoredAt": "2026-10-02T19:54:03.387Z"
 		},
 		{
-			"key": "proposal:2026-09-30-hub-appointment-services-table-price",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "New-appointment services table — Price column has no data source",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-appointment-services-table-price.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "83e14460c7d18986024bfc840dbb423daa6bfc52d7ee63893c1d817ed42e9305",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2746481724"
-			],
-			"rationale": "Appointment price column is unpopulated with a clear, bounded join fix already identified.",
-			"evidence": [
-				"Price column always renders '—' via formatMoney(undefined)",
-				"TODO(handoff) names the fix direction: join on productId in listEventTypes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:54:08.238Z"
-		},
-		{
 			"key": "proposal:2026-10-03-readiness-nightly-ci-outcome",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8575,41 +8536,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:59:35.856Z"
-		},
-		{
-			"key": "proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Stock items — MOQ, Group and Reorder qty become custom columns (core schema keeps only what logic reads)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-stock-item-optional-fields-to-custom-columns.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "0b48c2f71c5753ac0b71593e43882ec062e58cea4aab7a4363619e853e843b01",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-379939979",
-				"proposal:postmerge-minion-hub-6200323e3d73"
-			],
-			"rationale": "Schema-cleanup work is already substantially implemented across two branches with a documented follow-up to drop the read-only columns.",
-			"evidence": [
-				"Part 1 (5cc6ae6d) and Part 2 (cdbd69e0) implemented on feat/stock-optional-fields-custom",
-				"migration script planOrgBackfill has dry-run + apply modes with tests"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:54:08.238Z"
 		},
 		{
 			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
@@ -11843,38 +11769,6 @@
 			"scoredAt": "2026-10-04T00:21:10.403Z"
 		},
 		{
-			"key": "proposal:2026-09-29-hub-table-filters-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Table toolbar + Notion-style filters — open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "fa7c95518037b5adec5e75e0d6a74e2113811c8eb06feda350127eb0afa9e900",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Well-documented ledger of seven remaining UI follow-ups but bundles unrelated scoped items that should be split before execution.",
-			"evidence": [
-				"ledger lists 8 numbered items, one already closed 2026-09-29",
-				"spans persistence, group-by, editor, and schema follow-ups across multiple files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-30T06:54:08.238Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b9ec3f0147a5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14810,6 +14704,38 @@
 			"scoredAt": "2026-10-05T11:59:35.856Z"
 		},
 		{
+			"key": "proposal:2026-09-30-hub-appointment-services-table-price",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "New-appointment services table — Price column has no data source",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-appointment-services-table-price.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "83e14460c7d18986024bfc840dbb423daa6bfc52d7ee63893c1d817ed42e9305",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The price gap and its fix are precisely identified with a stated scope check, making this an actionable, bounded piece of work.",
+			"evidence": [
+				"Price column always renders '—' per TODO(handoff) in AppointmentForm.svelte",
+				"fix path named: join schedEventTypes to its sellable/product inside listEventTypes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:22:01.687Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-3219321730",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17495,6 +17421,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T03:21:43.070Z"
+		},
+		{
+			"key": "proposal:2026-09-29-hub-table-filters-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Table toolbar + Notion-style filters — open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "fa7c95518037b5adec5e75e0d6a74e2113811c8eb06feda350127eb0afa9e900",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This ledger bundles eight open ends of very different scope and urgency (one already closed), so it needs triage into individually scoped goals before any single one can be executed.",
+			"evidence": [
+				"item 3 already closed 2026-09-29 while items 1,2,4-8 remain open",
+				"items range from server-mode filter parsing to dropped schema columns"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:22:01.687Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-2877399286",
@@ -23684,6 +23642,38 @@
 			"scoredAt": "2026-10-06T08:51:33.396Z"
 		},
 		{
+			"key": "proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Stock items — MOQ, Group and Reorder qty become custom columns (core schema keeps only what logic reads)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-stock-item-optional-fields-to-custom-columns.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "0b48c2f71c5753ac0b71593e43882ec062e58cea4aab7a4363619e853e843b01",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Parts 1 and 2 of this migration already landed and were pushed, leaving only a low-urgency deferred column drop pending prod backfill verification.",
+			"evidence": [
+				"commits 5cc6ae6d and cdbd69e0 already implemented and pushed",
+				"TODO(handoff) to drop the three DB columns once the prod backfill is verified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:22:01.687Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2437241475",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25690,39 +25680,6 @@
 			"scoredAt": "2026-10-01T18:24:01.690Z"
 		},
 		{
-			"key": "run:minion_site#31686953033",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_site",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/actions/runs/31686953033",
-			"sourceUpdatedAt": "2026-09-12T09:31:54Z",
-			"sourceFingerprint": "fd33d67a9bcb040c710991818cff95818ec5463761e5c0012f15091f3395c7b6",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI run failure is recorded but with no error detail, scope, or recency pressure to act on.",
-			"evidence": [
-				"status: failure",
-				"pull_request_review_comment on dev",
-				"updatedAt 2026-09-12, over three weeks stale"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T17:51:24.632Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27176,6 +27133,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T06:15:43.007Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry just points at an already-merged commit fixing nitter persistence/shutdown, with no further open goal stated.",
+			"evidence": [
+				"commit b841c367 already merged",
+				"status is unknown with no stated remaining goal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-07T07:22:01.687Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
