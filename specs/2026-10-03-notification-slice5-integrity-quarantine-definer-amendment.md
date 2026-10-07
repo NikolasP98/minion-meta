@@ -1,12 +1,12 @@
 ---
 id: 2026-10-03-notification-slice5-integrity-quarantine-definer-amendment
 title: Preserve private terminal rows while quarantining exact live notification claims
-stage: spec
-status: approved
+stage: dev
+status: implementing
 pass: 2
 verdict: approved
 created: 2026-10-03
-updated: 2026-10-03
+updated: 2026-10-05
 repos: [minion_hub]
 tags: [security, data, logic, test]
 type: fix
@@ -85,7 +85,7 @@ exact frozen amendment and recon pair.
 4. `withNotificationWorkerTransaction` currently initializes generation but does not initialize
    scope mode, event ID or quarantine reason. An absent-setting rejection would therefore reject
    ordinary one-event and claim-page calls unless the shared initializer joins this delta.
-5. `claimOneProjectionEvent` uses a separate dedicated transaction. Its setup initializes scope
+5. ``claimOne` (named ``claimOne`` in earlier drafts)` uses a separate dedicated transaction. Its setup initializes scope
    mode, event ID and generation, but not quarantine reason, before sending a malformed claimed
    event to the same quarantine function. It must join the caller delta independently of the shared
    worker wrapper.
@@ -202,7 +202,7 @@ reason to empty strings in the same transaction-local setup statement that insta
 organization, owner and finite timeouts. Commit, rollback, timeout and pooled-connection reuse must
 all leave no setting from the previous callback.
 
-`claimOneProjectionEvent` retains its distinct dedicated transaction and initializes
+``claimOne`` retains its distinct dedicated transaction and initializes
 `app.notification_quarantine_reason` to the empty string in the same setup statement that installs
 `projection_claim`, clears event/generation, installs finite timeouts and binds runtime/org scope.
 Its success, rollback, timeout and pooled-connection reuse behavior has the same four-setting
@@ -300,7 +300,7 @@ before runtime lease acquisition.
    callback starts from the four canonical initialized values.
 9. Exercise every production quarantine caller: one-event settlement and claim-page quarantine
    through `withNotificationWorkerTransaction`, plus malformed projection quarantine through the
-   distinct `claimOneProjectionEvent` transaction. For each, prove success, rollback, timeout and
+   distinct ``claimOne`` transaction. For each, prove success, rollback, timeout and
    physical pool reuse begin and end with the exact four canonical settings and never inherit the
    prior claim's reason.
 
@@ -349,3 +349,49 @@ receipts, cleanup receipts, and a configured Hub check with zero diagnostics.
 
 This amendment authorizes no production migration, merge, release, external notification or data
 write. Those remain separate human-gated actions after local source acceptance.
+
+## 6. Implementation record — 2026-10-05
+
+Recorded on resumption of the paused readiness program. This section adds no invariant and grants no
+release authority; §5 still governs acceptance.
+
+Of the §5 acceptance requirements, the following are now satisfied at current bytes:
+
+- Both review passes on the frozen amendment and recon, and implementation review, were completed
+  before the pause and their receipts are retained in the checkpoint.
+- The focused quarantine native lane passed 13 of 13.
+- The combined CI-shaped lane now passes without skips: 18 files, 298 tests, 298 passed, 0 failed, 0
+  pending, validated by `scripts/qc/jobs-postgres-contract.ts` as `{files:18, passed:298,
+  skipped:0}`. The quarantine cases run inside that lane, so they are qualified in combination and
+  not only in isolation.
+- Actual PostgreSQL 17.6 runner receipts (`ok:true`, 17 migrations applied, zero pending) and the
+  pinned PostgreSQL 18 full-migration receipt (10 of 10) are retained, including the injected
+  rollback markers and the fresh-connection catalog recheck.
+- Cleanup receipts confirm zero child databases, zero `qc_%` fixture schemas, zero transient
+  notification roles, zero fixture sessions, zero containers and zero production writes.
+
+The configured Hub check also passes at final formatted bytes: 11,698 files, 0 errors, 0 warnings.
+`tests/fixtures/notification-scheduler/authority-cases.ts` and the outbox/scheduler sources this
+amendment touches were format-qualified on 2026-10-05 (quote style and array wrapping only) and the
+combined lane was rerun on those exact bytes, so the receipt is final-byte proof rather than
+inherited.
+
+The independent blast-radius review is complete; its verdict and the three corrections it produced
+are recorded in the parent spec's implementation record. Two items touch this amendment directly:
+
+- The premise that the scheduler fixture's routing compatibility step was written after the last
+  review pass was wrong. `tests/fixtures/notification-scheduler/postgres-harness.ts` hashes
+  identically in the 2026-10-03 and 2026-10-05 manifests (`b40d12b8…`), so it predates the pause.
+- §2.4, §4.1.9 and the DELTA named the caller `claimOneProjectionEvent`; the implemented identifier
+  is `claimOne` (`src/server/services/notifications/projection/projector.ts`). The references above
+  are corrected to the real name. The substantive requirement is unchanged and satisfied: that
+  distinct transaction initializes all four managed settings, including
+  `app.notification_quarantine_reason`.
+
+The review also confirmed, against this amendment's §2.3 and §4.1.1, that terminal owner and
+generation are carried correctly even though the definer's `UPDATE` does not set those columns and
+the owner holds no `UPDATE` grant on them: the `BEFORE` row guard writes them after validating that
+the incoming values are null, and the `WITH CHECK` then validates them.
+
+The boundary in §5 is unchanged: no production migration, merge, release, external notification or
+data write is authorized here.
