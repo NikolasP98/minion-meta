@@ -18,8 +18,8 @@ source: readiness-ui-a11y-batch-2026-10-07
 The 2026-10-07 readiness batch (hub draft PR
 [#437](https://github.com/NikolasP98/minion_hub/pull/437) on `fix/readiness-hub-ui-a11y`;
 gateway PR [#296](https://github.com/NikolasP98/minion-ai/pull/296) on `fix/readiness-gateway`)
-closed five findings from `2026-10-02-hub-gateway-production-readiness-recon` and left 13
-`TODO(handoff)` markers plus four unmarked open ends behind. Per AGENTS.md's open-items ledger
+closed six findings from `2026-10-02-hub-gateway-production-readiness-recon` and left 13
+`TODO(handoff)` markers plus ten unmarked open ends behind. Per AGENTS.md's open-items ledger
 rule every one of them must be written down here or it never gets fixed. This proposal is that
 ledger; it authorizes no change by itself.
 
@@ -31,6 +31,7 @@ Specs this ledger closes the loop for:
 | `2026-10-07-readiness-overlay-dialog-contract-spec` | HC-028 | hub `4fa49266` | #437 |
 | `2026-10-07-readiness-calendar-toolbar-coarse-pointer-spec` | UI-002 | hub `0823c93c` | #437 |
 | `2026-10-07-readiness-date-range-menu-keyboard-spec` | HC-029 | hub `821801d5` | #437 |
+| `2026-10-07-readiness-role-button-keyboard-spec` | HC-027 | hub `181b1014` | #437 (merged `c43795732`) |
 | `2026-10-07-readiness-tenant-event-audience-completion-spec` | GW-027 | gateway `44d2d0d45` | #296 (hold: GW-024) |
 
 ## AS-IS
@@ -43,9 +44,9 @@ git -C ~/.cache/claude-tmp/hub-ui-wt grep -n "TODO(handoff)" -- src tests script
 git -C ~/.cache/claude-tmp/gw023-wt grep -n "TODO(handoff): GW-005"
 ```
 
-Counts: HC-028 = 8, HC-043 = 2, UI-002 = 2, HC-029 = 0, HC-027 = 0 (lane still in progress,
-uncommitted, no marker yet), GW-005 = 1. Total 13. Line numbers are as of hub `821801d5` and
-gateway `44d2d0d45`.
+Counts: HC-028 = 8, HC-043 = 2, UI-002 = 2, HC-029 = 0, HC-027 = 0 (committed `181b1014`,
+re-grepped 2026-10-07: no marker), GW-005 = 1. Total 13. Line numbers are as of hub `821801d5`
+(`181b1014` for HC-027) and gateway `44d2d0d45`.
 
 ### HC-043 — mention contrast (2)
 
@@ -78,12 +79,13 @@ gateway `44d2d0d45`.
 
 No `TODO(handoff)` was left; the unmarked open ends are in the next section.
 
-### HC-027 — `role="button"` keyboard contract (0 markers, lane in progress)
+### HC-027 — `role="button"` keyboard contract (0 markers)
 
-At collection time the HC-027 lane was uncommitted in `hub-ui-wt` (`src/lib/a11y/button-keys.ts`,
-`src/lib/a11y/role-button-keys.mounted.test.ts`, 19 modified components; a pointer-only drag
-handle note in `AgentSettingsPanel.svelte`). No marker exists yet. When that lane commits, append
-its markers here (same `git grep` as above) before #437 leaves draft.
+Committed as hub `181b1014` (`fix(ui): give every role=button control the native button keyboard
+contract`), merged to `master` in #437 (`c43795732`). `git grep "TODO(handoff)" | grep HC-027`
+on `181b1014` returns nothing — the lane left no in-code marker. Its three open ends are
+judgment calls, not unwired code; they are U8–U10 in the unmarked table below (spec
+`2026-10-07-readiness-role-button-keyboard-spec` §6).
 
 ### GW-005 — orchestration progress audience (1)
 
@@ -102,12 +104,15 @@ its markers here (same `git grep` as above) before #437 leaves draft.
 | U5 | UI-002 | `/pos/appointments` shares `BookingCalendar` and inherits the fix but was not separately measured (no switch; same switcher/tabs/nav/tools). | One 390×844 coarse measurement pass with the existing `evidence-ui002/logs/measure.js` against the POS route fixture. | P3 |
 | U6 | GW-027 | Job-level `cron` events (`added`/`updated`/`removed`) carry no session key and are now withheld from tenants (admin only). Whether any tenant hub surface listened to them was not verified by the documentation lane. | `grep -rn "'cron'" minion_hub/src` for tenant-role subscribers; if one exists, give job events an org audience instead. | P3 |
 | U7 | GW-027 | Gateway PR #296 is on hold for GW-024 (legacy credential bypass); the hub consumer (#436) is already live, so hub tolerates both gateway states. | Land GW-024, then merge #296. Tracked in the readiness program, repeated here for completeness. | P0 (GW-024 itself) |
+| U8 | HC-027 | `reliability/KpiRow.svelte:57` keeps `outline-none` + the `focus-visible:bg-bg3/30` tint as its focus indicator — visible (Chromium pass), but a raw opt-out rather than the governed `.focus-ring-none` utility. Left untouched as "compliant". | Either drop `outline-none` and let the global ring show over the tint, or swap to `.focus-ring-none` so `lint:design` governs the opt-out. One class. | P3 — cosmetic/governance |
+| U9 | HC-027 | `tools/[id]/_components/CodeEditorPane.svelte` drag rows (`.chip-grip` L169 + five `.var-row`/`.snippet-card` sources) dropped `role="button"`, `tabindex` and the grip's `aria-label` on the implementer's judgment that a drag source with nothing to activate is not a button (keyboard path = the row's inputs / Copy `Button`; `svelte-ignore a11y_no_static_element_interactions` with a reason comment). **Reviewer to confirm** the disposition — the alternative is a keyboard reorder path (ArrowUp/Down on a focusable row), which no row has today. | Reviewer sign-off on the spec row, or a follow-up adding keyboard reorder if product wants drag parity. | P3 |
+| U10 | HC-027 | Backdrops (`AgentSettingsPanel.svelte:233`, `InboxOverlay.svelte:191`, `MessageBoard/Portal/Rulebook/PinboardOverlay`) keep `role="button"` with `tabindex="-1"`; they now honour Enter/Space/Escape but remain mis-typed dismiss layers. | Disappears with HC-028's Dialog migration (#3, #4 above and the overlay rows) — no separate work; listed so the role is not "fixed" in isolation. | P3 (ride HC-028) |
 
 ## TO-BE
 
 Every row above is either closed by a commit that removes its marker (and this ledger row is
-struck through with the commit sha) or explicitly rejected with a reason. The HC-027 section is
-filled before hub #437 leaves draft. `git grep "TODO(handoff)" | grep -E "HC-028|HC-043|UI-002|GW-005"`
+struck through with the commit sha) or explicitly rejected with a reason. The HC-027 section was
+filled on 2026-10-07 after `181b1014` landed (#437 merged `c43795732`). `git grep "TODO(handoff)" | grep -E "HC-028|HC-043|UI-002|GW-005"`
 on hub `master` / gateway `DEV` returns only rows still open here.
 
 ## DELTA
@@ -120,12 +125,12 @@ Suggested grouping into slices (each a junior-dev half day):
 3. **Test hygiene:** #12/U4 — one-line re-baseline, immediately.
 4. **Token contract:** #1/U3 + #2 — one design-tokens PR (meta `packages/design-tokens`) + hub
    adoption; needs the ui-design-governance skill.
-5. **Cosmetic P3s:** #5, #7, #8, #9, #10, #11, U1, U5, U6 — batch when touching the files.
+5. **Cosmetic P3s:** #5, #7, #8, #9, #10, #11, U1, U5, U6, U8, U10 — batch when touching the files.
+6. **Reviewer decision:** U9 — a sign-off on the spec row, no code unless product wants keyboard reorder.
 
 ## Out of scope
 
-Re-doing any of the five closed findings; the HC-027 lane itself (its own spec follows when it
-commits); GW-024 (owned by the readiness program).
+Re-doing any of the six closed findings; GW-024 (owned by the readiness program).
 
 ## Definition of done
 
