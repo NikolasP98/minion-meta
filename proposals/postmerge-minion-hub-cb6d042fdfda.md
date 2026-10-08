@@ -46,3 +46,11 @@ This is a straightforward cleanup task — no feature loss since the code is alr
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/446
 - file: `src/lib/components/scheduling/calendar-features.ts`
 - checked: 2026-10-08
+
+## Merged content (from handoff-minion-hub-1057520273)
+
+Same `TODO(handoff)` marker, reported by the handoff-ledger sweep. Exact
+source line:
+
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/calendar-features.ts:18`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/calendar-features.ts#L18
