@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T07:51:07.560Z",
+	"generatedAt": "2026-10-08T08:21:27.394Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -19416,6 +19416,38 @@
 			"scoredAt": "2026-10-05T12:03:01.297Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit shows the nitter persistence/shutdown fix already merged, leaving no outstanding deployment action described.",
+			"evidence": [
+				"summary describes merged fix(nitter) serialize persistence and drain poller shutdown (#295)",
+				"status is unknown with no indicated unresolved issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T08:21:27.256Z"
+		},
+		{
 			"key": "issue:minion-meta#356",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20379,38 +20411,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T02:51:52.316Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-0f5a066",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear bounded fix: add a missing in-code TODO(handoff) marker at a named file/line per the AGENTS.md handoff contract.",
-			"evidence": [
-				"medium src/routes/(app)/scheduling/resources/+page.server.ts:1 (missing-handoff)",
-				"lacks in-code TODO(handoff) marker per AGENTS.md contract"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T07:54:14.628Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
@@ -22241,6 +22241,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T09:24:14.357Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-0f5a066",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a bounded, well-specified fix to add a missing TODO(handoff) marker at a named file/line per the ledger contract.",
+			"evidence": [
+				"finding cites src/routes/(app)/scheduling/resources/+page.server.ts:1 missing-handoff",
+				"medium severity merge-scan finding, status draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T08:21:27.256Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-355769a",
@@ -25070,39 +25102,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T16:51:42.501Z"
-		},
-		{
-			"key": "run:minion (gateway)#37745308566",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37745308566",
-			"sourceUpdatedAt": "2026-10-08T07:47:27Z",
-			"sourceFingerprint": "0cda0704b055a4b96e0f5a40523f3da893726e17d7e7eb6a6f2645ccb6c51911",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single in-progress CI workflow run with no failure or outcome data provides insufficient basis for a scored action.",
-			"evidence": [
-				"status: in_progress",
-				"workflow_dispatch on DEV",
-				"no failure details present"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T07:51:07.388Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
@@ -30765,6 +30764,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T03:24:11.063Z"
+		},
+		{
+			"key": "run:minion (gateway)#37745308566",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/37745308566",
+			"sourceUpdatedAt": "2026-10-08T08:03:49Z",
+			"sourceFingerprint": "e78ffcb561cffcf1b92779817d16616f3e42d7953b61085b0c696ff55a6a080f",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI run triggered by workflow_dispatch with no failure or actionable detail reported.",
+			"evidence": [
+				"status: in_progress",
+				"summary: workflow_dispatch on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T08:21:27.256Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
