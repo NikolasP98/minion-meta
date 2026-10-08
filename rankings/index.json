@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T17:52:35.208Z",
+	"generatedAt": "2026-10-08T18:21:51.429Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10533,23 +10533,22 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 5
+				"implementation": 3
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#484",
 				"issue:minion-meta#485"
 			],
-			"rationale": "Recurring host-side exec failure (exit-126, turns=0) in minion-meta reconcile runs, duplicated across three near-identical monitor-intake issues that should become one runner-fix goal.",
+			"rationale": "Same exit-126 runner-exec-failure signature reported across three sibling issues in this batch should be consolidated into one host-fix/classifier goal.",
 			"evidence": [
-				"exit-126, turns=0, cost $0; agent process never launched",
-				"4th-5th occurrence of identical signature within ~2 hours",
-				"reconcile logic (handoff refresh, merge-scan, git push) completed normally before the claude step failed"
+				"4th-5th occurrence of the identical signature within ~2 hours",
+				"exit 126 ... agent process never actually started"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T17:54:22.346Z"
+			"scoredAt": "2026-10-08T18:21:51.272Z"
 		},
 		{
 			"key": "issue:minion-meta#484",
@@ -10569,23 +10568,22 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 5
+				"implementation": 3
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#483",
 				"issue:minion-meta#485"
 			],
-			"rationale": "Same exit-126/turns=0 runner exec-failure signature as sibling issues on the same day, warranting consolidation into a single host-fix goal.",
+			"rationale": "Duplicate exit-126 runner-exec-failure signature; should be merged with sibling issues into a single remediation goal.",
 			"evidence": [
-				"same signature as sibling runs today; only trailing claude provider call failed (exit-126, turns=0)",
-				"dev branch fast-forwarded 5e61adf..b74aadd before the failure",
+				"same signature as sibling runs today",
 				"recurring signature across multiple runs today, not an isolated blip"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T17:54:22.346Z"
+			"scoredAt": "2026-10-08T18:21:51.272Z"
 		},
 		{
 			"key": "issue:minion-meta#485",
@@ -10605,23 +10603,22 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 5
+				"implementation": 3
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#483",
 				"issue:minion-meta#484"
 			],
-			"rationale": "Third occurrence of the identical exec-failure signature naming the two sibling runs directly, confirming this should be consolidated into one host/runner fix goal rather than tracked as three separate issues.",
+			"rationale": "Third instance of identical exit-126 exec-failure signature; consolidating these avoids triaging the same host issue three times.",
 			"evidence": [
-				"same signature seen in 4 other minion-meta reconcile runs within ~2.5h (1c3d2c19, a9b4829d, 8362ab1d, 47ecd4c6)",
-				"pipeline infra steps all completed successfully per log tail; only the claude agent step exited 126 with turns=0",
-				"recommends verifying claude CLI binary presence/exec bit/PATH on the runner"
+				"same signature seen in 4 other minion-meta reconcile runs within the last ~2.5h",
+				"agent process never actually launched/executed (OS-level exec failure)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T17:54:22.346Z"
+			"scoredAt": "2026-10-08T18:21:51.272Z"
 		},
 		{
 			"key": "issue:minion-meta#487",
@@ -15552,40 +15549,6 @@
 			"scoredAt": "2026-10-02T08:25:52.185Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-cb6d042fdfda",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/calendar-features.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-cb6d042fdfda.md",
-			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "fb820938406d10a8389dea117f913ffd93224b89a2f856c1dc3eea1e1bde948c",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-07-hub-calendar-single-event-services"
-			],
-			"rationale": "This is a bounded, already-diagnosed dead-code removal with explicit fix steps and no feature-loss risk, ready to run now.",
-			"evidence": [
-				"Fix direction gives concrete steps: delete fan-out.ts, remove deck markup, grep references, run calendar tests",
-				"'no feature loss since the code is already unreachable'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T17:52:35.059Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-cf95482ec332",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17187,41 +17150,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T09:51:48.089Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-749c9f202140",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-749c9f202140.md",
-			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "ed702d3d39a5dca654f7f0fe980e96653511f6ace7d3c9adc5d5d8feab02f995",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 2,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-0173b6586d14",
-				"proposal:postmerge-minion-hub-5ecd8380b71c"
-			],
-			"rationale": "The marker text itself is truncated and the auto-diagnosis explicitly asks for clarification, so the finding lacks enough specification to act on as-is.",
-			"evidence": [
-				"Marker text cut off: 'are NOT' with no completion",
-				"diagnosis text says 'Could you share the full TODO text?' indicating incomplete scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T17:25:49.865Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b37743db1fcc",
@@ -20697,7 +20625,7 @@
 			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5ecd8380b71c.md",
 			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "5bfe4e861c0a90dfd43388204d1e1e5234024ec5b37a25078cfd165ed794dbd1",
+			"sourceFingerprint": "67f915f7ca5f815a570d63ffbe7d40de4bdc7cc92102f7d9559801819057d31c",
 			"score": 36,
 			"band": "low",
 			"axes": {
@@ -20706,23 +20634,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 4
+				"specification": 5,
+				"implementation": 3
 			},
 			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-0173b6586d14",
-				"proposal:postmerge-minion-hub-749c9f202140"
-			],
-			"rationale": "A missing expression index is a performance optimization, not urgent, and overlaps with the same file/PR as two related findings.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Missing expression index is a plausible scaling concern but the exact hot-query expressions still need to be identified before this is executable.",
 			"evidence": [
-				"TODO about missing expression index on sched_bookings",
-				"same file and PR #446 as the other two scheduling-bookings TODOs"
+				"no expression index on sched_bookings",
+				"Identify which expressions are used in hot query filters"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T17:25:49.865Z"
+			"scoredAt": "2026-10-08T18:21:51.272Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6e3297fea67e",
@@ -21223,38 +21148,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T05:26:20.196Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already shipped a fix for nitter persistence/shutdown, leaving nothing open to act on.",
-			"evidence": [
-				"commit b841c36 'fix(nitter): serialize persistence and drain shutdown' already merged",
-				"status: unknown with no indication of an ongoing deployment problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T17:52:35.059Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
@@ -22577,6 +22470,38 @@
 			"scoredAt": "2026-10-05T03:21:43.070Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-749c9f202140",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-749c9f202140.md",
+			"sourceUpdatedAt": "2026-10-08",
+			"sourceFingerprint": "096c583f4e0eb31001236e247e42c80163f8350742c0678e368d09c853c0f96d",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 2,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis itself is truncated and explicitly asks for the missing TODO text, so the goal needs reframing around recovering the real finding before it can be scoped.",
+			"evidence": [
+				"the \\\"are NOT\\\" phrase is cut off, which would clarify the issue",
+				"Could you share the full TODO text?"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T18:21:51.272Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-78f81166a2c1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23610,6 +23535,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T01:51:46.553Z"
+		},
+		{
+			"key": "pr:minion_hub#448",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#448 fix(scheduling): structured services list in the appointment tray",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/448",
+			"sourceUpdatedAt": "2026-10-08T17:57:50Z",
+			"sourceFingerprint": "2b66e3a3210b99135e6bd4fa21085b743dc3d72419b2c7bd2e4b4bbffbe9fc4a",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single-file markup/CSS fix addressing explicit owner feedback, already passing all gates and ready to merge.",
+			"evidence": [
+				"one file, markup + CSS only",
+				"bun run check 0/0 · lint:design + lint:tokens 0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T18:21:51.272Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-reserva-keyword-config",
@@ -26223,6 +26180,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T07:21:38.942Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-cb6d042fdfda",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/calendar-features.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-cb6d042fdfda.md",
+			"sourceUpdatedAt": "2026-10-08",
+			"sourceFingerprint": "53d6dde8fc0664bd756dafb9e83b39becaf5d03b3ee33ded053dd772364d8264",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two independent sweeps confirm the same unreachable fan-deck code path at a precise file/line, giving a clear low-risk deletion target.",
+			"evidence": [
+				"delete the fan-deck code paths (fan-out.ts, the deck markup",
+				"reported by the handoff-ledger sweep ... same TODO(handoff) marker"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T18:21:51.272Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-de937a67722d",
