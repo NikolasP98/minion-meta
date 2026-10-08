@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-08)
 
-- `NikolasP98/minion_hub@master src/lib/components/ui/Picker.svelte:393` — needs DataTable onRowActivate (double-click / Enter on the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/ui/Picker.svelte#L393
+- `NikolasP98/minion_hub@master src/lib/components/ui/Picker.svelte:394` — needs DataTable onRowActivate (double-click / Enter on the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/ui/Picker.svelte#L394
