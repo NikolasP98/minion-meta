@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-cb6d042fdfda
 title: "Post-merge finding — todo-handoff in src/lib/components/scheduling/calendar-features.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-08
 updated: 2026-10-08
 repos: [minion-hub]
