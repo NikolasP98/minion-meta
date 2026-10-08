@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-2746481724
-title: Handoff marker — src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)
-status: review
-created: 2026-09-30
+id: handoff-minion-hub-1057520273
+title: Handoff marker — src/lib/components/scheduling/calendar-features.ts (minion_hub)
+status: draft
+created: 2026-10-08
 updated: 2026-10-08
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: postmerge-minion-hub-3e55b8b7c010
 ---
 
-# Handoff marker — src/lib/components/scheduling/AppointmentForm.svelte
+# Handoff marker — src/lib/components/scheduling/calendar-features.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-08)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/AppointmentForm.svelte:254` — no server data source plumbs a real price for a service
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/AppointmentForm.svelte#L254
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/calendar-features.ts:18` — delete the fan-deck code paths (fan-out.ts, the deck markup
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/calendar-features.ts#L18

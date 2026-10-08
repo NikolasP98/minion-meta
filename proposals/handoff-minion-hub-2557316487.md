@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-08)
 
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:237` — Persist realization admission with the status change; this
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L237
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:320` — this read and moveGroup are two transactions, so a visit
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L320
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:240` — Persist realization admission with the status change; this
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L240
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:339` — this read and moveGroup are two transactions, so a visit
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L339
