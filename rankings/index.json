@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T04:51:10.355Z",
+	"generatedAt": "2026-10-08T05:21:32.664Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1561,6 +1561,39 @@
 			"scoredAt": "2026-10-07T18:23:03.050Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-requireadmin-audit-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Full requireAdmin call-site audit (org-vs-platform misclassification)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-requireadmin-audit-followup.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "ed0534a611547935b64fa690d5faa597bfe6729c6a440341db2990bba399d61c",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A confirmed live authorization-misclassification defect pattern (org owners wrongly 403'd) has ~50 remaining requireAdmin call sites unverified, with a clear scoped DoD and an already-proven fix pattern to replicate.",
+			"evidence": [
+				"requireAdmin checks platform role, not org membership, confirmed as a live defect on scheduling handlers and fixed there",
+				"~55 other call sites were spot-audited by path name only, not read line-by-line",
+				"DoD: classification comment or switch to requireOrgCapability plus targeted vitest per handler"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T05:21:32.531Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-defaces-crm-tools-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2893,38 +2926,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T18:22:02.987Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-requireadmin-audit-followup",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Full requireAdmin call-site audit (org-vs-platform misclassification)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-requireadmin-audit-followup.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "ed0534a611547935b64fa690d5faa597bfe6729c6a440341db2990bba399d61c",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified RBAC misclassification audit with an already-proven fix pattern and a concrete definition of done for the ~50 remaining call sites.",
-			"evidence": [
-				"scheduling handlers already fixed via requireOrgCapability as a confirmed live-defect pattern",
-				"definition of done requires per-handler classification plus targeted vitest, same as the shipped fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T04:54:20.488Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1767155690",
@@ -16204,40 +16205,6 @@
 			"scoredAt": "2026-10-06T06:21:55.594Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2249203609",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2249203609.md",
-			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "de6c3e47e44fa621e52beeb3044de2f88da44d905fc79c9a2ca00af6d85c416c",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2437241475"
-			],
-			"rationale": "A vague 'planning' marker on the shared DataTable component overlaps directly with the filters.ts marker describing the same boolean-variant change.",
-			"evidence": [
-				"add global server custom-property sort/filter/export planning",
-				"DataTable.svelte is a shared component across hub"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T01:25:27.787Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2437241475",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22236,6 +22203,38 @@
 			"scoredAt": "2026-10-08T01:26:52.431Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-08",
+			"sourceFingerprint": "7ce28ce08cd9fc805bbe4219c938da392f9b48eb22cf02efe34ada8d7be89051",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The ledger bundles many disparate, unrelated quoted fragments from rankings/index.json into one 'goal,' so the sweep's framing needs to split this into real per-topic items before any single fix is actionable.",
+			"evidence": [
+				"17+ marker lines spanning unrelated topics: finProductId null, race window, discount editor close affordance, drop column proposal",
+				"Markers read as quoted rationale/evidence substrings embedded in a data file rather than a coherent single code TODO"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T05:21:32.531Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-db09a2f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26395,6 +26394,38 @@
 			"scoredAt": "2026-10-03T22:22:01.505Z"
 		},
 		{
+			"key": "issue:minion-meta#580",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#580 [monitor:unstick] rank board goals (e6c76fc5) - both providers failed batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/580",
+			"sourceUpdatedAt": "2026-09-24T04:17:28Z",
+			"sourceFingerprint": "a5f4df555ad4188318a3db0629323d4e6499d49037ccd772d7d1404f44cb19e9",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The monitor-intake diagnosis itself concludes this is a transient provider-availability hiccup, not a code or spec defect, and recommends only a retry.",
+			"evidence": [
+				"Diagnosis: transient provider-availability/flakiness issue, not a spec or code defect",
+				"Recommendation: retry the run; a single-batch provider hiccup is unlikely to repeat"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T05:21:32.531Z"
+		},
+		{
 			"key": "issue:minion-meta#734",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26425,6 +26456,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T18:24:01.690Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Entry reports an already-merged nitter persistence/shutdown fix with no stated open follow-up.",
+			"evidence": [
+				"commit b841c36 merged fix(nitter): serialize persistence and drain shutdown",
+				"status unknown, only tagged deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T05:21:32.531Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -27397,6 +27460,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T01:23:29.744Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2249203609",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2249203609.md",
+			"sourceUpdatedAt": "2026-10-08",
+			"sourceFingerprint": "711679ee33316d9d63ab5ef4ba97205dbb81dee963a68d3dd8c30a0ac0e981a8",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single narrow planning marker for a future DataTable export/sort/filter feature with no urgency or breadth signal.",
+			"evidence": [
+				"One TODO(handoff) marker at DataTable.svelte:780",
+				"Marker text: add global server custom-property sort/filter/export planning"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T05:21:32.531Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2843825962",
@@ -29177,38 +29272,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T02:51:37.216Z"
-		},
-		{
-			"key": "issue:minion-meta#580",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#580 [monitor:unstick] rank board goals (e6c76fc5) - both providers failed batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/580",
-			"sourceUpdatedAt": "2026-09-24T04:17:28Z",
-			"sourceFingerprint": "a5f4df555ad4188318a3db0629323d4e6499d49037ccd772d7d1404f44cb19e9",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Self-diagnosed transient dual-provider flakiness in the ranking pipeline whose own recommendation is simply to retry, not a durable work item.",
-			"evidence": [
-				"diagnosis says a single-batch provider hiccup is unlikely to repeat",
-				"recommended action is retrying the run, not building anything"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T04:54:20.488Z"
 		},
 		{
 			"key": "issue:minion-meta#586",
@@ -31575,38 +31638,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T01:24:26.016Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "733ee065b66260eaf879abc0be16e08c5d6ddecde6fd2b026ae1069ce3a7bc39",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 0
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted markers are fragments of other proposals' text stored as JSON data inside rankings/index.json itself, not live code TODOs needing resolution.",
-			"evidence": [
-				"markers quote unrelated text like 'finProductId: null' and 'discount editor has no close affordance' from within rankings/index.json, a generated data file",
-				"sweep targets rankings/index.json lines, not application source"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T01:30:47.684Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
