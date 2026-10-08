@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T04:21:06.360Z",
+	"generatedAt": "2026-10-08T04:51:10.355Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -25453,38 +25453,6 @@
 			"scoredAt": "2026-10-08T00:51:39.667Z"
 		},
 		{
-			"key": "issue:minion-meta#729",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#729 [monitor:unstick] reconcile run ea0598b7 (minion-meta): claude agent exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/729",
-			"sourceUpdatedAt": "2026-10-01T04:17:32Z",
-			"sourceFingerprint": "0d85bf0b58c8206994b18e5f369cfdc9fa830eb9b5fc2cebadc2e31c194e4c06",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Transient exit-126/turns=0 agent-launch fault already diagnosed as safe-to-retry, with the underlying reconcile work already pushed, so it needs recurrence monitoring rather than immediate paid work.",
-			"evidence": [
-				"exit 126 turns=0 recurred twice within ~80 minutes on same repo",
-				"underlying reconcile work (handoff refresh, merge-scan, push) completed successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T04:24:04.388Z"
-		},
-		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26459,38 +26427,6 @@
 			"scoredAt": "2026-10-01T18:24:01.690Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This tracks a already-merged nitter persistence/shutdown fix with no indication of ongoing deployment risk.",
-			"evidence": [
-				"commit fix(nitter): serialize persistence and drain poller shutdown (#295)",
-				"status unknown with no outage or blocker signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T04:21:06.160Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27171,6 +27107,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T00:51:39.667Z"
+		},
+		{
+			"key": "issue:minion-meta#729",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#729 [monitor:unstick] reconcile run ea0598b7 (minion-meta): claude agent exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/729",
+			"sourceUpdatedAt": "2026-10-01T04:17:32Z",
+			"sourceFingerprint": "0d85bf0b58c8206994b18e5f369cfdc9fa830eb9b5fc2cebadc2e31c194e4c06",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The underlying reconcile work already completed and pushed successfully; the flagged error is a transient exit-126/turns=0 process-launch fault, not a real task failure.",
+			"evidence": [
+				"reconcile sweep completed fully ... successful git push c09a52a..2451d9e on minion-meta dev",
+				"claude-provider reconcile agent exited 126 with turns=0 and 0 permission denials",
+				"this exact signature ... recurred twice within ~80 minutes on the same repo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T04:51:10.206Z"
 		},
 		{
 			"key": "issue:minion-meta#732",
