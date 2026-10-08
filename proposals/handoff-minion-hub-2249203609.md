@@ -1,12 +1,12 @@
 ---
 id: handoff-minion-hub-2249203609
 title: Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-08-22
 updated: 2026-10-08
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-08-20-hub-datatable-server-mode-test-gap
+duplicate_candidate: 2026-09-26-hub-custom-columns-next-phases
 ---
 
 # Handoff marker — src/lib/components/data-table/DataTable.svelte
