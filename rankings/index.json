@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T09:21:32.727Z",
+	"generatedAt": "2026-10-08T09:51:16.298Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22145,38 +22145,6 @@
 			"scoredAt": "2026-10-08T01:26:52.431Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-db09a2f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Merge-scan flags concrete unchecked-access risks in CI test files and a removed regression test, bounded fixes with clear file:line targets.",
-			"evidence": [
-				"high unchecked-access at test/ci/ci-workflow.test.ts:206",
-				"medium weakened-test: review-workflow.test.ts fully removed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T09:24:14.357Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-0f5a066",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23784,6 +23752,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T01:29:08.620Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-db09a2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Findings are narrow test-code robustness issues with exact file/line locations and bounded null-check fixes, not production-facing risk.",
+			"evidence": [
+				"5 'high' unchecked-access findings in test/ci/*.test.ts from .find() without null checks",
+				"medium finding: removed test file that regression-checked absence of review workflow files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T09:51:16.159Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-77445c0",
@@ -26394,38 +26394,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T18:24:01.690Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit is an already-merged fix for nitter persistence/shutdown with no indicated outstanding issue.",
-			"evidence": [
-				"commit b841c36 already fixes nitter persistence/shutdown and is merged (#295)",
-				"status is unknown with no described open problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T09:21:32.595Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
