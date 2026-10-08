@@ -1,7 +1,7 @@
 ---
 id: 2026-09-30-hub-appointment-services-table-price
 title: New-appointment services table — Price column has no data source
-status: resolved
+status: done
 created: 2026-09-30
 repos: [minion_hub]
 tags: [ui, ux, data]
