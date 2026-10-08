@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-1480236091
 title: Handoff marker — .github/scripts/ci-security-scope.sh (minion-ai)
-status: draft
+status: review
 created: 2026-08-24
 updated: 2026-10-08
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-24-minion-ai-secret-baseline-refresh
 ---
 
 # Handoff marker — .github/scripts/ci-security-scope.sh
