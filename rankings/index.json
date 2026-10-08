@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T18:51:44.901Z",
+	"generatedAt": "2026-10-08T19:51:25.855Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10622,6 +10622,40 @@
 			"scoredAt": "2026-10-08T18:21:51.272Z"
 		},
 		{
+			"key": "issue:minion-meta#486",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#486 [monitor:unstick] reconcile run 7f695b37 (minion-meta) — agent exec-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/486",
+			"sourceUpdatedAt": "2026-09-17T18:17:48Z",
+			"sourceFingerprint": "78408f8d3eda1abb901827f6a3f79da789164028d943d9bcad991971d057ec14",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#584"
+			],
+			"rationale": "Recurring exit-126/turns=0 agent-exec fault on the reconcile runner is an infra host issue, not a task failure, and overlaps with #584's identical signature.",
+			"evidence": [
+				"note=reconcile agent failed exit-126, turns=0, permission_denials=0",
+				"identical signature recorded in 4 consecutive reconcile runs over ~2.5h"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T19:51:25.694Z"
+		},
+		{
 			"key": "issue:minion-meta#487",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10831,6 +10865,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-01T23:24:08.738Z"
+		},
+		{
+			"key": "issue:minion-meta#584",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#584 [monitor:unstick] reconcile proposals run 0f247401 (minion-meta) - exit-126 agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/584",
+			"sourceUpdatedAt": "2026-09-24T18:17:26Z",
+			"sourceFingerprint": "f23c69f0e896ac1f7bba2929b81294895da2b8fa55db130b54a164815c4d4b7f",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#486"
+			],
+			"rationale": "Same exit-126/turns=0 provider-exec fault pattern as #486, indicating a shared host-level permissions/PATH problem rather than two distinct issues.",
+			"evidence": [
+				"agent invocation failed with exit code 126 and turns=0, permission_denials=0",
+				"reconcile sweep itself completed fully and successfully"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T19:51:25.694Z"
 		},
 		{
 			"key": "issue:minion-meta#585",
@@ -18015,41 +18083,6 @@
 			"scoredAt": "2026-10-08T07:21:51.715Z"
 		},
 		{
-			"key": "issue:minion-meta#486",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#486 [monitor:unstick] reconcile run 7f695b37 (minion-meta) — agent exec-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/486",
-			"sourceUpdatedAt": "2026-09-17T18:17:48Z",
-			"sourceFingerprint": "78408f8d3eda1abb901827f6a3f79da789164028d943d9bcad991971d057ec14",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#584"
-			],
-			"rationale": "This is one instance of a recurring host-level exit-126/turns=0 reconcile-agent fault that duplicates the same diagnosis as the later #584 and should be consolidated into one fix-the-host goal.",
-			"evidence": [
-				"note=reconcile agent failed exit-126, turns=0, permission_denials=0",
-				"identical signature recorded in 4 consecutive reconcile runs over ~2.5h",
-				"reconcile pipeline itself completed and pushed successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T18:54:09.070Z"
-		},
-		{
 			"key": "issue:minion-meta#519",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18257,41 +18290,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T11:21:02.126Z"
-		},
-		{
-			"key": "issue:minion-meta#584",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#584 [monitor:unstick] reconcile proposals run 0f247401 (minion-meta) - exit-126 agent exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/584",
-			"sourceUpdatedAt": "2026-09-24T18:17:26Z",
-			"sourceFingerprint": "f23c69f0e896ac1f7bba2929b81294895da2b8fa55db130b54a164815c4d4b7f",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#486"
-			],
-			"rationale": "Restates the same exit-126/turns=0 claude-provider exec fault already diagnosed in #486 and should be merged with it into a single host-permission fix goal rather than tracked separately.",
-			"evidence": [
-				"reconcile sweep completed fully: proposals/index.json written, clean git push",
-				"failed only at claude-provider reconcile agent invocation with exit code 126, turns=0",
-				"recommends checking runner box claude CLI executable permissions/PATH/sandbox"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T18:54:09.070Z"
 		},
 		{
 			"key": "issue:minion-meta#634",
@@ -25334,38 +25332,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This entry describes an already-merged nitter persistence/shutdown fix, not an open deployment task.",
-			"evidence": [
-				"commit message is fix(nitter): serialize persistence and drain poller shutdown (#295)",
-				"status: unknown with no open follow-up described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T18:51:44.749Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
