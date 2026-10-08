@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T20:51:12.227Z",
+	"generatedAt": "2026-10-08T21:21:52.276Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6228,26 +6228,26 @@
 			"band": "medium",
 			"axes": {
 				"criticality": 6,
-				"importance": 5,
-				"impact": 5
+				"importance": 6,
+				"impact": 4
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#489"
 			],
-			"rationale": "Duplicate of the same recurring host-exec fault (claude exit-126, 0 turns) reported 4x in 2 hours and should be merged with #489 into one infra-fix goal.",
+			"rationale": "Identical recurring claude exit-126/turns=0 runner fault as #489 (same 4 timestamps), so these duplicate monitor intakes should be consolidated into one infra-fix goal.",
 			"evidence": [
-				"note: reconcile agent failed (provider=claude; exit-126; turns=0)",
-				"4th occurrence of identical signature in under 2 hours (17:57, 18:20, 19:18, 19:42)"
+				"4th occurrence of identical signature in under 2 hours (17:57,18:20,19:18,19:42)",
+				"diagnosis points to exec-permission/PATH fault on runner, not repo logic"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T20:54:07.287Z"
+			"scoredAt": "2026-10-08T21:21:52.126Z"
 		},
 		{
 			"key": "issue:minion-meta#489",
@@ -6262,26 +6262,26 @@
 			"band": "medium",
 			"axes": {
 				"criticality": 6,
-				"importance": 5,
-				"impact": 5
+				"importance": 6,
+				"impact": 4
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#488"
 			],
-			"rationale": "Same host-exec fault signature as #488 (claude exit-126, 0 turns) from the same incident window and should be consolidated into one goal.",
+			"rationale": "Same exit-126/turns=0 reconcile-runner fault signature as #488, filed separately for the same underlying infra problem.",
 			"evidence": [
-				"note: reconcile agent failed (provider=claude; exit-126; turns=0)",
-				"one of 4 identical occurrences today (17:57, 18:20, 19:18, 19:42)"
+				"note text and timestamps (17:57,18:20,19:18,19:42) match #488 exactly",
+				"shell-scripted portion of run completes cleanly, isolating the fault to provider process launch"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T20:54:07.287Z"
+			"scoredAt": "2026-10-08T21:21:52.126Z"
 		},
 		{
 			"key": "issue:minion-meta#523",
@@ -9979,6 +9979,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:57:33.852Z"
+		},
+		{
+			"key": "proposal:2026-09-11-hub-telemetry-boundary-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Qualify telemetry delivery and remaining host log boundaries",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-11-hub-telemetry-boundary-followups.md",
+			"sourceUpdatedAt": "2026-10-08",
+			"sourceFingerprint": "ff60bc5427b478489405822eb52850ec348e5fea5e9183a9442f195af282a245",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified follow-up with exact file:line pointers and bounded verification steps for telemetry delivery and log/Sentry boundaries after the PR246 PostHog fix.",
+			"evidence": [
+				"cites posthog.ts:57 and provision/run/+server.ts:140 TODOs with concrete next steps",
+				"explicitly scoped to qualification, not claiming delivery guarantees it hasn't verified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T21:21:52.126Z"
 		},
 		{
 			"key": "proposal:2026-09-29-hub-pos-calendar-container-cancel-drag",
@@ -21855,38 +21887,6 @@
 			"scoredAt": "2026-10-05T11:59:35.856Z"
 		},
 		{
-			"key": "proposal:2026-09-11-hub-telemetry-boundary-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Qualify telemetry delivery and remaining host log boundaries",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-11-hub-telemetry-boundary-followups.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "8cb8f9a1ed5e5af95c96454406be97b5fd5a2b1580f6ddbe035dcff4739c0ccd",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Observability hardening with no production incident evidence cited, framed mostly as 'needs measurement before changing anything' rather than a bounded fix.",
-			"evidence": [
-				"'Establish an explicit loss/latency budget before changing batching'",
-				"'this is a coverage gap for that project, not proof that agents did not execute'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T18:23:03.050Z"
-		},
-		{
 			"key": "proposal:2026-09-12-gateway-native-swift-qualification",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31058,6 +31058,38 @@
 			"scoredAt": "2026-10-04T20:51:21.896Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit log entry (nitter persistence/shutdown fix) reflecting already-shipped deployment status, not an open goal.",
+			"evidence": [
+				"title shows merged PR #295 commit message",
+				"status unknown but content is a completed fix, not a pending task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T21:21:52.126Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-991916159",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31811,7 +31843,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "63395a221011320c84577faca5da677f69784986b0c69c56cdf17acaf2556f40",
+			"sourceFingerprint": "9aaae3d1002d83a0900e4d7accc9198942cbea6af085e6c843f6b6bb4c179963",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -31820,20 +31852,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed marker lines are quoted fragments of unrelated prose/data embedded in rankings/index.json, not genuine TODO(handoff) code markers, indicating a self-referential sweep false-positive.",
+			"rationale": "The quoted markers read as stored rationale/evidence strings inside a rankings data file rather than genuine source-code TODOs, so the sweep likely misidentified its own output as an open item.",
 			"evidence": [
-				"marker text samples like 'the session is drawn when the cashier clicks' and ''no attachments card — fin_purchase is not in' schema' are not code comments",
-				"all 18+ markers point into rankings/index.json itself, the sweep's own output artifact"
+				"markers include domain-mismatched fragments like 'cashier clicks' and 'fin_purchase' unrelated to minion-meta code",
+				"proposal itself warns markers are untrusted quoted text, not instructions it wrote"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T18:51:44.749Z"
+			"scoredAt": "2026-10-08T21:21:52.126Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
