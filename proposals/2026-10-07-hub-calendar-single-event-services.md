@@ -93,6 +93,27 @@ closed the whole "Nueva cita" tray and lost the form.
 10. **Dirty guard false positives**: pure search/filter inputs inside dialogs
     must be `type="search"` or carry `data-dirty-ignore`; audit new dialogs.
 
+## Round 2 (hub #449 — the tray acts on the whole event)
+
+Verified after #446 shipped: the tray's status footer, reschedule and
+notes/tags still targeted ONE booking row. #449 adds the visit-wide `{status}`
+group body, re-anchors the tray on the event's lead, routes reschedule through
+`{move}`, and derives the header title/status from all services.
+
+11. **Visit-wide status is sequential per row, not one transaction** — status
+    log, accrual realisation and package-session return live in the per-row
+    path; a mid-walk failure is reported (`applied`/`skipped`), not rolled
+    back. `TODO(handoff)` in `_handlers.ts` (`visitStatusResponse`).
+12. **Mark completed confirms stock for the LEAD service only**; the siblings
+    close through the visit-wide call and realise their accruals best-effort,
+    unconfirmed. The consumption dialog needs every member's lines.
+    `TODO(handoff)` in `BookingDetailDrawer.svelte` (`oncompleted`).
+13. **Payment section is still per service** (lead's tickets; "Charge in POS"
+    carries the lead). Next slice: tickets across all services, paid vs
+    pending as amounts (needs the service price source — see
+    `2026-09-30-hub-appointment-services-table-price.md`), charge every unpaid
+    service.
+
 ## Monitoring (PostHog)
 
 Client events (`src/lib/analytics/track.ts`): `customer_search_no_results`,
