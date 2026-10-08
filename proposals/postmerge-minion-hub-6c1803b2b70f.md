@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-6c1803b2b70f
 title: "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-08
 updated: 2026-10-08
 repos: [minion-hub]
