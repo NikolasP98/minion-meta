@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T15:21:15.838Z",
+	"generatedAt": "2026-10-08T15:51:52.658Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22923,38 +22923,6 @@
 			"scoredAt": "2026-10-07T09:22:17.789Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown with no indication of ongoing deployment failure.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status unknown, updatedAt 2026-09-12"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T13:21:22.038Z"
-		},
-		{
 			"key": "issue:minion-meta#405",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25384,6 +25352,41 @@
 			"scoredAt": "2026-10-05T11:52:59.122Z"
 		},
 		{
+			"key": "issue:minion-meta#480",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#480 [monitor:unstick] reconcile run 0db97b3d (minion-meta): claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/480",
+			"sourceUpdatedAt": "2026-09-17T14:17:30Z",
+			"sourceFingerprint": "a042e8eb1e7e74f4a1611d2b0d21e93822815fd41931874e042976b608758bda",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#583"
+			],
+			"rationale": "Exit-126/turns=0 claude-provider-launch failure with reconcile work already pushed successfully; identical signature recurs in #583 a week later, so the two should merge into one host-classifier goal rather than stay as separate tickets.",
+			"evidence": [
+				"claude provider agent exited 126 with turns=0, reconcile output already committed/pushed",
+				"diagnosis flags this as a provider-launch infra fault, not a task-logic failure",
+				"recommendation suggests a host-classifier signature if the pattern recurs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T15:51:52.517Z"
+		},
+		{
 			"key": "issue:minion-meta#583",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25400,22 +25403,23 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 2,
+				"implementation": 1
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#480"
 			],
-			"rationale": "Same exit-126/turns=0 provider-exec-failure signature recurring across runs, which both diagnoses suggest warrants a single host-classifier fix rather than per-incident handling.",
+			"rationale": "Identical exit-126/turns=0 claude-provider failure to #480 (seven days earlier) confirms a recurring pattern that should become a single host-classifier goal instead of two parallel tickets.",
 			"evidence": [
-				"exit-126 turns=0 cost_usd=0 recurs across runs",
-				"recommendation to add provider-exec-failure classifier signature"
+				"claude-provider exit 126, turns=0, cost_usd=0, same signature as #480",
+				"reconcile phase (handoff refresh, proposals index write, git push) succeeded regardless",
+				"diagnosis explicitly calls this a good candidate host-classifier signature if repeated"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T15:24:13.712Z"
+			"scoredAt": "2026-10-08T15:51:52.517Z"
 		},
 		{
 			"key": "issue:minion-meta#723",
@@ -27294,20 +27298,24 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 2,
+				"implementation": 1
 			},
-			"confidence": 5,
+			"confidence": 3,
 			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Distinct failure mode (ranking batch rejected by both LLM providers) is likely a transient blip but worth tracking if it recurs before building a classifier.",
+			"relatedKeys": [
+				"issue:minion-meta#480",
+				"issue:minion-meta#583"
+			],
+			"rationale": "A distinct provider-JSON-validity failure (both bounded providers rejected a tiny 3-candidate batch) rather than the exec-126 pattern in #480/#583, so it needs its own look before any grouping or action.",
 			"evidence": [
-				"batch ranking failed both bounded providers or returned invalid JSON",
-				"diagnosis calls it a transient/infra fault, safe to retry"
+				"both primary (claude) and fallback (codex) providers failed/returned invalid JSON on batch 1",
+				"only 3 pending candidates in a tiny batch, run cost ~$0.126",
+				"diagnosis labels it a likely transient provider/infra blip, recommending a single auto-retry before escalation"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T15:24:13.712Z"
+			"scoredAt": "2026-10-08T15:51:52.517Z"
 		},
 		{
 			"key": "issue:minion-meta#735",
@@ -28778,40 +28786,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T02:51:37.216Z"
-		},
-		{
-			"key": "issue:minion-meta#480",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#480 [monitor:unstick] reconcile run 0db97b3d (minion-meta): claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/480",
-			"sourceUpdatedAt": "2026-09-17T14:17:30Z",
-			"sourceFingerprint": "a042e8eb1e7e74f4a1611d2b0d21e93822815fd41931874e042976b608758bda",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"issue:minion-meta#583"
-			],
-			"rationale": "One-off provider exit-126 with reconcile output already committed/pushed, superseded by a near-identical later occurrence.",
-			"evidence": [
-				"exit-126 turns=0, non-executable/corrupted claude CLI",
-				"reconcile output already committed/pushed per diagnosis"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T15:24:13.712Z"
 		},
 		{
 			"key": "issue:minion-meta#496",
