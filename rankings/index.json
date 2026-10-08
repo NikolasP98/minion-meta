@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-08T18:21:51.429Z",
+	"generatedAt": "2026-10-08T18:51:44.901Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1292,38 +1292,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T22:22:01.505Z"
-		},
-		{
-			"key": "run:minion_hub#37816191052",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/37816191052",
-			"sourceUpdatedAt": "2026-10-08T17:30:11Z",
-			"sourceFingerprint": "2eea5fc76793c1c2c71ac15179c3c572ff252f77188b5e3e5a6c6a3ccea50c8d",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on master blocks the release pipeline and needs immediate log triage even though the catalog entry gives no failure detail.",
-			"evidence": [
-				"status: failure",
-				"push on master, updatedAt 2026-10-08T17:30:11Z"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T17:52:35.059Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-faces-runtime-spec",
@@ -8347,6 +8315,39 @@
 			"scoredAt": "2026-10-08T07:21:51.715Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-0173b6586d14",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0173b6586d14.md",
+			"sourceUpdatedAt": "2026-10-08",
+			"sourceFingerprint": "e8e7d9f452b39d58bd4bdf722fc112e9c53a35443f2c1934bbcf4bb7380d3b64",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved post-merge finding identifies a concrete dedup-key risk in accrual counting with a clear fix direction affecting revenue data integrity.",
+			"evidence": [
+				"TODO(handoff): a realized accrual is counted via (source, source_id, status)",
+				"Fix direction: verify tuple sufficiency, add schema constraint, write dedup tests",
+				"status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T18:51:44.749Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-547fb86d71ab",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11524,41 +11525,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:24:29.546Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-0173b6586d14",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0173b6586d14.md",
-			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "9422352a87f49f2b8029d0213adf97b694a61303219dde560bb36b9868b732ba",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-5ecd8380b71c",
-				"proposal:postmerge-minion-hub-749c9f202140"
-			],
-			"rationale": "A dedup-key concern on revenue-affecting booking data is worth checking but needs verification before scoping real work.",
-			"evidence": [
-				"TODO flags composite key (source, source_id, status) dedup concern",
-				"file is scheduling-bookings.service.ts, same PR #446 as related findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T17:25:49.865Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-0cbe5486fa58",
@@ -23537,38 +23503,6 @@
 			"scoredAt": "2026-10-08T01:51:46.553Z"
 		},
 		{
-			"key": "pr:minion_hub#448",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#448 fix(scheduling): structured services list in the appointment tray",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/448",
-			"sourceUpdatedAt": "2026-10-08T17:57:50Z",
-			"sourceFingerprint": "2b66e3a3210b99135e6bd4fa21085b743dc3d72419b2c7bd2e4b4bbffbe9fc4a",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Single-file markup/CSS fix addressing explicit owner feedback, already passing all gates and ready to merge.",
-			"evidence": [
-				"one file, markup + CSS only",
-				"bun run check 0/0 · lint:design + lint:tokens 0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T18:21:51.272Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-reserva-keyword-config",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25106,6 +25040,38 @@
 			"scoredAt": "2026-10-08T12:52:12.465Z"
 		},
 		{
+			"key": "issue:minion-meta#734",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#734 [monitor:unstick] rank run 805a3164: provider fallback exhausted on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/734",
+			"sourceUpdatedAt": "2026-10-01T18:17:38Z",
+			"sourceFingerprint": "fd8aa48341059ca47ce88941c6ed2ea8cc5838a8ecaf99b72894290cb70a13f8",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The monitor diagnosis treats this as a transient dual-provider batch failure and recommends only retrying unless the pattern recurs.",
+			"evidence": [
+				"Diagnosis: ...stalled with only 4/856 candidates pending when claude batch 1 came back unavailable...codex fallback also failed",
+				"Recommendation: retry the run; a single bad batch from a provider is not unusual"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T18:51:44.749Z"
+		},
+		{
 			"key": "issue:minion-meta#752",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25368,6 +25334,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry describes an already-merged nitter persistence/shutdown fix, not an open deployment task.",
+			"evidence": [
+				"commit message is fix(nitter): serialize persistence and drain poller shutdown (#295)",
+				"status: unknown with no open follow-up described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-08T18:51:44.749Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -26628,36 +26626,36 @@
 			"scoredAt": "2026-10-08T05:21:32.531Z"
 		},
 		{
-			"key": "issue:minion-meta#734",
+			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#734 [monitor:unstick] rank run 805a3164: provider fallback exhausted on batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/734",
-			"sourceUpdatedAt": "2026-10-01T18:17:38Z",
-			"sourceFingerprint": "fd8aa48341059ca47ce88941c6ed2ea8cc5838a8ecaf99b72894290cb70a13f8",
-			"score": 25,
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 93709 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-08T18:22:12Z",
+			"sourceFingerprint": "2988f55ba1aed696034ce23a7c9ca6f16f9657018c7c4e1f51240fe94e9bd216",
+			"score": 23,
 			"band": "low",
 			"axes": {
-				"criticality": 3,
-				"importance": 2,
+				"criticality": 2,
+				"importance": 3,
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 3
+				"specification": 1,
+				"implementation": 1
 			},
-			"confidence": 4,
-			"recommendation": "prune",
+			"confidence": 2,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake describes a transient dual-provider batch failure that the diagnosis itself says should just be retried rather than tracked as new work.",
+			"rationale": "An automated upstream-sync issue claiming 93709 new commits is not a scoped, verifiable unit of work as framed.",
 			"evidence": [
-				"Diagnosis: transient provider/API fault, not a spec or data defect",
-				"Recommendation: retry the run; a single bad batch from a provider is not unusual"
+				"title states 93709 new commit(s) available",
+				"body is a raw commit-log dump with no scoped task definition"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-01T18:24:01.690Z"
+			"scoredAt": "2026-10-08T18:51:44.749Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -31324,38 +31322,6 @@
 			"scoredAt": "2026-10-05T01:55:04.322Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 93613 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-08T12:25:42Z",
-			"sourceFingerprint": "a85cea97d641c0db7c6e00937c3ec83ecfaf2f1e991710813a52ea5061df4e46",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated upstream-sync digest listing thousands of upstream commits with no scoped outcome or specific actionable defect.",
-			"evidence": [
-				"title: 'Upstream sync: 93613 new commit(s) available'",
-				"tags: upstream-sync"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T12:52:12.465Z"
-		},
-		{
 			"key": "issue:minion-meta#347",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31848,7 +31814,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "f20be8fa731dc556355b8987018dab1ba3d6bc5bc435312ed6097e8bc8e58305",
+			"sourceFingerprint": "63395a221011320c84577faca5da677f69784986b0c69c56cdf17acaf2556f40",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -31860,17 +31826,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The flagged lines are quoted rationale/evidence strings stored inside the rankings ledger data file itself, not real TODO comments in source code.",
+			"rationale": "The listed marker lines are quoted fragments of unrelated prose/data embedded in rankings/index.json, not genuine TODO(handoff) code markers, indicating a self-referential sweep false-positive.",
 			"evidence": [
-				"all cited 'markers' are quoted fragments from past scoring rationale embedded in rankings/index.json",
-				"file is a generated ledger artifact, not executable source"
+				"marker text samples like 'the session is drawn when the cashier clicks' and ''no attachments card — fin_purchase is not in' schema' are not code comments",
+				"all 18+ markers point into rankings/index.json itself, the sweep's own output artifact"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T17:52:35.059Z"
+			"scoredAt": "2026-10-08T18:51:44.749Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
