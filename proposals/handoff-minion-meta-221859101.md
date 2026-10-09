@@ -45,22 +45,22 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8177
 - `NikolasP98/minion-meta@dev rankings/index.json:8809` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8809
-- `NikolasP98/minion-meta@dev rankings/index.json:11498` — --apply is intentionally unimplemented",
+- `NikolasP98/minion-meta@dev rankings/index.json:11466` — --apply is intentionally unimplemented",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11466
+- `NikolasP98/minion-meta@dev rankings/index.json:11498` — a date already held by a manual holiday is skipped silently",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11498
-- `NikolasP98/minion-meta@dev rankings/index.json:11530` — a date already held by a manual holiday is skipped silently",
+- `NikolasP98/minion-meta@dev rankings/index.json:11530` — Historical version replacement needs an explicit data contract",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11530
-- `NikolasP98/minion-meta@dev rankings/index.json:11562` — Historical version replacement needs an explicit data contract",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11562
-- `NikolasP98/minion-meta@dev rankings/index.json:11727` — this is a per-VIEWER preference, not an RBAC restriction",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11727
-- `NikolasP98/minion-meta@dev rankings/index.json:11986` — add global server custom-property sort/filter/export planning",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11986
-- `NikolasP98/minion-meta@dev rankings/index.json:13029` — discount editor has no close affordance",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13029
-- `NikolasP98/minion-meta@dev rankings/index.json:13130` — 'no attachments card — fin_purchase is not in' schema",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13130
-- `NikolasP98/minion-meta@dev rankings/index.json:13673` — Bound streamed response bytes before allocation; arrayBuffer()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13673
+- `NikolasP98/minion-meta@dev rankings/index.json:11695` — this is a per-VIEWER preference, not an RBAC restriction",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11695
+- `NikolasP98/minion-meta@dev rankings/index.json:11954` — add global server custom-property sort/filter/export planning",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11954
+- `NikolasP98/minion-meta@dev rankings/index.json:12997` — discount editor has no close affordance",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12997
+- `NikolasP98/minion-meta@dev rankings/index.json:13098` — 'no attachments card — fin_purchase is not in' schema",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13098
+- `NikolasP98/minion-meta@dev rankings/index.json:13641` — Bound streamed response bytes before allocation; arrayBuffer()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13641
 - `NikolasP98/minion-meta@dev rankings/index.json:15193` — tagOptions is the FILTER's list — the event-scope registry",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15193
 - `NikolasP98/minion-meta@dev rankings/index.json:15290` — unresolved relationship between reorder_qty, moq, item_group",
@@ -97,25 +97,25 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20468
 - `NikolasP98/minion-meta@dev rankings/index.json:20565` — Full Workshop composition/camera and keyboard relationship/element",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20565
-- `NikolasP98/minion-meta@dev rankings/index.json:22283` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22283
-- `NikolasP98/minion-meta@dev rankings/index.json:22347` — reopened mid-exit — cancel the pending close'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22347
-- `NikolasP98/minion-meta@dev rankings/index.json:22379` — \"reads back a persisted preference on init\" ... test is incomplete",
+- `NikolasP98/minion-meta@dev rankings/index.json:22315` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22315
+- `NikolasP98/minion-meta@dev rankings/index.json:22379` — reopened mid-exit — cancel the pending close'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22379
-- `NikolasP98/minion-meta@dev rankings/index.json:22574` — the 'drag outside separates' test occasionally times out",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22574
-- `NikolasP98/minion-meta@dev rankings/index.json:22608` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22608
-- `NikolasP98/minion-meta@dev rankings/index.json:23802` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23802
-- `NikolasP98/minion-meta@dev rankings/index.json:25121` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25121
-- `NikolasP98/minion-meta@dev rankings/index.json:25253` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25253
-- `NikolasP98/minion-meta@dev rankings/index.json:26099` — no overflow clip — booking before startHour visually overflows",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26099
-- `NikolasP98/minion-meta@dev rankings/index.json:27948` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27948
-- `NikolasP98/minion-meta@dev rankings/index.json:31068` — the sideways-page overflow this card showed was fixed in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31068
+- `NikolasP98/minion-meta@dev rankings/index.json:22411` — \"reads back a persisted preference on init\" ... test is incomplete",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22411
+- `NikolasP98/minion-meta@dev rankings/index.json:22606` — the 'drag outside separates' test occasionally times out",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22606
+- `NikolasP98/minion-meta@dev rankings/index.json:22640` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22640
+- `NikolasP98/minion-meta@dev rankings/index.json:23866` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23866
+- `NikolasP98/minion-meta@dev rankings/index.json:25217` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25217
+- `NikolasP98/minion-meta@dev rankings/index.json:25349` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25349
+- `NikolasP98/minion-meta@dev rankings/index.json:26227` — no overflow clip — booking before startHour visually overflows",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26227
+- `NikolasP98/minion-meta@dev rankings/index.json:28044` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28044
+- `NikolasP98/minion-meta@dev rankings/index.json:31101` — the sideways-page overflow this card showed was fixed in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31101
