@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T19:51:22.959Z",
+	"generatedAt": "2026-10-09T20:21:12.396Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7790,39 +7790,6 @@
 			"scoredAt": "2026-10-05T11:59:35.856Z"
 		},
 		{
-			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Deprecated i18n adapter has a demonstrated concurrency locale-bleed defect and a concrete file-level migration plan, but no evidence of active production incidents.",
-			"evidence": [
-				"locale-parity.test.ts shows deterministic cross-request locale bleed under concurrency",
-				"package is npm-deprecated with v2 migration path documented",
-				"sketch identifies exact files (i18n.ts, hooks.server.ts, hooks.ts, svelte.config.js) to change"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T19:54:03.387Z"
-		},
-		{
 			"key": "proposal:2026-10-03-readiness-nightly-ci-outcome",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12774,6 +12741,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T21:22:09.389Z"
+		},
+		{
+			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Deprecated i18n adapter has a documented concurrency locale-bleed defect and a clear file-level migration plan, but no evidence of production impact yet.",
+			"evidence": [
+				"locale-parity.test.ts shows setLanguageTag cross-talk under concurrent requests",
+				"5 files (i18n.ts, hooks.server.ts, hooks.ts, canonical-path.ts, svelte.config.js) identified as needing changes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T20:21:12.233Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3238987400",
@@ -24092,21 +24091,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 5,
+				"implementation": 4
 			},
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Committed tarball is a minor repo-hygiene issue already flagged as a duplicate of an open shared-package release gate, so disposition is blocked on a human decision rather than ready for execution.",
+			"rationale": "A committed tarball is a minor repo-hygiene issue but the reconciliation note flags that the suggested fix may not apply since the package is still unpublished, so a human decision is needed before action.",
 			"evidence": [
-				"reconciliation note flags duplicate_candidate pending human confirmation",
-				"suggested bun install fix may not apply while @minion-stack/shared remains unpublished",
-				"issue is a single vendored tarball, not a functional defect"
+				"reconciliation note says fix 'may not apply while the package remains unpublished'",
+				"duplicate_candidate flagged against 2026-09-08-platform-qc-remediation.md"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T19:54:03.387Z"
+			"scoredAt": "2026-10-09T20:21:12.233Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-c268d8c264ba",
@@ -26747,38 +26745,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T05:21:32.531Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a changelog entry for an already-merged commit fixing nitter persistence/shutdown, not an open goal.",
-			"evidence": [
-				"commit message shows fix already merged",
-				"co-authored commit reference, not a pending task"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T19:51:22.786Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
