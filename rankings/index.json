@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T22:21:04.780Z",
+	"generatedAt": "2026-10-09T22:51:08.225Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26715,38 +26715,6 @@
 			"scoredAt": "2026-10-08T05:21:32.531Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged commit log entry describing a past fix, not an actionable forward-looking goal.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"status unknown, single commit reference"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T21:51:07.990Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27600,20 +27568,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 2
+				"specification": 7,
+				"implementation": 3
 			},
 			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The attached diagnosis itself confirms the substantive reconcile work already completed and pushed, leaving only a speculative monitoring-classifier enhancement.",
+			"rationale": "The substantive reconcile work already completed and pushed successfully; only a transient exit-126 provider-exec infra fault occurred, which is low-value to retry.",
 			"evidence": [
-				"diagnosis states reconcile completed fully with a successful git push",
-				"exit-126/turns=0 attributed to worker-box/environment exec issue, not task logic"
+				"491 proposals written, handoffs refreshed, merge-scan state persisted, and a git push succeeded",
+				"failure was exit-126/turns=0 on the claude provider agent, a worker-box exec problem not a repo/task issue"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T22:46:25.704Z"
+			"scoredAt": "2026-10-09T22:51:08.035Z"
 		},
 		{
 			"key": "issue:minion-meta#647",
@@ -28168,6 +28136,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T01:31:11.900Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-d222079",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ d222079",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-d222079.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "7db017599e97386d1b70882b7dd70586266ef4759f715a7d743f234526af1386",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single medium-severity weakened-test finding with a documented reason and alternative assertion is low urgency but should be triaged before deciding to fix or dismiss.",
+			"evidence": [
+				"medium severity finding: test conditionally skipped on win32 platform",
+				"documented reason and alternative assertion already exist per the finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T22:51:08.035Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2769d3127d2e",
@@ -30535,38 +30535,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T01:31:02.590Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-d222079",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ d222079",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-d222079.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "7db017599e97386d1b70882b7dd70586266ef4759f715a7d743f234526af1386",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Single medium-severity finding about a documented, justified test skip offers little actionable value.",
-			"evidence": [
-				"weakened-test finding is win32-skip with documented reason and alternative assertion",
-				"severity: medium, single finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T22:24:08.910Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
