@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T04:21:02.536Z",
+	"generatedAt": "2026-10-09T04:44:27.355Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3771,39 +3771,6 @@
 			"scoredAt": "2026-10-03T19:51:57.382Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-3e55b8b7c010",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3e55b8b7c010.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "3d1fd2ce49d515853364f839b4efc175131b3397a42c4877a3212e95614a083c",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Missing real pricing data source in the appointment form risks incorrect quotes and billing mismatches, a user-facing financial-trust issue with a clear fix direction.",
-			"evidence": [
-				"TODO(handoff): no server data source plumbs a real price",
-				"diagnosis cites billing mismatches and trust damage risk",
-				"fix direction: query shared DB schema for service pricing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T07:27:16.742Z"
-		},
-		{
 			"key": "spec:2026-10-03-hub-calendar-temporal-readiness-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3900,41 +3867,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T17:22:08.309Z"
-		},
-		{
-			"key": "pr:minion_hub#450",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#450 feat(scheduling): payment for the whole event — service prices, per-service money, multi-service charge",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/450",
-			"sourceUpdatedAt": "2026-10-08T23:48:47Z",
-			"sourceFingerprint": "e795f8715b68899af446006f3b1c1982a86042ca0adb645b0955f7776e0fdc9d",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#764"
-			],
-			"rationale": "Well-specified, fully tested event-wide payment feature with passing checks, ready to land.",
-			"evidence": [
-				"168 tests across 12 files; bun run check 0/0, lint:design+lint:tokens 0",
-				"closes meta proposal 2026-09-30-hub-appointment-services-table-price",
-				"detailed rules for grant/plan/cancelled service payment states"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T23:52:18.216Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -5149,6 +5081,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-02T23:17:02.574Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-2123c34b9bc0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2123c34b9bc0.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "57b63a54a3577f295e4d4fa94938d8338df63657fb63a59fb151a3eee666f5e4",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "paidAmount summing all non-void lines without status filtering is a concrete billing-accuracy bug with a clear fix direction pointing at the schema's status fields.",
+			"evidence": [
+				"sums every non-void line of the member regardless",
+				"overstates what members have actually paid, breaking accuracy in invoices"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T04:44:27.182Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2e738f3f945a",
@@ -15086,38 +15050,6 @@
 			"scoredAt": "2026-10-05T11:59:35.856Z"
 		},
 		{
-			"key": "proposal:2026-09-30-hub-appointment-services-table-price",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "New-appointment services table — Price column has no data source",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-appointment-services-table-price.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "83e14460c7d18986024bfc840dbb423daa6bfc52d7ee63893c1d817ed42e9305",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The price gap and its fix are precisely identified with a stated scope check, making this an actionable, bounded piece of work.",
-			"evidence": [
-				"Price column always renders '—' per TODO(handoff) in AppointmentForm.svelte",
-				"fix path named: join schedEventTypes to its sellable/product inside listEventTypes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T07:22:01.687Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-3530856808",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16501,6 +16433,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T23:21:24.322Z"
+		},
+		{
+			"key": "issue:minion-meta#497",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#497 [monitor:unstick] run 90699164 (minion-meta rank) - batch candidate mismatch, exit 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/497",
+			"sourceUpdatedAt": "2026-09-18T03:17:35Z",
+			"sourceFingerprint": "f76e487746e2bc25673f52741e2bff36ccc3d1bf634e653a12c12a84979d520d",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#587"
+			],
+			"rationale": "A genuine batch-validation failure left 89/532 ranking candidates unprocessed and incurred cost, but root cause is unconfirmed pending a retry.",
+			"evidence": [
+				"batch 4 omitted or added candidates",
+				"89/532 candidates were still pending when it stopped",
+				"cost was incurred ($1.02)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T04:44:27.182Z"
 		},
 		{
 			"key": "issue:minion-meta#526",
@@ -20859,38 +20826,6 @@
 			"scoredAt": "2026-10-06T05:26:20.196Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for nitter persistence/shutdown gives no current deployment status or outstanding issue to act on.",
-			"evidence": [
-				"title: fix(nitter): serialize persistence and drain shutdown (#295)",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T04:21:02.357Z"
-		},
-		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23228,41 +23163,6 @@
 			"scoredAt": "2026-10-07T23:51:35.593Z"
 		},
 		{
-			"key": "issue:minion-meta#497",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#497 [monitor:unstick] run 90699164 (minion-meta rank) - batch candidate mismatch, exit 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/497",
-			"sourceUpdatedAt": "2026-09-18T03:17:35Z",
-			"sourceFingerprint": "f76e487746e2bc25673f52741e2bff36ccc3d1bf634e653a12c12a84979d520d",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"issue:minion-meta#587"
-			],
-			"rationale": "Possible genuine batch-validation bug in ranking logic (not just infra) but evidence is thin and recommends only a retry first.",
-			"evidence": [
-				"batch candidate-set mismatch on batch 4",
-				"cost was incurred ($1.02)",
-				"89/532 candidates still pending"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T04:24:06.173Z"
-		},
-		{
 			"key": "issue:minion-meta#500",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23396,6 +23296,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T15:51:43.911Z"
+		},
+		{
+			"key": "issue:minion-meta#587",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#587 [monitor:unstick] rank run dfc092d5 - batch 2 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/587",
+			"sourceUpdatedAt": "2026-09-25T03:17:34Z",
+			"sourceFingerprint": "7877ce6ac4f0517f009fcec0c2e9dbe73cfa70567cca00cfc741a124e9c63ff4",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#497"
+			],
+			"rationale": "Both bounded providers rejecting batch 2 looks like a transient outage rather than a task bug, but recurrence would warrant a dedicated classifier signature shared with #497's batch failures.",
+			"evidence": [
+				"both bounded providers rejected it (claude unavailable/invalid, codex fallback also failing)",
+				"93/631 candidates pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T04:44:27.182Z"
 		},
 		{
 			"key": "issue:minion-meta#606",
@@ -23821,6 +23755,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T21:22:02.187Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-371c7c4e4606",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-371c7c4e4606.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "1794599e0e4bb415d25d143e5d6fd1bd26f689eb016649cd3b900ffe2accdd0d",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Hardcoded PEN currency formatting is a real but narrow regional UX issue whose impact depends on whether non-Peru orgs actually exist, which is unconfirmed.",
+			"evidence": [
+				"formatMoney's PEN",
+				"wrong currency symbols for non-Peru regions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T04:44:27.182Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
@@ -27513,41 +27479,6 @@
 			"scoredAt": "2026-10-02T12:24:25.230Z"
 		},
 		{
-			"key": "pr:minion-meta#764",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#764 docs(ledger): event-wide payment round + price-column proposal resolved",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/764",
-			"sourceUpdatedAt": "2026-10-08T23:45:28Z",
-			"sourceFingerprint": "b740fb968c261eaa643bfad887e2b2c4e42db649e48303f03fa50e80199c9602",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#450"
-			],
-			"rationale": "Trivial ledger/docs PR closing out the already-shipped payment proposal, safe to merge.",
-			"evidence": [
-				"Resolves 2026-09-30-hub-appointment-services-table-price",
-				"price join shipped in the hub payment PR",
-				"appends round 3 / open ends 14-16 to the ledger"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T23:52:18.216Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29005,19 +28936,18 @@
 				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "prune",
+			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#737"
 			],
-			"rationale": "Self-diagnosed infra exit-126 with reconcile logic already completed and pushed, so no actionable fix remains beyond a retry already recommended by the monitor.",
+			"rationale": "Diagnosis shows the reconcile sweep already completed and pushed; only a transient exit-126/turns=0 provider-exec fault remains, matching #737's identical signature.",
 			"evidence": [
-				"reconcile sweep ran to completion...pushed",
-				"exit-126, turns=0",
-				"no spec fix or code fix indicated"
+				"reconcile sweep itself ran to completion...pushed 2b1dca5..b5231d8",
+				"exit-126 and turns=0, permission_denials=0"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T04:24:06.173Z"
+			"scoredAt": "2026-10-09T04:44:27.182Z"
 		},
 		{
 			"key": "issue:minion-meta#502",
@@ -29376,41 +29306,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T02:51:37.216Z"
-		},
-		{
-			"key": "issue:minion-meta#587",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#587 [monitor:unstick] rank run dfc092d5 - batch 2 provider failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/587",
-			"sourceUpdatedAt": "2026-09-25T03:17:34Z",
-			"sourceFingerprint": "7877ce6ac4f0517f009fcec0c2e9dbe73cfa70567cca00cfc741a124e9c63ff4",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"issue:minion-meta#497"
-			],
-			"rationale": "Transient provider outage on one batch with earlier stages succeeding, recommendation is just retry, no code fix indicated.",
-			"evidence": [
-				"both bounded providers rejected it",
-				"transient provider-side outage, not a data or spec bug",
-				"Recommendation: retry the rank job"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T04:24:06.173Z"
 		},
 		{
 			"key": "issue:minion-meta#588",
@@ -29897,19 +29792,18 @@
 				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "prune",
+			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#496"
 			],
-			"rationale": "Same recurring infra exit-126/turns=0 signature as #496 with underlying work already pushed and idempotent retry recommended.",
+			"rationale": "Same exit-126/turns=0 infra signature as #496 with the deterministic reconcile work already pushed, so these should merge into one classifier-signature goal.",
 			"evidence": [
-				"deterministic sweep...completed and was persisted/pushed cleanly",
-				"exited 126 with turns=0",
-				"safe to retry"
+				"deterministic sweep itself...completed and was persisted/pushed cleanly",
+				"exited 126 with turns=0 and permission_denials=0"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T04:24:06.173Z"
+			"scoredAt": "2026-10-09T04:44:27.182Z"
 		},
 		{
 			"key": "issue:minion-meta#740",
@@ -32086,6 +31980,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T01:31:11.900Z"
+		},
+		{
+			"key": "run:minion_hub#37885078510",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/37885078510",
+			"sourceUpdatedAt": "2026-10-09T04:41:58Z",
+			"sourceFingerprint": "3994e14d0a3431afc26cd54132370de52b06abeabf22b7ad91fb4f25bff157fc",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is just an in-progress CI run status on a push, not an actionable goal.",
+			"evidence": [
+				"push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T04:44:27.182Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
