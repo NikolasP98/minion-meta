@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T20:51:11.718Z",
+	"generatedAt": "2026-10-09T21:21:12.046Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20838,38 +20838,6 @@
 			"scoredAt": "2026-10-06T05:26:20.196Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Commit fixed a nitter persistence/shutdown bug but there is no evidence of ongoing deployment issues requiring action now.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T20:51:11.563Z"
-		},
-		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30505,39 +30473,6 @@
 			"scoredAt": "2026-10-09T01:29:34.268Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-09",
-			"sourceFingerprint": "ae317359da5e0d715d7435fa401d897d8a699215e6e09508fec89a5e1f24dbad",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The flagged lines are quoted rationale/evidence text inside a generated ranking-output artifact (rankings/index.json), not real source-code TODOs, so the sweep's definition of done (edit source, remove TODO) doesn't apply as framed.",
-			"evidence": [
-				"target file is rankings/index.json, this system's own output artifact",
-				"markers quote unrelated rationale fragments (e.g. 'discount editor has no close affordance', 'drop column (proposal #16)')",
-				"definition of done expects a TODO(handoff) comment removal, which doesn't exist in generated JSON data"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T19:21:47.828Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32046,6 +31981,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T01:23:28.020Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "20f9a12acf26ff24f2226aa5b24cbbf0aba887b7dbaeb973c32bce20273e9ad6",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 0
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This flags text fragments found inside rankings/index.json itself (a generated data/output file containing other candidates' summaries), not real TODO(handoff) markers in source code, so there is no actionable code-level open end to resolve.",
+			"evidence": [
+				"all 'markers' point to rankings/index.json, the ranking tool's own output file, not application source",
+				"quoted fragments are excerpts from other candidates' summary text, not actual TODO(handoff) comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T21:21:11.869Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
