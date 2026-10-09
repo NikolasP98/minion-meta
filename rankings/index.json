@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T19:21:48.018Z",
+	"generatedAt": "2026-10-09T19:51:22.959Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -21161,21 +21161,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 5,
 				"implementation": 4
 			},
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The automated monitor flags a runner-level exec failure (exit-126, turns=0) but the underlying reconcile task already completed and pushed successfully, so this looks like a narrow infra flake worth confirming before committing work.",
+			"rationale": "Automated monitor alert describes a one-off runner exec failure after the underlying reconcile work already completed successfully, so it needs infra triage rather than being a scoped deliverable yet.",
 			"evidence": [
-				"exit_code=1 note 'exit-126/turns=0/permission_denials=0 for provider=claude'",
-				"log tail shows reconcile steps completed and 'a successful git push (eb22140..5898f0f dev -> dev)'",
-				"recommendation to check 'claude CLI binary permissions/PATH/exec bit on this runner host'"
+				"exit_code=1 note exit-126/turns=0 for provider=claude",
+				"reconcile steps and git push completed successfully despite the launch failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T19:24:32.264Z"
+			"scoredAt": "2026-10-09T19:51:22.786Z"
 		},
 		{
 			"key": "issue:minion-meta#550",
@@ -26748,6 +26747,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T05:21:32.531Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a changelog entry for an already-merged commit fixing nitter persistence/shutdown, not an open goal.",
+			"evidence": [
+				"commit message shows fix already merged",
+				"co-authored commit reference, not a pending task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T19:51:22.786Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
