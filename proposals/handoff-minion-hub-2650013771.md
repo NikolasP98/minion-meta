@@ -7,6 +7,7 @@ updated: 2026-10-09
 repos: [minion-hub]
 tags: [handoff-sweep]
 possibly_reopens: handoff-minion-hub-384264376
+duplicate_candidate: postmerge-minion-hub-e263984cb0f6
 ---
 
 # Handoff marker — src/server/services/ruc-registry.ts
@@ -31,3 +32,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/ruc-registry.ts#L9
 - `NikolasP98/minion_hub@master src/server/services/ruc-registry.ts:11` — RUC parties created BEFORE 2026-09-17 are unverified (no
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/ruc-registry.ts#L11
+
+## Reconciliation note (2026-10-09)
+
+Both markers above were already filed individually by the post-merge
+discovery loop on 2026-09-17, same file, same PR (#326), and both are
+`status: approved` (left this stage, not edited here):
+- L9 (DNI twin) ↔ `postmerge-minion-hub-e263984cb0f6` (set as `duplicate_candidate`)
+- L11 (unverified RUC parties) ↔ `postmerge-minion-hub-b27d16c7cc07`
