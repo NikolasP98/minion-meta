@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T12:21:07.857Z",
+	"generatedAt": "2026-10-09T12:51:10.624Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -24928,6 +24928,38 @@
 			"scoredAt": "2026-10-08T18:51:44.749Z"
 		},
 		{
+			"key": "issue:minion-meta#739",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#739 [monitor:unstick] reconcile run 4668a9c7: claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/739",
+			"sourceUpdatedAt": "2026-10-02T12:17:35Z",
+			"sourceFingerprint": "42730b6033742726df514f33d90efb717891159efe513b89e1eeff7f2ea2c76c",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Deterministic pipeline succeeded but the claude agent step failed with exit-126/turns=0, pointing to a runner-box exec/permissions issue rather than a task-logic bug.",
+			"evidence": [
+				"status=error, top-level exit_code=1 but deterministic steps completed cleanly",
+				"exit-126, turns=0, permission_denials=0 signature suggests box-level CLI invocation problem"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T12:51:10.461Z"
+		},
+		{
 			"key": "issue:minion-meta#752",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25393,6 +25425,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 94003 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-09T12:23:59Z",
+			"sourceFingerprint": "1b8c8ed7dbf27c44c29a3ee4d56c81d8550656e4ddb0e80a0534d2e45522a1a6",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine upstream sync notice listing commits with no defined actionable scope or failure.",
+			"evidence": [
+				"title: 'Upstream sync: 94003 new commit(s) available'",
+				"tags: upstream-sync"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T12:51:10.461Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -27505,38 +27569,6 @@
 			"scoredAt": "2026-10-08T16:51:43.807Z"
 		},
 		{
-			"key": "issue:minion-meta#739",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#739 [monitor:unstick] reconcile run 4668a9c7: claude agent exec failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/739",
-			"sourceUpdatedAt": "2026-10-02T12:17:35Z",
-			"sourceFingerprint": "42730b6033742726df514f33d90efb717891159efe513b89e1eeff7f2ea2c76c",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single automated reconcile run failed to even start the claude agent (exit-126, 0 turns) while the deterministic pipeline steps it reports alongside (handoff refreshes, merge-scan, git push) all completed, suggesting a one-off runner-level exec/permissions glitch rather than a standing defect worth immediate paid work.",
-			"evidence": [
-				"run note: reconcile agent failed (provider=claude; exit-126; turns=0; permission_denials=0)",
-				"git push of minion-meta dev succeeded (74a410c..386a9d2)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T12:24:25.230Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28016,38 +28048,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged commit fixing nitter persistence/shutdown shown as deployment health, with no indication of an outstanding issue.",
-			"evidence": [
-				"commit fix(nitter): serialize persistence and drain shutdown (#295) already merged",
-				"status: unknown with no stated ongoing deployment problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T11:51:24.756Z"
 		},
 		{
 			"key": "issue:minion-meta#332",
@@ -31295,39 +31295,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T01:26:29.163Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 93892 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-09T06:26:34Z",
-			"sourceFingerprint": "85dba00207b357b2dbf424f46574bfaf9b0e6eb2bae68ff77552af0bf7a22934",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 0
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated upstream-sync notification dumping a raw commit log with no defined scope or outcome.",
-			"evidence": [
-				"title: '93892 new commit(s) available'",
-				"body is a verbatim git log dump",
-				"tag: upstream-sync"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T06:51:46.732Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
