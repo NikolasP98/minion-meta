@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T15:21:17.824Z",
+	"generatedAt": "2026-10-09T15:51:37.166Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11343,38 +11343,6 @@
 			"scoredAt": "2026-10-09T01:28:21.521Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-5ff1c51",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 5ff1c51",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5ff1c51.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "aa436990021364c125d71b8d8754495103cd8dc011e282627886830d6a1afe35",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Merge-scan flagged concrete empty-catch and unchecked-access defects at specific file:line sites that make shutdown failures silently invisible.",
-			"evidence": [
-				"server-close.ts:184/189 empty-catch swallows quiesce()/close() errors",
-				"bridge-ws.test.ts:549/563 unchecked array access/.find()! could crash"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T15:24:08.412Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-factory-e8cac06",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15164,6 +15132,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T01:31:02.590Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-5ff1c51",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 5ff1c51",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5ff1c51.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "aa436990021364c125d71b8d8754495103cd8dc011e282627886830d6a1afe35",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The merge-scan lists concrete medium-severity empty-catch and unchecked-access findings at specific file:line locations in gateway shutdown code and tests, which are bounded and actionable.",
+			"evidence": [
+				"server-close.ts:184/189 empty-catch swallows quiesce()/close() errors, hiding shutdown failures",
+				"bridge-ws.test.ts:549,563 unchecked array/find access could crash tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T15:51:37.011Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2d7b4a1718f3",
@@ -20838,6 +20838,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T05:26:20.196Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The nitter persistence/shutdown fix described is already merged, leaving no remaining actionable work under this deploy-health entry.",
+			"evidence": [
+				"commit message: fix(nitter): serialize persistence and drain poller shutdown (#295)",
+				"no open status field; entry is a merged commit record, not a pending task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T15:51:37.011Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
@@ -29057,20 +29089,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 4,
 				"implementation": 3
 			},
-			"confidence": 6,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The diagnosis confirms a transient runner-level exec failure (exit-126, 0 turns) with reconcile side effects already landed and retry explicitly deemed safe, leaving no actionable code work.",
+			"rationale": "The quoted diagnosis states the reconcile side effects already landed and the exit-126/turns=0 failure is a transient runner issue safe to retry, not bounded dev work.",
 			"evidence": [
-				"exit 126 means the binary could not execute before any agent turn began",
-				"reconcile side effects (git push, proposals file) already landed; recommendation is retry, escalate only if recurring"
+				"quoted diagnosis: 'reconcile side effects ... already landed, so a retry mainly needs to get the claude agent step executing again'",
+				"quoted diagnosis: 'Recommendation: safe to retry'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T15:24:08.412Z"
+			"scoredAt": "2026-10-09T15:51:37.011Z"
 		},
 		{
 			"key": "issue:minion-meta#504",
