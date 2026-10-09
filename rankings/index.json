@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T23:21:46.252Z",
+	"generatedAt": "2026-10-09T23:51:20.869Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2363,74 +2363,6 @@
 			"scoredAt": "2026-10-03T20:51:25.314Z"
 		},
 		{
-			"key": "issue:minion-meta#743",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#743 [monitor:unstick] reconcile run a5fa3e14 (minion-meta): claude agent exec failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/743",
-			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
-			"sourceFingerprint": "6d07186d1654c6db0af411f66c9e908eaaf972051e82f2b0dd551650015b6d2d",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#744"
-			],
-			"rationale": "Exit-126/turns=0 runner-level failure recurring twice within 30 minutes should become one host-classifier fix goal rather than two separate tickets.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 indicates agent process never executed a turn",
-				"identical signature occurred in run f8c07e90 about 30 minutes earlier"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T23:24:17.960Z"
-		},
-		{
-			"key": "issue:minion-meta#744",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#744 [monitor:unstick] reconcile run f8c07e90 (minion-meta): claude agent exec failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/744",
-			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
-			"sourceFingerprint": "9ef0ed064d5e18aa81d0cbd5d9aef74a2588edfa2b319e5edeaef28e0242acf8",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#743"
-			],
-			"rationale": "Same exit-126 runner-level exec failure signature as #743 occurring ~30 minutes apart, warranting a single combined remediation goal.",
-			"evidence": [
-				"git/merge-scan phase completed normally; failure is isolated to claude agent invocation with exit-126",
-				"same signature as run a5fa3e14 (#743) about 30 minutes earlier"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T23:24:17.960Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-igv-rate-from-org-config",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3254,6 +3186,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T04:52:18.180Z"
+		},
+		{
+			"key": "pr:minion (gateway)#298",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#298 fix(runtime): bound persistent logs and disable container core dumps",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/298",
+			"sourceUpdatedAt": "2026-10-09T23:49:22Z",
+			"sourceFingerprint": "bc0aa013b30aa7728f92f5e3c781c7765fabedff57acb5ca148b2a6ef8645031",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Security-hardening PR against an approved spec with passing local verification, isolated scope, and a defined rollout/rollback plan.",
+			"evidence": [
+				"disables core dumps and bounds logs to 50MiB with rotation",
+				"references approved spec readiness-faces-runtime-spec.md",
+				"36+33+8 local test suites passed; pnpm check clean"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T23:51:20.697Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -6658,6 +6623,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T08:52:00.129Z"
+		},
+		{
+			"key": "issue:minion-meta#743",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#743 [monitor:unstick] reconcile run a5fa3e14 (minion-meta): claude agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/743",
+			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
+			"sourceFingerprint": "6d07186d1654c6db0af411f66c9e908eaaf972051e82f2b0dd551650015b6d2d",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#744"
+			],
+			"rationale": "Automated exit-126 exec failure alert duplicating #744's diagnosis of the same runner-level claude-binary issue and should become one fix-the-box goal.",
+			"evidence": [
+				"exit-126, turns=0 indicates binary not executable, not task logic",
+				"identical signature in run f8c07e90 ~30 min earlier same repo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T23:51:20.697Z"
+		},
+		{
+			"key": "issue:minion-meta#744",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#744 [monitor:unstick] reconcile run f8c07e90 (minion-meta): claude agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/744",
+			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
+			"sourceFingerprint": "9ef0ed064d5e18aa81d0cbd5d9aef74a2588edfa2b319e5edeaef28e0242acf8",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#743"
+			],
+			"rationale": "Second instance of the same persistent runner-level claude-binary exec failure as #743; should be consolidated into a single infra fix goal.",
+			"evidence": [
+				"same exit-126/turns=0 signature as run a5fa3e14 about 30 minutes later",
+				"recommends checking runner provisioning/permissions before retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T23:51:20.697Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
@@ -28358,37 +28391,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit already merged fixing nitter persistence and shutdown, leaving no outstanding actionable work.",
-			"evidence": [
-				"commit merged fixing nitter persistence and drain poller shutdown (#295)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T23:21:46.046Z"
 		},
 		{
 			"key": "issue:minion-meta#332",
