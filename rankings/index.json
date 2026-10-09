@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T09:51:51.168Z",
+	"generatedAt": "2026-10-09T10:51:26.949Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4160,6 +4160,38 @@
 			"scoredAt": "2026-10-07T08:21:55.181Z"
 		},
 		{
+			"key": "issue:minion-meta#598",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#598 [monitor:unstick] Unstick: rank board goals (eb0e4886)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/598",
+			"sourceUpdatedAt": "2026-09-25T09:17:53Z",
+			"sourceFingerprint": "898c76c471468ab6802eaa2b1a34b142832b8dd8a8717cbf1cc46640335d1acc",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A recurring JSON-parse failure in the rank pipeline across multiple runs on a fixed date indicates a genuine tooling defect that needs human inspection of the prompt/schema.",
+			"evidence": [
+				"recurred across at least 6 rank runs between 06:27 and 08:29 UTC on 2026-09-25 with the same 'Invalid numeric literal' signature",
+				"both claude and its codex fallback returned invalid JSON for this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T10:51:26.825Z"
+		},
+		{
 			"key": "issue:minion-meta#628",
 			"kind": "issue",
 			"stage": "proposal",
@@ -6301,40 +6333,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T10:21:23.911Z"
-		},
-		{
-			"key": "issue:minion-meta#598",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#598 [monitor:unstick] Unstick: rank board goals (eb0e4886)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/598",
-			"sourceUpdatedAt": "2026-09-25T09:17:53Z",
-			"sourceFingerprint": "898c76c471468ab6802eaa2b1a34b142832b8dd8a8717cbf1cc46640335d1acc",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion (gateway)#36979709427"
-			],
-			"rationale": "Recurring rank-run JSON parse failures across both providers indicate a real automation defect needing human prompt/schema inspection rather than blind retry.",
-			"evidence": [
-				"recurred across at least 6 rank runs between 06:27 and 08:29 UTC on 2026-09-25 with same signature",
-				"parse error: Invalid numeric literal; both claude and codex fallback failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T09:54:05.371Z"
 		},
 		{
 			"key": "issue:minion-meta#615",
@@ -28018,6 +28016,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary is a commit message for a nitter persistence/shutdown fix that has already merged, leaving no open deployment action.",
+			"evidence": [
+				"commit fixes nitter persistence and poller shutdown drain",
+				"status is unknown with no further described issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T10:51:26.825Z"
 		},
 		{
 			"key": "issue:minion-meta#332",
