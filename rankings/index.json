@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T11:21:24.211Z",
+	"generatedAt": "2026-10-09T11:51:24.890Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18000,6 +18000,38 @@
 			"scoredAt": "2026-10-09T08:52:53.005Z"
 		},
 		{
+			"key": "issue:minion-meta#501",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#501 [monitor:unstick] run d2eb2587 (minion-meta reconcile) — agent exec failure, exit-126/turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/501",
+			"sourceUpdatedAt": "2026-09-18T10:17:26Z",
+			"sourceFingerprint": "a81a5eb0be1207b3d01aa7a059317b7210935418f7bf81149d4234401a04b837",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake gives a clean infra diagnosis (exit-126, turns=0) with a concrete, bounded fix path of retrying and checking the runner's claude CLI install/PATH.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 — a clean infra signature per the note",
+				"recommendation: retry the run and have a human check the runner box's claude CLI install/PATH/permissions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T11:51:24.756Z"
+		},
+		{
 			"key": "issue:minion-meta#519",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24572,38 +24604,6 @@
 			"scoredAt": "2026-10-08T02:21:29.883Z"
 		},
 		{
-			"key": "issue:minion-meta#501",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#501 [monitor:unstick] run d2eb2587 (minion-meta reconcile) — agent exec failure, exit-126/turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/501",
-			"sourceUpdatedAt": "2026-09-18T10:17:26Z",
-			"sourceFingerprint": "a81a5eb0be1207b3d01aa7a059317b7210935418f7bf81149d4234401a04b837",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An automated monitor-intake ticket flags an isolated exit-126/turns=0 agent-launch infra failure with reconcile state already safely advanced, warranting a human PATH/permissions check rather than urgent action.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 — agent process never started a turn",
-				"git push dev->dev succeeded and proposals/index.json already written before the failure point"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T11:24:00.056Z"
-		},
-		{
 			"key": "issue:minion-meta#575",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28016,6 +28016,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged commit fixing nitter persistence/shutdown shown as deployment health, with no indication of an outstanding issue.",
+			"evidence": [
+				"commit fix(nitter): serialize persistence and drain shutdown (#295) already merged",
+				"status: unknown with no stated ongoing deployment problem"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T11:51:24.756Z"
 		},
 		{
 			"key": "issue:minion-meta#332",
