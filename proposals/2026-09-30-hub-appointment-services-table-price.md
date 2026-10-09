@@ -1,7 +1,7 @@
 ---
 id: 2026-09-30-hub-appointment-services-table-price
 title: New-appointment services table — Price column has no data source
-status: draft
+status: done
 created: 2026-09-30
 repos: [minion_hub]
 tags: [ui, ux, data]
@@ -45,3 +45,8 @@ Confirm whether event types are always backed by a sellable/product (1:1),
 or whether some event types have no linked product (service-only, no price)
 — in that case the Price column should keep showing "—" for those rows by
 design, not as a bug once the join lands.
+
+
+## Resolved 2026-10-08
+
+Hub `feat/visit-event-payment`: `listEventTypes` LEFT JOINs `fin_products` on `product_id` (active only) and returns `price` + `currency` (org POS currency, `fin_products` has no currency column); both appointment loaders and the calendar loader select them; `svcPrice()` returns `et.price`. `null` when the event type has no product — rendered "—", never 0.

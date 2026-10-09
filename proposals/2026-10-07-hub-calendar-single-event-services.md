@@ -114,6 +114,28 @@ group body, re-anchors the tray on the event's lead, routes reschedule through
     `2026-09-30-hub-appointment-services-table-price.md`), charge every unpaid
     service.
 
+## Round 3 (hub `feat/visit-event-payment` — payment for the whole event)
+
+Prices now exist (see `2026-09-30-hub-appointment-services-table-price.md`,
+resolved). `VisitMember` carries `price`, `paidAmount`, `currency`, `funding`
+(`cash|grant|plan`, per ROW), `ticketIds`; `getBookingDetail().tickets` is
+event-wide (`lineTotal` = the event's lines on the ticket, siblings never
+"also bought"); the tray shows money per service, an event summary ("Paid ·
+Pending (k of n)"), and the Charge button hands EVERY unpaid cash service to the
+till (handoff blob v2, multi-line; v1 still parsed). Decisions taken without the
+owner (revise if wrong): a grant-covered service owes nothing; a plan-funded
+service is pending against the plan's own remaining, not the event's; a
+cancelled / rejected / no-show service is neither unpaid nor pending; mixed
+currencies across services ⇒ counts only, never a summed amount.
+
+14. **`paidAmount` ignores a currency change inside one org** (sums a member's
+    lines regardless of ticket currency; `currency` = the newest). One org =
+    one POS currency today. `TODO(handoff)` in `visitForBooking`'s doc.
+15. **Create-form Price cell still formats with the PEN default** — `et.currency`
+    is plumbed; pass it in the `priceCell` snippet. `TODO(handoff)` on `svcPrice`.
+16. **Grant/plan facets in the Payment block describe the anchor row only**; the
+    Services rows carry the per-service "Package"/"Plan" label instead.
+
 ## Monitoring (PostHog)
 
 Client events (`src/lib/analytics/track.ts`): `customer_search_no_results`,
