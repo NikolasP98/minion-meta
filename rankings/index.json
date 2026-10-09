@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T09:21:32.478Z",
+	"generatedAt": "2026-10-09T09:51:51.168Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7513,6 +7513,74 @@
 			"scoredAt": "2026-10-06T06:52:05.563Z"
 		},
 		{
+			"key": "issue:minion-meta#595",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#595 [monitor:unstick] rank board goals failed (f989ec80)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/595",
+			"sourceUpdatedAt": "2026-09-25T08:17:50Z",
+			"sourceFingerprint": "e12b310a0b5b26699d5bd55e984faf37c15e9f16fbace5f5c1ca31b062f5e63a",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#596"
+			],
+			"rationale": "Recurring rank-batch JSON-parsing failure duplicates #596's identical signature and should become one tracked goal.",
+			"evidence": [
+				"parse error: Invalid numeric literal at line 1, column 4 on claude batch-2 response",
+				"recurred 5 times within ~70 minutes on 2026-09-25"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T09:51:51.030Z"
+		},
+		{
+			"key": "issue:minion-meta#596",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#596 [monitor:unstick] rank board goals failed (af6f08b4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/596",
+			"sourceUpdatedAt": "2026-09-25T08:17:50Z",
+			"sourceFingerprint": "d234475bdf82a7176419db9e865d2d06ba1be85b15c38f1f763c5981cd27d9bb",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#595"
+			],
+			"rationale": "Same rank-batch-invalid-json signature as #595; both providers failed and should be consolidated into one fix goal.",
+			"evidence": [
+				"parse error: Invalid numeric literal at line 1, column 9",
+				"fallback to codex also failed/invalid JSON"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T09:51:51.030Z"
+		},
+		{
 			"key": "issue:minion-meta#612",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8488,74 +8556,6 @@
 			"scoredAt": "2026-10-05T02:25:57.895Z"
 		},
 		{
-			"key": "issue:minion-meta#595",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#595 [monitor:unstick] rank board goals failed (f989ec80)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/595",
-			"sourceUpdatedAt": "2026-09-25T08:17:50Z",
-			"sourceFingerprint": "e12b310a0b5b26699d5bd55e984faf37c15e9f16fbace5f5c1ca31b062f5e63a",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#596"
-			],
-			"rationale": "Part of a confirmed 5-run cluster of identical rank-batch invalid-JSON failures that should become one host-classifier/provider-parsing fix rather than two separate tickets.",
-			"evidence": [
-				"5 identical rank-batch-JSON failures within ~70 minutes on 2026-09-25",
-				"recommends new host-classifier signature 'rank-batch-invalid-json'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T09:24:39.612Z"
-		},
-		{
-			"key": "issue:minion-meta#596",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#596 [monitor:unstick] rank board goals failed (af6f08b4)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/596",
-			"sourceUpdatedAt": "2026-09-25T08:17:50Z",
-			"sourceFingerprint": "d234475bdf82a7176419db9e865d2d06ba1be85b15c38f1f763c5981cd27d9bb",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#595"
-			],
-			"rationale": "Duplicate occurrence of the same rank-batch invalid-JSON cluster as #595, best resolved as one combined fix.",
-			"evidence": [
-				"same fingerprint cluster as f989ec80 (af6f08b4)",
-				"claude batch-2 response non-JSON, codex fallback also fails"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T09:24:39.612Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8782,6 +8782,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T01:31:02.590Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-249dc0b349bf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/db/pg-hr-schema.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-249dc0b349bf.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "4dbd56be99399f59ea59b40fd67cfd954f94c9e37f0631a4b12dccfb253163b3",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, bounded schema-TODO cleanup with a clear migration/verification path reduces data-consistency risk in pg-hr-schema.ts.",
+			"evidence": [
+				"TODO(handoff): drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+				"status approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T09:51:51.030Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-91262d537ce6",
@@ -13039,39 +13071,6 @@
 			"scoredAt": "2026-10-03T07:55:42.494Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-249dc0b349bf",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/db/pg-hr-schema.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-249dc0b349bf.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "4dbd56be99399f59ea59b40fd67cfd954f94c9e37f0631a4b12dccfb253163b3",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, bounded schema TODO with a clear diagnosis and fix direction (verify proposal #16, write migration, drop or document column).",
-			"evidence": [
-				"approved status",
-				"TODO(handoff): drop column (proposal #16)",
-				"fix direction specifies writing a Drizzle migration"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T09:24:39.612Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-66d88ed81830",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14499,38 +14498,6 @@
 			"scoredAt": "2026-10-07T10:21:26.402Z"
 		},
 		{
-			"key": "issue:minion-meta#597",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#597 [monitor:unstick] reconcile proposals failed (c99f511b)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/597",
-			"sourceUpdatedAt": "2026-09-25T08:18:05Z",
-			"sourceFingerprint": "c06e113020b5a303b2d9b9b8b532ff56479949cea3479e25b925e9cf60088f17",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Underlying reconcile work already persisted correctly, so this is a lower-urgency infra/exec-environment check (claude binary PATH/permissions) recurring 4x, distinct from the rank-batch signature.",
-			"evidence": [
-				"exit-126 turns=0 after work had already landed",
-				"recurred 4 times in ~1.5 hours across reconcile runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T09:24:39.612Z"
-		},
-		{
 			"key": "issue:minion-meta#614",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15167,6 +15134,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T01:31:02.590Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-2d7b4a1718f3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2d7b4a1718f3.md",
+			"sourceUpdatedAt": "2026-09-25",
+			"sourceFingerprint": "2c9df84d7c76b8891e990ba21bf8d6760139fb0624ac9fac5723533d41a8ed10",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, scoped fix to make BookingCalendar's tagOptions reactively derive from the event-scope registry prevents stale filter tags.",
+			"evidence": [
+				"TODO(handoff): `tagOptions` is the FILTER's list — the event-scope registry",
+				"status approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T09:51:51.030Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5006c27444a5",
@@ -17402,39 +17401,6 @@
 			"scoredAt": "2026-10-09T01:22:16.232Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-2d7b4a1718f3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2d7b4a1718f3.md",
-			"sourceUpdatedAt": "2026-09-25",
-			"sourceFingerprint": "2c9df84d7c76b8891e990ba21bf8d6760139fb0624ac9fac5723533d41a8ed10",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved UI data-coupling fix with a clear why-it-matters and a scoped, if not fully pinpointed, fix location.",
-			"evidence": [
-				"approved status",
-				"tagOptions decoupled from event-scope registry causes stale filter UI",
-				"fix direction: derive tagOptions reactively from a shared registry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T09:24:39.612Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-435bdc58c70c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19601,6 +19567,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T11:21:31.692Z"
+		},
+		{
+			"key": "issue:minion-meta#597",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#597 [monitor:unstick] reconcile proposals failed (c99f511b)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/597",
+			"sourceUpdatedAt": "2026-09-25T08:18:05Z",
+			"sourceFingerprint": "c06e113020b5a303b2d9b9b8b532ff56479949cea3479e25b925e9cf60088f17",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Diagnosed as an infra exec-126 fault after the substantive reconcile work already persisted successfully, so it needs a human runner-environment check rather than immediate dev work.",
+			"evidence": [
+				"exit-126; turns=0 after proposals/index.json already written and rebase re-pushed",
+				"recurred 4 times in ~1.5 hours (c99f511b, 04cab674, 2fe7af8a, a993aea0)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T09:51:51.030Z"
 		},
 		{
 			"key": "issue:minion-meta#657",
@@ -24506,38 +24504,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:29:26.851Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit shows the nitter persistence/shutdown fix and its test are already merged, leaving no further actionable work.",
-			"evidence": [
-				"commit message is a merged fix(nitter) with accompanying test change",
-				"tags only 'deployment' with status unknown and no open scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T09:21:32.326Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
