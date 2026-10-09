@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T02:50:59.168Z",
+	"generatedAt": "2026-10-09T03:51:12.113Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -29346,38 +29346,6 @@
 			"scoredAt": "2026-10-08T02:51:37.216Z"
 		},
 		{
-			"key": "issue:minion-meta#586",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#586 [monitor:unstick] reconcile run 9712b5ab (minion-meta) - claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/586",
-			"sourceUpdatedAt": "2026-09-25T02:17:26Z",
-			"sourceFingerprint": "4093e6365bd85729c1bdf121f1c97bfbad2bafad893e90915caa883e99836f60",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Transient infra exit-126/turns=0 failure where reconcile work already completed and pushed successfully, so no action is needed beyond a cheap retry already noted.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0",
-				"reconcile output already pushed looks fine so a retry should be cheap"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T03:23:48.198Z"
-		},
-		{
 			"key": "issue:minion-meta#587",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31183,38 +31151,6 @@
 			"scoredAt": "2026-10-04T20:51:21.896Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
-			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
-			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit shows the nitter persistence/shutdown fix is already merged, leaving no outstanding actionable work.",
-			"evidence": [
-				"fix(nitter): serialize persistence and drain poller shutdown",
-				"commit b841c36 already merged with co-author sign-off"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T01:51:06.823Z"
-		},
-		{
 			"key": "issue:minion-meta#765",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31731,6 +31667,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T06:52:29.491Z"
+		},
+		{
+			"key": "issue:minion-meta#586",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#586 [monitor:unstick] reconcile run 9712b5ab (minion-meta) - claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/586",
+			"sourceUpdatedAt": "2026-09-25T02:17:26Z",
+			"sourceFingerprint": "4093e6365bd85729c1bdf121f1c97bfbad2bafad893e90915caa883e99836f60",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake reports a transient provider exit-126/turns=0 launch fault on a reconcile run whose actual work (handoffs, proposals/index.json, push) already completed and landed successfully.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 on run 9712b5ab",
+				"reconcile sweep itself completed normally: ~85 handoffs refreshed, proposals/index.json written, changes pushed 91fa30b..9cdd1cc"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T03:51:11.943Z"
 		},
 		{
 			"key": "issue:minion-meta#589",
