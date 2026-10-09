@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-09T18:21:18.657Z",
+	"generatedAt": "2026-10-09T18:51:37.223Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -732,39 +732,6 @@
 			"scoredAt": "2026-09-15T14:58:39.472Z"
 		},
 		{
-			"key": "pr:minion_hub#451",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#451 feat(scheduling): board + table show one row per event; fix visit-wide status 400 on null reason",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/451",
-			"sourceUpdatedAt": "2026-10-09T16:49:03Z",
-			"sourceFingerprint": "5b8cc9a398ba4c088d8588068fa8390e9daf47666854b1c1f98080fd37d6795f",
-			"score": 79,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a live 400 regression on every visit-wide tray status write since #449 shipped, with a regression test and green CI gates.",
-			"evidence": [
-				"\"every visit-wide status write from the tray has 400'd since #449 deployed\"",
-				"\"8 files / 106+ tests green\"",
-				"\"bun run check 0/0\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T16:52:00.381Z"
-		},
-		{
 			"key": "spec:2026-08-22-factory-dev-staging-daily-production-promotion-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -796,6 +763,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T12:04:04.691Z"
+		},
+		{
+			"key": "pr:minion_hub#451",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#451 feat(scheduling): board + table show one row per event; fix visit-wide status 400 on null reason",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/451",
+			"sourceUpdatedAt": "2026-10-09T18:35:49Z",
+			"sourceFingerprint": "eda02e3b35c7f770ef42fdad0b04fa654f6cf30c2c3df7931d89ef78ef6f27f4",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR fixes a live production 400 error on tray status writes since #449 and ships with passing regression tests.",
+			"evidence": [
+				"every visit-wide status write from the tray has 400'd since #449 deployed",
+				"8 files / 106+ tests green, bun run check 0/0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T18:51:37.023Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
@@ -17761,6 +17760,38 @@
 			"scoredAt": "2026-10-05T12:03:01.297Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 94044 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-09T18:21:21Z",
+			"sourceFingerprint": "3685744216537d16b9d753558a44419905f005480b5a4faac7debb2960d758c2",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A raw dump of 94044 unscoped upstream commits is too large and unstructured to execute as a single goal and needs to be broken into bounded sync slices.",
+			"evidence": [
+				"Upstream sync: 94044 new commit(s) available",
+				"summary is an unscoped raw commit list with no plan"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-09T18:51:37.023Z"
+		},
+		{
 			"key": "issue:minion-meta#352",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18592,20 +18623,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A concrete medium-severity finding with a specific file/line and a plausible runtime crash risk from an unchecked property assertion.",
+			"rationale": "Scoped medium-severity test defect with an exact file/line location is small, bounded, and actionable now.",
 			"evidence": [
-				"src/shells/run-store.forks.test.ts:138 (unchecked-access)",
+				"src/shells/run-store.forks.test.ts:138 unchecked-access finding",
 				"finally block will crash if undefined"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-02T18:24:06.417Z"
+			"scoredAt": "2026-10-09T18:51:37.023Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-10e9567",
@@ -25492,14 +25523,14 @@
 			"scoredAt": "2026-10-07T21:22:27.987Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
 			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 94003 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-09T12:23:59Z",
-			"sourceFingerprint": "1b8c8ed7dbf27c44c29a3ee4d56c81d8550656e4ddb0e80a0534d2e45522a1a6",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b841c36750e4bf10dd3f81a4896b19c699fe3132",
+			"sourceUpdatedAt": "2026-09-12T21:10:47Z",
+			"sourceFingerprint": "ac3c0c652b9667b3958b3e87555e1444df0ff116e37435b0ebc7b0c5a09d8a6b",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -25511,17 +25542,17 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 4,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Routine upstream sync notice listing commits with no defined actionable scope or failure.",
+			"rationale": "This is an already-merged commit fixing nitter persistence/shutdown with no outstanding action described.",
 			"evidence": [
-				"title: 'Upstream sync: 94003 new commit(s) available'",
-				"tags: upstream-sync"
+				"commit b841c36 fixes nitter persistence and shutdown",
+				"status is unknown with no further action specified"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T12:51:10.461Z"
+			"scoredAt": "2026-10-09T18:51:37.023Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
