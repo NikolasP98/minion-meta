@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-390c35b3d77c
 title: "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-10
 updated: 2026-10-10
 repos: [minion-hub]
