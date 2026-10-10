@@ -29,13 +29,3 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master .github/workflows/notification-worker-artifact.yml:21` — Route attested artifacts to a reviewed private publication destination;
   https://github.com/NikolasP98/minion_hub/blob/master/.github/workflows/notification-worker-artifact.yml#L21
-
-## Reconciliation note 2026-10-10
-
-Likely duplicate of `postmerge-minion-hub-154299466cc7`: same file, same PR
-(#456), same marker text ("Route attested artifacts to a reviewed private
-publication destination"), filed the same day by the post-merge discovery
-loop. That proposal has the fuller diagnosis/fix-direction content, so it is
-the better merge target if a human confirms these are the same open end.
-Not merged outright — flagged for review per the handoff-sweep/postmerge-discovery
-pairing convention used elsewhere in this ledger.

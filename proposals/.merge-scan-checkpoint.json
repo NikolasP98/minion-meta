@@ -64,106 +64,50 @@
   },
   "NikolasP98/minion-ai:DEV": {
     "cursor": "b841c36750e4bf10dd3f81a4896b19c699fe3132",
-    "head": "eb40b998c45d305385d5dbfcb37537545a10f226",
-    "done": 30,
+    "head": "7fdd8f2adc4d79c2b358bac6796f38cc61dfc149",
+    "done": 13,
     "kept": [
       {
-        "file": "apps/ios/project.yml",
-        "desc": "SwiftFormat linting pre-build step removed from iOS build without immediate replacement; documented with TODO(handoff) but lint coverage is weakened.",
-        "severity": "medium",
+        "file": ".github/workflows/ci.yml",
+        "desc": "Test commands in 'Check deployment controller and rollback admission' step run without set -e; if any intermediate test fails (lines 530–536), the workflow continues instead of failing.",
+        "severity": "high",
         "category": "weakened-test",
-        "line": 50
+        "line": 530
       },
       {
         "file": "deploy/compose/delivery-floor-wiring.test.mjs",
-        "desc": "find() result assigned to target without null check; used for property mutation at lines 21–23",
-        "severity": "high",
+        "desc": "find() result at line 19 not null-checked before property access",
+        "severity": "medium",
         "category": "unchecked-access",
-        "line": 19
+        "line": 21
       },
       {
         "file": "deploy/compose/delivery-floor-wiring.test.mjs",
-        "desc": "find() result chained with property assignment without null check",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 29
-      },
-      {
-        "file": "docker/startup-permissions.test.py",
-        "desc": "Loop could access array out of bounds if last Dockerfile line ends with backslash and is followed by increment",
+        "desc": "find() result used without null check for property assignment",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 14
+        "line": 28
       },
       {
-        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
-        "desc": "Assertion changed from expect(released).toBeGreaterThanOrEqual(1) to toBe(0), reversing the tested cleanup behavior",
-        "severity": "medium",
-        "category": "weakened-test",
-        "line": 91
-      },
-      {
-        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
-        "desc": "Assertion changed from rejects.toThrow() (file deleted) to resolves.toBeUndefined() (file exists), inverting expected cleanup result",
-        "severity": "medium",
-        "category": "weakened-test",
-        "line": 92
-      },
-      {
-        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
-        "desc": "Cleanup count expectation reduced from 2 to 1; test now verifies fewer locks are cleaned up",
-        "severity": "medium",
-        "category": "weakened-test",
-        "line": 173
-      },
-      {
-        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
-        "desc": "Assertion changed from rejects.toThrow() (file deleted) to resolves.toBeUndefined() (file exists), inverting cleanup verification for stale alive lock",
-        "severity": "medium",
-        "category": "weakened-test",
-        "line": 180
-      },
-      {
-        "file": "src/cli/delivery-cli.test.ts",
-        "desc": "Accessing .payloads[0] on readQueuedDelivery result without null/undefined check",
+        "file": "deploy/swarm/minion-swarm-firewall.test.py",
+        "desc": "rule.pop(0) accessed without checking if rule has elements; will raise IndexError if empty",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 147
+        "line": 33
       },
       {
-        "file": "src/cli/gateway-cli/run-loop.ts",
-        "desc": "startPromise.catch(() => {}) with empty handler converts rejection to resolved undefined, causing startup errors to be silently lost instead of being caught and rethrown in the try block below (line 266).",
+        "file": "src/agents/sessions/session-write-lock.ts",
+        "desc": "Variable held is undefined in this scope; should be lockPath",
         "severity": "high",
-        "category": "empty-catch",
-        "line": 264
+        "category": "unchecked-access",
+        "line": 582
       },
       {
-        "file": "src/gateway/server-core/server-channels.ts",
-        "desc": "await item.task?.catch(() => {}) silently swallows errors from shutdown tasks with no logging or error tracking.",
-        "severity": "high",
-        "category": "empty-catch",
-        "line": 555
-      },
-      {
-        "file": "src/gateway/server-core/server-startup-memory.ts",
-        "desc": "Error from manager.close() operations is swallowed silently, potentially masking resource cleanup failures during startup abort or error recovery",
+        "file": "src/agents/subagents/templates/template-loader.ts",
+        "desc": "Empty catch block silently ignores fs.watch() setup errors; could mask real issues beyond platform incompatibility",
         "severity": "medium",
         "category": "empty-catch",
-        "line": 87
-      },
-      {
-        "file": "src/gateway/server-core/server-startup.ts",
-        "desc": "startupHookTask promise rejection silently swallowed in fire-and-forget pattern with no error logging or recovery",
-        "severity": "high",
-        "category": "empty-catch",
-        "line": 376
-      },
-      {
-        "file": "src/gateway/server-core/server-startup.ts",
-        "desc": "restartWakeTask promise rejection silently swallowed in fire-and-forget pattern with no error logging or recovery",
-        "severity": "high",
-        "category": "empty-catch",
-        "line": 386
+        "line": 237
       }
     ]
   }
