@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T06:22:11.049Z",
+	"generatedAt": "2026-10-10T06:51:27.560Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -771,8 +771,8 @@
 			"repo": "minion (gateway)",
 			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
-			"sourceUpdatedAt": "2026-10-10T06:01:25Z",
-			"sourceFingerprint": "98bcab479c14a11265f468371ff00590efc2dbda2f0316fcc0afc7462400a0ab",
+			"sourceUpdatedAt": "2026-10-10T06:45:25Z",
+			"sourceFingerprint": "92df5ef6bbff4e77fe5861a2394ba1a3a9fab25933b22076fa0f8bbc36f118d9",
 			"score": 78,
 			"band": "high",
 			"axes": {
@@ -782,19 +782,22 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 7
+				"implementation": 6
 			},
 			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This gates the next production gateway release with durable delivery and rollback-floor guarantees and has detailed CI evidence, but remains draft pending full DEV qualification.",
+			"relatedKeys": [
+				"run:minion (gateway)#38029439107"
+			],
+			"rationale": "Well-specified production release gate with signed CI evidence still awaiting final DEV qualification before promotion.",
 			"evidence": [
-				"remains draft until full DEV push gates at 2ee0fee6 pass, including both Windows shards",
-				"Final hosted CI38028776999 passed, including heartbeat48/48, outbound74/74 and file-store17/17"
+				"Draft status pending full DEV CI gates",
+				"Digest sha256:b1c6956... runtime proof matches 2ee0fee6",
+				"Attempt3 active after prior Linux shard loss"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T06:22:10.839Z"
+			"scoredAt": "2026-10-10T06:51:27.379Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
@@ -7349,6 +7352,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T00:22:17.137Z"
+		},
+		{
+			"key": "run:minion (gateway)#38029439107",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38029439107",
+			"sourceUpdatedAt": "2026-10-10T06:49:36Z",
+			"sourceFingerprint": "2184e4fbf90344c49d9b0d63cd1ea6258d57b29d83d64cb7c0ce149bbf85a55d",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This in-progress CI run is the validation attempt for PR303's release gate and has no independent goal scope.",
+			"evidence": [
+				"push on DEV, in_progress",
+				"PR303 summary names 'fresh full exact-push attempt3 is active'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T06:51:27.379Z"
 		},
 		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
@@ -21458,38 +21495,6 @@
 			"scoredAt": "2026-10-10T00:57:29.360Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/2ee0fee613354df6a01ce187a4eb22e1b48921d0",
-			"sourceUpdatedAt": "2026-10-10T06:00:31Z",
-			"sourceFingerprint": "83adca106d439259f36caa76f80479dd4705bdb4b042440fee1e6a75665554e5",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a status snapshot of an already-merged Windows CI fix, not a pending decision requiring action.",
-			"evidence": [
-				"summary is a merge of PR#309 enforcing Windows qualification tests",
-				"status: unknown, stage: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T06:22:10.839Z"
-		},
-		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26451,6 +26456,39 @@
 			"scoredAt": "2026-10-07T21:22:27.987Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 94299 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-10T06:26:56Z",
+			"sourceFingerprint": "7e29d7bc5320758155ecd7c947db9d54ca76a0a2e0d82c19d92e0f3379096ca2",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated upstream-sync notification listing raw commits with no defined scope or actionable outcome.",
+			"evidence": [
+				"Title is auto-generated 'Upstream sync: 94299 new commit(s)'",
+				"Body is a raw commit log dump",
+				"tags: upstream-sync only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T06:51:27.379Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29421,38 +29459,6 @@
 			"scoredAt": "2026-10-10T05:39:40.651Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 94158 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-10T00:41:41Z",
-			"sourceFingerprint": "e858aca75559aee509224f56555936b59e0c77722165894797dc1d8b94b97327",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated upstream-sync listing rather than a scoped goal, so it is not independently actionable.",
-			"evidence": [
-				"generic upstream-sync notification listing 94158 new commits",
-				"no specific actionable item isolated from the list"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T00:52:21.236Z"
-		},
-		{
 			"key": "issue:minion-meta#332",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31657,38 +31663,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T06:51:46.732Z"
-		},
-		{
-			"key": "run:minion (gateway)#38029439107",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38029439107",
-			"sourceUpdatedAt": "2026-10-10T06:18:48Z",
-			"sourceFingerprint": "a8417263d26cf3eced694ef90bfb4383377e63cffe53bf1a282669a8e9e924ce",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress CI run on DEV, a transient status rather than a goal requiring a decision yet.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T06:22:10.839Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
