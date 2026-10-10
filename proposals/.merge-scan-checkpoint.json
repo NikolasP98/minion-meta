@@ -65,7 +65,7 @@
   "NikolasP98/minion-ai:DEV": {
     "cursor": "b841c36750e4bf10dd3f81a4896b19c699fe3132",
     "head": "eb40b998c45d305385d5dbfcb37537545a10f226",
-    "done": 15,
+    "done": 30,
     "kept": [
       {
         "file": "apps/ios/project.yml",
@@ -129,6 +129,41 @@
         "severity": "medium",
         "category": "unchecked-access",
         "line": 147
+      },
+      {
+        "file": "src/cli/gateway-cli/run-loop.ts",
+        "desc": "startPromise.catch(() => {}) with empty handler converts rejection to resolved undefined, causing startup errors to be silently lost instead of being caught and rethrown in the try block below (line 266).",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 264
+      },
+      {
+        "file": "src/gateway/server-core/server-channels.ts",
+        "desc": "await item.task?.catch(() => {}) silently swallows errors from shutdown tasks with no logging or error tracking.",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 555
+      },
+      {
+        "file": "src/gateway/server-core/server-startup-memory.ts",
+        "desc": "Error from manager.close() operations is swallowed silently, potentially masking resource cleanup failures during startup abort or error recovery",
+        "severity": "medium",
+        "category": "empty-catch",
+        "line": 87
+      },
+      {
+        "file": "src/gateway/server-core/server-startup.ts",
+        "desc": "startupHookTask promise rejection silently swallowed in fire-and-forget pattern with no error logging or recovery",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 376
+      },
+      {
+        "file": "src/gateway/server-core/server-startup.ts",
+        "desc": "restartWakeTask promise rejection silently swallowed in fire-and-forget pattern with no error logging or recovery",
+        "severity": "high",
+        "category": "empty-catch",
+        "line": 386
       }
     ]
   }
