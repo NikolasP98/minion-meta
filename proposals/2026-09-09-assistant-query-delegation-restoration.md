@@ -1,10 +1,11 @@
 ---
 id: 2026-09-09-assistant-query-delegation-restoration
 title: Restore typed assistant analytics and persisted brain delegation after security containment
-status: draft
+status: review
 created: 2026-09-09
-updated: 2026-09-09
+updated: 2026-10-10
 repos: [minion_hub, minion, minion-meta]
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Assistant capability restoration

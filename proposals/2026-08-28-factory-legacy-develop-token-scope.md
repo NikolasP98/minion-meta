@@ -1,11 +1,12 @@
 ---
 id: 2026-08-28-factory-legacy-develop-token-scope
 title: Remove GH_TOKEN from the legacy develop/self-test environment
-status: draft
+status: review
 created: 2026-08-28
-updated: 2026-08-28
+updated: 2026-10-10
 repos: [minion-factory]
 tags: [security]
+duplicate_candidate: 2026-08-17-factory-worker-containment
 ---
 
 # Remove GH_TOKEN from the legacy develop/self-test environment
