@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T09:51:04.458Z",
+	"generatedAt": "2026-10-10T10:21:06.062Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3219,15 +3219,14 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A clear multi-tenant isolation bug in merged CRM dashboard code lets owners see each other's aggregated data, with a well-specified fix direction and file/line pointer.",
+			"rationale": "Unscoped CRM rollup aggregation breaks multi-tenant data isolation across owners, a concrete security/data-boundary defect with a clear fix direction.",
 			"evidence": [
 				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
-				"TODO(handoff) marker at crm-insights-dashboard.service.ts:40",
-				"caught by two independent sweeps (post-merge + handoff-ledger)"
+				"Add owner_id grouping to word-frequency, sentiment, and win-index aggregation queries"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T09:51:00.116Z"
+			"scoredAt": "2026-10-10T10:21:05.886Z"
 		},
 		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
@@ -20971,38 +20970,6 @@
 			"scoredAt": "2026-10-10T00:57:29.360Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1b3a9918fa1ea3d3b538a7f5df4a3b9612041ba4",
-			"sourceUpdatedAt": "2026-10-10T07:18:51Z",
-			"sourceFingerprint": "cd228f8b5a6584b93a3ee9da499df5d633545abf22989520b455a7fc8664a5f4",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged CI gate fix for Windows release shards is routine deployment hygiene with no indicated current incident.",
-			"evidence": [
-				"Merge pull request #310: CI: require complete Windows release shards",
-				"status unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T09:51:04.286Z"
-		},
-		{
 			"key": "issue:minion-meta#327",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27574,38 +27541,6 @@
 			"scoredAt": "2026-10-05T02:27:30.587Z"
 		},
 		{
-			"key": "issue:minion-meta#398",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#398 [monitor:unstick] Requeued transient failure of run 68142f89",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/398",
-			"sourceUpdatedAt": "2026-09-12T08:17:02Z",
-			"sourceFingerprint": "90cea18b6911f353323b63f94653de8efa648402be99e6c9248afb23b445d082",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake shows a transient push failure that was already requeued successfully, indicating self-resolution rather than ongoing action needed.",
-			"evidence": [
-				"note=push failed; requeue -> 201",
-				"class=C (transient)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T09:51:00.116Z"
-		},
-		{
 			"key": "issue:minion-meta#505",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32092,6 +32027,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T00:21:14.794Z"
+		},
+		{
+			"key": "issue:minion-meta#398",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#398 [monitor:unstick] Requeued transient failure of run 68142f89",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/398",
+			"sourceUpdatedAt": "2026-09-12T08:17:02Z",
+			"sourceFingerprint": "90cea18b6911f353323b63f94653de8efa648402be99e6c9248afb23b445d082",
+			"score": 15,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor requeue note for a single transient push failure with no indication of recurrence or unresolved impact.",
+			"evidence": [
+				"class=C note=push failed; requeue -> 201",
+				"source: unstick, single transient fingerprint"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T10:21:05.886Z"
 		},
 		{
 			"key": "issue:minion-meta#664",
