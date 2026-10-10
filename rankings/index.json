@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T04:21:54.680Z",
+	"generatedAt": "2026-10-10T04:51:12.881Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5836,40 +5836,6 @@
 			"scoredAt": "2026-10-04T06:21:18.394Z"
 		},
 		{
-			"key": "run:minion (gateway)#38021620383",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38021620383",
-			"sourceUpdatedAt": "2026-10-10T04:05:15Z",
-			"sourceFingerprint": "7a23fb8eff65326ad7d58022aa11c7a55e36c2c81a662fc7623679fa994ea34d",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#303"
-			],
-			"rationale": "This in-progress push CI run is the exact gate PR#303 needs to pass before the production release can be promoted.",
-			"evidence": [
-				"push on DEV, status in_progress",
-				"PR#303 states release remains draft until this full DEV push CI run passes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T04:21:54.495Z"
-		},
-		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -10254,6 +10220,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T01:52:05.642Z"
+		},
+		{
+			"key": "run:minion (gateway)#38021620383",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38021620383",
+			"sourceUpdatedAt": "2026-10-10T04:25:06Z",
+			"sourceFingerprint": "4a8ed7980df235e28484aa33d7dd05f0409b7d284993edab639ce215cdfe5089",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 6,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "A failing CI run on the DEV branch blocks confidence in merges and should be investigated promptly.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"CI workflow run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T04:51:12.695Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
@@ -17888,39 +17889,6 @@
 			"scoredAt": "2026-10-07T10:21:26.402Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding identifies missing integration-test coverage for merge-target wiring with a bounded fix (add an integration test).",
-			"evidence": [
-				"the PREDICATE is covered here, the WIRING is not — no test",
-				"status: approved",
-				"Fix direction: Add an integration test that mounts merge-target within its real parent context"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T04:24:14.799Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-948e27d654f8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18118,6 +18086,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T12:03:01.297Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7fdd8f2adc4d79c2b358bac6796f38cc61dfc149",
+			"sourceUpdatedAt": "2026-10-10T03:44:24Z",
+			"sourceFingerprint": "2d637146a535cb4817d15ee049b9791d61b5429fb7e4be09bcb71447dfb7d736",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"run:minion (gateway)#38021620383"
+			],
+			"rationale": "A merged deterministic-run-script PR landed but deployment health status is unknown, and a related CI run failed, so this needs verification rather than immediate action.",
+			"evidence": [
+				"status: unknown",
+				"summary references PR #308 test: make release gates behavior-based",
+				"related run shows CI failure on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T04:51:12.695Z"
 		},
 		{
 			"key": "issue:minion-meta#352",
@@ -20988,39 +20991,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-3ba60040d060",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3ba60040d060.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "4b8bdbc862d9e6fc01c1c77ba4b3b63686b60b9c06cf62a3b44dc35212ac68e8",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding with a clear diagnosis and bounded fix direction to unify inline tag editing between CRM customers and pos/catalog.",
-			"evidence": [
-				"tags are NOT inline-editable here while /pos/catalog",
-				"status: approved",
-				"Fix direction: move CRM page to use the same inline-editable tag component"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T04:24:14.799Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5ecd8380b71c",
@@ -25085,6 +25055,39 @@
 			"scoredAt": "2026-10-06T07:51:44.462Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A concrete test coverage gap (integration testing for merge-target wiring in scheduling) is clearly scoped with a specific fix direction (happy-path + edge case integration test).",
+			"evidence": [
+				"TODO(handoff): the PREDICATE is covered here, the WIRING is not — no test",
+				"approved status, clear fix direction with specific test cases",
+				"file and PR #370 identified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T04:51:12.695Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26846,6 +26849,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T09:51:48.089Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-3ba60040d060",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3ba60040d060.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "4b8bdbc862d9e6fc01c1c77ba4b3b63686b60b9c06cf62a3b44dc35212ac68e8",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A UX inconsistency (CRM tags read-only vs inline-editable in catalog) is documented with a clear fix direction but is low urgency and needs a decision on whether to implement or document-as-intentional.",
+			"evidence": [
+				"TODO(handoff): tags are NOT inline-editable here while /pos/catalog and...",
+				"approved status, updated 2026-09-26",
+				"auto-diagnosis proposes comparing tag components"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T04:51:12.695Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6510cf161973",
