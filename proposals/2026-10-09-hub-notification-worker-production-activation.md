@@ -24,7 +24,9 @@ absent merely because those files are missing from this repository.
 
 ## Current state
 
-Hub PR456 now contains the reviewed disabled-artifact implementation, and its hosted disabled-artifact gate passes. The worker remains disabled and credential-free. A fail-closed repository-privacy guard now blocks build, attestation and upload from the public Hub repository; no artifact has been published. A reviewed private publication destination remains open work. Two isolated exact-source builds and the remaining full Hub checks are still required, and production activation remains outside this release.
+Hub PR456 now contains the reviewed disabled-artifact implementation, and its hosted disabled-artifact gate passes. The worker remains disabled and credential-free. A fail-closed repository-privacy guard now blocks build, attestation and upload from the public Hub repository; no artifact has been published. A reviewed private publication destination remains open work. GitHub documents private-repository artifact attestations as an Enterprise Cloud capability, and the required entitlement has not been established; a future design must qualify both the private archive store and its provenance mechanism rather than assuming that a private repository is sufficient. Two isolated exact-source builds and the remaining full Hub checks are still required, and production activation remains outside this release.
+
+Primary source: [GitHub artifact attestation availability](https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations).
 
 The prior manual worker runbook assumes an existing host worker/cron transition
 without a matching verified deployment receipt. This is the remaining NOTIF-003
