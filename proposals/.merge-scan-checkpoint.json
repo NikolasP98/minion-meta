@@ -64,29 +64,29 @@
   },
   "NikolasP98/minion-ai:DEV": {
     "cursor": "b841c36750e4bf10dd3f81a4896b19c699fe3132",
-    "head": "56535668b31ad40f3afce29e46f048c8c592009d",
-    "done": 14,
+    "head": "8517a5d54c8bc66ce45f5cea2e50cf954316e82b",
+    "done": 16,
     "kept": [
       {
-        "file": "deploy/compose/delivery-floor-wiring.test.mjs",
-        "desc": "find() result assigned to target but not checked before accessing .delivery_recovery_fence property on line 20-23",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 18
-      },
-      {
-        "file": "deploy/compose/delivery-floor-wiring.test.mjs",
-        "desc": "find() result used directly without null check to set .local_build property; will throw TypeError if server id 'dev-protopi' not found",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 26
-      },
-      {
-        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
-        "desc": "Expected cleaned locks reduced from 2 to 1; 'old-live.jsonl.lock' no longer expected to be cleaned (line 173-178).",
+        "file": ".github/workflows/ci.yml",
+        "desc": "grep validates error message but exit code is not checked; script continues if pattern not found without failing the test",
         "severity": "medium",
         "category": "weakened-test",
-        "line": 173
+        "line": 543
+      },
+      {
+        "file": "deploy/compose/delivery-floor-wiring.test.mjs",
+        "desc": ".find() result target is used without null check before delete target.delivery_recovery_fence; will crash if 'dev-protopi' is not found.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 19
+      },
+      {
+        "file": "deploy/compose/delivery-floor-wiring.test.mjs",
+        "desc": ".find() result chained directly without null check before assigning .local_build; will crash if 'dev-protopi' is not found.",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 25
       }
     ]
   }
