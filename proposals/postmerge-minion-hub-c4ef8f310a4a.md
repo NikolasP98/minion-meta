@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-c4ef8f310a4a
 title: "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)"
-status: draft
+status: review
 created: 2026-10-10
 updated: 2026-10-10
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+possibly_reopens: postmerge-minion-hub-390c35b3d77c
 ---
 
 # Post-merge finding — todo-handoff in `scripts/ops/hub-worker-release.md`
@@ -40,3 +41,16 @@ The `TODO(handoff)` marker at `scripts/ops/hub-worker-release.md` is removed, or
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/456
 - file: `scripts/ops/hub-worker-release.md`
 - checked: 2026-10-10
+
+## Reconciliation note 2026-10-10
+
+Possible revival of `postmerge-minion-hub-390c35b3d77c`, closed the same day
+("marker is absent and proposal is still approved — closing"). Both findings
+are the same recurring `TODO(handoff)` on `scripts/ops/hub-worker-release.md`
+gating `NOTIFICATION_WORKER=1`; the exact marker wording differs between PR
+#455 and PR #456 (systemd-unit framing vs. artifact-publisher/compiled-startup
+framing), which is plausibly why the closer's marker-absence check missed it.
+Flagged for a human rather than merged, since the closing rationale may still
+be correct if the newer wording is itself stale. See also
+`2026-10-09-hub-notification-worker-production-activation` (in-spec, untouched),
+the ledger both findings point at.
