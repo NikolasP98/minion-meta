@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-ai-105110351
 title: Handoff marker — src/infra/outbound/delivery-queue-recovery.ts (minion-ai)
-status: draft
+status: merged
+merged_into: 2026-10-09-performance-release-qualification
 created: 2026-10-10
 updated: 2026-10-10
 repos: [minion-ai]
@@ -28,3 +29,12 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-ai@DEV src/infra/outbound/delivery-queue-recovery.ts:93` — add an explicit operator transition for held legacy entries;
   https://github.com/NikolasP98/minion-ai/blob/DEV/src/infra/outbound/delivery-queue-recovery.ts#L93
+
+## Reconciliation merge — 2026-10-10
+
+Same exact-site TODO already tracked in `2026-10-09-performance-release-qualification`
+("Legacy delivery disposition handoff" section), which names this same path and
+calls for "an explicit per-entry operator transition with preview, authority,
+generation fence, audit, provider correlation, and duplicate-risk acknowledgement."
+That proposal is `approved` and therefore left untouched here; this marker carries
+no content beyond what it already records and is tombstoned as merged.
