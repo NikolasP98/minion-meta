@@ -41,4 +41,4 @@ The directory-flush hypothesis is supported by [Microsoft FlushFileBuffers acces
 
 ## Current state
 
-Native probing confirmed that file sync and directory open pass while directory sync returns `EPERM`. The narrowly scoped `153c` correction and the bounded UTF-8 diagnostics at `bde87a` passed source review and focused tests. PR307 replaces closed PR306; its final native Windows job is still running, so native qualification is not yet claimed.
+Native probing confirmed that file sync and directory open pass while directory sync returns `EPERM`. The narrowly scoped `153c` correction and the bounded UTF-8 diagnostics at `bde87a` passed source review and focused tests. A later focused native run passed 133 tests with five skips, while the broader run failed with 51 passes and 34 skips. Backup-file flush and script exit-versus-close corrections are under review. PR307 replaces closed PR306; native qualification and production promotion remain held.
