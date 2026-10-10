@@ -82,3 +82,33 @@ opens the prefilled tray.
 
 No further code proposed here; each item above is a follow-up slice with its
 PR as the anchor.
+
+## Addendum 2026-10-10 (evening) — calendar readiness drafts landed
+
+Hub #439, #441, #442, #440 and #443 (re-opened as #464 after its stacked base
+was deleted) were rebased onto the single-event model and merged the same day.
+Owner rulings applied: one custom-property lane value per event, stored on the
+lead (#440); the four assumed drop rules stand; per-service custom fields are
+out of scope (HC-019 closed); status lanes stay view-only on a calendar drag
+while the board's status column writes (#443).
+
+New open ends:
+
+9. **Delete the fan-deck code** — now unblocked (#442 and #443 landed):
+   `fan-out.ts`, deck markup/drag handlers in `BookingCalendar.svelte`,
+   `tests/e2e/ui-audit/pos-calendar-fan-drag.spec.ts`, the `fanOut` feature
+   flag and the `cal_visit_expand_hint` keys, plus #439's `HC-016C` test that
+   opts into `fanOut: true`.
+10. **HC-018 transient "Unclassified" lane** — the append-only lane session
+    reads every booking as `null` while the custom-property bundle is still
+    loading, so a custom-column axis where every booking is classified still
+    keeps an empty Unclassified lane for the session. One guard (do not push
+    `null` while the bundle is loading) closes it.
+11. **`.head-vo` badge carries a native `title`** for its long hint (#443),
+    against the HC-023 convention of the shared Tooltip for truncated labels.
+12. **HC-017 projection vs declared primary tag** — still the owner's product
+    call; duplicate projection is what shipped.
+13. **CI flake**: `notification-worker-disabled-artifact` once failed
+    `private-worker-workflow-contract.test.mjs` ("publisher cancellation stops
+    and removes only its cidfile-owned container") on a docker cancel race;
+    green on rerun.
