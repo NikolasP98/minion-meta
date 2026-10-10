@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T17:22:36.314Z",
+	"generatedAt": "2026-10-10T17:51:58.203Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -666,41 +666,6 @@
 			"scoredAt": "2026-10-05T02:25:57.895Z"
 		},
 		{
-			"key": "pr:minion (gateway)#303",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
-			"sourceUpdatedAt": "2026-10-10T17:03:31Z",
-			"sourceFingerprint": "b720845f0dc3304e63d572081f5bb8129a1ec4fce603c915f2007beb71ad4a32",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"run:minion (gateway)#38070164203",
-				"proposal:handoff-minion-ai-1480236091"
-			],
-			"rationale": "Promotion of this release PR is held by a security gate while production stays on an older digest, making it the most consequential item in the batch.",
-			"evidence": [
-				"Promotion is held ... secrets job failed closed because workflow_dispatch resolves no BASE_SHA (TQ012)",
-				"Production remains 7a1501e9"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T17:22:36.155Z"
-		},
-		{
 			"key": "spec:2026-08-17-factory-token-budget-governance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -798,6 +763,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T12:04:04.691Z"
+		},
+		{
+			"key": "pr:minion (gateway)#303",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
+			"sourceUpdatedAt": "2026-10-10T17:42:28Z",
+			"sourceFingerprint": "5a693f83bf6d8e4a1df1a2e9baeff2969f889b35bc025fbecee69abfd803a7a3",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Production release promotion is explicitly held on one flaky Node shard 2 timeout with everything else passing, giving a clear bounded next step.",
+			"evidence": [
+				"Promotion is held... Node shard 2 failed one unchanged test",
+				"Docker Release passed for exact bb06e3a at immutable digest",
+				"Production remains 7a1501e969014ec2fcfb69021bda843d0f90d23b"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
@@ -1230,6 +1228,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:29:26.851Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
+			"sourceUpdatedAt": "2026-10-03",
+			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Backups and retention pruning silently never run, and the proposal gives a clear bounded wire-or-delete decision with explicit DELTA.",
+			"evidence": [
+				"startBackupScheduler() has zero call sites anywhere in the repo",
+				"no backup is ever taken and retention pruning never runs, silently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
 		},
 		{
 			"key": "proposal:2026-10-09-performance-release-qualification",
@@ -2071,40 +2101,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:58:34.335Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-meta-221859101"
-			],
-			"rationale": "Backup/retention scheduler is fully implemented but never invoked, meaning no backups or retention pruning currently run, with a clear fix or deletion path specified.",
-			"evidence": [
-				"startBackupScheduler() ... has zero call sites anywhere in the repo",
-				"no backup is ever taken and unified_events/chat retention pruning never runs, silently"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T17:21:05.918Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-shared-ui-boundaries",
@@ -4649,8 +4645,8 @@
 			"repo": "minion_hub",
 			"title": "#440 fix(scheduling): commit a reclassifying drag as one transaction (HC-011)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/440",
-			"sourceUpdatedAt": "2026-10-10T17:12:46Z",
-			"sourceFingerprint": "d4aa5ed4cf099abf70a17b82ad2d3a245c6a6550936aa86722fca2afc3edc29a",
+			"sourceUpdatedAt": "2026-10-10T17:30:59Z",
+			"sourceFingerprint": "c6f84e62f1ace4676ae8ed6cab6511b86d0afceca05431181ee0c89f36efeee2",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -4660,21 +4656,22 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
-			"confidence": 7,
-			"recommendation": "execute",
+			"confidence": 6,
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-676808e46687"
+				"pr:minion_hub#443"
 			],
-			"rationale": "Fixes a real data-integrity gap by making a reclassifying drag atomic, with strong rollback proof.",
+			"rationale": "Well-tested atomic-transaction fix but the author flags unconfirmed product decisions that gate merge.",
 			"evidence": [
-				"commit a reclassifying drag as one transaction (HC-011)",
-				"37 red on baseline → 13 files / 126 / 0; real CDP drags"
+				"Decisions assumed (please confirm or reverse)",
+				"Draft — data-tagged; owner approval + merge gate",
+				"37 red on baseline → 13 files / 126 / 0"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T17:22:36.155Z"
+			"scoredAt": "2026-10-10T17:51:58.013Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -5731,41 +5728,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-04T06:21:18.394Z"
-		},
-		{
-			"key": "run:minion (gateway)#38070164203",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38070164203",
-			"sourceUpdatedAt": "2026-10-10T17:18:58Z",
-			"sourceFingerprint": "76d6fe98fc5a7818eed63e8f8de490aaef3ecca5a95acc00d6e901f09ac6df75",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#303",
-				"deploy:minion (gateway)"
-			],
-			"rationale": "A failing DEV CI run with no diagnostic detail beyond 'failure' needs investigation before it can be scoped as actionable work.",
-			"evidence": [
-				"status: failure",
-				"summary: push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T17:22:36.155Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
@@ -9055,6 +9017,73 @@
 			"scoredAt": "2026-10-04T03:50:57.800Z"
 		},
 		{
+			"key": "pr:minion_hub#442",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#442 fix(calendar): stable lane registry, multi-tag projection, category subcolumn (HC-017/018/020)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/442",
+			"sourceUpdatedAt": "2026-10-10T17:30:43Z",
+			"sourceFingerprint": "797f0b860d75c685961ba8f22c5dc951c40ba2b661d9055dc2b286fbf1998b52",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Solid test proof but HC-017 is explicitly an unresolved product decision between two implementations.",
+			"evidence": [
+				"Draft — HC-017 product decision pending",
+				"Option (b)... would need a migration plus a drawer control — your call",
+				"13 red on the pristine tree → 29/29"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
+		},
+		{
+			"key": "pr:minion_hub#443",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#443 fix(calendar): keyboard reclassification on the board; truthful lanes on view-only axes (HC-015/014)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/443",
+			"sourceUpdatedAt": "2026-10-10T17:41:11Z",
+			"sourceFingerprint": "acd5a7a1a005494cbf0a23be401860e99e2eeb795103c694a72ce53a05a1e27e",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#440"
+			],
+			"rationale": "Stacked on and blocked by #440's unresolved decisions, so it cannot land independently yet despite strong test proof.",
+			"evidence": [
+				"Draft — stacked on S1 (#440); merges after it",
+				"9 red on S1's tree → 42/42 lane"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9581,38 +9610,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T17:22:08.309Z"
-		},
-		{
-			"key": "pr:minion_hub#443",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#443 fix(calendar): keyboard reclassification on the board; truthful lanes on view-only axes (HC-015/014)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/443",
-			"sourceUpdatedAt": "2026-10-07T14:33:15Z",
-			"sourceFingerprint": "6e78d187f6f2fd483bdbb147d645c6230e7c01b66af695d6c4f41fc31d628b77",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A well-scoped draft PR stacked on a merged prerequisite with concrete passing-test evidence is ready to continue toward merge.",
-			"evidence": [
-				"Proof: 9 red on S1's tree -> 42/42 lane; Playwright 3/3; svelte-check 0",
-				"Draft, stacked on S1 (#440), no server/migration change"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T14:52:17.671Z"
 		},
 		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
@@ -14471,41 +14468,6 @@
 			"scoredAt": "2026-10-08T03:51:20.805Z"
 		},
 		{
-			"key": "pr:minion_hub#442",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#442 fix(calendar): stable lane registry, multi-tag projection, category subcolumn (HC-017/018/020)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/442",
-			"sourceUpdatedAt": "2026-10-10T17:11:58Z",
-			"sourceFingerprint": "e04a365d64ef0436f294b72a82b370bf41b390a81a2e12f58218e2cfa0d0d62a",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#439"
-			],
-			"rationale": "A real product decision between duplicate-projection and primary-tag approaches is still open, blocking finalization.",
-			"evidence": [
-				"HC-017 product decision pending",
-				"Option (b) ... your call",
-				"rebase after S4 merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T17:22:36.155Z"
-		},
-		{
 			"key": "pr:minion_site#28",
 			"kind": "pr",
 			"stage": "development",
@@ -19150,6 +19112,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T12:03:01.297Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/2f3c914b43273a3c51b26b99570b95cf72664b55",
+			"sourceUpdatedAt": "2026-10-10T17:42:12Z",
+			"sourceFingerprint": "038331428d733f38b1ecb27e2f60dece624b38d85dce4bc85b290269b71670b6",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A bare deployment-health entry referencing one merged commit gives no verifiable outcome or scope to act on.",
+			"evidence": [
+				"status: unknown",
+				"summary is just a merge-commit title"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -24283,6 +24277,38 @@
 			"scoredAt": "2026-10-10T00:59:47.718Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "4093ac44b195529737e56429f6c12c7b0d293badf50a1c9bcf2782f9196dc698",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This bundles many unrelated TODO markers across a 13000+ line ranking file into one ticket with no single verifiable outcome.",
+			"evidence": [
+				"18 distinct markers spanning unrelated topics (finance, concurrency, RBAC, logging)",
+				"Definition of done: the marker's open end is resolved... closes automatically once no more markers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-db09a2f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26391,39 +26417,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/bb06e3ac46b2c41ac500246dbfbbd1a768746bca",
-			"sourceUpdatedAt": "2026-10-10T17:03:14Z",
-			"sourceFingerprint": "37ae968d90b4b85fca02d52b4fc2611f3e87a7b25a1540ff099522813495b459",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 10
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion (gateway)#303"
-			],
-			"rationale": "Already-merged CI security-binding commit is a satisfied status snapshot, not an open goal.",
-			"evidence": [
-				"title: Merge pull request #311 ... CI: bind dispatch security scans to trusted push"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T17:22:36.155Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -31857,6 +31850,70 @@
 			"scoredAt": "2026-10-09T06:51:46.732Z"
 		},
 		{
+			"key": "run:minion (gateway)#38072815136",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38072815136",
+			"sourceUpdatedAt": "2026-10-10T17:46:24Z",
+			"sourceFingerprint": "b4035e174543be505493170de977ba95fd0ea6304e5a1e4277d13318d56c3793",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a transient in-progress CI status with no decision to make until it completes.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
+		},
+		{
+			"key": "run:minion (gateway)#38072815235",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38072815235",
+			"sourceUpdatedAt": "2026-10-10T17:49:37Z",
+			"sourceFingerprint": "c025f12c15c69caca6ab02aba0d48903398c14122b2cf533dbdd7356e2523cc4",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a transient in-progress CI status with no decision to make until it completes.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
+		},
+		{
 			"key": "issue:minion_hub#452",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32308,6 +32365,38 @@
 			"scoredAt": "2026-10-05T11:52:03.296Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-2f3c914",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 2f3c914",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-2f3c914.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "2732434b2fe9ae12690a0f1b603f5fefc3ff99d6b4f48a1fe277b7c9cf1b13fb",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single medium-severity, narrowly scoped hardcoded-constant cleanup with an exact file/line target.",
+			"evidence": [
+				"medium ... hardcoded-config ... server.maintenance-timer-ownership.e2e.test.ts:156",
+				"should be imported as a named constant ... consistent with TICK_INTERVAL_MS"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T17:51:58.013Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32726,38 +32815,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T00:53:29.269Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "0eef3dacc57081c523c4af36530781edf3deaf49b39a842831668e1739ad12b3",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted text fragments embedded in the ranking index's own stored JSON strings, not real source-code TODOs, so this is a self-referential scan false-positive.",
-			"evidence": [
-				"file: rankings/index.json (this ranking catalog's own output)",
-				"markers read as quoted prose fragments, not code comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T17:22:36.155Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
