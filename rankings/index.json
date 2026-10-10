@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T06:51:27.560Z",
+	"generatedAt": "2026-10-10T07:21:34.543Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -666,6 +666,42 @@
 			"scoredAt": "2026-10-05T02:25:57.895Z"
 		},
 		{
+			"key": "pr:minion (gateway)#303",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
+			"sourceUpdatedAt": "2026-10-10T07:19:06Z",
+			"sourceFingerprint": "cf9373572975a773e14f31dd6f7c610333be644322d2c7437f1139a4a1e75aa7",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"deploy:minion (gateway)",
+				"run:minion (gateway)#38033999231"
+			],
+			"rationale": "Production promotion of a core delivery/reliability feature is explicitly held on one narrow, well-documented gap (full Windows CI shard execution) that already has a tracked fix in motion.",
+			"evidence": [
+				"Promotion is held... until corrected exact DEV source passes both actual unsuppressed full Windows shards",
+				"TQ011 tracks a narrow CI correction and a stable gate",
+				"Production remains 7a1501e9"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T07:21:34.330Z"
+		},
+		{
 			"key": "spec:2026-08-17-factory-token-budget-governance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -763,41 +799,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T12:04:04.691Z"
-		},
-		{
-			"key": "pr:minion (gateway)#303",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
-			"sourceUpdatedAt": "2026-10-10T06:45:25Z",
-			"sourceFingerprint": "92df5ef6bbff4e77fe5861a2394ba1a3a9fab25933b22076fa0f8bbc36f118d9",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"run:minion (gateway)#38029439107"
-			],
-			"rationale": "Well-specified production release gate with signed CI evidence still awaiting final DEV qualification before promotion.",
-			"evidence": [
-				"Draft status pending full DEV CI gates",
-				"Digest sha256:b1c6956... runtime proof matches 2ee0fee6",
-				"Attempt3 active after prior Linux shard loss"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T06:51:27.379Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
@@ -7354,40 +7355,6 @@
 			"scoredAt": "2026-10-10T00:22:17.137Z"
 		},
 		{
-			"key": "run:minion (gateway)#38029439107",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38029439107",
-			"sourceUpdatedAt": "2026-10-10T06:49:36Z",
-			"sourceFingerprint": "2184e4fbf90344c49d9b0d63cd1ea6258d57b29d83d64cb7c0ce149bbf85a55d",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#303"
-			],
-			"rationale": "This in-progress CI run is the validation attempt for PR303's release gate and has no independent goal scope.",
-			"evidence": [
-				"push on DEV, in_progress",
-				"PR303 summary names 'fresh full exact-push attempt3 is active'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T06:51:27.379Z"
-		},
-		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -10286,6 +10253,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:25:57.895Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1b3a9918fa1ea3d3b538a7f5df4a3b9612041ba4",
+			"sourceUpdatedAt": "2026-10-10T07:18:51Z",
+			"sourceFingerprint": "cd228f8b5a6584b93a3ee9da499df5d633545abf22989520b455a7fc8664a5f4",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This deploy entry reflects an already-merged CI fix (PR #310) and has no remaining open action as a standalone goal.",
+			"evidence": [
+				"Merge pull request #310 ... CI: require complete Windows release shards",
+				"updatedAt 2026-10-10T07:18:51Z, status unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T07:21:34.330Z"
 		},
 		{
 			"key": "issue:minion-meta#361",
@@ -26382,6 +26383,111 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T16:51:42.501Z"
+		},
+		{
+			"key": "run:minion (gateway)#38033999214",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38033999214",
+			"sourceUpdatedAt": "2026-10-10T07:19:12Z",
+			"sourceFingerprint": "39cfc641b2040e789c4a461d5f14e04d439decf937a08be66f6731cfa3be7002",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This is an automated, in-progress Docker Release CI run with no independent scope beyond verifying a DEV push.",
+			"evidence": [
+				"title Docker Release",
+				"summary push on DEV",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T07:21:34.330Z"
+		},
+		{
+			"key": "run:minion (gateway)#38033999231",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38033999231",
+			"sourceUpdatedAt": "2026-10-10T07:19:36Z",
+			"sourceFingerprint": "dd27e236b953cbbdd15f88baf02208882068f27275b8383d577597774afebd49",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This is an automated, in-progress CI run tied to a DEV push, not an independently actionable planning goal.",
+			"evidence": [
+				"title CI",
+				"summary push on DEV",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T07:21:34.330Z"
+		},
+		{
+			"key": "run:minion (gateway)#38033999341",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "npm publish",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38033999341",
+			"sourceUpdatedAt": "2026-10-10T07:18:58Z",
+			"sourceFingerprint": "b6c1e2f4f0770a287d047f4b6fa4d42217819bfeb1d36c243ecc141d100e6f2d",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This is an automated, in-progress npm publish run tied to a DEV push with no standalone scope.",
+			"evidence": [
+				"title npm publish",
+				"summary push on DEV",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T07:21:34.330Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
