@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T14:50:58.061Z",
+	"generatedAt": "2026-10-10T15:21:12.859Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -17499,38 +17499,6 @@
 			"scoredAt": "2026-10-05T12:03:01.297Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1b3a9918fa1ea3d3b538a7f5df4a3b9612041ba4",
-			"sourceUpdatedAt": "2026-10-10T07:18:51Z",
-			"sourceFingerprint": "cd228f8b5a6584b93a3ee9da499df5d633545abf22989520b455a7fc8664a5f4",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI gate merge for Windows release shards is routine deployment hygiene without evidence of active breakage.",
-			"evidence": [
-				"title: minion (gateway) deployment health",
-				"summary mentions CI require complete Windows release shards"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T13:21:23.918Z"
-		},
-		{
 			"key": "issue:minion-meta#352",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25357,6 +25325,40 @@
 			"scoredAt": "2026-10-08T02:21:29.883Z"
 		},
 		{
+			"key": "issue:minion-meta#515",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#515 [monitor:unstick] reconcile run 1e9663f5 (minion-meta): agent exit-126, turns=0, despite reconcile script completing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/515",
+			"sourceUpdatedAt": "2026-09-19T14:17:25Z",
+			"sourceFingerprint": "1f553748a3289f9a8477bcbd0796a876a6a8aaed4e188d0143bcece2f26b5af0",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#617"
+			],
+			"rationale": "Isolated exit-126/turns=0 infra fault with pipeline state already persisted, so it's a low-urgency retry candidate best merged with its duplicate.",
+			"evidence": [
+				"exit 126 with turns=0, cost_usd implied 0",
+				"reconcile state already persisted (proposals/index.json written, dev pushed)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T15:21:12.662Z"
+		},
+		{
 			"key": "issue:minion-meta#575",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25539,19 +25541,21 @@
 			},
 			"readiness": {
 				"specification": 5,
-				"implementation": 6
+				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single automated monitor-intake report of an infra-level exit-126 agent failure where the surrounding pipeline succeeded suggests a low-risk retry rather than urgent repo work.",
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#515"
+			],
+			"rationale": "Same recurring worker-box exec-permission signature as #515 a week later, suggesting both should become one host-classifier tracking goal rather than separate per-run triage.",
 			"evidence": [
-				"exit 126 with 0 turns and 0 cost_usd indicates agent process never launched",
-				"pipeline itself completed: refreshed handoffs, wrote proposals/index.json, pushed dev->dev successfully"
+				"exit 126, 0 turns, 0 permission_denials, cost_usd 0",
+				"pipeline completed: 518 proposals written, dev pushed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T14:50:58.917Z"
+			"scoredAt": "2026-10-10T15:21:12.662Z"
 		},
 		{
 			"key": "issue:minion-meta#643",
@@ -30052,39 +30056,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T11:51:06.564Z"
-		},
-		{
-			"key": "issue:minion-meta#515",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#515 [monitor:unstick] reconcile run 1e9663f5 (minion-meta): agent exit-126, turns=0, despite reconcile script completing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/515",
-			"sourceUpdatedAt": "2026-09-19T14:17:25Z",
-			"sourceFingerprint": "1f553748a3289f9a8477bcbd0796a876a6a8aaed4e188d0143bcece2f26b5af0",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Single isolated worker-box exec-permission fault with underlying reconcile state already persisted successfully, so no action is needed beyond a cheap retry already noted as handled.",
-			"evidence": [
-				"reconcile shell logic ran to completion in this run",
-				"exit 126 with turns=0 indicates process launch failure, not task/spec failure",
-				"recommendation in report is simply to retry, state already persisted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T15:20:58.803Z"
 		},
 		{
 			"key": "issue:minion-meta#541",
