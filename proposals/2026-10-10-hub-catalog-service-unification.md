@@ -51,3 +51,39 @@ part of an appointment.
    lines ride into the POS cart with the services and show as paid afterwards.
 
 Spec: `specs/2026-10-10-hub-catalog-service-unification-spec.md`.
+
+## Open ends — Slices 3 & 4 (minion_hub PR #465, branch `feat/catalog-service-sync`)
+
+Slices 3 (catalog ⇒ scheduling row) and 4 (products on an event) are implemented and
+gate-clean (`bun run check` 0/0, `lint:design`/`lint:tokens` clean, targeted vitest all
+green — 10 files / 163 tests directly, 47 files / 450 tests on the broader scheduling
+regression sweep), but three things were **not** verified and need owner/agent follow-up
+before merge:
+
+1. **QA stack migration proof not run.** `bun run qa:up` failed — port 54422 was held by
+   an unrelated, already-running stack (`supabase_db_minion-readiness-20261003`) from a
+   different session; it was not stopped. Both migrations
+   (`20261010130000_event_types_follow_catalog.sql`,
+   `20261010140000_sched_booking_products.sql`) are idempotent by construction (CTEs that
+   re-check `not exists` before inserting, invariant `raise exception` asserts) but have
+   **never executed against a live Postgres**. Re-run `bun run qa:up` on a free port and
+   confirm `bun run qa:reset` stays green before merging.
+2. **Prod dry-run not attempted** (spec Slice 3 DoD: "on FACES prod data … the result is
+   49 active rows named exactly like the catalog"). Needs the owner's `psql`/Supabase
+   access, same as prior prod dry-runs in this repo's history.
+3. **`addProductToVisit`'s duplicate-product 23505 → `'product already on this event'`
+   mapping is implemented but not unit-tested** — the mock-db test harness used elsewhere
+   in this file can't easily simulate a thrown unique-violation from an insert chain.
+   Covered by code review and the real `isUniqueViolation` helper (already used the same
+   way in `pos.service.ts`), not by an automated test.
+
+`TODO(handoff)` left in `scheduling-bookings.service.ts` (`ungroupBooking`): the
+anchor-product-move update could theoretically violate `sched_booking_products`'
+`(booking_id, product_id)` unique index if the new anchor already independently carries
+the same product — unreachable through this module today, flagged rather than defended
+against with a merge-qty fallback.
+
+Also flagged in the PR body: `visit.products` (spec wording) is implemented as a
+top-level `BookingDetail.products` field, not nested under the nullable `visit` — `visit`
+is `null` for the common single-service event, which would make products invisible
+exactly when I4 (≥1 service, but products are independent) matters most.
