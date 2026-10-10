@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-9cd4a3e7f998
 title: "Post-merge finding — scan-gap in src/server/services/notifications/projection/catalog-fingerprint.pg17.fence-once.expected.json (minion_hub)"
-status: draft
+status: review
 created: 2026-10-10
 updated: 2026-10-10
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `src/server/services/notifications/projection/catalog-fingerprint.pg17.fence-once.expected.json`
