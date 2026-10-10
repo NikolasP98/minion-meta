@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-10)
 
-- `NikolasP98/minion_hub@master scripts/ops/hub-worker-release.md:52` — Full provider and authenticated tenant acceptance remain separate
-  https://github.com/NikolasP98/minion_hub/blob/master/scripts/ops/hub-worker-release.md#L52
+- `NikolasP98/minion_hub@master scripts/ops/hub-worker-release.md:36` — Add the reviewed systemd unit, root-owned immutable deployment controller and first-activation/postflight automation before production sets NOTIFICATION_WORKER=1; track this in proposed meta ledger proposals/2026-10-09-hub-notification-worker-production-activation.md.
+  https://github.com/NikolasP98/minion_hub/blob/master/scripts/ops/hub-worker-release.md#L36

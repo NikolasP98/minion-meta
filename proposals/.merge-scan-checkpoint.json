@@ -64,43 +64,71 @@
   },
   "NikolasP98/minion-ai:DEV": {
     "cursor": "b841c36750e4bf10dd3f81a4896b19c699fe3132",
-    "head": "740f3d6ce5da17160dd68ac836cdbcdfe81ee697",
+    "head": "eb40b998c45d305385d5dbfcb37537545a10f226",
     "done": 15,
     "kept": [
       {
         "file": "apps/ios/project.yml",
-        "desc": "SwiftFormat lint check removed from iOS preBuildScripts; documented with TODO(handoff) marker",
+        "desc": "SwiftFormat linting pre-build step removed from iOS build without immediate replacement; documented with TODO(handoff) but lint coverage is weakened.",
         "severity": "medium",
         "category": "weakened-test",
         "line": 50
       },
       {
         "file": "deploy/compose/delivery-floor-wiring.test.mjs",
-        "desc": "Result of .find() assigned to target and used on lines 21–24 without null/undefined check; will crash if server with id 'dev-protopi' not in input array",
-        "severity": "medium",
+        "desc": "find() result assigned to target without null check; used for property mutation at lines 21–23",
+        "severity": "high",
         "category": "unchecked-access",
         "line": 19
       },
       {
         "file": "deploy/compose/delivery-floor-wiring.test.mjs",
-        "desc": "Result of .find() used directly without null/undefined check; will crash if server with id 'dev-protopi' not in input array",
-        "severity": "medium",
+        "desc": "find() result chained with property assignment without null check",
+        "severity": "high",
         "category": "unchecked-access",
-        "line": 26
+        "line": 29
       },
       {
-        "file": "deploy/swarm/minion-swarm-firewall.test.py",
-        "desc": "command[0] accessed without verifying list is non-empty; if shlex.split(value) returns empty list (e.g., blank ExecStart= line), IndexError is raised",
+        "file": "docker/startup-permissions.test.py",
+        "desc": "Loop could access array out of bounds if last Dockerfile line ends with backslash and is followed by increment",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 82
+        "line": 14
+      },
+      {
+        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
+        "desc": "Assertion changed from expect(released).toBeGreaterThanOrEqual(1) to toBe(0), reversing the tested cleanup behavior",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 91
+      },
+      {
+        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
+        "desc": "Assertion changed from rejects.toThrow() (file deleted) to resolves.toBeUndefined() (file exists), inverting expected cleanup result",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 92
+      },
+      {
+        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
+        "desc": "Cleanup count expectation reduced from 2 to 1; test now verifies fewer locks are cleaned up",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 173
+      },
+      {
+        "file": "src/agents/sessions/session-write-lock.e2e.test.ts",
+        "desc": "Assertion changed from rejects.toThrow() (file deleted) to resolves.toBeUndefined() (file exists), inverting cleanup verification for stale alive lock",
+        "severity": "medium",
+        "category": "weakened-test",
+        "line": 180
       },
       {
         "file": "src/cli/delivery-cli.test.ts",
-        "desc": "Accessing payloads[0] without null check or assertion; other accesses in this file use ! to assert non-null (lines 63, 70, 107)",
+        "desc": "Accessing .payloads[0] on readQueuedDelivery result without null/undefined check",
         "severity": "medium",
         "category": "unchecked-access",
-        "line": 129
+        "line": 147
       }
     ]
   }

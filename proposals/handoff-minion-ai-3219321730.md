@@ -27,5 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-10)
 
-- `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:586` — production enablement of gateway.shells.durability, the
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L586
+- `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:710` — production enablement of gateway.shells.durability, the
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L710
+- `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:945` — bind pi-agent.orchestration-progress task metadata to an
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L945
