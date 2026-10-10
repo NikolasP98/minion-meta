@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-184419011
 title: Handoff marker — packages/shells-bridge/test/qualification/sdk-acp-client.ts (minion-meta)
-status: draft
+status: review
 created: 2026-09-12
 updated: 2026-10-10
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-08-17-gw-shells-lifecycle-stubs
 ---
 
 # Handoff marker — packages/shells-bridge/test/qualification/sdk-acp-client.ts
