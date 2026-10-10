@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-10)
 
-- `NikolasP98/minion_hub@master .github/workflows/notification-worker-artifact.yml:21` — Route attested artifacts to a reviewed private publication destination;
+- `NikolasP98/minion_hub@master .github/workflows/notification-worker-artifact.yml:21` — Wire the exact-ID publisher only once live B2 authority,
   https://github.com/NikolasP98/minion_hub/blob/master/.github/workflows/notification-worker-artifact.yml#L21

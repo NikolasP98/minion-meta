@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-10)
 
-- `NikolasP98/minion_hub@master scripts/ops/hub-worker-release.md:36` — Provide a reviewed private artifact publisher, a root-owned immutable deployment controller and rollback floor, compiled-startup qualification, and first-activation/postflight automation before production sets NOTIFICATION_WORKER=1; track this in proposed meta ledger proposals/2026-10-09-hub-notifi
-  https://github.com/NikolasP98/minion_hub/blob/master/scripts/ops/hub-worker-release.md#L36
+- `NikolasP98/minion_hub@master scripts/ops/hub-worker-release.md:42` — Provide a reviewed private artifact publisher, a root-owned immutable deployment controller and rollback floor, compiled-startup qualification, and first-activation/postflight automation before production sets NOTIFICATION_WORKER=1; track this in proposed meta ledger proposals/2026-10-09-hub-notifi
+  https://github.com/NikolasP98/minion_hub/blob/master/scripts/ops/hub-worker-release.md#L42
