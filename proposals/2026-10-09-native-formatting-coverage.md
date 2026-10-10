@@ -1,12 +1,13 @@
 ---
 id: 2026-10-09-native-formatting-coverage
 title: Establish meaningful iOS and shared Swift formatting coverage
-status: draft
+status: review
 findings: [TQ-009]
 created: 2026-10-09
-updated: 2026-10-09
+updated: 2026-10-10
 repos: [minion]
 tags: [test]
+duplicate_candidate: 2026-09-12-gateway-native-swift-qualification
 ---
 
 # Establish meaningful iOS and shared Swift formatting coverage
