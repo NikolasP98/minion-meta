@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T01:02:08.533Z",
+	"generatedAt": "2026-10-10T01:22:07.602Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -732,38 +732,6 @@
 			"scoredAt": "2026-09-15T14:58:39.472Z"
 		},
 		{
-			"key": "pr:minion_hub#454",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#454 fix(db): hold fewer Supavisor client slots per isolate (EMAXCONN 200 on prod)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/454",
-			"sourceUpdatedAt": "2026-10-10T00:30:00Z",
-			"sourceFingerprint": "dd74bafb5fb455236c4cc78844c36e097717b0bfcb27f0767601653cd3dbd43e",
-			"score": 79,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is an active production incident with a small, already-tested fix ready to merge.",
-			"evidence": [
-				"EMAXCONN 200 reached on every route during bursts; 357 errors on current deployment",
-				"one-file pool-size fix with updated test pin"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T00:52:21.236Z"
-		},
-		{
 			"key": "spec:2026-08-22-factory-dev-staging-daily-production-promotion-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1159,6 +1127,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:29:26.851Z"
+		},
+		{
+			"key": "pr:minion (gateway)#303",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#303 release: safe durable delivery and bounded gateway diagnostics",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
+			"sourceUpdatedAt": "2026-10-10T01:19:24Z",
+			"sourceFingerprint": "af05e165566ffe3d8c4bfd8903247378d09b3a3351d20c17496d45a867e37414",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "Extensive validation shows the release is near-ready pending a scoped CI correction before merge.",
+			"evidence": [
+				"DEV image verified commit 8517a5d5 manifest sha256:d6a09e88, zero restarts",
+				"Promotion remains draft: broader macOS CI exposed a stale workflow-contract assertion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1961730030",
@@ -3321,38 +3323,6 @@
 			"scoredAt": "2026-10-07T04:52:18.180Z"
 		},
 		{
-			"key": "run:minion_hub#38008935566",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38008935566",
-			"sourceUpdatedAt": "2026-10-10T00:30:31Z",
-			"sourceFingerprint": "32627355b9bb4a1e8527381cd048367a03a2390bf2059491dd8b1235b3f5f4ab",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI failure on minion_hub's master branch is urgent to investigate, but the catalog entry gives no logs or error detail to act on directly.",
-			"evidence": [
-				"status: failure",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:02:08.379Z"
-		},
-		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3887,6 +3857,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T17:22:08.309Z"
+		},
+		{
+			"key": "pr:minion_hub#455",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#455 perf(notifications): evaluate audience fences once",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/455",
+			"sourceUpdatedAt": "2026-10-10T00:57:40Z",
+			"sourceFingerprint": "e8dcb2c09be43ef0c4bf86fadaa3dde7c5a293a461a95bb22893b30cbb9c1cf2",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Thoroughly tested performance migration with passing independent review and dual-PG-version validation.",
+			"evidence": [
+				"PostgreSQL 17 native audience lane: 26/26 passed",
+				"Independent source review: PASS"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -5523,6 +5525,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T04:52:18.180Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ec4f70d3709c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/groupchat.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ec4f70d3709c.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "67b1b70d24f2ab06b7e5a423dfaf8b8af73451fe352148fb99c45896fd1cdafa",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-fb3cad8ba259"
+			],
+			"rationale": "Silent-failure risk in checkpoint/storage recovery is well diagnosed with a concrete fix direction referencing an existing remediation proposal.",
+			"evidence": [
+				"Unreadable checkpoints and storage unavailability ... create silent failure modes",
+				"Fix direction: fail fast with clear errors ... surface recovery decisions to operators"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fc192ff88fe3",
@@ -8299,70 +8335,6 @@
 			"scoredAt": "2026-10-03T01:54:11.712Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ec4f70d3709c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/groupchat.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ec4f70d3709c.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "67b1b70d24f2ab06b7e5a423dfaf8b8af73451fe352148fb99c45896fd1cdafa",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Checkpoint/storage recovery gap is clearly specified with concrete fix direction and references a scoped proposal (HDS-05).",
-			"evidence": [
-				"fix direction: 'check storage availability...fail fast...surface recovery decisions to operators'",
-				"references meta proposals/2026-09-08-platform-qc-remediation.md (HDS-05)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T00:54:19.340Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-fb3cad8ba259",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in supabase/migrations/20260909090400_job_request_manifest.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fb3cad8ba259.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "fe5784443e64aeada13cce10c990d10b869dab34ce01c53f1fa4ab13c5913007",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Migration history-loss gap has a concrete two-phase archive fix direction and is independently confirmed by a second ledger sweep.",
-			"evidence": [
-				"fix direction: 'copy the entire manifest history to an archived_manifests table...then reset current-head'",
-				"'Merged from handoff-minion-hub-2883926730' confirms a duplicate independent finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T00:54:19.340Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-reserva-keyword-config-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8426,6 +8398,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:56:28.567Z"
+		},
+		{
+			"key": "run:minion_hub#38011012219",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38011012219",
+			"sourceUpdatedAt": "2026-10-10T01:01:00Z",
+			"sourceFingerprint": "87c10f464f6ad2a0047a63396c1a913a468dad932cd0d25cd084959b936e30d6",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI failure on the master release branch needs investigation but the record itself carries no failure detail to act on yet.",
+			"evidence": [
+				"CI",
+				"push on master, status failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-slice2-migration-reconciliation-spec",
@@ -11062,6 +11066,38 @@
 			"scoredAt": "2026-10-07T14:22:30.261Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-105110351",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/infra/outbound/delivery-queue-recovery.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-105110351.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "3883b495e1f48b377f264d6b42fb1322328e53925740a0382e58f2e24247efe0",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single, narrowly scoped marker requesting an explicit operator transition for held legacy delivery-queue entries.",
+			"evidence": [
+				"add an explicit operator transition for held legacy entries",
+				"src/infra/outbound/delivery-queue-recovery.ts:93"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-168406530",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11481,6 +11517,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T00:22:23.406Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fb3cad8ba259",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20260909090400_job_request_manifest.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fb3cad8ba259.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "fe5784443e64aeada13cce10c990d10b869dab34ce01c53f1fa4ab13c5913007",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ec4f70d3709c"
+			],
+			"rationale": "Manifest reset loses audit history, with a clear two-phase archive-then-reset fix direction confirmed by a duplicate marker from a second sweep.",
+			"evidence": [
+				"Current-head reset does not archive whole-manifest history",
+				"Fix direction: copy the entire manifest history to an archived_manifests table ... then reset current-head"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-msteams-large-upload-spec",
@@ -15603,70 +15673,6 @@
 			"scoredAt": "2026-10-03T01:24:06.901Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-e41a33a864a1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/brains.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e41a33a864a1.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "c239ad4478e5071d99561dbd2a240510c4f147e32c8e55d63746888e08f41140",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The TODO marker names a real gap but the recorded diagnosis only shows tool invocations with no stated fix direction, leaving scope underspecified.",
-			"evidence": [
-				"marker: 'Indeterminate admissions need an explicit recovery/UI'",
-				"diagnosis section contains only read/grep tool calls, no conclusion"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T00:54:19.340Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-e9b22dc941f6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e9b22dc941f6.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "4d2add799dcc28902cf89efb063d8c92aa443fc8e3de82bdbdfcdea2dd41e3bf",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Marker flags a bounds/ordering issue but the diagnosis again only shows tool invocations without an actual fix direction or scope.",
-			"evidence": [
-				"marker: 'These bounds start after host source loading. Phase15 must bound source'",
-				"diagnosis section shows only Read calls, no analysis or recommendation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T00:54:19.340Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-f05b351ac858",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19004,6 +19010,70 @@
 			"scoredAt": "2026-10-06T05:51:45.379Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-e41a33a864a1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/brains.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e41a33a864a1.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "c239ad4478e5071d99561dbd2a240510c4f147e32c8e55d63746888e08f41140",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Marker names a real indeterminate-admission recovery gap but the auto-diagnosis never produced a concrete fix direction.",
+			"evidence": [
+				"Indeterminate admissions need an explicit recovery/UI",
+				"Diagnosis (auto): I need to check the file to understand the context"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-e9b22dc941f6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e9b22dc941f6.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "4d2add799dcc28902cf89efb063d8c92aa443fc8e3de82bdbdfcdea2dd41e3bf",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Marker flags unbounded source-loading bounds but the auto-diagnosis stopped at tool invocation without a conclusion.",
+			"evidence": [
+				"These bounds start after host source loading. Phase15 must bound source",
+				"Diagnosis (auto): I'll check the memory and examine the file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
+		},
+		{
 			"key": "spec:2026-10-03-readiness-card-action-semantics-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -19168,6 +19238,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T12:03:01.297Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/8517a5d54c8bc66ce45f5cea2e50cf954316e82b",
+			"sourceUpdatedAt": "2026-10-10T01:05:27Z",
+			"sourceFingerprint": "448dcdf5c9227ca1739dd1e228cf60e7f8440428900cf6befa285c476c83ec1a",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "Already-merged release-identity fix with no outstanding forward-looking action.",
+			"evidence": [
+				"Merge pull request #302 ... fix(deploy): pin releases to immutable build identity",
+				"status unknown, stage deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
 			"key": "issue:minion-meta#356",
@@ -21262,38 +21366,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T23:51:07.705Z"
-		},
-		{
-			"key": "issue:minion-meta#389",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#389 [monitor:unstick] Run 1298682b (minion-meta rank) failed: provider returned invalid JSON, fallback did not recover",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/389",
-			"sourceUpdatedAt": "2026-09-11T23:17:17Z",
-			"sourceFingerprint": "939de4f1b58be55f0b1343876c6c796f63924eb46940a3c7513f6ccaad97e038",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A transient ranking-provider JSON parse failure from three weeks ago needs a current-status check before deciding whether retry or classifier work is still warranted.",
-			"evidence": [
-				"diagnosis labels it 'a transient provider/formatting fault'",
-				"updatedAt 2026-09-11, well before today 2026-10-03"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T00:54:19.340Z"
 		},
 		{
 			"key": "issue:minion-meta#430",
@@ -28820,6 +28892,38 @@
 			"scoredAt": "2026-10-05T11:52:59.122Z"
 		},
 		{
+			"key": "issue:minion-meta#389",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#389 [monitor:unstick] Run 1298682b (minion-meta rank) failed: provider returned invalid JSON, fallback did not recover",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/389",
+			"sourceUpdatedAt": "2026-09-11T23:17:17Z",
+			"sourceFingerprint": "939de4f1b58be55f0b1343876c6c796f63924eb46940a3c7513f6ccaad97e038",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Transient provider JSON parse error on one ranking batch with most of the run completing, indicating a one-off fault rather than durable work.",
+			"evidence": [
+				"parse error (\"Invalid numeric literal at line 1, column 4\") from the primary provider",
+				"Index progress ... 34/337 candidates pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
+		},
+		{
 			"key": "issue:minion-meta#390",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30609,6 +30713,38 @@
 			"scoredAt": "2026-10-10T00:59:47.718Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "99ac9ccef1ab2403474f6948fe199751da0dabb89e2dec2261e17e6222642fc8",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Cited markers are unrelated fragments pulled from a generated rankings data file rather than coherent actionable TODOs, so the detection approach needs correcting first.",
+			"evidence": [
+				"rankings/index.json:4969 — the session is drawn when the cashier clicks",
+				"rankings/index.json:13165 — 'no attachments card — fin_purchase is not in' schema"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T01:22:07.417Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31112,14 +31248,14 @@
 			"scoredAt": "2026-10-03T03:24:11.063Z"
 		},
 		{
-			"key": "run:minion (gateway)#38010111028",
+			"key": "run:minion (gateway)#38011793728",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion (gateway)",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38010111028",
-			"sourceUpdatedAt": "2026-10-10T00:45:29Z",
-			"sourceFingerprint": "661560a9337eeae5b1d4deb7e7587b86f95432af592ddf69f071f9082ccb4828",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38011793728",
+			"sourceUpdatedAt": "2026-10-10T01:09:36Z",
+			"sourceFingerprint": "a58972269af02719083e87e72b0d569135f26e9e857d1a570fdb55509f9b7003",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -31131,17 +31267,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 3,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run on DEV with no failure or detail requiring action yet.",
+			"rationale": "Routine in-progress CI run record on DEV with no distinct actionable content beyond pipeline status.",
 			"evidence": [
-				"status: in_progress",
-				"push on DEV"
+				"CI",
+				"push on DEV, status in_progress"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:02:08.379Z"
+			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
@@ -32081,38 +32217,6 @@
 			"scoredAt": "2026-10-10T00:53:29.269Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "cc192f5968198bf6e9ebff1819c743406d7174b3780a4abed4690073eaf9f426",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted business-logic snippets embedded in the ranking index's own stored data, not TODO comments in source code, so there is nothing to fix here.",
-			"evidence": [
-				"markers are disjoint quotes (cashier sessions, DOB fields, discount editor) inside rankings/index.json itself",
-				"file is the ranking system's own output, currently shown as modified in git status"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:01:17.385Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3652542388",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32139,38 +32243,6 @@
 			"evidence": [
 				"markers include raw fixture text like 'quoted\\\";',' and 'template',' with no coherent task description",
 				"one entry is the literal string 'DO_NOT_READ' from a scanner test case, not an actual directive"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:02:08.379Z"
-		},
-		{
-			"key": "run:minion (gateway)#38010111058",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38010111058",
-			"sourceUpdatedAt": "2026-10-10T00:49:36Z",
-			"sourceFingerprint": "ae4a1ca6cfac6ad7dfc9b783f0b65ab78fc6aa9ea8d19c94aef7b2acc175794a",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Queued Docker release run with no outcome yet to act on.",
-			"evidence": [
-				"status: queued",
-				"push on DEV"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
