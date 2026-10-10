@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T07:51:34.950Z",
+	"generatedAt": "2026-10-10T09:23:57.293Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -301,6 +301,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:48:43.709Z"
+		},
+		{
+			"key": "pr:minion (gateway)#303",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
+			"sourceUpdatedAt": "2026-10-10T07:53:59Z",
+			"sourceFingerprint": "1ac8bc716de3116171e141bbda877ab863ce653de1d971554a8f3ab34767cd97",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "A spec-complete, test-verified production release carrying durable-delivery and rollback-safety fixes is held only by a CI workflow_dispatch BASE_SHA bug blocking the full Windows gate.",
+			"evidence": [
+				"Promotion is held...Production remains 7a1501e9",
+				"Docker Release...passed at immutable digest...DEV runtime proof healthy, zero restarts",
+				"secrets job failed closed because workflow_dispatch resolves no BASE_SHA (TQ012)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
@@ -990,42 +1025,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:23:35.582Z"
-		},
-		{
-			"key": "pr:minion (gateway)#303",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
-			"sourceUpdatedAt": "2026-10-10T07:37:29Z",
-			"sourceFingerprint": "d6b3506928c962796550bdc089e2510a4217fa7e60c8518497f8beaf2d3425c8",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:merge-scan-minion-ai-1b3a991",
-				"run:minion (gateway)#38035022932"
-			],
-			"rationale": "Production release PR with durable delivery and lifecycle fixes is held pending required Windows gates but is otherwise well-evidenced and actionable now.",
-			"evidence": [
-				"Promotion is held until both full Windows partitions plus the stable gate pass",
-				"Docker Release38033999214 passed at immutable digest sha256:079a...",
-				"PR310 adds the stable Windows full required gate"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T07:51:34.768Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-gateway-lifecycle-spec",
@@ -6668,38 +6667,6 @@
 			"scoredAt": "2026-10-04T10:21:23.911Z"
 		},
 		{
-			"key": "issue:minion-meta#615",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#615 [monitor:unstick] rank board goals failed (run 4069a392, batch 2, minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/615",
-			"sourceUpdatedAt": "2026-09-26T07:18:15Z",
-			"sourceFingerprint": "b79063f3109df97e4b816f8e2e2a7901a91d9583cd16b8ecfd27a7f6ef3ea0f0",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A distinct claude-provider-invalid-JSON-then-fallback-failure pattern recurred 5 times in a 2-hour window on the rank job, warranting a human retry/classifier decision but not grouping with the unrelated exit-126 signature.",
-			"evidence": [
-				"non-JSON response parse error then fallback to codex also failing",
-				"5 occurrences in 05:13-06:27 window (66648d69, 2cd56917, 9226bb80, bf17c297)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:55:42.494Z"
-		},
-		{
 			"key": "issue:minion-meta#694",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7906,42 +7873,6 @@
 			"scoredAt": "2026-10-09T09:51:51.030Z"
 		},
 		{
-			"key": "issue:minion-meta#612",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#612 [monitor:unstick] rank board goals failed - run bf17c297",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/612",
-			"sourceUpdatedAt": "2026-09-26T06:17:55Z",
-			"sourceFingerprint": "8c2ac571fc88678b324c9d2adbf363f5132cf3d258d3eb01a440121cd3afda8b",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#609",
-				"issue:minion-meta#610",
-				"issue:minion-meta#611"
-			],
-			"rationale": "Shows both providers (claude and codex) failing together in the same rank-pipeline cluster, a stronger outage signal that should be grouped with the three sibling runs into one provider-health investigation.",
-			"evidence": [
-				"run bf17c297, codex hit two consecutive transient failures after claude's invalid-JSON error",
-				"'fourth rank run in roughly 90 minutes with the identical claude invalid-numeric-literal parse error'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
 			"key": "issue:minion-meta#649",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8342,40 +8273,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T03:21:43.070Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-5f7da17302b5",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5f7da17302b5.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "b9d124db59e14648a5a956f745bd724c9e707eda03c3c971a47d498c57dc538a",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-20449cc8b981"
-			],
-			"rationale": "The month grid rendering no tickets breaks the primary scheduling UX and shares the same component/PR as the sibling range-reporting finding, so they should be fixed as one BookingCalendar goal.",
-			"evidence": [
-				"month grid carries no tickets, breaking primary UX of the scheduling UI",
-				"same file and merged PR #372 as proposal:postmerge-minion-hub-20449cc8b981"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:55:42.494Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e29218b380bb",
@@ -9156,112 +9053,6 @@
 			"scoredAt": "2026-10-04T03:50:57.800Z"
 		},
 		{
-			"key": "issue:minion-meta#609",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#609 [monitor:unstick] rank board goals failed - run 66648d69",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/609",
-			"sourceUpdatedAt": "2026-09-26T06:17:45Z",
-			"sourceFingerprint": "9c3163fb5aed9b00434aec19bb760480476dedf20f4145b911cab3b4043c992c",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#610",
-				"issue:minion-meta#611",
-				"issue:minion-meta#612"
-			],
-			"rationale": "One of four rank-pipeline runs in ~90 minutes failing on the same claude-provider invalid-JSON parse error, which should become a single provider-health goal rather than four tickets.",
-			"evidence": [
-				"run 66648d69, 'Invalid numeric literal at line 1, column 7'",
-				"'one of four rank runs in the same ~90 minute window ... all failing with the identical invalid-numeric-literal parse error'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
-			"key": "issue:minion-meta#610",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#610 [monitor:unstick] rank board goals failed - run 2cd56917",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/610",
-			"sourceUpdatedAt": "2026-09-26T06:17:48Z",
-			"sourceFingerprint": "a7ea00e801687f88d20adf8220750ac302ba51dff3d59c20a2a8d1953b69858f",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#609",
-				"issue:minion-meta#611",
-				"issue:minion-meta#612"
-			],
-			"rationale": "Duplicate of the same rank-pipeline claude invalid-JSON failure signature seen across four runs in the same short window.",
-			"evidence": [
-				"run 2cd56917, parse error at column 5, same fallback-to-codex-then-error pattern"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
-			"key": "issue:minion-meta#611",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#611 [monitor:unstick] rank board goals failed - run 9226bb80",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/611",
-			"sourceUpdatedAt": "2026-09-26T06:17:51Z",
-			"sourceFingerprint": "bb8f311872c16dfbb8fc06a904293411d7b9810b0c8b8344af6d0b3993b28c29",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#609",
-				"issue:minion-meta#610",
-				"issue:minion-meta#612"
-			],
-			"rationale": "Third of four identical rank-pipeline invalid-JSON failures within 90 minutes; grouping avoids redundant per-run triage of one provider issue.",
-			"evidence": [
-				"run 9226bb80, parse error at column 4, cluster of four with 66648d69, 2cd56917, bf17c297"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
 			"key": "pr:minion_hub#441",
 			"kind": "pr",
 			"stage": "development",
@@ -9654,6 +9445,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:39:40.651Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-5f7da17302b5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5f7da17302b5.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "b9d124db59e14648a5a956f745bd724c9e707eda03c3c971a47d498c57dc538a",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-20449cc8b981"
+			],
+			"rationale": "BookingCalendar's month grid renders no tickets at all, a core scheduling UX break on the same component/PR as the sibling range finding, so the two should merge into one fix goal.",
+			"evidence": [
+				"month grid carries no tickets, breaking visibility into bookings/availability",
+				"same file and merged PR (#372) as the viewportRange/dataRange finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
@@ -10908,40 +10733,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T08:52:53.005Z"
-		},
-		{
-			"key": "issue:minion-meta#613",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#613 [monitor:unstick] reconcile proposals failed - run 5eccdc59",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/613",
-			"sourceUpdatedAt": "2026-09-26T06:18:00Z",
-			"sourceFingerprint": "125c6a5dddcfed489da7847d9118155993e2267ce0c6eb5eea3c8f23d92d2fab",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#614"
-			],
-			"rationale": "Recurring exit-126/turns=0 exec failure on the reconcile provider step is an internal-automation host issue best tracked as one classifier goal with its duplicate.",
-			"evidence": [
-				"exit-126, turns=0 signature recurred in run 8bea4c0b (#614)",
-				"recommendation to check claude CLI/PATH/exec bit on the executing host"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:55:42.494Z"
 		},
 		{
 			"key": "issue:minion-meta#654",
@@ -13234,21 +13025,21 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-5f7da17302b5"
 			],
-			"rationale": "A clearly scoped data-range reporting bug in BookingCalendar.svelte that affects downstream consumers, best fixed together with the sibling TODO finding in the same file.",
+			"rationale": "Clear, approved diagnosis that BookingCalendar reports only the visible viewport range instead of the full data range, breaking downstream consumers, and should merge with the sibling finding on the same component/PR into one fix goal.",
 			"evidence": [
-				"reports only viewportRange, not actual dataRange, breaking downstream date filters/API calls",
-				"same file and merged PR #372 as proposal:postmerge-minion-hub-5f7da17302b5"
+				"component reports viewportRange instead of dataRange, breaking date filters/availability queries/API calls",
+				"status approved with a stated fix direction (distinguish viewportRange vs dataRange)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:55:42.494Z"
+			"scoredAt": "2026-10-10T09:23:57.106Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-66d88ed81830",
@@ -13487,40 +13278,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T08:52:53.005Z"
-		},
-		{
-			"key": "issue:minion-meta#513",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#513 [monitor:unstick] reconcile proposals run d863cd7d (minion-meta) - claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/513",
-			"sourceUpdatedAt": "2026-09-19T08:17:37Z",
-			"sourceFingerprint": "c848ed2b92c455fddce829fdec1cb10669ef60080348c2c6f42978d2601e33dd",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"issue:minion-meta#750"
-			],
-			"rationale": "A recurring claude-provider exit-126/no-turns runner failure from 2026-09-19 needs confirmation it still recurs before committing fix work, especially since a different provider-failure class (#750) is now the active signal.",
-			"evidence": [
-				"'4th identical failure signature ... in the last ~2.5h'",
-				"updatedAt 2026-09-19, ~2 weeks stale relative to today"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T09:00:55.377Z"
 		},
 		{
 			"key": "issue:minion-meta#556",
@@ -14330,219 +14087,6 @@
 			"scoredAt": "2026-10-08T08:52:21.923Z"
 		},
 		{
-			"key": "issue:minion-meta#507",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#507 [monitor:unstick] reconcile proposals failed to launch agent (run 1f964451, minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/507",
-			"sourceUpdatedAt": "2026-09-19T05:17:56Z",
-			"sourceFingerprint": "a7790ced40856a5d6bfaf692d3757522a8d00f0b6dd6b3a8e5ace4d2800f85c6",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#508",
-				"issue:minion-meta#509",
-				"issue:minion-meta#510"
-			],
-			"rationale": "One of six near-identical monitor alerts reporting the same exit-126/turns=0 claude launch failure for reconcile runs within ~1.5 hours, best consolidated into a single host-infra fix goal.",
-			"evidence": [
-				"run 1f964451 exit-126 turns=0 claude provider",
-				"'this exact signature ... also appears on runs c2ceab64 and e2c61ecc within the same hour'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
-			"key": "issue:minion-meta#508",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#508 [monitor:unstick] reconcile proposals failed to launch agent (run c2ceab64, minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/508",
-			"sourceUpdatedAt": "2026-09-19T05:17:57Z",
-			"sourceFingerprint": "3d652851423c4c48dd1082d0ce6c4886ccd8c30a81823169ec307f6bd30f2f5a",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#507",
-				"issue:minion-meta#509",
-				"issue:minion-meta#511"
-			],
-			"rationale": "Duplicate of the same exit-126/turns=0 reconcile launch-failure signature as sibling runs, should be merged into one host-classifier fix rather than triaged separately.",
-			"evidence": [
-				"run c2ceab64, 'third occurrence of the identical signature this hour'",
-				"reconcile work itself completed (proposals/index.json written, push succeeded)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
-			"key": "issue:minion-meta#509",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#509 [monitor:unstick] reconcile proposals failed to launch agent (run e2c61ecc, minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/509",
-			"sourceUpdatedAt": "2026-09-19T05:17:58Z",
-			"sourceFingerprint": "6519d77f24f5e55ca1d6467a26fef9ba0053c983bb2c75491d598805325d9b4e",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#507",
-				"issue:minion-meta#508",
-				"issue:minion-meta#512"
-			],
-			"rationale": "Third instance of the identical exit-126/turns=0 reconcile launch failure in the same short window, a grouping candidate rather than an independent fix.",
-			"evidence": [
-				"run e2c61ecc, 'earliest of three identical-signature failures in the same hour'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
-			"key": "issue:minion-meta#510",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#510 [monitor:unstick] reconcile proposals run 5ff7adc1 - claude exec failure (exit-126, turns=0) after successful reconcile work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/510",
-			"sourceUpdatedAt": "2026-09-19T06:17:50Z",
-			"sourceFingerprint": "5b3c99cbb4762d6ecc5b5bb565c41f67e9f1cf5bc193ba9cb6473133959f6cbc",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#511",
-				"issue:minion-meta#512",
-				"issue:minion-meta#507"
-			],
-			"rationale": "Same exit-126/turns=0 process-launch failure recurring across six runs in ~1.5 hours; grouping into one runner-host fix is more effective than per-run triage.",
-			"evidence": [
-				"run 5ff7adc1, permission_denials=0 ruling out a permissions-denial cause",
-				"'identical signature ... also appears on runs e3d6b429, f6aa30b6, 1f964451, c2ceab64, e2c61ecc'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
-			"key": "issue:minion-meta#511",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#511 [monitor:unstick] reconcile proposals run e3d6b429 - claude exec failure (exit-126, turns=0) after successful reconcile work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/511",
-			"sourceUpdatedAt": "2026-09-19T06:17:57Z",
-			"sourceFingerprint": "979ad2992e807591ff93f26d83af97d21d093b18ffade4cda855faa65f7c2719",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#510",
-				"issue:minion-meta#512",
-				"issue:minion-meta#508"
-			],
-			"rationale": "Sibling of the same six-run exit-126/turns=0 cluster; consolidating avoids redundant separate fixes for one runner-host problem.",
-			"evidence": [
-				"run e3d6b429, 'six runs in ~1.5 hours share this exact signature'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
-			"key": "issue:minion-meta#512",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#512 [monitor:unstick] reconcile proposals run f6aa30b6 - claude exec failure (exit-126, turns=0) after successful reconcile work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/512",
-			"sourceUpdatedAt": "2026-09-19T06:18:02Z",
-			"sourceFingerprint": "621cc447084ef68e996be798022a8370606f2c33bb7a209c2421a56d0f9063d3",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#510",
-				"issue:minion-meta#511",
-				"issue:minion-meta#509"
-			],
-			"rationale": "Final member of the six identical exit-126/turns=0 reconcile launch-failure reports; one grouped host-infra goal is more effective than six parallel issues.",
-			"evidence": [
-				"run f6aa30b6, same 'provider exec failure: exit-126 turns=0' signature as five sibling runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:54:55.713Z"
-		},
-		{
 			"key": "issue:minion-meta#554",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14639,40 +14183,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T11:21:24.048Z"
-		},
-		{
-			"key": "issue:minion-meta#614",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#614 [monitor:unstick] reconcile proposals failed - run 8bea4c0b",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/614",
-			"sourceUpdatedAt": "2026-09-26T06:18:06Z",
-			"sourceFingerprint": "99268f3be1d2301aaa93b62581325e43c38e069010328d7886bc199d65a35630",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#613"
-			],
-			"rationale": "Identical exit-126/turns=0 signature as #613, but this run's scripted portion completed and wrote real output, so it should be resolved jointly with #613 rather than separately.",
-			"evidence": [
-				"same exit-126, turns=0 signature as run 5eccdc59 (#613)",
-				"proposals/index.json write (516 proposals) and git push completed despite reported agent failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T07:55:42.494Z"
 		},
 		{
 			"key": "issue:minion-meta#623",
@@ -17135,39 +16645,6 @@
 			"scoredAt": "2026-10-06T05:51:45.379Z"
 		},
 		{
-			"key": "issue:minion-meta#750",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#750 [monitor:unstick] rank run a828b1ce: batch 2 provider returned invalid JSON, fallback also failed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/750",
-			"sourceUpdatedAt": "2026-10-03T08:55:46Z",
-			"sourceFingerprint": "1fc54de0e81409e9f01610ee87eaaaeb85142f0b60b1708c24bda3b084760d6e",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Fresh, concrete monitor finding proposing a bounded hardening fix (retry-with-reprompt on ranker JSON parse failure) but needs a proper spec before paid execution.",
-			"evidence": [
-				"'parse error: Invalid numeric literal at line 1, column 2' then fallback to codex also failed",
-				"recommendation: 'hardening the ranker to retry-with-reprompt on JSON parse failure'",
-				"updatedAt 2026-10-03T08:55:46Z (today)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T09:00:55.377Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19366,6 +18843,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T01:22:07.417Z"
+		},
+		{
+			"key": "run:minion (gateway)#38035022932",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38035022932",
+			"sourceUpdatedAt": "2026-10-10T08:21:48Z",
+			"sourceFingerprint": "a29825e6ec603f6184e7ac5e344abc3906b342190b56e47c5cdd3d2471bc5de0",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A CI failure on the gateway's DEV branch is worth tracking but the catalog entry carries no failure detail beyond a generic title, so it cannot be sized or actioned yet.",
+			"evidence": [
+				"status failure for a workflow_dispatch run on branch DEV",
+				"summary provides no job/step/error detail beyond 'CI'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-card-action-semantics-spec",
@@ -23859,6 +23368,42 @@
 			"scoredAt": "2026-10-07T23:51:35.593Z"
 		},
 		{
+			"key": "issue:minion-meta#513",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#513 [monitor:unstick] reconcile proposals run d863cd7d (minion-meta) - claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/513",
+			"sourceUpdatedAt": "2026-09-19T08:17:37Z",
+			"sourceFingerprint": "c848ed2b92c455fddce829fdec1cb10669ef60080348c2c6f42978d2601e33dd",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#510",
+				"issue:minion-meta#511",
+				"issue:minion-meta#512"
+			],
+			"rationale": "Seven near-identical exit-126/turns=0 claude-CLI launch failures across ~3 hours should become one consolidated host-classifier-signature goal rather than seven separate issues.",
+			"evidence": [
+				"4th identical failure signature for minion-meta reconcile in the last ~2.5h (see also 5ff7adc1, e3d6b429, f6aa30b6)",
+				"mechanical reconcile phase...completed successfully; failure occurs after that, in the claude provider agent invocation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
 			"key": "issue:minion-meta#516",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24034,6 +23579,113 @@
 			"scoredAt": "2026-10-09T19:21:47.828Z"
 		},
 		{
+			"key": "issue:minion-meta#611",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#611 [monitor:unstick] rank board goals failed - run 9226bb80",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/611",
+			"sourceUpdatedAt": "2026-09-26T06:17:51Z",
+			"sourceFingerprint": "bb8f311872c16dfbb8fc06a904293411d7b9810b0c8b8344af6d0b3993b28c29",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#609",
+				"issue:minion-meta#610"
+			],
+			"rationale": "Four rank-pipeline runs within ~90 minutes hit the identical claude-provider invalid-JSON parse error and should be consolidated into one host-classifier-signature goal.",
+			"evidence": [
+				"claude provider for batch 1 returned non-JSON output (parse error: Invalid numeric literal)",
+				"part of a cluster of four rank runs (66648d69, 2cd56917, bf17c297, this run) within about 90 minutes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
+			"key": "issue:minion-meta#612",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#612 [monitor:unstick] rank board goals failed - run bf17c297",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/612",
+			"sourceUpdatedAt": "2026-09-26T06:17:55Z",
+			"sourceFingerprint": "8c2ac571fc88678b324c9d2adbf363f5132cf3d258d3eb01a440121cd3afda8b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#615",
+				"issue:minion-meta#750",
+				"issue:minion-meta#769"
+			],
+			"rationale": "Recurring claude-provider invalid-JSON batch-2 rank failure (4th in ~90min) should become one classifier-signature goal rather than a standalone ticket.",
+			"evidence": [
+				"fourth rank run in roughly 90 minutes with identical claude invalid-numeric-literal parse error",
+				"both bounded providers (claude, codex) failed together in this run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
+		},
+		{
+			"key": "issue:minion-meta#615",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#615 [monitor:unstick] rank board goals failed (run 4069a392, batch 2, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/615",
+			"sourceUpdatedAt": "2026-09-26T07:18:15Z",
+			"sourceFingerprint": "b79063f3109df97e4b816f8e2e2a7901a91d9583cd16b8ecfd27a7f6ef3ea0f0",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#612",
+				"issue:minion-meta#750",
+				"issue:minion-meta#769"
+			],
+			"rationale": "Fifth occurrence in a 2-hour window of the same claude-invalid-JSON-fallback-fail rank pattern warrants one classifier goal instead of per-run tickets.",
+			"evidence": [
+				"5 rank runs in 05:13-06:27 window with identical pattern",
+				"claude parse error at line1 col2 followed by codex fallback failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
+		},
+		{
 			"key": "issue:minion-meta#707",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24099,6 +23751,111 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T01:51:46.553Z"
+		},
+		{
+			"key": "issue:minion-meta#750",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#750 [monitor:unstick] rank run a828b1ce: batch 2 provider returned invalid JSON, fallback also failed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/750",
+			"sourceUpdatedAt": "2026-10-03T08:55:46Z",
+			"sourceFingerprint": "1fc54de0e81409e9f01610ee87eaaaeb85142f0b60b1708c24bda3b084760d6e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#769",
+				"issue:minion-meta#770"
+			],
+			"rationale": "Same batch-2 provider invalid-JSON signature recurs across rank runs with batch 1 unaffected, and the proposed retry-with-reprompt hardening is concrete enough to consolidate into one goal.",
+			"evidence": [
+				"batch 1 completed fine (jev shadow 12/12 scored)",
+				"parse error: Invalid numeric literal at line1 col2, then codex fallback also failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
+		},
+		{
+			"key": "issue:minion-meta#769",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#769 [monitor:unstick] rank board goals run 271d0b59 failed at batch 2 (provider JSON fault)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/769",
+			"sourceUpdatedAt": "2026-10-10T09:17:26Z",
+			"sourceFingerprint": "f48debaf9d699f72916af4f17cae810ffb5b03ba5b60cf83dd090968d24f439c",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#770",
+				"issue:minion-meta#750"
+			],
+			"rationale": "Identical batch-2 claude-JSON-parse-error/codex-fallback signature as sibling runs; a recurring class that should consolidate into one deterministic classifier/retry-hardening goal.",
+			"evidence": [
+				"batch 1 scored fine 12/12",
+				"same signature as run 82d75e6f roughly 30 minutes later"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
+		},
+		{
+			"key": "issue:minion-meta#770",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#770 [monitor:unstick] rank board goals run 82d75e6f failed at batch 2 (provider JSON fault)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/770",
+			"sourceUpdatedAt": "2026-10-10T09:17:26Z",
+			"sourceFingerprint": "1ff1ea9d44a404e24d052c4d186e2f1f3a645bc47f26c549233b8b45d823f67b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#769",
+				"issue:minion-meta#750"
+			],
+			"rationale": "Two consecutive runs with the identical batch-2 claude-JSON-parse-error/codex-fallback signature is a strong candidate to consolidate into one host-classifier/retry-hardening goal.",
+			"evidence": [
+				"identical failure shape as run 271d0b59 about 30 minutes earlier",
+				"batch 1 scored fine (jev shadow 12/12)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-reserva-keyword-config",
@@ -24383,38 +24140,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T00:59:47.718Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "0bad65e45b8b27dcbf2e09b03d62f396e5611e3eb674fdb7e4e6ef9bb6f76b53",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The ledger entry bundles 16+ unrelated markers spanning POS sessions, HR schema, RBAC, and UI affordances into one rankings/index.json proposal with no coherent single scope.",
-			"evidence": [
-				"Markers reference cashier session draws, fin_purchase schema, and HR drop columns in one file",
-				"16 distinct line markers listed under a single proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T07:51:34.768Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-db09a2f",
@@ -25698,6 +25423,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T05:22:47.201Z"
+		},
+		{
+			"key": "issue:minion-meta#613",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#613 [monitor:unstick] reconcile proposals failed - run 5eccdc59",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/613",
+			"sourceUpdatedAt": "2026-09-26T06:18:00Z",
+			"sourceFingerprint": "125c6a5dddcfed489da7847d9118155993e2267ce0c6eb5eea3c8f23d92d2fab",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#614"
+			],
+			"rationale": "Exit-126/turns=0 reconcile exec failure is an identical recurring signature with #614 and should consolidate into one host-classifier investigation.",
+			"evidence": [
+				"exit-126 turns=0 indicates claude provider binary never executed",
+				"matches identical signature in run 8bea4c0b"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
 		},
 		{
 			"key": "issue:minion-meta#617",
@@ -28745,6 +28504,40 @@
 			"scoredAt": "2026-10-09T22:51:08.035Z"
 		},
 		{
+			"key": "issue:minion-meta#614",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#614 [monitor:unstick] reconcile proposals failed - run 8bea4c0b",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/614",
+			"sourceUpdatedAt": "2026-09-26T06:18:06Z",
+			"sourceFingerprint": "99268f3be1d2301aaa93b62581325e43c38e069010328d7886bc199d65a35630",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#613"
+			],
+			"rationale": "Same exit-126 reconcile signature as #613, but log shows the scripted reconcile portion completed successfully despite the agent error, suggesting one merged investigation rather than two tickets.",
+			"evidence": [
+				"proposals/index.json wrote 516 proposals despite the claude exit-126",
+				"identical exit-126 turns=0 signature as sibling run 5eccdc59"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
+		},
+		{
 			"key": "issue:minion-meta#647",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30047,6 +29840,222 @@
 			"scoredAt": "2026-10-09T15:51:37.011Z"
 		},
 		{
+			"key": "issue:minion-meta#507",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#507 [monitor:unstick] reconcile proposals failed to launch agent (run 1f964451, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/507",
+			"sourceUpdatedAt": "2026-09-19T05:17:56Z",
+			"sourceFingerprint": "a7790ced40856a5d6bfaf692d3757522a8d00f0b6dd6b3a8e5ace4d2800f85c6",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#513",
+				"issue:minion-meta#508",
+				"issue:minion-meta#509"
+			],
+			"rationale": "Duplicate of a recurring claude-CLI launch-failure signature already captured more completely in #513.",
+			"evidence": [
+				"exit-126 turns=0 after reconcile work already completed and pushed",
+				"identical signature also on runs c2ceab64 and e2c61ecc within the same hour"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
+			"key": "issue:minion-meta#508",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#508 [monitor:unstick] reconcile proposals failed to launch agent (run c2ceab64, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/508",
+			"sourceUpdatedAt": "2026-09-19T05:17:57Z",
+			"sourceFingerprint": "3d652851423c4c48dd1082d0ce6c4886ccd8c30a81823169ec307f6bd30f2f5a",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#513",
+				"issue:minion-meta#507",
+				"issue:minion-meta#509"
+			],
+			"rationale": "Duplicate of the same exit-126/turns=0 claude-CLI launch failure cluster, redundant with #513.",
+			"evidence": [
+				"third occurrence of the identical signature this hour",
+				"reconcile's own work completed fully before the provider launch failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
+			"key": "issue:minion-meta#509",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#509 [monitor:unstick] reconcile proposals failed to launch agent (run e2c61ecc, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/509",
+			"sourceUpdatedAt": "2026-09-19T05:17:58Z",
+			"sourceFingerprint": "6519d77f24f5e55ca1d6467a26fef9ba0053c983bb2c75491d598805325d9b4e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#513",
+				"issue:minion-meta#507",
+				"issue:minion-meta#508"
+			],
+			"rationale": "Earliest of three identical-signature failures already superseded by the consolidated #513 report.",
+			"evidence": [
+				"same signature as runs 1f964451 and c2ceab64",
+				"proposals/index.json written and git push succeeded before the provider launch failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
+			"key": "issue:minion-meta#510",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#510 [monitor:unstick] reconcile proposals run 5ff7adc1 - claude exec failure (exit-126, turns=0) after successful reconcile work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/510",
+			"sourceUpdatedAt": "2026-09-19T06:17:50Z",
+			"sourceFingerprint": "5b3c99cbb4762d6ecc5b5bb565c41f67e9f1cf5bc193ba9cb6473133959f6cbc",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#513",
+				"issue:minion-meta#511",
+				"issue:minion-meta#512"
+			],
+			"rationale": "One of six runs sharing the identical exit-126/turns=0 provider-launch signature, redundant with #513.",
+			"evidence": [
+				"identical signature also on e3d6b429, f6aa30b6, 1f964451, c2ceab64, e2c61ecc",
+				"permission_denials=0 rules out a permission failure, confirming infra launch fault"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
+			"key": "issue:minion-meta#511",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#511 [monitor:unstick] reconcile proposals run e3d6b429 - claude exec failure (exit-126, turns=0) after successful reconcile work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/511",
+			"sourceUpdatedAt": "2026-09-19T06:17:57Z",
+			"sourceFingerprint": "979ad2992e807591ff93f26d83af97d21d093b18ffade4cda855faa65f7c2719",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#513",
+				"issue:minion-meta#510",
+				"issue:minion-meta#512"
+			],
+			"rationale": "Same exit-126/turns=0 signature as five sibling runs, redundant with the consolidated #513 report.",
+			"evidence": [
+				"same signature as sibling runs 5ff7adc1, f6aa30b6, 1f964451, c2ceab64, e2c61ecc",
+				"reconcile output already landed successfully before the provider launch failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
+			"key": "issue:minion-meta#512",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#512 [monitor:unstick] reconcile proposals run f6aa30b6 - claude exec failure (exit-126, turns=0) after successful reconcile work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/512",
+			"sourceUpdatedAt": "2026-09-19T06:18:02Z",
+			"sourceFingerprint": "621cc447084ef68e996be798022a8370606f2c33bb7a209c2421a56d0f9063d3",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#513",
+				"issue:minion-meta#510",
+				"issue:minion-meta#511"
+			],
+			"rationale": "Sixth run with the identical exit-126/turns=0 launch-failure signature, redundant with #513.",
+			"evidence": [
+				"six runs in ~1.5 hours share this exact signature",
+				"mechanical reconcile phase succeeded; only the claude provider invocation failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
 			"key": "issue:minion-meta#515",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30442,6 +30451,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:22:26.504Z"
+		},
+		{
+			"key": "issue:minion-meta#609",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#609 [monitor:unstick] rank board goals failed - run 66648d69",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/609",
+			"sourceUpdatedAt": "2026-09-26T06:17:45Z",
+			"sourceFingerprint": "9c3163fb5aed9b00434aec19bb760480476dedf20f4145b911cab3b4043c992c",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#611",
+				"issue:minion-meta#610"
+			],
+			"rationale": "One of four rank runs with the identical claude-provider invalid-JSON signature, redundant with the consolidated #611 report.",
+			"evidence": [
+				"one of four rank runs in the same ~90 minute window (2cd56917, 9226bb80, bf17c297, this run)",
+				"claude provider for rank batch 1 returned non-JSON output, triggering fallback to codex"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
+		},
+		{
+			"key": "issue:minion-meta#610",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#610 [monitor:unstick] rank board goals failed - run 2cd56917",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/610",
+			"sourceUpdatedAt": "2026-09-26T06:17:48Z",
+			"sourceFingerprint": "a7ea00e801687f88d20adf8220750ac302ba51dff3d59c20a2a8d1953b69858f",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#611",
+				"issue:minion-meta#609"
+			],
+			"rationale": "Same invalid-JSON claude-provider parse-error signature as sibling rank runs, redundant with #611.",
+			"evidence": [
+				"same failure signature as sibling rank runs",
+				"part of a cluster of four rank runs...within about 90 minutes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:22:27.738Z"
 		},
 		{
 			"key": "issue:minion-meta#645",
@@ -31161,6 +31240,38 @@
 			"scoredAt": "2026-10-10T00:59:47.718Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "9f4f2c52297f1b174d62a96e10d0cf8aba384d8e0cd094d191c5820d77ebaf51",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed TODO(handoff) markers are substrings of quoted rationale/evidence text embedded in the generated rankings/index.json data file, not actionable code markers.",
+			"evidence": [
+				"markers quoted include fragments like 'this narrows the race window, it does not close it' inside rankings/index.json",
+				"the flagged file is rankings/index.json itself, a generated ranking artifact rather than application source code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T09:23:57.106Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31598,40 +31709,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:52:23.150Z"
-		},
-		{
-			"key": "run:minion (gateway)#38035022932",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38035022932",
-			"sourceUpdatedAt": "2026-10-10T07:43:48Z",
-			"sourceFingerprint": "0527fa3095da71e88d2976c6a85d830aa39724a14c198bdca79cec718f5e8b61",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion (gateway)#303"
-			],
-			"rationale": "This is an in-progress automated CI run status rather than an actionable work item in itself.",
-			"evidence": [
-				"workflow_dispatch on DEV",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T07:51:34.768Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
