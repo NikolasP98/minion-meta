@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-2361254700
-title: Handoff marker — src/lib/components/scheduling/fan-out.ts (minion_hub)
-status: closed
-created: 2026-09-26
+id: handoff-minion-hub-2366728732
+title: Handoff marker — src/lib/components/scheduling/kit/booking-mover.ts (minion_hub)
+status: draft
+created: 2026-10-10
 updated: 2026-10-10
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: postmerge-minion-hub-2841d2ba75ad
 ---
 
-# Handoff marker — src/lib/components/scheduling/fan-out.ts
+# Handoff marker — src/lib/components/scheduling/kit/booking-mover.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,9 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-10)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/fan-out.ts:42` — that trade means a deck of QUARTER-hour procedures (FACES runs
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/fan-out.ts#L42
-
-## Closed (auto)
-
-No `TODO(handoff):` marker found in this file as of 2026-10-10; the sweep closed this proposal.
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/kit/booking-mover.ts:74` — no UI caller since the fan-out deck was deleted (ledger
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/kit/booking-mover.ts#L74
