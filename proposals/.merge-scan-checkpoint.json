@@ -64,29 +64,36 @@
   },
   "NikolasP98/minion-ai:DEV": {
     "cursor": "b841c36750e4bf10dd3f81a4896b19c699fe3132",
-    "head": "8517a5d54c8bc66ce45f5cea2e50cf954316e82b",
-    "done": 16,
+    "head": "d880c73bd8126b422625770a50dd0fd95d4d3fe6",
+    "done": 12,
     "kept": [
       {
-        "file": ".github/workflows/ci.yml",
-        "desc": "grep validates error message but exit code is not checked; script continues if pattern not found without failing the test",
+        "file": ".github/workflows/docker-release.yml",
+        "desc": "image_digest references needs.create-manifest.outputs.image-digest but create-manifest is not in the deploy-production job's needs list",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 293
+      },
+      {
+        "file": "deploy/compose/delivery-floor-wiring.test.mjs",
+        "desc": "Result of .find() used without null check; will crash if no server with id 'dev-protopi' exists in enabled array",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 18
+      },
+      {
+        "file": "deploy/compose/delivery-floor-wiring.test.mjs",
+        "desc": "Result of .find() chained directly into property assignment without null check; will crash if no matching server exists",
+        "severity": "high",
+        "category": "unchecked-access",
+        "line": 27
+      },
+      {
+        "file": "src/cli/commands/agent/delivery.ts",
+        "desc": "Calling runtime.log(message) without checking if log exists; line 209 uses optional chaining on error, but fallback at line 211 does not guard log access, risking TypeError if runtime.log is undefined.",
         "severity": "medium",
-        "category": "weakened-test",
-        "line": 543
-      },
-      {
-        "file": "deploy/compose/delivery-floor-wiring.test.mjs",
-        "desc": ".find() result target is used without null check before delete target.delivery_recovery_fence; will crash if 'dev-protopi' is not found.",
-        "severity": "high",
         "category": "unchecked-access",
-        "line": 19
-      },
-      {
-        "file": "deploy/compose/delivery-floor-wiring.test.mjs",
-        "desc": ".find() result chained directly without null check before assigning .local_build; will crash if 'dev-protopi' is not found.",
-        "severity": "high",
-        "category": "unchecked-access",
-        "line": 25
+        "line": 211
       }
     ]
   }
