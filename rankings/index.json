@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T03:23:35.776Z",
+	"generatedAt": "2026-10-10T03:52:23.330Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -666,6 +666,41 @@
 			"scoredAt": "2026-10-05T02:25:57.895Z"
 		},
 		{
+			"key": "pr:minion (gateway)#303",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
+			"sourceUpdatedAt": "2026-10-10T03:48:02Z",
+			"sourceFingerprint": "0836144c6ba098511f9dba7b452e6eb86d0b4ab6ae3c667b5c0422d5a94c9a0b",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"run:minion (gateway)#38021620383",
+				"run:minion (gateway)#38021721389"
+			],
+			"rationale": "A production gateway release with durable delivery, rollback-floor, and immutable build-receipt binding is actively gating on named CI runs and has detailed design/evidence references.",
+			"evidence": [
+				"binds deployment to an immutable build receipt and establishes a compatible-reader rollback floor",
+				"remains draft until fullDEVpushCI38021620383 and exact-source DockerRelease38021721389 pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
 			"key": "spec:2026-08-17-factory-token-budget-governance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -992,41 +1027,6 @@
 			"scoredAt": "2026-10-10T03:23:35.582Z"
 		},
 		{
-			"key": "pr:minion (gateway)#303",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
-			"sourceUpdatedAt": "2026-10-10T03:11:03Z",
-			"sourceFingerprint": "763974086bdba968aeabf90d465ec8d4519df96c97bc6f79c2dc35232856de4f",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#307"
-			],
-			"rationale": "Production release PR is draft and explicitly blocked on PR307 and fresh exact-image runtime verification, so it is not actionable yet despite high stakes.",
-			"evidence": [
-				"PR remains draft",
-				"required Windows correction is being qualified in PR307; it must join DEV before this production promotion",
-				"fresh exact-image runtime verification remains required"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T03:22:26.504Z"
-		},
-		{
 			"key": "spec:2026-10-03-readiness-gateway-lifecycle-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1058,42 +1058,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:27:30.587Z"
-		},
-		{
-			"key": "pr:minion (gateway)#307",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#307 fix: make Windows release gates platform-safe",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/307",
-			"sourceUpdatedAt": "2026-10-10T03:14:30Z",
-			"sourceFingerprint": "a072e279f1220edaf961b376a32a78ca194e1e32cdffd0c6f3b23c69b43517b9",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#303",
-				"proposal:2026-10-09-windows-release-qualification"
-			],
-			"rationale": "This is the direct, well-qualified blocker for the production release PR, with substantial local test evidence and only the hosted Windows gate remaining.",
-			"evidence": [
-				"run-script 10/10, lifecycle 2/2, adjacent cancellation suite 40/40 PASS",
-				"full pnpm check PASS with 0 errors",
-				"hosted Windows remains required"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T03:22:26.504Z"
 		},
 		{
 			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
@@ -2211,6 +2175,39 @@
 			"scoredAt": "2026-10-10T00:53:29.269Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1464158565",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — scripts/ops/hub-worker-release.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1464158565.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "66aff57770647b0330816a8d19c5e2eb94a1656ca6717687f5aaadca1ace0828",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-c4ef8f310a4a"
+			],
+			"rationale": "Shares the same hub-worker-release.md:36 marker text and NOTIFICATION_WORKER=1 production-gating concern as postmerge-minion-hub-c4ef8f310a4a.",
+			"evidence": [
+				"marker: 'Provide a reviewed private artifact publisher, a root-owned immutable deployment controller and rollback floor...before production sets NOTIFICATION_WORKER=1'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-821383456",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2340,6 +2337,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:51:35.785Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c4ef8f310a4a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c4ef8f310a4a.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "63f670151e58b5a1dbf28f2737d5e3cd63929072828e3115f1cc58e102d042e8",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-1464158565"
+			],
+			"rationale": "Gates a production-critical NOTIFICATION_WORKER flag with four concrete deliverables, but its own reconciliation note flags ambiguity against a same-day closed proposal, so it should be merged with its exact duplicate first.",
+			"evidence": [
+				"Fix direction lists four deliverables: private artifact publisher, root-owned immutable deployment controller, compiled-startup qualification, postflight automation",
+				"note: 'Possible revival of postmerge-minion-hub-390c35b3d77c, closed the same day'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-whatsapp-cloud-template-fallback-spec",
@@ -3428,40 +3459,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T04:52:18.180Z"
-		},
-		{
-			"key": "run:minion (gateway)#38016982057",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38016982057",
-			"sourceUpdatedAt": "2026-10-10T02:44:41Z",
-			"sourceFingerprint": "2467d84c9bbba40ae3de347f6f819b369afd697f057eabf016f6599187c2afac",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#303",
-				"pr:minion (gateway)#307"
-			],
-			"rationale": "A failing CI run on DEV blocks downstream release work but the catalog gives no failure detail to act on directly.",
-			"evidence": [
-				"CI run status: failure on push to DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T02:49:45.588Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -5011,6 +5008,40 @@
 			"scoredAt": "2026-10-10T00:53:29.269Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1309189080",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — .github/workflows/notification-worker-artifact.yml (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1309189080.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "16edd899e77e9acfb6d2bfbe4ae3e8a13379c2aa1590fcb359237be9af521b84",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-154299466cc7"
+			],
+			"rationale": "Same file, same PR #456, same marker text as postmerge-minion-hub-154299466cc7, which the reconciliation note already identifies as the fuller-diagnosis duplicate.",
+			"evidence": [
+				"note: 'Likely duplicate of postmerge-minion-hub-154299466cc7: same file, same PR (#456), same marker text'",
+				"marker text truncated: 'Route attested artifacts to a reviewed private publication destination'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1536014697",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5204,6 +5235,40 @@
 			"scoredAt": "2026-10-10T01:01:17.385Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-154299466cc7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in .github/workflows/notification-worker-artifact.yml (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-154299466cc7.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "0e1f66e926c05b6b73beab2f66d0b081021538e1eec812c9d32f412861c378a4",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-1309189080"
+			],
+			"rationale": "Concrete fix direction (private artifact registry with approval gates) exists but is explicitly flagged as a likely duplicate of handoff-minion-hub-1309189080 pending human confirmation.",
+			"evidence": [
+				"Fix direction: 'Set up a private artifact registry... with explicit approval gates'",
+				"status: draft, same file/PR as the handoff-sweep counterpart"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2123c34b9bc0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5268,41 +5333,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T06:52:29.491Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-390c35b3d77c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-390c35b3d77c.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "e0141b47fea738704727ff49998c863f70281b6d8217636176b5bf7f96f61895",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-10-09-notification-worker-disabled-artifact-spec",
-				"proposal:handoff-minion-hub-1464158565"
-			],
-			"rationale": "Approved finding on the NOTIFICATION_WORKER=1 production-readiness gap overlaps the in-progress disabled-artifact spec and should fold into that single goal rather than track separately.",
-			"evidence": [
-				"Diagnosis names unmanaged/unmonitored worker risk if NOTIFICATION_WORKER=1 is set without systemd/controller automation",
-				"notification-worker-disabled-artifact-spec explicitly extends the same production-activation ledger"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T03:23:35.582Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
@@ -8220,41 +8250,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T17:22:08.309Z"
-		},
-		{
-			"key": "pr:minion_hub#456",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#456 Stage immutable disabled notification worker artifact",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/456",
-			"sourceUpdatedAt": "2026-10-10T03:09:55Z",
-			"sourceFingerprint": "3fcef56a25bc86703434edeb4395f1c479c06aea36121b0acc75ae821bd3bcc0",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-09-hub-notification-worker-production-activation"
-			],
-			"rationale": "The disabled-artifact staging work is independently reviewed, hosted gates pass, and builds are reproducible byte-identical, making it ready to land even though activation stays out of scope.",
-			"evidence": [
-				"independent standards/spec/source review passed",
-				"two isolated disk-backed builds produced byte-identical 852,090,880-byte archives",
-				"hosted disabled artifact/root/systemd gate: passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T03:22:26.504Z"
 		},
 		{
 			"key": "proposal:2026-08-29-roadmap-milestone-order-deviation",
@@ -15181,41 +15176,6 @@
 			"scoredAt": "2026-10-05T11:59:35.856Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1464158565",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — scripts/ops/hub-worker-release.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1464158565.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "ede7dd32e25febfd41dc757e329090eba81a6109fa7d50d6de815f705f40a2b1",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-390c35b3d77c",
-				"spec:2026-10-09-notification-worker-disabled-artifact-spec"
-			],
-			"rationale": "Duplicate handoff-sweep filing of the identical hub-worker-release.md marker already tracked and diagnosed by the postmerge finding and addressed by in-progress spec work.",
-			"evidence": [
-				"Same file/line marker text as postmerge-minion-hub-390c35b3d77c for scripts/ops/hub-worker-release.md:36",
-				"notification-worker-disabled-artifact-spec is already implementing the referenced ops infra"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T03:23:35.582Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1649151658",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17489,14 +17449,14 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A merged PR left an incomplete drag-boundary TODO allowing out-of-bounds bookings and possible data anomalies, with a concrete clamp-based fix direction already specified.",
+			"rationale": "Approved status with a clear, bounded fix (clamp drag position to runway bounds plus visual feedback) for a concrete UI bug.",
 			"evidence": [
-				"TODO(handoff): a drag cannot cross the runway's visible edge",
-				"Fix direction: Add a clamp() check in the drag handler"
+				"Fix direction: 'Add a clamp() check in the drag handler... limits the event's final position to [runway.min, runway.max]'",
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T03:24:11.063Z"
+			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cff27fef4e3c",
@@ -23578,38 +23538,6 @@
 			"scoredAt": "2026-10-07T23:51:35.593Z"
 		},
 		{
-			"key": "issue:minion-meta#505",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#505 [monitor:unstick] reconcile run 6a35521e exited 126 despite completed work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/505",
-			"sourceUpdatedAt": "2026-09-19T02:17:25Z",
-			"sourceFingerprint": "6c3c787854b3c091bd8057a7c67806eec6a8186ce27f0c0a89404fcfd79de212",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The log tail quoted shows the reconcile run actually completed successfully despite exit-126, so this looks like an infra wrapper/exit-code artifact needing a runner-box check rather than a bounded reconcile fix.",
-			"evidence": [
-				"exit-126 recorded with turns=0 despite log showing full completion",
-				"git push succeeded 8e9d621..0b46a45 dev -> dev"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T03:24:11.063Z"
-		},
-		{
 			"key": "issue:minion-meta#516",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24134,6 +24062,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T00:59:47.718Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "aa9b70f9450ed1fc12d7e67b92a81cbb151ce39ad5b165580dae8e651ab3d51b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The listed 'markers' are quoted fragments from unrelated rankings content (e.g. 'this narrows the race window', 'no attachments card'), not actual TODO(handoff) comments, indicating the sweep misparsed its own generated data file rather than finding real open ends.",
+			"evidence": [
+				"marker text fragments read as mid-sentence quotes from disparate topics (DOB, cashier session, discount editor)",
+				"file is rankings/index.json, a generated ranking artifact, not application source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-db09a2f",
@@ -27400,6 +27360,38 @@
 			"scoredAt": "2026-10-03T09:51:00.116Z"
 		},
 		{
+			"key": "issue:minion-meta#505",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#505 [monitor:unstick] reconcile run 6a35521e exited 126 despite completed work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/505",
+			"sourceUpdatedAt": "2026-09-19T02:17:25Z",
+			"sourceFingerprint": "6c3c787854b3c091bd8057a7c67806eec6a8186ce27f0c0a89404fcfd79de212",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The attached diagnosis itself concludes the exit-126 is likely an infra/wrapper fault rather than a genuine reconcile failure, so the real work is a runner-box check, not a reconcile fix.",
+			"evidence": [
+				"log tail shows the reconcile fully completed with proposals/index.json written and push succeeded",
+				"recommendation: safe to retry; check runner box for non-executable/permission-denied post-hook"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
 			"key": "issue:minion-meta#517",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29047,6 +29039,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T05:25:32.539Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7fdd8f2adc4d79c2b358bac6796f38cc61dfc149",
+			"sourceUpdatedAt": "2026-10-10T03:44:24Z",
+			"sourceFingerprint": "2d637146a535cb4817d15ee049b9791d61b5429fb7e4be09bcb71447dfb7d736",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This is just a deployment-health status snapshot showing a test-only commit merge, fully subsumed by the PR303 release-gate narrative.",
+			"evidence": [
+				"summary is a single merge commit message for PR308",
+				"status unknown, no independent scope beyond PR303 gating"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -31004,38 +31030,6 @@
 			"scoredAt": "2026-10-10T00:59:47.718Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "90170b58cfbaaffe5fc0ea23d11d3dc62ffda455d91a01411c80457557505a16",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted text fragments embedded in rankings/index.json's own generated summaries, not actionable source-code TODOs in a single coherent area.",
-			"evidence": [
-				"Cited lines span unrelated domains (POS sessions, HR schema, finance accrual, discount UI)",
-				"rankings/index.json is a generated index artifact, not source code requiring a fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T03:23:35.582Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31523,20 +31517,88 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 2,
 				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 3,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The TODO marker is an incomplete sentence referencing an overflow fix that already happened, so the actionable scope is unclear until someone identifies what was actually fixed.",
+			"rationale": "The underlying marker is truncated mid-sentence and the auto-diagnosis admits the actual fix reference was never captured, so the current framing cannot define a verifiable outcome.",
 			"evidence": [
-				"Marker text: TODO(handoff): the sideways-page overflow this card showed was fixed in",
-				"comment stops mid-sentence"
+				"Marker text: 'the sideways-page overflow this card showed was fixed in' (truncated)",
+				"Diagnosis: 'whoever wrote it didn't capture the actual fix or reference'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T03:24:11.063Z"
+			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
+			"key": "run:minion (gateway)#38021620383",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38021620383",
+			"sourceUpdatedAt": "2026-10-10T03:48:16Z",
+			"sourceFingerprint": "23bfa14948740f15ae791d2eb2d6f185146cb7ca4e0510a4a7a0aea6bc71b64c",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This is a single in-progress CI check that is a prerequisite gate for pr:303, not an independent board goal.",
+			"evidence": [
+				"push on DEV, status in_progress",
+				"explicitly named as a required gate inside PR303's promotion criteria"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
+			"key": "run:minion (gateway)#38021721389",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38021721389",
+			"sourceUpdatedAt": "2026-10-10T03:46:24Z",
+			"sourceFingerprint": "cb4432b877c25dc39c3b5f4a37b169ce6cacf8d8184dc3cb296e192c3009ceb6",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This is the manually dispatched Docker Release run required by pr:303's promotion criteria, not a standalone goal.",
+			"evidence": [
+				"workflow_dispatch on DEV, status in_progress",
+				"PR303 text: 'exact-source DockerRelease38021721389...must pass' before promotion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
