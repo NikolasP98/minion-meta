@@ -1,12 +1,14 @@
 ---
 id: postmerge-minion-hub-87df86208583
 title: "Post-merge finding — todo-handoff in src/lib/components/scheduling/kit/booking-mover.ts (minion_hub)"
-status: draft
+status: merged
 created: 2026-10-10
 updated: 2026-10-10
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+duplicate_candidate: handoff-minion-hub-2366728732
+merged_into: handoff-minion-hub-2366728732
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/components/scheduling/kit/booking-mover.ts`
