@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T05:39:46.232Z",
+	"generatedAt": "2026-10-10T05:51:27.983Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -539,8 +539,8 @@
 			"repo": "minion (gateway)",
 			"title": "#303 release: durable delivery, bounded diagnostics and lifecycle shutdown",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
-			"sourceUpdatedAt": "2026-10-10T03:58:24Z",
-			"sourceFingerprint": "0843f61b2b296608fed3b324842f87678381ecac18d445255a040316f98586d1",
+			"sourceUpdatedAt": "2026-10-10T05:39:30Z",
+			"sourceFingerprint": "3e8a3e263e347631bdfa178a9521eadff22d019f3c0e39e0283124dc8552e89a",
 			"score": 83,
 			"band": "high",
 			"axes": {
@@ -549,22 +549,23 @@
 				"impact": 8
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 7,
+				"implementation": 3
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"run:minion (gateway)#38021620383"
+				"pr:minion (gateway)#309"
 			],
-			"rationale": "The release is fully validated but still gated on the in-progress full DEV push CI run before promotion can occur.",
+			"rationale": "The release is well-specified and high-stakes but remains a blocked draft until PR309's Windows qualification fixes land.",
 			"evidence": [
-				"release remains draft until full DEV push CI `38021620383` passes, including both native full Windows shards",
-				"Docker Release `38021721389` succeeded at exact DEV commit with matching digest"
+				"status: draft",
+				"full DEV push CI 38021620383 failed both native full Windows shards",
+				"release remains draft pending new exact DEV source passing the full gate"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T04:21:54.495Z"
+			"scoredAt": "2026-10-10T05:51:27.797Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-reviewer-instruction-isolation",
@@ -1971,6 +1972,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:27:30.587Z"
+		},
+		{
+			"key": "pr:minion (gateway)#309",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#309 test: enforce native Windows qualification and fatal unhandled errors",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/309",
+			"sourceUpdatedAt": "2026-10-10T05:48:57Z",
+			"sourceFingerprint": "b5d29159f655ee3734351fef05d0b4a2fe5bbe063326bccc85f23cd8630ab40b",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#303"
+			],
+			"rationale": "This test-only fix is clearly scoped, independently validated, and directly unblocks the production release gate PR303.",
+			"evidence": [
+				"parent combined run 145/145 passes across the three failing files",
+				"independent Standards/Spec and blast-radius review pass",
+				"final signed source 832eed39c399"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T05:51:27.797Z"
 		},
 		{
 			"key": "pr:minion_hub#340",
@@ -26349,38 +26385,6 @@
 			"scoredAt": "2026-10-07T16:51:42.501Z"
 		},
 		{
-			"key": "run:minion_hub#38028041967",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38028041967",
-			"sourceUpdatedAt": "2026-10-10T05:35:56Z",
-			"sourceFingerprint": "9f31983cb6b62610362e08b40e30e83a4968f5b04ac7fe4df6649c6fa3cf3bb9",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on master provides no actionable detail beyond its status until it completes.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T05:39:46.048Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29421,6 +29425,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:39:40.651Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7fdd8f2adc4d79c2b358bac6796f38cc61dfc149",
+			"sourceUpdatedAt": "2026-10-10T03:44:24Z",
+			"sourceFingerprint": "2d637146a535cb4817d15ee049b9791d61b5429fb7e4be09bcb71447dfb7d736",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deployment-health entry only reflects a routine test-only merge with no stated outstanding issue to act on.",
+			"evidence": [
+				"status: unknown",
+				"summary is just the PR308 merge commit message"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T05:51:27.797Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
