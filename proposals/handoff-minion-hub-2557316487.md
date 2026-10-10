@@ -27,9 +27,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-10)
 
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:247` — Persist realization admission with the status change; this
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L247
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:412` — this read and moveGroup are two transactions, so a visit
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L412
-- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:486` — an all-or-nothing variant needs setBookingStatus,
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L486
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:330` — Persist realization admission with the status change; this
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L330
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:512` — this read and moveGroup are two transactions, so a visit
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L512
+- `NikolasP98/minion_hub@master src/routes/api/scheduling/bookings/_handlers.ts:592` — an all-or-nothing variant needs setBookingStatus,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/scheduling/bookings/_handlers.ts#L592
