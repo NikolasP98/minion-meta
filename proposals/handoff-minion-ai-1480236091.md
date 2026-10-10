@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-10)
 
-- `NikolasP98/minion-ai@DEV .github/scripts/ci-security-scope.sh:33` — Audit and refresh the February 2026 baseline before adding
-  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/scripts/ci-security-scope.sh#L33
+- `NikolasP98/minion-ai@DEV .github/scripts/ci-security-scope.sh:41` — Audit and refresh the February 2026 baseline before adding
+  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/scripts/ci-security-scope.sh#L41
