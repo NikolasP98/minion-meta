@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3751540887
 title: Handoff marker — apps/ios/project.yml (minion-ai)
-status: draft
+status: review
 created: 2026-10-10
 updated: 2026-10-10
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-09-12-gateway-native-swift-qualification
 ---
 
 # Handoff marker — apps/ios/project.yml
