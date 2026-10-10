@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T01:52:05.839Z",
+	"generatedAt": "2026-10-10T02:22:13.899Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -303,43 +303,6 @@
 			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
-			"key": "pr:minion (gateway)#303",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#303 release: safe durable delivery and bounded gateway diagnostics",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
-			"sourceUpdatedAt": "2026-10-10T01:29:22Z",
-			"sourceFingerprint": "5bb5aee6c20b4e50148fa7967637f32afa01d8c00bdbe77a7cc37c71b125c172",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#301",
-				"deploy:minion (gateway)",
-				"run:minion (gateway)#38013298422"
-			],
-			"rationale": "Production-facing release bounding log/core-dump exposure and adding durable delivery recovery, with extensive multi-stage qualification already passed and only final-head hosted checks remaining.",
-			"evidence": [
-				"bounds diagnostic storage, disables core dumps, adds durable delivery recovery",
-				"PR300 hosted checks and independent review passed; corrected release 38011793766 succeeded",
-				"runtime verification matched commit 8517a5d5 and manifest digest with zero restarts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:52:05.642Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-capability-separation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -568,6 +531,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T06:52:29.491Z"
+		},
+		{
+			"key": "pr:minion (gateway)#303",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#303 release: safe durable delivery and bounded gateway diagnostics",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/303",
+			"sourceUpdatedAt": "2026-10-10T02:17:13Z",
+			"sourceFingerprint": "f910ebaa0ad5bcffa9548394d5dc65b80f729b091b6f5043daf938ada1492f76",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This draft release bounds diagnostics, disables core dumps, and adds durable-delivery recovery with named qualification gates and passing validation evidence, making it high-stakes and ready to finish.",
+			"evidence": [
+				"bounds diagnostic storage, disables core dumps, adds durable delivery recovery",
+				"DEV image recovered with reviewed 1024 MiB heap override, zero restarts",
+				"Promotion remains draft until final-head checks pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-reviewer-instruction-isolation",
@@ -3048,21 +3044,20 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 4
+				"implementation": 5
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-b252c0822c83"
-			],
-			"rationale": "Missing JobExecution ownership gates across four ingest/corpus domains is a cross-cutting authorization gap referenced by a platform-wide remediation proposal, but its multi-service scope needs to be broken down before paid execution.",
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Four ingest/corpus services still lack JobExecution ownership gates, a security-relevant gap already tracked twice (postmerge scan and handoff ledger) against a named remediation proposal.",
 			"evidence": [
-				"marker calls for adopting JobExecution in statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp, and brain_corpus_business",
-				"finding was independently caught by two separate factory sweeps (postmerge + handoff-ledger) and references proposals/2026-09-08-platform-qc-remediation.md (HDS-05)"
+				"Adopt JobExecution in statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp and brain_corpus_business",
+				"their domain effects still need ownership gates",
+				"Merged from handoff-minion-hub-1757377296 (same marker)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T01:54:11.712Z"
+			"scoredAt": "2026-10-10T02:22:13.723Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
@@ -3327,6 +3322,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T04:52:18.180Z"
+		},
+		{
+			"key": "pr:minion (gateway)#306",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#306 CI: repair Windows release qualification",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/306",
+			"sourceUpdatedAt": "2026-10-10T02:12:12Z",
+			"sourceFingerprint": "1857fa18f9be74149e526d39ec3131a07140002c0c3e868d7875c3780930cf29",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This draft fixes a concrete Windows EPERM failure blocking 63 tests across nine files and has detailed validation, so it is actionable and unblocks release qualification.",
+			"evidence": [
+				"DEV Windows full shard failed 63 tests across nine files due to EPERM on directory handle",
+				"Focused affected suite: 10 files passed",
+				"Hosted Windows smoke is still required before merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -3871,8 +3899,8 @@
 			"repo": "minion_hub",
 			"title": "#455 perf(notifications): evaluate audience fences once",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/455",
-			"sourceUpdatedAt": "2026-10-10T00:57:40Z",
-			"sourceFingerprint": "e8dcb2c09be43ef0c4bf86fadaa3dde7c5a293a461a95bb22893b30cbb9c1cf2",
+			"sourceUpdatedAt": "2026-10-10T02:19:30Z",
+			"sourceFingerprint": "d9e628044e1bb1cd117ab44a9d8c1425f70740b60d975d813d99e304e59d077b",
 			"score": 59,
 			"band": "medium",
 			"axes": {
@@ -3887,14 +3915,15 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Thoroughly tested performance migration with passing independent review and dual-PG-version validation.",
+			"rationale": "The migration consolidates six RLS fence evaluations with explicit JWT identity ordering and extensive dual-version validation, making it a ready, well-specified security/perf fix.",
 			"evidence": [
-				"PostgreSQL 17 native audience lane: 26/26 passed",
-				"Independent source review: PASS"
+				"moves each fence into one uncorrelated statement InitPlan",
+				"PostgreSQL 17 native audience lane: 26/26 passed; PostgreSQL 18: 26/26 passed",
+				"worker receives no new auth schema privilege"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:22:07.417Z"
+			"scoredAt": "2026-10-10T02:22:13.723Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -5394,6 +5423,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T06:21:55.594Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b6caed3b36fd.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "992bb74eef0d67d3d0440bfde4986adb9d7afdb12e75709b81954868e9daed2a",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An unbounded provider JSON read before res.json() is a concrete DoS exposure with a specific, boundable fix (size limit / streaming cap).",
+			"evidence": [
+				"TODO(handoff): provider JSON reader is not byte bounded before res.json()",
+				"Fix direction: enforce a maximum response size ... ~10MB threshold"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bb9baf1f3156",
@@ -7221,38 +7282,6 @@
 			"scoredAt": "2026-10-10T00:22:17.137Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b6caed3b36fd.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "992bb74eef0d67d3d0440bfde4986adb9d7afdb12e75709b81954868e9daed2a",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An unbounded provider JSON response before res.json() is a concrete, bounded DoS fix with a clear implementation path already specified.",
-			"evidence": [
-				"marker: provider JSON reader is not byte bounded before res.json()",
-				"fix direction specifies Content-Length check or maxBuffer-limited stream read"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T01:54:11.712Z"
-		},
-		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8305,40 +8334,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-03T07:55:42.494Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b252c0822c83",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-effects.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b252c0822c83.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "cfc17b029f1bc43a23f18257130666476ab1c41d12fbfd951ffc0ef747306ba2",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c5d86be403fa"
-			],
-			"rationale": "Indeterminate job-state recovery is a real reliability gap but needs an explicit reviewed policy decision before it is boundable execution work.",
-			"evidence": [
-				"TODO(handoff): add explicitly reviewed indeterminate recovery policy in job-effects.service.ts",
-				"diagnosis notes jobs can silently stall, retry infinitely, or fail unpredictably"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T01:54:11.712Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e29218b380bb",
@@ -9644,42 +9639,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T02:28:35.907Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/d880c73bd8126b422625770a50dd0fd95d4d3fe6",
-			"sourceUpdatedAt": "2026-10-10T01:28:17Z",
-			"sourceFingerprint": "e917547c22548520d82350d621227fad91506eee6e6c6de272c44b47ae966aa4",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#303",
-				"run:minion (gateway)#38013298422"
-			],
-			"rationale": "This is a deployment-health status pointer referencing a merged test-gate fix, not a scoped work item with its own actionable deliverable.",
-			"evidence": [
-				"status: unknown",
-				"summary references merge of PR #304 test repair",
-				"tags: [deployment]"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:52:05.642Z"
 		},
 		{
 			"key": "pr:minion (gateway)#254",
@@ -11534,38 +11493,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T08:21:55.181Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c1b3044762bb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "7682aec710bf82b606bd084bd2ce4bab0b3e99ebfd167951dfbe380ac4729da2",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Orphaned blobs from failed/concurrent imports risk storage cost and data drift, but the fix needs transaction and GC-job design before it is actionable.",
-			"evidence": [
-				"marker: reconcile uploaded blobs after failed/concurrent import creation",
-				"fix direction calls for transactional blob+DB writes plus a garbage-collection job"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-03T01:54:11.712Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e1f5f0efca2a",
@@ -15679,6 +15606,38 @@
 			"scoredAt": "2026-10-06T05:26:20.196Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-b252c0822c83",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-effects.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b252c0822c83.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "cfc17b029f1bc43a23f18257130666476ab1c41d12fbfd951ffc0ef747306ba2",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The TODO flags a missing indeterminate-state recovery policy but the fix direction is only generic guidance without a defined policy to implement yet.",
+			"evidence": [
+				"TODO(handoff): Add an explicitly reviewed indeterminate recovery policy",
+				"Fix direction: Document the recovery policy ... implement guards"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-de95b8a03fe5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17253,6 +17212,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c1b3044762bb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "7682aec710bf82b606bd084bd2ce4bab0b3e99ebfd167951dfbe380ac4729da2",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Orphaned blobs from failed/concurrent imports are a real but non-urgent consistency/cost issue with a reasonably specific fix direction.",
+			"evidence": [
+				"TODO(handoff): Reconcile uploaded blobs after failed/concurrent import creation",
+				"Fix direction: Wrap blob uploads in a transaction ... blob-garbage-collection job"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c2239f0660dc",
@@ -28869,6 +28860,38 @@
 			"scoredAt": "2026-10-03T05:25:32.539Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/740f3d6ce5da17160dd68ac836cdbcdfe81ee697",
+			"sourceUpdatedAt": "2026-10-10T02:16:57Z",
+			"sourceFingerprint": "ebf541b52f1dda70f9e9e385da72fa124b772d3375215370c8bbc4ff10774723",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deployment-health entry only reflects an already-merged CI gate pin with no open action.",
+			"evidence": [
+				"Merge pull request #305 fix/pin-swiftformat-release-gate",
+				"status unknown, tag deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31257,41 +31280,6 @@
 			"scoredAt": "2026-10-03T03:24:11.063Z"
 		},
 		{
-			"key": "run:minion (gateway)#38013298422",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38013298422",
-			"sourceUpdatedAt": "2026-10-10T01:47:46Z",
-			"sourceFingerprint": "70d0c533108023d853abe96dd331878af7825e97c0139098dec544ba54ae373c",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion (gateway)#303"
-			],
-			"rationale": "This is an in-progress automated CI run on a push, not a discrete goal with its own scope or decision to make.",
-			"evidence": [
-				"kind: run, status: in_progress",
-				"summary: 'push on DEV'",
-				"tags: [ci]"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:52:05.642Z"
-		},
-		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -32259,6 +32247,99 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T01:02:08.379Z"
+		},
+		{
+			"key": "run:minion (gateway)#38016391143",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "npm publish",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38016391143",
+			"sourceUpdatedAt": "2026-10-10T02:17:04Z",
+			"sourceFingerprint": "809f3edffde5ec0d4b2fcf08bfef5e1d417a71fd1d23ecb145aebb74ca9f5f50",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress automated CI run with no decision pending.",
+			"evidence": [
+				"npm publish, push on DEV, status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
+		},
+		{
+			"key": "run:minion (gateway)#38016391170",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38016391170",
+			"sourceUpdatedAt": "2026-10-10T02:17:56Z",
+			"sourceFingerprint": "e1931373f9ecab4793eb016a84779a1c1e336f19dc03ae9d0225beaa5f0f2f84",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress automated CI run with no decision pending.",
+			"evidence": [
+				"CI, push on DEV, status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
+		},
+		{
+			"key": "run:minion (gateway)#38016391207",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38016391207",
+			"sourceUpdatedAt": "2026-10-10T02:17:16Z",
+			"sourceFingerprint": "61d2fd81294cf0225e4ac0326800c11dbf1d3be882aef52f08b31347e775a772",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress automated CI run with no decision pending.",
+			"evidence": [
+				"Docker Release, push on DEV, status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T02:22:13.723Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
