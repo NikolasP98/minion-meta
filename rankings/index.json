@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-10T19:34:49.016Z",
+	"generatedAt": "2026-10-10T19:51:45.557Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3060,6 +3060,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T15:22:16.579Z"
+		},
+		{
+			"key": "pr:minion-meta#773",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#773 docs(spec): catalog is the only list of services (stored kind, composition, auto-scheduled services, products on events)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/773",
+			"sourceUpdatedAt": "2026-10-10T19:43:44Z",
+			"sourceFingerprint": "af83da6dd37df98a8df00939cfae0478b3d3275570568e4250f6460b266f032c",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Spec traces a concrete production data-integrity defect (drifted/unschedulable/phantom catalog rows) with a defined 4-slice remediation spec ready to move into dev.",
+			"evidence": [
+				"9 drifted, 4 unschedulable, 25 phantom rows on FACES",
+				"root cause: catalog service and sched_event_types row carry independent names",
+				"spec file: specs/2026-10-10-hub-catalog-service-unification-spec.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T19:51:45.395Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-containment-base-reconciliation",
@@ -8483,6 +8516,72 @@
 			"scoredAt": "2026-10-10T18:21:47.494Z"
 		},
 		{
+			"key": "pr:minion_hub#441",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#441 fix(scheduling): show custom booking fields in Bookings and the detail drawer (HC-019)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/441",
+			"sourceUpdatedAt": "2026-10-10T19:40:19Z",
+			"sourceFingerprint": "5f2d015e7729beb0bbce415ae6be3960bc39e5434da80a145e6a7be62781e533",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Draft PR has a clear scope, a shared-component implementation, and documented persona-matrix/PGlite/Chromium proof, leaving only merge-gate review.",
+			"evidence": [
+				"11/11 persona matrix and 25/25 PGlite tests reported",
+				"svelte-check 0, CI Prettier clean",
+				"draft — permissions-tagged; owner approval + merge gate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T19:51:45.395Z"
+		},
+		{
+			"key": "pr:minion_hub#442",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#442 fix(calendar): stable lane registry, multi-tag projection, category subcolumn (HC-017/018/020)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/442",
+			"sourceUpdatedAt": "2026-10-10T19:49:04Z",
+			"sourceFingerprint": "aa4dfa0898a849390c15f72657c91e3d6084846e451a4b926eb1c4549cb7cded",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Substantial test proof exists but the PR explicitly flags an unresolved product decision (HC-017 option a vs b) that blocks confident merge.",
+			"evidence": [
+				"HC-017 product decision pending — your call",
+				"29/29 and Playwright 9/9 proof reported",
+				"note: rebase after S4 merges due to shared file edits"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T19:51:45.395Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12314,75 +12413,6 @@
 			"scoredAt": "2026-10-06T07:51:44.462Z"
 		},
 		{
-			"key": "pr:minion_hub#441",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#441 fix(scheduling): show custom booking fields in Bookings and the detail drawer (HC-019)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/441",
-			"sourceUpdatedAt": "2026-10-10T19:31:55Z",
-			"sourceFingerprint": "7eeed84bf6804a722a4b099e93af5ccf8dc83977480e0d170c5c80e70d56ff2f",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Custom booking fields display has a clear scope, shared component reuse, and extensive persona/integration/e2e proof with no open decisions blocking merge.",
-			"evidence": [
-				"persona matrix 11/11, PGlite 25/25, Chromium PUT verified",
-				"svelte-check 0, ratchets unchanged, CI Prettier clean",
-				"single shared representation reused across Table/Board/drawer"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T19:34:48.853Z"
-		},
-		{
-			"key": "pr:minion_hub#442",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#442 fix(calendar): stable lane registry, multi-tag projection, category subcolumn (HC-017/018/020)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/442",
-			"sourceUpdatedAt": "2026-10-10T19:31:56Z",
-			"sourceFingerprint": "2e15b172e391f2ea3d803bdc9ea64340d61f06b080a9e3a6f9db3e9740b95a26",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#443",
-				"pr:minion_hub#440"
-			],
-			"rationale": "Lane/tag/category work implements HC-017 as one of two options but flags the choice as an unresolved product decision ('your call'), and also needs rebase after another slice merges.",
-			"evidence": [
-				"HC-017 option (a) implemented, option (b) explicitly marked pending decision",
-				"note to rebase after S4 merges due to overlapping edits",
-				"proof otherwise solid: 29/29 unit, 9/9 Playwright"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T19:34:48.853Z"
-		},
-		{
 			"key": "pr:minion_hub#443",
 			"kind": "pr",
 			"stage": "development",
@@ -13649,39 +13679,6 @@
 			"scoredAt": "2026-10-07T07:52:30.752Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1194287278",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "bae49897a5015f40e48cbd5a37acbda6c083e12596d9b92e0648319bc4b44470",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Ten disparate, terse marker fragments spanning drag/drop, filtering, and rendering behavior in one large calendar file are bundled into a single draft proposal with no coherent single outcome.",
-			"evidence": [
-				"status: draft",
-				"10 markers across BookingCalendar.svelte lines 253-4061",
-				"markers are quoted fragments, not full problem statements"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T16:32:31.603Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-cdf2e33a24b0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14696,6 +14693,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:59:35.856Z"
+		},
+		{
+			"key": "proposal:2026-10-09-native-formatting-coverage",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Establish meaningful iOS and shared Swift formatting coverage",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-native-formatting-coverage.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "f1d6a3dac7a76a7b940b962c14484476e186e7aeaf0c6b077e72963ae1a25a94",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Fixes a false-green CI gate (no-op SwiftFormat phase) which is a real quality gap but not an active production or release blocker.",
+			"evidence": [
+				"verified run exited zero while formatting no files",
+				"TO-BE requires malformed-file mutant and generated-file exclusion assertions",
+				"status: review"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T19:51:45.395Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1649151658",
@@ -17366,41 +17396,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T07:22:01.687Z"
-		},
-		{
-			"key": "proposal:2026-10-09-native-formatting-coverage",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Establish meaningful iOS and shared Swift formatting coverage",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-native-formatting-coverage.md",
-			"sourceUpdatedAt": "2026-10-09",
-			"sourceFingerprint": "b24540f8349848539baa694e14d8f99a6f4ec35bec239871315d39a891c317da",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:2026-10-09-gateway-native-formatter-reproducibility"
-			],
-			"rationale": "Addresses a real coverage gap (no-op SwiftFormat phase) but requires inventory and migration work not yet started.",
-			"evidence": [
-				"a verified run exited zero while formatting no files",
-				"GW030's release-gate correction removes the no-op phase",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T03:22:26.504Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-435bdc58c70c",
@@ -20135,6 +20130,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T00:53:29.269Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-1194287278",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "7d36a70cc7ec0005d2ed1bd3ab0c435a09e3f35a5737c7ac4d5f7ba78c4d9866",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles seven unrelated TODO markers scattered across one large component file into a single proposal, so it cannot produce one coherent, verifiable spec outcome as-is.",
+			"evidence": [
+				"7 distinct TODO(handoff) markers across different line ranges and concerns",
+				"status: draft, closes automatically once markers are removed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T19:51:45.395Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1323254565",
@@ -27589,6 +27616,38 @@
 			"scoredAt": "2026-10-05T02:27:30.587Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This is a routine deployment-health entry pointing to a test-scoping commit with no indication of actual deploy failure or urgency.",
+			"evidence": [
+				"status: unknown",
+				"summary is a routine test(tools) commit merge, not an incident"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-10T19:51:45.395Z"
+		},
+		{
 			"key": "issue:minion-meta#505",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31293,7 +31352,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "f29cc12d1835e285b66497fb5771fc241cd49596b2b7690b06facf0e775ea268",
+			"sourceFingerprint": "c5ff3093f9aced9b3e86d0792fcc42b6ec5aabb853abb22267bb5a150370b952",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -31305,18 +31364,17 @@
 				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed markers are quoted text fragments embedded inside the generated rankings/index.json data file itself, not actionable code TODOs.",
+			"rationale": "The markers point into rankings/index.json itself, a generated ranking-data artifact, not source code requiring a TODO fix, making this non-actionable as filed.",
 			"evidence": [
-				"rankings/index.json:2894 ... finProductId: null",
-				"rankings/index.json:12941 ... discount editor has no close affordance",
-				"the sweep closes this proposal automatically once the file carries no more markers"
+				"markers cite lines inside rankings/index.json (this ranking data file)",
+				"17 disparate quoted fragments spanning unrelated domains (finance, scheduling, discounts)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T19:21:27.805Z"
+			"scoredAt": "2026-10-10T19:51:45.395Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
@@ -31722,38 +31780,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:52:23.150Z"
-		},
-		{
-			"key": "run:minion_hub#38080181977",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38080181977",
-			"sourceUpdatedAt": "2026-10-10T19:32:09Z",
-			"sourceFingerprint": "ce5c965d62c67f35661397582b49805bfad5e70d08f749c989ef3ad0c525ca23",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on master is a routine pipeline status check, not a scoped, actionable goal.",
-			"evidence": [
-				"kind=run, stage=testing, status=in_progress",
-				"summary is just 'push on master' with no scope or outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T19:34:48.853Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
