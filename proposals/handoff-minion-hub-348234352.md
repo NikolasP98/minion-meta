@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-10)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/stock/entries/new/+page.svelte:731` — on adjustment/transfer entries (5 columns: item, qty,
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/entries/new/+page.svelte#L731
+- `NikolasP98/minion_hub@master src/routes/(app)/stock/entries/new/+page.svelte:801` — on adjustment/transfer entries (5 columns: item, qty,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/entries/new/+page.svelte#L801

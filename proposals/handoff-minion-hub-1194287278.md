@@ -32,15 +32,17 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L898
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1477` — this is a per-VIEWER preference, not an RBAC restriction —
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1477
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1774` — a drag cannot cross the runway's visible edge — there is no
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1774
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2732` — a drop reclassifies only for a custom column (its
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2732
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2814` — the agenda lists every booking in bookings — the whole
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2814
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2927` — the month grid carries no tickets
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2927
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2937` — nor does it fan a CONTAINER out (2026-09-26):
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2937
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4049` — no overflow clip — a booking that starts before startHour
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4049
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1680` — ondragover/ondrop live on .track, an ANCESTOR of the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1680
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1786` — a drag cannot cross the runway's visible edge — there is no
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1786
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2744` — a drop reclassifies only for a custom column (its
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2744
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2826` — the agenda lists every booking in bookings — the whole
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2826
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2939` — the month grid carries no tickets
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2939
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2949` — nor does it fan a CONTAINER out (2026-09-26):
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2949
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4061` — no overflow clip — a booking that starts before startHour
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4061
