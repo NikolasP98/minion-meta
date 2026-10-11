@@ -10,7 +10,7 @@ repos: [minion_hub]
 tags: [data, ui, logic]
 proposal: 2026-10-10-hub-inbox-notifications-reminders
 type: feature
-owner_ask: "Lets improve in-app notifications/reminders. For example, overdue appointments that haven't been confirmed/marked completed; appointments marked completed but no invoice/payment recorded; daily feed notif; app update/changelog (needs a system in the SDLC for producing formatted changelogs); shifts left open that need closing out (no activity after-hours; cooldown 3hrs only on after-hours from the last data change and notify the user in-app); other suggestions. There will be a notification-scope tier system: ALL USERS/GLOBAL (for updates/changelogs); orgs; roles; users. Daily feed goes out at the org's earliest available hour on a work day (aggregate start time from all org members); the feed should always be available via the inbox."
+owner_ask: "Lets improve in-app notifications/reminders. For example, overdue appointments that haven't been confirmed/marked completed; appointments marked completed but no invoice/payment recorded; daily feed notif; app update/changelog (needs a system in the SDLC for producing formatted changelogs); shifts left open that need closing out (no activity after-hours; cooldown 3hrs only on after-hours from the last data change and notify the user in-app); other suggestions. There will be a notification-scope tier system: ALL USERS/GLOBAL (for updates/changelogs); orgs; roles; users. Daily feed goes out at the org's earliest available hour on a work day (aggregate start time from all org members); the feed should always be available via the inbox. OR better yet, the daily feed notification is auto-spawned client-side when the user first opens the app. This saves on cron resources."
 ---
 
 # In-app inbox with scope tiers
@@ -76,9 +76,9 @@ org ∈ my orgs ∪ role where I hold the capability in that org ∪ user = me.
 |---|---|---|---|
 | D1 | `app_notifications` + `app_notification_reads` tables, RLS, indexes | S1 | migration + seed |
 | D2 | Feed API (list, unread count, read, dismiss, read-all) resolving scope tiers | S1 | route tests |
-| D3 | Bell badge = unread inbox + existing sources; popup latest 5; `/notifications` feed with kind filter, deep links; `/notifications/daily` feed view always available | S1 | component tests + browser pass |
+| D3 | Bell badge = unread inbox + existing sources; popup latest 5; `/notifications` feed with kind filter, deep links; `/notifications/daily` feed view always available; daily knock created client-side on first open of the day (`POST /api/inbox/daily`, idempotent) | S1 | component + route tests + browser pass |
 | D4 | Evaluator runner on the jobs tick with per-org isolation + auto-resolve | S2 | runner test |
-| D5 | Rules: overdue appointments, completed-without-payment, after-hours open shift (3 h), daily feed knock at the org's earliest start | S2 | one test per rule incl. boundaries |
+| D5 | Rules: overdue appointments, completed-without-payment, after-hours open shift (3 h) | S2 | one test per rule incl. boundaries |
 | D6 | Release pipeline: GitHub Action → CHANGELOG.md + tag → `/api/releases` → global `app.update` → `/changelog` page | S3 | workflow dry-run + route test |
 | D7 | Extras: WhatsApp logged out, low stock, paid-unscheduled, package expiring, overdue instalment, finance sync failed, DNI pending, birthdays | S4 | one test per rule |
 
@@ -117,6 +117,13 @@ org ∈ my orgs ∪ role where I hold the capability in that org ∪ user = me.
    (unscheduled paid services, completed-unpaid visits, open shifts) — this page is the
    always-available feed the knock links to. All strings via Paraglide (en + es); design
    tokens per `ui-design-governance`.
+5. Daily knock, CLIENT-SIDE (owner decision 2026-10-10: "auto-spawned client-side when the
+   user first opens the app. This saves on cron resources"): `POST /api/inbox/daily`
+   (idempotent) creates ONE `scope: user` row for the caller in the active org, kind
+   `daily.feed`, href `/notifications/daily?date=<org-local date>`, dedupe
+   `daily:{org}:{profile}:{date}`, `expires_at` = end of that org-local day; the app shell
+   calls it once per org-local day (localStorage guard; the server dedupe is the real
+   guard). No cron rule, no "earliest start" computation.
 
 **DoD:** migration + seed on the QA stack; route tests for the scope union (a role row is
 visible only to a holder of that capability in THAT org; a user row only to that user;
@@ -147,14 +154,8 @@ global to everyone; resolved hidden by default); component test for badge arithm
    payments; fire when after-hours AND `now − last_activity ≥ 3 h`; scope `user` → owner AND
    `role` → `pos:manage`; dedupe per shift; resolve when the shift closes. Inside hours or
    with recent activity: nothing.
-5. Rule `daily.feed`: per org and local workday, compute `earliest_start` = min(start) over
-   every active resource's availability rules for that weekday (org tz). When
-   `now ≥ earliest_start` and no row for `daily:{org}:{date}` exists, create scope `org`
-   "Tu día en FACES" with href `/notifications/daily?date=…`. Days with no availability: no
-   knock. The feed content itself is NOT built by the rule (Slice 1's page computes it on
-   demand).
-6. Each rule gets a unit test with its boundaries (29 vs 31 minutes; paid vs plan-funded;
-   inside vs outside hours; 2 h 59 vs 3 h; a day without availability).
+5. Each rule gets a unit test with its boundaries (29 vs 31 minutes; paid vs plan-funded;
+   inside vs outside hours; 2 h 59 vs 3 h).
 
 **DoD:** `evaluate.test.ts` proves per-org isolation (one throwing org does not stop the
 next) and resolve-on-clear; `bun run check` 0/0.
@@ -210,7 +211,7 @@ birthday today; org scope, info). Capability keys verified against `rbac.service
    the assigned staff and managers; mark it completed, tick → row resolved and gone.
 3. Open a shift as staff, set the clock after hours with no activity for 3 h, tick → the
    owner sees "Caja abierta"; close the shift, tick → resolved.
-4. Tick at the org's earliest start → one "Tu día" row; `/notifications/daily` renders the
-   day; tick again → no duplicate.
+4. Open the app as a persona → one "Tu día" row for that user; reload → no duplicate;
+   `/notifications/daily` renders the day.
 5. Run the release workflow dry-run on a branch; POST a release to the QA app → one global
    "Novedades" row for every persona, `/changelog` lists it.
