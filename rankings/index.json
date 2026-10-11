@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T08:20:59.035Z",
+	"generatedAt": "2026-10-11T08:51:14.015Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -29978,20 +29978,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 5,
 				"implementation": 2
 			},
-			"confidence": 4,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a transient automated monitor alert about a rank-run provider failure that the note itself says should just be retried, not substantive work.",
+			"rationale": "This is a single automated alert describing a transient dual-provider ranking failure whose own note says to just retry, with no evidence of recurrence to justify new work.",
 			"evidence": [
-				"fingerprint: unstick-unknown-009fa02a",
-				"note: 'reads as a transient LLM-provider fault, not a code or spec bug... Recommendation: retry the run'"
+				"batch 1 ranking failed on both bounded LLM providers... Recommendation: retry the run",
+				"If this both-providers-fail pattern recurs across rank runs, it is a good candidate for a new host-classifier signature"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T08:21:00.850Z"
+			"scoredAt": "2026-10-11T08:51:13.808Z"
 		},
 		{
 			"key": "issue:minion-meta#417",
@@ -32284,38 +32284,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T23:21:24.036Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
-			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
-			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deployment-health entry is just a log of a merged test-scope PR with no indicated failure or open problem.",
-			"evidence": [
-				"summary is merge of PR #313 test(tools) scope domain registry integration",
-				"status field is unknown with no failure signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T07:51:44.627Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
