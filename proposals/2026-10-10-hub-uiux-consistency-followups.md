@@ -1,9 +1,9 @@
 ---
 id: 2026-10-10-hub-uiux-consistency-followups
 title: Hub UI/UX consistency — deferred follow-ups from the 2026-10-10 audit
-status: draft
+status: approved
 created: 2026-10-10
-updated: 2026-10-10
+updated: 2026-10-11
 repos: [minion_hub]
 tags: [ui, logic]
 value: 6
