@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T00:51:10.989Z",
+	"generatedAt": "2026-10-11T01:21:00.432Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9422,6 +9422,41 @@
 			"scoredAt": "2026-10-07T14:22:30.261Z"
 		},
 		{
+			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub evening batch 2026-10-10 — open ends (drop override, per-user shifts, unified sell history, filters across calendar views, DATE property formats)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-pos-sell-history-unified.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "872f2bef387b9cf88ee95f3e633958a139576b379197fd49d6535de8b0c73ad9",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-7103ac983198"
+			],
+			"rationale": "A 12-item ledger spanning five separate PRs (including a flagged double-booking override and a migration-window uniqueness gap) is too bundled to execute as one goal and should be split into per-issue specs.",
+			"evidence": [
+				"item 1: \"a drop onto an occupied slot books when the override path is taken\"",
+				"item 3: migration leaves \"a moment with no uniqueness guard\"",
+				"item 5 duplicates the separately filed /pos/history pagination finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T01:21:00.212Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9648,6 +9683,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T17:22:08.309Z"
+		},
+		{
+			"key": "pr:minion_hub#474",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#474 feat(pos): right-click context menu on calendar events",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/474",
+			"sourceUpdatedAt": "2026-10-11T01:17:00Z",
+			"sourceFingerprint": "1f61be28e3f8c050aef5d91dbf1862db72b2a5b093befa4f75dc6a3c6e087c15",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified, open PR implementing a scoped calendar context menu with a real data-integrity fix (atomic unschedule transaction).",
+			"evidence": [
+				"conditional entries table (Cobrar/Dividir/Desagendar/Eliminar) with capability gates",
+				"unscheduleVisit combines line-release and cancel in one withOrgCore txn to avoid a known split-transaction data bug"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T01:21:00.212Z"
 		},
 		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
@@ -13493,6 +13560,38 @@
 			"scoredAt": "2026-10-07T06:53:00.258Z"
 		},
 		{
+			"key": "pr:minion_hub#475",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#475 feat(hub): in-app inbox with scope tiers — Slice 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/475",
+			"sourceUpdatedAt": "2026-10-11T01:11:15Z",
+			"sourceFingerprint": "02dce0eb230b220328d98c2887176427778117e64837c2aca3694c560e048007",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Foundational inbox slice with a clear spec boundary but explicitly unverified DB migration and RLS-contract test, so merge risk on the data layer is unresolved.",
+			"evidence": [
+				"\"local QA stack down (0 containers, 110 pending migrations)\"",
+				"RLS-contract test \"has only been type-checked, never executed\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T01:21:00.212Z"
+		},
+		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16716,6 +16815,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T05:22:47.201Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7103ac983198",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/history/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7103ac983198.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "ea72170cadceb37586e29fe753fa77c23bf018639e5cf1dd6c34a17618187c68",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-10-hub-pos-sell-history-unified"
+			],
+			"rationale": "A single, well-scoped pagination fix for one loader file with a clear implementation direction already given.",
+			"evidence": [
+				"\"plain limit, newest-first — no server pagination\" at a single named file",
+				"fix direction specifies cursor/offset pagination with LIMIT+1 has-more check"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T01:21:00.212Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
@@ -20873,39 +21006,6 @@
 			"scoredAt": "2026-10-07T21:22:27.987Z"
 		},
 		{
-			"key": "pr:minion_hub#472",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#472 feat(appointments): one filter across calendar, board and table",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/472",
-			"sourceUpdatedAt": "2026-10-11T00:15:23Z",
-			"sourceFingerprint": "0df026e4c7c7952c024182c14444793bfbcad66d5a71b4417aa902836d8e3722",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Unifies filter state across three appointment views with shared extracted modules and a full passing verification table, making it ready to merge now.",
-			"evidence": [
-				"bun run check exit 0, vitest 280 tests passed",
-				"lint:design and lint:tokens exit 0 with clean git status",
-				"filter logic shared via new filter-columns.ts and FilterToolbar.svelte"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:22:12.060Z"
-		},
-		{
 			"key": "proposal:2026-09-28-hub-stock-receipt-purchase-link",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22762,72 +22862,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T01:51:03.838Z"
-		},
-		{
-			"key": "pr:minion_hub#471",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#471 feat(custom-columns): Notion date formats + time on date properties",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/471",
-			"sourceUpdatedAt": "2026-10-11T00:12:34Z",
-			"sourceFingerprint": "3c4fe7a7f2fa64cdffefac73b7bd9e08010823c6dd5e958d9c2ed74ba844704d",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A scoped, largely-complete UI feature PR with existing test coverage for the prerequisite date-filter machinery and clear implementation detail.",
-			"evidence": [
-				"custom-properties.ts gains includeTime/dateFormat/timeFormat fields",
-				"formatCustomPropertyDate renders all six formats through one shared renderer",
-				"status open, development stage"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:22:12.060Z"
-		},
-		{
-			"key": "pr:minion_hub#473",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#473 pos: unify sell-page recent sales + shift history into one activity popover",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/473",
-			"sourceUpdatedAt": "2026-10-11T00:19:42Z",
-			"sourceFingerprint": "0e39a356e0275891ec102c51496672996f6d195dfe9dc2e02fdd7f3a77bc3dc2",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Consolidates two POS popovers into one activity view plus a new history page, with full passing test/check evidence and route-contract bookkeeping done.",
-			"evidence": [
-				"192/192 tests passing across touched and covering files",
-				"route-design-manifest counts updated for new /pos/history screen",
-				"bun run check 0 errors, 0 warnings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:22:12.060Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2632898496",
@@ -26515,38 +26549,6 @@
 			"scoredAt": "2026-10-08T00:51:39.667Z"
 		},
 		{
-			"key": "pr:minion-meta#777",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#777 docs(ledger): hub evening batch 2026-10-10 open ends (#469–#473)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/777",
-			"sourceUpdatedAt": "2026-10-11T00:01:02Z",
-			"sourceFingerprint": "3b43318d9161ea371ff3ba3ea6aeb3760223f682c3d5fa6c7803d97fe591807a",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Low-cost documentation PR recording open ends from the hub batch, ready to merge since it's just a ledger update.",
-			"evidence": [
-				"ledger for hub #469-#473 with twelve open ends listed",
-				"referenced by #473's TODO(handoff) comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:09:02.141Z"
-		},
-		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27613,38 +27615,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T20:49:12.337Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
-			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
-			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged test-scoping commit with no indication of deployment failure or pending risk.",
-			"evidence": [
-				"summary: test(tools): scope domain registry integration",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:51:10.795Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -31345,6 +31315,38 @@
 			"scoredAt": "2026-10-11T00:28:30.108Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "1ab375269070b4b632f74306311851ace6703ac6880302c2fcecf1661f3fb28e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The markers point at line numbers inside a generated ranking artifact (rankings/index.json) rather than real source-code defects, making the ledger non-actionable as product work.",
+			"evidence": [
+				"all cited markers are at `rankings/index.json:<line>`, a generated index file",
+				"definition of done is just \"the TODO(handoff) comment removed\" from that data file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T01:21:00.212Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32852,38 +32854,6 @@
 			"scoredAt": "2026-10-11T00:23:25.274Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "562c64dd3d76991c1a2487a409c73a966c97661caae872c28cf9d7daf4ad2125",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted markers are disjoint text fragments pulled from rankings/index.json's own rationale/evidence strings rather than a genuine code TODO describing one open end.",
-			"evidence": [
-				"markers are unrelated one-line fragments (race window, stock release, DOB, discount editor) from the ranking output file itself",
-				"no single coherent problem statement across the 17+ quoted lines"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:30:08.365Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3652542388",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32914,6 +32884,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:30:17.772Z"
+		},
+		{
+			"key": "run:minion_hub#38101375602",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38101375602",
+			"sourceUpdatedAt": "2026-10-11T01:18:22Z",
+			"sourceFingerprint": "615147de7ee0aaa868f9c7c9c12d9e892df920f1d62b5325d635f841bfb18c90",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A routine in-progress CI run on master is a status event, not an actionable board goal.",
+			"evidence": [
+				"kind: run, stage: testing, status: in_progress",
+				"summary: \"push on master\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T01:21:00.212Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
