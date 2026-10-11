@@ -3,7 +3,7 @@ id: postmerge-minion-hub-c4ef8f310a4a
 title: "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)"
 status: review
 created: 2026-10-10
-updated: 2026-10-10
+updated: 2026-10-11
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
@@ -54,3 +54,14 @@ Flagged for a human rather than merged, since the closing rationale may still
 be correct if the newer wording is itself stale. See also
 `2026-10-09-hub-notification-worker-production-activation` (in-spec, untouched),
 the ledger both findings point at.
+
+## Merge note 2026-10-11
+
+Merged `handoff-minion-hub-1464158565` (handoff-sweep marker on the same
+file) into this finding: its most recent marker snapshot (as of 2026-10-11)
+quotes the identical artifact-publisher/compiled-startup wording as this
+proposal's PR #456 occurrence, confirming both were tracking the same live
+marker. Its stale `duplicate_candidate` pointed at the closed, older-worded
+`postmerge-minion-hub-1697a678cf5f`. Unique content carried over: direct
+line link to the current marker —
+https://github.com/NikolasP98/minion_hub/blob/master/scripts/ops/hub-worker-release.md#L42
