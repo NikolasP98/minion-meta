@@ -1,10 +1,11 @@
 ---
 id: ci-minion_hub-release-notes
 title: CI red — Release notes on minion_hub master
-status: draft
+status: closed
 created: 2026-10-11
 updated: 2026-10-11
 repos: []
+closed_reason: "workflow green again as of 2026-10-11, run https://github.com/NikolasP98/minion_hub/actions/runs/38110480406"
 ---
 
 # CI red — Release notes on NikolasP98/minion_hub@master
