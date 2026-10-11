@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T11:51:07.783Z",
+	"generatedAt": "2026-10-11T12:21:07.623Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -25045,6 +25045,38 @@
 			"scoredAt": "2026-10-07T14:22:30.261Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged test-scoping PR surfaced as a deployment health entry with no indication of actual deployment failure or issue.",
+			"evidence": [
+				"summary is a merged PR: test(tools): scope domain registry integration",
+				"status: unknown, no failure signal present"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T12:21:07.417Z"
+		},
+		{
 			"key": "pr:minion-meta#555",
 			"kind": "pr",
 			"stage": "development",
@@ -28613,6 +28645,38 @@
 			"scoredAt": "2026-10-09T16:52:00.381Z"
 		},
 		{
+			"key": "issue:minion-meta#417",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#417 [monitor:unstick] reconcile proposals run b694e8db: infra launch failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/417",
+			"sourceUpdatedAt": "2026-09-13T10:17:33Z",
+			"sourceFingerprint": "f75d8adf5fbb34cc94a96acfc3624b9ba974a87d274a9909c369bf4a933c0e8f",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The quoted diagnosis indicates the underlying reconcile work already succeeded and the exit-126/zero-turn failure is a transient infra/runner issue, not a genuine defect requiring a goal.",
+			"evidence": [
+				"reconcile sweep completed successfully, dev branch pushed 83c1484..26ea165",
+				"failure isolated to agent-launch step, exit 126, turns=0, cost_usd=0, recommended as retry/transient box issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T12:21:07.417Z"
+		},
+		{
 			"key": "issue:minion-meta#432",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30022,38 +30086,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T08:51:13.808Z"
-		},
-		{
-			"key": "issue:minion-meta#417",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#417 [monitor:unstick] reconcile proposals run b694e8db: infra launch failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/417",
-			"sourceUpdatedAt": "2026-09-13T10:17:33Z",
-			"sourceFingerprint": "f75d8adf5fbb34cc94a96acfc3624b9ba974a87d274a9909c369bf4a933c0e8f",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor report indicates a transient infra launch failure (exit-126, zero turns) with the underlying reconcile work already succeeded, so no code/spec action is needed.",
-			"evidence": [
-				"exit code 126 and turns=0, permission_denials=0, cost_usd=0",
-				"reconcile sweep logic itself completed successfully in this run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T11:51:01.311Z"
 		},
 		{
 			"key": "issue:minion-meta#428",
