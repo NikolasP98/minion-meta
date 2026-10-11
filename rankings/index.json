@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T10:51:12.863Z",
+	"generatedAt": "2026-10-11T11:21:06.145Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -28151,6 +28151,38 @@
 			"scoredAt": "2026-10-10T20:49:12.337Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged test-scoping PR with no indication of deployment failure or pending risk.",
+			"evidence": [
+				"Merge pull request #313 ... test(tools): scope domain registry integration",
+				"status unknown, no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T11:21:05.985Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31182,20 +31214,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 3
+				"specification": 5,
+				"implementation": 2
 			},
 			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor report indicates a transient exec-level infra fault with the underlying reconcile work already completed successfully, so no action is needed beyond passive classifier tuning.",
+			"rationale": "The diagnosis itself states the underlying reconcile work completed successfully and only a transient exit-126/turns=0 provider glitch occurred, which is safe to retry and not a genuine task failure.",
 			"evidence": [
-				"claude provider process exited with code 126 and turns=0",
-				"reconcile logic completed fully and successfully with git push succeeded"
+				"Deterministic reconcile logic completed fully and successfully ... no failure visible anywhere in that work",
+				"Recommendation: safe to retry as-is since the underlying reconcile state already advanced cleanly"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T10:50:58.007Z"
+			"scoredAt": "2026-10-11T11:21:05.985Z"
 		},
 		{
 			"key": "issue:minion-meta#666",
