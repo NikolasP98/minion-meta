@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T21:21:39.851Z",
+	"generatedAt": "2026-10-11T21:51:40.275Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3420,6 +3420,41 @@
 			"scoredAt": "2026-10-07T10:51:55.918Z"
 		},
 		{
+			"key": "proposal:2026-09-12-360-continuation-review-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Follow-ups from independent review of Claude continuation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-12-360-continuation-review-followups.md",
+			"sourceUpdatedAt": "2026-10-04",
+			"sourceFingerprint": "8e5968fc755697d778a318c014a21d53bb195c5879a6d8dbad1f9c0668d4558b",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-09-10-hub-finance-parser-version-binding"
+			],
+			"rationale": "Most review findings are already fixed and deployed, but the remaining R2/R4 attachment-authorization and sweeper-coordination gaps are clearly scoped security-relevant open work.",
+			"evidence": [
+				"R2/R4 remain open",
+				"Apply linked-record existence, module-view/edit and owner-scope authorization to attachment read/download/link/unlink",
+				"Coordinate attachment link admission with sweeper deletion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T21:51:40.079Z"
+		},
+		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4906,41 +4941,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T18:22:02.987Z"
-		},
-		{
-			"key": "proposal:2026-09-12-360-continuation-review-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Follow-ups from independent review of Claude continuation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-12-360-continuation-review-followups.md",
-			"sourceUpdatedAt": "2026-10-04",
-			"sourceFingerprint": "8e5968fc755697d778a318c014a21d53bb195c5879a6d8dbad1f9c0668d4558b",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-09-08-platform-qc-remediation",
-				"proposal:2026-09-10-hub-finance-parser-version-binding"
-			],
-			"rationale": "Most listed items are already deployed; the remaining open R2/R3/R4 items duplicate the authorization and parser-binding proposals and should be consolidated rather than tracked separately.",
-			"evidence": [
-				"R3/R5/R6/R8: fixed and deployed... PR292 merged",
-				"R2/R4: attachment record authorization, link/sweeper coordination... remain open"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T21:22:09.389Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-workshop-owned-persistence",
@@ -8643,6 +8643,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:59:35.856Z"
+		},
+		{
+			"key": "proposal:2026-09-10-hub-finance-parser-version-binding",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Bind stored statement parser_version to the parser's own exported version",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-finance-parser-version-binding.md",
+			"sourceUpdatedAt": "2026-10-04",
+			"sourceFingerprint": "6c971e974a023e35919b5d7aa955cf52e2c0fa115d1dfff6b6c14a06fa30f51b",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-09-12-360-continuation-review-followups"
+			],
+			"rationale": "The integration fix for parser-version provenance and stale-cursor rejection is thoroughly specified but explicitly blocked on two prerequisite candidates not yet merged to master.",
+			"evidence": [
+				"owned by the frozen 10-04 candidate ... which is not on origin/master",
+				"If row.parserVersion !== STATEMENT_PARSER_VERSION ... the import must not silently continue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T21:51:40.079Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-249dc0b349bf",
@@ -12659,40 +12693,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:59:35.856Z"
-		},
-		{
-			"key": "proposal:2026-09-10-hub-finance-parser-version-binding",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Bind stored statement parser_version to the parser's own exported version",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-finance-parser-version-binding.md",
-			"sourceUpdatedAt": "2026-10-04",
-			"sourceFingerprint": "6c971e974a023e35919b5d7aa955cf52e2c0fa115d1dfff6b6c14a06fa30f51b",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:2026-09-12-360-continuation-review-followups"
-			],
-			"rationale": "Well-specified provenance fix that is explicitly blocked pending two prerequisite candidates landing on master.",
-			"evidence": [
-				"owned by the frozen 10-04 candidate... which is not on origin/master",
-				"once 10-07 + 10-04 land"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T21:22:09.389Z"
 		},
 		{
 			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
@@ -21575,6 +21575,38 @@
 			"scoredAt": "2026-10-11T19:51:35.163Z"
 		},
 		{
+			"key": "issue:minion-meta#539",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#539 [monitor:unstick] reconcile proposals (minion-meta) run d56b5e67: claude exec-126 after sweep completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/539",
+			"sourceUpdatedAt": "2026-09-20T20:18:14Z",
+			"sourceFingerprint": "99e0d30ffe5e3f36b677bd02750d75fa1bfe150a64b4fba1d581857824f3a93a",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The diagnosis is clear and the recommended fix (add a host classifier signature for the recurring exit-126 infra fault) is small and bounded.",
+			"evidence": [
+				"recurred 4x between 17:56 and 20:13 UTC today across separate runs",
+				"recommend adding a host classifier signature for 'provider=claude; exit-126; turns=0'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T21:51:40.079Z"
+		},
+		{
 			"key": "issue:minion-meta#550",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22150,38 +22182,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:59:35.856Z"
-		},
-		{
-			"key": "proposal:2026-09-12-gateway-native-swift-qualification",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Qualify the Gateway native Swift toolchain separately from server runtime",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-12-gateway-native-swift-qualification.md",
-			"sourceUpdatedAt": "2026-10-04",
-			"sourceFingerprint": "375686e3c0c210c707dfbbf9b0bee664c8cf1e59178d021a06e91f650602a5dd",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Clearly diagnosed native CI tooling gap that does not block the currently deployed Linux gateway, with only an unadopted draft fix so far.",
-			"evidence": [
-				"consolidated job subsequently failed SwiftFormat0.63.0 against116 of208 untouched native files",
-				"The authorized current deployment targets the Linux Gateway Docker services"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T21:22:09.389Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-minion-run-dev-switcher",
@@ -28915,38 +28915,6 @@
 			"scoredAt": "2026-10-11T03:51:36.852Z"
 		},
 		{
-			"key": "issue:minion-meta#539",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#539 [monitor:unstick] reconcile proposals (minion-meta) run d56b5e67: claude exec-126 after sweep completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/539",
-			"sourceUpdatedAt": "2026-09-20T20:18:14Z",
-			"sourceFingerprint": "99e0d30ffe5e3f36b677bd02750d75fa1bfe150a64b4fba1d581857824f3a93a",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Diagnostic monitor-intake issue already confirms the real work landed and no retry is needed, leaving only a minor future classifier suggestion.",
-			"evidence": [
-				"no retry needed for this run (would just redo already-completed work)",
-				"Real work already landed on dev"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T21:22:09.389Z"
-		},
-		{
 			"key": "issue:minion-meta#567",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29412,6 +29380,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T11:59:35.856Z"
+		},
+		{
+			"key": "proposal:2026-09-12-gateway-native-swift-qualification",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Qualify the Gateway native Swift toolchain separately from server runtime",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-12-gateway-native-swift-qualification.md",
+			"sourceUpdatedAt": "2026-10-04",
+			"sourceFingerprint": "375686e3c0c210c707dfbbf9b0bee664c8cf1e59178d021a06e91f650602a5dd",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The native Swift toolchain qualification has a clearly bounded next scope but is low urgency since the current authorized deployment targets the Linux gateway, not the native app.",
+			"evidence": [
+				"The authorized current deployment targets the Linux Gateway Docker services",
+				"SwiftFormat ... failed against 116 of 208 untouched native files",
+				"No push, PR or workflow trigger occurred"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T21:51:40.079Z"
 		},
 		{
 			"key": "proposal:2026-10-09-gateway-native-formatter-reproducibility",
@@ -32410,6 +32411,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T23:21:24.036Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry only reports a merged PR's test scoping change as a deployment health status, with nothing actionable to execute.",
+			"evidence": [
+				"Merge pull request #313 ... test(tools): scope domain registry integration"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T21:51:40.079Z"
 		},
 		{
 			"key": "issue:minion-meta#589",
