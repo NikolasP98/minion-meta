@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T06:21:21.351Z",
+	"generatedAt": "2026-10-11T06:51:32.863Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5735,39 +5735,6 @@
 			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-fc192ff88fe3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fc192ff88fe3.md",
-			"sourceUpdatedAt": "2026-09-20",
-			"sourceFingerprint": "c85f74edfbda822f3273ee02dbebecf7e2ee58b83598bf91b3980fdf910e1391",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved, well-diagnosed finding identifies a concrete data-persistence bug with a located file and fix direction, making it actionable now.",
-			"evidence": [
-				"status: approved",
-				"TODO(handoff) marker in src/routes/api/scheduling/bookings/_handlers.ts",
-				"diagnosis: admission state lost on reload, breaking audit trails"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T06:21:18.394Z"
-		},
-		{
 			"key": "run:minion (gateway)#38075114301",
 			"kind": "run",
 			"stage": "testing",
@@ -8315,6 +8282,39 @@
 			"scoredAt": "2026-10-10T01:52:05.642Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-fc192ff88fe3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fc192ff88fe3.md",
+			"sourceUpdatedAt": "2026-09-20",
+			"sourceFingerprint": "c85f74edfbda822f3273ee02dbebecf7e2ee58b83598bf91b3980fdf910e1391",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved, well-diagnosed post-merge finding with a concrete fix direction for a real data-consistency gap in booking status persistence.",
+			"evidence": [
+				"status: approved",
+				"'Without this, admission state is lost on reload, breaking audit trails and causing data inconsistency'",
+				"diagnosis gives a concrete fix direction: wrap admission + booking writes in one transaction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T06:51:32.709Z"
+		},
+		{
 			"key": "spec:2026-08-17-hub-reserva-keyword-config-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -10601,6 +10601,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T19:51:25.694Z"
+		},
+		{
+			"key": "issue:minion-meta#526",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#526 [monitor:unstick] reconcile run 2093bda7 (minion-meta): agent exit-126, turns=0, but reconcile shell logic completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/526",
+			"sourceUpdatedAt": "2026-09-20T05:17:43Z",
+			"sourceFingerprint": "cd9088147709f8a500643c86a1cb97826e8270dc30edf03b925f658d26cff242",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#527"
+			],
+			"rationale": "This is the third of an identical recurring exit-126 signature on the same runner, and the report itself recommends folding repeats into one classifier/fix rather than tracking separately.",
+			"evidence": [
+				"'This is the third occurrence of this exact signature today (03:54, 04:22, 05:04)'",
+				"'Recommendation: a human should check the claude CLI binary/exec permissions and PATH on this runner box'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T06:51:32.709Z"
+		},
+		{
+			"key": "issue:minion-meta#527",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#527 [monitor:unstick] reconcile run 5b0520fb (minion-meta): agent exit-126, turns=0, but reconcile shell logic completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/527",
+			"sourceUpdatedAt": "2026-09-20T05:17:43Z",
+			"sourceFingerprint": "ae7c55ea64a40c62912e4531624b3000322619e8c9a111438e4adb7576cc95fb",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#526"
+			],
+			"rationale": "Second occurrence of the same exit-126/turns=0 signature as #526 within the same hour, explicitly suggested to be grouped under one host-classifier fix.",
+			"evidence": [
+				"'second occurrence of this exact signature today within roughly 30 minutes of the prior one'",
+				"'Worth folding into the same new host-classifier signature recommended for the sibling runs'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T06:51:32.709Z"
 		},
 		{
 			"key": "issue:minion-meta#584",
@@ -15361,6 +15429,38 @@
 			"scoredAt": "2026-10-10T05:38:18.941Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 94816 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-11T06:27:25Z",
+			"sourceFingerprint": "96fc30a5ab1f55b051d89921ce37660cc0127dd2a11046bbaa30f666a75f4a3e",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Keeping pace with upstream matters but a raw dump of 94816 commits with no triage or scoping cannot be executed as a single goal and needs reframing into a bounded review process.",
+			"evidence": [
+				"title: '94816 new commit(s) available'",
+				"summary is an unfiltered raw commit log with no categorization or risk triage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T06:51:32.709Z"
+		},
+		{
 			"key": "issue:minion-meta#306",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16060,74 +16160,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T04:44:27.182Z"
-		},
-		{
-			"key": "issue:minion-meta#526",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#526 [monitor:unstick] reconcile run 2093bda7 (minion-meta): agent exit-126, turns=0, but reconcile shell logic completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/526",
-			"sourceUpdatedAt": "2026-09-20T05:17:43Z",
-			"sourceFingerprint": "cd9088147709f8a500643c86a1cb97826e8270dc30edf03b925f658d26cff242",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#527"
-			],
-			"rationale": "This is the third occurrence of an identical exit-126/turns=0 reconcile signature that the alert itself recommends folding into one host-classifier goal with its sibling.",
-			"evidence": [
-				"third occurrence of this exact signature today (03:54, 04:22, 05:04)",
-				"recommendation: fold into the same new host-classifier signature recommended for the sibling runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T06:21:18.394Z"
-		},
-		{
-			"key": "issue:minion-meta#527",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#527 [monitor:unstick] reconcile run 5b0520fb (minion-meta): agent exit-126, turns=0, but reconcile shell logic completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/527",
-			"sourceUpdatedAt": "2026-09-20T05:17:43Z",
-			"sourceFingerprint": "ae7c55ea64a40c62912e4531624b3000322619e8c9a111438e4adb7576cc95fb",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#526"
-			],
-			"rationale": "Second occurrence of the same recurring exit-126/turns=0 reconcile signature that should be consolidated with the adjacent issue rather than tracked separately.",
-			"evidence": [
-				"second occurrence of this exact signature today within roughly 30 minutes of the prior one",
-				"Worth folding into the same new host-classifier signature... rather than filing separately each time"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T06:21:18.394Z"
 		},
 		{
 			"key": "issue:minion-meta#536",
@@ -26531,38 +26563,6 @@
 			"scoredAt": "2026-10-07T21:22:27.987Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 94672 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-11T00:45:59Z",
-			"sourceFingerprint": "c787da113dce18d961e61952d59247ffd2272c2aabd30eea180c7ee1eefb8414",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An automated upstream-sync notification listing tens of thousands of commits is not a scoped, actionable goal.",
-			"evidence": [
-				"title: Upstream sync: 94672 new commit(s) available",
-				"tags: upstream-sync"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:51:10.795Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28082,6 +28082,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T20:49:12.337Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine deployment-health snapshot showing a successful merge of a scoped test PR, with no indicated failure or open problem to act on.",
+			"evidence": [
+				"summary is 'Merge pull request #313 ... test(tools): scope domain registry integration'",
+				"status: unknown, no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T06:51:32.709Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
