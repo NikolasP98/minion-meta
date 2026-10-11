@@ -3,7 +3,7 @@ id: 2026-09-12-360-continuation-review-followups
 title: 'Follow-ups from independent review of Claude continuation'
 status: draft
 created: 2026-09-12
-updated: 2026-10-04
+updated: 2026-10-11
 repos: [minion-meta, minion, minion-hub]
 ---
 
@@ -78,3 +78,7 @@ The10-15 worker lifecycle repair drains actual route promises and registered job
 handoff-minion-ai-3505379795 (`extensions/nitter/src/feed-state.ts`, "Crash-safe file replacement and delivery/state atomicity") is the same open end as the R10 "Nitter repair boundary" section above; tombstoned as merged here, no new content.
 
 Related but not merged (same R10 Windows-timeout area, but a distinct TODO on the test file rather than feed-state.ts — flagged for human review instead): handoff-minion-ai-167668368 (`extensions/flows/src/data-nodes.test.ts`).
+
+## Reconciliation merge — 2026-10-11
+
+handoff-minion-ai-439295008 (`src/security/scan-paths.ts:23`, "This checks a normalized filesystem snapshot, not atomic use.") is the same open end as the R9 "path predicate is a normalized-path snapshot, not atomic filesystem authorization" finding above; tombstoned as merged here. Its only new content was the precise file/line citation, now recorded: `NikolasP98/minion-ai@DEV src/security/scan-paths.ts:23`.

@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-ai-439295008
 title: Handoff marker — src/security/scan-paths.ts (minion-ai)
-status: draft
+status: merged
+merged_into: 2026-09-12-360-continuation-review-followups
 created: 2026-09-12
 updated: 2026-10-11
 repos: [minion-ai]
