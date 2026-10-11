@@ -172,3 +172,49 @@ also carries an in-code `TODO(handoff)` at its exact site where applicable.
    Paraglide en+es titles; the actual Slice 2 code it was supposed to mirror
    already uses fixed strings — this slice follows the real codebase pattern
    instead of the brief.
+
+## Integration — minion_hub PR #479 (`feat/inbox`, 2026-10-10 evening)
+
+The four stacked drafts (#475 S1, #477 S2, #476 S3, #478 S4) were rebased onto
+`master` as one chain on `feat/inbox` and closed as superseded; #479 carries them
+plus an inbox-first UI pass and pipeline fixes found while wiring them for real:
+
+- `/notifications` is now the inbox (grouped Hoy / Ayer / Anteriormente, unread
+  emphasis, human kind labels via `src/lib/inbox/feed.ts`, unread-only + resolved
+  toggles, header links to `/notifications/daily` and `/changelog`); the admin
+  review sections (join requests, pulse) render below the feed only when non-empty.
+- Bell popup: unread-first, kind + relative time, mark-all-read. Shell polling
+  toasts the newest unread row when a later poll sees the count grow (never the
+  page-load backlog). `G N` chord; palette entries for `/notifications`,
+  `/changelog`.
+- `listFeed` now excludes rows the reader dismissed (they reappeared on reload).
+- `/api/jobs/tick` is a Vercel cron every 5 minutes (`vercel.json`,
+  `maxDuration: 60`) — before this the evaluator had no scheduler at all.
+- Release pipeline: hub `master` has required reviews, so the Action's
+  `git push origin HEAD` would have been rejected — it now pushes only the tag;
+  0-PR runs create no release; the Action authenticates with its own
+  `RELEASES_SECRET` (repo secret + Vercel production env, generated 2026-10-10,
+  never the Vercel `CRON_SECRET` copied across) with `CRON_SECRET` as the
+  route's fallback.
+- `releases.service.ts` built a `CoreCtx` with `getCoreDb()` at module scope;
+  SvelteKit's postbuild analyse imports every server chunk and the preview
+  build (no `SUPABASE_DB_URL`) failed. Now built per call.
+- Ledgers: route-contract 160 endpoints / 149 screens / Wave A 35; UI-audit
+  inventory test updated to match.
+
+Proof: `bun run check` 0/0; `lint:design` + `lint:tokens` clean; 30 vitest
+files / 208 tests green; QA stack `qa:down --volumes` → `qa:up` applied
+`20261011100000_app_notifications.sql` + `20261011110000_app_releases.sql` on
+live Postgres, `qa:seed:verify` 225/225.
+
+### Open ends added by the integration
+
+7. **Arrival toast navigates with `window.location.assign`** (full page load)
+   because the state module avoids importing `$app/navigation` (vitest mocks).
+   Upgrade to `goto` if the reload is ever noticed.
+8. **`ui-audit-inventory.test.ts` hangs locally when git commit signing is
+   on** — it `git commit`s in temp repos and the signer prompts. Run it with
+   `GIT_CONFIG_PARAMETERS="'commit.gpgsign=false'"`; CI is unaffected.
+9. **Two commits on `feat/inbox` are unsigned** (`495226f8`, `8112a131`): the
+   1Password SSH agent stopped answering mid-session. hub `master` does not
+   require signatures and the squash merge is GitHub-signed; noted, not hidden.

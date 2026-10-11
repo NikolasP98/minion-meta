@@ -136,11 +136,15 @@ Design spec: [`specs/2026-04-19-minion-meta-repo-design.md`](specs/2026-04-19-mi
 
 ### Release notes
 
-`minion_hub`'s `CHANGELOG.md` and in-app `/changelog` are generated, not hand-written:
+`minion_hub`'s in-app `/changelog` is generated, not hand-written:
 `.github/workflows/release-notes.yml` runs on every push to hub `master`, groups merged PR
 titles since the last `hub-v*` tag by conventional prefix (`feat`→Nuevo, `fix`→Arreglado,
-else→Interno) and scope, prepends a dated section, tags the release, and POSTs it to
-`/api/releases` (one global `app.update` notification). **PR titles are the changelog** —
+else→Interno) and scope, tags the release (`hub-vYYYY.MM.DD[-n]`), and POSTs it to
+`/api/releases` (`app_releases` row + one global `app.update` notification). hub `master`
+is PR-only, so no `CHANGELOG.md` commit is pushed — the tag and the `app_releases` row are
+the artifacts; a push with no merged PR since the last tag creates nothing. The Action
+authenticates with the `RELEASES_SECRET` repo secret (same value as the Vercel production
+env of that name). **PR titles are the changelog** —
 write them as a user-facing sentence with a conventional prefix and scope
 (`feat(pos): one open shift per user`), not an internal implementation note.
 
