@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T17:21:23.249Z",
+	"generatedAt": "2026-10-11T17:51:08.941Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3971,20 +3971,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 6
+				"specification": 8,
+				"implementation": 5
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A well-specified schema and definition-of-done exist to replace a temporary metadata overlay affecting thousands of invoices.",
+			"rationale": "Well-specified data-model fix replacing a temporary overlay that risks duplicate/ambiguous invoice identity across 3,996 SUSII invoices as SUSII is retired.",
 			"evidence": [
-				"3,996 SUSII invoices with 924 SIRE documents under a temporary overlay",
-				"DoD defines unique constraints, backfill, and test coverage"
+				"3,996 SUSII invoices... 924 official documents, 909 matched",
+				"Enforce unique (org_id, provider, provider_ref) and (invoice_id, provider)",
+				"Definition of done includes tests for SIRE-first, SUSII-first, repeated sync, unmatched documents"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T17:21:53.420Z"
+			"scoredAt": "2026-10-11T17:51:08.788Z"
 		},
 		{
 			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
@@ -26526,6 +26527,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A routine merged test-scoping PR with no indication of deployment failure or urgency.",
+			"evidence": [
+				"Merge pull request #313 ... test(tools): scope domain registry integration",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T17:51:08.788Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
