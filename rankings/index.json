@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T23:21:39.136Z",
+	"generatedAt": "2026-10-11T23:51:43.874Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -400,6 +400,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:10.731Z"
+		},
+		{
+			"key": "proposal:2026-10-11-hub-corpus-pipeline-scaling",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Brain-corpus pipeline — where it runs, when, how, and on what database (post-incident 2026-10-11)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-11-hub-corpus-pipeline-scaling.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "494e138a0ff83a853ad06a9f8042267ae5e24e025f57134cbdf33d30cfa666f1",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A documented production incident (cascading Postgres/Supavisor/Auth failures across the whole hub) exposed an unbounded per-org corpus pipeline that structurally cannot scale to multiple tenants, with concrete AS-IS evidence and TO-BE architecture decisions already written.",
+			"evidence": [
+				"by 23:00Z every pooled hub request was ECHECKOUTTIMEOUT",
+				"tombstone sweep ran 90,525 times touching 0 rows for 34h total DB time",
+				"ten orgs of this size on current design does not run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T23:51:43.724Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-igv-rate-from-org-config-spec",
@@ -2990,38 +3023,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T15:22:16.579Z"
-		},
-		{
-			"key": "pr:minion-meta#781",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#781 docs(proposal): brain-corpus pipeline scaling — where/when/how + DB sizing (incident 2026-10-11)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/781",
-			"sourceUpdatedAt": "2026-10-11T23:13:26Z",
-			"sourceFingerprint": "6627a0d77dd211ad643ceae9cddeb39bc2d2c720f96223928e4ba86343f90475",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Post-incident proposal with concrete DB-sizing evidence, scoped slices, and companion hotfix PRs indicates ready, important infra work.",
-			"evidence": [
-				"Post-incident proposal: evidence (pg_stat_statements, table sizes, instance settings, pipeline audit)",
-				"Companion hotfixes: hub #485, #486"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T23:21:38.965Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-containment-base-reconciliation",
@@ -16072,22 +16073,23 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#540"
 			],
-			"rationale": "Recurring exit-126/turns=0 claude CLI host fault across multiple runs is better handled as one combined host-fix goal than separate tickets.",
+			"rationale": "Diagnosed as a recurring claude-binary exit-126/turns=0 infra fault on a worker box, not a repo/spec defect, and merge-scan data was already committed successfully.",
 			"evidence": [
-				"exit 126 turns=0 permission_denials=0, same signature as runs 0efde7a0 and 510720bc",
-				"diagnosis recommends checking claude binary path/permissions on runner box"
+				"exit 126 turns=0 permission_denials=0",
+				"same signature seen in runs 0efde7a0, 510720bc within 1.5h",
+				"merge-scan data already pushed df1cf4d..e1966b9"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T23:21:24.322Z"
+			"scoredAt": "2026-10-11T23:51:43.724Z"
 		},
 		{
 			"key": "issue:minion-meta#497",
@@ -16141,22 +16143,23 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#426"
 			],
-			"rationale": "Identical exit-126/turns=0 claude provider signature to #426 (and sibling run d56b5e67), warranting a single combined host-fix/classifier goal.",
+			"rationale": "Same exit-126/turns=0/provider=claude infra signature as #426 recurring on a different run a week later, suggesting both should become one host-fix goal.",
 			"evidence": [
-				"exit 126 turns=0, identical signature to run d56b5e67 ~1h44m earlier",
-				"reconcile data itself fully committed and pushed before the agent step failed"
+				"identical exit 126 turns=0 signature as sibling run d56b5e67",
+				"reconcile data already committed and pushed 951b3b8..a3905e7",
+				"worker_started_at to finished_at only ~0.6s"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T23:21:24.322Z"
+			"scoredAt": "2026-10-11T23:51:43.724Z"
 		},
 		{
 			"key": "issue:minion-meta#559",
@@ -28148,38 +28151,6 @@
 			"scoredAt": "2026-10-10T20:49:12.337Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
-			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
-			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged test-scoping PR with no indicated outstanding issue or action.",
-			"evidence": [
-				"title: minion (gateway) deployment health",
-				"summary: Merge pull request #313 ... test(tools): scope domain registry integration"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T23:21:38.965Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29484,7 +29455,7 @@
 			"title": "Handoff marker — src/lib/components/scheduling/kit/booking-mover.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2366728732.md",
 			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "a1993ca5ceaff19361db031890f75f2e409e1a28e5fc3e263373badfc9b2c891",
+			"sourceFingerprint": "69707b4945712e2db6df5877b74bdbc2f0bad0052c7f80b046da014934660534",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -29493,20 +29464,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 3
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Low-impact dead-code marker whose relation to an existing cleanup item is uncertain and explicitly flagged for human disposition.",
+			"rationale": "Small, well-scoped dead-code removal (no UI caller since the fan-out deck was deleted) with a clear single-file definition of done.",
 			"evidence": [
 				"no UI caller since the fan-out deck was deleted",
-				"not certain enough to merge — flagged for human disposition"
+				"marker at booking-mover.ts:74",
+				"definition of done: marker resolved and TODO comment removed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T23:21:38.965Z"
+			"scoredAt": "2026-10-11T23:51:43.724Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2746481724",
@@ -31609,20 +31581,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 5,
 				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Diagnosis finds only transient LLM provider flakiness on a tiny batch with no spec/logic defect, resolvable by a plain retry.",
+			"rationale": "Transient LLM-provider flakiness on a tiny 2-candidate batch with no logic/spec defect found, and the issue's own diagnosis recommends a plain retry that should already have succeeded.",
 			"evidence": [
-				"catalog built fine with only 2 pending candidates",
-				"no evidence of spec/logic bug, recommends retry"
+				"only 2 pending candidates in batch",
+				"no evidence of spec/logic bug in log tail",
+				"recommendation: retry the run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T23:21:24.322Z"
+			"scoredAt": "2026-10-11T23:51:43.724Z"
 		},
 		{
 			"key": "issue:minion-meta#760",
@@ -31969,6 +31942,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:28:30.108Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "c89d8ddbd3653d7164521c59c5e2f2fb74b57a2ea4db8383f6c5ba43616bcdc9",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted fragments embedded inside a generated ranking data file (rankings/index.json) rather than genuine code TODOs needing a fix, making this handoff-sweep hit non-actionable.",
+			"evidence": [
+				"target file is rankings/index.json, a generated catalog artifact",
+				"marker text quotes unrelated fragments like 'drop column (proposal #16)' and 'discount editor has no close affordance'",
+				"over a dozen disparate markers all pointing at one data file's line numbers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T23:51:43.724Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
@@ -32373,39 +32379,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:52:23.150Z"
-		},
-		{
-			"key": "run:minion_hub#38183820878",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38183820878",
-			"sourceUpdatedAt": "2026-10-11T23:19:17Z",
-			"sourceFingerprint": "344247f9e8e97b6fe173e8d612fd1f634acbf4a61d94036e083e185ec351a6da",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is only an in-progress CI run status on master, not a scoped work item.",
-			"evidence": [
-				"title: CI",
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T23:21:38.965Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
@@ -32993,38 +32966,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:28:30.108Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "49e601a13a967e587f4d95482d683b2a59fdf5be4a7184aca1c43b46f8cb1779",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are text fragments embedded inside a JSON data file rather than genuine code TODO(handoff) comments, making this sweep result non-actionable.",
-			"evidence": [
-				"markers point into rankings/index.json, a JSON data file, not source code",
-				"quoted fragments read as unrelated data content (e.g. 'finProductId: null', DOB mentions)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T23:21:38.965Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-2f3c914",
