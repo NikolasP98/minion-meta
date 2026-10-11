@@ -43,20 +43,20 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5525
 - `NikolasP98/minion-meta@dev rankings/index.json:5557` — provider JSON reader is not byte bounded before res.json()",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5557
-- `NikolasP98/minion-meta@dev rankings/index.json:8036` — a realized accrual is counted via (source, source_id, status)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8036
-- `NikolasP98/minion-meta@dev rankings/index.json:8069` — Replace this bounded best-effort fan-out with the durable...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8069
-- `NikolasP98/minion-meta@dev rankings/index.json:8703` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8703
-- `NikolasP98/minion-meta@dev rankings/index.json:11542` — --apply is intentionally unimplemented",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11542
-- `NikolasP98/minion-meta@dev rankings/index.json:11609` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11609
-- `NikolasP98/minion-meta@dev rankings/index.json:11741` — this is a per-VIEWER preference, not an RBAC restriction",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11741
-- `NikolasP98/minion-meta@dev rankings/index.json:11773` — host error-log scrubbing is separate from the sanitized pipeline",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11773
+- `NikolasP98/minion-meta@dev rankings/index.json:7931` — a realized accrual is counted via (source, source_id, status)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7931
+- `NikolasP98/minion-meta@dev rankings/index.json:7964` — Replace this bounded best-effort fan-out with the durable...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7964
+- `NikolasP98/minion-meta@dev rankings/index.json:8598` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8598
+- `NikolasP98/minion-meta@dev rankings/index.json:11472` — --apply is intentionally unimplemented",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11472
+- `NikolasP98/minion-meta@dev rankings/index.json:11539` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11539
+- `NikolasP98/minion-meta@dev rankings/index.json:11671` — this is a per-VIEWER preference, not an RBAC restriction",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11671
+- `NikolasP98/minion-meta@dev rankings/index.json:11703` — host error-log scrubbing is separate from the sanitized pipeline",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11703
 - `NikolasP98/minion-meta@dev rankings/index.json:12817` — discount editor has no close affordance",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12817
 - `NikolasP98/minion-meta@dev rankings/index.json:12918` — 'no attachments card — fin_purchase is not in' schema",
@@ -103,17 +103,17 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22862
 - `NikolasP98/minion-meta@dev rankings/index.json:23186` — ?booking= deep-link query param is not wired",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23186
-- `NikolasP98/minion-meta@dev rankings/index.json:24574` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24574
-- `NikolasP98/minion-meta@dev rankings/index.json:25331` — the PREDICATE is covered here, the WIRING is not — no test",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25331
-- `NikolasP98/minion-meta@dev rankings/index.json:25364` — add global server custom-property sort/filter/export planning",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25364
-- `NikolasP98/minion-meta@dev rankings/index.json:26251` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26251
-- `NikolasP98/minion-meta@dev rankings/index.json:26387` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26387
-- `NikolasP98/minion-meta@dev rankings/index.json:27463` — tags are NOT inline-editable here while /pos/catalog and...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27463
-- `NikolasP98/minion-meta@dev rankings/index.json:29755` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29755
+- `NikolasP98/minion-meta@dev rankings/index.json:24542` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24542
+- `NikolasP98/minion-meta@dev rankings/index.json:25299` — the PREDICATE is covered here, the WIRING is not — no test",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25299
+- `NikolasP98/minion-meta@dev rankings/index.json:25332` — add global server custom-property sort/filter/export planning",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25332
+- `NikolasP98/minion-meta@dev rankings/index.json:26219` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26219
+- `NikolasP98/minion-meta@dev rankings/index.json:26355` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26355
+- `NikolasP98/minion-meta@dev rankings/index.json:27431` — tags are NOT inline-editable here while /pos/catalog and...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27431
+- `NikolasP98/minion-meta@dev rankings/index.json:29723` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29723

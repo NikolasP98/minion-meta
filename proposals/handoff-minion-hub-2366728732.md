@@ -29,13 +29,3 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/kit/booking-mover.ts:74` — no UI caller since the fan-out deck was deleted (ledger
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/kit/booking-mover.ts#L74
-
-## Reconciliation note 2026-10-11
-
-This marker's own description says `booking-mover.ts` has had no UI caller
-since the fan-out deck was deleted — that deletion is open end #1 in
-`2026-10-07-hub-calendar-single-event-services.md` ("Delete the fan-deck
-code … once PRs #442/#443 land"), which names `fan-out.ts`,
-`BookingCalendar.svelte`, and the fan-drag e2e spec but does not explicitly
-list `booking-mover.ts`. Plausibly the same dead-code cleanup, not certain
-enough to merge — flagged for human disposition.
