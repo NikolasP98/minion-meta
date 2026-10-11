@@ -134,6 +134,16 @@ Each subproject remains its own git repo with its own remote, branch, package ma
 
 Design spec: [`specs/2026-04-19-minion-meta-repo-design.md`](specs/2026-04-19-minion-meta-repo-design.md).
 
+### Release notes
+
+`minion_hub`'s `CHANGELOG.md` and in-app `/changelog` are generated, not hand-written:
+`.github/workflows/release-notes.yml` runs on every push to hub `master`, groups merged PR
+titles since the last `hub-v*` tag by conventional prefix (`feat`→Nuevo, `fix`→Arreglado,
+else→Interno) and scope, prepends a dated section, tags the release, and POSTs it to
+`/api/releases` (one global `app.update` notification). **PR titles are the changelog** —
+write them as a user-facing sentence with a conventional prefix and scope
+(`feat(pos): one open shift per user`), not an internal implementation note.
+
 ## Architecture Overview
 
 ### Cross-Project Data Flow
