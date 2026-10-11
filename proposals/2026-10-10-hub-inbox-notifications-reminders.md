@@ -218,3 +218,21 @@ live Postgres, `qa:seed:verify` 225/225.
 9. **Two commits on `feat/inbox` are unsigned** (`495226f8`, `8112a131`): the
    1Password SSH agent stopped answering mid-session. hub `master` does not
    require signatures and the squash merge is GitHub-signed; noted, not hidden.
+
+### Shipped 2026-10-10 (hub #479 merged `d6db2ca27`, prod live 23:04)
+
+- Both migrations applied on production (`hub_migrations` 20261011100000 + 20261011110000).
+- `RELEASES_SECRET` set (GitHub repo secret + Vercel production env); the
+  release-notes workflow's first run raced the deploy (401 from the previous
+  deployment), the re-run tagged `hub-v2026.10.11` and created the `app_releases`
+  row + the global `app.update` notification. Subsequent merges release automatically.
+- Two notifications sent: the global release notice and an org-scoped
+  `org.notice` for FACES ("Estrenamos la bandeja de notificaciones",
+  dedupe `faces:inbox-launch:2026-10-10`).
+- `/api/jobs/tick` cron is registered in `vercel.json` (`*/5 * * * *`).
+
+10. **`releases.service.ts` builds the `app.update` title with Paraglide on the
+    server** — the first release title came out in English ("What's new in …")
+    because a cron-auth request has no locale; fixed in the data by hand for
+    this release. Use a fixed Spanish title like the evaluator rules do, or
+    resolve the locale explicitly, before the next release.
