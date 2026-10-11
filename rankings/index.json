@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T08:51:14.015Z",
+	"generatedAt": "2026-10-11T09:21:30.477Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9325,6 +9325,38 @@
 			"scoredAt": "2026-10-11T05:22:33.427Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "af10380bb98e765ce07681ef2d4ab7df6c80b3e4784f99782b4863265cf3b211",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundling 18+ unrelated TODO markers spanning finance, scheduling, RBAC, and data-integrity concerns into a single ledger proposal prevents any one of them from becoming a scoped, verifiable goal.",
+			"evidence": [
+				"markers span disparate domains, e.g. 'booking commit race window' and 'Seven production-verified customers still have no DOB'",
+				"definition of done only requires removing TODO comments, not resolving the underlying issues individually"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T09:21:30.279Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10639,6 +10671,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T07:51:44.627Z"
+		},
+		{
+			"key": "issue:minion-meta#530",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#530 [monitor:unstick] reconcile run e3ca01f2 (minion-meta): claude agent launch exit-126, reconcile data step succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/530",
+			"sourceUpdatedAt": "2026-09-20T08:17:48Z",
+			"sourceFingerprint": "340cde9faa09012e03dcf70f981e81b226bfc96aba6ce5b8300983ae24a64d22",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#531"
+			],
+			"rationale": "This recurring claude-binary exec-126 launch fault on the worker image has a clear signature and should be fixed together with the identical duplicate report rather than tracked twice.",
+			"evidence": [
+				"exit-126 before any turns, ~0.6s after worker start, reconcile data step itself succeeded and pushed",
+				"same exact signature recurs across multiple runs in the window per the diagnosis text"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T09:21:30.279Z"
+		},
+		{
+			"key": "issue:minion-meta#531",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#531 [monitor:unstick] reconcile run 94c9e865 (minion-meta): claude agent launch exit-126, reconcile data step succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/531",
+			"sourceUpdatedAt": "2026-09-20T08:17:48Z",
+			"sourceFingerprint": "fc94b67dd8a5fc46bd7147b401abea898c98fd28efc304caca397731dd52b8e9",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#530"
+			],
+			"rationale": "Identical exit-126 claude-launch signature to #530 on a different run timestamp, so these should be consolidated into one host-fix goal instead of duplicate tickets.",
+			"evidence": [
+				"same diagnosis: exit-126, turns=0, ~0.6s post worker-start, reconcile step succeeded",
+				"fingerprint unstick-unknown-94c9e865 distinct run but same signature as #530"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T09:21:30.279Z"
 		},
 		{
 			"key": "issue:minion-meta#584",
@@ -19591,76 +19691,6 @@
 			"scoredAt": "2026-10-11T02:51:48.161Z"
 		},
 		{
-			"key": "issue:minion-meta#530",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#530 [monitor:unstick] reconcile run e3ca01f2 (minion-meta): claude agent launch exit-126, reconcile data step succeeded",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/530",
-			"sourceUpdatedAt": "2026-09-20T08:17:48Z",
-			"sourceFingerprint": "340cde9faa09012e03dcf70f981e81b226bfc96aba6ce5b8300983ae24a64d22",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#531"
-			],
-			"rationale": "Identical recurring exit-126 exec-permission signature with #531 should become one host-classifier goal rather than two duplicate intakes.",
-			"evidence": [
-				"exit-126 turns=0 permission_denials=0 ~0.6s post-worker-start",
-				"reconcile git-side work already completed and pushed successfully",
-				"same exact signature recurs identically across multiple runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T08:51:04.664Z"
-		},
-		{
-			"key": "issue:minion-meta#531",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#531 [monitor:unstick] reconcile run 94c9e865 (minion-meta): claude agent launch exit-126, reconcile data step succeeded",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/531",
-			"sourceUpdatedAt": "2026-09-20T08:17:48Z",
-			"sourceFingerprint": "fc94b67dd8a5fc46bd7147b401abea898c98fd28efc304caca397731dd52b8e9",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#530"
-			],
-			"rationale": "Identical recurring exit-126 exec-permission signature with #530 should become one host-classifier goal rather than two duplicate intakes.",
-			"evidence": [
-				"exit-126 turns=0 permission_denials=0 ~0.6s post-worker-start",
-				"reconcile git-side work already completed and pushed successfully",
-				"same exact signature recurs identically across multiple runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-04T08:51:04.664Z"
-		},
-		{
 			"key": "issue:minion-meta#535",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28121,6 +28151,38 @@
 			"scoredAt": "2026-10-10T20:49:12.337Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The entry only shows a routine merge of a test-scoping commit with no indication of a deployment failure or open problem.",
+			"evidence": [
+				"summary is a merge commit for 'test(tools): scope domain registry integration'",
+				"status field is 'unknown' with no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T09:21:30.279Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33417,37 +33479,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:23:25.274Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "c3fc37cc777d2512200152a08e7574d8d8c7e0f50d700ec4f84b47854be67e31",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed 'markers' are quoted rationale fragments embedded in the generated rankings/index.json data file, not actual TODO(handoff) comments in source code, indicating a sweep false positive.",
-			"evidence": [
-				"markers are line numbers inside rankings/index.json, a generated data file, quoting prior ranking rationale text like 'this synthetic line posts finProductId: null'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T05:22:33.427Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
