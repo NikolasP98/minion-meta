@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-bd7700d5dd6a
 title: "Post-merge finding — todo-handoff in src/server/services/inbox/rules/visit-unpaid.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-11
 updated: 2026-10-11
 repos: [minion-hub]
