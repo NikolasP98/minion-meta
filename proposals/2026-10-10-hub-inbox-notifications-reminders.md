@@ -122,3 +122,53 @@ Open ends (each also carries an in-code `TODO(handoff)`):
    timestamp of its own, so a line edited after its ticket's submission (if that's ever
    possible) wouldn't bump "last activity". Not believed to be reachable today.
 5. **Slices 3–4 (release pipeline/changelog, operational extras) are still open work.**
+
+## Slice 4 open ends (operational extras)
+
+Implemented on `minion_hub` branch `feat/inbox-extras` (draft PR #478, stacked on
+`feat/inbox-evaluator` #477 — do not merge #478 before #477/#475). Added
+`stock.low`, `service.paid_unscheduled`, `package.expiring`, `plan.overdue`,
+`finance.sync_failed`, `crm.dni_pending`, `crm.birthday` to `INBOX_RULES`. Each
+also carries an in-code `TODO(handoff)` at its exact site where applicable.
+
+1. **`channel.whatsapp_logged_out` is SKIPPED, not implemented.** No DB-backed
+   per-org read of real WhatsApp login/logout state exists in `minion_hub`:
+   the `channels.status` column (`channel.service.ts`'s `listChannels`) only
+   ever reflects the config `enabled` flag, written by
+   `channel-sync.service.ts`'s `writeChannelRows` — never a real gateway
+   session state. The only live signal is `crm-channels.service.ts`'s
+   `getChannelCatalog`, a best-effort RPC (`gatewayCall('channels.status', …)`)
+   that a `withOrgCore` DB-transaction rule on a 10-minute tick cannot rely on.
+   `TODO(handoff)` in `rules/index.ts`. Needs either the gateway or a sync job
+   to persist real channel session state into a queryable column before this
+   rule can be built — do not invent that table from this side.
+2. **None of the 7 implemented rules have been run against seeded QA
+   fixtures.** `bun run qa:status` showed the stack up and healthy, but
+   `/api/jobs/tick` requires a `CRON_SECRET` bearer not configured in the
+   shared QA container, and setting one on a possibly concurrently-used QA
+   stack was judged out of scope for this slice. All 7 rules are proven only
+   via pure boundary-function unit tests + `bun run check`. Add seed fixtures
+   (low-stock bin, expiring package grant with sessions left, overdue payment
+   plan instalment, failed finance sync source, DNI-pending contact >2 days,
+   a contact with today's birthday) to `scripts/qa/seed/matrix.ts` and prove
+   each end-to-end, same gap Slice 2 left open for `visit.unpaid` and
+   `shift.open_after_hours`.
+3. **`crm.birthday`'s `isBirthdayToday`** is a plain `MM-DD` string match on
+   `parties.dob` — a Feb-29 birth date never matches in a non-leap year (no
+   Feb-28/Mar-1 fallback). Documented as a `shortcut:` in the code; upgrade
+   only if a real contact reports a missed notification.
+4. **`crm.dni_pending`'s "pending" definition** is inferred from
+   `party.service.ts`'s own DNI-check logic (`docNumber` 8-digit,
+   `dniVerified=false`, `metadata.dni_validation.status` null/`'processing'`)
+   — there is no dedicated typed status column, so this predicate effectively
+   *is* the spec. Worth a product-intent check before relying on it further.
+5. **`service.paid_unscheduled` caps at 500 pending lines per org per tick**
+   (vs. the shared query's own 200-line default) rather than paging — an org
+   exceeding that has a bigger operational problem than this reminder, but
+   the cap is a `shortcut:` worth raising if it's ever actually hit.
+6. **Fixed-locale (Spanish) notification text**, same as Slice 2's rules and
+   for the same reason (no per-call Paraglide locale override, no request
+   locale on a cron tick). The task brief that produced this slice assumed
+   Paraglide en+es titles; the actual Slice 2 code it was supposed to mirror
+   already uses fixed strings — this slice follows the real codebase pattern
+   instead of the brief.
