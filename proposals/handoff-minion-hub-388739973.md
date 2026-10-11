@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-388739973
 title: Handoff marker — src/server/services/inbox/daily-feed.service.ts (minion_hub)
-status: draft
+status: review
 created: 2026-10-11
 updated: 2026-10-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-b09a8df58dcf
 ---
 
 # Handoff marker — src/server/services/inbox/daily-feed.service.ts

@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-4116242517
 title: Handoff marker — src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)
-status: draft
+status: review
 created: 2026-10-11
 updated: 2026-10-11
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-bb9cd7740cf0
 ---
 
 # Handoff marker — src/server/services/inbox/rules/shift-open-after-hours.ts
