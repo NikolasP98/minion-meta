@@ -1,15 +1,14 @@
 ---
-id: handoff-minion-hub-2249203609
-title: Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)
-status: review
-created: 2026-08-22
+id: handoff-minion-hub-943681295
+title: Handoff marker — src/routes/(app)/pos/history/+page.server.ts (minion_hub)
+status: draft
+created: 2026-10-11
 updated: 2026-10-11
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: 2026-09-26-hub-custom-columns-next-phases
 ---
 
-# Handoff marker — src/lib/components/data-table/DataTable.svelte
+# Handoff marker — src/routes/(app)/pos/history/+page.server.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
@@ -27,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-11)
 
-- `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:759` — add global server custom-property sort/filter/export planning;
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L759
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/history/+page.server.ts:13` — plain limit, newest-first — no server pagination. Fine at
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/history/+page.server.ts#L13
