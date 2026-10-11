@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T01:52:50.530Z",
+	"generatedAt": "2026-10-11T02:17:23.556Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8682,14 +8682,14 @@
 			"scoredAt": "2026-10-10T18:21:47.494Z"
 		},
 		{
-			"key": "pr:minion_hub#475",
+			"key": "pr:minion_hub#477",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#475 feat(hub): in-app inbox with scope tiers — Slice 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/475",
-			"sourceUpdatedAt": "2026-10-11T01:27:46Z",
-			"sourceFingerprint": "4ad3ad95aa16cce6f07c59fae8bf7295072e63bb7955f9315f1881e398379b73",
+			"title": "#477 feat(hub): inbox Slice 2 — evaluator runner + overdue/unpaid/after-hours rules",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/477",
+			"sourceUpdatedAt": "2026-10-11T02:05:50Z",
+			"sourceFingerprint": "34da080c601420c67a170e1f3bd5137f18a74cc305b35d11a4a7c999d9eed192",
 			"score": 51,
 			"band": "medium",
 			"axes": {
@@ -8699,19 +8699,23 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 5
+				"implementation": 8
 			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Slice 1 of a larger spec is well-described but self-reports unverified QA stack and untested RLS migration.",
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#475",
+				"pr:minion_hub#476",
+				"pr:minion-meta#778"
+			],
+			"rationale": "Evaluator-rules slice with the strongest implementation evidence, including a real bug found and fixed via live QA Postgres validation.",
 			"evidence": [
-				"bun run qa:status showed local QA stack down, 110 pending migrations",
-				"RLS-contract integration test only type-checked, never executed"
+				"Found + fixed partial-unique-index ON CONFLICT bug via live QA Postgres",
+				"vitest 18/18 boundary tests passed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T01:52:08.718Z"
+			"scoredAt": "2026-10-11T02:17:23.346Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -9285,6 +9289,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:09:02.141Z"
+		},
+		{
+			"key": "pr:minion_hub#475",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#475 feat(hub): in-app inbox with scope tiers — Slice 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/475",
+			"sourceUpdatedAt": "2026-10-11T02:08:00Z",
+			"sourceFingerprint": "b8cea28ca4c627dd4294a7bf4fa31da6a4c9c4e1a50c48c7fa783f996dd15af5",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#476",
+				"pr:minion_hub#477",
+				"pr:minion-meta#778"
+			],
+			"rationale": "Foundational inbox slice that #476/#477 stack on, with gates passing but RLS integration test unverified against live Postgres.",
+			"evidence": [
+				"bun run check 0 errors; vitest 67/67 passed",
+				"RLS-contract integration test only type-checked, never executed; QA stack reported down"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T02:17:23.346Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
@@ -12354,38 +12394,6 @@
 			"scoredAt": "2026-10-06T07:51:44.462Z"
 		},
 		{
-			"key": "pr:minion_hub#474",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#474 feat(pos): right-click context menu on calendar events",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/474",
-			"sourceUpdatedAt": "2026-10-11T01:47:26Z",
-			"sourceFingerprint": "0bcf7401e360492af1ef0c4bec528fae0e485dcf4226ee9c7ff99cd15b4889eb",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified feature PR with explicit owner ask, conditional UX rules, and described test/file changes ready to land.",
-			"evidence": [
-				"owner ask quoted 2026-10-10 with explicit context-menu conditional rules",
-				"unscheduleVisit extraction described as one atomic txn across files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T01:52:08.718Z"
-		},
-		{
 			"key": "pr:minion-base#41",
 			"kind": "pr",
 			"stage": "development",
@@ -15231,6 +15239,42 @@
 			"scoredAt": "2026-10-07T03:51:09.743Z"
 		},
 		{
+			"key": "pr:minion-meta#778",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#778 docs(spec): in-app inbox with scope tiers (reminders, daily feed, changelog, extras)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/778",
+			"sourceUpdatedAt": "2026-10-11T02:04:24Z",
+			"sourceFingerprint": "012111f0940cc112545a2005a7a2d6136b3e899f503d1b84b76e75a722f0cd8f",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#475",
+				"pr:minion_hub#476",
+				"pr:minion_hub#477"
+			],
+			"rationale": "Spec PR underpinning the three stacked hub implementation slices, best tracked as one inbox initiative.",
+			"evidence": [
+				"Owner ask 2026-10-10, spec covers 4 hub slices",
+				"status open; referenced directly by #475/#476/#477"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T02:17:23.346Z"
+		},
+		{
 			"key": "proposal:2026-08-23-hub-archived-warehouse-submit-guard",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16971,38 +17015,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T04:51:35.446Z"
-		},
-		{
-			"key": "pr:minion-meta#778",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#778 docs(spec): in-app inbox with scope tiers (reminders, daily feed, changelog, extras)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/778",
-			"sourceUpdatedAt": "2026-10-11T00:28:45Z",
-			"sourceFingerprint": "14634f85557d1ea9d11961ab66232e8f483886d1355d391aac8c9b06d38723f2",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A docs-stage spec PR for a multi-slice inbox feature needs further scoping before paid implementation work is actionable.",
-			"evidence": [
-				"title: docs(spec): in-app inbox with scope tiers",
-				"summary: Spec: 4 hub slices — inbox + feed UI, evaluator rules, changelog SDLC pipeline, operational extras"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:51:10.795Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
@@ -19142,6 +19154,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T14:22:30.261Z"
+		},
+		{
+			"key": "pr:minion_hub#476",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#476 feat(hub): app changelog pipeline — release-notes workflow, /api/releases, /changelog (spec S3)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/476",
+			"sourceUpdatedAt": "2026-10-11T02:01:16Z",
+			"sourceFingerprint": "c09d9e48039a7f8e2d47194b27fe229f737f8c2bf0e0a9d7110b313db1b5ceac",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#475",
+				"pr:minion_hub#477",
+				"pr:minion-meta#778"
+			],
+			"rationale": "Changelog-pipeline slice stacked on #475, gated and dry-run verified, part of the same inbox initiative.",
+			"evidence": [
+				"bun run check 0 errors; vitest 32/32 passed",
+				"dry-run over 39 real merged PRs produced correct grouping output"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T02:17:23.346Z"
 		},
 		{
 			"key": "spec:2026-08-18-minion-base-mobile-hitl-ux-plan",
@@ -31754,6 +31802,38 @@
 			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
+			"key": "run:minion_hub#38104506194",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38104506194",
+			"sourceUpdatedAt": "2026-10-11T02:14:43Z",
+			"sourceFingerprint": "bca88c3271938b34bf6a0804445cec1bee049311684b46fdad21b48a5f8c58ec",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "In-progress CI run on a master push is routine automated status, not a standalone actionable goal.",
+			"evidence": [
+				"status in_progress",
+				"push on master trigger"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T02:17:23.346Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -31883,6 +31963,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T18:21:18.483Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Already-merged routine test-scope commit with no failure signal, not an actionable goal.",
+			"evidence": [
+				"Merge pull request #313 ... test(tools): scope domain registry integration",
+				"status unknown, no indication of deployment failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T02:17:23.346Z"
 		},
 		{
 			"key": "issue:minion-meta#765",
