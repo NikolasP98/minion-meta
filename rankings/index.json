@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T15:23:42.009Z",
+	"generatedAt": "2026-10-11T15:32:25.999Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1090,6 +1090,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:23:35.582Z"
+		},
+		{
+			"key": "pr:minion_hub#484",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#484 test(routes): guard against per-route Vercel config exports (function split → /en|/es 404)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/484",
+			"sourceUpdatedAt": "2026-10-11T15:30:10Z",
+			"sourceFingerprint": "f1b0797c5b9f4d8257663630624a6bf0bc71288920b230610c2ddf18c3edc321",
+			"score": 77,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a scoped regression test closing a repeating production incident that 404s every locale-prefixed URL.",
+			"evidence": [
+				"prod incidents cited on 2026-07-16 and 2026-10-11 causing /en|/es 404s",
+				"follow-up PR to hotfix #483 adds a source sweep asserting no per-route config export"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-gateway-lifecycle-spec",
@@ -8013,6 +8045,38 @@
 			"scoredAt": "2026-10-11T00:24:40.558Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2303234027",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2303234027.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "2c3755a53d55af13267c810673179c5bc259073a48e28d49a9ecee37396b18c2",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Four related open ends against spec §4.1 in one drawer component, including a possibly client-only permission gate, warrant a focused spec pass before execution.",
+			"evidence": [
+				"marker at line 392: plan button gated on pos:create with unclear server-side enforcement",
+				"three other markers reference spec §4.1 for missing booking/POS features in the same file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-f696097",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12858,41 +12922,6 @@
 			"scoredAt": "2026-10-10T00:27:18.902Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2303234027",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2303234027.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "831044f75bae888e95fba385eba59b98ebed62e2a1830efbe6e02971b3d12a41",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-1194287278"
-			],
-			"rationale": "Review-stage handoff ledger ties into POS integration spec §4.1 gaps and a possibly incomplete server-side authorization check on the plan action.",
-			"evidence": [
-				"\"the plan button is gated on pos:create, but server-side...\"",
-				"spec §4.1 lists reschedule, charge in POS as missing",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T02:21:38.333Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3443913000",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15561,38 +15590,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:38:18.941Z"
-		},
-		{
-			"key": "run:minion_hub#38150897540",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "Release notes",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38150897540",
-			"sourceUpdatedAt": "2026-10-11T15:21:15Z",
-			"sourceFingerprint": "ef7436a1449212cc126ae1bf573708c562a1d783e41a547e80f5269b61f73fae",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failed release-notes CI run on master is a real but narrow-impact break that needs log investigation before a concrete fix can be scoped.",
-			"evidence": [
-				"status failure on push to master, updated 2026-10-11T15:21:15Z",
-				"no diagnostic detail beyond workflow name and trigger in the catalog entry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T15:23:41.808Z"
 		},
 		{
 			"key": "issue:minion-meta#306",
@@ -20367,6 +20364,38 @@
 			"scoredAt": "2026-10-05T12:00:37.623Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1643634086",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1643634086.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "2df3656fa4bcb59066b955132779575437f2f6d8177051bb352ddfb6f1e68b53",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Two real event-handling bugs in a shared Dialog component need spec scoping before they form a bounded executable goal.",
+			"evidence": [
+				"marker at Dialog.svelte:129 on native input/change event limitation",
+				"marker at Dialog.svelte:211 on reopened-mid-exit close handling"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2131866440",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20466,37 +20495,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T12:00:37.623Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-348234352",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-348234352.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "8984cf6e473d26e67fb2f61200a1f1e3d6e8ddff6f5d6226cca1b086a3f9e9ce",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A column-handling gap for adjustment/transfer stock entries touches inventory data but the marker's scope is only partially visible.",
-			"evidence": [
-				"entries/new/+page.svelte:801 references adjustment/transfer entries needing a 5-column layout"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:26:48.647Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-86254ea",
@@ -21161,6 +21159,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T05:26:20.196Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2249203609",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2249203609.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "f8d2b7f4e07538bfa8cbcc577fa7b2d66a44862faa2c834cbceab7af1d805b59",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A shared DataTable feature request for server-side sort/filter/export needs proper spec scoping before it is actionable.",
+			"evidence": [
+				"single marker at DataTable.svelte:760 about adding global server custom-property sort/filter/export planning"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1883922325",
@@ -26125,37 +26154,6 @@
 			"scoredAt": "2026-10-09T19:21:47.828Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1643634086",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1643634086.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "10ee9a92f6052cddd7e865adbddba7d66fb35a2ed32eff33bf1e7fdbff993f68",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Two minor interaction edge cases in a widely-used foundation dialog are low urgency but still need scoping.",
-			"evidence": [
-				"markers on custom input/change event handling and animation cancel on reopen mid-exit"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:24:40.558Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2437241475",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26187,38 +26185,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:25:50.614Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2778272735",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2778272735.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "9b33d3ae9a8c7059fd93ae473e5a1cbf9fbe50ac40ede0d61f599e7b008bada6",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two concrete markers in the same CRM contact page (broken mailto link, tag ordering vs a named spec) are bounded and verifiable fixes.",
-			"evidence": [
-				"+page.svelte:767 notes custom fields lose their mailto link",
-				"+page.svelte:892 cites spec 2026-09-28 Bundle F for tag placement"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:26:48.647Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3542676477",
@@ -27241,38 +27207,6 @@
 			"scoredAt": "2026-10-11T00:24:40.558Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2249203609",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/data-table/DataTable.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2249203609.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "ad9304011773fccf763342fb259d74cf7052c4b8b1007e9a8d02b78e3b78d34c",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Single marker is only a planning note for future server-side sort/filter/export work, not yet scoped into a concrete outcome.",
-			"evidence": [
-				"marker text: 'add global server custom-property sort/filter/export planning'",
-				"status review with only one marker in the file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T01:52:08.718Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2634414043",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27340,6 +27274,38 @@
 			"scoredAt": "2026-10-11T00:26:48.647Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2778272735",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2778272735.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "280d24c8bb5e024a7930fbad173bd7a667445cc1fb3662603fadd2264d7a0e8c",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Two minor UI polish gaps against a named spec need scoping before they are executable.",
+			"evidence": [
+				"marker at line 767: custom fields lose mailto link",
+				"marker at line 893: spec 2026-09-28 Bundle F wants tags positioned last"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3234352348",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27371,6 +27337,37 @@
 			"scoredAt": "2026-10-11T00:26:48.647Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-348234352",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-348234352.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "94e37a2d73caac49a6d9ae8aabbb02a70a6d0d8fef75fef0f5bb42b2d4a6b9fa",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A single marker describing a missing column layout for adjustment/transfer entries needs spec scoping before execution.",
+			"evidence": [
+				"marker at line 808 describes a 5-column layout need for adjustment/transfer entries"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3867107013",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27400,38 +27397,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:27:17.124Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "0d6c50b2cc3fcc3c8e3500306ed157b2de79fe945eb5f80cc8067264511c4368",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This is a self-referential handoff marker pointing at dozens of unrelated TODO lines inside the rankings/index.json file itself, so it bundles many disparate open ends without a coherent single scope.",
-			"evidence": [
-				"Filed automatically by the factory handoff-ledger sweep",
-				"18+ distinct marker lines spanning unrelated topics (race windows, DOB data, RBAC, schema) in rankings/index.json"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T13:21:08.872Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-277751425",
@@ -28276,6 +28241,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T20:49:12.337Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
+			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
+			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary is only a merged test-scope commit message with no indicated deployment failure, so it is not a discrete actionable goal.",
+			"evidence": [
+				"summary is a merge of PR #313, a test change scoping the domain tool registry",
+				"status is unknown with no failure signal reported"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -31880,6 +31877,37 @@
 			"scoredAt": "2026-10-05T12:00:37.623Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-191614546",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/stock/entries/[id]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-191614546.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "5a669a0e28e13f00ea162bb3113a04b702bbc7e94758ab58f5834d4dc9c5e019",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The marker's own truncated text suggests the overflow issue it names was already fixed elsewhere, indicating it is likely stale.",
+			"evidence": [
+				"marker text reads 'the sideways-page overflow this card showed was fixed in'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2131986185",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32409,14 +32437,14 @@
 			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
-			"key": "run:minion_hub#38150897577",
+			"key": "run:minion_hub#38151462743",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38150897577",
-			"sourceUpdatedAt": "2026-10-11T15:21:06Z",
-			"sourceFingerprint": "68520cc2c46e9f6c6809ca4e6b52edc1bec3a8e4a81730f945cbf872e9e5d300",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38151462743",
+			"sourceUpdatedAt": "2026-10-11T15:29:18Z",
+			"sourceFingerprint": "4227aa30f8025b2f2e9cb00dd0b429dcccc2fa53541c44e928072404e53a3fa3",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -32428,17 +32456,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This CI run is still in_progress with no failure or actionable signal yet, so there is nothing to act on as a goal.",
+			"rationale": "An in-progress CI run on a push to master is routine operational status with no failure signal, not a discrete ranking goal.",
 			"evidence": [
-				"status in_progress on push to master",
-				"no error or outcome data present"
+				"status in_progress triggered by push on master",
+				"no failure or actionable outcome reported"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T15:23:41.808Z"
+			"scoredAt": "2026-10-11T15:32:25.815Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
@@ -32634,37 +32662,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:23:25.274Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-191614546",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/stock/entries/[id]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-191614546.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "69d484706972f9cef0ba50a9f6015e6faa7d4c47ec608b0d3fe140650ca031c0",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The marker's truncated reference to a fix elsewhere is ambiguous, so it's unclear whether this open end is already resolved.",
-			"evidence": [
-				"marker: 'the sideways-page overflow this card showed was fixed in'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T00:24:40.558Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2366728732",
@@ -33605,6 +33602,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:23:25.274Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "d5a8ac4bae6a8e44d49dc69fc6e249b4f5fcd7a6c167ea809c1707ee3f332f95",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The quoted markers point into the rankings data file itself and read like prior rationale/evidence text rather than real source-code TODOs, indicating a sweep false positive.",
+			"evidence": [
+				"markers point into rankings/index.json, a generated data file, not application source",
+				"quoted marker text matches rationale-style sentences rather than code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T15:32:25.815Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
