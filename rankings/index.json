@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-11T04:03:43.824Z",
+	"generatedAt": "2026-10-11T04:23:51.913Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1999,6 +1999,39 @@
 			"scoredAt": "2026-10-05T02:27:30.587Z"
 		},
 		{
+			"key": "spec:2026-10-10-hub-inbox-notifications-reminders-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "In-app inbox with scope tiers — reminders (overdue, unpaid, after-hours shifts, daily feed), app changelog, operational extras",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-10-hub-inbox-notifications-reminders-spec.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "e240b7470be98cf6c6fcef1571349473a3ecbbeac59be1e31cba8470cf52f495",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Actively implementing core inbox spec with clear invariants and a defined delta-slice table already underway.",
+			"evidence": [
+				"status: implementing",
+				"DELTA table defines D1 migration slice S1",
+				"AS-IS notes no business-hours table exists yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
+		},
+		{
 			"key": "pr:minion_hub#340",
 			"kind": "pr",
 			"stage": "development",
@@ -2892,6 +2925,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T15:51:34.876Z"
+		},
+		{
+			"key": "proposal:2026-10-10-hub-inbox-notifications-reminders",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "In-app inbox with scope tiers — reminders, daily feed, app changelog, operational extras",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-inbox-notifications-reminders.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "240eeabd04da3f04ff2d0243b2c94fec9afc2bb97fd68f8ffb1591b310c96afc",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Slice 1 of the owner-requested inbox feature is implemented on a branch with a detailed spec and documented open ends, ready for Slice 2 work.",
+			"evidence": [
+				"Slice 1 implemented on branch feat/inbox-scope-tiers (draft PR)",
+				"Not verified against a live database in this session",
+				"Spec exists at specs/2026-10-10-hub-inbox-notifications-reminders-spec.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -3986,6 +4052,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:22:26.504Z"
+		},
+		{
+			"key": "proposal:ci-minion_hub-release-notes",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Release notes on minion_hub master",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion_hub-release-notes.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "29f4fad61f9b91266043b74c5d0c00a98416a8dbc6ac2ca57a5c72699a85dedd",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The release-notes workflow fails with a 401 on every master push, blocking the changelog pipeline, with a diagnosis already pointing to the likely auth-header fix.",
+			"evidence": [
+				"POST https://hub.minion-ai.org/api/releases failed: 401 Authentication required",
+				"scripts/ops/release-notes.mjs:150",
+				"checked 2026-10-11"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-auto-response",
@@ -9457,6 +9556,38 @@
 			"scoredAt": "2026-10-07T05:51:52.914Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-e7566401f3cf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/inbox.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e7566401f3cf.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "432b4164ad6e9add8bf34b413641062ef25153513feca6e0ba86ee27f2530d72",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A timestamp-tie pagination bug can silently skip inbox rows for users, but the auto-diagnosis never completed its analysis so the fix scope is unverified.",
+			"evidence": [
+				"marker: ties at identical microsecond timestamps could skip a row",
+				"diagnosis body contains only unexecuted tool-call fragments, no concrete fix direction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-site-d5d1a8c9d6a9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12728,6 +12859,40 @@
 			"scoredAt": "2026-10-10T09:23:57.106Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-39a05376c28e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/daily-feed.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-39a05376c28e.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "1724c7ab6a4c19bae20b13ab0ebab5d98c9ed1c76333590852ea428c8947d66d",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b09a8df58dcf"
+			],
+			"rationale": "Diagnosis itself states the business-hours/timezone gap needs a spec task rather than a hotfix since it touches shared schema across all consumers.",
+			"evidence": [
+				"touches shared schema in @minion-stack/db",
+				"diagnosis: 'This should be a spec task, not a hotfix'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-66d88ed81830",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12792,6 +12957,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T07:21:38.942Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b09a8df58dcf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/daily-feed.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b09a8df58dcf.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "598c2827c633b59145e026e8db31217b94e99d213a2fc7fc7acd71b8d24a3364",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-39a05376c28e"
+			],
+			"rationale": "Same file daily-feed.service.ts carries both this per-booking granularity gap and the business-hours TODO; best resolved as one goal.",
+			"evidence": [
+				"file src/server/services/inbox/daily-feed.service.ts",
+				"diagnosis: refactor to iterate over individual Booking records"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
 		},
 		{
 			"key": "spec:2026-10-07-readiness-date-range-menu-keyboard-spec",
@@ -14779,6 +14978,38 @@
 			"scoredAt": "2026-10-08T06:51:57.603Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/state/features/notifications.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b2d5d528651.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "a9001eec8b7800cd54a713e2ad307d5e75b4666626db3610be02658345ce7e70",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Browser-local-date guard key causes notification dedup inconsistency across timezones for multi-org users, a real bug with a bounded fix.",
+			"evidence": [
+				"guard key uses the BROWSER's local date, not the org's",
+				"diagnosis suggests passing org canonical timezone or using UTC"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9b86db24576e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15199,41 +15430,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:38:18.941Z"
-		},
-		{
-			"key": "run:minion_hub#38110236555",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "Release notes",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38110236555",
-			"sourceUpdatedAt": "2026-10-11T04:01:20Z",
-			"sourceFingerprint": "219d066fc396a46fb407b39c749b4ed4e89a999641a8e433500ed87bfeb41af5",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion_hub#38110236501"
-			],
-			"rationale": "A failed Release notes workflow on a master push signals a problem but lacks any error detail needed to size or assign work.",
-			"evidence": [
-				"title: Release notes",
-				"status: failure",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T04:03:43.626Z"
 		},
 		{
 			"key": "issue:minion-meta#306",
@@ -16920,40 +17116,6 @@
 			"scoredAt": "2026-10-06T04:51:35.446Z"
 		},
 		{
-			"key": "pr:minion-meta#778",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#778 docs(spec): in-app inbox with scope tiers (reminders, daily feed, changelog, extras)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/778",
-			"sourceUpdatedAt": "2026-10-11T03:33:17Z",
-			"sourceFingerprint": "8e8c5b0406d3755a2721d55e747a73ecc4fd1de2ee398a7e07c1ec081fd3d9c2",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#479"
-			],
-			"rationale": "This is the governing spec for #479 whose implementation is already complete and verified, so merging the spec is now a low-risk formality to close the SDLC chain.",
-			"evidence": [
-				"spec for meta #778 referenced directly by pr:minion_hub#479",
-				"four stacked drafts rebased per this spec"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T03:51:36.852Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17219,6 +17381,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:26:48.647Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-388739973",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/inbox/daily-feed.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-388739973.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "b0ab218d40cbbdcd9823dd1a5508a853eedaa3a63c90a74325b384a034382429",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Lack of an org-level timezone/business-hours table is a known architecture gap affecting daily-feed correctness for orgs outside the America/Lima default.",
+			"evidence": [
+				"no org business-hours/timezone table exists yet (AS-IS)",
+				"per-booking check, not the groupId-merged 'visit'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2769d3127d2e",
@@ -20387,6 +20581,40 @@
 			"scoredAt": "2026-10-07T06:52:29.491Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-563d320153c1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/visit-unpaid.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-563d320153c1.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "7552806153e963a41f1a70dd5fb5084597f9ed1e15170e3ba4456fa2cb7b6729",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-bd7700d5dd6a"
+			],
+			"rationale": "Same file visit-unpaid.ts carries two open TODOs (deep-link param and test coverage) that should be resolved together.",
+			"evidence": [
+				"file src/server/services/inbox/rules/visit-unpaid.ts",
+				"marker references appointment-overdue.ts same unwired deep-link param"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-5ecd8380b71c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20516,6 +20744,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T00:21:14.794Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d5e424e20df5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d5e424e20df5.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "d768c00ee5243d2212a7a5450bfc29f21b235adc0472ee1b2d8b5e76a86855b0",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-bb9cd7740cf0"
+			],
+			"rationale": "Same file as bb9cd7740cf0; the unwired ?shift= deep-link param is a small, well-scoped fix that should be triaged alongside that file's other TODO.",
+			"evidence": [
+				"?shift= deep-link param is not wired into /pos/shifts yet",
+				"diagnosis estimates ~10-15 line change"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
@@ -21994,6 +22256,37 @@
 			"scoredAt": "2026-10-11T01:52:08.718Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-3240807164",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/inbox/rules/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3240807164.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "24087207a8728a56c2e05ae7bd2235193da88e6b322ff281813000af9ec0c86d",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An entire spec Slice 4 extra rule (WhatsApp logged-out notification) is unimplemented, a scope gap rather than a quick fix.",
+			"evidence": [
+				"channel.whatsapp_logged_out (spec Slice 4) is SKIPPED — no"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-379939979",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22509,6 +22802,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T05:21:59.724Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-bd7700d5dd6a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/visit-unpaid.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bd7700d5dd6a.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "e31712cf60aa29b81bb29e8e83fd6cd945dd6e6eba3f37cb7df44cbf0ae95f3f",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-563d320153c1"
+			],
+			"rationale": "Same file visit-unpaid.ts needs both this integration-test gap and the deep-link fix resolved together.",
+			"evidence": [
+				"file src/server/services/inbox/rules/visit-unpaid.ts",
+				"gap is lack of integration tests beyond isolated isStaleCompleted/isVisitFunded units"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d43d362714c8",
@@ -24263,6 +24590,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T05:21:59.724Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-bb9cd7740cf0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bb9cd7740cf0.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "03a952f427e2dfde8a90b5a0836153c018ba225a335982534dd5350058927f5e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d5e424e20df5"
+			],
+			"rationale": "The auto-diagnosis is corrupted tool-call fragments rather than real analysis, but the file matches the other shift-open-after-hours TODO so they should be triaged together.",
+			"evidence": [
+				"diagnosis body contains raw function_calls/invoke fragments, not an analysis",
+				"same file src/server/services/inbox/rules/shift-open-after-hours.ts as d5e424e20df5"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
@@ -27087,6 +27448,38 @@
 			"scoredAt": "2026-10-05T04:21:00.335Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-99075985a806",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-99075985a806.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "386a5dd00c76e9ebb07ad6f0810b7f626fbd1cf2d014f83c63c26ea7b9ff9a39",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The skipped whatsapp-logged-out case is low urgency right now since the spec's own AS-IS notes WhatsApp on the gateway is currently down.",
+			"evidence": [
+				"WhatsApp/Telegram on the FACES gateway are down (spec AS-IS)",
+				"marker: channel.whatsapp_logged_out (spec Slice 4) is SKIPPED"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-ae985ee3170a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27564,38 +27957,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T20:49:12.337Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/7240f4eeb1114e05df9dfe79ce1c0dbc73d3117a",
-			"sourceUpdatedAt": "2026-10-10T18:16:26Z",
-			"sourceFingerprint": "d4293bc1d89a6c542161f98ec9d8bf76b80f9e76b8c4e99f803e3daa542ece60",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine deployment-health record of an already-merged test-scoping PR with no stated problem or follow-up needed.",
-			"evidence": [
-				"summary: Merge pull request #313 ... test(tools): scope domain registry integration",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T04:03:43.626Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -28895,6 +29256,42 @@
 			"scoredAt": "2026-10-11T00:22:12.060Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2083867420",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/inbox/rules/visit-unpaid.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2083867420.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "479f42db4351fe57368ed0dd4b8fb020c73eda8df3638e715b2bbadbb26f4364",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-3288561461",
+				"proposal:handoff-minion-hub-4116242517",
+				"proposal:postmerge-minion-hub-152748b32645"
+			],
+			"rationale": "Shares the same unwired deep-link query-param gap as appointment-overdue.ts and shift-open-after-hours.ts, better fixed once across all three files.",
+			"evidence": [
+				"see appointment-overdue.ts — same unwired deep-link param",
+				"visit-unpaid.ts:126"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2746481724",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28955,6 +29352,78 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:26:48.647Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-3288561461",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/inbox/rules/appointment-overdue.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3288561461.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "6e62b22d7381dbe264cc0937e7ca0a8981ead77920f469065442f286a187d34e",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-152748b32645",
+				"proposal:handoff-minion-hub-2083867420",
+				"proposal:handoff-minion-hub-4116242517"
+			],
+			"rationale": "Same ?booking= deep-link gap independently re-filed by the post-merge discovery sweep, and shares the pattern with visit-unpaid.ts and shift-open-after-hours.ts.",
+			"evidence": [
+				"?booking= deep-link query param is not wired into the",
+				"duplicate finding also filed as postmerge-minion-hub-152748b32645"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-4116242517",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4116242517.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "e2d9ed6764ccf4974f3cfedbfe31bdb1909d9e59f97d830b5b30a1cceece69f5",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-3288561461",
+				"proposal:handoff-minion-hub-2083867420",
+				"proposal:postmerge-minion-hub-152748b32645"
+			],
+			"rationale": "Carries the same unwired deep-link param gap as appointment-overdue.ts and visit-unpaid.ts, best resolved as one cross-file fix.",
+			"evidence": [
+				"?shift= deep-link param is not wired into /pos/shifts yet",
+				"same gap as visit-unpaid.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-732128239",
@@ -29019,38 +29488,6 @@
 			"scoredAt": "2026-10-11T00:28:30.108Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "b2ef086bac0e1fd9be556d1150a7817cae52f1b10403acd8578714ff85fb57aa",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The flagged file is the generated rankings/index.json data store, and the quoted 'markers' are disparate rationale/evidence fragments from unrelated past entries rather than genuine TODO(handoff) code comments, so the proposal needs to be reframed around the sweep's misclassification rather than resolved marker-by-marker.",
-			"evidence": [
-				"18+ marker lines span unrelated finance/HR/scheduling/discount topics inside rankings/index.json",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T02:21:38.333Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29113,6 +29550,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T22:51:08.035Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-152748b32645",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/appointment-overdue.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-152748b32645.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "c23e4c7ffd0d82d29346461910c172d2ad7744595d00087ffceabe016c565401",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-3288561461",
+				"proposal:handoff-minion-hub-2083867420",
+				"proposal:handoff-minion-hub-4116242517"
+			],
+			"rationale": "Duplicate filing, via post-merge discovery, of the same appointment-overdue.ts deep-link gap already tracked by the handoff-sweep proposal and the broader cross-file pattern.",
+			"evidence": [
+				"TODO(handoff): ?booking= deep-link query param is not wired into the",
+				"merged PR #479"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-755c81782da8",
@@ -31666,6 +32139,38 @@
 			"scoredAt": "2026-10-07T21:22:27.987Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c9369d818ed7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/stock-low.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c9369d818ed7.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "9441f5c465377b18f25c2e1fa5e3e8271fc6a33fffd15e0c59d124e86ad22b91",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, low-risk DRY cleanup to prevent future drift between duplicated reorder-threshold predicates.",
+			"evidence": [
+				"duplicates the b.qty <= i.reorder_level predicate",
+				"fix is extracting a single shared helper"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:23:51.709Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-cb4eec61bb4f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32020,6 +32525,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:25:50.614Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2418054922",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/inbox/rules/stock-low.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2418054922.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "0dc8a44e66ac1e55dbc52e9f0ea15cf738309b347fdebb86ee7f7f273c387ac2",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Minor duplicated predicate logic flagged for cleanup with no functional defect reported.",
+			"evidence": [
+				"this duplicates the b.qty <= i.reorder_level predicate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2599625050",
@@ -32384,6 +32920,70 @@
 			"scoredAt": "2026-10-05T11:52:03.296Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1020011068",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/inbox/inbox.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1020011068.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "c0962f544216e7a9dd3899942546e6b875a4c16506b939199b8ed3b0a62ff973",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A theoretical pagination tie-break edge case flagged with no evidence it has ever occurred in practice.",
+			"evidence": [
+				"ties at identical microsecond timestamps could skip a row",
+				"No evidence this has ever mattered at this data volume"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-1853653495",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/state/features/notifications.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1853653495.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "a08e6c2ef857c16268e83799117704e498c0ce748fdda0ba7afb4ed88561196b",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The browser-local-date guard is only a best-effort fetch-avoidance cache; the real idempotency guard (server dedupe_key) is already org-timezone-correct.",
+			"evidence": [
+				"guard key uses the BROWSER's local date, not the org's",
+				"client key is only a best-effort fetch-avoidance cache"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-815818272",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32477,40 +33077,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-05T01:55:04.322Z"
-		},
-		{
-			"key": "run:minion_hub#38110236501",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38110236501",
-			"sourceUpdatedAt": "2026-10-11T04:01:09Z",
-			"sourceFingerprint": "a7ddf517b743c09d18d7d74647ccc3d7e248c5c730861b397a7c8b7184d127b8",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion_hub#38110236555"
-			],
-			"rationale": "An in-progress CI run has no completed outcome or details to act on yet.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T04:03:43.626Z"
 		},
 		{
 			"key": "issue:minion-meta#347",
@@ -32931,6 +33497,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:23:25.274Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "5e59117a3c1a14a05c172d7c991b8e7121d26b32fb6cfd43c61fa4b6048f9936",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "These are TODO(handoff)-shaped strings embedded as data inside the generated rankings/index.json file, not actual code defects, so treating them as one resolvable marker is unworkable.",
+			"evidence": [
+				"source: handoff-sweep",
+				"markers point into rankings/index.json, a generated data file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-11T04:22:23.306Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
