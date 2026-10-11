@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-d5e424e20df5
 title: "Post-merge finding — todo-handoff in src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-11
 updated: 2026-10-11
 repos: [minion-hub]
