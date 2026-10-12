@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-12)
 
-- `NikolasP98/minion_hub@master src/routes/api/pos/settings/+server.ts:76` — the confirmed root cause (QA-stack app logs) was
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/settings/+server.ts#L76
+- `NikolasP98/minion_hub@master src/routes/api/pos/settings/+server.ts:80` — the confirmed root cause (QA-stack app logs) was
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/pos/settings/+server.ts#L80

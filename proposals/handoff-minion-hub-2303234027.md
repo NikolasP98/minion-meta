@@ -27,11 +27,11 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-12)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:384` — the drawer still shows no LINKED POS TICKETS — spec §4.1
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L384
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:388` — spec §4.1 also lists reschedule, "charge in POS" and "book the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L388
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:392` — the plan button is gated on pos:create, but server-side
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L392
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:1693` — the consumption dialog confirmed stock lines for the LEAD
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L1693
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:402` — the drawer still shows no LINKED POS TICKETS — spec §4.1
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L402
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:406` — spec §4.1 also lists reschedule, "charge in POS" and "book the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L406
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:410` — the plan button is gated on pos:create, but server-side
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L410
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingDetailDrawer.svelte:1711` — the consumption dialog confirmed stock lines for the LEAD
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingDetailDrawer.svelte#L1711
