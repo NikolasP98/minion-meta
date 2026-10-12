@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-ai-1739301354
 title: Handoff marker — scripts/test-parallel.mjs (minion-ai)
-status: draft
+status: review
+duplicate_candidate: 2026-08-22-ci-compute-savings-bun-test-roadmap
 created: 2026-10-12
 updated: 2026-10-12
 repos: [minion-ai]
