@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-12T07:22:12.807Z",
+	"generatedAt": "2026-10-12T07:40:55.366Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -796,6 +796,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-09-15T14:58:39.472Z"
+		},
+		{
+			"key": "proposal:2026-10-12-hub-micro-debloat",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub on a Supabase Micro — debloat ledger (background load, statements per page, shared GET transaction)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-micro-debloat.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "5acd5f1deb3674f859851040dc5bccd6743be314a0e155e98d2a64f0a87cc723",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is an active, owner-flagged production performance problem with a well-evidenced AS-IS/TO-BE/DELTA, four PRs already shipped with measured gains, and a clear remaining open-ends ledger.",
+			"evidence": [
+				"owner: app takes a very long time to load items and pages (2026-10-12)",
+				"4 PRs shipped (492,495,497,498) with measured before/after latency",
+				"catalog still runs 46 real statements - concrete next step named"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T07:40:55.186Z"
 		},
 		{
 			"key": "spec:2026-08-22-factory-dev-staging-daily-production-promotion-spec",
@@ -2377,38 +2410,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:56:17.748Z"
-		},
-		{
-			"key": "pr:minion_hub#498",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#498 perf(hub): one shared org transaction per GET request on POS routes",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/498",
-			"sourceUpdatedAt": "2026-10-12T07:07:01Z",
-			"sourceFingerprint": "a5a048022a776602e7d02469af9dca836f24fb76e0d7e33260c718ba5f47c609",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An already-implemented and measured fix for a real compute-constrained production bottleneck across all POS routes.",
-			"evidence": [
-				"-66.3% round trips on /pos/catalog, byte-identical responses before/after",
-				"Supabase Micro has no compute headroom and owner ruled out upgrade"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T07:22:12.644Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-infra-product-failure-taxonomy",
@@ -9461,6 +9462,39 @@
 			"scoredAt": "2026-10-07T17:22:08.309Z"
 		},
 		{
+			"key": "pr:minion-meta#786",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#786 docs(proposal): pi 1.1.0 upgrade + JEV turn router for the hub assistant",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/786",
+			"sourceUpdatedAt": "2026-10-12T07:37:40Z",
+			"sourceFingerprint": "01c66753395623fd459c23c3e2798ab7a946f3ae36fecd8ca070bee448321658",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A draft proposal with useful measurements (type-error count, token size) but explicitly states spec stage is still required before any dev work starts.",
+			"evidence": [
+				"status: draft, spec stage required before S0",
+				"95 type errors/30 files measured in a throwaway worktree",
+				"hub envelope measured at 14.2K chars/turn"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T07:40:55.186Z"
+		},
+		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13603,38 +13637,6 @@
 			"scoredAt": "2026-10-07T06:53:00.258Z"
 		},
 		{
-			"key": "pr:minion-meta#786",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#786 docs(proposal): pi 1.1.0 upgrade + JEV turn router for the hub assistant",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/786",
-			"sourceUpdatedAt": "2026-10-12T07:02:46Z",
-			"sourceFingerprint": "ec7d9c82d6dd9a9a5f114782a714feca5f3c3fdb2071f721b578e94ac7880a87",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Useful measured exploration of a pi upgrade and router design, but the author explicitly states a spec stage is still required before execution.",
-			"evidence": [
-				"draft status; spec stage required before S0 per summary",
-				"95 type errors across 30 files measured in a throwaway worktree"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T07:22:12.644Z"
-		},
-		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17371,38 +17373,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T04:51:35.446Z"
-		},
-		{
-			"key": "pr:minion-meta#785",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#785 docs(proposal): hub Micro debloat ledger (#492/#495/#497/#498 + 12 open ends)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/785",
-			"sourceUpdatedAt": "2026-10-12T07:00:38Z",
-			"sourceFingerprint": "261dcd100d7424d48d01047dede16594b9de9c3e0f8ff899c8ff35b3867102a3",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A ready-to-merge ledger documenting four already-shipped hub debloat PRs plus open ends, preserving SDLC-contract audit trail.",
-			"evidence": [
-				"ledger for #492/#495/#497/#498 plus 12 open ends",
-				"content already fully drafted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T07:22:12.644Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
@@ -23159,6 +23129,41 @@
 			"scoredAt": "2026-10-08T06:51:57.603Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-1d4b2c73ae7e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/hooks.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1d4b2c73ae7e.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "6cd6b94b96dd7d7c342b2e673301bac988a43f9c82734fa7769d6550b1dc56e1",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-10-12-hub-micro-debloat",
+				"proposal:postmerge-minion-hub-d9632d903381"
+			],
+			"rationale": "This TODO(handoff) from PR #498 is one of the two known limits of the same shared-GET-transaction design already tracked as an open end in the hub-micro-debloat ledger, so it should be folded into that goal rather than tracked separately.",
+			"evidence": [
+				"TODO(handoff) marker in src/hooks.server.ts from merged PR #498",
+				"debloat proposal lists write-inside-joined-GET-load as open end #3 with a TODO(handoff) in hooks.server.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T07:40:55.186Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2e7588be9b25",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23386,6 +23391,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T00:21:14.794Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d9632d903381",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/db/ambient-org-tx.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d9632d903381.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "5d7cf96378bec03b21c8c8a47663095b77a5b775869133e45590e91e6a283898",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-10-12-hub-micro-debloat",
+				"proposal:postmerge-minion-hub-1d4b2c73ae7e"
+			],
+			"rationale": "This is the second TODO(handoff) from the same PR #498 shared-connection design, best resolved together with the sibling TODO and the parent debloat ledger rather than as an isolated fix.",
+			"evidence": [
+				"TODO(handoff) marker in src/server/db/ambient-org-tx.ts from merged PR #498",
+				"concerns single connection serializing concurrent POS GETs, same shared-transaction tradeoff the debloat proposal already documents"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T07:40:55.186Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-de7821f4ab4f",
@@ -28528,38 +28568,6 @@
 			"scoredAt": "2026-10-12T01:56:56.870Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f4c1a235406cb06384fdfe6e2623f4ddb10e0ba0",
-			"sourceUpdatedAt": "2026-10-12T06:20:44Z",
-			"sourceFingerprint": "d19d161f17a6212fb5e357e7a518f3e6c606f73b1dde82d23973cfe34b991fbd",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deploy-health entry only references a merged CI test commit with no stated problem or failure to act on.",
-			"evidence": [
-				"status unknown with no described incident",
-				"summary is just a merged CI test(ci) commit message"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T07:22:12.644Z"
-		},
-		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31192,19 +31200,20 @@
 			},
 			"readiness": {
 				"specification": 3,
-				"implementation": 2
+				"implementation": 1
 			},
-			"confidence": 4,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Transient infra exit-126 failure on an already-successful reconcile run, explicitly diagnosed as safe to retry rather than a real task defect.",
+			"rationale": "The intake's own diagnosis shows the reconcile sweep already succeeded and the only failure was a transient exit-126 runner fault, with retry already recommended, so no further goal action is needed.",
 			"evidence": [
-				"reconcile side effects already landed (bcf4b72..b7d2c65 pushed)",
-				"exit-126, turns=0, permission_denials=0 described as infra/runner fault, not a spec problem"
+				"reconcile sweep completed successfully, side effects already pushed",
+				"downstream claude-provider step failed exit-126, turns=0",
+				"diagnosis explicitly calls this transient/infra, not a spec problem"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T07:21:17.492Z"
+			"scoredAt": "2026-10-12T07:40:55.186Z"
 		},
 		{
 			"key": "issue:minion-meta#543",
@@ -33886,6 +33895,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#38218805147",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38218805147",
+			"sourceUpdatedAt": "2026-10-12T07:37:48Z",
+			"sourceFingerprint": "dc36e028316577e4135eed7060657cff82aad1276e6862840bada9d10d735696",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is routine CI pipeline status for a push to master, not a discrete work item to rank as a goal.",
+			"evidence": [
+				"kind: run, status: in_progress",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T07:40:55.186Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
