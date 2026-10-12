@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-12T18:51:17.909Z",
+	"generatedAt": "2026-10-12T19:21:20.772Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -28933,6 +28933,38 @@
 			"scoredAt": "2026-10-12T01:56:56.870Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f4c1a235406cb06384fdfe6e2623f4ddb10e0ba0",
+			"sourceUpdatedAt": "2026-10-12T06:20:44Z",
+			"sourceFingerprint": "d19d161f17a6212fb5e357e7a518f3e6c606f73b1dde82d23973cfe34b991fbd",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged CI test-hardening commit with no indication of a deployment problem to act on.",
+			"evidence": [
+				"summary is a merge of a CI diagnostics test fix",
+				"status unknown, no failure indicated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T19:21:20.599Z"
+		},
+		{
 			"key": "issue:minion-meta#382",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31732,38 +31764,6 @@
 			"scoredAt": "2026-10-12T15:21:20.383Z"
 		},
 		{
-			"key": "issue:minion-meta#666",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#666 [monitor:unstick] reconcile run bcc267f4 (minion-meta) failed at agent launch, exit-126/turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/666",
-			"sourceUpdatedAt": "2026-09-28T18:17:31Z",
-			"sourceFingerprint": "563480fb542d4af39eaf1a326f8556d9c006c36d0d8c166ad8e6217ea9244ab0",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Log analysis shows the reconcile work fully completed and persisted before a one-off agent-launch fault, with explicit note that no fix is needed.",
-			"evidence": [
-				"log tail shows sweep completed, pushed, and state saved before error",
-				"note states 'no data-level fix needed and nothing appears lost'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T18:51:51.135Z"
-		},
-		{
 			"key": "issue:minion-meta#702",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33148,6 +33148,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T06:51:46.732Z"
+		},
+		{
+			"key": "issue:minion-meta#666",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#666 [monitor:unstick] reconcile run bcc267f4 (minion-meta) failed at agent launch, exit-126/turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/666",
+			"sourceUpdatedAt": "2026-09-28T18:17:31Z",
+			"sourceFingerprint": "563480fb542d4af39eaf1a326f8556d9c006c36d0d8c166ad8e6217ea9244ab0",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The log tail confirms the reconcile sweep fully completed and persisted its output before an infra-level exit-126 agent-launch fault, so there is no data loss or task failure to remediate.",
+			"evidence": [
+				"log shows push and state already persisted before failure",
+				"exit-126/turns=0 indicates agent binary could not execute, a transient host fault not a reconcile defect"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T19:21:20.599Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
