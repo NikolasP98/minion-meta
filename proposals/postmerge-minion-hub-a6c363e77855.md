@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-a6c363e77855
 title: "Post-merge finding — todo-handoff in src/server/services/custom-properties.service.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-12
 updated: 2026-10-12
 repos: [minion-hub]
