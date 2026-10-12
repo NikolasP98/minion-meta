@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-12T14:51:49.980Z",
+	"generatedAt": "2026-10-12T15:21:20.521Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -28865,38 +28865,6 @@
 			"scoredAt": "2026-10-12T01:56:56.870Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f4c1a235406cb06384fdfe6e2623f4ddb10e0ba0",
-			"sourceUpdatedAt": "2026-10-12T06:20:44Z",
-			"sourceFingerprint": "d19d161f17a6212fb5e357e7a518f3e6c606f73b1dde82d23973cfe34b991fbd",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine deployment-health snapshot of an already-merged CI diagnostics-retention commit with no pending action.",
-			"evidence": [
-				"summary: 'Merge pull request #321 ... test(ci): retain bounded Node shard diagnostics'",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T14:51:49.811Z"
-		},
-		{
 			"key": "issue:minion-meta#382",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29581,38 +29549,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T09:23:57.106Z"
-		},
-		{
-			"key": "issue:minion-meta#665",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#665 [monitor:unstick] reconcile proposals run 0ac66fb8 failed (exit-126, turns=0) despite apparent success",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/665",
-			"sourceUpdatedAt": "2026-09-28T14:17:33Z",
-			"sourceFingerprint": "3267402d68cd40eb49d1662d7fd153abf38db11cb45265caa8cad686822de0cf",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted alert text itself shows the reconcile pipeline completed and pushed successfully despite the exit-126 signal, making this a non-actionable monitoring false positive.",
-			"evidence": [
-				"proposals/index.json written (545 proposals) and git push de20de7..2000ad8 succeeded",
-				"exit-126/turns=0 described as isolated to launching the claude provider binary, not a task failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T14:51:52.835Z"
 		},
 		{
 			"key": "issue:minion-meta#722",
@@ -31729,6 +31665,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T14:51:19.851Z"
+		},
+		{
+			"key": "issue:minion-meta#665",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#665 [monitor:unstick] reconcile proposals run 0ac66fb8 failed (exit-126, turns=0) despite apparent success",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/665",
+			"sourceUpdatedAt": "2026-09-28T14:17:33Z",
+			"sourceFingerprint": "3267402d68cd40eb49d1662d7fd153abf38db11cb45265caa8cad686822de0cf",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Monitor intake describes an infra exit-126 on agent launch while the reconcile scaffold itself completed and pushed successfully, so no actionable defect remains beyond an optional host PATH/exec-permission check.",
+			"evidence": [
+				"exit-126 turns=0 (agent process failed to start)",
+				"log tail shows reconcile scaffold completed fully and pushed de20de7..2000ad8"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T15:21:20.383Z"
 		},
 		{
 			"key": "issue:minion-meta#666",
