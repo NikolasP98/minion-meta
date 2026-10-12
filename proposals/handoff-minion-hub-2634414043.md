@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-12)
 
-- `NikolasP98/minion_hub@master src/lib/components/agents/AgentMemoryPanel.svelte:339` — the search box + category pills now live in the DataTable's
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/agents/AgentMemoryPanel.svelte#L339
+- `NikolasP98/minion_hub@master src/lib/components/agents/AgentMemoryPanel.svelte:340` — the search box + category pills now live in the DataTable's
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/agents/AgentMemoryPanel.svelte#L340
