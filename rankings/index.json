@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-12T23:21:11.136Z",
+	"generatedAt": "2026-10-12T23:52:05.891Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1429,6 +1429,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T22:23:20.564Z"
+		},
+		{
+			"key": "pr:minion_hub#502",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#502 fix(crm): guardian add/remove require the CRM edit capability",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/502",
+			"sourceUpdatedAt": "2026-10-12T23:41:18Z",
+			"sourceFingerprint": "90bd4f3d18c78f1f0f73e549e59ebaa23f9f06e04c6c057b7905caca8e1ee0be",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A pre-existing authorization gap let any authenticated CRM viewer add/remove guardians without edit rights, and is now fixed with a verifying test.",
+			"evidence": [
+				"POST and DELETE ran addGuardian/removeGuardian with no capability check",
+				"Surfaced by the automated security review on 2026-10-12; pre-existing on master",
+				"vitest 6/6"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
 		},
 		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
@@ -4302,6 +4335,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T22:51:21.539Z"
+		},
+		{
+			"key": "pr:minion_hub#503",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#503 fix(assistant): show replies even when live chat events are lost",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/503",
+			"sourceUpdatedAt": "2026-10-12T23:41:31Z",
+			"sourceFingerprint": "feb721bccc4ec7eeaf6cbc87d7634d3e4ff1595258e502453609b021d95f7ff3",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Replies silently failing to render in a core assistant flow is confirmed in prod and gains a reload safety net plus diagnostics, though the root cause remains unconfirmed.",
+			"evidence": [
+				"Verified in prod 2026-10-12... root cause still unconfirmed",
+				"gwTrace('chat.event', ...) and chat.guard_timeout added for diagnosis",
+				"vitest 33/33 (gateway/)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-570b9d39c7eb",
@@ -7340,6 +7406,39 @@
 			"scoredAt": "2026-10-11T00:30:17.772Z"
 		},
 		{
+			"key": "pr:minion_hub#509",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#509 feat(assistant): route each message through a JEV classifier and load only the context it needs",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/509",
+			"sourceUpdatedAt": "2026-10-12T23:46:17Z",
+			"sourceFingerprint": "9c4daf3336ff06a516f03661c95c7c88d8ad591e815b89171324c57be73132d3",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Implements a spec'd token-optimization slice for the assistant with a fail-open classifier, PostHog instrumentation, and extensive tests, leaving threshold calibration as a tracked open end.",
+			"evidence": [
+				"optimize that 4k token per turn",
+				"missing key or any error => null (fail-open = today's full envelope)",
+				"vitest 46/46 + route ledgers 104/104"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8333,6 +8432,41 @@
 			"scoredAt": "2026-10-07T17:22:08.309Z"
 		},
 		{
+			"key": "pr:minion_hub#510",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#510 feat(onboarding): replace the agent onboarding with new-org and new-user setup",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/510",
+			"sourceUpdatedAt": "2026-10-12T23:48:26Z",
+			"sourceFingerprint": "f9c8b9884c503ff2fcd883078d44eb90413dc230a695eb6ec7f0d79811e0c7f5",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#788"
+			],
+			"rationale": "Replaces onboarding flow with a schema migration and is draft-gated, so it needs human review before merge despite green gates.",
+			"evidence": [
+				"Draft because it carries a migration",
+				"Migrations apply only on the production Vercel build",
+				"bun run check 0 · vitest green · prettier 0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:52:05.747Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9135,6 +9269,72 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
+		},
+		{
+			"key": "pr:minion_hub#507",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#507 feat(pos): accounts page lists scheduled services still pending invoicing",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/507",
+			"sourceUpdatedAt": "2026-10-12T23:42:07Z",
+			"sourceFingerprint": "9e0f1c983109ec106f63b592d2563ad438b9a817ea3a4a1b382e76d92706cf9b",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An owner-requested billing visibility feature surfaces scheduled-but-uninvoiced work via a single centralized predicate with substantial test coverage, with a documented indexing gap.",
+			"evidence": [
+				"Owner: \"pos/accounts should include scheduled items with pending invoicing\"",
+				"vitest 15/15",
+				"TODO in code: missing (org_id, booking_id) index for the anti-join"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
+		},
+		{
+			"key": "pr:minion_hub#508",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#508 feat(pos): packages grant each included item and never duplicate the base service's consumption",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/508",
+			"sourceUpdatedAt": "2026-10-12T23:42:11Z",
+			"sourceFingerprint": "6979de6b921b2f070d4feae18337e21e5bc7e5d5fde88a934a509e6fe87e386b",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a data-integrity gap where package consumption could duplicate a base service's own consumption, with a dry-run cleanup script and broad test coverage, plus a documented backfill gap.",
+			"evidence": [
+				"blockedPackageConsumption refuses duplicate declarations before any write",
+				"cleanup script dry-run by default, NOT run against prod",
+				"vitest 70/70; proposal filed for historical lump grants"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
 		},
 		{
 			"key": "proposal:2026-09-10-hub-finance-parser-version-binding",
@@ -12958,6 +13158,39 @@
 			"scoredAt": "2026-10-06T07:51:44.462Z"
 		},
 		{
+			"key": "pr:minion_hub#499",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#499 fix(pos): expanding a catalog row no longer reloads other open rows",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/499",
+			"sourceUpdatedAt": "2026-10-12T23:40:11Z",
+			"sourceFingerprint": "9783cde3f9551b7772a8c9c563ca6610affa655e1e534544cd30107eeb9a64f9",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A diagnosed UI reload bug in a frequently used catalog editor is fixed with a regression test and passing gates, with a documented staleness caveat.",
+			"evidence": [
+				"module-scoped per-sellable cache seeds the editor synchronously on remount",
+				"vitest 2/2, bun run check 0",
+				"TODO(handoff) + proposal filed for cache staleness"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
+		},
+		{
 			"key": "pr:minion-base#41",
 			"kind": "pr",
 			"stage": "development",
@@ -14949,6 +15182,39 @@
 			"scoredAt": "2026-10-12T14:51:49.811Z"
 		},
 		{
+			"key": "pr:minion_hub#504",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#504 fix(notifications): opening one notification marks every notification for the same page as read",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/504",
+			"sourceUpdatedAt": "2026-10-12T23:40:34Z",
+			"sourceFingerprint": "30f89f3893be3489d220fbce9a31fafddb1ac5ef8402337244e567e3d6435d86",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An owner-reported notification bug (one click marking unrelated notifications read) is fixed with a single upsert and unit tests.",
+			"evidence": [
+				"Owner: \"if multiple notifications that point to the same place is clicked, then they're all marked as read\"",
+				"Five changelog notifications share one href",
+				"vitest 3/3"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
+		},
+		{
 			"key": "pr:minion_site#28",
 			"kind": "pr",
 			"stage": "development",
@@ -16394,6 +16660,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T05:34:17.693Z"
+		},
+		{
+			"key": "pr:minion_hub#506",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#506 feat(pos): drag a customer's whole pending group onto the calendar to schedule every service back-to-back",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/506",
+			"sourceUpdatedAt": "2026-10-12T23:41:37Z",
+			"sourceFingerprint": "92586c89dd8cd64b668bc3cc6763a3e0c10b0452925b5a7753d86c2c225c2992",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A new drag-to-schedule feature for pending customer services reuses the existing booking call with a tested sequential-slot helper, though not visually verified.",
+			"evidence": [
+				"sequentialSlots helper + tests (9)",
+				"stop on first failure, keep ones created, toast failed item",
+				"Not visually verified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -19532,6 +19831,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "pr:minion_hub#505",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#505 fix(pos): calendar keeps one staff filter and its smallest zoom fills the view",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/505",
+			"sourceUpdatedAt": "2026-10-12T23:41:55Z",
+			"sourceFingerprint": "31dc73b5f01fbb34b44db6a6eceb024f9c399a8aa48257831be014d6160ef6a3",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Removes a duplicated staff filter control and fixes minimum calendar zoom with a pure helper and tests, though not visually verified.",
+			"evidence": [
+				"native dropdown duplicated the filter button's Personal filter",
+				"minPxPerHour helper + 4 tests",
+				"Not visually verified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nextcloud-talk-dm-misclassified",
@@ -22721,6 +23053,39 @@
 			"scoredAt": "2026-10-11T19:51:35.163Z"
 		},
 		{
+			"key": "pr:minion_hub#500",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#500 fix(pos): catalog kanban scrolls inside the page instead of overflowing it",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/500",
+			"sourceUpdatedAt": "2026-10-12T23:40:18Z",
+			"sourceFingerprint": "9382fe3c5fc0a201d70e77040c200289b46c6d08736585db48243d34fcbf5393",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A contained CSS min-width fix resolves a layout overflow bug with passing gates, though not visually verified.",
+			"evidence": [
+				"min-width: 0 lets overflow-x: auto take over",
+				"bun run check 0, lint:design 0",
+				"Not visually verified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
+		},
+		{
 			"key": "proposal:2026-08-17-meta-spec-index-project-possibly-shipped",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24980,6 +25345,39 @@
 			"scoredAt": "2026-10-10T22:22:20.938Z"
 		},
 		{
+			"key": "pr:minion_hub#501",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#501 fix(table): \"open records in\" options no longer overflow the table options popover",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/501",
+			"sourceUpdatedAt": "2026-10-12T23:40:36Z",
+			"sourceFingerprint": "56f7338b1dd35e1a549f92fc9a8c3b646041e8a0a40d1c3f7220154ddda9a882",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A scoped flex-sizing fix resolves a popover overflow for a 3-option control with passing gates, though not visually verified.",
+			"evidence": [
+				"buttons shrink to fit scoped to the options menu",
+				"bun run check 0, prettier 0",
+				"Not visually verified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:51:57.917Z"
+		},
+		{
 			"key": "proposal:2026-09-13-hub-module-switcher-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25891,6 +26289,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T06:21:55.594Z"
+		},
+		{
+			"key": "pr:minion-meta#788",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#788 docs(proposals): 2026-10-12 hub batch — JEV router, onboarding, package semantics, composition cache",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/788",
+			"sourceUpdatedAt": "2026-10-12T23:39:50Z",
+			"sourceFingerprint": "a7a98aa66afcace51d646ebc0efaa69f690c8cf0a3da6290794f46516f6fc41e",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#510"
+			],
+			"rationale": "This is a low-risk documentation ledger that already passes its own validation check, so it can be merged without further evaluation.",
+			"evidence": [
+				"node scripts/proposal-index.mjs --check passes (761 proposals)",
+				"Ledger for the 2026-10-12 hub batch",
+				"status open"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T23:52:05.747Z"
 		},
 		{
 			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
