@@ -1,12 +1,14 @@
 ---
 id: postmerge-minion-hub-1d4b2c73ae7e
 title: "Post-merge finding — todo-handoff in src/hooks.server.ts (minion_hub)"
-status: draft
+status: merged
 created: 2026-10-12
 updated: 2026-10-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+duplicate_candidate: 2026-10-12-hub-micro-debloat
+merged_into: 2026-10-12-hub-micro-debloat
 ---
 
 # Post-merge finding — todo-handoff in `src/hooks.server.ts`
@@ -49,3 +51,10 @@ I'll check the TODO comment to understand the issue.
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/498
 - file: `src/hooks.server.ts`
 - checked: 2026-10-12
+
+## Merged from handoff-minion-hub-2755832806
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/hooks.server.ts:649` — two known limits of sharing one transaction across a load
+  https://github.com/NikolasP98/minion_hub/blob/master/src/hooks.server.ts#L649

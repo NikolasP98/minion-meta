@@ -54,3 +54,15 @@ Owner-run (outside git): netcup crontab meta/jobs 10 → 30 min, finance hourly 
 10. **Micro wall-clock gain not yet measured** — rerun the logged-in timing table (home, sell, appointments, history, catalog, accounts) once the instance is out of throttle; any page over 2 s is a ticket.
 11. **Meta DM freshness** in the CRM is now 30 min (netcup meta tick); revert that crontab line if the clinic needs 10.
 12. **Product cadence not revisited**: inbox evaluator every 30 min means overdue-appointment reminders can lag up to 30 min.
+
+## Merged from postmerge-minion-hub-1d4b2c73ae7e and postmerge-minion-hub-d9632d903381
+
+Both the factory handoff-ledger sweep and the post-merge discovery loop independently
+flagged the same two `TODO(handoff)` markers this ledger already tracks as open ends
+#3 and #5, against the same merged PR (#498, commit `f6b33d1`):
+
+- `src/hooks.server.ts:649` — two known limits of sharing one transaction across a load
+  (open end #3 above). https://github.com/NikolasP98/minion_hub/blob/master/src/hooks.server.ts#L649
+- `src/server/db/ambient-org-tx.ts:26` — that single connection also means two
+  concurrent POS GETs (open end #5 above).
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/db/ambient-org-tx.ts#L26

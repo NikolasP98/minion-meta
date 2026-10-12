@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2615293567
 title: Handoff marker — src/server/db/ambient-org-tx.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-10-12
 updated: 2026-10-12
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-d9632d903381
+merged_into: postmerge-minion-hub-d9632d903381
 ---
 
 # Handoff marker — src/server/db/ambient-org-tx.ts

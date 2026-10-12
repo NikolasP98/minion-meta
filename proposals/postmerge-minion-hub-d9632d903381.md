@@ -1,12 +1,14 @@
 ---
 id: postmerge-minion-hub-d9632d903381
 title: "Post-merge finding — todo-handoff in src/server/db/ambient-org-tx.ts (minion_hub)"
-status: draft
+status: merged
 created: 2026-10-12
 updated: 2026-10-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+duplicate_candidate: 2026-10-12-hub-micro-debloat
+merged_into: 2026-10-12-hub-micro-debloat
 ---
 
 # Post-merge finding — todo-handoff in `src/server/db/ambient-org-tx.ts`
@@ -40,3 +42,10 @@ This matters because a single database connection serializes concurrent requests
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/498
 - file: `src/server/db/ambient-org-tx.ts`
 - checked: 2026-10-12
+
+## Merged from handoff-minion-hub-2615293567
+
+Same marker, also caught by the factory handoff-ledger sweep:
+
+- `NikolasP98/minion_hub@master src/server/db/ambient-org-tx.ts:26` — that single connection also means two concurrent POS GETs
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/db/ambient-org-tx.ts#L26
