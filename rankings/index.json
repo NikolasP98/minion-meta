@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-12T05:40:52.896Z",
+	"generatedAt": "2026-10-12T06:14:58.667Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1062,38 +1062,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:56:17.748Z"
-		},
-		{
-			"key": "pr:minion_hub#492",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#492 perf(hub): cut idle-tab and cron background load for the Micro CPU budget",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/492",
-			"sourceUpdatedAt": "2026-10-12T05:26:28Z",
-			"sourceFingerprint": "0b0ac680bcb92e0fbcd1a0283b48637c182a3a437552a5d5354e2c4955a21269",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Addresses an ongoing production constraint (Supabase Micro CPU credits drained and not recovering) with a scoped, already-verified fix across crons, polling and login.",
-			"evidence": [
-				"CPU credits drained 2026-10-11 and never recover; owner will not upgrade compute",
-				"bun run check 0 errors, targeted vitest suites passing, idle-tab load cut from 3 req/min to 0.5"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T05:34:17.693Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-shared-ui-boundaries",
@@ -5748,6 +5716,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T01:22:12.940Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "2e7c8994b3e8aa629dd016318f164ef2da7993bf5480dfd5aa1409b21599813d",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Aggregates 17 disparate unresolved markers spanning race conditions, data contracts, schema gaps, and unbounded JSON reads across unrelated domains, making it too unfocused to execute as one unit.",
+			"evidence": [
+				"this narrows the race window, it does not close it",
+				"provider JSON reader is not byte bounded before res.json()",
+				"Seven production-verified customers still have no DOB"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T06:14:58.473Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
@@ -10963,6 +10964,40 @@
 			"scoredAt": "2026-10-05T06:21:16.209Z"
 		},
 		{
+			"key": "pr:minion (gateway)#322",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#322 test(ci): qualify Windows process cleanup with Job Objects",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/322",
+			"sourceUpdatedAt": "2026-10-12T06:11:41Z",
+			"sourceFingerprint": "e2d90c216fda9ee7e8c815b84e96991f9ca1cb500ec0549834012dbe412aa688",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#321"
+			],
+			"rationale": "Adds native Job Object process cleanup for Windows CI qualification but native behavior is explicitly not yet validated on a hosted run.",
+			"evidence": [
+				"Native Win32 behavior is intentionally still pending the first hosted Windows run",
+				"does not claim native qualification until that first result"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T06:14:58.473Z"
+		},
+		{
 			"key": "proposal:2026-08-24-minion-ai-secret-baseline-refresh",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12269,39 +12304,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T07:51:44.462Z"
-		},
-		{
-			"key": "pr:minion (gateway)#321",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#321 test(ci): retain bounded Node shard diagnostics",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/321",
-			"sourceUpdatedAt": "2026-10-12T05:35:05Z",
-			"sourceFingerprint": "c23553e41f1f374bf5477109ce9ba6433cfc29d7bfdc57f87e20cd1ef2b1a4be",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Draft PR has full validation evidence replacing #320's history issue and is bounded to CI diagnostics, making it actionable now pending hosted qualification and human review.",
-			"evidence": [
-				"52/52 focused tests passed on the identical corrected tree",
-				"pnpm check passed and secret scan passed for the one-commit history",
-				"replacement commit signed by factory@minion-ai.org"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T05:40:52.692Z"
 		},
 		{
 			"key": "pr:minion-base#41",
@@ -15383,6 +15385,40 @@
 			"scoredAt": "2026-10-07T03:51:09.743Z"
 		},
 		{
+			"key": "pr:minion (gateway)#321",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#321 test(ci): retain bounded Node shard diagnostics",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/321",
+			"sourceUpdatedAt": "2026-10-12T06:00:47Z",
+			"sourceFingerprint": "15fac9b70577bc1ea79a253c0195d4a0a52e21553d64352db58e3b7c5fe0d3f7",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#322"
+			],
+			"rationale": "Replaces PR #320 to drop a secret-flagged historical blob with a signed single-commit diagnostics change but is still draft pending hosted qualification.",
+			"evidence": [
+				"replacement commit is signed... pending hosted qualification and human merge review",
+				"per-commit secret scanner flags... historical blob"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T06:14:58.473Z"
+		},
+		{
 			"key": "proposal:2026-08-23-hub-archived-warehouse-submit-guard",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17080,38 +17116,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T08:21:55.181Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3c21d7cfdbecd8f951519152cbee9276dfc64aea",
-			"sourceUpdatedAt": "2026-10-12T04:37:55Z",
-			"sourceFingerprint": "5e97cf783bbced0e7606867c421c2306e5e37af7fe207f634fb6c6238768db4c",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment health entry only shows a recent CI fix merge with no indication of an active deployment issue.",
-			"evidence": [
-				"summary references merge of PR #319 fixing Windows test qualification",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T05:40:52.692Z"
 		},
 		{
 			"key": "issue:minion-meta#643",
@@ -19281,37 +19285,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T14:22:30.261Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-1853653495",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/state/features/notifications.svelte.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1853653495.md",
-			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "b7aaec2bfad0b45fa6a7777bd75dd511f9a3576e94c7b3d948cac454111e8d72",
-			"score": 37,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The notification guard uses browser-local date instead of org timezone, a concrete, bounded bug causing likely duplicate or missed notifications across timezones.",
-			"evidence": [
-				"marker: 'the guard key uses the BROWSER's local date, not the org's'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T01:54:41.666Z"
 		},
 		{
 			"key": "spec:2026-08-18-minion-base-mobile-hitl-ux-plan",
@@ -22429,38 +22402,6 @@
 			"scoredAt": "2026-10-05T09:22:06.908Z"
 		},
 		{
-			"key": "pr:minion (gateway)#320",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#320 test(ci): expose progress when Gateway test runs stall",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/320",
-			"sourceUpdatedAt": "2026-10-12T05:30:29Z",
-			"sourceFingerprint": "8465644be1ee82ed8aff988007ebc77ca23f058eaa44a2a8aeaf37bfaa787ed9",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A diagnostic-only heartbeat addition with a clear approved spec, but it explicitly does not fix the original CI stall and hosted qualification is still pending.",
-			"evidence": [
-				"Diagnostic-only TQ-019 slice; does not claim the original stall is fixed",
-				"Hosted exact-source Node and native Windows qualification are pending"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T05:34:17.693Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24914,14 +24855,14 @@
 			"scoredAt": "2026-10-12T01:52:03.892Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2778272735",
+			"key": "proposal:handoff-minion-hub-1853653495",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2778272735.md",
+			"title": "Handoff marker — src/lib/state/features/notifications.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1853653495.md",
 			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "4ffccfc6cd0ce781f0a0d82f071afc3c3728f17895de2f4de9ba0fe35159fa44",
+			"sourceFingerprint": "5e67345d2bab245f4b4ada54929b2cd3a6c17c53be84eb25acad1d4fb28553a0",
 			"score": 30,
 			"band": "low",
 			"axes": {
@@ -24930,20 +24871,51 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Two markers describe a lost mailto link for custom fields and a spec-ordering gap for tags, both narrow CRM contact-page UX issues.",
+			"rationale": "A single-line handoff marker about a date-guard using browser local time instead of org time, low scope but a real correctness bug.",
 			"evidence": [
-				"+page.svelte:768 'custom fields lose their mailto link'",
-				"+page.svelte:894 'spec 2026-09-28 Bundle F asks for tags LAST'"
+				"the guard key uses the BROWSER's local date, not the org's"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T01:56:56.870Z"
+			"scoredAt": "2026-10-12T06:14:58.473Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2778272735",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2778272735.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "ccba9c056fe8e07adae5caa4b2f984f6f3027b0b77427ae674c440819b01f715",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Two markers: a lost mailto link on custom fields and a spec-deviating tag ordering, both small UI fixes with clear pointers.",
+			"evidence": [
+				"additional custom fields lose their mailto link",
+				"spec 2026-09-28 Bundle F asks for tags LAST inside"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T06:14:58.473Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3542676477",
@@ -32116,7 +32088,7 @@
 			"title": "Handoff marker — src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2634414043.md",
 			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "d73b12ade544471c77ccf39d23cbf225ba15ecddd0ced03a0faf3590937c4c94",
+			"sourceFingerprint": "1295eadba79345a11dd829aa22e10e3bb1575f7c03acee81c0994078b320a548",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -32125,19 +32097,19 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 4,
 				"implementation": 2
 			},
-			"confidence": 3,
+			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The single marker's fragment suggests the described search/category UI may already have moved into the DataTable, so the open end is unclear without more context.",
+			"rationale": "Single marker about search/category UI relocation into a DataTable component, appears to be minor UI cleanup with unclear scope.",
 			"evidence": [
-				"AgentMemoryPanel.svelte:339 'now live in the DataTable's...'"
+				"the search box + category pills now live in the DataTable's"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T01:56:56.870Z"
+			"scoredAt": "2026-10-12T06:14:58.473Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2843825962",
@@ -32169,6 +32141,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T01:56:56.870Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-3234352348",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/finances/invoices/[id]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3234352348.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "d471d43606c8e1be80a4d64a841885c7e63d1ab522bd4acc23c60585af15b94d",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single marker about a card style duplication issue in OverviewCard, low-impact styling cleanup.",
+			"evidence": [
+				"OverviewCard's own .card (border/radius/background)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T06:14:58.473Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-681000311",
@@ -32606,14 +32609,14 @@
 			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
-			"key": "run:minion_hub#38208790597",
+			"key": "run:minion_hub#38211419413",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38208790597",
-			"sourceUpdatedAt": "2026-10-12T05:38:09Z",
-			"sourceFingerprint": "5a37988996edf658b397a391fa45963e9e6eee97b39ad70442d2ca001ecd2f4d",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38211419413",
+			"sourceUpdatedAt": "2026-10-12T06:12:40Z",
+			"sourceFingerprint": "668625b818bf012329b7e3f68188636f73ec4a643c4732197a9acd3f458fb8da",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -32622,20 +32625,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 1,
-				"implementation": 1
+				"specification": 2,
+				"implementation": 8
 			},
-			"confidence": 2,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on master with no indication of failure or actionable work.",
+			"rationale": "This is an in-progress CI run on master with no actionable goal content, not a work item to rank.",
 			"evidence": [
-				"status: in_progress",
-				"push on master"
+				"push on master",
+				"status: in_progress"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T05:40:52.692Z"
+			"scoredAt": "2026-10-12T06:14:58.473Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
@@ -33123,37 +33126,6 @@
 			"scoredAt": "2026-10-12T01:55:35.602Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-3234352348",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/finances/invoices/[id]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3234352348.md",
-			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "75c05973318838b5596ab133f48cf80b945193a0ce32eb52b382680c00c72169",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Cosmetic styling TODO on OverviewCard's own border/radius/background has minimal urgency or breadth.",
-			"evidence": [
-				"marker text: \"OverviewCard's own .card (border/radius/background)\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T01:57:46.627Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-815818272",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33634,37 +33606,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T01:54:41.666Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "f0b9d974dd1c716fe8b32b1148b632447ddb5a03a31ce8c46a9a226b6f7568a3",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are unrelated rationale sentence fragments pulled from the rankings data file itself rather than genuine actionable TODO comments.",
-			"evidence": [
-				"markers include disparate quotes like 'Seven production-verified customers still have no DOB' and 'tagOptions is the FILTER's list' sourced from rankings/index.json content"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T05:40:52.692Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
