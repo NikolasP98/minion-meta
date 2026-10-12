@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-12T07:51:29.542Z",
+	"generatedAt": "2026-10-12T08:21:17.305Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2480,6 +2480,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
+		},
+		{
+			"key": "pr:minion (gateway)#323",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#323 fix(cache): authenticate the Valkey usage cache and stop the NOAUTH error flood",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/323",
+			"sourceUpdatedAt": "2026-10-12T07:53:48Z",
+			"sourceFingerprint": "d67eefad744ad8c134010094e691e7fedebbb9bf05eddb7aafcd5f9458b08342",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a confirmed production log flood and a silently broken cache via a small, tested, already-implemented fix.",
+			"evidence": [
+				"888 NOAUTH stack-trace lines in 7 days of prod logs",
+				"169 tests passed, tsgo clean, oxfmt/oxlint clean"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T08:21:17.114Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-igv-rate-from-org-config",
@@ -5582,39 +5614,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T01:22:07.417Z"
-		},
-		{
-			"key": "run:minion (gateway)#38212072255",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38212072255",
-			"sourceUpdatedAt": "2026-10-12T06:36:47Z",
-			"sourceFingerprint": "45bd1a69142c70e30c4cb90bf10c70df31c7027279a3dc63022607020459557a",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI failed on the gateway's DEV branch but no failure detail is given, so root cause must be investigated before work can be scoped.",
-			"evidence": [
-				"status: failure",
-				"repo: minion (gateway)",
-				"summary: push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T06:51:37.346Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-memory-governance-spec",
@@ -26941,6 +26940,38 @@
 			"scoredAt": "2026-10-07T16:51:42.501Z"
 		},
 		{
+			"key": "run:minion (gateway)#38220887999",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38220887999",
+			"sourceUpdatedAt": "2026-10-12T08:03:02Z",
+			"sourceFingerprint": "274e3fb4043b3e68728e586716a27a12595b997d83bac3b195118251a3c84114",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run is routine operational status with no actionable goal content yet.",
+			"evidence": [
+				"workflow_dispatch on DEV",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T08:21:17.114Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30520,20 +30551,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake itself diagnoses a one-off infra launch failure (exit-126) with no state corruption and a recommendation to simply retry.",
+			"rationale": "Automated monitor intake reports a one-off infra exit-126 with no state corruption and work already completed/pushed, so no action is needed beyond optional retry.",
 			"evidence": [
-				"note=exit-126, turns=0, cost_usd=0",
-				"Recommendation: safe to retry as-is (no state corruption evident)"
+				"note=exit-126, turns=0, cost_usd=0 before any work",
+				"sweep already persisted progress and pushed to dev"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-05T07:51:22.891Z"
+			"scoredAt": "2026-10-12T08:21:17.114Z"
 		},
 		{
 			"key": "issue:minion-meta#431",
@@ -32893,38 +32924,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T18:21:18.483Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f4c1a235406cb06384fdfe6e2623f4ddb10e0ba0",
-			"sourceUpdatedAt": "2026-10-12T06:20:44Z",
-			"sourceFingerprint": "d19d161f17a6212fb5e357e7a518f3e6c606f73b1dde82d23973cfe34b991fbd",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine CI merge commit about bounded Node shard diagnostics, not a scoped actionable goal.",
-			"evidence": [
-				"summary is a PR merge for test(ci) retain bounded Node shard diagnostics",
-				"status is unknown with no stated issue or deadline"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T07:51:29.382Z"
 		},
 		{
 			"key": "issue:minion-meta#765",
