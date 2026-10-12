@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-12T14:21:18.662Z",
+	"generatedAt": "2026-10-12T14:51:49.980Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2650,6 +2650,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T04:22:23.306Z"
+		},
+		{
+			"key": "pr:minion (gateway)#324",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#324 chore(pi): upgrade @earendil-works/pi-* 0.75.5 → 1.1.0 (codemode/MCP/System-1 ready)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/324",
+			"sourceUpdatedAt": "2026-10-12T14:20:40Z",
+			"sourceFingerprint": "e7d3a0af7cd059d296e691fe7557897b0eab7aba3a6771859fe3222e914a7e8a",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#325"
+			],
+			"rationale": "Well-specified dependency upgrade with broad gateway impact is currently blocked externally, so it should be revisited once the drone v0.6.0 fix lands.",
+			"evidence": [
+				"Blocker: @minion-stack/drone@0.5.x breaks pnpm check/drone-tts suites until NikolasP98/drone#3 merges and tags v0.6.0",
+				"pnpm tsgo 0 errors; pnpm check 0 errors; vitest test/ci 15/15 files, 167 tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T14:51:49.811Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -14779,6 +14813,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T03:21:54.055Z"
+		},
+		{
+			"key": "pr:minion (gateway)#325",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#325 feat(agents): opt-in codemode + tool_search + MCP for embedded sessions (MINION_CODEMODE)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/325",
+			"sourceUpdatedAt": "2026-10-12T14:40:08Z",
+			"sourceFingerprint": "426686da8f074d84f478951b42c3e84e3af19e79de0789f96b8d7e70df0c7c5d",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#324"
+			],
+			"rationale": "An opt-in feature explicitly stacked on and gated by the still-blocked #324 cannot proceed independently and should be re-reviewed once its base merges.",
+			"evidence": [
+				"'Stacked on #324 ... Do not merge before #324; retarget to DEV after it lands'",
+				"codemode.test.ts 6 tests passing; payloads.e2e.test.ts has 3 pre-existing failures noted as unrelated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T14:51:49.811Z"
 		},
 		{
 			"key": "pr:minion_site#28",
@@ -28795,6 +28863,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T01:56:56.870Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f4c1a235406cb06384fdfe6e2623f4ddb10e0ba0",
+			"sourceUpdatedAt": "2026-10-12T06:20:44Z",
+			"sourceFingerprint": "d19d161f17a6212fb5e357e7a518f3e6c606f73b1dde82d23973cfe34b991fbd",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine deployment-health snapshot of an already-merged CI diagnostics-retention commit with no pending action.",
+			"evidence": [
+				"summary: 'Merge pull request #321 ... test(ci): retain bounded Node shard diagnostics'",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-12T14:51:49.811Z"
 		},
 		{
 			"key": "issue:minion-meta#382",
