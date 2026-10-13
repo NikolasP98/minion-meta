@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T07:51:53.848Z",
+	"generatedAt": "2026-10-13T08:21:40.845Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -12795,74 +12795,6 @@
 			"scoredAt": "2026-10-10T23:12:37.126Z"
 		},
 		{
-			"key": "issue:minion-meta#681",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#681 [monitor:unstick] reconcile run 58755351: exit-126/turns=0 despite completed work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/681",
-			"sourceUpdatedAt": "2026-09-29T07:17:50Z",
-			"sourceFingerprint": "3a62e9320e6ebe353887a1adab25e852d4e3f1cba4ff114c2d79e771bdaae90f",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#682"
-			],
-			"rationale": "Recurring exit-126/turns=0 infra signature masks completed work and should be fixed as one host-classifier issue rather than per-run tickets.",
-			"evidence": [
-				"log tail shows reconcile pipeline completed fully despite exit-126",
-				"same signature recurs across 7 runs in ~2.5hr window including 980b84fe"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T07:51:44.462Z"
-		},
-		{
-			"key": "issue:minion-meta#682",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#682 [monitor:unstick] reconcile run 980b84fe: exit-126/turns=0 despite completed work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/682",
-			"sourceUpdatedAt": "2026-09-29T07:17:54Z",
-			"sourceFingerprint": "2deaa646bcf182eba4fd3250e53603822c48534ce0b710c620ee0c65b664073a",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#681"
-			],
-			"rationale": "Identical exit-126/turns=0 signature and diagnosis to #681 — same underlying infra fault, should become a single fix goal.",
-			"evidence": [
-				"fingerprint cluster matches #681's run list (58755351, 980b84fe, e2355c77...)",
-				"substantive pipeline work completed despite the exit-126"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T07:51:44.462Z"
-		},
-		{
 			"key": "pr:minion-base#41",
 			"kind": "pr",
 			"stage": "development",
@@ -13861,6 +13793,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T03:21:54.055Z"
+		},
+		{
+			"key": "issue:minion-meta#681",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#681 [monitor:unstick] reconcile run 58755351: exit-126/turns=0 despite completed work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/681",
+			"sourceUpdatedAt": "2026-09-29T07:17:50Z",
+			"sourceFingerprint": "3a62e9320e6ebe353887a1adab25e852d4e3f1cba4ff114c2d79e771bdaae90f",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#682"
+			],
+			"rationale": "Identical recurring exit-126/turns=0 reconcile infra signature as #682, should be consolidated into one infra-fix goal.",
+			"evidence": [
+				"same unstick-unknown exit-126 turns=0 signature cited across 7 runs including #682",
+				"substantive reconcile pipeline work completed despite the error"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T08:21:40.655Z"
+		},
+		{
+			"key": "issue:minion-meta#682",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#682 [monitor:unstick] reconcile run 980b84fe: exit-126/turns=0 despite completed work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/682",
+			"sourceUpdatedAt": "2026-09-29T07:17:54Z",
+			"sourceFingerprint": "2deaa646bcf182eba4fd3250e53603822c48534ce0b710c620ee0c65b664073a",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#681"
+			],
+			"rationale": "Identical recurring exit-126/turns=0 reconcile infra signature as #681, should be consolidated into one infra-fix goal.",
+			"evidence": [
+				"same unstick-unknown exit-126 turns=0 signature cited across 7 runs including #681",
+				"substantive reconcile pipeline work completed despite the error"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T08:21:40.655Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-release-probe-red-and-silent",
@@ -20460,6 +20460,38 @@
 			"scoredAt": "2026-10-07T14:22:30.261Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/79943fd162429c5760edc7afcdd684eccce99dee",
+			"sourceUpdatedAt": "2026-10-13T02:30:45Z",
+			"sourceFingerprint": "299358fdb4f6e66e370193790049e2b34fbe9f82819e7a3d0028c6ab07023891",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health record for an already-merged PR (#325) with no outstanding action.",
+			"evidence": [
+				"commit describes PR #325 already merged to gateway",
+				"fix for MCP workspace-trust issue already shipped in same commit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T08:21:40.655Z"
+		},
+		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23173,6 +23205,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T06:51:57.603Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-2d28aa22c8d6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/invoices/[id]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2d28aa22c8d6.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "b74e04eb4fb0234137c06525cb5481288a0379be46c6f289500314c2caf82f33",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-scoped, approved design-token fix for a single component with a clear file, marker, and verification command.",
+			"evidence": [
+				"TODO(handoff) marker names exact file src/routes/.../+page.svelte",
+				"definition of done specifies bun run lint:design verification",
+				"status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T08:21:40.655Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2e7588be9b25",
@@ -25963,39 +26028,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T08:52:21.923Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-2d28aa22c8d6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/invoices/[id]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2d28aa22c8d6.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "b74e04eb4fb0234137c06525cb5481288a0379be46c6f289500314c2caf82f33",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, narrowly-scoped design-token fix with exact file, marker, and verification command given.",
-			"evidence": [
-				"TODO(handoff) marker at src/routes/.../invoices/[id]/+page.svelte",
-				"fix direction specifies contract.json tokens and bun run lint:design verification",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T07:51:44.462Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
@@ -33854,6 +33886,38 @@
 			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
+			"key": "run:minion (gateway)#38364961965",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38364961965",
+			"sourceUpdatedAt": "2026-10-13T07:50:49Z",
+			"sourceFingerprint": "bc4d1c628017d5c8f9f8f58c82c2fa8aea58f0839200ba6cc7d9ab432e01e03e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is merely an in-progress CI run status with no decision or deliverable attached.",
+			"evidence": [
+				"status: in_progress",
+				"workflow_dispatch on DEV branch, no described problem or outcome"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T08:21:40.655Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -34782,37 +34846,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
-			"key": "run:minion (gateway)#38364961965",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38364961965",
-			"sourceUpdatedAt": "2026-10-13T07:48:49Z",
-			"sourceFingerprint": "73a23bc86b1f1d040a768c073377389a15854c0539fd87a45cbca0cf65efcac6",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status, not a describable work item with scope or outcome to rank.",
-			"evidence": [
-				"status: in_progress, workflow_dispatch on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T07:51:53.715Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
