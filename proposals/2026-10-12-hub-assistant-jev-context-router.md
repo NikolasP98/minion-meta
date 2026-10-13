@@ -3,7 +3,7 @@ id: 2026-10-12-hub-assistant-jev-context-router
 title: Hub assistant — JEV turn router, open ends and threshold calibration
 status: draft
 created: 2026-10-12
-updated: 2026-10-12
+updated: 2026-10-13
 repos: [minion_hub]
 tags: [logic, security]
 value: 8
@@ -107,6 +107,11 @@ cost ≈ **$0.000022 per turn** (~525 input tokens).
    `p_changelog` plus the chosen mode precisely so they can be re-derived from real
    traffic. Re-check after ~200 real turns. The `brain` noul is the weakest signal
    (0.37–0.88 with poor separation) and most likely to need moving.
+   (Merged from postmerge-minion-hub-441331fd7343, 2026-10-13: alternatives
+   considered — document the probe methodology in a linked artifact/comment;
+   move thresholds to versioned config with "last validated" + confidence
+   bounds; or have the classifier return confidence scores so tuning is
+   data-driven at runtime.)
 2. **`pages` threshold deviates from the spec (0.35, not 0.5).** The spec proposed
    0.5; a live "¿dónde configuro los horarios?" turn scores 0.41, and
    `UI_TOOL_RULES` (1) requires a "where/how do I…" question to navigate — 0.5

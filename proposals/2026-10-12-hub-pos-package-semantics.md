@@ -1,9 +1,10 @@
 ---
 id: 2026-10-12-hub-pos-package-semantics
 title: POS packages — grant each included item, never duplicate the base service's consumption
-status: draft
+status: review
+duplicate_candidate: postmerge-minion-hub-9f08fb1611b8
 created: 2026-10-12
-updated: 2026-10-12
+updated: 2026-10-13
 repos: [minion_hub]
 tags: [logic, data, ui]
 value: 7
@@ -12,6 +13,16 @@ source: hub-batch-2026-10-12-assistant-onboarding-notif
 ---
 
 # POS packages — what a pack is made of, and what its sale deposits
+
+<!-- Reconciliation note (2026-10-13): two 2026-10-13 postmerge-discovery
+     findings rediscovered TODO(handoff) markers this proposal's "Open ends"
+     section already declares as the in-code half of the same ledger entry:
+     postmerge-minion-hub-9f08fb1611b8 (composition.ts — "a pack's PRODUCT
+     lines are issued at sale", matches open end #2, blockedPackageConsumption)
+     and postmerge-minion-hub-3c3dde2c9372 (pos-packages.service.ts, matches
+     open end #1, createGrantsForTicketLine). Both findings are already
+     status: approved (out of this sweep's reach), so flagging this side for
+     a human to reconcile rather than auto-merging. -->
 
 ## Owner ask (verbatim, 2026-10-12)
 

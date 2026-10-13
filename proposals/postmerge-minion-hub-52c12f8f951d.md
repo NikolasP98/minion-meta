@@ -40,3 +40,10 @@ The `TODO(handoff)` marker at `scripts/qa/seed/tenancy.ts` is removed, or intent
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/510
 - file: `scripts/qa/seed/tenancy.ts`
 - checked: 2026-10-13
+
+## Merged from handoff-minion-hub-2370941391
+
+The handoff-ledger sweep independently flagged the same marker:
+
+- `NikolasP98/minion_hub@master scripts/qa/seed/tenancy.ts:221` — there is no DELIBERATE fixture for a not-yet-onboarded org
+  https://github.com/NikolasP98/minion_hub/blob/master/scripts/qa/seed/tenancy.ts#L221

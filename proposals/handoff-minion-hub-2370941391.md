@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2370941391
 title: Handoff marker — scripts/qa/seed/tenancy.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-52c12f8f951d
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]

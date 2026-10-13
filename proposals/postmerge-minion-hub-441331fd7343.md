@@ -1,7 +1,8 @@
 ---
 id: postmerge-minion-hub-441331fd7343
 title: "Post-merge finding — todo-handoff in src/lib/assistant/turn-router.ts (minion_hub)"
-status: draft
+status: merged
+merged_into: 2026-10-12-hub-assistant-jev-context-router
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]
@@ -10,6 +11,14 @@ source: postmerge-discovery
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/assistant/turn-router.ts`
+
+<!-- Reconciliation note (2026-10-13): this TODO(handoff) at turn-router.ts:53
+     ("every threshold below was set from 12 live classifier probes on...")
+     is the in-code half of open end #1 in
+     2026-10-12-hub-assistant-jev-context-router ("threshold calibration from
+     the decision log" — same "12 live probes" basis, re-check after ~200
+     real turns). Merging here rather than into handoff-minion-hub-4153218003,
+     which only aggregates the raw marker text without that context. -->
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
 scan of a merged pull request (spec 2026-08-18-factory-postmerge-discovery-loop,

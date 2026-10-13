@@ -1,9 +1,10 @@
 ---
 id: 2026-10-12-hub-catalog-composition-cache-staleness
 title: Catalog composition editor's per-row cache never invalidates on external changes
-status: draft
+status: review
+duplicate_candidate: postmerge-minion-hub-121dc587ec1f
 created: 2026-10-12
-updated: 2026-10-12
+updated: 2026-10-13
 repos: [minion_hub]
 tags: [ui, data]
 value: 2
@@ -11,6 +12,16 @@ effort: S
 ---
 
 # Catalog composition editor's per-row cache never invalidates on external changes
+
+<!-- Reconciliation note (2026-10-13): postmerge-minion-hub-121dc587ec1f is a
+     postmerge-discovery finding for a TODO(handoff) at
+     CompositionEditor.svelte:16 — "module-scoped for the page's lifetime,
+     invalidated only by" — which reads as the in-code half of the exact
+     defect this proposal already describes (module-scoped compositionCache,
+     no invalidation from external writes). That finding is already
+     status: approved (out of this sweep's reach — approved proposals are
+     left alone), so flagging this side instead for a human to reconcile
+     rather than auto-merging on a partial marker quote. -->
 
 ## Problem
 

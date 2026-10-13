@@ -1,21 +1,24 @@
 ---
 id: handoff-minion-hub-4153218003
 title: Handoff marker — src/lib/assistant/turn-router.ts (minion_hub)
-status: review
-duplicate_candidate: postmerge-minion-hub-441331fd7343
+status: merged
+merged_into: 2026-10-12-hub-assistant-jev-context-router
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
-<!-- Reconciliation note: this marker lists two distinct TODO(handoff) lines
-     (turn-router.ts:53 and turn-router.ts:124). Line 53 corresponds to
-     postmerge-minion-hub-441331fd7343 (classifier threshold provenance);
-     line 124 corresponds to postmerge-minion-hub-a76bc9e9991b (release notes
-     not inlined) — a separate, unrelated finding in the same file. This is a
-     1-to-2 relationship, not a clean same-idea duplicate, so it is flagged
-     for human review rather than auto-merged into either one. -->
+<!-- Reconciliation note (2026-10-13, supersedes prior note): this marker
+     lists two distinct TODO(handoff) lines (turn-router.ts:53 and
+     turn-router.ts:124). Both are the in-code half of open ends already
+     documented in 2026-10-12-hub-assistant-jev-context-router — line 53 is
+     open end #1 (threshold calibration, "12 live probes"), line 124 is open
+     end #3 (hub_changelog inject is prose only). The intermediate postmerge
+     findings (postmerge-minion-hub-441331fd7343,
+     postmerge-minion-hub-a76bc9e9991b) were re-pointed to the same canonical
+     once it was found, so merging this marker there directly instead of
+     leaving it on the no-longer-accurate 1-to-2 ambiguity call. -->
 
 # Handoff marker — src/lib/assistant/turn-router.ts
 
