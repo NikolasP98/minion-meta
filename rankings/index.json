@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T21:52:16.115Z",
+	"generatedAt": "2026-10-13T22:21:35.481Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16589,6 +16589,39 @@
 			"scoredAt": "2026-10-13T07:22:14.632Z"
 		},
 		{
+			"key": "issue:minion-meta#688",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#688 [monitor:unstick] reconcile run 1dc53e89 (minion-meta): agent exec failure exit-126/turns=0 after clean pipeline completion",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/688",
+			"sourceUpdatedAt": "2026-09-29T21:17:40Z",
+			"sourceFingerprint": "11158f2ff23ca5f2c5677b749764cc5f922ea445423fe6d50d09a3df223187e1",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The reconcile exec failure was recoverable and safe to retry, with the only concrete next step (adding a classifier signature) conditional on further recurrence.",
+			"evidence": [
+				"exit-126, turns=0",
+				"second identical exit-126/turns=0 signature...within ~45 minutes",
+				"Recommendation: safe to retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T22:21:35.328Z"
+		},
+		{
 			"key": "issue:minion-meta#772",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19591,39 +19624,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T05:34:17.693Z"
-		},
-		{
-			"key": "issue:minion-meta#688",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#688 [monitor:unstick] reconcile run 1dc53e89 (minion-meta): agent exec failure exit-126/turns=0 after clean pipeline completion",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/688",
-			"sourceUpdatedAt": "2026-09-29T21:17:40Z",
-			"sourceFingerprint": "11158f2ff23ca5f2c5677b749764cc5f922ea445423fe6d50d09a3df223187e1",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a transient worker-exec fault with git state already safely pushed and an explicit recommendation to retry and only escalate if the pattern recurs further.",
-			"evidence": [
-				"exit-126, turns=0 for the reconcile agent step",
-				"second identical exit-126/turns=0 signature within ~45 minutes",
-				"git-side reconcile state already pushed successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:51:32.848Z"
 		},
 		{
 			"key": "issue:minion-meta#719",
@@ -25710,6 +25710,38 @@
 			"scoredAt": "2026-10-07T14:22:30.261Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit describes an already-shipped blue/green deployment feature with built-in rollback, leaving no open action.",
+			"evidence": [
+				"slot-switch.sh clones the live service spec into an idle slot...flips traffic",
+				"rollback flips back to the parked slot"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T22:21:35.328Z"
+		},
+		{
 			"key": "proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27444,6 +27476,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T06:51:46.732Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-be298870a398",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/data-table/filters.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-be298870a398.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "92f7bc2b5f6b4ead95f07d7309bda1e37554f36a13b3e20b96ee437ef388663a",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This approved post-merge finding has a clear definition of done and diagnosis already underway on a narrowly scoped file.",
+			"evidence": [
+				"status: approved",
+				"Definition of done: the TODO(handoff) marker...is removed, or intentionally left with an updated rationale"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T22:21:35.328Z"
 		},
 		{
 			"key": "run:minion (gateway)#31686911500",
@@ -30752,39 +30816,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T22:27:23.009Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-be298870a398",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/data-table/filters.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-be298870a398.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "92f7bc2b5f6b4ead95f07d7309bda1e37554f36a13b3e20b96ee437ef388663a",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The TODO(handoff) marker in filters.ts has a clear definition of done and diagnosis already underway, making it a small bounded task ready for execution.",
-			"evidence": [
-				"TODO(handoff) marker at src/lib/components/data-table/filters.ts",
-				"Definition of done: marker removed or intentionally left with updated rationale",
-				"merged PR #411 referenced as source"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:51:32.848Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c9369d818ed7",
