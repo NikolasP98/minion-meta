@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T02:52:08.632Z",
+	"generatedAt": "2026-10-13T03:21:21.774Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6080,6 +6080,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T01:22:07.417Z"
+		},
+		{
+			"key": "run:minion (gateway)#38337233964",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38337233964",
+			"sourceUpdatedAt": "2026-10-13T02:53:04Z",
+			"sourceFingerprint": "b48fc2d9ce90333631ce5d4b58003957a59904a2d87a6b836f9567ff95d21bb3",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the gateway's DEV branch today is worth investigating for blocked merges, but the catalog gives no failure detail to act on yet.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"updatedAt 2026-10-13 (today)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T03:21:21.605Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-pos-plan-operation-spec",
@@ -17722,38 +17755,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T08:21:55.181Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/79943fd162429c5760edc7afcdd684eccce99dee",
-			"sourceUpdatedAt": "2026-10-13T02:30:45Z",
-			"sourceFingerprint": "299358fdb4f6e66e370193790049e2b34fbe9f82819e7a3d0028c6ab07023891",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This deploy-health entry is just a merged commit description for an already-shipped codemode feature with no outstanding issue to act on.",
-			"evidence": [
-				"feat(agents): opt-in codemode + tool_search + MCP (#325)",
-				"status: unknown, commit already merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T02:52:08.482Z"
 		},
 		{
 			"key": "issue:minion-meta#643",
@@ -32152,6 +32153,38 @@
 			"scoredAt": "2026-10-12T15:21:20.383Z"
 		},
 		{
+			"key": "issue:minion-meta#668",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#668 [monitor:unstick] reconcile proposals run 5f751591 (minion-meta) - agent launch exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/668",
+			"sourceUpdatedAt": "2026-09-29T02:17:37Z",
+			"sourceFingerprint": "7bc069d3fef358d919fbfa7581b2d414b7b84a84d179be5af95d6eaf84052814",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Quoted diagnosis describes a transient agent-launch exec failure (exit 126) after the deterministic reconcile work already succeeded, making this a self-resolving monitor alert rather than actionable work.",
+			"evidence": [
+				"status=error/exit_code=1 but run note shows exit 126, turns=0 before agent reasoning",
+				"deterministic reconcile steps (clone, merge-scan, proposals/index.json, push) completed successfully"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T03:21:21.605Z"
+		},
+		{
 			"key": "issue:minion-meta#702",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33734,38 +33767,6 @@
 			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
-			"key": "run:minion (gateway)#38337233964",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38337233964",
-			"sourceUpdatedAt": "2026-10-13T02:40:21Z",
-			"sourceFingerprint": "a160871b906953fb99fdb7d2c871e4ef8d9eec545a54c0b3367c0c9b01a4543c",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status on a push with no failure or finding to act on.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T02:52:08.482Z"
-		},
-		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -34053,38 +34054,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T10:21:05.886Z"
-		},
-		{
-			"key": "issue:minion-meta#668",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#668 [monitor:unstick] reconcile proposals run 5f751591 (minion-meta) - agent launch exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/668",
-			"sourceUpdatedAt": "2026-09-29T02:17:37Z",
-			"sourceFingerprint": "7bc069d3fef358d919fbfa7581b2d414b7b84a84d179be5af95d6eaf84052814",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Diagnosis attributes the failure to a transient worker-box exec permission fault (exit 126, turns=0) unrelated to the minion-meta repo or any spec, making this non-actionable as dev work.",
-			"evidence": [
-				"run note: claude-provider agent subprocess exited 126 with turns=0 and permission_denials=0",
-				"deterministic reconcile steps completed cleanly before the agent-launch failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T02:51:06.416Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2634414043",
