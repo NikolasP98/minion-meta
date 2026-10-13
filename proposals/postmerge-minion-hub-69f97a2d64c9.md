@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-69f97a2d64c9
 title: "Post-merge finding — todo-handoff in src/server/services/pos/accounts/unbilled.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]
