@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T05:52:06.746Z",
+	"generatedAt": "2026-10-13T06:22:13.000Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3489,6 +3489,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:57:28.771Z"
+		},
+		{
+			"key": "pr:minion (gateway)#327",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#327 feat(swarm): blue/green gateway slots — prepare/switch/rollback with the parked image as instant rollback",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/327",
+			"sourceUpdatedAt": "2026-10-13T06:11:25Z",
+			"sourceFingerprint": "27a2849d9cf0b1609b184f5d9c4af319e93861148dff7d0fb3333c4c0a57a9b6",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified infra PR adding blue/green rollback safety for production gateway deploys, with passing mutation-checked tests and clean lint.",
+			"evidence": [
+				"slot-switch.test.sh passes; mutation-checked",
+				"pnpm check passes 0 errors",
+				"draft PR, size L, maintainer tag"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -8605,6 +8638,38 @@
 			"scoredAt": "2026-10-07T17:22:08.309Z"
 		},
 		{
+			"key": "pr:minion_hub#513",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#513 fix(onboarding): finishing or skipping the first-run setup lands on /home",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/513",
+			"sourceUpdatedAt": "2026-10-13T06:18:41Z",
+			"sourceFingerprint": "d8ecc9ff0a450e0f4d205db05d25db6c717873564e35950fdd6a99b978534eb4",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a confirmed production 404 on the onboarding completion redirect affecting every new user, with passing tests.",
+			"evidence": [
+				"PostHog recorded Not found: / on hub.minion-ai.org/en/onboarding",
+				"bun run check 0, vitest 5/5, prettier 0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11723,6 +11788,39 @@
 			"scoredAt": "2026-10-12T06:51:24.945Z"
 		},
 		{
+			"key": "pr:minion (gateway)#328",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#328 fix(memory): memory_get stops the model guessing daily files that do not exist",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/328",
+			"sourceUpdatedAt": "2026-10-13T06:15:45Z",
+			"sourceFingerprint": "c5043616db1dee2e1b808b9400dd04b36d8f0e69121a4f16993909acfbccf0b3",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes an observed production bug where the model kept guessing nonexistent memory files due to a raw ENOENT error, and is fully tested.",
+			"evidence": [
+				"production transcript, FACES gateway, 2026-10-13",
+				"pnpm vitest run memory-tool.e2e.test.ts 8/8 passed",
+				"test/ci/ 167 tests passed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
+		},
+		{
 			"key": "proposal:2026-08-24-minion-ai-secret-baseline-refresh",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14662,6 +14760,80 @@
 			"scoredAt": "2026-10-08T08:52:21.923Z"
 		},
 		{
+			"key": "issue:minion-meta#559",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#559 [monitor:unstick] reconcile run 6191de48: agent launch failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/559",
+			"sourceUpdatedAt": "2026-09-22T05:17:55Z",
+			"sourceFingerprint": "4bd58fdfd7bf3b34068bb35d05fff146ba5dbf2a3a5f98ab44bdee0c6c7830b7",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#560",
+				"issue:minion-meta#674",
+				"issue:minion-meta#675"
+			],
+			"rationale": "Duplicate automated monitor alert describing the same recurring runner exec-126 host fault as its siblings in this batch, so should become one host-fix goal.",
+			"evidence": [
+				"fingerprint unstick-unknown-6191de48",
+				"recurs identically across 5 runs in ~1.5h",
+				"exit-126 turns=0 agent launch failure, shell work completed fine"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
+		},
+		{
+			"key": "issue:minion-meta#560",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#560 [monitor:unstick] reconcile run c5e63869: agent launch failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/560",
+			"sourceUpdatedAt": "2026-09-22T05:17:56Z",
+			"sourceFingerprint": "5c529a4f8fb31229903b0df247b7d84600f0fdc716f6783751c87974c28a58ae",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#559",
+				"issue:minion-meta#674",
+				"issue:minion-meta#675"
+			],
+			"rationale": "Identical signature to sibling run 6191de48; a duplicate monitor alert for the same recurring host exec fault.",
+			"evidence": [
+				"fingerprint unstick-unknown-c5e63869",
+				"478 proposals written, git push succeeded, agent step exit-126 turns=0",
+				"part of a recurring cluster of 5 identical failures"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
+		},
+		{
 			"key": "issue:minion-meta#573",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14724,6 +14896,80 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T11:21:24.048Z"
+		},
+		{
+			"key": "issue:minion-meta#674",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#674 [monitor:unstick] reconcile run 704ff11c (minion-meta) - claude agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/674",
+			"sourceUpdatedAt": "2026-09-29T05:17:50Z",
+			"sourceFingerprint": "53636a065f51f2d28fea9d48ac75d5fa537d3ff2fedc6c6d9d950b1330798374",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#675",
+				"issue:minion-meta#559",
+				"issue:minion-meta#560"
+			],
+			"rationale": "Same claude-agent-exec-failure signature as sibling runs in this batch; duplicate alerts should consolidate into one host-fix goal.",
+			"evidence": [
+				"same exact signature also hit ae48f39c and 65ce8434 within the same hour",
+				"exit-126, turns=0, cost_usd=0",
+				"shell reconcile work completed fine, only agent launch step failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
+		},
+		{
+			"key": "issue:minion-meta#675",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#675 [monitor:unstick] reconcile run ae48f39c (minion-meta) - claude agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/675",
+			"sourceUpdatedAt": "2026-09-29T05:17:56Z",
+			"sourceFingerprint": "90eb5df3267ca8de2314c9a6690b981457a865081dc42aee401f2ac25470a576",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#674",
+				"issue:minion-meta#559",
+				"issue:minion-meta#560"
+			],
+			"rationale": "Second of three identical exec-126 failures within roughly an hour; duplicate of sibling monitor alerts in this batch.",
+			"evidence": [
+				"second of three identical failures within ~1 hour (03:30Z, 04:18Z, 04:27Z)",
+				"exit-126/turns=0/cost=0 on claude provider",
+				"shell reconcile work (handoff refresh, merge-scan, push) completed fine"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
 		},
 		{
 			"key": "issue:minion-meta#706",
@@ -16655,38 +16901,6 @@
 			"scoredAt": "2026-10-07T10:21:26.402Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-464643f50d6e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/Picker.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-464643f50d6e.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "46ff9ccf45f8bd944b126ffdd2af12169b5f9afb9236a2fff8eb278366cb6f8a",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, well-scoped UX fix with a clear definition of done: wire onRowActivate on the Picker's DataTable.",
-			"evidence": [
-				"TODO(handoff): needs DataTable onRowActivate (double-click / Enter on the",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T05:51:45.379Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-a6c363e77855",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16955,150 +17169,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T23:51:43.724Z"
-		},
-		{
-			"key": "issue:minion-meta#559",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#559 [monitor:unstick] reconcile run 6191de48: agent launch failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/559",
-			"sourceUpdatedAt": "2026-09-22T05:17:55Z",
-			"sourceFingerprint": "4bd58fdfd7bf3b34068bb35d05fff146ba5dbf2a3a5f98ab44bdee0c6c7830b7",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#560",
-				"issue:minion-meta#674",
-				"issue:minion-meta#675"
-			],
-			"rationale": "Self-reported exit-126 claude-binary-not-executable host fault with shell work completing fine, duplicated across four monitor-intake issues.",
-			"evidence": [
-				"exit_code=1 but turns=0, permission_denials=0, diagnosed as exit-126 agent launch failure",
-				"recurs identically across 5 runs in ~1.5h per the issue text"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T05:51:45.379Z"
-		},
-		{
-			"key": "issue:minion-meta#560",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#560 [monitor:unstick] reconcile run c5e63869: agent launch failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/560",
-			"sourceUpdatedAt": "2026-09-22T05:17:56Z",
-			"sourceFingerprint": "5c529a4f8fb31229903b0df247b7d84600f0fdc716f6783751c87974c28a58ae",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#559",
-				"issue:minion-meta#674",
-				"issue:minion-meta#675"
-			],
-			"rationale": "Identical sibling signature to #559 describing the same runner-box exec-126 fault for the claude provider binary.",
-			"evidence": [
-				"identical pattern to sibling run 6191de48",
-				"part of a recurring cluster of 5 identical failures within ~1.5h"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T05:51:45.379Z"
-		},
-		{
-			"key": "issue:minion-meta#674",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#674 [monitor:unstick] reconcile run 704ff11c (minion-meta) - claude agent exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/674",
-			"sourceUpdatedAt": "2026-09-29T05:17:50Z",
-			"sourceFingerprint": "53636a065f51f2d28fea9d48ac75d5fa537d3ff2fedc6c6d9d950b1330798374",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#675",
-				"issue:minion-meta#559",
-				"issue:minion-meta#560"
-			],
-			"rationale": "Same claude-agent-exec-failure (exit-126, turns=0, cost=0) signature recurring a week after the earlier #559/#560 cluster, suggesting the host issue was never fixed.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0, cost_usd=0",
-				"same exact signature also hit ae48f39c and 65ce8434 within the same hour"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T05:51:45.379Z"
-		},
-		{
-			"key": "issue:minion-meta#675",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#675 [monitor:unstick] reconcile run ae48f39c (minion-meta) - claude agent exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/675",
-			"sourceUpdatedAt": "2026-09-29T05:17:56Z",
-			"sourceFingerprint": "90eb5df3267ca8de2314c9a6690b981457a865081dc42aee401f2ac25470a576",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#674",
-				"issue:minion-meta#559",
-				"issue:minion-meta#560"
-			],
-			"rationale": "Third occurrence of the same exec-126 runner fault in the same hour, confirming a persistent box problem rather than a one-off.",
-			"evidence": [
-				"second of three identical failures within roughly an hour (03:30Z, 04:18Z, 04:27Z)",
-				"exit-126/turns=0/cost=0 on the claude provider"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T05:51:45.379Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
@@ -20183,40 +20253,6 @@
 			"scoredAt": "2026-10-10T05:39:40.651Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-77a6343cc924",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/purchases/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77a6343cc924.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "f33878fd366508e47a7e3c009d64c1b9ca80b38053cd41041ce31799bde118b1",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-a65726c1d1d9"
-			],
-			"rationale": "Approved accessibility fix (missing label on a status icon) with a clear, bounded fix direction.",
-			"evidence": [
-				"lone icon without accompanying text or ARIA label is inaccessible and ambiguous",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T05:51:45.379Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-77c392e264f4",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20352,40 +20388,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:39:40.651Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-a65726c1d1d9",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/purchases/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a65726c1d1d9.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "f0c19aa914ba08345ad7d89005ecb4a4470e78f28af89952ad973effc30fbf47",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-77a6343cc924"
-			],
-			"rationale": "Approved fix for disappearing empty purchase periods breaking timeline continuity, same file as a sibling finding but a distinct issue.",
-			"evidence": [
-				"a period with NO purchases no longer appears at all",
-				"users can't distinguish between no data loaded and no purchases in this period"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T05:51:45.379Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e41a33a864a1",
@@ -21364,6 +21366,39 @@
 			"scoredAt": "2026-10-07T06:52:29.491Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-464643f50d6e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/Picker.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-464643f50d6e.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "46ff9ccf45f8bd944b126ffdd2af12169b5f9afb9236a2fff8eb278366cb6f8a",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding describing a concrete, standalone missing keyboard/double-click interaction on the Picker component.",
+			"evidence": [
+				"TODO(handoff): needs DataTable onRowActivate",
+				"status: approved",
+				"merged PR #402"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-5ecd8380b71c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21458,6 +21493,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T02:22:18.707Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-a65726c1d1d9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/purchases/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a65726c1d1d9.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "f0c19aa914ba08345ad7d89005ecb4a4470e78f28af89952ad973effc30fbf47",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-77a6343cc924"
+			],
+			"rationale": "Same file and merged PR (#401) as a sibling approved finding in this batch, warranting one combined follow-up goal.",
+			"evidence": [
+				"file src/routes/(app)/finances/purchases/+page.svelte",
+				"merged PR #401",
+				"status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
@@ -23820,6 +23890,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T09:22:17.789Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/79943fd162429c5760edc7afcdd684eccce99dee",
+			"sourceUpdatedAt": "2026-10-13T02:30:45Z",
+			"sourceFingerprint": "299358fdb4f6e66e370193790049e2b34fbe9f82819e7a3d0028c6ab07023891",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry is a deployment-health record describing an already-merged commit (#325), not an open actionable goal.",
+			"evidence": [
+				"title: minion (gateway) deployment health",
+				"summary describes merged PR #325 with Co-Authored-By trailer"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -28514,6 +28616,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-06T21:22:27.571Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-77a6343cc924",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/finances/purchases/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77a6343cc924.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "f33878fd366508e47a7e3c009d64c1b9ca80b38053cd41041ce31799bde118b1",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a65726c1d1d9"
+			],
+			"rationale": "Accessibility finding in the same file and merged PR as another approved finding in this batch, so they should become one follow-up fix.",
+			"evidence": [
+				"file src/routes/(app)/finances/purchases/+page.svelte",
+				"merged PR #401",
+				"status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:22:12.861Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9732f7ab41ad",
