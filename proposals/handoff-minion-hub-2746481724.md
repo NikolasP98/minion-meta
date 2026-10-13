@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-13)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/AppointmentForm.svelte:263` — the Price cell still formats with formatMoney's PEN
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/AppointmentForm.svelte#L263
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/AppointmentForm.svelte:268` — the Price cell still formats with formatMoney's PEN
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/AppointmentForm.svelte#L268
