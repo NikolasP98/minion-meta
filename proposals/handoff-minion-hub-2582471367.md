@@ -27,5 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-13)
 
-- `NikolasP98/minion_hub@master src/server/services/pos-packages.service.ts:396` — §4.2's "cancel a grant" action on /pos/accounts will hit this
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-packages.service.ts#L396
+- `NikolasP98/minion_hub@master src/server/services/pos-packages.service.ts:166` — grants carry packageProductId as well as serviceProductId,
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-packages.service.ts#L166
+- `NikolasP98/minion_hub@master src/server/services/pos-packages.service.ts:401` — §4.2's "cancel a grant" action on /pos/accounts will hit this
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-packages.service.ts#L401
