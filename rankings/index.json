@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T11:21:25.282Z",
+	"generatedAt": "2026-10-13T11:51:16.558Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -21886,6 +21886,38 @@
 			"scoredAt": "2026-10-07T21:22:27.987Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/79943fd162429c5760edc7afcdd684eccce99dee",
+			"sourceUpdatedAt": "2026-10-13T02:30:45Z",
+			"sourceFingerprint": "299358fdb4f6e66e370193790049e2b34fbe9f82819e7a3d0028c6ab07023891",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 7
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Merged commit for opt-in codemode/MCP feature appears deployed with no reported failure, so this is a routine health check rather than urgent action.",
+			"evidence": [
+				"feat(agents): opt-in codemode + tool_search + MCP for embedded sessions",
+				"Off by default (pi 0.75 behaviour)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T11:51:16.411Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-e2abba73de07",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29347,6 +29379,38 @@
 			"scoredAt": "2026-10-13T00:21:37.191Z"
 		},
 		{
+			"key": "issue:minion-meta#437",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#437 [monitor:unstick] reconcile proposals run 2661cede (minion-meta) - agent launch failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/437",
+			"sourceUpdatedAt": "2026-09-15T10:17:29Z",
+			"sourceFingerprint": "c4040b2536e6f28abb41697f4200439a43d8d035c602d913fee36e1920f27722",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The diagnosis itself states the underlying reconcile work already completed and pushed successfully, and only an infra-level agent-launch exit-126 needs a safe retry, so this is not independently actionable work.",
+			"evidence": [
+				"reconcile sweep ... completed successfully",
+				"Recommendation: safe to retry as-is; the reconciliation data itself is already committed and pushed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T11:51:16.411Z"
+		},
+		{
 			"key": "issue:minion-meta#439",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31127,39 +31191,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T07:51:53.715Z"
-		},
-		{
-			"key": "issue:minion-meta#437",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#437 [monitor:unstick] reconcile proposals run 2661cede (minion-meta) - agent launch failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/437",
-			"sourceUpdatedAt": "2026-09-15T10:17:29Z",
-			"sourceFingerprint": "c4040b2536e6f28abb41697f4200439a43d8d035c602d913fee36e1920f27722",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The reconcile data was already committed and pushed successfully; only the trailing agent-launch step failed with an infra-level exit-126/turns=0 signature that the diagnosis itself says is safe to retry.",
-			"evidence": [
-				"reconciliation data itself is already committed and pushed",
-				"exit-126, turns=0, permission_denials=0",
-				"Recommendation: safe to retry as-is"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T11:21:19.983Z"
 		},
 		{
 			"key": "issue:minion-meta#440",
