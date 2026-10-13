@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T01:53:20.258Z",
+	"generatedAt": "2026-10-13T02:22:18.861Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -501,6 +501,39 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
+			"key": "pr:minion_hub#512",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#512 fix(auth): onboarding gate looped every user back to /onboarding",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/512",
+			"sourceUpdatedAt": "2026-10-13T02:06:17Z",
+			"sourceFingerprint": "7162a1ea1506f6e7a5de1c4001a8659b9329b98b852a3a43ac41865d44c4582a",
+			"score": 85,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Live incident causing every navigation to loop back to onboarding for all users since the #510 deploy, with a tested one-line fix ready to merge.",
+			"evidence": [
+				"since the #510 deploy every app navigation redirects to /onboarding",
+				"resolveIdentity never copied onboardedAt causing the gate to always read pending",
+				"regression test fails without fix, passes with it; 35/35 vitest"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
+		},
+		{
 			"key": "spec:2026-10-07-readiness-tenant-event-audience-completion-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -631,6 +664,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "pr:minion (gateway)#326",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#326 fix(agents): stop writing the getter-only AgentState.systemPrompt (pi 1.1.0) — every embedded turn was failing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/326",
+			"sourceUpdatedAt": "2026-10-13T02:08:28Z",
+			"sourceFingerprint": "1324d37512515b01252a254d6a2f636bae8133dce6bcbba80aba2cc968021a7a",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "This hotfix resolves a currently-deployed regression breaking every embedded chat.send call and is already verified and ready to merge.",
+			"evidence": [
+				"every chat.send to the main agent fails before reaching the model",
+				"regression test + live probe verified the fix (3.6s PONG)",
+				"already deployed to the dev channel per base commit 49fa9269"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-agent-event-audience-spec",
@@ -7578,6 +7646,41 @@
 			"scoredAt": "2026-10-11T00:30:17.772Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/49fa9269fbabd76f747ae699af8f04a5fe45cc29",
+			"sourceUpdatedAt": "2026-10-13T01:40:42Z",
+			"sourceFingerprint": "e26275a2854e5b65a23db530911709087ca85c903d8f6dfb86fb861ce043d407",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#326",
+				"pr:minion (gateway)#325"
+			],
+			"rationale": "Already-deployed pi 1.1.0 upgrade left multiple TODO(handoff) markers and a critical regression already fixed in #326, so it now needs monitoring rather than new execution.",
+			"evidence": [
+				"commit text lists several TODO(handoff) markers",
+				"hotfix PR #326 references this commit as already deployed to the dev channel"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10062,39 +10165,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T17:22:08.309Z"
-		},
-		{
-			"key": "pr:minion-meta#786",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#786 docs(proposal): pi 1.1.0 upgrade + JEV turn router for the hub assistant",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/786",
-			"sourceUpdatedAt": "2026-10-12T07:37:40Z",
-			"sourceFingerprint": "01c66753395623fd459c23c3e2798ab7a946f3ae36fecd8ca070bee448321658",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A draft proposal with useful measurements (type-error count, token size) but explicitly states spec stage is still required before any dev work starts.",
-			"evidence": [
-				"status: draft, spec stage required before S0",
-				"95 type errors/30 files measured in a throwaway worktree",
-				"hub envelope measured at 14.2K chars/turn"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T07:40:55.186Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -13405,6 +13475,38 @@
 			"scoredAt": "2026-10-07T08:52:00.129Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/unbilled.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-69f97a2d64c9.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "f4d049961a8a5d0ffede8f888b721a1d3d7ae3b1f256de20d566426fe28fb435",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An anti-join query lacking an index forces full table scans that will scale poorly as ticket volume grows, with a concrete fix direction already given.",
+			"evidence": [
+				"TODO(handoff): the anti-join has no index to lean on",
+				"anti-joins without indexes force full table scans... O(n*m) query time that scales poorly"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-6ccc8172373b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14219,6 +14321,42 @@
 			"scoredAt": "2026-10-07T06:53:00.258Z"
 		},
 		{
+			"key": "pr:minion (gateway)#325",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#325 feat(agents): opt-in codemode + tool_search + MCP for embedded sessions (MINION_CODEMODE)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/325",
+			"sourceUpdatedAt": "2026-10-13T02:18:38Z",
+			"sourceFingerprint": "22c3749444054a430be3b36a490a6c5714322a438f6d9ddc7ab30964b1a0958d",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"deploy:minion (gateway)",
+				"pr:minion (gateway)#326"
+			],
+			"rationale": "The opt-in feature is well-tested but still draft and explicitly blocked on retargeting after #324 lands.",
+			"evidence": [
+				"status: draft",
+				"Do not merge before #324; retarget to DEV after it lands",
+				"pnpm tsgo 0 errors, 167 tests passing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
+		},
+		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14935,6 +15073,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T03:51:20.805Z"
+		},
+		{
+			"key": "issue:minion-meta#791",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#791 [monitor:unstick] rank board goals run 852cc63b: both bounded providers failed on batch 3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/791",
+			"sourceUpdatedAt": "2026-10-13T02:17:54Z",
+			"sourceFingerprint": "c0d164a91777c7537977b7da9e541f50a763180766f2121f9078c37e888639b6",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#553"
+			],
+			"rationale": "Both bounded providers failed on one batch and an identical failure shape recurred roughly 46 minutes earlier, suggesting a real but not-yet-actionable provider-outage pattern worth a host classifier.",
+			"evidence": [
+				"claude batch 3 unavailable...codex fallback also failed",
+				"run 1a149c39 shows the identical failure shape ~46 minutes earlier",
+				"catalog built fine (1044 goals); earlier batches succeeded"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
 		},
 		{
 			"key": "pr:minion (gateway)#317",
@@ -17295,38 +17468,6 @@
 			"scoredAt": "2026-10-11T06:21:21.157Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/unbilled.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-69f97a2d64c9.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "2b26dbe20d4ae202aab3afc5f07f65693e9ed4c9a6c966c29ed54f4c116e7a48",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Possible missing index causing full scans on pos_ticket_lines is a real performance risk, but the auto-diagnosis admits it hasn't confirmed which column needs indexing.",
-			"evidence": [
-				"TODO(handoff) about anti-join with no index to lean on",
-				"diagnosis text says 'I need to examine the query' without concluding which column"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:53:20.105Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-7103ac983198",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17757,38 +17898,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T19:00:16.165Z"
-		},
-		{
-			"key": "pr:minion (gateway)#325",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#325 feat(agents): opt-in codemode + tool_search + MCP for embedded sessions (MINION_CODEMODE)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/325",
-			"sourceUpdatedAt": "2026-10-13T01:41:57Z",
-			"sourceFingerprint": "91219c7aea9dd3e13a95cd29674e3055bb3dd121dfd63f3530873a5422f848e0",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Gates mostly pass and scope is clear, but merge is explicitly blocked until the stacked base PR lands first.",
-			"evidence": [
-				"Stacked on #324",
-				"Do not merge before #324; retarget to DEV after it lands"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:52:23.197Z"
 		},
 		{
 			"key": "pr:minion_hub#279",
@@ -21395,6 +21504,70 @@
 			"scoredAt": "2026-10-08T18:21:51.272Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-67ebd1f1b0f0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/accounts/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-67ebd1f1b0f0.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "91613fa78563ad6ed289d257efbd82cc87afb5b3ac7f0361302cfa10611dc25d",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A clearly-scoped, approved TODO-handoff finding with an identified file and a straightforward fix direction.",
+			"evidence": [
+				"TODO(handoff): it cannot preselect the event itself — no hub route",
+				"Fix direction: add optional query parameter eventId and preselect that event"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b993a41e7c7.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "a023b726001aad6e3328cac8fa38d5fbeb9bb0ee835f2000d278b2dcb7e695ff",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis for this TODO-handoff finding never completed — it shows only tool-call stubs with no actual analysis or fix direction, so the finding isn't yet actionable.",
+			"evidence": [
+				"TODO(handoff): onArtifactCallback/onChoice are NOT routed",
+				"Diagnosis (auto) contains only Read tool-call invocations, no analysis or fix direction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23558,37 +23731,39 @@
 			"scoredAt": "2026-10-13T01:52:23.197Z"
 		},
 		{
-			"key": "issue:minion-meta#553",
-			"kind": "issue",
-			"stage": "proposal",
+			"key": "pr:minion-meta#786",
+			"kind": "pr",
+			"stage": "development",
 			"repo": "minion-meta",
-			"title": "#553 [monitor:unstick] reconcile run ab9228c4 (minion-meta) failed: agent exec exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/553",
-			"sourceUpdatedAt": "2026-09-22T01:17:29Z",
-			"sourceFingerprint": "d9351e62cae65655750f97d776cc064a0bf838646af2ed7885abd5c23fa145b3",
-			"score": 31,
+			"title": "#786 docs(proposal): pi 1.1.0 upgrade + JEV turn router for the hub assistant",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/786",
+			"sourceUpdatedAt": "2026-10-13T02:20:02Z",
+			"sourceFingerprint": "5f7e188982d8e1132a510f70ba4e6caf87937c5f6b0423e6914d672ad312a625",
+			"score": 32,
 			"band": "low",
 			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 2
+				"criticality": 2,
+				"importance": 5,
+				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 4,
+				"implementation": 2
 			},
-			"confidence": 4,
+			"confidence": 6,
 			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single transient exit-126/zero-turn agent exec failure where the substantive reconcile work already succeeded, warranting monitoring rather than immediate action unless it recurs.",
+			"relatedKeys": [
+				"deploy:minion (gateway)",
+				"pr:minion (gateway)#325"
+			],
+			"rationale": "This is an early-stage proposal that itself states the spec stage is still required before any implementation work can begin.",
 			"evidence": [
-				"exit-126, turns=0, cost_usd=0",
-				"Recommendation: retry the run -- only the agent step needs to re-run",
-				"candidate for a new host-classifier signature if pattern recurs"
+				"Status: draft (spec stage required before S0; deps + security tags)",
+				"measured in a throwaway worktree, no production change yet"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T01:51:03.838Z"
+			"scoredAt": "2026-10-13T02:22:18.707Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -31360,6 +31535,39 @@
 			"scoredAt": "2026-10-12T12:26:34.201Z"
 		},
 		{
+			"key": "issue:minion-meta#553",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#553 [monitor:unstick] reconcile run ab9228c4 (minion-meta) failed: agent exec exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/553",
+			"sourceUpdatedAt": "2026-09-22T01:17:29Z",
+			"sourceFingerprint": "d9351e62cae65655750f97d776cc064a0bf838646af2ed7885abd5c23fa145b3",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A month-old single-occurrence transient OS-level exec failure with no recurrence evidence and the only recommendation is to retry the run.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0, cost_usd=0",
+				"Recommendation: retry the run",
+				"updatedAt 2026-09-22 with no recurrence noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T02:22:18.707Z"
+		},
+		{
 			"key": "issue:minion-meta#574",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33206,38 +33414,6 @@
 			"scoredAt": "2026-10-12T02:52:47.071Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b993a41e7c7.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "c4825cfe0ab5a562292e45e045df5d731a097ef01f5d24133446dcec17f87135",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The auto-diagnosis contains only leftover tool-invocation transcript instead of actual analysis, so the problem and fix direction are not yet legible for paid work.",
-			"evidence": [
-				"diagnosis section shows raw <invoke name=Read> blocks instead of findings",
-				"no stated fix direction or root-cause conclusion"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:53:20.105Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-a271953da5c9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33631,38 +33807,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T01:21:50.775Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-67ebd1f1b0f0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/accounts/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-67ebd1f1b0f0.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "fd70210442aa04bc3e27c4e3f1b22d1954e7c5475d91ae848e44caf51dc2bc19",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Minor UX gap (no deep-link preselection of event on POS accounts page) with a clear, bounded fix.",
-			"evidence": [
-				"TODO(handoff) in +page.svelte about missing event preselect via route",
-				"draft status, merged PR #507"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:53:20.105Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
@@ -34432,74 +34576,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
-			"key": "run:minion (gateway)#38333055570",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38333055570",
-			"sourceUpdatedAt": "2026-10-13T01:46:53Z",
-			"sourceFingerprint": "591752987af5f98fc321000e48468e43f5b00047991bcc48b71141a3d4a792ae",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion (gateway)#38333274654"
-			],
-			"rationale": "An in-progress automated CI run is not a rankable goal — it is already executing on its own.",
-			"evidence": [
-				"status in_progress",
-				"triggered by push on DEV, standard pipeline"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:53:20.105Z"
-		},
-		{
-			"key": "run:minion (gateway)#38333274654",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38333274654",
-			"sourceUpdatedAt": "2026-10-13T01:46:11Z",
-			"sourceFingerprint": "c9f11d21e81f78bb21ae84baa48b114ca6045d5789fe3f85fbd0ed1b16240e6c",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion (gateway)#38333055570"
-			],
-			"rationale": "An in-progress automated CI run is not a rankable goal — it is already executing on its own.",
-			"evidence": [
-				"status in_progress",
-				"triggered by push on DEV, standard pipeline"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:53:20.105Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
