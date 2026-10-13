@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-13)
 
-- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:388` — cancelling a plan leaves its already-paid instalment lines
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L388
+- `NikolasP98/minion_hub@master src/server/services/pos-accounts.service.ts:389` — cancelling a plan leaves its already-paid instalment lines
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos-accounts.service.ts#L389

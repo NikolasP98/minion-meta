@@ -27,5 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-13)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/accounts/+page.svelte:120` — the link targets /pos/sell, so a role holding
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/accounts/+page.svelte#L120
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/accounts/+page.svelte:128` — it cannot preselect the event itself — no hub route
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/accounts/+page.svelte#L128
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/accounts/+page.svelte:157` — the link targets /pos/sell, so a role holding
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/accounts/+page.svelte#L157
