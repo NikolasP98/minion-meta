@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T04:51:06.422Z",
+	"generatedAt": "2026-10-13T05:18:54.700Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -531,39 +531,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T02:52:08.482Z"
-		},
-		{
-			"key": "pr:minion_hub#512",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#512 fix(auth): onboarding gate looped every user back to /onboarding",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/512",
-			"sourceUpdatedAt": "2026-10-13T02:06:17Z",
-			"sourceFingerprint": "7162a1ea1506f6e7a5de1c4001a8659b9329b98b852a3a43ac41865d44c4582a",
-			"score": 85,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Live incident causing every navigation to loop back to onboarding for all users since the #510 deploy, with a tested one-line fix ready to merge.",
-			"evidence": [
-				"since the #510 deploy every app navigation redirects to /onboarding",
-				"resolveIdentity never copied onboardedAt causing the gate to always read pending",
-				"regression test fails without fix, passes with it; 35/35 vitest"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T02:22:18.707Z"
 		},
 		{
 			"key": "spec:2026-10-07-readiness-tenant-event-audience-completion-spec",
@@ -9105,6 +9072,39 @@
 			"scoredAt": "2026-10-11T11:51:07.590Z"
 		},
 		{
+			"key": "issue:minion-meta#672",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#672 [monitor:unstick] reconcile run 65ce8434 (minion-meta): claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/672",
+			"sourceUpdatedAt": "2026-09-29T04:17:34Z",
+			"sourceFingerprint": "3788155a6be0233c12da66a394a91ef60dc942be37cc2f4bbb2484fba8514682",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Recurring exit-126 claude-provider invocation failure has a clear, bounded fix despite narrow standalone impact.",
+			"evidence": [
+				"exit-126, turns=0 recurred in a second run within ~1.5 hours",
+				"surrounding reconcile pipeline completed successfully",
+				"diagnosis recommends verifying claude CLI binary health"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T05:18:54.558Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11548,39 +11548,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T01:52:08.718Z"
-		},
-		{
-			"key": "issue:minion-meta#672",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#672 [monitor:unstick] reconcile run 65ce8434 (minion-meta): claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/672",
-			"sourceUpdatedAt": "2026-09-29T04:17:34Z",
-			"sourceFingerprint": "3788155a6be0233c12da66a394a91ef60dc942be37cc2f4bbb2484fba8514682",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A recurring exit-126 claude-provider invocation fault needs human infra verification before automated retries continue.",
-			"evidence": [
-				"exit-126, turns=0 signature recurred within ~1.5 hours (5f751591)",
-				"surrounding reconcile pipeline completed successfully",
-				"recommendation: verify claude CLI binary/path on runner before retry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T04:51:35.446Z"
 		},
 		{
 			"key": "issue:minion-meta#692",
@@ -16526,6 +16493,41 @@
 			"scoredAt": "2026-10-12T05:34:17.693Z"
 		},
 		{
+			"key": "pr:minion_hub#358",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#358 feat(crm): isolated seven-day JEV shadow pilot",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/358",
+			"sourceUpdatedAt": "2026-09-22T03:50:48Z",
+			"sourceFingerprint": "f385f9424589e532bd99765f2748ff1887824a680ddcc9fb38f5d5b5017b0291",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#555"
+			],
+			"rationale": "Isolated draft shadow-pilot PR with solid test evidence but explicitly blocked pending acceptance of an unverified tokenizer/output-cap policy.",
+			"evidence": [
+				"draft status pending independent review",
+				"inference defaults off pending acceptance of empirical policy",
+				"seven unit tests plus native isolation test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T05:18:54.558Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16817,6 +16819,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T07:22:12.644Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-bdc3ef8ab34d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bdc3ef8ab34d.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "fc4eadc605943befdf0eafe7056df1bedff1fb004051dc216d830bf60ee025c4",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-948e27d654f8"
+			],
+			"rationale": "Describes the 'part 2' per-org sequence column referenced by the companion crm.customers numbering TODO in the same file and PR, warranting one combined goal.",
+			"evidence": [
+				"TODO: UUID-only today — part 2 adds a per-org sequence column",
+				"same file and merged PR #357 as companion numbering TODO",
+				"requires Drizzle migration plus query-layer updates"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T05:18:54.558Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-button-consumer-semantics-spec",
@@ -17859,41 +17896,6 @@
 			"scoredAt": "2026-10-07T04:52:18.180Z"
 		},
 		{
-			"key": "pr:minion_hub#358",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#358 feat(crm): isolated seven-day JEV shadow pilot",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/358",
-			"sourceUpdatedAt": "2026-09-22T03:50:48Z",
-			"sourceFingerprint": "f385f9424589e532bd99765f2748ff1887824a680ddcc9fb38f5d5b5017b0291",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#555"
-			],
-			"rationale": "Draft shadow-pilot PR with tests and CI is deliberately gated behind independent review and explicit policy acceptance before it can execute further.",
-			"evidence": [
-				"status: draft, pending independent review",
-				"inference defaults off pending acceptance of empirical policy",
-				"seven unit tests + PostgreSQL isolation test + dedicated CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T04:51:35.446Z"
-		},
-		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18231,22 +18233,22 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 5
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-bdc3ef8ab34d"
 			],
-			"rationale": "Both TODOs sit in the same merged PR and file and point to the same deferred per-org numbering work, so they belong to one goal.",
+			"rationale": "This crm.customers numbering TODO and the sibling UUID/per-org-sequence TODO from the same merged PR describe one 'part 2' sequencing feature and should become a single goal.",
 			"evidence": [
-				"same file src/lib/tables/defs/index.ts",
-				"same merged PR #357",
-				"marker references 'numbered in part 2'"
+				"marker: same as crm.customers — numbered in part 2",
+				"same file src/lib/tables/defs/index.ts, same merged PR #357",
+				"approved status"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T04:51:35.446Z"
+			"scoredAt": "2026-10-13T05:18:54.558Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-96f1290718f8",
@@ -18311,41 +18313,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T08:53:26.537Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-bdc3ef8ab34d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bdc3ef8ab34d.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "fc4eadc605943befdf0eafe7056df1bedff1fb004051dc216d830bf60ee025c4",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-948e27d654f8"
-			],
-			"rationale": "Defines the 'part 2' per-org sequence column work that the sibling TODO in the same file/PR references, forming one goal together.",
-			"evidence": [
-				"UUID-only today — part 2 adds a per-org sequence column",
-				"same merged PR #357, same file",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T04:51:35.446Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fcb3411ee30e",
@@ -25329,6 +25296,39 @@
 			"scoredAt": "2026-10-13T01:21:50.775Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "dec701b787765f55f86fac4c61e3dfcd6757e4c54e777e073f1a08d1ef7ce79a",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles eighteen-plus unrelated TODO markers spanning data contracts, UI, scheduling, and security into one tracking file, so the current framing cannot produce one actionable outcome.",
+			"evidence": [
+				"markers span race windows, missing DOBs, JSON byte-bounding, discount-editor UI, anti-join indexing",
+				"single file aggregates 18+ distinct open ends",
+				"review status with no scoping split"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T05:18:54.558Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-db09a2f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25855,41 +25855,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T14:22:30.261Z"
-		},
-		{
-			"key": "pr:minion-meta#555",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#555 docs: record JEV shadow deployment and week-one review",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/555",
-			"sourceUpdatedAt": "2026-09-22T03:54:56Z",
-			"sourceFingerprint": "9a8b586922123dee24a559b2282f4345964562a52ef78ce6719b6066ca207196",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#358"
-			],
-			"rationale": "This docs PR explicitly records the same shadow deployment as minion_hub#358 and should be tracked as one goal with it.",
-			"evidence": [
-				"Related implementation: NikolasP98/minion_hub#358",
-				"status: draft",
-				"records read-only boundary, no Hub merge claimed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T04:51:35.446Z"
 		},
 		{
 			"key": "pr:minion-meta#561",
@@ -27684,38 +27649,6 @@
 			"scoredAt": "2026-10-07T21:22:27.987Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/79943fd162429c5760edc7afcdd684eccce99dee",
-			"sourceUpdatedAt": "2026-10-13T02:30:45Z",
-			"sourceFingerprint": "299358fdb4f6e66e370193790049e2b34fbe9f82819e7a3d0028c6ab07023891",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 10
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged, deployed commit (codemode/MCP feature plus a security fix) with no remaining actionable work.",
-			"evidence": [
-				"PR #325 already merged with three commits including fixes",
-				"MCP loader fix already applied to prevent workspace-planted server execution"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T03:51:30.970Z"
-		},
-		{
 			"key": "issue:minion-meta#480",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27991,6 +27924,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T00:51:39.667Z"
+		},
+		{
+			"key": "pr:minion-meta#555",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#555 docs: record JEV shadow deployment and week-one review",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/555",
+			"sourceUpdatedAt": "2026-09-22T03:54:56Z",
+			"sourceFingerprint": "9a8b586922123dee24a559b2282f4345964562a52ef78ce6719b6066ca207196",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#358"
+			],
+			"rationale": "Documentation-only record of the companion shadow-pilot deployment with no independent action beyond tracking.",
+			"evidence": [
+				"records operational receipts without customer context",
+				"review requires independent human labels",
+				"draft status"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T05:18:54.558Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
@@ -33267,38 +33235,6 @@
 			"scoredAt": "2026-10-12T12:32:02.784Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "1cfec15c7b25b80e2d4d18618a01c38af30973b64ca18a642e112e584d5bac32",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The 17 listed markers are quoted fragments from unrelated domain findings embedded inside the rankings data file itself, not real source TODO(handoff) comments requiring code fixes.",
-			"evidence": [
-				"markers quote unrelated POS/inventory text like 'discount editor has no close affordance'",
-				"all located inside rankings/index.json, a generated data file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T02:52:08.482Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34727,6 +34663,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#38350494238",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38350494238",
+			"sourceUpdatedAt": "2026-10-13T05:15:55Z",
+			"sourceFingerprint": "a1a126f40ea68436b5513379e23fc0835beaa8ba72d95f0ba04c8214c5af6a80",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI run status, not an actionable goal.",
+			"evidence": [
+				"status: in_progress",
+				"push on master trigger with no finding or defect described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T05:18:54.558Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
