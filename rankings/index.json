@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T18:38:02.339Z",
+	"generatedAt": "2026-10-13T18:51:50.645Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2767,6 +2767,41 @@
 			"scoredAt": "2026-10-13T16:22:04.338Z"
 		},
 		{
+			"key": "pr:minion_hub#517",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#517 feat(pos): calendar menus open pre-populated, never empty, and cancel paid visits with a refund choice",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/517",
+			"sourceUpdatedAt": "2026-10-13T18:42:41Z",
+			"sourceFingerprint": "76c65b201e2dd21787d49f7994d93905e68c41d0c0826614f30463be45d8fb80",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
+				"proposal:2026-10-13-hub-calendar-context-menu-followups"
+			],
+			"rationale": "UI slice for the cancel/refund spec passes its stated test, check, and lint gates and only awaits the already-in-flight server slice S1.",
+			"evidence": [
+				"4 test files, 33 passed; bun run check 0 errors",
+				"depends on feat/pos-void-refund (S1), in flight"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T18:51:50.506Z"
+		},
+		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3462,6 +3497,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:57:28.771Z"
+		},
+		{
+			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Calendar context menus pre-populated, never empty; paid and unpaid items cancelable with an explicit refund",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "0e69badcc5a46c26f8e3f8e866249fec9e8ee9092be45a8db13b5a00819184a7",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#517",
+				"proposal:2026-10-13-hub-calendar-context-menu-followups"
+			],
+			"rationale": "Owner-reported POS bug around empty menus and stranded money on paid cancellations, with explicit invariants and an in-progress implementation.",
+			"evidence": [
+				"status implementing; AS-IS/TO-BE/invariants I1-I6 fully specified",
+				"UI slice S2 already merged against this spec"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T18:51:50.506Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -5089,39 +5159,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-08T00:51:39.667Z"
-		},
-		{
-			"key": "pr:minion_hub#517",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#517 feat(pos): calendar menus open pre-populated, never empty, and cancel paid visits with a refund choice",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/517",
-			"sourceUpdatedAt": "2026-10-13T18:20:47Z",
-			"sourceFingerprint": "92465b4c6d35c77dd5218cd5518add243edcaf093d40f062dd217e539a374c41",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR fixing a user-facing POS bug (empty/loading menus, unsafe cancel of paid visits) with passing tests and clear spec references, but has a noted dependency on an in-flight server slice.",
-			"evidence": [
-				"4 files, 33 passed; bun run check 0 errors",
-				"fixes 'Cargando…' showing on every click and paid cancel stranding money",
-				"depends on feat/pos-void-refund S1 landing first"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T18:38:02.187Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -11711,6 +11748,41 @@
 			"scoredAt": "2026-10-07T14:22:30.261Z"
 		},
 		{
+			"key": "proposal:2026-10-13-hub-calendar-context-menu-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Calendar context menu + cancel/refund — open ends after S1/S2",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-calendar-context-menu-followups.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "440aabd8b672a77de50e49f40154bf3997a4f85339f06965bdc3a128367c03a6",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"pr:minion_hub#517",
+				"spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec"
+			],
+			"rationale": "Bundles nine unrelated open ends (RBAC gap, concurrency hardening, missing tests, UI polish) that need separate scoped specs rather than one combined goal.",
+			"evidence": [
+				"9 distinct numbered follow-ups with different owners and fixes",
+				"item 8 flags a real concurrency gap with no UI path to trigger it today"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T18:51:50.506Z"
+		},
+		{
 			"key": "proposal:ci-minion-ai-deploy-gateway-devprd-channels",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13971,39 +14043,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T06:53:00.258Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A completed blue/green slot deployment mechanism with rollback is described but this entry is a deployment-health tracker, not an open task requiring action.",
-			"evidence": [
-				"slot-switch.sh clones live service spec into idle slot",
-				"rollback flips back to parked slot",
-				"MINION_SLOT_IMAGE pins digest to prevent mid-cutover tag drift"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T18:38:02.187Z"
 		},
 		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
@@ -22592,41 +22631,6 @@
 			"scoredAt": "2026-10-11T19:51:35.163Z"
 		},
 		{
-			"key": "pr:minion-meta#793",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#793 docs(spec): calendar context menus + paid/unpaid cancel with explicit refund (hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/793",
-			"sourceUpdatedAt": "2026-10-13T17:14:14Z",
-			"sourceFingerprint": "d1ae9db68655282040d27078394afc4a4d9829f0593a5758988794e87448b8f7",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#516",
-				"pr:minion_hub#517"
-			],
-			"rationale": "Low-risk spec-documentation PR that formalizes work already implemented in the two linked hub PRs.",
-			"evidence": [
-				"Spec for 2026-10-13 owner asks, links both implementation PRs",
-				"SDLC contract requires spec artifacts committed to minion-meta"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T17:21:55.870Z"
-		},
-		{
 			"key": "proposal:2026-08-17-meta-spec-index-project-possibly-shipped",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25644,40 +25648,6 @@
 			"scoredAt": "2026-10-06T21:22:33.839Z"
 		},
 		{
-			"key": "run:minion_hub#38448000670",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38448000670",
-			"sourceUpdatedAt": "2026-10-13T18:35:38Z",
-			"sourceFingerprint": "218c4856e8b75622bce7a8e54140ac3b58a4dba30bad373a48fce9aeda877313",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion_hub#38448000577"
-			],
-			"rationale": "CI run is still pending so its outcome and any needed action are not yet determined.",
-			"evidence": [
-				"status: pending",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T18:38:02.187Z"
-		},
-		{
 			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -27084,40 +27054,6 @@
 			"scoredAt": "2026-10-09T19:21:47.828Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-4020222934",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — deploy/swarm/slot-switch.sh (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-4020222934.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "ada49a8d0b090bd743e1718462d50782c83f56906de859cbeb12626c20c55a44",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:2026-10-13-gateway-swarm-blue-green-slots"
-			],
-			"rationale": "A thin, truncated auto-filed marker duplicating open end 1 already analyzed in depth by the companion proposal.",
-			"evidence": [
-				"marker text cuts off mid-sentence",
-				"same file/line (slot-switch.sh:16) as proposal open end 1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1309189080",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27543,37 +27479,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T16:51:42.501Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2746481724",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2746481724.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "09ab7d69e4ec427f90e66fee0934a1c713970aa551dec2440c7bd6d3401c8c2c",
-			"score": 27,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A single, precisely-located hardcoded PEN currency formatting bug in the appointment price cell is a bounded, user-visible fix.",
-			"evidence": [
-				"the Price cell still formats with formatMoney's PEN"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:17:23.726Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
@@ -33335,6 +33240,37 @@
 			"scoredAt": "2026-10-13T01:17:23.726Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2746481724",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/AppointmentForm.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2746481724.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "969f4c48042e3816398981f7577a659d82394ed3078d6c3d679dab526fcdd0df",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single bounded formatting fix in one file with a clear definition of done.",
+			"evidence": [
+				"Price cell still formats with formatMoney's PEN default at AppointmentForm.svelte:268"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T18:51:50.506Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2785164896",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33494,38 +33430,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:32:02.784Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "bc22a30e480a3daa0606f72c6fa1ea9f7e649dae0b4f013c00f7ac44e7aa5655",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A self-referential listing of markers embedded in the ranking index data file itself, not an actionable code defect.",
-			"evidence": [
-				"source file is rankings/index.json, this system's own data",
-				"several quoted lines are truncated/garbled fragments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
@@ -34894,6 +34798,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T01:21:50.775Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "97ff5314e7d6140ffa0d70a971ab4763d4a9373729ae43762f702637dbc7ed0d",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged lines are rationale/evidence text stored inside a generated rankings data file, not actionable TODOs in source code.",
+			"evidence": [
+				"target file is rankings/index.json, a data artifact, not application source",
+				"listed markers quote prior ranking rationale strings (e.g. 'this narrows the race window')"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T18:51:50.506Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
