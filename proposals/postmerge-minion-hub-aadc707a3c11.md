@@ -1,7 +1,8 @@
 ---
 id: postmerge-minion-hub-aadc707a3c11
 title: "Post-merge finding — todo-handoff in src/lib/state/chat/chat.svelte.ts (minion_hub)"
-status: draft
+status: merged
+merged_into: handoff-minion-hub-759780196
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]
