@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-52c12f8f951d
 title: "Post-merge finding — todo-handoff in scripts/qa/seed/tenancy.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]
