@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-4020222934
 title: Handoff marker — deploy/swarm/slot-switch.sh (minion-ai)
-status: draft
+status: merged
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-ai]
 tags: [handoff-sweep]
+merged_into: 2026-10-13-gateway-swarm-blue-green-slots
 ---
 
 # Handoff marker — deploy/swarm/slot-switch.sh
