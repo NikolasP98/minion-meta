@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T06:22:13.000Z",
+	"generatedAt": "2026-10-13T06:51:48.015Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1092,6 +1092,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T01:13:59.991Z"
+		},
+		{
+			"key": "pr:minion_hub#514",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#514 fix(pos): calendar no longer loops on resize and zooms to its maximum again",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/514",
+			"sourceUpdatedAt": "2026-10-13T06:25:28Z",
+			"sourceFingerprint": "4a5d3afd4360299c8cb55a0f61a66415719283f6bdaae0610298947a114aee04",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Root-caused production crash (effect_update_depth_exceeded) on the POS appointments calendar with a one-line fix, regression tests, and green gates ready to merge.",
+			"evidence": [
+				"PostHog has 9 occurrences in one session across day/week/board views",
+				"kit/staff-pref-sync.mounted.test.ts fails pre-fix and passes post-fix",
+				"bun run check 0 errors/0 warnings, vitest 29 tests passing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:51:47.846Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-shared-ui-boundaries",
@@ -5880,40 +5913,6 @@
 			"scoredAt": "2026-10-10T22:27:23.009Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/repair-verified-customer-metadata.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ab7a33dc7fa6.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "9eef569f85e26c08a0b8db01e2bacf73e8e05a29d881064a26f9c63f19c8dbe4",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#561"
-			],
-			"rationale": "Seven production-verified customers still lack DOB, a flagged compliance/fraud-detection gap that needs an explicit backfill-vs-reverification decision.",
-			"evidence": [
-				"Marker: 'TODO(handoff): Seven production-verified customers still have no DOB'",
-				"status is approved and diagnosis flags KYC/age-verification compliance exposure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T06:21:55.594Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9367,6 +9366,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:39:40.651Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/repair-verified-customer-metadata.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ab7a33dc7fa6.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "9eef569f85e26c08a0b8db01e2bacf73e8e05a29d881064a26f9c63f19c8dbe4",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A real compliance gap (seven verified customers missing DOB) is documented but the fix direction is an undecided choice between two approaches, so it needs a decision before actionable work can start.",
+			"evidence": [
+				"Seven production-verified customers still have no DOB per TODO(handoff) marker",
+				"Diagnosis offers two unresolved options: third-party backfill vs re-verification request"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:51:47.846Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ac3dd6e80c62",
@@ -16769,38 +16800,6 @@
 			"scoredAt": "2026-10-12T03:51:49.903Z"
 		},
 		{
-			"key": "proposal:2026-09-28-hub-table-open-modes-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Table open modes + bulk bar + stock detail — open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-table-open-modes-followups.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "0af9d8885eede8b1d874ccfc81409e9553fc6fa4c97dc854dd5421f74ec1af92",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Most enumerated sub-items are already shipped on feat/table-open-gaps, leaving only a partially-specified remainder (§5, and §10-11 not detailed in the excerpt) to scope before dispatching.",
-			"evidence": [
-				"'Slice 2 status' notes §1,2,3,4,6,7,8,9 addressed by hub branch feat/table-open-gaps",
-				"Remaining §5 view-transition limitation and new §10-11 are referenced but not detailed in this text"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T06:21:55.594Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-184419011",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21101,6 +21100,38 @@
 			"scoredAt": "2026-10-07T18:23:03.050Z"
 		},
 		{
+			"key": "proposal:2026-09-28-hub-table-open-modes-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Table open modes + bulk bar + stock detail — open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-table-open-modes-followups.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "0af9d8885eede8b1d874ccfc81409e9553fc6fa4c97dc854dd5421f74ec1af92",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This ledger mixes already-addressed items with several unrelated unresolved follow-ups (§5, §9 QA 500, permission model) that should become separately scoped proposals rather than one tracking doc.",
+			"evidence": [
+				"slice 2 status notes most sections (§1-§4,§6-§9) already addressed by feat/table-open-gaps",
+				"remaining §5 view-transition and §9 QA /pos/catalog 500 are unrelated problem domains"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:51:47.846Z"
+		},
+		{
 			"key": "proposal:2026-10-10-hub-pos-stock-fix-batch",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23892,70 +23923,6 @@
 			"scoredAt": "2026-10-07T09:22:17.789Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/79943fd162429c5760edc7afcdd684eccce99dee",
-			"sourceUpdatedAt": "2026-10-13T02:30:45Z",
-			"sourceFingerprint": "299358fdb4f6e66e370193790049e2b34fbe9f82819e7a3d0028c6ab07023891",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This entry is a deployment-health record describing an already-merged commit (#325), not an open actionable goal.",
-			"evidence": [
-				"title: minion (gateway) deployment health",
-				"summary describes merged PR #325 with Co-Authored-By trailer"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T06:22:12.861Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 96169 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-13T00:41:53Z",
-			"sourceFingerprint": "a760dd2ac16b7a57443d64f2a959fa484ae5139c11ec5e3eac136c0cf77c8e0e",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A raw upstream commit dump is not itself an actionable goal and needs triage into discrete items before it can be worked.",
-			"evidence": [
-				"Lists 96169 new commit(s) available as an undifferentiated log",
-				"No scoped problem statement or verifiable outcome is stated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:13:59.991Z"
-		},
-		{
 			"key": "issue:minion-meta#390",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25861,40 +25828,6 @@
 			"scoredAt": "2026-10-07T14:22:30.261Z"
 		},
 		{
-			"key": "pr:minion-meta#561",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#561 docs: record CRM identity and guardian release readiness",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/561",
-			"sourceUpdatedAt": "2026-09-22T05:39:16Z",
-			"sourceFingerprint": "b98f876cd7969e4ab0bfe6e746f47cacf60ff09c65def6c6f62c95d581fdb8cb",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-ab7a33dc7fa6"
-			],
-			"rationale": "The documentation PR is already validated end-to-end and only needs merging to close out the release record.",
-			"evidence": [
-				"Post-merge CI run 35691161338 completed successfully with all six jobs passing",
-				"Vercel deployment dpl_2xwqtx2hFjN9DSaYpr4HLCrjYFRG is READY and serving production"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T06:21:55.594Z"
-		},
-		{
 			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27727,6 +27660,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 96425 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-13T06:30:57Z",
+			"sourceFingerprint": "a3d6aa03e9ea951a8cfa45cfbc0f9e3f4da662ea553886584ddccf3fa2e26385",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "An automated upstream-sync notification listing 96425 commits is not a scoped task and needs to be reframed into a bounded sync/review action.",
+			"evidence": [
+				"title states 96425 new commit(s) available",
+				"summary is a raw commit log dump with no scoped change description"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:51:47.846Z"
 		},
 		{
 			"key": "issue:minion-meta#480",
@@ -30318,6 +30283,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T06:21:35.749Z"
+		},
+		{
+			"key": "pr:minion-meta#561",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#561 docs: record CRM identity and guardian release readiness",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/561",
+			"sourceUpdatedAt": "2026-09-22T05:39:16Z",
+			"sourceFingerprint": "b98f876cd7969e4ab0bfe6e746f47cacf60ff09c65def6c6f62c95d581fdb8cb",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Low-risk documentation PR recording already-completed, verified release work that satisfies the SDLC paper-trail requirement.",
+			"evidence": [
+				"Hub PR #362 already merged and Vercel deployment dpl_2xwqtx2hFjN9DSaYpr4HLCrjYFRG is READY",
+				"Post-merge CI run 35691161338 completed successfully"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T06:51:47.846Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-personal-agent-entrypoint-test",
