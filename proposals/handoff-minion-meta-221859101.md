@@ -85,18 +85,18 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21456
 - `NikolasP98/minion-meta@dev rankings/index.json:21523` — startBackupScheduler() has no call site anywhere in src/",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21523
-- `NikolasP98/minion-meta@dev rankings/index.json:23163` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23163
-- `NikolasP98/minion-meta@dev rankings/index.json:23196` — reopened mid-exit — cancel the pending close'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23196
-- `NikolasP98/minion-meta@dev rankings/index.json:23261` — Qualify Pixi/Habbo/Rapier motion, camera...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23261
-- `NikolasP98/minion-meta@dev rankings/index.json:23493` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23493
-- `NikolasP98/minion-meta@dev rankings/index.json:23786` — ?booking= deep-link query param is not wired",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23786
-- `NikolasP98/minion-meta@dev rankings/index.json:25298` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25298
+- `NikolasP98/minion-meta@dev rankings/index.json:23131` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23131
+- `NikolasP98/minion-meta@dev rankings/index.json:23164` — reopened mid-exit — cancel the pending close'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23164
+- `NikolasP98/minion-meta@dev rankings/index.json:23229` — Qualify Pixi/Habbo/Rapier motion, camera...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23229
+- `NikolasP98/minion-meta@dev rankings/index.json:23461` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23461
+- `NikolasP98/minion-meta@dev rankings/index.json:23754` — ?booking= deep-link query param is not wired",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23754
+- `NikolasP98/minion-meta@dev rankings/index.json:25266` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25266
 - `NikolasP98/minion-meta@dev rankings/index.json:25954` — the PREDICATE is covered here, the WIRING is not — no test",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25954
 - `NikolasP98/minion-meta@dev rankings/index.json:25987` — add global server custom-property sort/filter/export planning",
@@ -105,7 +105,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27256
 - `NikolasP98/minion-meta@dev rankings/index.json:27392` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27392
-- `NikolasP98/minion-meta@dev rankings/index.json:28379` — tags are NOT inline-editable here while /pos/catalog and...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28379
-- `NikolasP98/minion-meta@dev rankings/index.json:30762` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30762
+- `NikolasP98/minion-meta@dev rankings/index.json:28347` — tags are NOT inline-editable here while /pos/catalog and...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28347
+- `NikolasP98/minion-meta@dev rankings/index.json:30763` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30763

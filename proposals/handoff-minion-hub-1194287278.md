@@ -28,17 +28,17 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:262` — tagOptions is the FILTER's list — the event-scope registry
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L262
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:997` — the reported range is exactly what is ON SCREEN, while the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L997
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1370` — HC-017 — while a copy is being dragged only THAT copy
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1370
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1728` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1728
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1931` — ondragover/ondrop live on .track, an ANCESTOR of the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1931
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2041` — a drag cannot cross the runway's visible edge — there is no
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2041
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2859` — a drop reclassifies only for a custom column (its
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2859
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2940` — the agenda lists every booking in bookings — the whole
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2940
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:998` — the reported range is exactly what is ON SCREEN, while the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L998
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1371` — HC-017 — while a copy is being dragged only THAT copy
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1371
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1729` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1729
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1932` — ondragover/ondrop live on .track, an ANCESTOR of the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1932
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2042` — a drag cannot cross the runway's visible edge — there is no
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2042
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2860` — a drop reclassifies only for a custom column (its
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2860
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2941` — the agenda lists every booking in bookings — the whole
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2941
