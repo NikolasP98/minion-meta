@@ -9,6 +9,11 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- merged from handoff-minion-hub-3297143687 (handoff-ledger sweep, same marker/file, 2026-10-13):
+     marker location: src/server/services/pos/accounts/unbilled.ts:34
+     https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos/accounts/unbilled.ts#L34 -->
+
+
 # Post-merge finding — todo-handoff in `src/server/services/pos/accounts/unbilled.ts`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic

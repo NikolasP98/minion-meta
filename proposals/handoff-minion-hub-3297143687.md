@@ -1,7 +1,9 @@
 ---
 id: handoff-minion-hub-3297143687
 title: Handoff marker — src/server/services/pos/accounts/unbilled.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-69f97a2d64c9
+duplicate_candidate: postmerge-minion-hub-69f97a2d64c9
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]

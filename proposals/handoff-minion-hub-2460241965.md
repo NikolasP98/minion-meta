@@ -1,7 +1,9 @@
 ---
 id: handoff-minion-hub-2460241965
 title: Handoff marker — src/lib/components/layout/FloatingAssistant.svelte (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-8b993a41e7c7
+duplicate_candidate: postmerge-minion-hub-8b993a41e7c7
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]

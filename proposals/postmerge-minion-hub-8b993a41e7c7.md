@@ -9,6 +9,11 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- merged from handoff-minion-hub-2460241965 (handoff-ledger sweep, same marker/file, 2026-10-13):
+     marker location: src/lib/components/layout/FloatingAssistant.svelte:979
+     https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/layout/FloatingAssistant.svelte#L979 -->
+
+
 # Post-merge finding — todo-handoff in `src/lib/components/layout/FloatingAssistant.svelte`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic

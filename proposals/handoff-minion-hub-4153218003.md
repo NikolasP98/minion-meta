@@ -1,12 +1,21 @@
 ---
 id: handoff-minion-hub-4153218003
 title: Handoff marker — src/lib/assistant/turn-router.ts (minion_hub)
-status: draft
+status: review
+duplicate_candidate: postmerge-minion-hub-441331fd7343
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
+
+<!-- Reconciliation note: this marker lists two distinct TODO(handoff) lines
+     (turn-router.ts:53 and turn-router.ts:124). Line 53 corresponds to
+     postmerge-minion-hub-441331fd7343 (classifier threshold provenance);
+     line 124 corresponds to postmerge-minion-hub-a76bc9e9991b (release notes
+     not inlined) — a separate, unrelated finding in the same file. This is a
+     1-to-2 relationship, not a clean same-idea duplicate, so it is flagged
+     for human review rather than auto-merged into either one. -->
 
 # Handoff marker — src/lib/assistant/turn-router.ts
 
