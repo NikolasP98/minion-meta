@@ -1,7 +1,7 @@
 ---
 id: 2026-10-13-hub-first-paint-performance
 title: Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel
-status: draft
+status: approved
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion_hub]
