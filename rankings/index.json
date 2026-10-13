@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T16:52:07.828Z",
+	"generatedAt": "2026-10-13T17:21:56.024Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1502,6 +1502,39 @@
 			"scoredAt": "2026-10-10T22:23:20.564Z"
 		},
 		{
+			"key": "run:minion (gateway)#38431292325",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38431292325",
+			"sourceUpdatedAt": "2026-10-13T16:51:40Z",
+			"sourceFingerprint": "d6bb2bf5d00c19d3584635f37c71453a2411c5f5c9d6659abca62cbf4a34fc62",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the gateway's DEV branch is urgent but the catalog gives no failure detail to act on yet.",
+			"evidence": [
+				"status: failure",
+				"push on DEV",
+				"no logs or failure reason included in candidate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T17:21:55.870Z"
+		},
+		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2772,8 +2805,8 @@
 			"repo": "minion_hub",
 			"title": "#516 feat(pos): void a ticket from any shift with an explicit cash or store-credit refund",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/516",
-			"sourceUpdatedAt": "2026-10-13T16:47:47Z",
-			"sourceFingerprint": "d4b0a90f190f317fae33c3d66e2af26b520884122c787d4f920c761cbb0f6eb5",
+			"sourceUpdatedAt": "2026-10-13T17:16:35Z",
+			"sourceFingerprint": "e820415a355fa6b3dce89676881145c8465338fb139975d36efc290b666570ba",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -2791,14 +2824,15 @@
 				"pr:minion_hub#517",
 				"pr:minion-meta#793"
 			],
-			"rationale": "Server slice for refund-aware void is spec-anchored, fully tested (119 passing), and blocks the dependent UI PR #517.",
+			"rationale": "Server-side refund-on-void slice is fully tested, lint-clean, and unblocks the dependent UI slice.",
 			"evidence": [
-				"5 files, 119 tests passed per PR body",
-				"PR #517 explicitly names this as its merge dependency"
+				"119 tests passed across 5 files",
+				"bun run check: 0 errors, 0 warnings",
+				"shift_closed guard removed per spec I5"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
+			"scoredAt": "2026-10-13T17:21:55.870Z"
 		},
 		{
 			"key": "pr:minion_hub#517",
@@ -2807,8 +2841,8 @@
 			"repo": "minion_hub",
 			"title": "#517 feat(pos): calendar menus open pre-populated, never empty, and cancel paid visits with a refund choice",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/517",
-			"sourceUpdatedAt": "2026-10-13T16:46:05Z",
-			"sourceFingerprint": "17bb063cf3deb9484d98b6bc458345f7ba68ea13cbc68297a232f5d8aa7cdc22",
+			"sourceUpdatedAt": "2026-10-13T16:57:16Z",
+			"sourceFingerprint": "e0714a4775dc472334dbe4d6a0ae5b4afc01982c7b40f077abe1ead3fe8d5f71",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -2817,7 +2851,7 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 9,
 				"implementation": 7
 			},
 			"confidence": 7,
@@ -2826,14 +2860,15 @@
 				"pr:minion_hub#516",
 				"pr:minion-meta#793"
 			],
-			"rationale": "UI slice closes an owner-reported broken-menu/empty-box bug with gates passing, but is explicitly gated on merging #516 first.",
+			"rationale": "UI slice fixes an owner-reported broken menu and paid-cancel gap but explicitly depends on S1 merging first and carries two documented open ends.",
 			"evidence": [
-				"bunx vitest run: 4 files, 33 passed",
-				"body states 'Merge S1 first or accept that window'"
+				"33 tests passed, bun run check clean",
+				"PR states 'Merge S1 first or accept that window'",
+				"two TODO(handoff) open ends noted in PR body"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
+			"scoredAt": "2026-10-13T17:21:55.870Z"
 		},
 		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
@@ -14135,40 +14170,6 @@
 			"scoredAt": "2026-10-12T02:55:06.557Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:2026-10-13-gateway-swarm-blue-green-slots"
-			],
-			"rationale": "A deployment-health record of the already-merged blue/green slot feature whose open ends are fully tracked in the companion proposal.",
-			"evidence": [
-				"commit f2de5e0 adds slot-switch.sh prepare/switch/rollback",
-				"status unknown, no new content beyond the proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
-		},
-		{
 			"key": "issue:minion-meta#332",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20851,40 +20852,6 @@
 			"scoredAt": "2026-10-11T04:51:46.982Z"
 		},
 		{
-			"key": "pr:minion-meta#793",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#793 docs(spec): calendar context menus + paid/unpaid cancel with explicit refund (hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/793",
-			"sourceUpdatedAt": "2026-10-13T16:43:26Z",
-			"sourceFingerprint": "b325412c15bc5bb83e53eef8d7e298b880c4883a33732126b36b22235366b42a",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#516",
-				"pr:minion_hub#517"
-			],
-			"rationale": "Spec artifact documenting the two in-flight implementation PRs; trivial to land alongside them to satisfy the SDLC contract.",
-			"evidence": [
-				"names feat/pos-void-refund and feat/calendar-ctx-menu-cancel as its implementation PRs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22626,6 +22593,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T19:51:35.163Z"
+		},
+		{
+			"key": "pr:minion-meta#793",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#793 docs(spec): calendar context menus + paid/unpaid cancel with explicit refund (hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/793",
+			"sourceUpdatedAt": "2026-10-13T17:14:14Z",
+			"sourceFingerprint": "d1ae9db68655282040d27078394afc4a4d9829f0593a5758988794e87448b8f7",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#516",
+				"pr:minion_hub#517"
+			],
+			"rationale": "Low-risk spec-documentation PR that formalizes work already implemented in the two linked hub PRs.",
+			"evidence": [
+				"Spec for 2026-10-13 owner asks, links both implementation PRs",
+				"SDLC contract requires spec artifacts committed to minion-meta"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T17:21:55.870Z"
 		},
 		{
 			"key": "proposal:2026-08-17-meta-spec-index-project-possibly-shipped",
@@ -34926,38 +34928,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
-			"key": "run:minion (gateway)#38431292325",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38431292325",
-			"sourceUpdatedAt": "2026-10-13T16:44:46Z",
-			"sourceFingerprint": "73ff9e5c82e797034dad9bdb9a058a2b98282fa96ee127349f87b410bf2a888e",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Transient in-progress CI run status, not a durable goal.",
-			"evidence": [
-				"status in_progress",
-				"push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
