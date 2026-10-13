@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T21:21:51.983Z",
+	"generatedAt": "2026-10-13T21:52:16.115Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -25676,38 +25676,6 @@
 			"scoredAt": "2026-10-09T20:21:12.233Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-site-c268d8c264ba",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.1-readiness.2.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-c268d8c264ba.md",
-			"sourceUpdatedAt": "2026-10-06",
-			"sourceFingerprint": "f92f0a7fd5dbb3212f002e041ec48aac585f0835fc97357c33d2d9f03fcebdc6",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Reconciliation note flags this as a likely duplicate of an already-tracked remediation item and a sibling readiness.1 finding, so it should be merged/disposed rather than executed independently.",
-			"evidence": [
-				"Reconciliation note: 'Likely a near-duplicate of postmerge-minion-site-0315da964f10... as well as of the remediation doc'",
-				"flagged duplicate_candidate rather than merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:33.839Z"
-		},
-		{
 			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -25740,38 +25708,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T14:22:30.261Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit describes an already-merged blue/green slot-switch rollback feature with no open issue to act on.",
-			"evidence": [
-				"sourceUrl points to a merged commit f2de5e0",
-				"summary describes completed prepare/switch/rollback scripts, not a pending defect"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T21:21:51.843Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling",
@@ -28350,23 +28286,23 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-6510cf161973",
 				"proposal:postmerge-minion-hub-de937a67722d",
-				"proposal:postmerge-minion-hub-fb35d494ee25"
+				"proposal:postmerge-minion-hub-edfa7d5328ee"
 			],
-			"rationale": "One of eight near-identical deps/*.tgz scan-gap findings across hub+site that share the same root cause and fix direction and should be consolidated into one cleanup goal.",
+			"rationale": "One of five near-identical minion_hub tarball-in-deps findings from the same merged PR that should be consolidated into a single cleanup goal.",
 			"evidence": [
-				"self-flagged duplicate_candidate against 2026-09-08-platform-qc-remediation",
-				"fix direction is identical across sibling findings: remove tgz, gitignore deps/, declare as normal dependency"
+				"merged PR #431 added deps/minion-stack-design-tokens-0.1.1-readiness.2.tgz",
+				"reconciliation note flags this as duplicate_candidate pending human confirmation"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:27.571Z"
+			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
@@ -28484,23 +28420,23 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-0f6b2d0e3194",
 				"proposal:postmerge-minion-hub-de937a67722d",
-				"proposal:postmerge-minion-site-0e436304bf6c"
+				"proposal:postmerge-minion-hub-fb35d494ee25"
 			],
-			"rationale": "Another instance of the same deps/*.tgz scan-gap pattern already flagged duplicate against existing remediation; belongs in one consolidated tarball-cleanup goal.",
+			"rationale": "Same mechanical scan-gap pattern (binary tgz under deps/) as four sibling minion_hub findings from the same PR #431, better fixed as one batch.",
 			"evidence": [
-				"self-flagged duplicate_candidate against 2026-09-08-platform-qc-remediation",
-				"same PR #431 merge as sibling hub tgz findings"
+				"merged PR #431 added deps/minion-stack-ui-0.1.0-readiness.1.tgz",
+				"fix direction is identical across sibling findings: gitignore + package.json dependency declaration"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:27.571Z"
+			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-77a6343cc924",
@@ -28619,23 +28555,23 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-edfa7d5328ee",
 				"proposal:postmerge-minion-hub-0f6b2d0e3194",
-				"proposal:postmerge-minion-site-0315da964f10"
+				"proposal:postmerge-minion-hub-fb35d494ee25"
 			],
-			"rationale": "Shared-package tgz scan-gap already tracked under the platform-qc-remediation shared-package gate at a prior hash/version; should be merged with its sibling readiness.2 build and the broader tarball cleanup.",
+			"rationale": "Shared-package tarball finding overlapping both sibling minion_hub findings and an existing external remediation track, so a single consolidated hub-deps goal is more actionable than five.",
 			"evidence": [
-				"note cites prior hash d01a5285 at 0.9.0 already tracked in platform-qc-remediation",
-				"readiness.1 build of @minion-stack/shared@0.9.1"
+				"reconciliation note ties this to 2026-09-08-platform-qc-remediation's shared package release emission gate",
+				"same merged PR #431 and same deps/ pattern as four other candidates"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:27.571Z"
+			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e0651859d6e7",
@@ -28687,23 +28623,23 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-de937a67722d",
-				"proposal:postmerge-minion-hub-fb35d494ee25",
-				"proposal:postmerge-minion-site-0315da964f10"
+				"proposal:postmerge-minion-hub-0f6b2d0e3194",
+				"proposal:postmerge-minion-hub-6510cf161973"
 			],
-			"rationale": "Likely a sequential rebuild duplicate of the readiness.1 shared-package tgz finding from the same merged PR; consolidate rather than track separately.",
+			"rationale": "Explicitly noted as a likely near-duplicate of de937a67722d (readiness.1 vs readiness.2 of the same package), reinforcing that the hub findings belong in one group.",
 			"evidence": [
-				"note explicitly calls this 'likely a near-duplicate' of postmerge-minion-hub-de937a67722d",
-				"same merged PR #431, same package family @minion-stack/shared@0.9.1"
+				"reconciliation note calls this a likely near-duplicate of postmerge-minion-hub-de937a67722d",
+				"same merged PR #431"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:27.571Z"
+			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb35d494ee25",
@@ -28723,23 +28659,23 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-0f6b2d0e3194",
+				"proposal:postmerge-minion-hub-de937a67722d",
 				"proposal:postmerge-minion-hub-6510cf161973",
-				"proposal:postmerge-minion-hub-de937a67722d"
+				"proposal:postmerge-minion-hub-0f6b2d0e3194"
 			],
-			"rationale": "Yet another deps/*.tgz scan-gap from the same PR #431 with identical fix direction; one of several that should become a single tarball-cleanup goal.",
+			"rationale": "Fifth instance of the same committed-tarball pattern in minion_hub/deps, best resolved as a single deps/ cleanup PR rather than five independent goals.",
 			"evidence": [
-				"self-flagged duplicate_candidate against 2026-09-08-platform-qc-remediation UI-06 item",
-				"same merged PR #431 as four sibling hub tgz findings"
+				"merged PR #431 added deps/minion-stack-workforce-client-0.4.0-readiness.1.tgz",
+				"identical fix direction across all five hub candidates"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:27.571Z"
+			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-0315da964f10",
@@ -28759,23 +28695,23 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
+				"proposal:postmerge-minion-site-c268d8c264ba",
 				"proposal:postmerge-minion-site-0e436304bf6c",
-				"proposal:postmerge-minion-site-4a5f91cda214",
-				"proposal:postmerge-minion-hub-de937a67722d"
+				"proposal:postmerge-minion-site-4a5f91cda214"
 			],
-			"rationale": "Site-side shared-package tgz scan-gap explicitly noted as consistent with an earlier disposition on the same repo (postmerge-minion-site-a357d1f6520e); should be grouped with other site tgz findings rather than tracked independently.",
+			"rationale": "One of four identical minion-site deps/ tarball findings from the same merged PR, better consolidated into one site-deps cleanup goal.",
 			"evidence": [
-				"note references prior precedent postmerge-minion-site-a357d1f6520e on same repo",
-				"same merged PR #33 as sibling site tgz findings"
+				"merged PR #33 added deps/minion-stack-shared-0.9.1-readiness.1.tgz",
+				"reconciliation note ties to prior precedent postmerge-minion-site-a357d1f6520e"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:27.571Z"
+			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-0e436304bf6c",
@@ -28795,23 +28731,23 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-site-0315da964f10",
 				"proposal:postmerge-minion-site-4a5f91cda214",
-				"proposal:postmerge-minion-hub-6510cf161973"
+				"proposal:postmerge-minion-site-c268d8c264ba"
 			],
-			"rationale": "Same deps/*.tgz scan-gap pattern on the site repo from the same merged PR #33; fix direction overlaps fully with sibling findings and should be merged into one goal.",
+			"rationale": "Same merged PR #33 and deps/ pattern as three sibling minion-site findings, warranting one consolidated goal.",
 			"evidence": [
-				"self-flagged duplicate_candidate against 2026-09-08-platform-qc-remediation UI-06 item",
-				"same merged PR #33 as other site tgz findings"
+				"merged PR #33 added deps/minion-stack-ui-0.1.0-readiness.1.tgz",
+				"identical fix direction (gitignore + registry install) across sibling findings"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:27.571Z"
+			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-4a5f91cda214",
@@ -28831,23 +28767,59 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-site-0315da964f10",
 				"proposal:postmerge-minion-site-0e436304bf6c",
-				"proposal:postmerge-minion-hub-0f6b2d0e3194"
+				"proposal:postmerge-minion-site-c268d8c264ba"
 			],
-			"rationale": "Design-tokens tgz scan-gap on the site repo, same PR #33 and same root cause as the other seven tarball findings in this batch; consolidate into one cleanup goal.",
+			"rationale": "Design-tokens tarball finding sharing the same PR, repo, and fix pattern as three other minion-site candidates, fitting a single cleanup goal.",
 			"evidence": [
-				"self-flagged duplicate_candidate against 2026-09-08-platform-qc-remediation UI-06 item",
-				"same merged PR #33 as sibling site tgz findings"
+				"merged PR #33 added deps/minion-stack-design-tokens-0.1.1-readiness.2.tgz",
+				"reconciliation note flags duplicate_candidate status pending human confirmation"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T21:22:27.571Z"
+			"scoredAt": "2026-10-13T21:52:15.982Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-c268d8c264ba",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.1-readiness.2.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-c268d8c264ba.md",
+			"sourceUpdatedAt": "2026-10-06",
+			"sourceFingerprint": "f92f0a7fd5dbb3212f002e041ec48aac585f0835fc97357c33d2d9f03fcebdc6",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-site-0315da964f10",
+				"proposal:postmerge-minion-site-4a5f91cda214",
+				"proposal:postmerge-minion-site-0e436304bf6c"
+			],
+			"rationale": "Noted as a likely near-duplicate of 0315da964f10 (readiness.1 vs readiness.2), confirming the four site findings should merge into one goal.",
+			"evidence": [
+				"reconciliation note calls this a likely near-duplicate of postmerge-minion-site-0315da964f10",
+				"same merged PR #33 and deps/ pattern"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
 			"key": "spec:2026-09-12-erp-core-modules-attachments-recon",
