@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-1732119319
 title: Handoff marker — src/lib/components/scheduling/calendar-context-menu.ts (minion_hub)
-status: draft
+status: merged
+merged_into: 2026-10-13-hub-calendar-context-menu-followups
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]

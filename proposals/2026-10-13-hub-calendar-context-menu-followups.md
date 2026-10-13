@@ -9,6 +9,7 @@ tags: [ui, billing, logic]
 value: 4
 effort: S
 source: 2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec
+absorbed: [handoff-minion-hub-1732119319]
 ---
 # Open ends ledger — calendar context menu and cancel/refund
 
