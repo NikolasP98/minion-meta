@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1018876462
 title: Handoff marker — src/lib/components/pos/composition.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-9f08fb1611b8
+merged_into: postmerge-minion-hub-9f08fb1611b8
 ---
 
 # Handoff marker — src/lib/components/pos/composition.ts

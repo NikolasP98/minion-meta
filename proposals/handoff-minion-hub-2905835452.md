@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2905835452
 title: Handoff marker — src/lib/components/pos/CompositionEditor.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-10-13
 updated: 2026-10-13
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-121dc587ec1f
+merged_into: postmerge-minion-hub-121dc587ec1f
 ---
 
 # Handoff marker — src/lib/components/pos/CompositionEditor.svelte

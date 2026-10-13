@@ -40,3 +40,10 @@ The incomplete TODO suggests **module-scoped state in CompositionEditor lacks cl
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/499
 - file: `src/lib/components/pos/CompositionEditor.svelte`
 - checked: 2026-10-13
+
+## Merged from handoff-minion-hub-2905835452
+
+The handoff-ledger sweep independently flagged the same marker:
+
+- `NikolasP98/minion_hub@master src/lib/components/pos/CompositionEditor.svelte:16` — module-scoped for the page's lifetime, invalidated only by
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/pos/CompositionEditor.svelte#L16

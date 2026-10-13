@@ -49,3 +49,10 @@ I'll read the file to see the full context of that TODO.
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/508
 - file: `src/lib/components/pos/composition.ts`
 - checked: 2026-10-13
+
+## Merged from handoff-minion-hub-1018876462
+
+The handoff-ledger sweep independently flagged the same marker:
+
+- `NikolasP98/minion_hub@master src/lib/components/pos/composition.ts:88` — a pack's PRODUCT lines are issued at sale (handed over at the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/pos/composition.ts#L88
