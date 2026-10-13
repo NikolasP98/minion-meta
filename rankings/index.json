@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T17:51:19.689Z",
+	"generatedAt": "2026-10-13T18:21:18.854Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2603,6 +2603,39 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
+			"key": "pr:minion_hub#517",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#517 feat(pos): calendar menus open pre-populated, never empty, and cancel paid visits with a refund choice",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/517",
+			"sourceUpdatedAt": "2026-10-13T18:17:41Z",
+			"sourceFingerprint": "c446a38e54d6f152014b37c7790b991d3f87a362de2896e5b6b34de251bbc5ad",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "PR fixes a live POS UX bug (empty/loading menus, unsafe paid-visit cancellation) with passing gates and a documented upstream dependency on an in-flight server slice.",
+			"evidence": [
+				"Gates: vitest 4 files/33 passed, bun check 0 errors, design lint no new debt",
+				"Depends on in-flight feat/pos-void-refund (S1) for refund body semantics",
+				"Owner-reported bug: menu stuck on 'Cargando…', closed visits empty, paid items strandable"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T18:21:18.723Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-igv-rate-from-org-config",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2829,42 +2862,6 @@
 				"119 tests passed across 5 files",
 				"bun run check: 0 errors, 0 warnings",
 				"shift_closed guard removed per spec I5"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T17:21:55.870Z"
-		},
-		{
-			"key": "pr:minion_hub#517",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#517 feat(pos): calendar menus open pre-populated, never empty, and cancel paid visits with a refund choice",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/517",
-			"sourceUpdatedAt": "2026-10-13T16:57:16Z",
-			"sourceFingerprint": "e0714a4775dc472334dbe4d6a0ae5b4afc01982c7b40f077abe1ead3fe8d5f71",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#516",
-				"pr:minion-meta#793"
-			],
-			"rationale": "UI slice fixes an owner-reported broken menu and paid-cancel gap but explicitly depends on S1 merging first and carries two documented open ends.",
-			"evidence": [
-				"33 tests passed, bun run check clean",
-				"PR states 'Merge S1 first or accept that window'",
-				"two TODO(handoff) open ends noted in PR body"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -8061,39 +8058,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T05:51:52.914Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A blue/green slot-switch deploy mechanism was implemented but this entry reports deployment health status as unknown with no verification evidence.",
-			"evidence": [
-				"status: unknown",
-				"blue/green gateway slots prepare/switch/rollback (#327)",
-				"slots.json journals active slot per tenant"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T17:51:19.517Z"
 		},
 		{
 			"key": "issue:minion-meta#329",
