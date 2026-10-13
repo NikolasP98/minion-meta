@@ -36,3 +36,12 @@ menus, never empty, cancel-paid dialog, tray right-click).
    `/pos/appointments`); proven only through the pure `cancelPaidTickets` unit test.
 7. **SUNAT baja** for a voided ticket that was emitted (B999 shadow or real) is still a
    one-off script; the void does not touch `pos_emissions`. Separate spec.
+8. **Concurrent double-void.** `voidTicket`'s final status update has no `WHERE status='submitted'`
+   guard and the refund idempotency read happens outside the write transaction; two truly
+   concurrent voids could double-write refund/ledger rows. No UI path retries today (dialogs
+   block re-entry), so it is a hardening item: guard the update and re-check inside the tx.
+9. **Shift `expected` can now be negative** (cross-shift cash refund larger than the shift's
+   sales); `computeExpected`/`checkedShift` accept it (hub #516 follow-up fix). The close
+   dialog's "Diferencia" and the ShiftBanner should render a negative expected sensibly;
+   not visually checked.
+
