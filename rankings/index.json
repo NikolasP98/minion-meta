@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T14:21:48.843Z",
+	"generatedAt": "2026-10-13T14:51:47.432Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2463,6 +2463,39 @@
 			"scoredAt": "2026-10-12T02:56:17.748Z"
 		},
 		{
+			"key": "pr:minion (gateway)#327",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#327 feat(swarm): blue/green gateway slots — prepare/switch/rollback with the parked image as instant rollback",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/327",
+			"sourceUpdatedAt": "2026-10-13T14:37:19Z",
+			"sourceFingerprint": "9d3c10d104e8b00b42613a5c5ea095c0f63a40b5f7928d0203746218579fc61e",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A thoroughly specified and tested blue/green deployment mechanism for the production gateway is ready for review and merge.",
+			"evidence": [
+				"slot-switch.test.sh passes; mutation-checked",
+				"shellcheck clean on all three scripts",
+				"pnpm check passes (0 errors)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T14:51:47.298Z"
+		},
+		{
 			"key": "proposal:2026-08-28-factory-infra-product-failure-taxonomy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2761,39 +2794,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T04:22:23.306Z"
-		},
-		{
-			"key": "pr:minion (gateway)#327",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#327 feat(swarm): blue/green gateway slots — prepare/switch/rollback with the parked image as instant rollback",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/327",
-			"sourceUpdatedAt": "2026-10-13T14:17:57Z",
-			"sourceFingerprint": "779bc9f0841cae27265fbbf1635ac1ccc818bbff15603c5a87215c7612417331",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A draft PR adding blue/green gateway slot switching with tests, shellcheck, and documented safety invariants provides concrete rollback capability for production deploys.",
-			"evidence": [
-				"slot-switch.sh with status/prepare/switch/rollback and digest-pinned images",
-				"slot-switch.test.sh covers clone fidelity, switch order, rollback, unhealthy-switch restore",
-				"pnpm check passes; shellcheck clean"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T14:21:48.692Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -3686,6 +3686,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T04:52:18.180Z"
+		},
+		{
+			"key": "run:minion (gateway)#38411529179",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38411529179",
+			"sourceUpdatedAt": "2026-10-13T14:45:50Z",
+			"sourceFingerprint": "385c8a155ed8a83720067718acbe42c5700301a4eed2e549f49b17412063d352",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the DEV branch blocks downstream work but lacks diagnostic detail to size as an actionable goal yet.",
+			"evidence": [
+				"status: failure",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T14:51:47.298Z"
 		},
 		{
 			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
@@ -21790,6 +21822,38 @@
 			"scoredAt": "2026-10-10T22:23:20.564Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/30139844d9f0c6d47e13ad19b84c840a47166608",
+			"sourceUpdatedAt": "2026-10-13T14:13:33Z",
+			"sourceFingerprint": "6c9f8627b5eaa8b5a5dc700afbd5fa1477593a8c5d778a97b660452349a185af",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy record just reflects an already-merged commit fixing memory_get, so there is no remaining actionable goal.",
+			"evidence": [
+				"status: unknown",
+				"summary is the already-merged commit message for fix(memory)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T14:51:47.298Z"
+		},
+		{
 			"key": "issue:minion-meta#415",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33755,39 +33819,6 @@
 			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
-			"key": "run:minion (gateway)#38411529179",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38411529179",
-			"sourceUpdatedAt": "2026-10-13T14:18:31Z",
-			"sourceFingerprint": "b44e92de0ff318ff9aafaa78f17c7fdb55ce4b5ee43138ed82271f4ef4138c15",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is just an in-progress CI run status, not an actionable work item.",
-			"evidence": [
-				"kind: run, stage: testing",
-				"status: in_progress",
-				"push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T14:21:48.692Z"
-		},
-		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -34716,37 +34747,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
-			"key": "run:minion (gateway)#38411529096",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38411529096",
-			"sourceUpdatedAt": "2026-10-13T14:14:01Z",
-			"sourceFingerprint": "ef95263307341e6ce857d4ab7f1d4c1c3ddbb9c1f69874da11b156d9c5ec260d",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress CI run status, not an actionable goal.",
-			"evidence": [
-				"kind is 'run', status 'in_progress', summary is just 'push on DEV'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T14:16:20.463Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
