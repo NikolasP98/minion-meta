@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T14:16:20.601Z",
+	"generatedAt": "2026-10-13T14:21:48.843Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2763,6 +2763,39 @@
 			"scoredAt": "2026-10-11T04:22:23.306Z"
 		},
 		{
+			"key": "pr:minion (gateway)#327",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#327 feat(swarm): blue/green gateway slots — prepare/switch/rollback with the parked image as instant rollback",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/327",
+			"sourceUpdatedAt": "2026-10-13T14:17:57Z",
+			"sourceFingerprint": "779bc9f0841cae27265fbbf1635ac1ccc818bbff15603c5a87215c7612417331",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A draft PR adding blue/green gateway slot switching with tests, shellcheck, and documented safety invariants provides concrete rollback capability for production deploys.",
+			"evidence": [
+				"slot-switch.sh with status/prepare/switch/rollback and digest-pinned images",
+				"slot-switch.test.sh covers clone fidelity, switch order, rollback, unhealthy-switch restore",
+				"pnpm check passes; shellcheck clean"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T14:21:48.692Z"
+		},
+		{
 			"key": "pr:minion-base#43",
 			"kind": "pr",
 			"stage": "development",
@@ -3490,39 +3523,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:57:28.771Z"
-		},
-		{
-			"key": "pr:minion (gateway)#327",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#327 feat(swarm): blue/green gateway slots — prepare/switch/rollback with the parked image as instant rollback",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/327",
-			"sourceUpdatedAt": "2026-10-13T06:11:25Z",
-			"sourceFingerprint": "27a2849d9cf0b1609b184f5d9c4af319e93861148dff7d0fb3333c4c0a57a9b6",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified infra PR adding blue/green rollback safety for production gateway deploys, with passing mutation-checked tests and clean lint.",
-			"evidence": [
-				"slot-switch.test.sh passes; mutation-checked",
-				"pnpm check passes 0 errors",
-				"draft PR, size L, maintainer tag"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T06:22:12.861Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -6490,38 +6490,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T18:22:02.987Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-1194287278",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "feeb8aaaa379bf1f317c3aead6e26af7a5e242186aaadd61d4ee823cea2feca1",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Eight disparate bugs across a core scheduling component are bundled under one draft proposal, making it too broad to spec or execute as a single unit.",
-			"evidence": [
-				"BookingCalendar.svelte has 8 distinct markers (L262, L997, L1370, L1728, L1931, L2041, L2859, L2940)",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:15:48.989Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-531a2204dc23",
@@ -20969,6 +20937,39 @@
 			"scoredAt": "2026-10-13T01:13:59.991Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1194287278",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "d9193ce6073114e8791d7ba680bed8e80763f081b3c8f73213ae2d5e9ecaefc7",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This is an auto-filed ledger marker bundling eight distinct handoff comments in one large scheduling component, so it needs to be triaged/split before it is actionable as a single spec.",
+			"evidence": [
+				"8 separate TODO(handoff) markers across BookingCalendar.svelte lines 262-2941",
+				"filed automatically by the factory handoff-ledger sweep, not a human-authored spec",
+				"definition of done requires all markers resolved before auto-closing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T14:21:48.692Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-388739973",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30769,38 +30770,6 @@
 			"scoredAt": "2026-10-13T01:17:23.726Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/30139844d9f0c6d47e13ad19b84c840a47166608",
-			"sourceUpdatedAt": "2026-10-13T14:13:33Z",
-			"sourceFingerprint": "6c9f8627b5eaa8b5a5dc700afbd5fa1477593a8c5d778a97b660452349a185af",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This candidate only restates an already-merged commit as a deployment health snapshot, leaving no open task.",
-			"evidence": [
-				"summary describes a completed fix(memory) commit, not an open issue",
-				"status is 'unknown' with no pending action described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T14:16:20.463Z"
-		},
-		{
 			"key": "issue:minion-meta#345",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33786,6 +33755,39 @@
 			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
+			"key": "run:minion (gateway)#38411529179",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38411529179",
+			"sourceUpdatedAt": "2026-10-13T14:18:31Z",
+			"sourceFingerprint": "b44e92de0ff318ff9aafaa78f17c7fdb55ce4b5ee43138ed82271f4ef4138c15",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is just an in-progress CI run status, not an actionable work item.",
+			"evidence": [
+				"kind: run, stage: testing",
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-13T14:21:48.692Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -34741,99 +34743,6 @@
 			"rationale": "This is an in-progress CI run status, not an actionable goal.",
 			"evidence": [
 				"kind is 'run', status 'in_progress', summary is just 'push on DEV'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T14:16:20.463Z"
-		},
-		{
-			"key": "run:minion (gateway)#38411529179",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38411529179",
-			"sourceUpdatedAt": "2026-10-13T14:13:36Z",
-			"sourceFingerprint": "4f8e57f0267ae6849070864aa0e0fbcae7d17cb307565a8ce2649c2e07ed8d66",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Queued CI run snapshot with no actionable content.",
-			"evidence": [
-				"status 'queued', summary 'push on DEV'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T14:16:20.463Z"
-		},
-		{
-			"key": "run:minion (gateway)#38411529194",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "npm publish",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38411529194",
-			"sourceUpdatedAt": "2026-10-13T14:13:47Z",
-			"sourceFingerprint": "592ab39d7af281264ab4a7a89b2c8974665b6c2459de830d6986f516b7eb4baa",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "In-progress npm publish CI run, purely ephemeral status.",
-			"evidence": [
-				"status 'in_progress', title 'npm publish', summary 'push on DEV'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T14:16:20.463Z"
-		},
-		{
-			"key": "run:minion_hub#38411509218",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38411509218",
-			"sourceUpdatedAt": "2026-10-13T14:13:29Z",
-			"sourceFingerprint": "4d6c38900be5883a3c0604ee336e0ebf316e14cc209ac4b6e2e85eb5a9e52120",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Pending CI run on minion_hub master with no distinguishing content beyond trigger metadata.",
-			"evidence": [
-				"status 'pending', summary 'push on master'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
