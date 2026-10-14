@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T01:32:14.991Z",
+	"generatedAt": "2026-10-14T02:21:17.758Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8898,6 +8898,38 @@
 			"scoredAt": "2026-10-13T05:18:54.558Z"
 		},
 		{
+			"key": "issue:minion-meta#795",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#795 [monitor:unstick] rank d6d6359d: ranking catalog refused — minion_hub source unavailable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/795",
+			"sourceUpdatedAt": "2026-10-14T02:17:23Z",
+			"sourceFingerprint": "de0fa5c1771239114b8668180fe0d3906c0f957641ffaefc5f834c29099e7c68",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The ranking catalog build is intentionally refusing to run because minion_hub source data is unavailable, which blocks automated ranking until a human checks source reachability/registration.",
+			"evidence": [
+				"script throws 'ranking catalog source unavailable for minion_hub; refusing a partial catalog'",
+				"recommendation to check minion_hub reachability/registration or retry if transient"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T02:21:17.608Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9857,6 +9889,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A blue/green deploy mechanism landed and should be validated in production but the summary gives no current health signal or incident to act on.",
+			"evidence": [
+				"slot-switch.sh clones live service spec into idle slot",
+				"rollback flips back to parked slot",
+				"journals active slot in slots.json"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T02:21:17.608Z"
 		},
 		{
 			"key": "pr:minion (gateway)#254",
