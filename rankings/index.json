@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T19:21:24.767Z",
+	"generatedAt": "2026-10-14T19:51:29.713Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18227,38 +18227,6 @@
 			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment health signal for a merged blue/green slot-switch feature with no indicated incident, so it's informational rather than urgent.",
-			"evidence": [
-				"commit implements slot-switch.sh with rollback",
-				"test fixtures use detect-secrets allowlist pragmas, no real incident reported"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T19:21:24.616Z"
-		},
-		{
 			"key": "issue:minion-meta#643",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32367,20 +32335,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 5,
 				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The quoted log analysis indicates the reconcile run actually completed successfully and the exit-126/turns=0 signature was a transient infra fault in launching the provider process, not a real task failure.",
+			"rationale": "Automated monitor intake describes a single transient exit-126/turns=0 provider launch fault with no recurrence evidence, so no action is currently warranted beyond passive tracking.",
 			"evidence": [
-				"\"the reconcile script itself completed normally... proposals/index.json was written... git push of dev succeeded\"",
-				"\"Recommendation for a human: safe to retry the run\""
+				"exit 126, turns=0, permission_denials=0",
+				"reconcile script itself completed normally (push succeeded, index written)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T19:21:43.405Z"
+			"scoredAt": "2026-10-14T19:51:29.572Z"
 		},
 		{
 			"key": "issue:minion-meta#579",
