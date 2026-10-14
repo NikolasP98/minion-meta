@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T09:51:52.241Z",
+	"generatedAt": "2026-10-14T10:52:02.971Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14721,38 +14721,6 @@
 			"scoredAt": "2026-10-13T07:22:14.632Z"
 		},
 		{
-			"key": "issue:minion-meta#573",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#573 [monitor:unstick] rank run 9af58437: both bounded LLM providers failed during ranking",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/573",
-			"sourceUpdatedAt": "2026-09-23T09:17:17Z",
-			"sourceFingerprint": "581482d7d97f540b3f8a81dfd63b40f77ee7cc1eb240cdc4e98169ae93098677",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single transient dual-provider failure during ranking is self-recoverable via retry and the diagnosis itself conditions any classifier fix on recurrence.",
-			"evidence": [
-				"both bounded LLM providers failed/returned invalid JSON on rank run 9af58437 batch 1",
-				"diagnosis recommends retry now and only adding a host-classifier signature if this recurs across multiple runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T10:21:26.402Z"
-		},
-		{
 			"key": "issue:minion-meta#600",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15518,6 +15486,38 @@
 			"scoredAt": "2026-10-10T17:22:36.155Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-be019c6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ be019c6",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-be019c6.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "77569202c6f0f72305adb3ad8cadb073f77fde00ef016a48d87fcbe8da0395bf",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Four exact-location empty-catch findings in merged hub code that mask errors are well-specified and bounded to fix.",
+			"evidence": [
+				"4 medium empty-catch findings with exact file:line locations",
+				"swallows JSON.parse, fetch, and file-read errors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T10:52:02.834Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-198db99358ad",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15685,6 +15685,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T01:53:20.105Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-435bdc58c70c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-435bdc58c70c.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "bde6aeae063ef1a3b800a0ae6d3dc06f1af0b13ffeedcef651f1df97a5559109",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "CRM customer form's ?new=1/POST mismatch breaks bookmarkable/back-button semantics and has a concrete SvelteKit form-action fix direction.",
+			"evidence": [
+				"TODO: 'assistant opens this party form via ?new=1, but POST' breaks that contract",
+				"fix direction: use SvelteKit form actions with action=\"?/createCustomer\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T10:52:02.834Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-66d88ed81830",
@@ -16344,6 +16376,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:38:18.941Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-234ac5245d15",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/builder/AgentCreateWizard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-234ac5245d15.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "3ceedb7e50cc7812a45027bf2dcea4db64865df4bc3e2fa9dcfb9c5a7b8a1d19",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-302658e86e88"
+			],
+			"rationale": "Same HC-028 Dialog-migration ticket and spec reference as the AgentCreatorWizard finding, so both wizard modals should become one Dialog-migration goal.",
+			"evidence": [
+				"marker cites HC-028 and spec-hc028-overlay-dialog-contract.md DELTA 2",
+				"approved status with clear fix direction toward shared Dialog"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T10:52:02.834Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-302658e86e88",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/marketplace/AgentCreatorWizard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-302658e86e88.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "b85ad1772674d44ad5d638db628848d563fcb636bb1de9ff53e8bff186bde913",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-234ac5245d15"
+			],
+			"rationale": "Same HC-028 Dialog-migration ticket as the AgentCreateWizard finding, and also fixes a missing Escape a11y path, so combine into one Dialog-migration goal.",
+			"evidence": [
+				"marker cites HC-028 and spec-hc028-overlay-dialog-contract.md DELTA 2",
+				"no Escape path at all, a WCAG modal gap"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T10:52:02.834Z"
 		},
 		{
 			"key": "run:minion (gateway)#38529420889",
@@ -17062,38 +17162,6 @@
 			"scoredAt": "2026-10-07T23:51:35.593Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-be019c6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ be019c6",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-be019c6.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "77569202c6f0f72305adb3ad8cadb073f77fde00ef016a48d87fcbe8da0395bf",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Four concrete empty-catch findings with exact file:line locations across minion_hub represent bounded, low-risk error-handling fixes that improve reliability visibility.",
-			"evidence": [
-				"medium empty-catch findings at guide.svelte.ts:71, prompt-contract.live.test.ts:33, runner.ts:60, pos/sell/+page.svelte:320",
-				"each masks real errors such as CSS parsing, JSON.parse, and fetch failures"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T10:21:26.402Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-a6c363e77855",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17652,40 +17720,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T09:22:04.054Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-302658e86e88",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/marketplace/AgentCreatorWizard.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-302658e86e88.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "b85ad1772674d44ad5d638db628848d563fcb636bb1de9ff53e8bff186bde913",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-234ac5245d15"
-			],
-			"rationale": "Same HC-028 Dialog migration as the builder wizard finding, with an added accessibility gap (no Escape path) that slightly raises urgency but still belongs in one combined goal.",
-			"evidence": [
-				"no Escape path at all",
-				"See spec-hc028-overlay-dialog-contract.md DELTA 2"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T09:51:48.089Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-371c7c4e4606",
@@ -18444,38 +18478,6 @@
 			"scoredAt": "2026-10-10T22:23:20.564Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-435bdc58c70c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-435bdc58c70c.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "bde6aeae063ef1a3b800a0ae6d3dc06f1af0b13ffeedcef651f1df97a5559109",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The finding has a precise location and a clear, bounded fix direction (SvelteKit form action) to repair a broken GET/POST UI contract in the CRM customers page.",
-			"evidence": [
-				"TODO(handoff) at crm/customers/+page.svelte notes POST breaks the bookmarkable ?new=1 UI mode",
-				"fix direction: replace query-param toggle with <form method=\"POST\" action=\"?/createCustomer\">"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T10:21:26.402Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-52c12f8f951d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18721,20 +18723,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 4,
+				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The proposed fix is a broader protocol replacement (native tool_use to a prompt-driven parser) whose scope and risk to assistant UI rendering are not yet bounded enough for confident execution.",
+			"rationale": "Replacing native tool_use with a prompt-driven protocol in the assistant's UI-block generation is an architectural decision, not a mechanical TODO fix, and needs its own design/spec pass.",
 			"evidence": [
-				"TODO(handoff) at ui-blocks.ts notes coupling to Claude's native tool_use mechanics",
-				"fix direction proposes replacing tool_use binding with a delimiter-based response parser, a larger architectural change"
+				"marker: 'prompt-driven protocol instead of native tool_use — replace'",
+				"auto fix-direction proposes a specific parser design rather than confirming a chosen approach"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T10:21:26.402Z"
+			"scoredAt": "2026-10-14T10:52:02.834Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
@@ -21612,40 +21614,6 @@
 			"scoredAt": "2026-10-14T03:21:59.140Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-234ac5245d15",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/builder/AgentCreateWizard.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-234ac5245d15.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "3ceedb7e50cc7812a45027bf2dcea4db64865df4bc3e2fa9dcfb9c5a7b8a1d19",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-302658e86e88"
-			],
-			"rationale": "Hand-rolled wizard modal migration to shared Dialog is design-debt work, not urgent, and shares the same HC-028 spec target as the marketplace wizard finding.",
-			"evidence": [
-				"TODO(handoff): HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
-				"See spec-hc028-overlay-dialog-contract.md DELTA 2"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T09:51:48.089Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-302a578cc5a5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24114,38 +24082,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T01:52:23.197Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit message describes a blue/green slot-switch feature already implemented and merged, leaving no stated outstanding task to rank.",
-			"evidence": [
-				"slot-switch.sh ... flips traffic ... restores on failure",
-				"status: unknown, no pending work described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T09:51:52.103Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -28405,38 +28341,6 @@
 			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/calendar-mobile.spec.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-315b73ded9bb.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "9829432eeb738ae680bbad7ea7ac3a41d303ebc88dc5e362c714d93a8f0e129c",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The auto-diagnosis itself admits the TODO marker text is truncated and unclear, so the finding needs the full in-code comment read before it can be turned into an actionable goal.",
-			"evidence": [
-				"The truncated detail suggests the handoff comment itself may be unclear or the scan cut it off mid-sentence",
-				"Read the full TODO comment ... to understand the actual blocker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T09:51:48.089Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-380ed33fff7f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31026,6 +30930,38 @@
 			"scoredAt": "2026-10-13T16:52:07.690Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/calendar-mobile.spec.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-315b73ded9bb.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "9829432eeb738ae680bbad7ea7ac3a41d303ebc88dc5e362c714d93a8f0e129c",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis itself flags the TODO marker text as truncated/unclear, so the real blocker must be clarified before this is actionable.",
+			"evidence": [
+				"diagnosis: 'truncated detail suggests the handoff comment itself may be unclear or the scan cut it off mid-sentence'",
+				"fix direction starts with reading the full TODO to find the actual blocker"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T10:52:02.834Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-755c81782da8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32249,6 +32185,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T07:22:18.731Z"
+		},
+		{
+			"key": "issue:minion-meta#573",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#573 [monitor:unstick] rank run 9af58437: both bounded LLM providers failed during ranking",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/573",
+			"sourceUpdatedAt": "2026-09-23T09:17:17Z",
+			"sourceFingerprint": "581482d7d97f540b3f8a81dfd63b40f77ee7cc1eb240cdc4e98169ae93098677",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Self-diagnosed transient dual-provider fault with a retry recommendation, not a verified recurring pattern needing a goal.",
+			"evidence": [
+				"log shows claude and codex fallback both failed/invalid JSON on batch 1",
+				"diagnosis treats it as transient infra fault and recommends retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T10:52:02.834Z"
 		},
 		{
 			"key": "issue:minion-meta#574",
