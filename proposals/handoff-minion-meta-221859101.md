@@ -27,79 +27,79 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-14)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3156` — this narrows the race window, it does not close it",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3156
-- `NikolasP98/minion-meta@dev rankings/index.json:4014` — the session is drawn when the cashier clicks, not when the...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4014
-- `NikolasP98/minion-meta@dev rankings/index.json:4730` — Admit stock release durably with the booking commit",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4730
-- `NikolasP98/minion-meta@dev rankings/index.json:6094` — Historical version replacement needs an explicit data contract",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6094
-- `NikolasP98/minion-meta@dev rankings/index.json:6126` — provider JSON reader is not byte bounded before res.json()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6126
-- `NikolasP98/minion-meta@dev rankings/index.json:8674` — a realized accrual is counted via (source, source_id, status)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8674
-- `NikolasP98/minion-meta@dev rankings/index.json:8743` — remove once the phone failure is root-caused.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8743
-- `NikolasP98/minion-meta@dev rankings/index.json:9636` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9636
-- `NikolasP98/minion-meta@dev rankings/index.json:10503` — the owner also asked to configure this via agent builder",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10503
-- `NikolasP98/minion-meta@dev rankings/index.json:12153` — --apply is intentionally unimplemented",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12153
-- `NikolasP98/minion-meta@dev rankings/index.json:12220` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12220
-- `NikolasP98/minion-meta@dev rankings/index.json:12352` — this is a per-VIEWER preference, not an RBAC restriction",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12352
-- `NikolasP98/minion-meta@dev rankings/index.json:12417` — host error-log scrubbing is separate from the sanitized pipeline",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12417
-- `NikolasP98/minion-meta@dev rankings/index.json:13374` — the anti-join has no index to lean on",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13374
-- `NikolasP98/minion-meta@dev rankings/index.json:15648` — spec §4.1 also lists reschedule, charge in POS and book the...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15648
-- `NikolasP98/minion-meta@dev rankings/index.json:15681` — tagOptions is the FILTER's list — the event-scope registry",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15681
-- `NikolasP98/minion-meta@dev rankings/index.json:15715` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15715
-- `NikolasP98/minion-meta@dev rankings/index.json:15950` — on adjustment/transfer entries (5 columns: item, qty,'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15950
-- `NikolasP98/minion-meta@dev rankings/index.json:15982` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15982
-- `NikolasP98/minion-meta@dev rankings/index.json:16115` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16115
-- `NikolasP98/minion-meta@dev rankings/index.json:18119` — Reconcile uploaded blobs after failed/concurrent import creation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18119
-- `NikolasP98/minion-meta@dev rankings/index.json:18705` — UUID-only like crm.customers — numbered in part 2",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18705
-- `NikolasP98/minion-meta@dev rankings/index.json:18737` — add-only; rename / deactivate / max-days edits need a modal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18737
-- `NikolasP98/minion-meta@dev rankings/index.json:21708` — needs DataTable onRowActivate",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21708
-- `NikolasP98/minion-meta@dev rankings/index.json:21773` — it cannot preselect the event itself — no hub route",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21773
-- `NikolasP98/minion-meta@dev rankings/index.json:21805` — onArtifactCallback/onChoice are NOT routed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21805
-- `NikolasP98/minion-meta@dev rankings/index.json:21872` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21872
-- `NikolasP98/minion-meta@dev rankings/index.json:23683` — reopened mid-exit — cancel the pending close'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23683
-- `NikolasP98/minion-meta@dev rankings/index.json:23748` — Qualify Pixi/Habbo/Rapier motion, camera...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23748
-- `NikolasP98/minion-meta@dev rankings/index.json:23980` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23980
-- `NikolasP98/minion-meta@dev rankings/index.json:24307` — ?booking= deep-link query param is not wired",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24307
-- `NikolasP98/minion-meta@dev rankings/index.json:25594` — leave bars + holiday shading come from the loader's current-year",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25594
-- `NikolasP98/minion-meta@dev rankings/index.json:26018` — the PREDICATE is covered here, the WIRING is not — no test",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26018
-- `NikolasP98/minion-meta@dev rankings/index.json:26051` — add global server custom-property sort/filter/export planning",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26051
-- `NikolasP98/minion-meta@dev rankings/index.json:27360` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27360
-- `NikolasP98/minion-meta@dev rankings/index.json:27464` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27464
-- `NikolasP98/minion-meta@dev rankings/index.json:28497` — tags are NOT inline-editable here while /pos/catalog and...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28497
-- `NikolasP98/minion-meta@dev rankings/index.json:31178` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31178
+- `NikolasP98/minion-meta@dev rankings/index.json:3214` — this narrows the race window, it does not close it",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3214
+- `NikolasP98/minion-meta@dev rankings/index.json:4072` — the session is drawn when the cashier clicks, not when the...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4072
+- `NikolasP98/minion-meta@dev rankings/index.json:4885` — Admit stock release durably with the booking commit",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4885
+- `NikolasP98/minion-meta@dev rankings/index.json:6114` — Historical version replacement needs an explicit data contract",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6114
+- `NikolasP98/minion-meta@dev rankings/index.json:6146` — provider JSON reader is not byte bounded before res.json()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6146
+- `NikolasP98/minion-meta@dev rankings/index.json:8623` — a realized accrual is counted via (source, source_id, status)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8623
+- `NikolasP98/minion-meta@dev rankings/index.json:8692` — remove once the phone failure is root-caused.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8692
+- `NikolasP98/minion-meta@dev rankings/index.json:9617` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9617
+- `NikolasP98/minion-meta@dev rankings/index.json:10515` — the owner also asked to configure this via agent builder",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10515
+- `NikolasP98/minion-meta@dev rankings/index.json:12132` — --apply is intentionally unimplemented",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12132
+- `NikolasP98/minion-meta@dev rankings/index.json:12199` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12199
+- `NikolasP98/minion-meta@dev rankings/index.json:12331` — this is a per-VIEWER preference, not an RBAC restriction",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12331
+- `NikolasP98/minion-meta@dev rankings/index.json:12396` — host error-log scrubbing is separate from the sanitized pipeline",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12396
+- `NikolasP98/minion-meta@dev rankings/index.json:13353` — the anti-join has no index to lean on",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13353
+- `NikolasP98/minion-meta@dev rankings/index.json:15656` — spec §4.1 also lists reschedule, charge in POS and book the...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15656
+- `NikolasP98/minion-meta@dev rankings/index.json:15689` — tagOptions is the FILTER's list — the event-scope registry",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15689
+- `NikolasP98/minion-meta@dev rankings/index.json:15723` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15723
+- `NikolasP98/minion-meta@dev rankings/index.json:15958` — on adjustment/transfer entries (5 columns: item, qty,'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15958
+- `NikolasP98/minion-meta@dev rankings/index.json:15990` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15990
+- `NikolasP98/minion-meta@dev rankings/index.json:16123` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16123
+- `NikolasP98/minion-meta@dev rankings/index.json:18127` — Reconcile uploaded blobs after failed/concurrent import creation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18127
+- `NikolasP98/minion-meta@dev rankings/index.json:18713` — UUID-only like crm.customers — numbered in part 2",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18713
+- `NikolasP98/minion-meta@dev rankings/index.json:18745` — add-only; rename / deactivate / max-days edits need a modal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18745
+- `NikolasP98/minion-meta@dev rankings/index.json:21647` — needs DataTable onRowActivate",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21647
+- `NikolasP98/minion-meta@dev rankings/index.json:21712` — it cannot preselect the event itself — no hub route",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21712
+- `NikolasP98/minion-meta@dev rankings/index.json:21744` — onArtifactCallback/onChoice are NOT routed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21744
+- `NikolasP98/minion-meta@dev rankings/index.json:21811` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21811
+- `NikolasP98/minion-meta@dev rankings/index.json:23621` — reopened mid-exit — cancel the pending close'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23621
+- `NikolasP98/minion-meta@dev rankings/index.json:23686` — Qualify Pixi/Habbo/Rapier motion, camera...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23686
+- `NikolasP98/minion-meta@dev rankings/index.json:23918` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23918
+- `NikolasP98/minion-meta@dev rankings/index.json:24245` — ?booking= deep-link query param is not wired",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24245
+- `NikolasP98/minion-meta@dev rankings/index.json:25500` — leave bars + holiday shading come from the loader's current-year",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25500
+- `NikolasP98/minion-meta@dev rankings/index.json:25956` — the PREDICATE is covered here, the WIRING is not — no test",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25956
+- `NikolasP98/minion-meta@dev rankings/index.json:25989` — add global server custom-property sort/filter/export planning",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25989
+- `NikolasP98/minion-meta@dev rankings/index.json:27431` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27431
+- `NikolasP98/minion-meta@dev rankings/index.json:27535` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27535
+- `NikolasP98/minion-meta@dev rankings/index.json:28472` — tags are NOT inline-editable here while /pos/catalog and...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28472
+- `NikolasP98/minion-meta@dev rankings/index.json:31182` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31182
