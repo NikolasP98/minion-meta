@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T18:53:42.997Z",
+	"generatedAt": "2026-10-14T19:21:24.767Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6055,39 +6055,6 @@
 			"scoredAt": "2026-10-12T03:51:49.903Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/run-migrations.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-928e5d399f1a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "95075896492dc53a23e4abe35a13a26d3db33b73dd5eba01c47f8e6c80aa676e",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A concrete, approved finding names an incomplete ALTER TABLE migration with a clear fix path that could block future schema pushes.",
-			"evidence": [
-				"TODO(handoff) marker names drizzle/0008_workshop_thumbnail.sql with an incomplete ALTER TABLE",
-				"diagnosis recommends verifying the statement and testing with 'bun run db:push'",
-				"status is 'approved'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T18:51:59.069Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-9654a64b55fa",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7530,6 +7497,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T00:22:17.137Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/run-migrations.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-928e5d399f1a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "95075896492dc53a23e4abe35a13a26d3db33b73dd5eba01c47f8e6c80aa676e",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An incomplete ALTER TABLE migration left as a TODO(handoff) can block schema pushes and cause runtime errors, with a clear fix direction and verification step given.",
+			"evidence": [
+				"TODO(handoff) marker in run-migrations.ts for 0008_workshop_thumbnail.sql",
+				"diagnosis: incomplete ALTER TABLE could block schema pushes or cause runtime errors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T19:21:24.616Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bb9baf1f3156",
@@ -18228,6 +18227,38 @@
 			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Deployment health signal for a merged blue/green slot-switch feature with no indicated incident, so it's informational rather than urgent.",
+			"evidence": [
+				"commit implements slot-switch.sh with rollback",
+				"test fixtures use detect-secrets allowlist pragmas, no real incident reported"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T19:21:24.616Z"
+		},
+		{
 			"key": "issue:minion-meta#643",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26401,6 +26432,40 @@
 			"scoredAt": "2026-10-14T12:51:43.648Z"
 		},
 		{
+			"key": "issue:minion-meta#451",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#451 [monitor:unstick] reconcile run e6e89e89 (minion-meta): agent launch failed exit-126 after scripted reconcile succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/451",
+			"sourceUpdatedAt": "2026-09-16T17:17:37Z",
+			"sourceFingerprint": "2bdaed26f68d888c62f6bc4c6053a61878aa95b08d8be4ddafd8f020c9385c7b",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#720"
+			],
+			"rationale": "A one-off exit-126 launch fault with zero permission denials and all state already persisted, explicitly marked safe to retry with no task-logic failure.",
+			"evidence": [
+				"turns=0, permission_denials=0, scripted work already completed",
+				"recommendation: safe to retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T19:21:24.616Z"
+		},
+		{
 			"key": "issue:minion-meta#460",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26942,6 +27007,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T17:21:46.968Z"
+		},
+		{
+			"key": "issue:minion-meta#720",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#720 [monitor:unstick] rank run d8436f46 (minion-meta): both bounded providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/720",
+			"sourceUpdatedAt": "2026-09-30T18:17:32Z",
+			"sourceFingerprint": "39762af2a30581194ba99aea5c9fb59f17426bb9d58a3a031e1d691c84706eeb",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#451"
+			],
+			"rationale": "Transient dual-provider batch failure on one ranking batch, explicitly diagnosed as safe to retry rather than a real task or spec defect.",
+			"evidence": [
+				"both bounded providers failed on batch 1, cost_usd=0.132518 (calls attempted)",
+				"recommendation: safe to retry as-is"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T19:21:24.616Z"
 		},
 		{
 			"key": "issue:minion-meta#731",
@@ -31611,38 +31710,6 @@
 			"scoredAt": "2026-10-14T13:21:55.984Z"
 		},
 		{
-			"key": "issue:minion-meta#451",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#451 [monitor:unstick] reconcile run e6e89e89 (minion-meta): agent launch failed exit-126 after scripted reconcile succeeded",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/451",
-			"sourceUpdatedAt": "2026-09-16T17:17:37Z",
-			"sourceFingerprint": "2bdaed26f68d888c62f6bc4c6053a61878aa95b08d8be4ddafd8f020c9385c7b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The embedded diagnosis already concludes the run is safe to retry with all state persisted, leaving no code-level fix to execute.",
-			"evidence": [
-				"diagnosis states 'safe to retry' and 'all reconciliation state was already persisted'",
-				"turns=0 with permission_denials=0 indicates a transient launch fault, not a task defect"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T18:51:59.069Z"
-		},
-		{
 			"key": "issue:minion-meta#452",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32849,38 +32916,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T13:21:55.984Z"
-		},
-		{
-			"key": "issue:minion-meta#720",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#720 [monitor:unstick] rank run d8436f46 (minion-meta): both bounded providers failed on batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/720",
-			"sourceUpdatedAt": "2026-09-30T18:17:32Z",
-			"sourceFingerprint": "39762af2a30581194ba99aea5c9fb59f17426bb9d58a3a031e1d691c84706eeb",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Diagnosis attributes the failure to a transient dual-provider hiccup and recommends retrying as-is rather than any fix.",
-			"evidence": [
-				"diagnosis states 'safe to retry as-is'",
-				"log shows only 2/839 candidates affected before fallback failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T18:51:59.069Z"
 		},
 		{
 			"key": "issue:minion-meta#725",
