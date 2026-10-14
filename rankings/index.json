@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T13:21:56.141Z",
+	"generatedAt": "2026-10-14T13:51:35.576Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -884,20 +884,21 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 7,
 				"implementation": 2
 			},
 			"confidence": 5,
-			"recommendation": "reframe",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The proposal bundles five distinct security/durability/contract slices with real file-level targets but no implementation yet, so it should be split into separately scoped specs rather than executed as one goal.",
+			"rationale": "Well-scoped security/durability remediation across multiple repos but still a draft proposal resting on an unverifiable private audit with no spec-stage review or implementation evidence yet.",
 			"evidence": [
-				"Draft explicitly states audit completed; implementation remains open and authorizes no production action",
-				"Five separate priority slices (authorization, secret logging, flow authority, durable effects, shells contract) span unrelated subsystems and files"
+				"status is draft, updatedAt 2026-10-07",
+				"'Audit completed; implementation remains open' and 'This draft authorizes no production action'",
+				"cites raw SQL interpolation and secret logging risks in specific files (compile-flow.ts, +server.ts) without independently verifiable confirmation"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T13:22:09.696Z"
+			"scoredAt": "2026-10-14T13:51:35.437Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
@@ -27639,38 +27640,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 6
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The commit shows a blue/green slot deployment with health checks and rollback already implemented and merged, with no outstanding action described.",
-			"evidence": [
-				"commit f2de5e0 adds slot-switch.sh with prepare/switch/rollback and /health wait",
-				"status is unknown with no open gap stated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T13:21:55.984Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
