@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T16:51:15.467Z",
+	"generatedAt": "2026-10-14T17:21:47.100Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20068,39 +20068,6 @@
 			"scoredAt": "2026-10-14T04:21:24.125Z"
 		},
 		{
-			"key": "issue:minion-meta#719",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#719 [monitor:unstick] reconcile run d88d2538 (minion-meta): claude agent exit-126/turns=0 after successful scan",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/719",
-			"sourceUpdatedAt": "2026-09-30T16:17:33Z",
-			"sourceFingerprint": "eb5f17a83bc116a0efada868224d33c69a1c8317c14b35ec11c2284da4b2b20e",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The diagnosis is clear and the reconcile data itself succeeded, but this is a single transient agent-launch failure that the report itself says only warrants a classifier if it recurs.",
-			"evidence": [
-				"worker_started_at to finished_at under 1 second confirms an exec failure, not a task failure",
-				"Reconcile sweep itself completed fully (599 proposals, dev branch pushed)",
-				"Report recommends adding a classifier only if exit-126+turns=0 recurs across runs/boxes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T16:51:42.501Z"
-		},
-		{
 			"key": "issue:minion-meta#721",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26973,6 +26940,39 @@
 			"scoredAt": "2026-10-14T05:21:58.865Z"
 		},
 		{
+			"key": "issue:minion-meta#719",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#719 [monitor:unstick] reconcile run d88d2538 (minion-meta): claude agent exit-126/turns=0 after successful scan",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/719",
+			"sourceUpdatedAt": "2026-09-30T16:17:33Z",
+			"sourceFingerprint": "eb5f17a83bc116a0efada868224d33c69a1c8317c14b35ec11c2284da4b2b20e",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The reconcile data landed successfully; only the downstream agent invocation failed with a narrow exec/permission signature (exit-126, turns=0) that is clearly diagnosed and actionable.",
+			"evidence": [
+				"exit-126, turns=0, cost_usd=0, under 1 second runtime",
+				"reconcile sweep itself completed fine (proposals/index.json written, dev branch pushed)",
+				"recommendation: retry + check claude CLI binary permissions/PATH on runner"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T17:21:46.968Z"
+		},
+		{
 			"key": "issue:minion-meta#731",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27502,38 +27502,6 @@
 			"scoredAt": "2026-10-13T22:21:35.328Z"
 		},
 		{
-			"key": "run:minion (gateway)#31686911500",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/31686911500",
-			"sourceUpdatedAt": "2026-09-12T09:31:57Z",
-			"sourceFingerprint": "08122e13e4c986b0a2c34dd42ccc1ad6458c9234ddd8151631e56ef9975fd17e",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a nearly month-stale CI failure with no error detail beyond the trigger type, likely superseded by later runs.",
-			"evidence": [
-				"updatedAt 2026-09-12 is about a month old relative to 2026-10-07",
-				"Summary only states 'pull_request_review_comment on DEV' with no failure detail"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T16:51:42.501Z"
-		},
-		{
 			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -27638,38 +27606,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit describes an already-shipped blue/green slot-switch deploy feature with no outstanding action.",
-			"evidence": [
-				"commit f2de5e0 documents completed slot-switch.sh with rollback and health checks",
-				"summary reads as a shipped feature log, not a pending task"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T16:21:41.266Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -28365,38 +28301,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T06:52:04.424Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-14",
-			"sourceFingerprint": "9d9a24c15403d94b1ce071cfb6d222d0c8dc30d6c7d0d2340b65798f5ae63ec2",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted rationale snippets from the rankings/index.json data file spanning unrelated domains, suggesting the handoff-sweep mis-detected generated ranking text as code TODO(handoff) markers rather than finding real open ends.",
-			"evidence": [
-				"markers point to rankings/index.json lines like #3120, #3978, #4694 with disparate unrelated topics (POS, HR schema, phone failure)",
-				"sweep targets a generated output file rather than source code containing genuine TODO(handoff) comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T13:21:55.984Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-0f6b2d0e3194",
@@ -29284,6 +29188,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T06:51:24.945Z"
+		},
+		{
+			"key": "run:minion (gateway)#31686911500",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/31686911500",
+			"sourceUpdatedAt": "2026-09-12T09:31:57Z",
+			"sourceFingerprint": "08122e13e4c986b0a2c34dd42ccc1ad6458c9234ddd8151631e56ef9975fd17e",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a single stale CI failure over a month old with no further diagnostic detail, likely superseded by subsequent runs.",
+			"evidence": [
+				"status: failure, updatedAt 2026-09-12T09:31:57Z",
+				"title/summary give only 'Claude Code' / pull_request_review_comment on DEV with no further detail"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
 			"key": "issue:minion-meta#382",
@@ -34456,6 +34392,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T01:30:35.108Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-14",
+			"sourceFingerprint": "71c923bdfef365e8a672203b7b5f0063f135dc29543a5229842340011dbe6e3b",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted rationale-style sentences pulled from a generated rankings data file rather than genuine TODO(handoff) code comments, leaving no concrete actionable scope.",
+			"evidence": [
+				"markers point to rankings/index.json lines containing phrases like ranking rationale text, not code TODOs",
+				"target file (rankings/index.json) is generated output, not source code with real handoff markers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
