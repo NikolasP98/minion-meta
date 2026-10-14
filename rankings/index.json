@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-13T23:51:01.453Z",
+	"generatedAt": "2026-10-14T00:21:35.745Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20235,38 +20235,6 @@
 			"scoredAt": "2026-10-09T23:21:46.046Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ f0ba8a3",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f0ba8a3.md",
-			"sourceUpdatedAt": "2026-09-01",
-			"sourceFingerprint": "eb63e9bd660af5c072a36be65d89a79ffa35b517763263c7bd11938739d44bcd",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Concrete unchecked-access findings with exact file/line locations in test files pose real crash risk and are directly actionable.",
-			"evidence": [
-				"res.rows[0] accessed without checking if rows array exists",
-				"Destructured row from db.select() is used without null check"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T23:51:14.716Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-5006c27444a5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22135,6 +22103,40 @@
 			"scoredAt": "2026-10-12T16:21:40.495Z"
 		},
 		{
+			"key": "issue:minion-meta#440",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#440 [monitor:unstick] reconcile run 9ad9ad8b (minion-meta) failed to launch agent: exit-126, zero turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/440",
+			"sourceUpdatedAt": "2026-09-15T22:17:26Z",
+			"sourceFingerprint": "f1e5d739a195de5513f96b5ec531b74618d5ee73436e622a8582423916c0723b",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#568"
+			],
+			"rationale": "Duplicate monitor-intake for the same claude-agent exit-126/turns=0 launch failure signature as #568, better tracked as one grouped host-classifier item than two separate issues.",
+			"evidence": [
+				"exit code 126, turns=0, permission_denials=0",
+				"same unstick signature pattern as issue #568"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T00:21:35.589Z"
+		},
+		{
 			"key": "issue:minion-meta#477",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22445,6 +22447,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T21:51:40.079Z"
+		},
+		{
+			"key": "issue:minion-meta#568",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#568 [monitor:unstick] reconcile run b9a8ea7e (minion-meta): claude agent exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/568",
+			"sourceUpdatedAt": "2026-09-22T22:17:28Z",
+			"sourceFingerprint": "9a215aee0018d9f1e258a5753e58c1cf4b6ab80cd4156745fd67cd73f89622ca",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#440"
+			],
+			"rationale": "Second occurrence of the identical exit-126/turns=0 agent-exec signature as #440, a week later, indicating a recurring host-level issue worth one consolidated tracking item.",
+			"evidence": [
+				"exit code 126, turns=0, permission_denials=0",
+				"reconcile work itself completed successfully before the exec step failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T00:21:35.589Z"
 		},
 		{
 			"key": "issue:minion-meta#620",
@@ -23078,6 +23114,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T20:21:39.879Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ f0ba8a3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f0ba8a3.md",
+			"sourceUpdatedAt": "2026-09-01",
+			"sourceFingerprint": "eb63e9bd660af5c072a36be65d89a79ffa35b517763263c7bd11938739d44bcd",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated merge-scan lists four concrete unchecked-access findings with exact file:line locations in minion-hub test files, making the fix bounded and actionable even though severity is test-only, not production.",
+			"evidence": [
+				"4 unchecked-access findings with file:line locations",
+				"all findings confined to .test.ts files, not production source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T00:21:35.589Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-121dc587ec1f",
@@ -25708,38 +25776,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T14:22:30.261Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The commit describes an already-shipped blue/green deployment feature with built-in rollback, leaving no open action.",
-			"evidence": [
-				"slot-switch.sh clones the live service spec into an idle slot...flips traffic",
-				"rollback flips back to the parked slot"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T22:21:35.328Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling",
@@ -29799,40 +29835,6 @@
 			"scoredAt": "2026-10-13T11:21:25.149Z"
 		},
 		{
-			"key": "issue:minion-meta#568",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#568 [monitor:unstick] reconcile run b9a8ea7e (minion-meta): claude agent exec failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/568",
-			"sourceUpdatedAt": "2026-09-22T22:17:28Z",
-			"sourceFingerprint": "9a215aee0018d9f1e258a5753e58c1cf4b6ab80cd4156745fd67cd73f89622ca",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#440"
-			],
-			"rationale": "Second identical exit-126/turns=0 agent-exec failure signature recurring a week later, worth combining into one host-classifier goal rather than two separate tickets.",
-			"evidence": [
-				"claude-agent invocation step, which exited 126 with turns=0",
-				"If this exit-126/turns=0 signature recurs across runs, it is a good candidate for a new host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T23:51:14.716Z"
-		},
-		{
 			"key": "issue:minion-meta#578",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31274,40 +31276,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T19:51:25.912Z"
-		},
-		{
-			"key": "issue:minion-meta#440",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#440 [monitor:unstick] reconcile run 9ad9ad8b (minion-meta) failed to launch agent: exit-126, zero turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/440",
-			"sourceUpdatedAt": "2026-09-15T22:17:26Z",
-			"sourceFingerprint": "f1e5d739a195de5513f96b5ec531b74618d5ee73436e622a8582423916c0723b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#568"
-			],
-			"rationale": "Single transient exit-126/turns=0 agent-launch failure that self-diagnoses as environmental and recommends retry, not a repo-content bug.",
-			"evidence": [
-				"exit code 126 and turns=0",
-				"reconcile logic itself ran cleanly up to the point of invoking the agent"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T23:51:14.716Z"
 		},
 		{
 			"key": "issue:minion-meta#451",
@@ -34623,21 +34591,19 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "prune",
-			"relatedKeys": [
-				"issue:minion-meta#690"
-			],
-			"rationale": "Auto-requeued transient clone failure that already resolved itself via retry with no further action needed.",
+			"relatedKeys": [],
+			"rationale": "Transient clone failure that the system already auto-requeued successfully, leaving no outstanding action.",
 			"evidence": [
-				"class=C note=clone failed (3 tries); requeue -> 201"
+				"class=C note=clone failed (3 tries); requeue -> 201 success"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T23:51:14.716Z"
+			"scoredAt": "2026-10-14T00:21:35.589Z"
 		},
 		{
 			"key": "issue:minion-meta#690",
@@ -34656,21 +34622,19 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "prune",
-			"relatedKeys": [
-				"issue:minion-meta#689"
-			],
-			"rationale": "Duplicate transient clone-failure requeue notice, already auto-resolved and non-actionable.",
+			"relatedKeys": [],
+			"rationale": "Same transient clone-failure-then-successful-requeue pattern as #689, already self-resolved with no remaining work.",
 			"evidence": [
-				"class=C note=clone failed (3 tries); requeue -> 201"
+				"class=C note=clone failed (3 tries); requeue -> 201 success"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-06T23:51:14.716Z"
+			"scoredAt": "2026-10-14T00:21:35.589Z"
 		},
 		{
 			"key": "issue:minion-meta#718",
