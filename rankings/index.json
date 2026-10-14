@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T20:51:37.847Z",
+	"generatedAt": "2026-10-14T21:21:43.377Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14131,6 +14131,38 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health status entry for the blue/green slot-switch feature which was already merged in #327, leaving no open goal to execute.",
+			"evidence": [
+				"commit merges #327 blue/green gateway slot switching with rollback",
+				"entry describes already-shipped infra, not a pending task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T21:21:43.232Z"
+		},
+		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16093,6 +16125,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T02:22:13.723Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c371d6639113",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "0706e420210c0b31a559be2122b366b36922bfdaa6e0aa279bbc94424f8ae350",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The dead-code TODO is clearly specified with a concrete fix direction and is already marked approved, making it actionable now.",
+			"evidence": [
+				"TODO(handoff): startBackupScheduler() has no call site anywhere in src/",
+				"status: approved",
+				"fix direction specifies searching for init call sites or removing the dead code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T21:21:43.232Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
@@ -20076,38 +20141,6 @@
 			"scoredAt": "2026-10-14T04:21:24.125Z"
 		},
 		{
-			"key": "issue:minion-meta#721",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#721 [monitor:unstick] reconcile run 167dc353 failed: claude agent exit-126, turns=0 (infra fault)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/721",
-			"sourceUpdatedAt": "2026-09-30T20:17:32Z",
-			"sourceFingerprint": "9a1a33769282189f169955f1278fb1e832f06ab5e6f4d0f796f812ca3948a516",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Single transient infra-fault alert (agent exit-126, turns=0) needs human runner inspection to confirm recurrence before it becomes bounded dev work.",
-			"evidence": [
-				"reconcile pipeline itself completed normally (599 proposals, branch pushed)",
-				"exit-126/turns=0 flagged as likely transient exec/permission runner fault, not a task-logic failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T20:51:38.161Z"
-		},
-		{
 			"key": "issue:minion-meta#782",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21782,39 +21815,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T06:22:12.861Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c371d6639113",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "0706e420210c0b31a559be2122b366b36922bfdaa6e0aa279bbc94424f8ae350",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, narrowly-scoped TODO(handoff) dead-code finding with a clear definition of done and concrete fix directions.",
-			"evidence": [
-				"TODO(handoff): startBackupScheduler() has no call site anywhere in src/",
-				"status: approved",
-				"diagnosis includes concrete fix-direction steps and a definition of done"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T20:51:38.161Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cdf2e33a24b0",
@@ -27009,6 +27009,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T19:21:24.616Z"
+		},
+		{
+			"key": "issue:minion-meta#721",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#721 [monitor:unstick] reconcile run 167dc353 failed: claude agent exit-126, turns=0 (infra fault)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/721",
+			"sourceUpdatedAt": "2026-09-30T20:17:32Z",
+			"sourceFingerprint": "9a1a33769282189f169955f1278fb1e832f06ab5e6f4d0f796f812ca3948a516",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The underlying reconcile work completed successfully and the failure is a single transient exit-126 infra fault whose recurrence is not yet established.",
+			"evidence": [
+				"reconcile pipeline completed normally: 599 proposals written, dev branch pushed",
+				"claude-provider step exited 126 with turns=0, described as likely transient infra fault"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T21:21:43.232Z"
 		},
 		{
 			"key": "issue:minion-meta#731",
@@ -33608,6 +33640,38 @@
 			"scoredAt": "2026-10-12T12:32:02.784Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-14",
+			"sourceFingerprint": "1f8f4945c885cf87bd7e380c4ffd0c2d7a1123ed9daf0827dee58e8f977a3838",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The listed 'markers' are sentence fragments copied from other proposals' content stored inside the generated rankings/index.json data file, not genuine in-code TODOs needing a fix.",
+			"evidence": [
+				"16 marker lines point at rankings/index.json, a generated catalog data file",
+				"quoted marker text matches phrasing from other proposals' summaries rather than source code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T21:21:43.232Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34268,38 +34332,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T01:30:35.108Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-14",
-			"sourceFingerprint": "71c923bdfef365e8a672203b7b5f0063f135dc29543a5229842340011dbe6e3b",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted rationale-style sentences pulled from a generated rankings data file rather than genuine TODO(handoff) code comments, leaving no concrete actionable scope.",
-			"evidence": [
-				"markers point to rankings/index.json lines containing phrases like ranking rationale text, not code TODOs",
-				"target file (rankings/index.json) is generated output, not source code with real handoff markers"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
