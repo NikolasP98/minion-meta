@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-14)
 
-- `NikolasP98/minion_hub@master src/server/services/inbox/daily-feed.service.ts:8` — no org business-hours/timezone table exists yet (AS-IS). Use
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/daily-feed.service.ts#L8
-- `NikolasP98/minion_hub@master src/server/services/inbox/daily-feed.service.ts:194` — per-booking check, not the groupId-merged "visit" the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/daily-feed.service.ts#L194
+- `NikolasP98/minion_hub@master src/server/services/inbox/daily-feed.service.ts:12` — no org business-hours/timezone table exists yet (AS-IS). Use
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/daily-feed.service.ts#L12
+- `NikolasP98/minion_hub@master src/server/services/inbox/daily-feed.service.ts:220` — per-booking check, not the groupId-merged "visit" the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/daily-feed.service.ts#L220
