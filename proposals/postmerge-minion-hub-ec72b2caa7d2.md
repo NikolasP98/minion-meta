@@ -42,3 +42,9 @@ The TODO indicates that daily notification configuration is incomplete — it's 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/520
 - file: `src/routes/(app)/notifications/daily/+page.svelte`
 - checked: 2026-10-14
+
+## Merged from handoff-minion-hub-2714305531
+
+Same marker, filed by the handoff-ledger sweep: it points to the same line
+and adds a direct source link:
+https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/notifications/daily/+page.svelte#L13
