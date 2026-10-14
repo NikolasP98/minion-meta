@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T03:51:31.746Z",
+	"generatedAt": "2026-10-14T04:21:24.260Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10136,19 +10136,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 5
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A detailed owner-driven UX proposal with clear AS-IS/TO-BE, concrete file pointers, and three well-scoped sub-changes (container status, optimistic cancel, fan-deck drag) makes this ready for scoped implementation.",
+			"rationale": "A direct owner-reported UX bug (container status and feedback correctness) with a detailed AS-IS/TO-BE spec and concrete file-level implementation plan makes this ready for execution.",
 			"evidence": [
-				"AS-IS cites specific files: BookingCalendar.svelte, booking-mover.ts:82, scheduling-bookings.service.ts ~1351-1400",
-				"TO-BE specifies concrete mechanisms: createOptimistic<string>(), POST {apiBase}/{id}/group {reorder: [ids]}"
+				"owner request with screenshots describing container showing cancelled when only lead was cancelled",
+				"TO-BE specifies optimistic setStatus via createOptimistic overlay and a new reorder API with service-level test plan",
+				"existing code anchors cited: BookingCalendar.svelte, booking-mover.ts:82, scheduling-bookings.service.ts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T03:51:09.743Z"
+			"scoredAt": "2026-10-14T04:21:24.125Z"
 		},
 		{
 			"key": "proposal:2026-10-09-gateway-startup-heap-profiling",
@@ -16199,38 +16200,6 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
-			"key": "issue:minion-meta#705",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#705 [monitor:unstick] Reconcile run db3dd4c6 - claude agent exec failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/705",
-			"sourceUpdatedAt": "2026-09-30T03:18:08Z",
-			"sourceFingerprint": "6f002a126390988bfb5855e9904d017539fbf302b954d44ebd862aee87b43bbf",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A recurring exit-126 host-level fault blocks automated reconcile runs but is diagnostic rather than a bounded fix, so it needs human infra investigation before it's actionable as paid work.",
-			"evidence": [
-				"exit 126 with 0 turns recurred identically in two runs ~2h17m apart",
-				"recommendation is to check worker box's claude CLI install/PATH, not a code fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T03:51:09.743Z"
-		},
-		{
 			"key": "proposal:2026-08-23-hub-archived-warehouse-submit-guard",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19940,6 +19909,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T01:22:00.333Z"
+		},
+		{
+			"key": "issue:minion-meta#705",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#705 [monitor:unstick] Reconcile run db3dd4c6 - claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/705",
+			"sourceUpdatedAt": "2026-09-30T03:18:08Z",
+			"sourceFingerprint": "6f002a126390988bfb5855e9904d017539fbf302b954d44ebd862aee87b43bbf",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The reconciliation pipeline itself succeeded and only the LLM agent sub-step failed with a host-level exec error twice, so this needs a human checking worker-box PATH/exec permissions rather than a code change.",
+			"evidence": [
+				"exit 126 with 0 turns, 0 permission denials",
+				"identical signature recurred in run 07e319f5 ~2h17m earlier",
+				"recommendation text itself suggests a host classifier rule, not a dev task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T04:21:24.125Z"
 		},
 		{
 			"key": "issue:minion-meta#719",
@@ -27786,38 +27788,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit log entry for an already-merged blue/green deployment feature with no outstanding action described.",
-			"evidence": [
-				"PR #327 adds slot-switch.sh with prepare/switch/rollback already implemented",
-				"rollback restores on failure and journals active slot in slots.json"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T03:51:31.583Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
