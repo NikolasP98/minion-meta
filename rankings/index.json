@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T08:21:48.402Z",
+	"generatedAt": "2026-10-14T08:51:49.933Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5035,39 +5035,6 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
-			"key": "issue:minion-meta#265",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#265 [monitor:unstick] Factory queue wedged",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/265",
-			"sourceUpdatedAt": "2026-10-07T08:17:02Z",
-			"sourceFingerprint": "59e52648e9d7d7e32176842bd0d348fecf4cb04b7de005c80a534608ddc6b7c1",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A wedged factory queue blocks all downstream automated runs and has a clear, bounded fix (restart runner).",
-			"evidence": [
-				"queued run(s) with nothing running for >15m",
-				"runner may need a restart",
-				"updated 2026-10-07"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T08:21:55.181Z"
-		},
-		{
 			"key": "issue:minion-meta#405",
 			"kind": "issue",
 			"stage": "proposal",
@@ -6800,6 +6767,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T07:22:18.731Z"
+		},
+		{
+			"key": "issue:minion-meta#265",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#265 [monitor:unstick] Factory queue wedged",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/265",
+			"sourceUpdatedAt": "2026-10-07T08:17:02Z",
+			"sourceFingerprint": "59e52648e9d7d7e32176842bd0d348fecf4cb04b7de005c80a534608ddc6b7c1",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A queue-wedged alert from a week ago with only a vague symptom description and no confirmation it is still active warrants a fresh check before committing work.",
+			"evidence": [
+				"queued run(s) with nothing running for >15m; runner may need a restart",
+				"updatedAt 2026-10-07, 7 days stale"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
 			"key": "issue:minion-meta#306",
@@ -12340,22 +12339,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 5
 			},
 			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-f05b351ac858"
 			],
-			"rationale": "A real data-loss bug tied to the same HC-028 shared-Dialog migration as the other overlay proposal in this batch, so the two should become one goal.",
+			"rationale": "A hand-rolled modal with a documented data-loss bug (unsaved edits discarded on outside click) is part of the same HC-028 shared-Dialog migration as the RelationshipPrompt finding.",
 			"evidence": [
-				"outside-click dismissal must be gated on slot.dirty edits; today a stray click discards them",
-				"references spec-hc028-overlay-dialog-contract, same as f05b351ac858"
+				"outside-click dismissal must be gated on unsaved slot.dirty edits (today a stray click discards them)",
+				"See spec-hc028-overlay-dialog-contract"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T08:21:55.181Z"
+			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e1f5f0efca2a",
@@ -16152,40 +16151,6 @@
 			"scoredAt": "2026-10-12T07:22:12.644Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-f05b351ac858",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/workshop/RelationshipPrompt.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f05b351ac858.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "d5316adf3fbcc9e426366268b3be35fd9e416647ead9811e8b1f4b7e75199b69",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c14a5898d7d0"
-			],
-			"rationale": "Part of the same HC-028 overlay-dialog contract work as the other proposal in this batch and still needs a Dialog-vs-Popover anchoring decision before it is actionable alone.",
-			"evidence": [
-				"needs a positioned-dialog decision (Popover vs Dialog with an anchor)",
-				"shared Dialog centres itself and has no anchor API"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T08:21:55.181Z"
-		},
-		{
 			"key": "spec:2026-08-31-handoff-minion-hub-722867358-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -18201,19 +18166,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A clearly specified WCAG AA contrast failure with a bounded fix path and verification commands already identified.",
+			"rationale": "A concrete WCAG AA contrast failure in the solarized-light palette has a clear, bounded fix direction and verification steps already specified.",
 			"evidence": [
-				"contrast ratio ~2.5:1 vs 4.5:1 required, fails WCAG AA",
-				"fix direction: adjust palette then run lint:design && lint:tokens"
+				"solarized-light --color-text-primary #586e75 on --color-surface-3",
+				"run bun run lint:design && bun run lint:tokens in minion_hub/ and update the design-token contract"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T08:21:55.181Z"
+			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
 			"key": "issue:minion-meta#643",
@@ -18736,6 +18701,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T08:53:26.537Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f05b351ac858",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/workshop/RelationshipPrompt.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f05b351ac858.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "d5316adf3fbcc9e426366268b3be35fd9e416647ead9811e8b1f4b7e75199b69",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-c14a5898d7d0"
+			],
+			"rationale": "This is an open design decision (anchored Popover vs Dialog) for the same HC-028 overlay migration as the SectionProseEditor finding, best resolved together.",
+			"evidence": [
+				"Needs a positioned-dialog decision (Popover vs Dialog with an anchor)",
+				"See spec-hc028-overlay-dialog-contract.md DELTA 2"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fcb3411ee30e",
@@ -24148,6 +24147,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T01:52:23.197Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 9
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This entry is a commit message describing a blue/green slot-switch feature already merged, with no outstanding action.",
+			"evidence": [
+				"feat(swarm): blue/green gateway slots — prepare/switch/rollback with the parked image as instant rollback (#327)",
+				"rollback flips back to the parked slot. OWNER-RUN.sh + cutover.sh are the owner-run sequence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -34615,38 +34646,6 @@
 			"scoredAt": "2026-10-11T21:21:39.668Z"
 		},
 		{
-			"key": "issue:minion-meta#445",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#445 [monitor:unstick] probe-only-ignore",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/445",
-			"sourceUpdatedAt": "2026-09-16T07:17:53Z",
-			"sourceFingerprint": "8f85753e2b938346f3ce900e785c38da55f916cbf51e0355a2cfc0e474a6a1f7",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a bare health-check probe entry with no actionable content.",
-			"evidence": [
-				"fingerprint: unstick-probe...-check",
-				"summary body is just 'probe'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T08:21:55.181Z"
-		},
-		{
 			"key": "issue:minion-meta#447",
 			"kind": "issue",
 			"stage": "proposal",
@@ -35059,6 +35058,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T21:21:39.668Z"
+		},
+		{
+			"key": "issue:minion-meta#445",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#445 [monitor:unstick] probe-only-ignore",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/445",
+			"sourceUpdatedAt": "2026-09-16T07:17:53Z",
+			"sourceFingerprint": "8f85753e2b938346f3ce900e785c38da55f916cbf51e0355a2cfc0e474a6a1f7",
+			"score": 0,
+			"band": "low",
+			"axes": {
+				"criticality": 0,
+				"importance": 0,
+				"impact": 0
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Title and fingerprint explicitly mark this as a probe-only noise entry with no real content.",
+			"evidence": [
+				"title: probe-only-ignore",
+				"fingerprint: unstick-probe-1af9cb83-check; body text: \"probe\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
 			"key": "issue:minion-meta#599",
