@@ -1,7 +1,7 @@
 ---
 id: 2026-10-14-hub-daily-dashboard
 title: Daily dashboard — agent-authored layouts and the cards still missing
-status: draft
+status: approved
 created: 2026-10-14
 updated: 2026-10-14
 repos: [minion_hub]
