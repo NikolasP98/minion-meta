@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T12:21:26.417Z",
+	"generatedAt": "2026-10-14T12:51:43.793Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10038,38 +10038,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Blue/green slot-switch deployment tooling landed with rollback support, but this entry tracks ongoing deployment health rather than a single bounded goal.",
-			"evidence": [
-				"slot-switch.sh clones live service spec to idle slot and flips traffic",
-				"rollback flips back to parked slot on failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T12:21:26.261Z"
 		},
 		{
 			"key": "pr:minion (gateway)#254",
@@ -24586,39 +24554,6 @@
 			"scoredAt": "2026-10-10T05:38:18.941Z"
 		},
 		{
-			"key": "issue:minion-meta#446",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#446 [monitor:unstick] reconcile run f66b5a2d: exit-126 with 0 agent turns after successful merge-scan work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/446",
-			"sourceUpdatedAt": "2026-09-16T10:17:31Z",
-			"sourceFingerprint": "9d71fce7265e5a5ad05120bf939418e9ac7d40388d470ffe8e11d2a9cfa93f70",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Single automated monitor alert describes a one-off exec-layer failure (exit-126, turns=0) after otherwise-successful reconcile work, with no evidence yet of recurrence to justify building new tooling.",
-			"evidence": [
-				"exit-126 with turns=0 for the claude provider agent step",
-				"merge-scan state was already checkpointed/persisted so a retry should be cheap",
-				"recommendation is contingent: 'if exit-126/turns=0 recurs on the same worker box across other runs'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T12:21:33.252Z"
-		},
-		{
 			"key": "issue:minion-meta#456",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26498,6 +26433,38 @@
 			"scoredAt": "2026-10-12T12:23:42.174Z"
 		},
 		{
+			"key": "issue:minion-meta#446",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#446 [monitor:unstick] reconcile run f66b5a2d: exit-126 with 0 agent turns after successful merge-scan work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/446",
+			"sourceUpdatedAt": "2026-09-16T10:17:31Z",
+			"sourceFingerprint": "9d71fce7265e5a5ad05120bf939418e9ac7d40388d470ffe8e11d2a9cfa93f70",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single transient exit-126/turns=0 infra failure with checkpointed state and a cheap retry already recommended is low-impact unless the pattern recurs across runs.",
+			"evidence": [
+				"diagnosis: exit-126 with turns=0, 'infra/exec-layer fault on the runner'",
+				"'merge-scan state was already checkpointed/persisted so a retry should be cheap'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T12:51:43.648Z"
+		},
+		{
 			"key": "issue:minion-meta#460",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27672,6 +27639,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T21:22:27.987Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 97586 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-14T12:25:37Z",
+			"sourceFingerprint": "5f3d5a4bd9cdf81bd76495dfd029e30a222502e141a36cd6e76aeb7c1041388d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Raw upstream commit dump has no defined scope, test plan, or merge strategy, so it cannot be executed as stated even though staying in sync matters.",
+			"evidence": [
+				"title lists 97586 new commits as a bare log dump",
+				"summary is an unstructured commit list with no stated scope or acceptance criteria"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T12:51:43.648Z"
 		},
 		{
 			"key": "issue:minion-meta#480",
@@ -34613,38 +34612,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T17:51:58.013Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 97346 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-14T06:27:22Z",
-			"sourceFingerprint": "70cc3f74e51226992331ebca2d2f5a85ca37e0c0473e1469d1470dad14648091",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated upstream-sync notice listing commits, not a scoped actionable task.",
-			"evidence": [
-				"title: Upstream sync: 97346 new commit(s) available",
-				"tags: upstream-sync"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T06:39:14.722Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
