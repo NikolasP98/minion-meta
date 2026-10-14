@@ -94,7 +94,7 @@ Three owner asks on `/pos/appointments` (2026-10-13), decided in chat the same d
 | D5 | page: remove `openEventMenu` fetch; `{#if ctxAt && ctxItems.length}`; `cancel-paid` dialog with refund radio; tray right-click menu | S2 | `+page` component test for the dialog payload; existing calendar tests green |
 | D6 | i18n es/en keys for the new entries and dialog | S2 | `i18n:compile` + check |
 
-Out of scope: partial voids, real payment-gateway reversals, SUNAT baja (separate spec),
+**Out of scope:** partial voids, real payment-gateway reversals, SUNAT baja (separate spec),
 line-level cancel endpoint.
 
 ## Verification
