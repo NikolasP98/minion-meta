@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T02:51:04.148Z",
+	"generatedAt": "2026-10-14T03:21:59.357Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6987,6 +6987,38 @@
 			"scoredAt": "2026-10-08T21:21:52.126Z"
 		},
 		{
+			"key": "issue:minion-meta#701",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#701 [monitor:unstick] reconcile proposals: agent never started, exit-126 turns=0 (run 07e319f5)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/701",
+			"sourceUpdatedAt": "2026-09-30T01:18:12Z",
+			"sourceFingerprint": "381e471cfd656f34e4294ede2520d2615866d596416db39a5c24a1749fe1faf9",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Suspected host disk exhaustion caused multiple sibling runs to fail outright, but confirming and remediating requires a human checking the runner box before any coded fix.",
+			"evidence": [
+				"No space left on device during git worktree creation",
+				"sits in same window as sibling runs that failed outright"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T03:21:59.140Z"
+		},
+		{
 			"key": "issue:minion-meta#715",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9889,39 +9921,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A blue/green deploy mechanism landed and should be validated in production but the summary gives no current health signal or incident to act on.",
-			"evidence": [
-				"slot-switch.sh clones live service spec into idle slot",
-				"rollback flips back to parked slot",
-				"journals active slot in slots.json"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T02:21:17.608Z"
 		},
 		{
 			"key": "pr:minion (gateway)#254",
@@ -16305,38 +16304,6 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
-			"key": "issue:minion-meta#701",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#701 [monitor:unstick] reconcile proposals: agent never started, exit-126 turns=0 (run 07e319f5)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/701",
-			"sourceUpdatedAt": "2026-09-30T01:18:12Z",
-			"sourceFingerprint": "381e471cfd656f34e4294ede2520d2615866d596416db39a5c24a1749fe1faf9",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Recurring disk exhaustion blocked multiple runs but the actual fix is an ops action on the host, not codebase work.",
-			"evidence": [
-				"No space left on device during git worktree creation and output writing",
-				"sits in same window as 5 sibling failed runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T02:51:52.316Z"
-		},
-		{
 			"key": "issue:minion-meta#705",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21649,19 +21616,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Five concrete file:line findings (empty catches, unchecked array access, hardcoded path) are bounded and directly fixable.",
+			"rationale": "Five concrete medium-severity findings with exact file:line locations and clear remediation patterns (logging, validation, env-config) are bounded and actionable now.",
 			"evidence": [
-				"catch block in shadowTaskSize swallows errors silently",
-				"hardcoded jev-guard.sh path should be env-configurable"
+				"empty-catch at runner/src/jev-sites.ts:149 swallows shadow path errors silently",
+				"unchecked-access in scripts/jev-shadow-report.mjs:147",
+				"hardcoded hook path in agent/hooks/claude-settings.json:9"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T02:51:52.316Z"
+			"scoredAt": "2026-10-14T03:21:59.140Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2164a4547ea3",
@@ -25904,14 +25872,14 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Clear a11y DOM-hierarchy diagnosis and a concrete fix direction (nest the close button inside the trigger) make this directly actionable.",
+			"rationale": "A clear accessibility defect (close button sibling to the Dropdown trigger breaking focus/keyboard semantics) already has a specific, bounded fix direction stated.",
 			"evidence": [
-				"Button sibling of Dropdown trigger breaks keyboard focus/DOM semantics",
-				"fix direction: nest × inside trigger or wrapper"
+				"Button sibling of the Dropdown trigger creates ambiguous focus/click targets",
+				"Fix direction: nest close button inside trigger or dropdown wrapper"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T02:51:52.316Z"
+			"scoredAt": "2026-10-14T03:21:59.140Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c7c309cb2647",
@@ -31191,6 +31159,38 @@
 			"scoredAt": "2026-10-13T05:52:06.585Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f173c4e5b58a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellableWizard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f173c4e5b58a.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "36914a3d8a69a164e93bb2dbc640aa50ba7afeea8682620af54327dbfa158835",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An unwired modal component needs a product decision (complete integration vs delete) before any code change, which the finding itself defers to a follow-on proposal.",
+			"evidence": [
+				"modal presentation has no consumer today",
+				"Fix direction: Check whether... Create a proposals/sellable-wizard-modal-*.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T03:21:59.140Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-f17e52eaac73",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31254,6 +31254,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:25:05.160Z"
+		},
+		{
+			"key": "issue:minion-meta#347",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#347 [monitor:unstick] Run 071ee51e: reconcile exited 78 after deferred merge-scan gap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/347",
+			"sourceUpdatedAt": "2026-09-30T01:18:20Z",
+			"sourceFingerprint": "3ccaed372b75f7db1e0efb4d5f9ec479bf06e90e032aaa7e6b21b4015231221c",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Transient reconcile exit is explicitly flagged as not a genuine proposal failure with a recommendation to simply retry or allow the next sweep.",
+			"evidence": [
+				"exit 78 after deferred merge-scan gap",
+				"transient/deferred reconcile outcome, not a genuine proposal failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T03:21:59.140Z"
 		},
 		{
 			"key": "issue:minion-meta#362",
@@ -32639,7 +32671,7 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 3,
 				"implementation": 2
 			},
 			"confidence": 5,
@@ -32647,14 +32679,14 @@
 			"relatedKeys": [
 				"issue:minion-meta#703"
 			],
-			"rationale": "Same transient claude-provider JSON failure class as #703; only worth a code fix if the pattern keeps recurring across batches.",
+			"rationale": "This and issue #703 both show the claude provider returning malformed JSON in rank runs, which together constitute evidence of a recurring provider fault worth one classifier-signature goal rather than two isolated tickets.",
 			"evidence": [
 				"claude provider returned malformed JSON",
-				"fallback to codex"
+				"Transient provider/JSON-format fault, not a task-logic bug"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T02:51:52.316Z"
+			"scoredAt": "2026-10-14T03:21:59.140Z"
 		},
 		{
 			"key": "issue:minion-meta#703",
@@ -32673,7 +32705,7 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 3,
 				"implementation": 2
 			},
 			"confidence": 5,
@@ -32681,14 +32713,14 @@
 			"relatedKeys": [
 				"issue:minion-meta#702"
 			],
-			"rationale": "Same transient claude-provider JSON failure class as #702, both recommend retry over a code change.",
+			"rationale": "Paired with #702, this second same-batch instance of claude-provider malformed JSON plus codex retries indicates a recurring class that should be consolidated into one host-classifier goal.",
 			"evidence": [
-				"claude provider returned malformed JSON, parse error",
+				"claude provider returned malformed JSON, fell back to codex",
 				"codex hit two consecutive transient provider failures"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T02:51:52.316Z"
+			"scoredAt": "2026-10-14T03:21:59.140Z"
 		},
 		{
 			"key": "issue:minion-meta#709",
@@ -33722,22 +33754,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 2,
 				"implementation": 2
 			},
 			"confidence": 4,
 			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-f173c4e5b58a"
-			],
-			"rationale": "Diagnosis only shows search tool invocations with no concrete conclusion, so scope and fix direction are not actually established yet.",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis for this TODO never produced actual analysis — the summary shows raw tool-invocation scaffolding instead of a problem statement or fix direction.",
 			"evidence": [
-				"Diagnosis (auto) section shows only Read/Grep invocations, no conclusion",
-				"status approved"
+				"Diagnosis (auto) section contains unresolved tool invocation markup, not analysis",
+				"Marker text truncated: 'other consumption-mapping surfaces (e.g.'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T02:51:52.316Z"
+			"scoredAt": "2026-10-14T03:21:59.140Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7b8cd069cbf5",
@@ -33977,40 +34007,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T18:23:03.050Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f173c4e5b58a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellableWizard.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f173c4e5b58a.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "36914a3d8a69a164e93bb2dbc640aa50ba7afeea8682620af54327dbfa158835",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-66cd0246e677"
-			],
-			"rationale": "Outcome is an undetermined dead-code-vs-feature decision requiring a new scoping proposal before any fix can execute.",
-			"evidence": [
-				"modal presentation has no consumer today",
-				"recommends creating proposals/sellable-wizard-modal-*.md to decide keep-or-delete"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T02:51:52.316Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fbd7c21e9aff",
@@ -34461,38 +34457,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T17:51:58.013Z"
-		},
-		{
-			"key": "issue:minion-meta#347",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#347 [monitor:unstick] Run 071ee51e: reconcile exited 78 after deferred merge-scan gap",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/347",
-			"sourceUpdatedAt": "2026-09-30T01:18:20Z",
-			"sourceFingerprint": "3ccaed372b75f7db1e0efb4d5f9ec479bf06e90e032aaa7e6b21b4015231221c",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Transient/deferred reconcile outcome with no code action needed unless it recurs indefinitely.",
-			"evidence": [
-				"exit 78",
-				"transient/deferred reconcile outcome, not a genuine proposal failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T02:51:52.316Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
