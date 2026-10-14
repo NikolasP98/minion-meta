@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-14T12:51:43.793Z",
+	"generatedAt": "2026-10-14T13:21:56.141Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -27641,6 +27641,38 @@
 			"scoredAt": "2026-10-07T21:22:27.987Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 6
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit shows a blue/green slot deployment with health checks and rollback already implemented and merged, with no outstanding action described.",
+			"evidence": [
+				"commit f2de5e0 adds slot-switch.sh with prepare/switch/rollback and /health wait",
+				"status is unknown with no open gap stated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T13:21:55.984Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28334,6 +28366,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T06:52:04.424Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-14",
+			"sourceFingerprint": "9d9a24c15403d94b1ce071cfb6d222d0c8dc30d6c7d0d2340b65798f5ae63ec2",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted rationale snippets from the rankings/index.json data file spanning unrelated domains, suggesting the handoff-sweep mis-detected generated ranking text as code TODO(handoff) markers rather than finding real open ends.",
+			"evidence": [
+				"markers point to rankings/index.json lines like #3120, #3978, #4694 with disparate unrelated topics (POS, HR schema, phone failure)",
+				"sweep targets a generated output file rather than source code containing genuine TODO(handoff) comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T13:21:55.984Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-0f6b2d0e3194",
@@ -31610,6 +31674,40 @@
 			"scoredAt": "2026-10-13T19:51:25.912Z"
 		},
 		{
+			"key": "issue:minion-meta#447",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#447 [monitor:unstick] rank run 4e23a1f1: batch 1 provider failure (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/447",
+			"sourceUpdatedAt": "2026-09-16T11:17:31Z",
+			"sourceFingerprint": "ccb4dde51a0191e207910ecee9f920eea29c79447cbb3e8e210334e1b91fde9b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#718"
+			],
+			"rationale": "The diagnosis says this is transient provider flakiness safe to retry, with the only real follow-up being a shared classifier-signature addition also raised in issue #718.",
+			"evidence": [
+				"\"Recommendation: safe to retry the run as-is\"",
+				"\"worth adding as a dedicated host classifier signature (provider-batch-failure)\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T13:21:55.984Z"
+		},
+		{
 			"key": "issue:minion-meta#451",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32816,6 +32914,40 @@
 			"scoredAt": "2026-10-14T03:21:59.140Z"
 		},
 		{
+			"key": "issue:minion-meta#718",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#718 [monitor:unstick] reconcile run 6822e82e: claude provider agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/718",
+			"sourceUpdatedAt": "2026-09-30T12:17:31Z",
+			"sourceFingerprint": "a2e7c5ad37374c7b62e3b3987ecff101635b61e027d2ffa1cdad1bcbc179b48b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#447"
+			],
+			"rationale": "This is diagnosed as a transient exec-fault safe to retry, and its proposed fix (a host classifier signature for provider exec failures) overlaps with the classifier work proposed in #447.",
+			"evidence": [
+				"\"Exit 126 ... is a launch-time exec fault, not a task/logic failure\"",
+				"\"worth adding to the host classifier so it stops landing in the unrecognised bucket\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-14T13:21:55.984Z"
+		},
+		{
 			"key": "issue:minion-meta#720",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33631,38 +33763,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:32:02.784Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-14",
-			"sourceFingerprint": "2251375dc407fe272bf012a066ec29edcb14df6d0dc21391ba4a8e8fec198af0",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted marker lines are fragments of other proposals' summary text that landed inside the generated rankings/index.json, not genuine TODO(handoff) comments in source code.",
-			"evidence": [
-				"target file is rankings/index.json, a generated artifact",
-				"quoted lines read as proposal summary fragments (e.g. 'spec §4.1 also lists reschedule...') rather than code comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T09:21:59.455Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
@@ -34646,38 +34746,6 @@
 			"scoredAt": "2026-10-11T21:21:39.668Z"
 		},
 		{
-			"key": "issue:minion-meta#447",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#447 [monitor:unstick] rank run 4e23a1f1: batch 1 provider failure (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/447",
-			"sourceUpdatedAt": "2026-09-16T11:17:31Z",
-			"sourceFingerprint": "ccb4dde51a0191e207910ecee9f920eea29c79447cbb3e8e210334e1b91fde9b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Diagnosed as a transient provider outage isolated to one batch with catalog writes unaffected, and explicitly marked safe to retry with no code change needed.",
-			"evidence": [
-				"both bounded providers ... either were unavailable or returned invalid JSON",
-				"Recommendation: safe to retry the run as-is"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T12:51:56.608Z"
-		},
-		{
 			"key": "issue:minion-meta#586",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34770,38 +34838,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T00:21:35.589Z"
-		},
-		{
-			"key": "issue:minion-meta#718",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#718 [monitor:unstick] reconcile run 6822e82e: claude provider agent exec failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/718",
-			"sourceUpdatedAt": "2026-09-30T12:17:31Z",
-			"sourceFingerprint": "a2e7c5ad37374c7b62e3b3987ecff101635b61e027d2ffa1cdad1bcbc179b48b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The reconcile sweep itself succeeded end-to-end and the failure is a transient exec fault on a downstream provider binary, explicitly flagged as not needing spec or code changes.",
-			"evidence": [
-				"reconcile sweep itself succeeded end-to-end",
-				"safe to retry the run; no spec or reconcile-logic changes needed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-07T12:51:56.608Z"
 		},
 		{
 			"key": "issue:minion-meta#736",
