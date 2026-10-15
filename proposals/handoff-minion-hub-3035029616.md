@@ -6,7 +6,6 @@ created: 2026-09-02
 updated: 2026-10-15
 repos: [minion-hub]
 tags: [handoff-sweep]
-duplicate_candidate: postmerge-minion-hub-38e0a3c5f572
 ---
 
 # Handoff marker — src/routes/(app)/pos/appointments/+page.svelte
