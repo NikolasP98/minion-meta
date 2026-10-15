@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T05:51:08.851Z",
+	"generatedAt": "2026-10-15T06:11:48.187Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8035,6 +8035,38 @@
 			"scoredAt": "2026-10-12T22:21:24.782Z"
 		},
 		{
+			"key": "issue:minion-meta#467",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#467 [monitor:unstick] reconcile run 31abd571 (minion-meta): exit-126/turns=0 after apparently clean shell steps",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/467",
+			"sourceUpdatedAt": "2026-09-17T04:17:37Z",
+			"sourceFingerprint": "f7dfa263d2515a337d2528c2238781e84185608ec0435b752f9ca18faf6f0008",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring exit-126/turns=0 launcher fault across 3 reconcile runs points to an infra/runner issue needing human inspection before it can be scoped as actionable work.",
+			"evidence": [
+				"identical signature seen on 3 runs within ~2 hours",
+				"exit_code 1 with exit-126/turns=0 consistent with exec/permission/PATH fault, not task-logic failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T06:11:48.041Z"
+		},
+		{
 			"key": "issue:minion-meta#595",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13521,39 +13553,6 @@
 			"scoredAt": "2026-10-11T00:09:02.141Z"
 		},
 		{
-			"key": "issue:minion-meta#467",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#467 [monitor:unstick] reconcile run 31abd571 (minion-meta): exit-126/turns=0 after apparently clean shell steps",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/467",
-			"sourceUpdatedAt": "2026-09-17T04:17:37Z",
-			"sourceFingerprint": "f7dfa263d2515a337d2528c2238781e84185608ec0435b752f9ca18faf6f0008",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A recurring launcher-level fault (exit-126/turns=0) blocks reconcile runs but needs human runner-environment inspection before it's actionable dev work.",
-			"evidence": [
-				"exit_code 1 and note exit-126/turns=0, meaning the downstream claude-agent process never ran a single turn",
-				"identical signature seen on 3 runs within ~2 hours",
-				"Recommendation: this is an infra/launcher fault... A human should inspect the runner environment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T05:51:14.538Z"
-		},
-		{
 			"key": "issue:minion-meta#498",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16518,38 +16517,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:34:30.416Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Blue/green slot-switch deployment tooling appears shipped and functional with rollback safety, so remaining work is verification rather than new build.",
-			"evidence": [
-				"slot-switch.sh clones live service spec into idle slot with health wait and restore-on-failure",
-				"rollback flips to parked slot, slot state journaled in slots.json"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T05:31:31.578Z"
 		},
 		{
 			"key": "issue:minion-meta#623",
@@ -35033,6 +35000,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#38690736851",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38690736851",
+			"sourceUpdatedAt": "2026-10-15T06:09:20Z",
+			"sourceFingerprint": "441ff9be4344c583f9656a1a310efc54087d9f90ecde9001a91c2cefa68534ad",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status with no stated problem or actionable content.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T06:11:48.041Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
