@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T16:51:49.826Z",
+	"generatedAt": "2026-10-15T17:21:28.446Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -24396,38 +24396,6 @@
 			"scoredAt": "2026-10-13T01:52:23.197Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The commit shows blue/green slot-switch tooling with rollback already implemented and merged, leaving no outstanding actionable goal.",
-			"evidence": [
-				"deploy/swarm/slot-switch.sh clones the live service spec into an idle slot with a new image and journals active slot",
-				"rollback flips back to the parked slot; MINION_SLOT_IMAGE pins a digest for cutover safety"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T16:51:49.661Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27171,6 +27139,38 @@
 			"scoredAt": "2026-10-15T05:18:45.932Z"
 		},
 		{
+			"key": "issue:minion-meta#733",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#733 [monitor:unstick] run 02b49135 (minion-meta reconcile): agent exit-126, pipeline otherwise completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/733",
+			"sourceUpdatedAt": "2026-10-01T16:17:43Z",
+			"sourceFingerprint": "a09e6e3205993ce3998bf19eff781027b7f30c0f689c05c532b6f0246469003f",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Transient exit-126 agent-launch fault with pipeline otherwise completing suggests retry-first rather than paid dev work.",
+			"evidence": [
+				"reconcile pipeline completed (601 proposals written) but reconcile-agent exited 126 with 0 turns",
+				"recommendation in report is to retry the run and only escalate if exit-126 recurs across other runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T17:21:28.290Z"
+		},
+		{
 			"key": "issue:minion-meta#734",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28538,6 +28538,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T01:30:42.910Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "928a8648397d6fa7cb930993a63665692ab6e03e02ea8c857670cd585c9ebae9",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is an auto-generated aggregate of 17+ unrelated TODO markers across the same file, so it lacks a single verifiable outcome and should be split into individually scoped items.",
+			"evidence": [
+				"markers span disparate concerns (race window, audit trace, byte-bounded JSON reader, RBAC preference, anti-join index)",
+				"definition of done requires removing a TODO(handoff) comment but no single scoped fix is specified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T17:21:28.290Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-0f6b2d0e3194",
@@ -30170,39 +30202,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T16:21:46.358Z"
-		},
-		{
-			"key": "issue:minion-meta#733",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#733 [monitor:unstick] run 02b49135 (minion-meta reconcile): agent exit-126, pipeline otherwise completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/733",
-			"sourceUpdatedAt": "2026-10-01T16:17:43Z",
-			"sourceFingerprint": "a09e6e3205993ce3998bf19eff781027b7f30c0f689c05c532b6f0246469003f",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Automated diagnosis describes a single transient agent-launch (exit 126) fault on an otherwise-completed pipeline run with no confirmed recurrence, so the stated recommendation is simply to retry.",
-			"evidence": [
-				"pipeline ran its handoff-refresh and merge-scan steps to completion",
-				"exit 126 ... a box/environment fault rather than a task-logic failure",
-				"Recommendation: retry the run as-is"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T16:51:43.807Z"
 		},
 		{
 			"key": "issue:minion-meta#740",
@@ -35011,38 +35010,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T01:26:31.697Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "13b53dd13b2ab31e906a7e659e7b4f250ad195de7ef48a32b314b974d97ff5c4",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Every marker points at rankings/index.json, the ranking pipeline's own output/data file, indicating the sweep scraped quoted rationale text rather than finding real code TODOs.",
-			"evidence": [
-				"NikolasP98/minion-meta@dev rankings/index.json:2256 — this narrows the race window, it does not close it",
-				"all 16+ markers cite only rankings/index.json line numbers, not source files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T13:22:00.640Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
