@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T02:28:07.036Z",
+	"generatedAt": "2026-10-15T02:41:37.281Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5833,6 +5833,38 @@
 			"scoredAt": "2026-10-15T01:29:36.208Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "515ac651125e837a9d34565d2fb2e9842a2312d07129419b0fef8f7133d9668e",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is an automated sweep bundling 17+ unrelated TODO(handoff) markers (race windows, data contracts, RBAC, scrubbing, indexing) into one proposal with no individual scoping, so it needs to be split into per-marker specs before any can be executed.",
+			"evidence": [
+				"17 distinct markers spanning unrelated concerns (stock release, JSON byte bounds, RBAC, index performance)",
+				"proposal closes only once file carries no more markers, implying bulk non-atomic scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:41:37.128Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2123c34b9bc0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6697,39 +6729,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T06:21:35.749Z"
-		},
-		{
-			"key": "pr:minion_hub#524",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#524 fix(scheduling): completing a visit confirms every service's consumption; removing its first service no longer 404s; notes save on idle",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/524",
-			"sourceUpdatedAt": "2026-10-15T02:23:47Z",
-			"sourceFingerprint": "381b3462c1b6a613fb8ea91dd7b70991f685fdf2b4f3dcc22e48e35e898e0594",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "PR fixes real scheduling bugs (unconfirmed stock, 404 on service removal, autosave spam) with passing tests and is ready to merge.",
-			"evidence": [
-				"43 files/389 tests and 9 files/102 tests passed",
-				"fixes 404 on removing anchor service and unconfirmed member stock consumption",
-				"browser verification explicitly skipped per time cap"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T02:28:06.851Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1194287278",
@@ -10148,6 +10147,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Blue/green slot-switch deployment tooling shipped with rollback and digest pinning, so remaining work is monitoring/validation rather than urgent action.",
+			"evidence": [
+				"slot-switch.sh clones live service into idle slot with rollback on failure",
+				"MINION_SLOT_IMAGE pins a digest for cutover safety"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:41:37.128Z"
 		},
 		{
 			"key": "pr:minion (gateway)#257",
@@ -15959,40 +15990,6 @@
 			"scoredAt": "2026-10-10T17:22:36.155Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-6c1803b2b70f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6c1803b2b70f.md",
-			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "b4979206f1a42ea374e17662cf7bcaac31e20ee342dacdad4ed3805436349548",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2303234027"
-			],
-			"rationale": "Already-approved finding for the BookingDetailDrawer consumption-dialog stock-line gap, duplicated by handoff-minion-hub-2303234027's marker at the same line.",
-			"evidence": [
-				"TODO(handoff) marker text identical to handoff-minion-hub-2303234027:1395",
-				"diagnosis flags risk of silent overbooking/stale inventory"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T23:52:18.216Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-88c1258817d5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18325,6 +18322,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T19:00:16.165Z"
+		},
+		{
+			"key": "pr:minion-meta#799",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#799 spec(hub): POS history per-shift tables + calendar totals; visit completion per service; catalog bundle aggregates",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/799",
+			"sourceUpdatedAt": "2026-10-15T02:39:34Z",
+			"sourceFingerprint": "aa79700ddbcddce1f875731a46312c0d47bc4b5d5de2135b12eae2c2f22af945",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Four POS slices are already merged to master with verified AS-IS behavior, leaving only an open PR to close out and two explicitly out-of-scope items noted.",
+			"evidence": [
+				"#522-#525 merged to master per summary",
+				"out of scope: lint rule for bare :global(.x) and stock mapping data issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:41:37.128Z"
 		},
 		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
@@ -24053,6 +24082,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T22:23:20.564Z"
+		},
+		{
+			"key": "run:minion_hub#38672116719",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38672116719",
+			"sourceUpdatedAt": "2026-10-15T02:39:25Z",
+			"sourceFingerprint": "fe53576d030f043718a77208c69c09f4ed9a51db351edf3cc0318999b4fe06b6",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run on master with no indication of failure or blocking issue.",
+			"evidence": [
+				"status in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:41:37.128Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
@@ -33852,38 +33913,6 @@
 			"scoredAt": "2026-10-15T01:30:42.910Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "c3a38616db5f1293ab57f236c6442c1cd85cf35fc04209ae00cb6bcb8cd76ce2",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The proposal bundles over a dozen unrelated TODO markers pulled from a data file into one artifact without a coherent single outcome.",
-			"evidence": [
-				"16+ markers spanning booking commits, RBAC, phone failure root-cause, anti-join indexing",
-				"all markers point into rankings/index.json, a generated data file rather than source logic"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T02:21:31.582Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3518589653",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35003,38 +35032,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
-			"key": "run:minion_hub#38670903756",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38670903756",
-			"sourceUpdatedAt": "2026-10-15T02:25:33Z",
-			"sourceFingerprint": "4f0bea499f4ee0fcac9e6e7c9ae6891137d7ab53c9db4db5913286b62b4dee8d",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status, not an actionable work item.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T02:28:06.851Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
