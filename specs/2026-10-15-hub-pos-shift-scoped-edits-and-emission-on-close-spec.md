@@ -1,8 +1,8 @@
 ---
 id: 2026-10-15-hub-pos-shift-scoped-edits-and-emission-on-close-spec
 title: POS shifts own the editable window — tender corrections, SUNAT emission on close, accounting period locks
-stage: spec
-status: approved
+stage: deploy
+status: shipped
 pass: 1
 created: 2026-10-15
 updated: 2026-10-15
@@ -12,6 +12,12 @@ tags: [logic, data, test]
 ---
 
 # POS shifts own the editable window — tender corrections, SUNAT emission on close, accounting period locks
+
+## Shipped 2026-10-15
+
+- S1 hub #534 (`1bb1d817`), S2 hub #535 (`397f6b1d`), S3 hub #536 (`f35e5391`) — all squash-merged
+  to `master` and deployed to hub.minion-ai.org the same day. S4 stays open.
+- Open ends ledgered in `proposals/2026-10-15-hub-pos-shift-scoped-edits-followups.md`.
 
 ## 0. Product
 
