@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T04:51:17.509Z",
+	"generatedAt": "2026-10-15T05:18:46.075Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14061,6 +14061,38 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Blue/green slot-switch deployment infra already merged and functioning, so this is a monitoring/follow-up item rather than new actionable work.",
+			"evidence": [
+				"slot-switch.sh clones live service spec into idle slot with health wait and rollback",
+				"#327 merged with OWNER-RUN.sh + cutover.sh sequence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T05:18:45.932Z"
+		},
+		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26990,6 +27022,38 @@
 			"scoredAt": "2026-10-14T21:21:43.232Z"
 		},
 		{
+			"key": "issue:minion-meta#729",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#729 [monitor:unstick] reconcile run ea0598b7 (minion-meta): claude agent exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/729",
+			"sourceUpdatedAt": "2026-10-01T04:17:32Z",
+			"sourceFingerprint": "0d85bf0b58c8206994b18e5f369cfdc9fa830eb9b5fc2cebadc2e31c194e4c06",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The underlying reconcile work already succeeded and pushed before the agent crash, so this should be reframed as an infra/runner investigation (claude CLI exec bit/PATH) rather than a retry of task logic.",
+			"evidence": [
+				"reconcile sweep completed fully and pushed c09a52a..2451d9e before the failure",
+				"exit 126 turns=0 recurred twice within ~80 minutes, suggesting runner/container fault"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T05:18:45.932Z"
+		},
+		{
 			"key": "issue:minion-meta#731",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30064,39 +30128,6 @@
 			"scoredAt": "2026-10-14T05:21:58.865Z"
 		},
 		{
-			"key": "issue:minion-meta#729",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#729 [monitor:unstick] reconcile run ea0598b7 (minion-meta): claude agent exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/729",
-			"sourceUpdatedAt": "2026-10-01T04:17:32Z",
-			"sourceFingerprint": "0d85bf0b58c8206994b18e5f369cfdc9fa830eb9b5fc2cebadc2e31c194e4c06",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The underlying reconcile work already completed and pushed successfully; the flagged error is a transient exit-126/turns=0 process-launch fault, not a real task failure.",
-			"evidence": [
-				"reconcile sweep completed fully ... successful git push c09a52a..2451d9e on minion-meta dev",
-				"claude-provider reconcile agent exited 126 with turns=0 and 0 permission denials",
-				"this exact signature ... recurred twice within ~80 minutes on the same repo"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T04:51:10.206Z"
-		},
-		{
 			"key": "issue:minion-meta#732",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30299,40 +30330,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T06:51:47.846Z"
-		},
-		{
-			"key": "pr:minion-meta#800",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#800 docs(governance): page views go through DataView; context menus carry icons",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/800",
-			"sourceUpdatedAt": "2026-10-15T04:35:06Z",
-			"sourceFingerprint": "fc19e44be253585825480470d4ef3b0dda093d9ee9306b4113d4bc96e6862847",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#529"
-			],
-			"rationale": "Trivial, low-risk docs sync that completes the canonical/hub skill copy parity left pending by #529.",
-			"evidence": [
-				"Mirror of the two bullets added to the hub's skill copy in hub #528 and #529",
-				"Both copies are now identical"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T04:37:04.829Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-personal-agent-entrypoint-test",
@@ -33829,7 +33826,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "96567e2ee1af67a212635ff910922d344ec0f253d31d8077643ddfe40abdb3fd",
+			"sourceFingerprint": "d19c7cbdb4a4674b62f3e3460e4167a0b0a459cb6385476b2a7dbd09b5842a5d",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -33838,21 +33835,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 2,
+				"implementation": 1
 			},
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The flagged 'markers' are text fragments quoted from disparate unrelated rankings entries (POS, HR schema, booking) inside rankings/index.json itself, indicating the handoff-sweep matched ranking-output content rather than real TODO(handoff) code comments.",
+			"rationale": "This is an auto-generated bundle of 15+ unrelated TODO markers scraped from a data file, with no single verifiable scope or outcome.",
 			"evidence": [
-				"title states file is rankings/index.json (a generated ranking output, not source code)",
-				"listed marker snippets reference unrelated domains like POS tickets, HR schema, booking commits with no connection to minion-meta orchestration code",
-				"status is review with no concrete single open end, just a sweep-generated aggregate"
+				"markers span unrelated topics: race windows, stock release, phone failure, RBAC, anti-join indexing",
+				"source is an automated handoff-ledger sweep over rankings/index.json, not a scoped engineering proposal"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T04:51:17.362Z"
+			"scoredAt": "2026-10-15T05:18:45.932Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3518589653",
@@ -34274,6 +34270,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:21:58.865Z"
+		},
+		{
+			"key": "run:minion_hub#38685899620",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38685899620",
+			"sourceUpdatedAt": "2026-10-15T05:16:39Z",
+			"sourceFingerprint": "a2c33fccad32386c331732bd0bd642fe826742535ddcf2a579b20c9182f4656f",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master with no indication of failure or actionable work.",
+			"evidence": [
+				"status in_progress",
+				"push on master, no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T05:18:45.932Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
