@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-15)
 
-- `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:764` — add global server custom-property sort/filter/export planning;
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L764
+- `NikolasP98/minion_hub@master src/lib/components/data-table/DataTable.svelte:765` — add global server custom-property sort/filter/export planning;
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-table/DataTable.svelte#L765
