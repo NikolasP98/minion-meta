@@ -347,6 +347,25 @@ non-trivial) → deploy (branch-triggered) → post-merge verification
   DELTA (exact transitions, tests proving each) — see the templates.
 - Security/data-tagged work always keeps human gates at approval AND merge.
 
+## Spec-driven workflow (Spec Kit) — normative
+
+Owner directive (2026-10-15): every implementation — feature, change, or fix, in any
+subproject — is specified with [GitHub Spec Kit](https://speckit.org/) before code is written.
+The toolkit is installed at the meta root (`.specify/` + `.claude/skills/speckit-*`; CLI
+`specify`, installed with `uv tool install specify-cli`). Its constitution,
+`.specify/memory/constitution.md`, binds Spec Kit artifacts to the SDLC contract below.
+
+- Order: `/speckit-specify` → (`/speckit-clarify`) → `/speckit-plan` → `/speckit-tasks` →
+  (`/speckit-analyze`) → `/speckit-implement` → `/speckit-converge`. A hotfix may compress the
+  cycle but still produces a `spec.md` naming what it bypassed and why.
+- Artifacts live in `specs/<NNN>-<slug>/` (`spec.md`, `plan.md`, `tasks.md`, …).
+  `scripts/spec-index.mjs` reads only top-level `specs/*.md`, so a feature that must appear on
+  the board also gets a top-level stub spec with `TEMPLATE.md` frontmatter pointing at its
+  Spec Kit directory. Subproject code still ships from that repository's own worktree and
+  branch per the Project Map.
+- Start sessions from the meta root: the `/speckit-*` skills and `.specify/` scripts are not
+  visible from a subproject directory.
+
 ## Orchestration Guide
 
 ### Dispatching Subagents
