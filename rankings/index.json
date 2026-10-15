@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T17:51:19.076Z",
+	"generatedAt": "2026-10-15T18:21:18.057Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4206,42 +4206,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:53:38.303Z"
-		},
-		{
-			"key": "proposal:2026-10-07-hub-calendar-single-event-services",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub calendar — one event, many services (fan-out retired, services managed from the tray) + 2026-10-07 user-bug batch open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-07-hub-calendar-single-event-services.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "c8be9de39158bedffb7c84eb7c04ea3181bc5d394f3b5a646a45dc9fef69588d",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-cb6d042fdfda",
-				"proposal:handoff-minion-hub-2557316487",
-				"proposal:handoff-minion-hub-2746481724"
-			],
-			"rationale": "This shipped feature's own open-ends ledger names the same fan-out deletion, moveGroup transaction race, and price-plumbing gaps that appear as separate handoff proposals in this batch.",
-			"evidence": [
-				"open end #1 names CALENDAR_FEATURE_DEFAULTS.fanOut deletion, matching postmerge-minion-hub-cb6d042fdfda",
-				"ledger references scheduling-bookings.service.ts reads/writes also flagged in the _handlers.ts handoff marker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T17:52:35.059Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-420076982",
@@ -9672,6 +9636,38 @@
 			"scoredAt": "2026-10-12T02:52:47.071Z"
 		},
 		{
+			"key": "proposal:2026-10-07-hub-calendar-single-event-services",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub calendar — one event, many services (fan-out retired, services managed from the tray) + 2026-10-07 user-bug batch open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-07-hub-calendar-single-event-services.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "c8be9de39158bedffb7c84eb7c04ea3181bc5d394f3b5a646a45dc9fef69588d",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Shipped feature with a clear, itemized open-ends ledger (missing index, un-collapsed board/table views, dead fan-out code) that gives bounded, actionable follow-up work.",
+			"evidence": [
+				"Storage unchanged (one row per service... intact)",
+				"Open ends: delete fan-deck code, board/table views still show one row per service, missing expression index on metadata->>'groupId'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T18:21:17.909Z"
+		},
+		{
 			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10262,38 +10258,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Blue/green slot-switch deployment infra merged and appears functional but has no indication of outstanding issues needing urgent action.",
-			"evidence": [
-				"slot-switch.sh clones live service spec into idle slot with new image",
-				"MINION_SLOT_IMAGE pins a digest to avoid moving-tag cutover races"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T17:51:18.927Z"
 		},
 		{
 			"key": "pr:minion (gateway)#257",
