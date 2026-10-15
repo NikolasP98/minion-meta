@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T20:21:38.203Z",
+	"generatedAt": "2026-10-15T20:51:17.419Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -631,6 +631,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "pr:minion-meta#803",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#803 docs(audit): agent harness audit 2026-10-15 + restoration proposal",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/803",
+			"sourceUpdatedAt": "2026-10-15T20:49:24Z",
+			"sourceFingerprint": "6c606c05ca355c4b8c92f6c1d409aa9b6a0ea1fdba890d5a5c68f410815d31ba",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Documents a live production 403 from a NULL gateway_id on all rows plus multiple RBAC/MCP gaps, and separate fix PRs are already in flight for the code changes.",
+			"evidence": [
+				"gateway_id is NULL on 11/11 rows causing 403 in production",
+				"2 critical cross-org RBAC leaks identified",
+				"restoration proposal itself is draft/out-of-scope for code changes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T20:51:17.278Z"
 		},
 		{
 			"key": "proposal:2026-10-13-gateway-swarm-blue-green-slots",
@@ -10397,38 +10430,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The summary is a commit message describing an already-shipped blue/green slot-switch script with health checks and rollback, leaving no open forward-looking deliverable to rank.",
-			"evidence": [
-				"deploy/swarm/slot-switch.sh clones the live service spec into an idle slot, flips traffic, waits on /health, restores on failure",
-				"rollback flips back to the parked slot and OWNER-RUN.sh/cutover.sh are described as the owner-run sequence"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T20:21:38.042Z"
 		},
 		{
 			"key": "pr:minion (gateway)#257",
@@ -32105,20 +32106,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Self-diagnosed as a transient runner exec-permission fault with no data loss and work already succeeded, making it non-actionable as a goal.",
+			"rationale": "Monitor itself classifies this as a transient runner exec-permission issue with no data loss and the underlying merge-scan/push already succeeded.",
 			"evidence": [
-				"exit-126/turns=0, agent binary never executed a single turn",
-				"merge-scan/push work already succeeded so no data was lost"
+				"exit-126/turns=0, deterministic work already pushed as 46767b3",
+				"recommendation in report is to fix runner exec bit, not app code"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T20:21:17.032Z"
+			"scoredAt": "2026-10-15T20:51:17.278Z"
 		},
 		{
 			"key": "issue:minion-meta#496",
@@ -33432,38 +33433,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T23:51:43.724Z"
-		},
-		{
-			"key": "issue:minion-meta#762",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#762 [monitor:unstick] rank run 6ae461d7: both bounded LLM providers failed on batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/762",
-			"sourceUpdatedAt": "2026-10-08T20:17:27Z",
-			"sourceFingerprint": "8cbe8ea21cffc556abc31d86b6d49af03d2037381bf2165237a436ed26aecd16",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Classified as a transient dual-provider availability fault on a near-complete ranking run with no spec or code fix indicated.",
-			"evidence": [
-				"only 2 of 956 candidates were even pending",
-				"recommendation: safe to retry as-is; no spec or code fix indicated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T20:21:17.032Z"
 		},
 		{
 			"key": "issue:minion-meta#787",
@@ -34882,6 +34851,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T17:51:55.358Z"
+		},
+		{
+			"key": "issue:minion-meta#762",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#762 [monitor:unstick] rank run 6ae461d7: both bounded LLM providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/762",
+			"sourceUpdatedAt": "2026-10-08T20:17:27Z",
+			"sourceFingerprint": "8cbe8ea21cffc556abc31d86b6d49af03d2037381bf2165237a436ed26aecd16",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Report explicitly identifies this as a transient dual-provider outage on a near-complete rank run with no spec or code fix indicated.",
+			"evidence": [
+				"only 2 of 956 candidates were pending",
+				"recommendation states safe to retry as-is, no spec/code fix indicated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T20:51:17.278Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
