@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T19:21:25.033Z",
+	"generatedAt": "2026-10-15T19:51:30.697Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8147,6 +8147,38 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Blue/green deploy tooling with rollback is a meaningful infra improvement but shows no active incident or blocking urgency.",
+			"evidence": [
+				"slot-switch.sh clones live service spec and flips traffic with health check",
+				"rollback flips back to parked slot"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T19:51:30.543Z"
+		},
+		{
 			"key": "issue:minion-meta#329",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10200,39 +10232,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:31:08.781Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "4f5c88152da3a9613c83e551626679d8880725398a8e05ec46372a8c4090d951",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This single proposal bundles over a dozen unrelated handoff markers (race windows, audit trails, DB schema drops, provider JSON bounds) spanning many files, so it needs to be split into individually scoped goals rather than executed as one.",
-			"evidence": [
-				"17+ distinct marker lines across unrelated files cited",
-				"status: review",
-				"provider JSON reader is not byte bounded before res.json()"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T19:21:24.883Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e98422b",
@@ -27463,6 +27462,38 @@
 			"scoredAt": "2026-10-15T01:30:42.910Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "84bb11b14814682ab9ca69cf915fc5916bbe01e1ee92cefed85e8883d572465c",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is an auto-filed bundle of 18+ unrelated TODO markers scraped from a data file, not a single actionable scoped goal.",
+			"evidence": [
+				"Filed automatically by the factory handoff-ledger sweep",
+				"Markers (as of 2026-10-15)` lists 18+ disparate pointers across unrelated domains"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T19:51:30.543Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-2ee0fee",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28211,6 +28242,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T09:22:04.054Z"
+		},
+		{
+			"key": "pr:minion_hub#539",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#539 fix(shell): assistant launcher always starts in its corner; a resize keeps it in place",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/539",
+			"sourceUpdatedAt": "2026-10-15T19:48:46Z",
+			"sourceFingerprint": "ff7003f294912f10f32d1d91a51be72558af3d90e06b8e399617cee1290d590d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-scoped UI fix for a reported positioning bug with clear before/after behavior and passing gates, just needs browser verification.",
+			"evidence": [
+				"Owner report: launcher came back where it had been dragged after a hard refresh",
+				"prettier ✅ · svelte-check 0 errors in changed file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T19:51:30.543Z"
 		},
 		{
 			"key": "pr:minion-meta#555",
