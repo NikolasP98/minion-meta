@@ -26,9 +26,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-15)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:446` — that till-side draw happens on CLICK, not on submit, so an
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L446
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:501` — this synthetic line posts finProductId: null, so
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L501
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:808` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L808
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:459` — that till-side draw happens on CLICK, not on submit, so an
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L459
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:514` — this synthetic line posts finProductId: null, so
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L514
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/+page.svelte:821` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/+page.svelte#L821
