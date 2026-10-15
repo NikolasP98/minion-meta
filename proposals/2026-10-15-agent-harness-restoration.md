@@ -86,6 +86,24 @@ Audit: `audits/2026-10-15-agent-harness/00-synthesis.md` (A–E reports alongsid
 tools (proposal `2026-09-02-gateway-client-tools-webmcp-bridge` stays draft); a hub-side MCP
 server; the four orphan bridge endpoints without gateway tools (product decision).
 
+## Shipped from this audit (2026-10-15)
+
+- S0c — gateway **#329 MERGED** `39be924dc` (DEV): `search_crm_conversations` + `crm_conversation_themes` in `TOOL_ORDER`, test `TOOL_REGISTRY ⊆ TOOL_ORDER`.
+- S1 (D1 D2 D4 D6) — hub **#540 MERGED** `7d917ed06`: winning mode loads its manifest; `/home` button replies keep the full envelope; `changelog` 0.45; write-tool inventory on `data‖forms`.
+- S2a — hub **#541 OPEN**, label `security`, human merge gate: `google-adc`/`google-identities` require org membership (non-member → 404 / empty), `channel-identities` requires server token or admin. Note: `channel-identities` is not in the server-token path allowlist, so the gate is admin-only in practice; `TODO(handoff)` left for the unscoped list.
+
+## S0 design constraint (measured 2026-10-15, blocks S0a/S0b)
+
+`personal_agents.gateway_id` is ONE column, but 3 of the 11 users are members of several orgs
+with different `prd` gateways (the owner: 4 orgs, 3 gateways). `resolveGatewayPrincipal`
+requires the row's gateway to equal the calling gateway, so a user's agent is reachable from
+exactly one gateway. Every personal agent actually runs on the FACES gateway container today,
+so the only rule that restores service without widening trust is "the gateway the agent was
+provisioned on" — `netcup-faces-prd` (`a64274a8…`) for all 10 active rows; the 1 pending row
+(`bri…`) has no org membership and stays unassigned. Multi-org users then need either
+per-(user, org) assignment rows or a resolver that accepts any `prd` gateway of an org the
+user is a member of. That is an owner decision (question 1 below), not an implementation detail.
+
 ## Open questions for the owner
 
 1. Which gateway should an org's personal agents bind to when the org has both `dev` and `prd`
