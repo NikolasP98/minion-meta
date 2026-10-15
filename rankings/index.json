@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T12:51:33.438Z",
+	"generatedAt": "2026-10-15T13:22:00.805Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16889,6 +16889,38 @@
 			"scoredAt": "2026-10-13T22:21:35.328Z"
 		},
 		{
+			"key": "issue:minion-meta#731",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#731 [monitor:unstick] reconcile proposals run 0b57655f failed: claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/731",
+			"sourceUpdatedAt": "2026-10-01T12:17:30Z",
+			"sourceFingerprint": "4e0555dea3322a1c8caad8e8aa625c43b602428381aa4190f4fa0aa6d1478f68",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single non-destructive exit-126/turns=0 worker-host fault with completed work already persisted warrants a host check but is not urgent enough to execute immediately.",
+			"evidence": [
+				"exit-126, turns=0 ... this is an environment/exec fault on the worker host",
+				"reconcile work was already persisted and pushed, so a retry is not destructive"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T13:22:00.640Z"
+		},
+		{
 			"key": "issue:minion-meta#772",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24391,38 +24423,6 @@
 			"scoredAt": "2026-10-15T01:26:31.697Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-698ce81",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 698ce81",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-698ce81.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "7657571bd4101a5b0914a0f3d6cd2218b3388c294ba16153f8c86ca098198149",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-scoped medium-severity test-coverage regression at a specific file/line with an existing remediation pointer, making it a bounded, actionable fix.",
-			"evidence": [
-				"medium weakened-test: 'Test skipped on Windows platform, removing regression coverage for open-file replacement scenario'",
-				"documented with TODO(handoff) reference to remediation proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T12:52:12.465Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-152748b32645",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25894,6 +25894,38 @@
 			"scoredAt": "2026-10-09T20:21:12.233Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit message describes an already-shipped blue/green deploy/rollback feature with no pending action, so there is nothing left to execute.",
+			"evidence": [
+				"feat(swarm): blue/green gateway slots — prepare/switch/rollback (#327)",
+				"OWNER-RUN.sh + cutover.sh are the owner-run sequence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T13:22:00.640Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27071,38 +27103,6 @@
 			"scoredAt": "2026-10-15T05:18:45.932Z"
 		},
 		{
-			"key": "issue:minion-meta#731",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#731 [monitor:unstick] reconcile proposals run 0b57655f failed: claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/731",
-			"sourceUpdatedAt": "2026-10-01T12:17:30Z",
-			"sourceFingerprint": "4e0555dea3322a1c8caad8e8aa625c43b602428381aa4190f4fa0aa6d1478f68",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The underlying reconcile work already completed and persisted; the only failure is a single transient provider exec fault that is already safe to retry, so recurrence should be confirmed before committing resources.",
-			"evidence": [
-				"reconcile stage completed fully and successfully ... pushed to dev",
-				"exit-126, turns=0 ... environment/exec fault on the worker host; safe to retry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T12:52:12.465Z"
-		},
-		{
 			"key": "issue:minion-meta#734",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27394,6 +27394,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T06:22:10.839Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-698ce81",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 698ce81",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-698ce81.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "7657571bd4101a5b0914a0f3d6cd2218b3388c294ba16153f8c86ca098198149",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The finding is a narrow, specific test-coverage gap that is already documented with a TODO(handoff) pointer to a separate remediation proposal, so this one needs confirmation of non-duplication before execution.",
+			"evidence": [
+				"Test skipped on Windows platform, removing regression coverage for open-file replacement scenario",
+				"documented with TODO(handoff) reference to remediation proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T13:22:00.640Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-7012cd5",
@@ -33833,38 +33865,6 @@
 			"scoredAt": "2026-10-15T01:30:42.910Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "f1963556f2a959fe1a4ad74c13b752260915ccc5255afdbc3b506ed8924bda23",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted markers point at rankings/index.json, a generated ranking artifact that merely stores copied TODO text from other proposals' summaries, not an actionable source-code marker.",
-			"evidence": [
-				"all markers cite rankings/index.json line numbers rather than source files",
-				"marker text duplicates phrasing from unrelated proposals already filed separately"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T09:22:21.495Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3518589653",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35017,6 +35017,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T01:26:31.697Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "13b53dd13b2ab31e906a7e659e7b4f250ad195de7ef48a32b314b974d97ff5c4",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Every marker points at rankings/index.json, the ranking pipeline's own output/data file, indicating the sweep scraped quoted rationale text rather than finding real code TODOs.",
+			"evidence": [
+				"NikolasP98/minion-meta@dev rankings/index.json:2256 — this narrows the race window, it does not close it",
+				"all 16+ markers cite only rankings/index.json line numbers, not source files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T13:22:00.640Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
