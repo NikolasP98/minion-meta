@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T08:21:52.814Z",
+	"generatedAt": "2026-10-15T08:26:57.095Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2526,40 +2526,6 @@
 			"scoredAt": "2026-10-12T02:56:17.748Z"
 		},
 		{
-			"key": "pr:minion_hub#536",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#536 feat(finances): the accountant locks a month — every POS edit, void or re-issue in it is refused",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/536",
-			"sourceUpdatedAt": "2026-10-15T08:19:04Z",
-			"sourceFingerprint": "332eb4ece1231bf752a61ff1e32396e8aa1bfe429d4c2cd9bc8ad9e3f94a6d62",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-aa4301d6af0e"
-			],
-			"rationale": "Fully specified, tested PR implementing accounting period locks (S3) is ready to merge and resolves the related TODO proposal.",
-			"evidence": [
-				"528 tests passed including new period-locks.test.ts",
-				"Spec S3 follows #534/#535 with documented known limits"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T08:21:52.636Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-infra-product-failure-taxonomy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3749,39 +3715,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T18:51:50.506Z"
-		},
-		{
-			"key": "spec:2026-10-15-hub-pos-shift-scoped-edits-and-emission-on-close-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "POS shifts own the editable window — tender corrections, SUNAT emission on close, accounting period locks",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-15-hub-pos-shift-scoped-edits-and-emission-on-close-spec.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "7721cc99c55ce2bbe6bfd8789c53d84453e9666aca621662c83c6a978e2209f5",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved spec with verified file:line AS-IS anchors and a clear TO-BE/DELTA for owner-requested POS tender-correction and SUNAT-emission-on-close behavior is ready for scoped dev work.",
-			"evidence": [
-				"status: approved",
-				"AS-IS verified on hub origin/master 2026-10-15; file anchors from the recon",
-				"Owner 2026-10-15: SUNAT submission on shift close, more permissive edits while open"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T06:51:43.486Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -6059,6 +5992,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:58:35.205Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7c314d7486da",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7c314d7486da.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "6a31661644465a4011e7a5150937bf2c47689f0e94c49a5c992b00b8ac56c702",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A shipped POS unlock flow deletes rows with no audit trace, a compliance-relevant gap with a clear fix direction (write audit record, then soft-delete/archive) already specified.",
+			"evidence": [
+				"TODO(handoff): an unlock deletes the row and leaves no audit trace",
+				"merged PR #536 in src/server/services/pos.service.ts",
+				"fix direction: audit record before delete, soft-delete or archive table"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T08:26:56.937Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7cff7d845501",
@@ -23735,38 +23701,6 @@
 			"scoredAt": "2026-10-10T07:51:34.768Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-0f5a066",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is a bounded, well-specified fix to add a missing TODO(handoff) marker at a named file/line per the ledger contract.",
-			"evidence": [
-				"finding cites src/routes/(app)/scheduling/resources/+page.server.ts:1 missing-handoff",
-				"medium severity merge-scan finding, status draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T08:21:27.256Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27895,38 +27829,6 @@
 			"scoredAt": "2026-10-14T14:52:12.732Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Describes an already-merged blue/green deployment feature with no stated forward action.",
-			"evidence": [
-				"commit f2de5e0 implements slot-switch.sh for blue/green rollback",
-				"OWNER-RUN.sh + cutover.sh already form the owner-run sequence"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T08:21:52.636Z"
-		},
-		{
 			"key": "issue:minion-meta#460",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31169,6 +31071,38 @@
 			"scoredAt": "2026-10-13T16:52:07.690Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-0f5a066",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A documented open end lacking its required in-code TODO(handoff) marker is a small, bounded process-compliance fix with no functional risk.",
+			"evidence": [
+				"medium severity, missing-handoff finding",
+				"file src/routes/(app)/scheduling/resources/+page.server.ts:1"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T08:26:56.937Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31429,40 +31363,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T22:27:23.009Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-aa4301d6af0e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-aa4301d6af0e.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "76b6451f341f076aa2fb9e42d53d65300f49dc2c1878e88ac6aab43376bda54f",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion_hub#536"
-			],
-			"rationale": "The pos_period_locks stub this finding flags is already implemented by the in-flight PR for S3 of the same spec.",
-			"evidence": [
-				"Marker text references pos_period_locks S3 stub in pos.service.ts",
-				"PR #536 implements pos_period_locks for S3 of the identical spec"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T08:21:52.636Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b6fd4bd15db2",
@@ -35135,6 +35035,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#38705383246",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38705383246",
+			"sourceUpdatedAt": "2026-10-15T08:24:09Z",
+			"sourceFingerprint": "db3fec1c5edef6dc80b9a8a6414192561e9e6676bc67351921c650ebe741aa27",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status on master, not a board-worthy goal requiring a decision.",
+			"evidence": [
+				"stage testing, status in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T08:26:56.937Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
