@@ -104,6 +104,16 @@ provisioned on" — `netcup-faces-prd` (`a64274a8…`) for all 10 active rows; t
 per-(user, org) assignment rows or a resolver that accepts any `prd` gateway of an org the
 user is a member of. That is an owner decision (question 1 below), not an implementation detail.
 
+## Corrections from the SDD dry-run (2026-10-15 evening, `audits/2026-10-15-sdd-adoption/`)
+
+Each pending slice was run through Spec Kit (`specs/001`–`008`); the specs disproved parts of this proposal:
+
+- **S0a is wrong as written.** The provisioner creates the agent via `gatewayCall → resolveCredentialsForUser(undefined)`, i.e. on the platform *system* gateway, while the resolver compares the assignment to the *calling* gateway. "Assign the org's `prd` gateway" coincides with reality only for org `21e0601b…`. The assignment must be the gateway the provisioner actually used, and dev-only orgs need a defined outcome (`channelFirst()` is ORDER BY, not WHERE). See `specs/001-restore-agent-gateway-assignment/`.
+- **S3 ceiling is ~53%, not "anything":** 193 of 364 hub write pairs are capability-mapped by `apiWriteCapability`; the 171 unmapped include all of team/access admin. `event.fetch` does run the full `hooks.server.ts` pipeline, so module-enabled/owner/masking come free. See `specs/004-…`.
+- **S5 design flaw:** the hub JWT's agent claim is empty for every personal agent provisioned by the live path, so `assignedAgentIds[0]` resolves to nothing; `/mcp` never consults the JWT revocation store. Counts: 31 `mcpExport` tools, 17 writers, 3 without a permission (incl. `module_action`). See `specs/005-…`.
+- **Stale claim removed:** `actions/notify-user` enforces `comms:create` via `requireNotificationAdmission`. Typed read endpoints are 12 (+1 retired stub).
+- **S2 gate note:** `repo-policy.yaml` declares `bun run test` / `pnpm test` as the test commands; both are unsafe to run in full (see memory `gw-no-full-test-suite`); plans substitute targeted runs and say so in the PR.
+
 ## Open questions for the owner
 
 1. Which gateway should an org's personal agents bind to when the org has both `dev` and `prd`
