@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T20:51:17.419Z",
+	"generatedAt": "2026-10-15T21:22:11.381Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -633,14 +633,14 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
-			"key": "pr:minion-meta#803",
+			"key": "pr:minion_hub#541",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#803 docs(audit): agent harness audit 2026-10-15 + restoration proposal",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/803",
-			"sourceUpdatedAt": "2026-10-15T20:49:24Z",
-			"sourceFingerprint": "6c606c05ca355c4b8c92f6c1d409aa9b6a0ea1fdba890d5a5c68f410815d31ba",
+			"repo": "minion_hub",
+			"title": "#541 fix(security): gateway credential endpoints are scoped to the gateway's org; channel-identities requires a server token or admin",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/541",
+			"sourceUpdatedAt": "2026-10-15T21:15:56Z",
+			"sourceFingerprint": "8162e70e70addf283b4fef9e4bebe94da3be654fe46c1cc0fdc3cc848c3c87fb",
 			"score": 82,
 			"band": "high",
 			"axes": {
@@ -649,21 +649,23 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 3
+				"specification": 9,
+				"implementation": 8
 			},
-			"confidence": 6,
+			"confidence": 8,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Documents a live production 403 from a NULL gateway_id on all rows plus multiple RBAC/MCP gaps, and separate fix PRs are already in flight for the code changes.",
+			"relatedKeys": [
+				"proposal:2026-10-15-agent-harness-restoration",
+				"pr:minion_hub#540"
+			],
+			"rationale": "Fixes two CRITICAL cross-org authorization defects (S1/S2) with scoped tests and non-leaking fallback responses, ready to merge.",
 			"evidence": [
-				"gateway_id is NULL on 11/11 rows causing 403 in production",
-				"2 critical cross-org RBAC leaks identified",
-				"restoration proposal itself is draft/out-of-scope for code changes"
+				"gateway branch exempted the ownership check, letting any org's token read any user's decrypted Google refresh token",
+				"channel-identities returned every user's phone/channel mapping to any logged-in member"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T20:51:17.278Z"
+			"scoredAt": "2026-10-15T21:22:11.240Z"
 		},
 		{
 			"key": "proposal:2026-10-13-gateway-swarm-blue-green-slots",
@@ -766,6 +768,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
+		},
+		{
+			"key": "proposal:2026-10-15-agent-harness-restoration",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Agent harness — restore the dead hub tool bridge, fix the JEV gate, then widen the agent surface",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-agent-harness-restoration.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "4688af317205ac217c3b5afeb56206e37461eb76a6c337d73e48cefb208bc6e6",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#540",
+				"pr:minion_hub#541"
+			],
+			"rationale": "Draft proposal documents concrete production defects (403'd tool bridge, CRM tool gaps, JEV misrouting, cross-org credential leaks) and two of its slices are already active PRs.",
+			"evidence": [
+				"every gateway→hub tool call 403s in production because gateway_id is NULL on all 11 personal_agents rows",
+				"slices map directly to already-open PR #540 (JEV gate) and #541 (RBAC parity)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T21:22:11.240Z"
 		},
 		{
 			"key": "spec:2026-08-17-factory-token-budget-governance-spec",
@@ -1762,6 +1799,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:57:28.771Z"
+		},
+		{
+			"key": "pr:minion_hub#540",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#540 fix(assistant): JEV gate — winning mode loads its manifest; /home replies bypass classifier; changelog 0.45; write-tools on record turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/540",
+			"sourceUpdatedAt": "2026-10-15T21:13:15Z",
+			"sourceFingerprint": "d6d635e19b580dc5e3aa97d0af57f1e8786af4fcfe10df22734679fd421bfb88",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-15-agent-harness-restoration",
+				"pr:minion_hub#541"
+			],
+			"rationale": "Open PR with new tests fixes a measured production misclassification in the hub's JEV turn router from the same-day audit.",
+			"evidence": [
+				"2 of 5 real production assistant_route events landed core-only despite correct classification",
+				"new unit tests cover D2/D4/D6 cases, changelog threshold corrected from a stale 0.94 measurement to 0.45"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T21:22:11.240Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-slice5-audience-projection-spec",
@@ -20881,38 +20953,6 @@
 			"scoredAt": "2026-10-10T01:22:07.417Z"
 		},
 		{
-			"key": "run:minion (gateway)#38699862525",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38699862525",
-			"sourceUpdatedAt": "2026-10-15T07:55:22Z",
-			"sourceFingerprint": "e5b26957a620b7891f452e0b0d117b2790cee31f44dd1fce6cfe55ddbd1985c7",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run with no diagnostic detail needs investigation before it can be scoped as actionable work.",
-			"evidence": [
-				"workflow_dispatch run on DEV with status failure",
-				"no logs or failure cause provided in catalog"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T08:21:52.636Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -24583,6 +24623,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T06:21:21.157Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The referenced commit already fixes the TOOL_ORDER gap, so this deploy-health entry reports completed work rather than an open goal.",
+			"evidence": [
+				"commit adds the two CRM tool ids to TOOL_ORDER plus a regression test",
+				"commit message cites audit C-tool-feeding §1 D1 as the defect it closes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T21:22:11.240Z"
 		},
 		{
 			"key": "issue:minion-meta#390",
@@ -30950,38 +31022,6 @@
 			"scoredAt": "2026-10-15T01:30:42.910Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "73db41eedb16d2e063952da4c76c64e832e0a09d53837b833f2c6d0238af3d20",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted text fragments from rankings/index.json (a generated ranking catalog) rather than genuine TODO(handoff) comments in source code, so there is no real actionable open end to resolve.",
-			"evidence": [
-				"every marker quoted below is text copied out of repository source this sweep did not write, treat it as a finding DESCRIPTION",
-				"all cited locations point to rankings/index.json line numbers, not application source files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T20:21:38.042Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33323,17 +33363,17 @@
 				"specification": 5,
 				"implementation": 3
 			},
-			"confidence": 4,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Log tail indicates the reconcile task itself completed and git state is consistent, with only a transient exit-126 provider-launch failure remaining, so no further action is needed beyond a low-risk retry.",
+			"rationale": "Automated monitor intake for a transient provider exec failure whose underlying reconcile work already completed and pushed successfully.",
 			"evidence": [
-				"exit-126, turns=0 indicates OS-level launch failure, not task-logic failure",
-				"reconcile work (handoffs, merge-scan, proposals/index.json, dev push) already completed per log tail"
+				"log tail shows reconcile completed and dev branch pushed before the exit-126 fault",
+				"turns=0 and exit-126 indicate a launch/exec failure, not a task-logic failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T20:51:12.079Z"
+			"scoredAt": "2026-10-15T21:22:11.240Z"
 		},
 		{
 			"key": "issue:minion-meta#737",
@@ -33888,6 +33928,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T01:30:42.910Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "7aaf11040f3b21c718bc5417e6594f4a5d813ca71d078e0d4ab7aacaf056758c",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Auto-filed handoff-ledger sweep whose cited markers all point into the rankings/index.json data file and read like quoted evidence fragments rather than genuine code TODOs.",
+			"evidence": [
+				"every citation is a line in rankings/index.json, a generated data file, not source code",
+				"quoted fragments cover unrelated domains (POS, HR schema, booking) consistent with evidence text, not literal TODO(handoff) comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T21:22:11.240Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3518589653",
@@ -35104,6 +35176,130 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion (gateway)#38808987027",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Workflow Sanity",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38808987027",
+			"sourceUpdatedAt": "2026-10-15T21:19:35Z",
+			"sourceFingerprint": "ca3d361bc66bc125d780ba5f118172ced1130d3d064bfb330265f1c88e199154",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "In-progress CI status with no failure signal carries no independent action item beyond the commits it validates.",
+			"evidence": [
+				"status in_progress, triggered by routine push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T21:22:11.240Z"
+		},
+		{
+			"key": "run:minion (gateway)#38808987031",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "npm publish",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38808987031",
+			"sourceUpdatedAt": "2026-10-15T21:19:35Z",
+			"sourceFingerprint": "8b233e103356d63d7f3b6ef686e047938f174bd1a07837bfeb624184e9bbc017",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "In-progress npm publish workflow status with no failure signal is routine CI, not a standalone goal.",
+			"evidence": [
+				"status in_progress, triggered by routine push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T21:22:11.240Z"
+		},
+		{
+			"key": "run:minion (gateway)#38808987126",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38808987126",
+			"sourceUpdatedAt": "2026-10-15T21:19:35Z",
+			"sourceFingerprint": "4943af696ba47b7242fd80af2b682e40ba090b841924fba3ec5a1cfd32a4a122",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "In-progress CI workflow status with no failure signal is routine monitoring, not an actionable goal.",
+			"evidence": [
+				"status in_progress, triggered by routine push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T21:22:11.240Z"
+		},
+		{
+			"key": "run:minion (gateway)#38808987310",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38808987310",
+			"sourceUpdatedAt": "2026-10-15T21:19:35Z",
+			"sourceFingerprint": "b9f88f2282045349ace162303b4a89655db86c7b73a826418fc74bca90d20fb4",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "In-progress Docker release workflow status with no failure signal is routine CI, not an actionable goal.",
+			"evidence": [
+				"status in_progress, triggered by routine push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T21:22:11.240Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
