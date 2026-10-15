@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T05:21:14.172Z",
+	"generatedAt": "2026-10-15T05:31:31.723Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1912,18 +1912,17 @@
 				"specification": 8,
 				"implementation": 6
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A confirmed live authorization-misclassification defect pattern (org owners wrongly 403'd) has ~50 remaining requireAdmin call sites unverified, with a clear scoped DoD and an already-proven fix pattern to replicate.",
+			"rationale": "A confirmed authorization misclassification pattern (org admins incorrectly blocked by platform-only checks) has ~50 remaining call sites with a clear audit methodology and definition of done.",
 			"evidence": [
-				"requireAdmin checks platform role, not org membership, confirmed as a live defect on scheduling handlers and fixed there",
-				"~55 other call sites were spot-audited by path name only, not read line-by-line",
-				"DoD: classification comment or switch to requireOrgCapability plus targeted vitest per handler"
+				"requireAdmin checks platform role not org membership, confirmed as live defect on scheduling handlers",
+				"~50 call sites remain spot-audited only, not read line-by-line, with unverified classification"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T05:21:32.531Z"
+			"scoredAt": "2026-10-15T05:31:31.578Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-catalog-service-unification",
@@ -16521,6 +16520,38 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Blue/green slot-switch deployment tooling appears shipped and functional with rollback safety, so remaining work is verification rather than new build.",
+			"evidence": [
+				"slot-switch.sh clones live service spec into idle slot with health wait and restore-on-failure",
+				"rollback flips to parked slot, slot state journaled in slots.json"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T05:31:31.578Z"
+		},
+		{
 			"key": "issue:minion-meta#623",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22046,6 +22077,38 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
+			"key": "run:minion_hub#38687028324",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38687028324",
+			"sourceUpdatedAt": "2026-10-15T05:29:15Z",
+			"sourceFingerprint": "7dbd5cd5a2a8325a84956709b91e95f704516c146ff1323bc52920a0fa13a993",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master with no indication of failure or actionable work.",
+			"evidence": [
+				"status in_progress, push on master",
+				"no failure or error details present in summary"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T05:31:31.578Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -26623,6 +26686,38 @@
 			"scoredAt": "2026-10-13T15:21:31.215Z"
 		},
 		{
+			"key": "issue:minion-meta#580",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#580 [monitor:unstick] rank board goals (e6c76fc5) - both providers failed batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/580",
+			"sourceUpdatedAt": "2026-09-24T04:17:28Z",
+			"sourceFingerprint": "a5f4df555ad4188318a3db0629323d4e6499d49037ccd772d7d1404f44cb19e9",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a transient provider-availability hiccup in the ranking pipeline itself, recommended for simple retry rather than dedicated work.",
+			"evidence": [
+				"batch 1 failed on both bounded providers, 2/624 candidates pending at exit",
+				"diagnosis states this reads as transient provider-availability issue, not a spec or code defect"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T05:31:31.578Z"
+		},
+		{
 			"key": "issue:minion-meta#585",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29113,38 +29208,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T23:51:10.688Z"
-		},
-		{
-			"key": "issue:minion-meta#580",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#580 [monitor:unstick] rank board goals (e6c76fc5) - both providers failed batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/580",
-			"sourceUpdatedAt": "2026-09-24T04:17:28Z",
-			"sourceFingerprint": "a5f4df555ad4188318a3db0629323d4e6499d49037ccd772d7d1404f44cb19e9",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The monitor-intake diagnosis itself concludes this is a transient provider-availability hiccup, not a code or spec defect, and recommends only a retry.",
-			"evidence": [
-				"Diagnosis: transient provider-availability/flakiness issue, not a spec or code defect",
-				"Recommendation: retry the run; a single-batch provider hiccup is unlikely to repeat"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T05:21:32.531Z"
 		},
 		{
 			"key": "issue:minion-meta#664",
@@ -34206,38 +34269,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:21:58.865Z"
-		},
-		{
-			"key": "run:minion_hub#38685899620",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38685899620",
-			"sourceUpdatedAt": "2026-10-15T05:16:39Z",
-			"sourceFingerprint": "a2c33fccad32386c331732bd0bd642fe826742535ddcf2a579b20c9182f4656f",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on master with no indication of failure or actionable work.",
-			"evidence": [
-				"status in_progress",
-				"push on master, no failure signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T05:18:45.932Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
