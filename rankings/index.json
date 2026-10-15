@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T02:16:43.659Z",
+	"generatedAt": "2026-10-15T02:21:31.734Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -17017,8 +17017,8 @@
 			"repo": "minion_hub",
 			"title": "#525 feat(pos): sales history shows one table per shift with a payment summary, plus week and month totals",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/525",
-			"sourceUpdatedAt": "2026-10-15T02:13:00Z",
-			"sourceFingerprint": "6172665abf3a4b49e76957befc93ddf7bd11549e5b0fe37d2a008ec19c791ddc",
+			"sourceUpdatedAt": "2026-10-15T02:17:34Z",
+			"sourceFingerprint": "760811fefe65412e1cfe38944efc0eddc99760c7cd0dd4dddfe4c1f63fc16252",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -17027,21 +17027,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 9,
+				"implementation": 9
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Well-specified POS history reporting feature (shift grouping, week/month totals) with passing tests and verification, non-urgent but ready to ship.",
+			"rationale": "Open PR with a clearly scoped feature and all verification checks already passing, so it is actionable now.",
 			"evidence": [
-				"each shift collapsible with payment-method summary",
-				"7 passed tests in history route, 102 contract tests passed",
-				"lint:design and lint:tokens exit 0"
+				"CHECK_EXIT/TEST_EXIT/DESIGN_EXIT/TOKENS_EXIT all report 0",
+				"detailed shift-grouped sales history + week/month totals scope with explicit out-of-scope notes"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T02:16:43.507Z"
+			"scoredAt": "2026-10-15T02:21:31.582Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -17769,39 +17768,6 @@
 			"scoredAt": "2026-10-15T01:25:19.679Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "58b445b3c49fe974987ad56517c2bd4c963191d7fb6fcb370beadd30f76df26c",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This single proposal bundles 17+ unrelated TODO(handoff) markers spanning security, scheduling, and schema concerns with no common scope, so it should be split into individually scoped specs before it is actionable.",
-			"evidence": [
-				"markers span race windows, stock release, unbounded JSON reads, schema drop columns",
-				"definition of done only closes once the file carries no more markers",
-				"no single verifiable outcome ties the markers together"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T02:16:43.507Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-355769a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18322,6 +18288,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T08:51:49.802Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit describes an already-merged blue/green rollback mechanism with no pending action remaining.",
+			"evidence": [
+				"feat(swarm) blue/green gateway slots commit already merged (#327)",
+				"OWNER-RUN.sh + cutover.sh sequence already implemented with tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:21:31.582Z"
 		},
 		{
 			"key": "issue:minion-meta#643",
@@ -33917,6 +33915,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T01:30:42.910Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "c3a38616db5f1293ab57f236c6442c1cd85cf35fc04209ae00cb6bcb8cd76ce2",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The proposal bundles over a dozen unrelated TODO markers pulled from a data file into one artifact without a coherent single outcome.",
+			"evidence": [
+				"16+ markers spanning booking commits, RBAC, phone failure root-cause, anti-join indexing",
+				"all markers point into rankings/index.json, a generated data file rather than source logic"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:21:31.582Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3518589653",
