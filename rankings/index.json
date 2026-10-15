@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T03:51:07.847Z",
+	"generatedAt": "2026-10-15T04:02:28.116Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14224,38 +14224,6 @@
 			"scoredAt": "2026-10-12T02:55:06.557Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a recent deployment-infra commit (blue/green slot switching) described as already implemented, so there is no clear pending action beyond monitoring deployment health.",
-			"evidence": [
-				"feat(swarm): blue/green gateway slots — prepare/switch/rollback (#327)",
-				"status unknown, updatedAt 2026-10-13"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T03:51:07.690Z"
-		},
-		{
 			"key": "issue:minion-meta#332",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14452,8 +14420,8 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 7,
+				"implementation": 3
 			},
 			"confidence": 6,
 			"recommendation": "group",
@@ -14461,14 +14429,14 @@
 				"issue:minion-meta#463",
 				"issue:minion-meta#728"
 			],
-			"rationale": "Same recurring exit-126/turns=0 host-provisioning signature as the other two monitor alerts, so it should be consolidated into one infra-fix goal rather than tracked separately.",
+			"rationale": "Recurring exit-126/turns=0 reconcile-agent failure that is a runner-box/CLI-permission issue, not a task logic bug, and should be consolidated with its duplicates into one fix-and-classify goal.",
 			"evidence": [
 				"note provider=claude exit-126 turns=0 permission_denials=0",
-				"same signature also appears on runs 971d2fed and 44336b57"
+				"same signature also on runs 971d2fed and 44336b57"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T03:51:20.805Z"
+			"scoredAt": "2026-10-15T04:02:27.957Z"
 		},
 		{
 			"key": "issue:minion-meta#463",
@@ -14487,8 +14455,8 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 7,
+				"implementation": 3
 			},
 			"confidence": 6,
 			"recommendation": "group",
@@ -14496,14 +14464,14 @@
 				"issue:minion-meta#462",
 				"issue:minion-meta#728"
 			],
-			"rationale": "Duplicate recurring exit-126/turns=0 reconcile-agent failure signature that should merge with the sibling monitor alerts into a single runner-box fix goal.",
+			"rationale": "Duplicate of the same exit-126/turns=0 runner-box signature seen in #462 and #728, warranting one combined remediation goal rather than three separate tickets.",
 			"evidence": [
-				"provider=claude exit-126 turns=0 permission_denials=0",
-				"same recurring class seen in 6a8b8c7e and 44336b57"
+				"Same signature as run 6a8b8c7e",
+				"recommend adding a dedicated exit-126/turns=0 signature to the host classifier"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T03:51:20.805Z"
+			"scoredAt": "2026-10-15T04:02:27.957Z"
 		},
 		{
 			"key": "issue:minion-meta#476",
@@ -14848,8 +14816,8 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 7,
+				"implementation": 3
 			},
 			"confidence": 6,
 			"recommendation": "group",
@@ -14857,14 +14825,14 @@
 				"issue:minion-meta#462",
 				"issue:minion-meta#463"
 			],
-			"rationale": "Third occurrence of the identical exit-126/turns=0 reconcile-agent infra signature, reinforcing that this should become one grouped runner-box/classifier fix goal.",
+			"rationale": "Third occurrence of the identical exit-126/turns=0 reconcile-agent failure, reinforcing that this recurring class should be grouped into a single runner-box/classifier fix goal.",
 			"evidence": [
 				"second identical occurrence today (see run 95e0103a)",
-				"exit 126 ... turns=0 confirms the claude agent never ran"
+				"exit-126, turns=0 for the claude reconcile agent"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T03:51:20.805Z"
+			"scoredAt": "2026-10-15T04:02:27.957Z"
 		},
 		{
 			"key": "issue:minion-meta#791",
@@ -35030,6 +34998,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#38679131779",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38679131779",
+			"sourceUpdatedAt": "2026-10-15T04:00:02Z",
+			"sourceFingerprint": "b0e9c205d470bc991acd264c17830f772a966459e89d08d574088b29e228d3db",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is just a currently in-progress CI run with no failure or actionable content, not a goal candidate.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T04:02:27.957Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
