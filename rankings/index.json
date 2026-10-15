@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T23:21:46.799Z",
+	"generatedAt": "2026-10-15T23:51:11.786Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2764,6 +2764,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two CRM tools were registered but omitted from TOOL_ORDER so they silently never loaded on any channel despite the hub UI depending on them, and the fix plus regression test are already committed.",
+			"evidence": [
+				"TOOL_ORDER never listed their ids so createMinionTools() filtered them out on hub, WA, and TG",
+				"adds regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T23:51:11.633Z"
 		},
 		{
 			"key": "run:minion (gateway)#38808987126",
