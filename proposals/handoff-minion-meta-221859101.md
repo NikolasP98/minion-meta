@@ -97,11 +97,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25936
 - `NikolasP98/minion-meta@dev rankings/index.json:25969` — add global server custom-property sort/filter/export planning",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25969
-- `NikolasP98/minion-meta@dev rankings/index.json:27377` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27377
-- `NikolasP98/minion-meta@dev rankings/index.json:27481` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27481
-- `NikolasP98/minion-meta@dev rankings/index.json:28425` — tags are NOT inline-editable here while /pos/catalog and...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28425
-- `NikolasP98/minion-meta@dev rankings/index.json:31361` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31361
+- `NikolasP98/minion-meta@dev rankings/index.json:27409` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27409
+- `NikolasP98/minion-meta@dev rankings/index.json:27513` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27513
+- `NikolasP98/minion-meta@dev rankings/index.json:28457` — tags are NOT inline-editable here while /pos/catalog and...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28457
+- `NikolasP98/minion-meta@dev rankings/index.json:31326` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31326
