@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T01:51:20.488Z",
+	"generatedAt": "2026-10-15T02:04:19.331Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2194,6 +2194,38 @@
 			"scoredAt": "2026-10-10T06:22:10.839Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-5accda62ce08",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5accda62ce08.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "50abf52f2d4317588f727a19799056f598544222eb26f33e11e78d2accd95c70",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved proposal diagnoses an unresolved race-window TODO in the POS transaction service with a clear concurrency-control fix direction.",
+			"evidence": [
+				"TODO(handoff): this narrows the race window, it does not close it",
+				"fix direction: SELECT FOR UPDATE, version columns, or a distributed lock"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:04:19.179Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3087,39 +3119,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T07:22:18.731Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-5accda62ce08",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5accda62ce08.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "50abf52f2d4317588f727a19799056f598544222eb26f33e11e78d2accd95c70",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved proposal documents an unresolved race condition in the POS service with clear risk, diagnosis, and fix direction, warranting real engineering follow-through.",
-			"evidence": [
-				"TODO(handoff): this narrows the race window, it does not close it",
-				"risk: double-charges, lost transactions, or inventory desync under load",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T01:51:46.553Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
@@ -9887,6 +9886,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T23:01:59.751Z"
+		},
+		{
+			"key": "pr:minion_hub#523",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#523 fix(pos): the open/close-register button no longer renders broken after navigating from Home",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/523",
+			"sourceUpdatedAt": "2026-10-15T02:01:06Z",
+			"sourceFingerprint": "5c87ed96d69bc76eba3f83065900a07f637fd3575e5b9340c3f631a37d74b8f0",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Root-caused CSS-leak fix for the POS open/close-register button is implemented and verified, ready to merge.",
+			"evidence": [
+				"unscoped :global(.act) rule in My Agent components overrode the POS banner button after client-side nav",
+				"bun run check, lint:design, and lint:tokens all report 0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:04:19.179Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -18226,6 +18257,38 @@
 			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit already implements blue/green slot switching with health-gated rollback, leaving no outstanding action.",
+			"evidence": [
+				"slot-switch.sh supports prepare/switch/rollback with /health gate and per-tenant journal",
+				"MINION_SLOT_IMAGE pins a digest so a moving tag can't change target mid-cutover"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:04:19.179Z"
+		},
+		{
 			"key": "issue:minion-meta#643",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24951,22 +25014,22 @@
 			},
 			"readiness": {
 				"specification": 5,
-				"implementation": 3
+				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#725",
 				"issue:minion-meta#726"
 			],
-			"rationale": "Deterministic reconcile work completed but a trailing claude-agent step keeps failing with the same exit-126 signature across multiple runs, making it the strongest candidate to anchor a grouped host-classifier fix.",
+			"rationale": "Recurring exit-126 claude-agent signature across multiple runs is explicitly flagged as worth a host-classifier addition, best merged with the sibling intake issues into one goal.",
 			"evidence": [
-				"identical signature recurs across multiple reconcile runs (0f9098be, 48abb488)",
-				"exit-126 turns=0 while reconcile pipeline itself completed"
+				"reconcile core pipeline completed (601 proposals written, pushed) despite trailing claude-agent exit-126",
+				"identical signature recurs across runs 0f9098be and 48abb488"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T01:51:46.553Z"
+			"scoredAt": "2026-10-15T02:04:19.179Z"
 		},
 		{
 			"key": "issue:minion-meta#750",
@@ -33118,22 +33181,22 @@
 			},
 			"readiness": {
 				"specification": 4,
-				"implementation": 3
+				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 4,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#726",
 				"issue:minion-meta#727"
 			],
-			"rationale": "A transient single-batch provider flake that self-resolves via retry fits the same recurring pattern as the other two monitor-intake issues and should become one classifier-hardening goal.",
+			"rationale": "Transient single-batch provider flake recommending only a retry, best consolidated with sibling intake issues into one classifier-signature goal.",
 			"evidence": [
-				"batches 1-8 scored fine, only batch 9 failed",
-				"recommendation: retry the run"
+				"batch 9 dual-provider failure after 846/847 goals already scored",
+				"recommendation was retry the run, not fix a spec or task defect"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T01:51:46.553Z"
+			"scoredAt": "2026-10-15T02:04:19.179Z"
 		},
 		{
 			"key": "issue:minion-meta#726",
@@ -33153,22 +33216,22 @@
 			},
 			"readiness": {
 				"specification": 4,
-				"implementation": 3
+				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 4,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#725",
 				"issue:minion-meta#727"
 			],
-			"rationale": "Another near-complete run with a single transient batch failure, matching the same recurring provider-flake signature as the related issues.",
+			"rationale": "Same transient provider-failure pattern as the sibling intake issues, better tracked as one combined classifier-signature goal.",
 			"evidence": [
-				"only 4 pending out of 848 goals",
-				"both bounded providers ultimately failed on batch 1"
+				"claude unavailable on batch1, codex fallback also failed",
+				"only 4 of 848 goals left pending"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T01:51:46.553Z"
+			"scoredAt": "2026-10-15T02:04:19.179Z"
 		},
 		{
 			"key": "issue:minion-meta#735",
@@ -34972,6 +35035,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#38668778328",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38668778328",
+			"sourceUpdatedAt": "2026-10-15T02:01:26Z",
+			"sourceFingerprint": "7fb5a8e0cd568e2cc197fe2b89fc69a9121dfa1f61a7994c596ef79d37fbfe5d",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run status is not itself an actionable work item.",
+			"evidence": [
+				"push on master",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T02:04:19.179Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
