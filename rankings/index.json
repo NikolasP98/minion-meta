@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T19:51:30.697Z",
+	"generatedAt": "2026-10-15T19:56:02.747Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8147,38 +8147,6 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
-			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
-			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Blue/green deploy tooling with rollback is a meaningful infra improvement but shows no active incident or blocking urgency.",
-			"evidence": [
-				"slot-switch.sh clones live service spec and flips traffic with health check",
-				"rollback flips back to parked slot"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T19:51:30.543Z"
-		},
-		{
 			"key": "issue:minion-meta#329",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10031,6 +9999,41 @@
 			"scoredAt": "2026-10-11T10:51:12.708Z"
 		},
 		{
+			"key": "issue:minion-meta#584",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#584 [monitor:unstick] reconcile proposals run 0f247401 (minion-meta) - exit-126 agent exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/584",
+			"sourceUpdatedAt": "2026-09-24T18:17:26Z",
+			"sourceFingerprint": "f23c69f0e896ac1f7bba2929b81294895da2b8fa55db130b54a164815c4d4b7f",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:minion-meta#486"
+			],
+			"rationale": "Recurring exit-126 infra fault in the reconcile agent-exec step is well-diagnosed with a clear, bounded fix (check claude binary permissions/PATH on the runner).",
+			"evidence": [
+				"exit 126, turns=0, permission_denials=0",
+				"reconcile-proper work (clone/push/proposals index) already succeeds",
+				"recommendation: check runner's claude provider binary exec permissions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T19:56:02.583Z"
+		},
+		{
 			"key": "issue:minion-meta#638",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11097,40 +11100,6 @@
 			"scoredAt": "2026-10-15T16:51:49.661Z"
 		},
 		{
-			"key": "issue:minion-meta#486",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#486 [monitor:unstick] reconcile run 7f695b37 (minion-meta) — agent exec-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/486",
-			"sourceUpdatedAt": "2026-09-17T18:17:48Z",
-			"sourceFingerprint": "78408f8d3eda1abb901827f6a3f79da789164028d943d9bcad991971d057ec14",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#584"
-			],
-			"rationale": "Recurring exit-126/turns=0 agent-exec fault on the reconcile runner is an infra host issue, not a task failure, and overlaps with #584's identical signature.",
-			"evidence": [
-				"note=reconcile agent failed exit-126, turns=0, permission_denials=0",
-				"identical signature recorded in 4 consecutive reconcile runs over ~2.5h"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T19:51:25.694Z"
-		},
-		{
 			"key": "issue:minion-meta#526",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11435,40 +11404,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T19:51:24.274Z"
-		},
-		{
-			"key": "issue:minion-meta#584",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#584 [monitor:unstick] reconcile proposals run 0f247401 (minion-meta) - exit-126 agent exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/584",
-			"sourceUpdatedAt": "2026-09-24T18:17:26Z",
-			"sourceFingerprint": "f23c69f0e896ac1f7bba2929b81294895da2b8fa55db130b54a164815c4d4b7f",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#486"
-			],
-			"rationale": "Same exit-126/turns=0 provider-exec fault pattern as #486, indicating a shared host-level permissions/PATH problem rather than two distinct issues.",
-			"evidence": [
-				"agent invocation failed with exit code 126 and turns=0, permission_denials=0",
-				"reconcile sweep itself completed fully and successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T19:51:25.694Z"
 		},
 		{
 			"key": "issue:minion-meta#590",
@@ -28244,38 +28179,6 @@
 			"scoredAt": "2026-10-12T09:22:04.054Z"
 		},
 		{
-			"key": "pr:minion_hub#539",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#539 fix(shell): assistant launcher always starts in its corner; a resize keeps it in place",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/539",
-			"sourceUpdatedAt": "2026-10-15T19:48:46Z",
-			"sourceFingerprint": "ff7003f294912f10f32d1d91a51be72558af3d90e06b8e399617cee1290d590d",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, well-scoped UI fix for a reported positioning bug with clear before/after behavior and passing gates, just needs browser verification.",
-			"evidence": [
-				"Owner report: launcher came back where it had been dragged after a hard refresh",
-				"prettier ✅ · svelte-check 0 errors in changed file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T19:51:30.543Z"
-		},
-		{
 			"key": "pr:minion-meta#555",
 			"kind": "pr",
 			"stage": "development",
@@ -29291,6 +29194,40 @@
 			"scoredAt": "2026-10-11T15:23:41.808Z"
 		},
 		{
+			"key": "issue:minion-meta#486",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#486 [monitor:unstick] reconcile run 7f695b37 (minion-meta) — agent exec-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/486",
+			"sourceUpdatedAt": "2026-09-17T18:17:48Z",
+			"sourceFingerprint": "78408f8d3eda1abb901827f6a3f79da789164028d943d9bcad991971d057ec14",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#584"
+			],
+			"rationale": "Same exit-126/turns=0 infra fingerprint as the later #584 report, making this earlier instance redundant.",
+			"evidence": [
+				"identical exit-126 turns=0 permission_denials=0 signature",
+				"updated 2026-09-17, superseded by 2026-09-24 report of same fault"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T19:56:02.583Z"
+		},
+		{
 			"key": "issue:minion-meta#505",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29516,38 +29453,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T17:21:46.968Z"
-		},
-		{
-			"key": "run:minion_hub#38792893068",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38792893068",
-			"sourceUpdatedAt": "2026-10-15T19:19:07Z",
-			"sourceFingerprint": "24943a11950618a40d7d3c4c73e40dd44e0f718393a6e25529d8907049df2e97",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on master, not a goal requiring ranking.",
-			"evidence": [
-				"push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T19:21:24.883Z"
 		},
 		{
 			"key": "issue:minion-meta#382",
@@ -35166,6 +35071,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#38797500811",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38797500811",
+			"sourceUpdatedAt": "2026-10-15T19:54:19Z",
+			"sourceFingerprint": "9e8f3696fd14662a11394f2928266d3720c1b723a71e7dc11b9efd160c80a143",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is just an in-progress CI run with no pending decision or actionable work.",
+			"evidence": [
+				"status: in_progress",
+				"push on master trigger"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T19:56:02.583Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
