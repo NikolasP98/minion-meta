@@ -43,18 +43,18 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8594
 - `NikolasP98/minion-meta@dev rankings/index.json:9614` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9614
-- `NikolasP98/minion-meta@dev rankings/index.json:10445` — the owner also asked to configure this via agent builder",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10445
-- `NikolasP98/minion-meta@dev rankings/index.json:12027` — --apply is intentionally unimplemented",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12027
-- `NikolasP98/minion-meta@dev rankings/index.json:12094` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12094
-- `NikolasP98/minion-meta@dev rankings/index.json:12261` — this is a per-VIEWER preference, not an RBAC restriction",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12261
-- `NikolasP98/minion-meta@dev rankings/index.json:12326` — host error-log scrubbing is separate from the sanitized pipeline",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12326
-- `NikolasP98/minion-meta@dev rankings/index.json:13218` — the anti-join has no index to lean on",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13218
+- `NikolasP98/minion-meta@dev rankings/index.json:10477` — the owner also asked to configure this via agent builder",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10477
+- `NikolasP98/minion-meta@dev rankings/index.json:12059` — --apply is intentionally unimplemented",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12059
+- `NikolasP98/minion-meta@dev rankings/index.json:12126` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12126
+- `NikolasP98/minion-meta@dev rankings/index.json:12293` — this is a per-VIEWER preference, not an RBAC restriction",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12293
+- `NikolasP98/minion-meta@dev rankings/index.json:12358` — host error-log scrubbing is separate from the sanitized pipeline",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12358
+- `NikolasP98/minion-meta@dev rankings/index.json:13250` — the anti-join has no index to lean on",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13250
 - `NikolasP98/minion-meta@dev rankings/index.json:15750` — spec §4.1 also lists reschedule, charge in POS and book the...",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15750
 - `NikolasP98/minion-meta@dev rankings/index.json:15783` — tagOptions is the FILTER's list — the event-scope registry",
@@ -103,5 +103,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27477
 - `NikolasP98/minion-meta@dev rankings/index.json:28421` — tags are NOT inline-editable here while /pos/catalog and...",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28421
-- `NikolasP98/minion-meta@dev rankings/index.json:31323` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31323
+- `NikolasP98/minion-meta@dev rankings/index.json:31355` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31355
