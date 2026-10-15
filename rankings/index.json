@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T16:21:46.497Z",
+	"generatedAt": "2026-10-15T16:51:49.826Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10947,56 +10947,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 3
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#482"
 			],
-			"rationale": "This is one of three identical recurring exit-126/turns=0/provider=claude reconcile-worker failures in a 30-minute window and should be consolidated with its sibling into one fix goal rather than tracked separately.",
+			"rationale": "This is one of three identical exit-126/turns=0/provider=claude signatures within 30 minutes and should be consolidated with #482 into a single environmental-fix goal rather than triaged separately.",
 			"evidence": [
-				"title cites run 8362ab1d with 'claude provider exit-126 after successful git work'",
-				"quoted diagnosis states '1 of 3 occurrences of the identical exit-126/turns=0/provider=claude signature within a 30-minute window'"
+				"exit-126, turns=0, permission_denials=0, provider=claude with worker_started_at within ~1s of finished_at",
+				"same signature recurred 3x in 30 minutes across runs 8362ab1d, 47ecd4c6, 0db97b3d"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T16:21:32.717Z"
-		},
-		{
-			"key": "issue:minion-meta#482",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#482 [monitor:unstick] reconcile proposals run 47ecd4c6: claude provider exit-126 after partial git work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/482",
-			"sourceUpdatedAt": "2026-09-17T15:17:52Z",
-			"sourceFingerprint": "3e3331a2751963f9d8089e9dd497c9791d31f353f2060348817c680036c499bd",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#481"
-			],
-			"rationale": "Shares the identical exit-126/turns=0/provider=claude signature and 30-minute window with #481, so the two (plus the unlisted third run) should be grouped into a single reconcile-worker reliability goal.",
-			"evidence": [
-				"title cites run 47ecd4c6 with 'claude provider exit-126 after partial git work'",
-				"quoted diagnosis: 'same underlying environmental issue as the other two runs in this batch'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T16:21:32.717Z"
+			"scoredAt": "2026-10-15T16:51:49.661Z"
 		},
 		{
 			"key": "issue:minion-meta#483",
@@ -13696,6 +13662,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:09:02.141Z"
+		},
+		{
+			"key": "issue:minion-meta#482",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#482 [monitor:unstick] reconcile proposals run 47ecd4c6: claude provider exit-126 after partial git work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/482",
+			"sourceUpdatedAt": "2026-09-17T15:17:52Z",
+			"sourceFingerprint": "3e3331a2751963f9d8089e9dd497c9791d31f353f2060348817c680036c499bd",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#481"
+			],
+			"rationale": "Same recurring exit-126 claude-provider signature as #481, with less git work completed before failure, so the two should merge into one fix-the-environment goal.",
+			"evidence": [
+				"log cuts off before proposals/index.json was written; no git push attempted in this run",
+				"described as 1 of 3 occurrences of the identical exit-126/turns=0/provider=claude signature in a 30-minute window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T16:51:49.661Z"
 		},
 		{
 			"key": "issue:minion-meta#498",
@@ -24394,6 +24394,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T01:52:23.197Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit shows blue/green slot-switch tooling with rollback already implemented and merged, leaving no outstanding actionable goal.",
+			"evidence": [
+				"deploy/swarm/slot-switch.sh clones the live service spec into an idle slot with a new image and journals active slot",
+				"rollback flips back to the parked slot; MINION_SLOT_IMAGE pins a digest for cutover safety"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T16:51:49.661Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
