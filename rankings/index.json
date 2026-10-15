@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T06:11:48.187Z",
+	"generatedAt": "2026-10-15T06:21:19.101Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7866,6 +7866,38 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A blue/green deploy mechanism with rollback was shipped and merits a health/verification check rather than new execution.",
+			"evidence": [
+				"feat(swarm): blue/green gateway slots — prepare/switch/rollback with the parked image as instant rollback (#327)",
+				"restores on failure, and journals the active slot per tenant"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T06:21:18.964Z"
+		},
+		{
 			"key": "issue:minion-meta#329",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13959,6 +13991,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T01:26:31.697Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "eab344500943c04b382a502853129d17016fe4d2eb3de27ce3c3b0b1c93b0ef8",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is an auto-filed sweep bundling many unrelated TODO(handoff) markers from rankings/index.json with no single verifiable outcome, so it needs to be split into per-marker specs before it is actionable.",
+			"evidence": [
+				"Filed automatically by the factory handoff-ledger sweep",
+				"Markers (as of 2026-10-15)` lists 17+ distinct unrelated findings across the file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T06:21:18.964Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-base-1d2151b",
@@ -34907,38 +34971,6 @@
 			"scoredAt": "2026-10-15T01:26:31.697Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "49f772d69443bb4521e0b13a7815b542c28aae5a3fa03da74e39605dea8e3701",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 0
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The flagged file is rankings/index.json itself, a generated ranking artifact, so the quoted 'markers' are rationale/evidence text from prior ranking runs rather than real TODO(handoff) code comments needing resolution.",
-			"evidence": [
-				"source: handoff-sweep targets rankings/index.json, a data output file, not source code",
-				"quoted marker text (e.g. 'this narrows the race window') reads as prior scoring rationale, not an actionable TODO"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T05:21:13.996Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3652542388",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35000,38 +35032,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
-			"key": "run:minion_hub#38690736851",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38690736851",
-			"sourceUpdatedAt": "2026-10-15T06:09:20Z",
-			"sourceFingerprint": "441ff9be4344c583f9656a1a310efc54087d9f90ecde9001a91c2cefa68534ad",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status with no stated problem or actionable content.",
-			"evidence": [
-				"status: in_progress",
-				"summary: push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T06:11:48.041Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
