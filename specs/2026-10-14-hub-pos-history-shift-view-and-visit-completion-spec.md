@@ -13,6 +13,19 @@ tags: [logic, test]
 
 # POS history per-shift tables + calendar totals; visit completion per service; package aggregates
 
+## 0. Product
+
+Owner feedback batch 2026-10-14 (FACES clinic), four asks decided in chat the same day:
+
+1. `/pos/history` is always one table per shift, each with its own header and a readable
+   payment summary, plus week/month views of totals per payment method.
+2. Completing a multi-service visit must confirm EVERY service's stock consumption (the
+   clinic enters ml / units at completion); removing a visit's first service must not 404;
+   notes must not interrupt typing.
+3. The catalog drops its coverage banner; a package row aggregates stock / cost / margin
+   from its sessions.
+4. Confirm that selling a package grants its N individual sessions (confirmation only).
+
 Owner feedback batch 2026-10-14 (FACES, WhatsApp 16:20 Lima + annotated screenshots).
 Confirmed against PostHog replay `01a13c14-4b83-7ab6-9fea-dc04bc6fcfd9` (10-14 20:22Z–) and
 production rows (see AS-IS evidence). Four independent slices, one hub PR each.
@@ -164,3 +177,20 @@ Verified in prod config, no code: `fin_product_components` has AF1 → 4 × AF2,
 → 3 × NCTF-1S, PB3 → 3 × PBO; `createGrantsForTicketLine` (pos-packages.service) mints one
 grant per edge with `sessions = qty` on sale, and `/pos/accounts` lists them as pending to
 schedule (hub #511/#516 flow). The booking picker already hides bundles (#511).
+
+**Out of scope:** server pagination of the history window; a lint rule forbidding bare
+`:global(.x)` selectors (ledger: `proposals/2026-10-14-hub-global-class-selector-lint.md`);
+nested bundles; the `Pb Serum Ojeras` stock mapping (owner data, not code).
+
+## Verification
+
+- Hub PRs merged to `master`: #522 (catalog), #523 (shift banner leak), #525 (history),
+  #524 (visit completion). Each ran `bun run check`, the slice's vitest folders, the route /
+  service boundary contracts, `lint:design`, `lint:tokens` and prettier in the foreground.
+- Production (Vercel `c2bea4172`, 2026-10-15 02:45Z) browser-checked: history list shows one
+  table per shift with its own header + summary table; month view shows per-day totals per
+  method; catalog has no banner and `AF1` shows stock 4 (= ⌊17/4⌋); the shift banner's
+  "Abrir caja" button measures 81×32 px after client-side navigation from Home (was 26×24).
+- Not browser-verified: completing a two-service visit (unit-tested per-member line split
+  and result merge; no safe pending two-service visit to complete on production data).
+
