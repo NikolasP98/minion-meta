@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T01:32:10.265Z",
+	"generatedAt": "2026-10-15T01:42:18.858Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1566,38 +1566,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T08:21:48.244Z"
-		},
-		{
-			"key": "run:minion_hub#38523232863",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38523232863",
-			"sourceUpdatedAt": "2026-10-14T06:42:19Z",
-			"sourceFingerprint": "46c6aaf1d31a1c61f558d0f3074d3e0cdad0d9a76d3bbd00f46296e399146b50",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "CI is failing on a push to minion_hub's master branch, which is both its development branch and PR base, so it blocks all downstream merges until investigated and fixed.",
-			"evidence": [
-				"run status is 'failure' on 'push on master'",
-				"master is minion_hub's registered development branch and PR base"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T06:52:04.424Z"
 		},
 		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
@@ -14255,6 +14223,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f2de5e0053402f95a86284c47b7c6036b6b947cc",
+			"sourceUpdatedAt": "2026-10-13T16:32:01Z",
+			"sourceFingerprint": "68441ee625793eac1599effff2f7be73d56b53dc1384e372a54381554d3c74c2",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Blue/green slot-switch deployment infra merged; no indication of current outage or pending action beyond monitoring health.",
+			"evidence": [
+				"slot-switch.sh with prepare/switch/rollback",
+				"journals active slot per tenant",
+				"test fixtures carry allowlist pragmas"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T01:42:18.693Z"
 		},
 		{
 			"key": "issue:minion-meta#332",
@@ -34142,6 +34143,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
+			"key": "run:minion_hub#38666886874",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38666886874",
+			"sourceUpdatedAt": "2026-10-15T01:40:11Z",
+			"sourceFingerprint": "488a961c9d9de788f6f6c2ed2f2e0e2e7d4dd6a97f05ea8f619177bcff2192ff",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on push to master with no indication of failure or actionable issue.",
+			"evidence": [
+				"status in_progress",
+				"push on master",
+				"CI workflow run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-15T01:42:18.693Z"
 		},
 		{
 			"key": "issue:minion-meta#589",
