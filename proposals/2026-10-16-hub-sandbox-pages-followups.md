@@ -34,3 +34,9 @@ Spec: `specs/010-hub-sandbox-pages/`. POC: hub branch `feat/sandbox-pages-poc` (
 - Tier 1 as a sub-session (`sessions_spawn`) so element HTML/JS never enters the main assistant context; today both tiers run in one turn.
 - `EditableGrid` controlled mode: during a drag the preview order can differ from the saved order for one write round-trip (Playwright proof 2026-10-16: dragged cell at index 1 after drop, index 0 after Done; final state correct). Cause: `saved` is cleared when `items` reload mid-drag. Fix: ignore reloads while `dragId`/`resizeId` is set.
 - The sandbox now inherits `EditableGrid`'s narrow-container fallback (one column ≤ 620px) instead of its old 2-column step at 1024px.
+
+## Added 2026-10-16 (spec 014 — component library)
+- Agent-facing library: a `sandbox.library` tool (list shared/own components) and a line in the canvas map pointing at reusable components, so tier 2 can reuse instead of rebuild.
+- Panel shows title + size only; a thumbnail/preview (render the srcdoc at small scale) would make picking easier.
+- Library entries are snapshots: no versioning, no "update copies from the library"; cross-org sharing out of scope.
+- `mine` relies on `created_by`; rows created before that column was populated show as not mine.
