@@ -2,21 +2,21 @@
 
 Extends `../012-design-system-durability/contracts/ui.md`.
 
-## Baseline (runtime)
-- Under `(pointer: coarse)`, every `button, [role=button], [role=switch], [role=checkbox], [role=radio], [role=tab], [role=menuitem], [role=menuitemradio], [role=menuitemcheckbox], [role=option], input:not([type=hidden]), select, textarea, a[href].btn-like` outside `[data-density="dense"]` has `min-height: var(--control-height-touch)` and, for icon-only controls, `min-width` too. Dense surfaces: DataTable body, icon-button clusters (`.dt-tool`), telemetry (`.t-telemetry`), chart canvases — each sets `data-density="dense"` and keeps a reachable alternative (row menu, keyboard).
-- Density mode: `<html data-density="comfortable|compact">`; tokens `--density-row`, `--density-control`, `--density-gap` resolve per mode; comfortable equals the current values.
+## Baseline (runtime) — amended after analysis
+- Un-layered, normal-specificity rules in `app.css` (Tailwind utilities live in `@layer utilities`; a layered or `:where()` rule loses to `min-h-*` utilities and Svelte-scoped `min-height: 0`), under `@media (pointer: coarse), (max-width: 767.98px)`: every `button, [role=button], [role=switch], [role=checkbox], [role=radio], [role=tab], [role=menuitem], [role=menuitemradio], [role=menuitemcheckbox], [role=option], input:not([type=hidden]):not([type=checkbox]):not([type=radio]), select, textarea` outside `[data-dense]` has `min-height: var(--active-control-min-height)` (icon-only: `min-width` too). The `min-height: 0` / `min-h-*` escapes that remain are enumerated as dense with reasons. Dense surfaces (`data-dense`): DataTable body, icon-tool clusters (`.dt-tool`), telemetry (`.t-telemetry`), chart canvases — each keeps a reachable alternative.
+- Density mode lives on the existing `AppViewport` (`data-density="compact|comfortable"`, `compact` = today, mounted by `(app)/+layout.svelte`), not on `<html>`; mapping to DataTable density: compact → `normal` (44, today), comfortable → `comfortable` (52).
 
 ## Density preference
-- Section `density` in `/api/me/preferences/[section]`; value `{ version: 1, mode: 'comfortable' | 'compact' }`; local scoped copy via `createScopedPreference('density', …)`; applied by `$lib/themes/runtime.ts` next to `data-theme`.
+- Section `density` in `/api/me/preferences/[section]`; value `{ version: 1, mode: 'compact' | 'comfortable' }`, default `compact`; local scoped copy via `createScopedPreference('density', …)`; applied through the `AppViewport` prop from the SSR-loaded preferences (no flash).
 
-## Archetype manifest
-- `src/lib/routes/archetypes.ts`: `Record<routeId, 'collection'|'detail'|'create-edit'|'dashboard'|'settings'|'workspace'|'none'>` covering every `(app)` `+page.svelte`; the conformance test reads each page source and asserts the archetype's composition: collection = PageShell + PageHeader + one toolbar (DataView or FilterToolbar) + a region that owns scroll; detail = PageShell + PageHeader/DetailHeader + sections; create-edit = PageShell + form footer; dashboard = PageShell + EditableGrid or KPI grid; settings = SectionShell/SettingsNav; workspace = SectionShell. Unknown route → test fails.
+## Archetype manifest — amended after analysis
+- The registry is the existing `src/lib/routes/route-design-manifest.ts` (`RouteArchetype`: dashboard | collection | record-detail | form-settings | master-detail | workspace-editor | canvas-kanban | terminal-remote-desktop | public-auth, 100 % coverage proven by `route-design-contracts.test.ts`). PageShell's own enum is reconciled to these names. A generic `archetype-composition.test.ts` walks each page's layout chain up to `(app)` and asserts per archetype: collection = PageShell + PageHeader + one toolbar (DataView / FilterToolbar / DataTable toolbar) + the manifest's scroll owner; record-detail = PageShell + PageHeader|DetailHeader; form-settings = PageShell|SectionShell + commit footer or autosave; dashboard = PageShell + EditableGrid|KPI grid; master-detail/workspace-editor/canvas-kanban = SectionShell|PageShell per manifest. `KNOWN_NONCONFORMING` carries reasons; an unlisted non-conforming page fails.
 
-## Action scope
-- `ActionScope = 'shell'|'page'|'collection'|'selection'|'row'|'field'`; PageHeader renders exactly one `primary` action and folds the rest into overflow; declarations on pilots are props, not a new registry.
+## Action scope — amended
+- `ActionScope = 'shell'|'page'|'collection'|'selection'|'row'|'field'`; PageHeader's `primaryActions` snippet carries at most one control, proven by a DOM-count test on the pilots (`[data-part='primary-actions'] > *` ≤ 1); extras move to `secondaryActions`/overflow. No typed registry.
 
-## Collection states
-- `DataView` accepts `state: CollectionState` (`initial-load|refreshing|stale|empty|no-results|denied|partial|failed|recovered`) + `onRetry` (read-only); it renders the shared presentation and never a second global spinner (uses `AsyncBoundary`/`Skeleton`/`EmptyState`).
+## Collection states — amended
+- `DataView` stays headless (012). `CollectionState.svelte` (same directory) accepts `state: CollectionState` (`initial-load|refreshing|stale|empty|no-results|denied|partial|failed|recovered`), `message?`, `onRetry?` (read-only) and action snippets; pages compose it above the renderer or through DataTable's `empty`/`errorContent` slots; it uses `ui/EmptyState`, `Skeleton`, `Spinner xs` only and never a second global spinner.
 
 ## Content contract
-- `messages/{en,es}.json` gain `verb_save`, `verb_cancel`, `verb_create`, `verb_delete`, `verb_archive`, `verb_restore`, `verb_retry`, `verb_review`, `verb_export`, `verb_import` (append-only, both languages in one commit). `scripts/qc/content-contract.test.ts`: (1) no two keys with the same EN text map to different ES texts for verb keys; (2) no `toLocaleString`/`toFixed`/`Intl.NumberFormat` on money fields and no hand-rolled date formats outside `$lib/utils/format`.
+- `messages/{en,es}.json` gain `verb_save`, `verb_cancel`, `verb_create`, `verb_delete`, `verb_archive`, `verb_restore`, `verb_retry`, `verb_review`, `verb_export`, `verb_import` (append-only, both languages in one commit). `scripts/qc/content-contract.test.ts`: (1) across ALL keys, identical EN text must map to one ES text (divergences fixed by value change — keys are never removed — or allow-listed with reasons); (2) per-file ratchet over money/date formatter bypasses (`scripts/qc/.content-contract-baseline.json`, decrease-only): no new file, no count increase; the three pilots are at zero.

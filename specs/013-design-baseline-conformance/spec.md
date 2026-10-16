@@ -11,9 +11,9 @@ Feature 012 hardened the design-system *rules* (token contract 1.1.0, intrinsic 
 
 ## AS-IS (measured on minion_hub master `48976586`, 2026-10-16)
 
-- Runtime baseline: `app.css` has one global `:focus-visible` ring and no role-based touch floor; 44 px targets exist only inside `@minion-stack/ui` controls and three hub-local components patched by 012. A hub-local button, tab or menu item at 22 px stays 22 px on a phone.
+- Runtime baseline: `app.css` has one global `:focus-visible` ring. `AppViewport` already publishes `data-density` (`compact` is what `(app)/+layout.svelte` mounts today) and `--active-control-min-height` (44 under coarse pointer / ≤ 767.98 px, else 32 in compact, 44 in comfortable) — but nothing consumes that token, so a hub-local button, tab or menu item at 22 px stays 22 px on a phone. DataTable carries a third density vocabulary (`compact|normal|comfortable` = 36/44/52, `normal` today).
 - Sizing debt: `lint:design` counts **302** raw 20–48 px heights outside `ui/` (`raw-control-height`, reporting only, no ceiling); style blocks alone show 7× `40px`, 7× `22px`, 5× `20px`, with the largest clusters in `components/my-agent` (10), `marketplace` (8), `builder` (4), `socials` (3). Icon literals: **1,051** `size={N}`; 315 of them are off the 12/14/16/20 scale (13: 124, 11: 95, 15: 63, 10: 33).
-- Page composition: 145 app pages; PageShell on 92, PageHeader on 113, SectionShell on 2, DataView on 5, DataTable on 21, native `<table>` on 4, FormField on 2, ConfirmDialog on 6. No test asserts that a page composes like its recipe.
+- Page composition: 145 app pages; PageShell on 92, PageHeader on 113, SectionShell on 2, DataView on 5, DataTable on 21, native `<table>` on 4, FormField on 2, ConfirmDialog on 6. A route manifest (`route-design-manifest.ts`, 100 % coverage test, nine archetypes) and per-wave composition tests exist, 16 of 21 layouts own the shells, and PageShell carries a second archetype enum — but no generic layout-aware test asserts that every page composes like its archetype.
 - States: only pages routed through DataView share empty/no-results/denied/failed/refreshing presentation; the other collection pages hand-roll them or omit them.
 - Narrow widths: index sidebars and filter bars are component-local decisions; several collection pages keep a sidebar beside a 390 px list.
 - Action placement: per-view preferences still appear in some page headers; some headers carry more than one primary action.
@@ -24,7 +24,7 @@ Anchors: `audits/2026-10-16-design-system-durability-handover/`, `.lavish/design
 
 ## TO-BE and invariants
 
-1. A non-conforming interactive element is corrected at runtime by its role, not by someone finding it: under a coarse pointer every actionable element meets the 44 px target; under a fine pointer density is one coordinated mode (comfortable | compact) applied to rows, headers, toolbars and menus together. Opt-out is explicit and visible in the DOM (`data-density="dense"` on a surface), never implicit.
+1. A non-conforming interactive element is corrected at runtime by its role, not by someone finding it: under a coarse pointer (or ≤ 767.98 px) every actionable element meets the 44 px target through the existing `--active-control-min-height`; under a fine pointer density is one coordinated mode — `compact` (today's sizing, default) | `comfortable` — driven by `AppViewport` and mapped onto DataTable's own density (`normal` | `comfortable`). Opt-out is explicit and visible in the DOM (`data-dense` on a surface), never implicit.
 2. Control heights and icon sizes come only from the scale. The ratchets have ceilings and the counts can only go down.
 3. Every app page declares its archetype (collection, detail, create/edit, dashboard, settings, workspace) and a test proves it composes like the archetype's recipe (shell, header, toolbar, scroll owner).
 4. Every collection surface presents the same initial-load, refreshing, stale, empty, no-results, denied, partial and failed states through one wrapper.
@@ -66,16 +66,16 @@ Nested interactive elements (a button inside a clickable row); dense tables unde
 ### Functional Requirements
 
 - **FR-001 (baseline)**: Provide a role-based runtime baseline so that under coarse pointer every `button`, link-as-button, switch, checkbox, radio, tab, menu item, option and form field meets a 44 px target, and under fine pointer a coordinated density mode sizes rows, headers, toolbars, menus and controls together. Surfaces may opt out only through an explicit dense attribute that also keeps a reachable alternative.
-- **FR-002 (density preference)**: Expose comfortable/compact as a user preference that follows the user across devices, defaulting to the current comfortable sizing so existing users see no change until they choose.
+- **FR-002 (density preference)**: Expose compact/comfortable as a user preference that follows the user across devices, defaulting to `compact` (today's sizing) so existing users see no change until they choose; applied server-side on first paint through the existing viewport density.
 - **FR-003 (sizing normalisation)**: Replace raw control heights and icon sizes outside the shared UI package with scale tokens; set ratchet ceilings for `raw-control-height` and `raw-icon-size` so they can only decrease.
-- **FR-004 (archetype conformance)**: Every app page declares its archetype; a test asserts shell, header, toolbar and scroll-owner composition per archetype and fails on an undeclared page or a seeded violation.
-- **FR-005 (state coverage)**: Collection pages present initial-load, refreshing, stale, empty, no-results, denied, partial and failed states through the shared data-view wrapper with read-only retry; the wrapper adds no second global spinner.
+- **FR-004 (archetype conformance)**: The existing route manifest remains the single archetype registry (PageShell's enum reconciled to it); a generic, layout-aware test asserts shell, header, toolbar and scroll-owner composition per archetype for every page and fails on an undeclared page or a seeded violation; non-conforming pages are allow-listed with reasons, never silently.
+- **FR-005 (state coverage)**: Collection pages present initial-load, refreshing, stale, empty, no-results, denied, partial and failed states through one shared collection-state presentation composed next to the headless DataView or inside DataTable's state slots (012's "no wrapper" decision stands), with read-only retry and no second global spinner.
 - **FR-006 (narrow collapse)**: Index sidebars become parent routes, filter bars become sheets and context panels become steps at narrow widths on the collection archetype; no document overflow at 390 or 320 px.
 - **FR-007 (action placement)**: Actions declare their scope; the page header renders one dominant action; per-view settings live in the toolbar kebab; object settings in the object menu.
 - **FR-008 (token debt)**: Raw shadows, numeric layers, raw colours, raw motion and raw type sizes outside third-party surfaces are replaced by tokens; remaining exceptions are capped with reasons and the global ceilings are lowered to the new counts.
-- **FR-009 (content contract)**: Publish shared bilingual action verbs and value conventions (money, dates, counts) as one catalog section consumed by pages; a test flags divergent verbs for the same action and any money/date render that bypasses the shared formatters.
+- **FR-009 (content contract)**: Publish shared bilingual action verbs and value conventions (money, dates, counts) as one catalog section consumed by the pilots; a test flags divergent translations for any keys with identical source text, and a per-file ratchet stops new money/date renders that bypass the shared formatters while the existing bypass count can only fall.
 - **FR-010 (gates)**: Every change passes design/token lint, Paraglide compile, typecheck, affected tests and production build; EN and ES ship together; no new routes or endpoints; RBAC and tenancy untouched.
-- **FR-011 (release)**: Each item ships as its own reviewed PR against the registry base; production is verified on the real aliases as in feature 012.
+- **FR-011 (release)**: Each work stream ships as its own reviewed PR against the registry base (items grouped by disjoint ownership); the repository's `check` and `build` gates run serially per PR before it leaves draft; production is verified on the real aliases as in feature 012.
 
 ### Key Entities
 DensityMode (comfortable | compact; user preference section); DenseSurface (explicit opt-out attribute with reason); Archetype (collection | detail | create-edit | dashboard | settings | workspace) with a recipe composition contract; ActionScope (shell | page | collection | selection | row | field); CollectionState (initial-load | refreshing | stale | empty | no-results | denied | partial | failed | recovered); ContentContract (verbs, money, date, count conventions).
@@ -86,10 +86,10 @@ DensityMode (comfortable | compact; user preference section); DenseSurface (expl
 - SC-001: 0 unmarked interactive targets under 44 px under coarse pointer across the recipe matrix and 20 sampled real routes.
 - SC-002: Density switch changes table row, toolbar control and menu item heights together; preference persists across a second device/profile.
 - SC-003: 100 % of app pages declare an archetype; the conformance test fails on a seeded violation and passes on master.
-- SC-004: `raw-control-height` ≤ 30 and `raw-icon-size` ≤ 50 with ceilings set; raw-shadow ≤ 6, raw-layer ≤ 5, raw-color ≤ 120, raw-motion ≤ 3, raw-type-size ≤ 4 (remaining values reason-coded).
+- SC-004: ceilings become a CI gate (strict global totals); governed totals (raw minus reason-coded exceptions) `raw-control-height` ≤ 30, `raw-icon-size` ≤ 50, raw-shadow ≤ 6, raw-layer ≤ 5, raw-color ≤ 120, raw-motion ≤ 3, raw-type-size ≤ 4; raw totals reported beside them.
 - SC-005: Three representative collection pages render all nine states identically through the wrapper.
 - SC-006: Document overflow 0 at 390 and 320 px on the collection archetype pilots with every control reachable.
-- SC-007: Zero divergent verbs for the same action across EN/ES catalogs; zero money/date renders outside the shared formatters.
+- SC-007: Zero divergent translations for keys with identical source text across EN/ES; the three pilots render money/dates only through the shared formatters; the bypass-file ratchet is committed and decrease-only.
 - SC-008: Each PR merged after CI and independent review; both production aliases verified.
 
 ## Assumptions and out of scope
