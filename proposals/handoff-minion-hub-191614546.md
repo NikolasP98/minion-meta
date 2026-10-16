@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-16)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/stock/entries/[id]/+page.svelte:157` — the sideways-page overflow this card showed was fixed in
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/entries/[id]/+page.svelte#L157
+- `NikolasP98/minion_hub@master src/routes/(app)/stock/entries/[id]/+page.svelte:160` — the sideways-page overflow this card showed was fixed in
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/entries/[id]/+page.svelte#L160
