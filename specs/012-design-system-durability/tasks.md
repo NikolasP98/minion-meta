@@ -41,14 +41,14 @@ Input: spec.md, plan.md, research.md, data-model.md, contracts/ui.md. Paths pref
 - [x] T020 [P] [US5] Make Hub/scripts/design-lint.mjs fail closed on unavailable base and cover governed changed files; add negative tests. — evidence: hub scripts/design-lint.mjs (fail closed + merge-base fork point) + design-lint.test.ts 3/3
 - [x] T021 [P] [US5] Add Site/scripts/design-lint.mjs per-file ratchet and correct CI base; test debt transfer/missing-ref failures while preserving installed-token gates. — evidence: site scripts/design-lint.mjs per-file ratchet (+ merge-base) + design-lint.test.mjs 5/5; CI exact base
 - [x] T022 [US5] Build and pack immutable meta design-token/UI archives with source/member hashes, integrate both consumer deps/package.json/bun.lock and generate qualification manifest. — evidence: scripts/pack-design-system.mjs; receipt /tmp/…-targets/design-system-provenance.json (sha f5399651…); hub 23/23, site 17/17+4/4, site-release 17/17+4/4 artifact/token tests
-- [ ] T023 [US5] Run mandatory repository gates, negative fixtures, full relevant suites/builds and actual-browser recipe matrix; write evidence/verification.md.
-- [ ] T024 [US5] Obtain independent code review, resolve findings and rerun affected gates; write evidence/review.md.
+- [x] T023 [US5] Run mandatory repository gates, negative fixtures, full relevant suites/builds and actual-browser recipe matrix; write evidence/verification.md. — evidence: evidence/verification.md; evidence/browser/matrix.md (+appendix), remeasure-after-fixes.json
+- [x] T024 [US5] Obtain independent code review, resolve findings and rerun affected gates; write evidence/review.md. — evidence: evidence/review.md (three independent reviews, all findings dispositioned)
 
 ## Release and convergence
 
-- [ ] T025 Commit scoped changes, open PRs against registry bases, pass CI and merge under owner authorization; record PR/SHA receipts in evidence/deployment.md.
-- [ ] T026 Promote scoped meta/Site changes to release branches; verify production aliases/source versions and read-only locale/affected UI smoke receipts in evidence/deployment.md.
-- [ ] T027 Reconcile every audit ID and historical disposition in evidence/finding-ledger.json; update proposal/spec status and Lavish report with actual implementation/deployment evidence.
+- [x] T025 Commit scoped changes, open PRs against registry bases, pass CI and merge under owner authorization; record PR/SHA receipts in evidence/deployment.md. — evidence: evidence/deployment.md — hub #545, meta #813, site #34 merged after CI; Version Packages #815 left to the owner
+- [x] T026 Promote scoped meta/Site changes to release branches; verify production aliases/source versions and read-only locale/affected UI smoke receipts in evidence/deployment.md. — evidence: evidence/deployment.md — meta #814 → main, site #35 → master; production aliases + EN/ES smoke verified
+- [x] T027 Reconcile every audit ID and historical disposition in evidence/finding-ledger.json; update proposal/spec status and Lavish report with actual implementation/deployment evidence. — evidence: evidence/finding-ledger.json (30 IDs + 18 dispositions with deployment fields); proposal/spec status updated; Lavish report updated
 
 ## Dependencies and parallelism
 
