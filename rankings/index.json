@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T07:40:00.059Z",
+	"generatedAt": "2026-10-16T08:10:03.691Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3891,38 +3891,6 @@
 			"scoredAt": "2026-10-13T18:51:50.506Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A real bug fix (tools missing from TOOL_ORDER) was committed, but this deploy-health candidate just reflects a commit log rather than an actionable open task.",
-			"evidence": [
-				"TOOL_ORDER never listed crm tool ids so they were never instantiated",
-				"regression test added asserting TOOL_REGISTRY subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T07:39:59.891Z"
-		},
-		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -4246,6 +4214,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:56:17.748Z"
+		},
+		{
+			"key": "pr:minion_hub#543",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#543 feat(qa): dev:local --gateway — a local Minion gateway so the assistant is online on a dev server",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/543",
+			"sourceUpdatedAt": "2026-10-16T08:06:19Z",
+			"sourceFingerprint": "18747b6dae950774f657e138b84895a4c166b3ababb66dc63e3b2a53aaa1e9c0",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#809"
+			],
+			"rationale": "A draft implementation PR for an opt-in local gateway mode with detailed file:line evidence and a declared secret boundary needing owner review before merge.",
+			"evidence": [
+				"draft for owner review and owner merge per Principle V",
+				"four independent mechanisms with file:line evidence keep the assistant offline",
+				"per-stack token sealed with encrypt() and permissions tightened to 0600/0700"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T08:10:03.497Z"
 		},
 		{
 			"key": "proposal:2026-08-29-base-meta-status-revision-binding-required",
@@ -6662,6 +6665,39 @@
 			"scoredAt": "2026-10-10T20:14:10.244Z"
 		},
 		{
+			"key": "run:minion (gateway)#38868043873",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38868043873",
+			"sourceUpdatedAt": "2026-10-16T07:53:24Z",
+			"sourceFingerprint": "8d93a4475251c3147c6f3ee28328f6da902b896618efbea688b27199daf00a69",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failed CI run on the DEV branch via manual dispatch lacks detail on cause or scope, warranting investigation before further action.",
+			"evidence": [
+				"status failure",
+				"workflow_dispatch on DEV",
+				"CI workflow for minion gateway repo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T08:10:03.497Z"
+		},
+		{
 			"key": "spec:2026-09-02-hub-team-hr-module-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -6971,6 +7007,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T06:21:35.749Z"
+		},
+		{
+			"key": "pr:minion-meta#809",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#809 docs(spec): 011 — dev:local gateway mode",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/809",
+			"sourceUpdatedAt": "2026-10-16T08:05:45Z",
+			"sourceFingerprint": "196a2c3c5f3442fd7bd648ddc5c173f602da28b7369eccad0645de874a0b2216",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#543"
+			],
+			"rationale": "The companion Spec Kit spec/plan/tasks artifact for the same dev-local-gateway feature is well-specified with explicit DELTA rows and constitution checks, open and awaiting progress alongside its implementation PR.",
+			"evidence": [
+				"nine-row DELTA table (D1-D9) each with closing proof",
+				"proposal-index check passed (803 proposals, index up to date)",
+				"Principle V applies, implementation PR opens as draft for owner review and merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T08:10:03.497Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-0290030",
@@ -16855,39 +16926,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "pr:minion-meta#809",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#809 docs(spec): 011 — dev:local gateway mode",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/809",
-			"sourceUpdatedAt": "2026-10-16T07:03:12Z",
-			"sourceFingerprint": "49d882b7d1f1fd21fe281a8baffec88f7124806020e7b6b524b614df8544e002",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Thorough Spec Kit artifact with evidence-backed AS-IS/TO-BE/DELTA is ready to merge as a planning document ahead of the actual implementation PR.",
-			"evidence": [
-				"proposal-index check passed (803 proposals)",
-				"23 tasks across 5 phases with 4 tagged assumptions",
-				"AS-IS backed by four file:line mechanisms plus a measured DB count"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T07:10:38.177Z"
 		},
 		{
 			"key": "proposal:2026-08-23-hub-archived-warehouse-submit-guard",
@@ -27789,38 +27827,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T21:52:11.157Z"
-		},
-		{
-			"key": "run:minion (gateway)#38868043873",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38868043873",
-			"sourceUpdatedAt": "2026-10-16T07:37:30Z",
-			"sourceFingerprint": "e9fb885841392150cd03a1d42fba88f9caf80eb024349faadac6c26e8d74f9a8",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress CI run triggered via workflow_dispatch, not a goal requiring ranking or action.",
-			"evidence": [
-				"workflow_dispatch on DEV",
-				"status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T07:39:59.891Z"
 		},
 		{
 			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
