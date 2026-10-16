@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T12:10:02.280Z",
+	"generatedAt": "2026-10-16T12:40:02.505Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2163,6 +2163,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T04:23:51.709Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A committed fix instantiates two previously-missing CRM tools that hub-facing prompts and the /crm/insights panel already depend on, so deployment/verification closes a real functional gap.",
+			"evidence": [
+				"TOOL_ORDER never listed the two tool ids so createMinionTools() never instantiated them",
+				"hub's per-turn envelope instructs the model to call both by name",
+				"adds a regression test asserting TOOL_REGISTRY is a subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T12:40:02.348Z"
 		},
 		{
 			"key": "issue:minion-meta#730",
@@ -24569,38 +24602,6 @@
 			"scoredAt": "2026-10-11T06:21:21.157Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 99030 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-16T06:28:16Z",
-			"sourceFingerprint": "34c3583ce76cee0bf0a01dae3d0c3cbedd2e09f91e2252c44e9517acad483324",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Automated upstream sync dumping tens of thousands of raw commits needs human triage before any specific action is scoped.",
-			"evidence": [
-				"99030 new commit(s) available",
-				"unfiltered raw commit list with no curated scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T06:40:34.650Z"
-		},
-		{
 			"key": "issue:minion-meta#390",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31777,6 +31778,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:39:40.651Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 99284 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-16T12:25:12Z",
+			"sourceFingerprint": "942b4d3ba486f61521f5b2caecb41f9a9445ec30eb14f5c282619b916df736f7",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated upstream-sync listing of ~99k commits with no scoped problem, owner, or actionable outcome defined for this repo.",
+			"evidence": [
+				"title states '99284 new commit(s) available'",
+				"body is a raw commit log dump with tag 'upstream-sync'",
+				"no specific change, rationale, or acceptance criteria tied to this repo's codebase"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T12:40:02.348Z"
 		},
 		{
 			"key": "issue:minion-meta#345",
