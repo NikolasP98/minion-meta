@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T15:10:05.917Z",
+	"generatedAt": "2026-10-16T15:40:35.233Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4282,41 +4282,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:56:17.748Z"
-		},
-		{
-			"key": "pr:minion_hub#543",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#543 feat(qa): dev:local --gateway — a local Minion gateway so the assistant is online on a dev server",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/543",
-			"sourceUpdatedAt": "2026-10-16T08:06:19Z",
-			"sourceFingerprint": "18747b6dae950774f657e138b84895a4c166b3ababb66dc63e3b2a53aaa1e9c0",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#809"
-			],
-			"rationale": "A draft implementation PR for an opt-in local gateway mode with detailed file:line evidence and a declared secret boundary needing owner review before merge.",
-			"evidence": [
-				"draft for owner review and owner merge per Principle V",
-				"four independent mechanisms with file:line evidence keep the assistant offline",
-				"per-stack token sealed with encrypt() and permissions tightened to 0600/0700"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T08:10:03.497Z"
 		},
 		{
 			"key": "proposal:2026-08-29-base-meta-status-revision-binding-required",
@@ -10704,6 +10669,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:21:58.865Z"
+		},
+		{
+			"key": "pr:minion_hub#543",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#543 feat(qa): dev:local --gateway — a local Minion gateway so the assistant is online on a dev server",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/543",
+			"sourceUpdatedAt": "2026-10-16T15:30:22Z",
+			"sourceFingerprint": "d6406da6e70a316a9498264f7264acf45770d4bf48829924589a58b6acbac769",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A well-specified draft PR with detailed implementation already addressing the owner's explicit request for a local gateway, needing only owner review/merge.",
+			"evidence": [
+				"Owner quote: 'at least there should be a mode where a local server can ship with it enabled'",
+				"Two review fixes (permissions, hubMetrics.enabled) already folded in"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T15:40:35.099Z"
 		},
 		{
 			"key": "pr:minion_hub#544",
@@ -29854,6 +29851,38 @@
 			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit already adds the missing tool ids to TOOL_ORDER plus a regression test, so the fix is shipped and nothing remains outstanding.",
+			"evidence": [
+				"Adds both ids next to crm_query in TOOL_ORDER",
+				"regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T15:40:35.099Z"
+		},
+		{
 			"key": "issue:minion-meta#382",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32944,39 +32973,6 @@
 			"scoredAt": "2026-10-16T07:10:38.177Z"
 		},
 		{
-			"key": "issue:minion-meta#601",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#601 [monitor:unstick] reconcile run ba9d37bb (minion-meta): claude agent exec failure exit-126/turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/601",
-			"sourceUpdatedAt": "2026-09-25T14:17:28Z",
-			"sourceFingerprint": "2b0df9c4671e09a2c9f91c66beb37729bab4210a666301c310636938ca8ebd97",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an infra-runner exec failure (exit-126/turns=0) with reconcile side effects already completed, making it a non-actionable retry/infra-signature note rather than a real task.",
-			"evidence": [
-				"exit_code=1 but reconcile stage itself completed fine",
-				"claude CLI exited 126 with turns=0, i.e. never started running",
-				"recommendation in the report is just retry / check runner image permissions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T15:21:17.641Z"
-		},
-		{
 			"key": "issue:minion-meta#606",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34712,6 +34708,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-09T18:21:18.483Z"
+		},
+		{
+			"key": "issue:minion-meta#601",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#601 [monitor:unstick] reconcile run ba9d37bb (minion-meta): claude agent exec failure exit-126/turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/601",
+			"sourceUpdatedAt": "2026-09-25T14:17:28Z",
+			"sourceFingerprint": "2b0df9c4671e09a2c9f91c66beb37729bab4210a666301c310636938ca8ebd97",
+			"score": 17,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 1,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor intake already diagnosed as a transient infra exec fault (exit-126/turns=0) with reconcile side effects complete and a simple retry recommended, not an actionable development task.",
+			"evidence": [
+				"exit 126 + turns=0 means the claude CLI never started, an infra/runner fault not a task failure",
+				"reconcile side effects already completed per the report"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T15:40:35.099Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1739301354",
