@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T10:39:59.571Z",
+	"generatedAt": "2026-10-16T11:09:58.480Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5267,38 +5267,6 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fix restores two CRM tools that were silently never instantiated despite full registry/permission wiring, which the hub's /crm/insights panel depends on.",
-			"evidence": [
-				"TOOL_ORDER never listed the two tool ids so createMinionTools() filtered them out on every channel",
-				"adds a regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T10:39:59.441Z"
-		},
-		{
 			"key": "issue:minion-meta#405",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5541,38 +5509,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T21:51:43.806Z"
-		},
-		{
-			"key": "issue:minion-meta#598",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#598 [monitor:unstick] Unstick: rank board goals (eb0e4886)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/598",
-			"sourceUpdatedAt": "2026-09-25T09:17:53Z",
-			"sourceFingerprint": "898c76c471468ab6802eaa2b1a34b142832b8dd8a8717cbf1cc46640335d1acc",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A recurring JSON-parse failure in the rank pipeline across multiple runs on a fixed date indicates a genuine tooling defect that needs human inspection of the prompt/schema.",
-			"evidence": [
-				"recurred across at least 6 rank runs between 06:27 and 08:29 UTC on 2026-09-25 with the same 'Invalid numeric literal' signature",
-				"both claude and its codex fallback returned invalid JSON for this batch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T10:51:26.825Z"
 		},
 		{
 			"key": "issue:minion-meta#627",
@@ -14058,6 +13994,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T03:51:30.970Z"
+		},
+		{
+			"key": "issue:minion-meta#598",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#598 [monitor:unstick] Unstick: rank board goals (eb0e4886)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/598",
+			"sourceUpdatedAt": "2026-09-25T09:17:53Z",
+			"sourceFingerprint": "898c76c471468ab6802eaa2b1a34b142832b8dd8a8717cbf1cc46640335d1acc",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring ranking-pipeline JSON parse failures across both providers indicate a real tooling defect worth investigation but lack a concrete fix plan.",
+			"evidence": [
+				"recurred across at least 6 rank runs between 06:27 and 08:29 UTC on 2026-09-25 with same parse error signature",
+				"both claude batch and codex fallback returned invalid JSON"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T11:09:58.337Z"
 		},
 		{
 			"key": "issue:minion-meta#651",
