@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T22:40:08.165Z",
+	"generatedAt": "2026-10-16T23:10:23.110Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -21554,6 +21554,38 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit message shows the TOOL_ORDER fix for the two CRM tools is already implemented and merged, leaving no remaining actionable work.",
+			"evidence": [
+				"commit adds crm tool ids to TOOL_ORDER next to crm_query",
+				"includes a regression test asserting TOOL_REGISTRY subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T23:10:22.972Z"
+		},
+		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27789,6 +27821,38 @@
 			"scoredAt": "2026-10-15T13:22:00.640Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-d222079",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ d222079",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-d222079.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "7db017599e97386d1b70882b7dd70586266ef4759f715a7d743f234526af1386",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A medium-severity weakened-test finding with an exact file:line location and documented cause is a small, bounded fix.",
+			"evidence": [
+				"medium weakened-test at src/shells/bridge-ws.test.ts:609",
+				"test conditionally skipped on win32 platform, reducing coverage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T23:10:22.972Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-7012cd5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28468,6 +28532,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T19:40:02.916Z"
+		},
+		{
+			"key": "issue:minion-meta#604",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#604 [monitor:unstick] reconcile proposals run cd5cf34f (minion-meta) - exit-126 claude provider exec failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/604",
+			"sourceUpdatedAt": "2026-09-25T22:17:30Z",
+			"sourceFingerprint": "8bdff5ae17ee0eae9da1ce7282341c5385f57fca2d86cd276d60bc2ee80ef318",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The monitor diagnosis itself states the substantive reconcile work already completed and pushed successfully, and a bare retry is low-value for this transient exec-126 infra blip.",
+			"evidence": [
+				"491 proposals written, handoffs refreshed, git push succeeded despite exit_code=1",
+				"diagnosis: infra/transient fault, not a task-logic failure, retry low-value"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T23:10:22.972Z"
 		},
 		{
 			"key": "issue:minion-meta#657",
@@ -30679,38 +30775,6 @@
 			"scoredAt": "2026-10-13T11:21:25.149Z"
 		},
 		{
-			"key": "issue:minion-meta#604",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#604 [monitor:unstick] reconcile proposals run cd5cf34f (minion-meta) - exit-126 claude provider exec failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/604",
-			"sourceUpdatedAt": "2026-09-25T22:17:30Z",
-			"sourceFingerprint": "8bdff5ae17ee0eae9da1ce7282341c5385f57fca2d86cd276d60bc2ee80ef318",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The substantive reconcile work already completed and pushed successfully; only a transient exit-126 provider-exec infra fault occurred, which is low-value to retry.",
-			"evidence": [
-				"491 proposals written, handoffs refreshed, merge-scan state persisted, and a git push succeeded",
-				"failure was exit-126/turns=0 on the claude provider agent, a worker-box exec problem not a repo/task issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T22:51:08.035Z"
-		},
-		{
 			"key": "issue:minion-meta#614",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31433,38 +31497,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T04:12:25.693Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-d222079",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ d222079",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-d222079.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "7db017599e97386d1b70882b7dd70586266ef4759f715a7d743f234526af1386",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single medium-severity weakened-test finding with a documented reason and alternative assertion is low urgency but should be triaged before deciding to fix or dismiss.",
-			"evidence": [
-				"medium severity finding: test conditionally skipped on win32 platform",
-				"documented reason and alternative assertion already exist per the finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T22:51:08.035Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-f2de5e0",
