@@ -312,3 +312,32 @@ feature activation, and deployment are separate release actions.
   of the qualified WhatsApp slice. Matching TODOs are in gateway
   `src/agents/bash/internal-assistant-process-lifetime.ts`. This must be completed
   alongside shared isolation to meet the original capability-parity requirement.
+
+- **Activation diagnostics follow-up:** fresh member-scoped readiness now separates
+  account binding, active provisioning and executable parity. It runs before channel
+  activation and before each durable message admission. It does not provision a new
+  isolated shared runtime or complete unsupported tools. Saved model overrides,
+  configured fallbacks and unknown plugin/custom inventories fail closed. The
+  source runtime's default-provisioning TODO still applies.
+- **Isolated job integration:** the new channel-neutral Docker primitive proves
+  container-owned process lifetime locally (11 real Docker tests and nine
+  deterministic watchdog/output tests). Its source TODO is at
+  `src/agents/bash/isolated-container-job.ts:startIsolatedContainerJob`. Before
+  enabling exec/process, implement a durable derived job grant independent of the
+  completed parent turn, exact owner-aware process registry and stdin, fresh
+  revocation checks/renewal, acknowledged cancellation, restart reconciliation,
+  and signed idempotent completion/outbox delivery. Supply a qualified pinned Node
+  image and managed canonical workspace UID/GID. The primitive is not wired into
+  either channel yet; existing execution rejection remains intentional.
+- **Session history parity:** `src/agents/tools/sessions/internal-assistant-session-read.ts`
+  contains the matching TODO for persisted historical org/owner provenance and
+  signed RPC scope. The new safe read path covers only the exact admitted WhatsApp
+  conversation and rejects model mutation. It cannot substitute for the broader
+  Hub session API or delegation. Full activation remains blocked for agents whose
+  existing policy includes those unqualified semantics.
+- **Existing session E2E harness:** the original pre-change session-status and
+  sessions-visibility E2E suites also fail on the archived feature HEAD, including
+  timeouts and leaked unmocked RPC. New focused tests exercise ordinary factory
+  behavior separately; they do not establish those older suites passing. Repair
+  their mock/import isolation and rerun before using them as release evidence.
+  The new `internal-assistant-session-read.test.ts` carries the matching TODO.

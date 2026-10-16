@@ -597,3 +597,80 @@ An unknown business effect or provider send is not retried automatically. Inspec
 its domain record/provider receipt before resolving the reconciliation state.
 The application supervisor waits for old ownership to stop; an event-loop or
 process freeze additionally requires a working external process supervisor.
+
+### 12.1 Fresh activation diagnostics
+
+Hub exposes `GET /api/personal-agent/whatsapp-readiness` for the authenticated
+member and an account status endpoint under the existing channel-admin permission.
+An `active` provisioning row is kept distinct from WhatsApp readiness. Enabling
+internal bound replies requires at least one currently verified member whose
+personal agent passes preflight. Every message repeats preflight for its actual
+member before creating a durable turn; another member's readiness never admits it.
+
+Hub sends `agents.whatsapp.readiness` to the assigned gateway with exact agent,
+profile, organization, optional channel, current C2 permission snapshot and
+published custom-tool names/permission metadata. This administrative RPC performs
+no Hub callback, tool-factory invocation, model call or configuration mutation.
+In particular it must not call Hub while admission holds database locks. It uses
+the same declared tool policies and L1 permission filter as execution, before
+relevance selection. Missing inventories, unsupported execution surfaces,
+noncanonical memory, unsafe shared isolation, unavailable Docker, unqualified
+fallback models and saved conversation model overrides remain explicit blockers.
+
+The version-1 report includes exact identity, timestamp, a hash of configuration
+and request snapshot, parity and canonical-memory flags, blocker codes, and the
+declared Hub/WhatsApp tool sets. The hash is not an attestation of image bytes or
+SDK files. Hub rejects malformed, stale (over 30 seconds), future (over 5 seconds),
+wrong-identity or internally inconsistent reports. No ready report is cached.
+Account diagnostics paginate (20 default, 100 maximum) and activation scans bounded
+batches until one member is ready or the shared deadline expires. Incomplete
+inspection is reported separately from a complete result with no ready members.
+Runtime authority and effect checks remain mandatory after preflight.
+
+### 12.2 Isolated job primitive and session inspection
+
+A channel-neutral Docker job primitive is implemented but is not connected to
+exec/process yet. Each job has an immutable org/profile/agent/grant owner and a
+random job ID. A pinned local Node image runs a root PID 1 lease watchdog with a
+private root-owned lease file; workload commands run as a nonroot UID in the
+canonical private workspace. The container has no network, a read-only root,
+dropped capabilities, bounded resources and a fixed maximum lifetime. Authorization
+returns a finite server expiry before start, renew, input, output and completion.
+Stopping and normal completion both require whole-container termination
+acknowledgement, including detached descendants. Output is bounded and freshly
+authorized. Lost Docker acknowledgement is uncertainty, never a successful kill.
+
+The next integration must persist the grant/job binding before starting work,
+renew independently of the parent model turn, bind registry lookup and stdin to
+the immutable owner, reconcile containers after restart, and deliver completion
+through an idempotent authorized result/outbox path. Ordinary unsigned heartbeat
+notification cannot deliver admitted work. Both Hub and WhatsApp must select the
+same adapter from trusted personal-agent configuration. This requires a qualified
+image and managed workspace UID/GID as well as the durable grant lifecycle.
+
+Admitted session reads have a separate current-conversation implementation using
+the exact admission session key, bounded canonical stores/transcripts, and fresh
+authority checks before and after reading. Global stores, aliases, hidden reasoning,
+provider metadata and model mutation are excluded. This narrower read path does
+not establish parity with Hub's wider historical-session operations; persisted
+org/owner provenance and signed delegation remain prerequisites. Preflight keeps
+that distinction visible and must not label the full session surface qualified.
+
+The derived-job integration contract is channel-neutral: persist a server-issued
+`grantId` and generated `jobId` with org/profile/agent/gateway, original authority
+(WA admission, account and claim revision, or authenticated Hub session), immutable
+command hash/tool-call identity, attenuated capabilities, fixed deadline, rolling
+expiry, worker owner/generation and state. Required states are `launching`,
+`running`, `completed`, `cancel_requested`, `cancelled`, `expired`, and
+`reconcile_required`. Persist the launch receipt before Docker create. Ambiguous
+launch fences the parent operation scope, including attempts with a new tool-call
+or job ID; an idempotency key alone cannot prevent duplicate effects.
+
+Background authorization cannot reuse the current WA `checkedTurn` helper: it
+requires the original transport lease and a running parent turn. Derived-job
+checks instead revalidate the durable principal, claim revision and permissions,
+then independently acquire current delivery ownership when producing a result.
+Completion and its deduplicated continuation/outbox record must commit atomically.
+No raw commands or output belong in the grant table by default. The proposed
+neutral `/api/gateway/assistant-jobs` API and migration are not implemented yet;
+this is the reviewed next integration boundary, not a shipped endpoint.
