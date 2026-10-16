@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T03:50:59.210Z",
+	"generatedAt": "2026-10-16T04:21:11.680Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5161,38 +5161,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Commit shows two registered CRM tools were silently excluded from TOOL_ORDER so they never ran despite the model being told to call them, and a regression test was added to prevent recurrence.",
-			"evidence": [
-				"TOOL_ORDER never listed the two tool ids so createMinionTools() never instantiated them",
-				"adds regression test asserting TOOL_REGISTRY subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T01:51:09.032Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -32603,6 +32571,38 @@
 			"scoredAt": "2026-10-14T19:51:29.572Z"
 		},
 		{
+			"key": "issue:minion-meta#586",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#586 [monitor:unstick] reconcile run 9712b5ab (minion-meta) - claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/586",
+			"sourceUpdatedAt": "2026-09-25T02:17:26Z",
+			"sourceFingerprint": "4093e6365bd85729c1bdf121f1c97bfbad2bafad893e90915caa883e99836f60",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Single transient exit-126/turns=0 infra launch failure where the reconcile work had already completed and pushed successfully, so no remediation is actionable beyond a cheap retry already noted as done.",
+			"evidence": [
+				"exit-126/turns=0/permission_denials=0 signature with reconcile output already pushed 91fa30b..9cdd1cc",
+				"log tail shows the sweep itself completed normally end-to-end"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T04:21:11.516Z"
+		},
+		{
 			"key": "issue:minion-meta#601",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34725,38 +34725,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
-		},
-		{
-			"key": "issue:minion-meta#586",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#586 [monitor:unstick] reconcile run 9712b5ab (minion-meta) - claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/586",
-			"sourceUpdatedAt": "2026-09-25T02:17:26Z",
-			"sourceFingerprint": "4093e6365bd85729c1bdf121f1c97bfbad2bafad893e90915caa883e99836f60",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake reports a transient provider exit-126/turns=0 launch fault on a reconcile run whose actual work (handoffs, proposals/index.json, push) already completed and landed successfully.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 on run 9712b5ab",
-				"reconcile sweep itself completed normally: ~85 handoffs refreshed, proposals/index.json written, changes pushed 91fa30b..9cdd1cc"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T03:51:11.943Z"
 		},
 		{
 			"key": "issue:minion-meta#689",
