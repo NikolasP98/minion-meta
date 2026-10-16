@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T19:40:03.060Z",
+	"generatedAt": "2026-10-16T20:09:59.414Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5302,6 +5302,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Commit fixes a real registry/TOOL_ORDER gap preventing two CRM tools from ever loading, with a regression test added, so verification is straightforward.",
+			"evidence": [
+				"TOOL_ORDER never listed their ids so createMinionTools() filters them out",
+				"adds regression test asserting TOOL_REGISTRY keys subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T20:09:59.258Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -22962,38 +22994,6 @@
 			"scoredAt": "2026-10-15T16:21:46.358Z"
 		},
 		{
-			"key": "issue:minion-meta#503",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#503 [monitor:unstick] reconcile run dc81686c: exit-126 launching claude provider (turns=0) after reconcile logic completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/503",
-			"sourceUpdatedAt": "2026-09-18T18:17:27Z",
-			"sourceFingerprint": "362cbbfb5dfdc2dba1c22ae6c134adba973395093d7c7e82e2f8df559a58d22a",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Automated monitor alert describes a one-off runner exec failure after the underlying reconcile work already completed successfully, so it needs infra triage rather than being a scoped deliverable yet.",
-			"evidence": [
-				"exit_code=1 note exit-126/turns=0 for provider=claude",
-				"reconcile steps and git push completed successfully despite the launch failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T19:51:22.786Z"
-		},
-		{
 			"key": "issue:minion-meta#506",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26738,6 +26738,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T19:21:24.616Z"
+		},
+		{
+			"key": "issue:minion-meta#503",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#503 [monitor:unstick] reconcile run dc81686c: exit-126 launching claude provider (turns=0) after reconcile logic completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/503",
+			"sourceUpdatedAt": "2026-09-18T18:17:27Z",
+			"sourceFingerprint": "362cbbfb5dfdc2dba1c22ae6c134adba973395093d7c7e82e2f8df559a58d22a",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single exit-126/turns=0 runner-host exec failure where the underlying reconcile work already completed and pushed, so it's an infra-signature classification item rather than urgent broken work.",
+			"evidence": [
+				"exit_code=1 with exit-126/turns=0 for provider=claude",
+				"reconcile shell steps completed and git push eb22140..5898f0f succeeded"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T20:09:59.258Z"
 		},
 		{
 			"key": "issue:minion-meta#515",
