@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T00:21:29.247Z",
+	"generatedAt": "2026-10-16T00:51:11.222Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5091,6 +5091,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two CRM tools were registered but never instantiated due to a missing TOOL_ORDER entry, silently breaking a UI panel that depends on them, and the fix plus regression test already landed.",
+			"evidence": [
+				"TOOL_ORDER never listed their ids so createMinionTools() never instantiated them",
+				"/crm/insights panel is built around them",
+				"Adds regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T00:51:11.070Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -22239,38 +22272,6 @@
 			"scoredAt": "2026-10-10T22:23:20.564Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 98526 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-15T18:22:14Z",
-			"sourceFingerprint": "d845d8aaf35068de4029e2de727d698ea7a82db8cb10adcdacc1c17627c35d2e",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A single issue listing 98,526 unmerged upstream commits is not a bounded, actionable scope and likely signals the sync tracking itself needs reframing into smaller scoped syncs.",
-			"evidence": [
-				"title: '98526 new commit(s) available'",
-				"commit list is mostly test/perf/refactor batches with no flagged security urgency"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T18:50:14.074Z"
-		},
-		{
 			"key": "issue:minion-meta#415",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31700,6 +31701,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T05:39:40.651Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 98783 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-16T00:36:46Z",
+			"sourceFingerprint": "4725a583e9ed6fb36c4993347fe877fb9ae8f2ee3feac5bc983f7ffeff80a220",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a generic automated upstream-sync notification listing tens of thousands of unrelated upstream commits with no scoped problem or verifiable outcome for this repo.",
+			"evidence": [
+				"98783 new commit(s) available",
+				"title is auto-generated upstream sync notice",
+				"no specific actionable change identified, just a commit dump"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T00:51:11.070Z"
 		},
 		{
 			"key": "issue:minion-meta#345",
