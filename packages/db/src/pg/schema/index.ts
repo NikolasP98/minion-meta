@@ -73,3 +73,5 @@ export {
   oauthAccessToken,
   oauthConsent,
 } from './auth.js';
+
+export { whatsappAccountLeases, whatsappAssistantTurns, whatsappAssistantReplies, assistantActionReceipts, whatsappAssistantConfirmations, agentMemoryTombstones } from "./whatsapp-assistant.js";
