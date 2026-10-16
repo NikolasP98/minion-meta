@@ -93,3 +93,33 @@ pnpm --filter @minion-stack/ui build
 The package uses Svelte 5 runes/snippets only. Stable `data-part`, `data-variant`,
 `data-size`, and `data-state` hooks support consumer decoration without global
 element overrides.
+
+
+## Input targets and decoration
+
+With the required shared utilities import, coarse-pointer Button/IconButton and
+Toggle targets are at least 44px in both axes. Input/Select targets are at least 44px
+high; Textarea retains its larger minimum. Checkbox/Radio associated labels are
+at least 44px high without enlarging the glyph. Fine-pointer dimensions keep the
+existing density scale. Toggle's `data-part="toggle"` is the interactive target;
+`toggle-track` and `toggle-thumb` are visual children. Consumer theme decoration
+must use these hooks and must not style every `button` or match class substrings.
+
+## Maturity and compatible changes
+
+The exported primitives are supported within the documented behavior and
+qualification matrix. An export is not a claim of every browser or assistive
+technology certification. Hub domain compositions remain Hub-owned; experimental
+recipes must be marked experimental and identify their missing evidence before
+promotion to supported status.
+
+A public prop, snippet argument, event, or stable hook change inventories both
+Hub and Site callers first. Additive optional capabilities preserve defaults.
+Renames keep a compatibility adapter with a named replacement and migration
+receipt until both consumers have migrated; removal requires a breaking release.
+Deprecation records the replacement, consumer usage, tests and removal version.
+No runtime warning or version label substitutes for the actual consumer inventory.
+
+Each release qualifies generated CSS, packaged primitives, installed consumer
+builds and deployed identities separately. Source-only or SSR checks cannot close
+rendered contrast, pointer-target, focus or overflow acceptance criteria.

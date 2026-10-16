@@ -36,7 +36,7 @@
 
   const controlId = $derived(id ?? `field-${generatedId}`);
   const describedBy = $derived(
-    error ? `${controlId}-error` : helper ? `${controlId}-helper` : undefined,
+    [helper ? `${controlId}-helper` : undefined, error ? `${controlId}-error` : undefined].filter(Boolean).join(' ') || undefined,
   );
   const control = $derived<FormFieldControl>({
     id: controlId,
@@ -71,7 +71,8 @@
       role="alert"
       data-part="field-error"
     >{error}</span>
-  {:else if helper}
+  {/if}
+  {#if helper}
     <span
       id={`${controlId}-helper`}
       class="text-[length:var(--font-size-caption)] leading-[var(--line-height-compact)] text-[var(--color-text-tertiary)]"

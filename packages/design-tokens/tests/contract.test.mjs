@@ -5,6 +5,8 @@ import {
   contractPath,
   contrastRatio,
   generatedCssPath,
+  normalTextContrastFailures,
+  relativeLuminance,
   readContract,
   resolveTheme,
   semanticColorMap,
@@ -47,13 +49,37 @@ test('every theme is a complete, resolvable semantic mode', async () => {
   }
 });
 
-test('text, accent, and status pairs meet WCAG AA contrast', async () => {
+test('normal text meets AA across every supported base surface', async () => {
+  const contract = await readContract();
+  assert.deepEqual(contract.contrast.normalText, {
+    foregrounds: ['textPrimary', 'textSecondary', 'textTertiary'],
+    backgrounds: ['canvas', 'surface1', 'surface2', 'surface3', 'overlay'],
+    minimumRatio: 4.5,
+  });
+  assert.equal(Object.keys(contract.themes).length * 3 * 5, 270);
+  assert.deepEqual(normalTextContrastFailures(contract), []);
+  for (const [id, theme] of Object.entries(contract.themes)) {
+    const levels = ['textPrimary', 'textSecondary', 'textTertiary'].map((role) =>
+      relativeLuminance(theme.colors[role]),
+    );
+    assert.ok(theme.mode === 'light'
+      ? levels[0] <= levels[1] && levels[1] <= levels[2]
+      : levels[0] >= levels[1] && levels[1] >= levels[2], `${id}: text hierarchy`);
+  }
+});
+
+test('contrast audit rejects the original raised-surface failure', async () => {
+  const contract = await readContract();
+  contract.themes['gruvbox-light'].colors.textTertiary = '#716c5f';
+  assert.ok(normalTextContrastFailures(contract).some((failure) =>
+    failure.themeId === 'gruvbox-light' && failure.foreground === 'textTertiary'
+      && failure.background === 'surface3' && failure.ratio < 3.1,
+  ));
+});
+
+test('accent and status pairs meet WCAG AA contrast', async () => {
   const contract = await readContract();
   for (const [themeId, theme] of Object.entries(contract.themes)) {
-    for (const textRole of ['textPrimary', 'textSecondary', 'textTertiary']) {
-      const ratio = contrastRatio(theme.colors[textRole], theme.colors.canvas);
-      assert.ok(ratio >= 4.5, `${themeId}: ${textRole}/canvas ${ratio.toFixed(2)}:1`);
-    }
     const accentRatio = contrastRatio(theme.colors.onAccent, theme.colors.accent);
     assert.ok(accentRatio >= 4.5, `${themeId}: onAccent/accent ${accentRatio.toFixed(2)}:1`);
     for (const status of statusNames) {
@@ -127,6 +153,8 @@ test('generated CSS exposes every theme mode and excludes undeclared legacy toke
     css.includes('@theme static {'),
     'foundation tokens must be emitted even when a consumer does not generate a matching utility',
   );
+  assert.equal(contract.foundations.layout['--page-max'], '80rem');
+  assert.match(css, /\n\s*--page-max: 80rem;/);
   for (const themeId of Object.keys(contract.themes)) {
     if (themeId === contract.defaultTheme) continue;
     assert.ok(css.includes(`data-minion-theme='${themeId}'`), themeId);

@@ -171,8 +171,27 @@
 }
 
 @media (pointer: coarse) {
-  .control-target {
+  /* Stable primitive hooks make targets intrinsic, including disabled states. */
+  .control-target,
+  [data-part='button'],
+  [data-part='toggle'] {
     min-width: var(--control-height-touch);
     min-height: var(--control-height-touch);
+  }
+  [data-part='input'],
+  [data-part='select'],
+  [data-part='checkbox-label'],
+  [data-part='radio-label'] {
+    min-height: var(--control-height-touch);
+  }
+  [data-part='checkbox-label'],
+  [data-part='radio-label'] {
+    min-width: var(--control-height-touch);
+    display: flex;
+    align-items: center;
+  }
+  [data-part='checkbox'],
+  [data-part='radio'] {
+    margin-top: calc((var(--control-height-touch) - var(--space-4)) / 2);
   }
 }
