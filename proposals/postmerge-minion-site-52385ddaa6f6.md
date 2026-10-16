@@ -33,9 +33,10 @@ The file is a tarball snapshot of `@minion-stack/design-tokens` with an integrit
 
 **Fix**: Verify the file is in `.gitignore`, then revert it from the commit. Regenerate lockfiles locally with `bun install` or `pnpm install` (depending on minion-site's package manager—it's `bun` per the Project Map). If it's intentionally committed, audit why and document it.
 
+
 ## Latest occurrence
 
-- repo: `NikolasP98/minion-site@4edd54f`
-- merged PR: https://github.com/NikolasP98/minion-site/pull/34
+- repo: `NikolasP98/minion-site@cd21151`
+- merged PR: https://github.com/NikolasP98/minion-site/pull/35
 - file: `deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz`
 - checked: 2026-10-16

@@ -31,9 +31,10 @@ This matters because **binary tarballs in `deps/` shouldn't be committed to git*
 
 **Fix direction**: Remove the file from git and `.gitignore` it. If it's a build artifact or vendored dependency, either (1) regenerate it from source during CI, or (2) host it in artifact storage (GitHub Releases, S3, npm registry) and download on-demand. Check `git log --all -- <filename>` to understand why it was added in the first place.
 
+
 ## Latest occurrence
 
-- repo: `NikolasP98/minion-site@4edd54f`
-- merged PR: https://github.com/NikolasP98/minion-site/pull/34
+- repo: `NikolasP98/minion-site@cd21151`
+- merged PR: https://github.com/NikolasP98/minion-site/pull/35
 - file: `deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz`
 - checked: 2026-10-16
