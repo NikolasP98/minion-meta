@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T01:31:25.917Z",
+	"generatedAt": "2026-10-16T01:51:09.200Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5161,6 +5161,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Commit shows two registered CRM tools were silently excluded from TOOL_ORDER so they never ran despite the model being told to call them, and a regression test was added to prevent recurrence.",
+			"evidence": [
+				"TOOL_ORDER never listed the two tool ids so createMinionTools() never instantiated them",
+				"adds regression test asserting TOOL_REGISTRY subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T01:51:09.032Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -33208,6 +33240,40 @@
 			"scoredAt": "2026-10-15T21:22:11.240Z"
 		},
 		{
+			"key": "issue:minion-meta#736",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#736 [monitor:unstick] Run 83e57d84 (minion-meta reconcile): claude agent exit-126, 0 turns — launch failure, not task failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/736",
+			"sourceUpdatedAt": "2026-10-02T00:17:25Z",
+			"sourceFingerprint": "05d767309e6b54975bf0b88afc96582559c82c729a2265fd81300850cee7c371",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#765"
+			],
+			"rationale": "Automated monitor diagnosis itself concludes the underlying reconcile work succeeded and this was a one-off infra exit-126/turns=0 launch glitch needing only a retry, not substantive work.",
+			"evidence": [
+				"agent exited code 126 turns=0 while reconcile script body completed successfully per log tail",
+				"recommendation only, no action taken"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T01:51:09.032Z"
+		},
+		{
 			"key": "issue:minion-meta#737",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33305,6 +33371,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T23:51:43.724Z"
+		},
+		{
+			"key": "issue:minion-meta#765",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#765 [monitor:unstick] Run 992423e7 (minion-meta rank) failed: both ranking providers errored",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/765",
+			"sourceUpdatedAt": "2026-10-09T01:17:19Z",
+			"sourceFingerprint": "e73ecf642ecac1356fe6a9a12fab1581b3e697b3a2b6eda81ceb7ea426e5d1e7",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#736"
+			],
+			"rationale": "Diagnosis attributes failure to transient dual-provider ranking exhaustion with the catalog itself written successfully, recommending a simple retry rather than a fix.",
+			"evidence": [
+				"codex hit transient provider failures on retry 1/3 and 2/3 before exiting error",
+				"ranking catalog itself was written successfully before provider calls failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T01:51:09.032Z"
 		},
 		{
 			"key": "issue:minion-meta#787",
@@ -34276,38 +34376,6 @@
 			"scoredAt": "2026-10-09T18:21:18.483Z"
 		},
 		{
-			"key": "issue:minion-meta#765",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#765 [monitor:unstick] Run 992423e7 (minion-meta rank) failed: both ranking providers errored",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/765",
-			"sourceUpdatedAt": "2026-10-09T01:17:19Z",
-			"sourceFingerprint": "e73ecf642ecac1356fe6a9a12fab1581b3e697b3a2b6eda81ceb7ea426e5d1e7",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Diagnosis concludes this is a transient dual-provider failure safe to retry with no spec or code fix indicated.",
-			"evidence": [
-				"\"safe to retry the run as-is; no spec or code fix indicated\"",
-				"\"the ranking catalog itself was written successfully\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T01:22:16.232Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-1739301354",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34751,38 +34819,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T00:21:35.589Z"
-		},
-		{
-			"key": "issue:minion-meta#736",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#736 [monitor:unstick] Run 83e57d84 (minion-meta reconcile): claude agent exit-126, 0 turns — launch failure, not task failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/736",
-			"sourceUpdatedAt": "2026-10-02T00:17:25Z",
-			"sourceFingerprint": "05d767309e6b54975bf0b88afc96582559c82c729a2265fd81300850cee7c371",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Diagnosis already concludes the underlying reconcile work succeeded and the exit-126 was a transient launch glitch needing no action.",
-			"evidence": [
-				"\"No action taken; recommendation only\"",
-				"\"the reconcile logic which is healthy\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T01:22:16.232Z"
 		},
 		{
 			"key": "issue:minion-meta#760",
