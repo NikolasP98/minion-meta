@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-16)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/finances/invoices/[id]/+page.svelte:472` — OverviewCard's own .card (border/radius/background)
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/invoices/[id]/+page.svelte#L472
+- `NikolasP98/minion_hub@master src/routes/(app)/finances/invoices/[id]/+page.svelte:487` — OverviewCard's own .card (border/radius/background)
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/invoices/[id]/+page.svelte#L487

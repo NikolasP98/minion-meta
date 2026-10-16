@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-2195640700
 title: Handoff marker — src/lib/components/ui/Picker.svelte (minion_hub)
-status: review
+status: closed
 created: 2026-09-29
 updated: 2026-10-16
 repos: [minion-hub]
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/ui/Picker.svelte:394` — needs DataTable onRowActivate (double-click / Enter on the
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/ui/Picker.svelte#L394
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-16; the sweep closed this proposal.

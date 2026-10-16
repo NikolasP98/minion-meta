@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-878971600
 title: Handoff marker — src/lib/components/scheduling/FieldsList.svelte (minion_hub)
-status: review
+status: closed
 created: 2026-09-25
 updated: 2026-10-16
 repos: [minion-hub]
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/FieldsList.svelte:89` — a sub-item row stays enabled-looking while its PARENT is
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/FieldsList.svelte#L89
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-16; the sweep closed this proposal.
