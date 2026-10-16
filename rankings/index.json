@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-15T23:51:11.786Z",
+	"generatedAt": "2026-10-16T00:21:29.247Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2764,38 +2764,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two CRM tools were registered but omitted from TOOL_ORDER so they silently never loaded on any channel despite the hub UI depending on them, and the fix plus regression test are already committed.",
-			"evidence": [
-				"TOOL_ORDER never listed their ids so createMinionTools() filtered them out on hub, WA, and TG",
-				"adds regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T23:51:11.633Z"
 		},
 		{
 			"key": "run:minion (gateway)#38808987126",
@@ -6332,6 +6300,38 @@
 			"scoredAt": "2026-10-10T05:39:40.651Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-9b86db24576e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-9b86db24576e.md",
+			"sourceUpdatedAt": "2026-10-08",
+			"sourceFingerprint": "a1639efee6aa23996480a0e6cb459470ef210408bb84eb56a3318378bae27a68",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, well-scoped fix for a concrete data-integrity gap (non-atomic booking status updates) with a clear transactional fix direction.",
+			"evidence": [
+				"status: approved",
+				"Fix direction: Add a transactional setBookingStatus wrapper... rolling back all changes if any single update fails"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T00:21:29.103Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9e33ef1698dc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6362,6 +6362,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T22:27:23.009Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b27d16c7cc07",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b27d16c7cc07.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "e36cc96ae2ba13495ff2df21088e837ba9f760fc5db52433d177e3048d44549a",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved compliance/data-integrity gap (unverified pre-cutoff RUC parties) with a concrete backfill-or-flag fix direction.",
+			"evidence": [
+				"status: approved",
+				"Fix direction: Run a backfill migration... or mark them verification_status = 'pending'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T00:21:29.103Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
@@ -12270,38 +12302,6 @@
 			"scoredAt": "2026-10-15T07:21:53.849Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-b27d16c7cc07",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/ruc-registry.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b27d16c7cc07.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "e36cc96ae2ba13495ff2df21088e837ba9f760fc5db52433d177e3048d44549a",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved standalone compliance/data-integrity finding on unverified pre-cutoff RUC parties with a clear fix direction and no duplicate in this batch.",
-			"evidence": [
-				"RUC parties created before 2026-09-17 are unverified",
-				"diagnosis flags compliance/reconciliation risk if used in transactions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T23:52:18.216Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b37743db1fcc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13757,6 +13757,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T16:51:49.661Z"
+		},
+		{
+			"key": "issue:minion-meta#494",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#494 [monitor:unstick] reconcile run 44bbfe05: claude provider exit-126 despite clean merge-scan/push",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/494",
+			"sourceUpdatedAt": "2026-09-17T22:17:52Z",
+			"sourceFingerprint": "6b88edc47b4adbc856153fd1d11598a1130ff906d5fbc5bf80651d9c6c7c1836",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#495"
+			],
+			"rationale": "Automated monitor report of a recurring host-level exec failure (claude provider exit-126) on reconcile runs, duplicated almost verbatim by issue #495 filed one second apart.",
+			"evidence": [
+				"same exit-126/turns=0-on-claude-provider signature recurs identically across 7 reconcile runs",
+				"issue #495 filed at 22:17:53Z, one second after #494 at 22:17:52Z, describing the same incident window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T00:21:29.103Z"
+		},
+		{
+			"key": "issue:minion-meta#495",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#495 [monitor:unstick] reconcile run ae3b86da: claude provider exit-126 despite clean merge-scan/push",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/495",
+			"sourceUpdatedAt": "2026-09-17T22:17:53Z",
+			"sourceFingerprint": "cf65a09fc1d489794464d46d8330219d466b31aea219d1fa0239be7f1feee671",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#494"
+			],
+			"rationale": "Near-duplicate of #494, same recurring host/exec issue signature and same time window, should be merged into one diagnostic goal.",
+			"evidence": [
+				"recurrence points to a persistent host/box problem per the alert text",
+				"reconcile logic itself succeeded and pushed cleanly, so this is infra-classification work not task failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T00:21:29.103Z"
 		},
 		{
 			"key": "issue:minion-meta#498",
@@ -16267,40 +16335,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T09:21:59.455Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-9b86db24576e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-9b86db24576e.md",
-			"sourceUpdatedAt": "2026-10-08",
-			"sourceFingerprint": "a1639efee6aa23996480a0e6cb459470ef210408bb84eb56a3318378bae27a68",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2557316487"
-			],
-			"rationale": "Already-approved finding for the setBookingStatus atomicity gap, duplicated by handoff-minion-hub-2557316487's marker at line 479 in the same file.",
-			"evidence": [
-				"TODO(handoff) marker text identical to handoff-minion-hub-2557316487:479",
-				"diagnosis flags risk of inconsistent booking state across multi-step updates"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T23:52:18.216Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-adb53e4fbbd5",
@@ -22692,76 +22726,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T16:21:46.358Z"
-		},
-		{
-			"key": "issue:minion-meta#494",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#494 [monitor:unstick] reconcile run 44bbfe05: claude provider exit-126 despite clean merge-scan/push",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/494",
-			"sourceUpdatedAt": "2026-09-17T22:17:52Z",
-			"sourceFingerprint": "6b88edc47b4adbc856153fd1d11598a1130ff906d5fbc5bf80651d9c6c7c1836",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#495"
-			],
-			"rationale": "Duplicate monitor-intake report of the same host-level claude-provider exit-126 signature already filed as issue #495.",
-			"evidence": [
-				"fingerprint unstick-unknown-44bbfe05 vs unstick-unknown-ae3b86da, same signature",
-				"signature recurred 7 times between 19:18-21:57Z on 2026-09-17",
-				"reconcile git/merge-scan work itself completed cleanly"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T23:52:18.216Z"
-		},
-		{
-			"key": "issue:minion-meta#495",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#495 [monitor:unstick] reconcile run ae3b86da: claude provider exit-126 despite clean merge-scan/push",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/495",
-			"sourceUpdatedAt": "2026-09-17T22:17:53Z",
-			"sourceFingerprint": "cf65a09fc1d489794464d46d8330219d466b31aea219d1fa0239be7f1feee671",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#494"
-			],
-			"rationale": "Duplicate monitor-intake report of the same host-level claude-provider exit-126 signature already filed as issue #494.",
-			"evidence": [
-				"identical exit-126/turns=0 signature as #494",
-				"both flag otherwise-successful git/merge-scan/push",
-				"recommendation is to inspect the host/container once, not per-run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-08T23:52:18.216Z"
 		},
 		{
 			"key": "issue:minion-meta#503",
