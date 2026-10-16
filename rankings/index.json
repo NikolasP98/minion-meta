@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T16:40:01.956Z",
+	"generatedAt": "2026-10-16T17:10:47.881Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2163,38 +2163,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T04:23:51.709Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fix restores two CRM tools that were silently never instantiated despite full registry/permission/UI wiring, which is a real functional gap in a shipped feature.",
-			"evidence": [
-				"TOOL_ORDER never listed the two tool ids so createMinionTools() filtered them out",
-				"adds regression test asserting TOOL_REGISTRY keys subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T16:40:01.760Z"
 		},
 		{
 			"key": "issue:minion-meta#730",
@@ -27577,6 +27545,38 @@
 			"scoredAt": "2026-10-16T01:29:38.644Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "3e766db376e36d30009d532f20f740b0e4cf42059b9a641746dc6fabe2f94152",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The marker list attributes ~18 unrelated TODO-like text fragments to line numbers in a generated rankings/index.json data file, which is more likely a handoff-sweep grep false positive on stored ranking evidence/rationale text than genuine in-code TODOs needing individual resolution.",
+			"evidence": [
+				"all markers point at rankings/index.json, a generated output artifact, not source code",
+				"quoted fragments read as prior ranking rationale/evidence snippets (e.g. POS session, stock release, admin UI) unrelated to each other"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T17:10:47.750Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-2ee0fee",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29941,18 +29941,16 @@
 			"recommendation": "prune",
 			"relatedKeys": [
 				"issue:minion-meta#383",
-				"issue:minion-meta#384",
-				"issue:minion-meta#386"
+				"issue:minion-meta#384"
 			],
-			"rationale": "Duplicate alert for a transient provider outage window a month ago with no actionable fix beyond retry.",
+			"rationale": "Five identical provider-exhaustion alerts from a single 2026-09-11 incident window with no recurrence in the five weeks since, and this very ranking run is executing successfully, indicating the transient issue self-resolved.",
 			"evidence": [
-				"\"5th run with this identical signature in a row\"",
-				"\"from 11:32 to 13:32 UTC on 2026-09-11\"",
-				"\"Recommendation: a human should check claude/codex API credentials\""
+				"identical signature across 5 runs 11:32-13:32 UTC 2026-09-11, none since",
+				"updatedAt 2026-09-11, over a month stale as of 2026-10-16"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T16:52:00.381Z"
+			"scoredAt": "2026-10-16T17:10:47.750Z"
 		},
 		{
 			"key": "issue:minion-meta#383",
@@ -29978,17 +29976,16 @@
 			"recommendation": "prune",
 			"relatedKeys": [
 				"issue:minion-meta#382",
-				"issue:minion-meta#384",
-				"issue:minion-meta#385"
+				"issue:minion-meta#384"
 			],
-			"rationale": "Duplicate of the same stale September provider-outage cluster, no new evidence of recurrence.",
+			"rationale": "Duplicate of the same single 2026-09-11 provider-exhaustion incident reported five times with no recurrence since.",
 			"evidence": [
-				"\"5th run with this identical signature in a row\"",
-				"\"fingerprint: unstick-unknown-9f58c975\""
+				"fingerprint matches dff614fc/41421ef3/f3177556/9f58c975/fc5680fe cluster",
+				"no further occurrences after 2026-09-11 13:32 UTC"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T16:52:00.381Z"
+			"scoredAt": "2026-10-16T17:10:47.750Z"
 		},
 		{
 			"key": "issue:minion-meta#384",
@@ -30014,17 +30011,16 @@
 			"recommendation": "prune",
 			"relatedKeys": [
 				"issue:minion-meta#382",
-				"issue:minion-meta#385",
-				"issue:minion-meta#386"
+				"issue:minion-meta#385"
 			],
-			"rationale": "Duplicate of the same stale September provider-outage cluster, no new evidence of recurrence.",
+			"rationale": "Duplicate of the same single 2026-09-11 provider-exhaustion incident reported five times with no recurrence since.",
 			"evidence": [
-				"\"5th run with this identical signature in a row\"",
-				"\"fingerprint: unstick-unknown-f3177556\""
+				"fingerprint matches dff614fc/41421ef3/9f58c975/fc5680fe cluster",
+				"no further occurrences after 2026-09-11 13:32 UTC"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T16:52:00.381Z"
+			"scoredAt": "2026-10-16T17:10:47.750Z"
 		},
 		{
 			"key": "issue:minion-meta#385",
@@ -30049,18 +30045,17 @@
 			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [
-				"issue:minion-meta#383",
 				"issue:minion-meta#384",
 				"issue:minion-meta#386"
 			],
-			"rationale": "Duplicate of the same stale September provider-outage cluster, no new evidence of recurrence.",
+			"rationale": "Duplicate of the same single 2026-09-11 provider-exhaustion incident reported five times with no recurrence since.",
 			"evidence": [
-				"\"5th run with this identical signature in a row\"",
-				"\"fingerprint: unstick-unknown-41421ef3\""
+				"fingerprint matches dff614fc/f3177556/9f58c975/fc5680fe cluster",
+				"no further occurrences after 2026-09-11 13:32 UTC"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T16:52:00.381Z"
+			"scoredAt": "2026-10-16T17:10:47.750Z"
 		},
 		{
 			"key": "issue:minion-meta#386",
@@ -30085,18 +30080,17 @@
 			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [
-				"issue:minion-meta#382",
-				"issue:minion-meta#384",
+				"issue:minion-meta#383",
 				"issue:minion-meta#385"
 			],
-			"rationale": "First occurrence of the same stale September provider-outage cluster, already a month old with no recurrence shown in this batch.",
+			"rationale": "Duplicate of the same single 2026-09-11 provider-exhaustion incident reported five times with no recurrence since.",
 			"evidence": [
-				"\"this looks like a good candidate for a new host-classifier signature\"",
-				"\"fingerprint: unstick-unknown-dff614fc\""
+				"fingerprint matches 41421ef3/f3177556/9f58c975 cluster",
+				"no further occurrences after 2026-09-11 13:32 UTC"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T16:52:00.381Z"
+			"scoredAt": "2026-10-16T17:10:47.750Z"
 		},
 		{
 			"key": "issue:minion-meta#417",
@@ -30683,20 +30677,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 2
+				"implementation": 1
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Deterministic reconcile work already completed and pushed successfully; only the agent exec step failed once and is explicitly safe to retry.",
+			"rationale": "A single exit-126/turns=0 agent-launch failure where the surrounding deterministic reconcile work completed fully and successfully, with the alert itself noting it is safe to retry and non-recurring.",
 			"evidence": [
-				"\"the surrounding reconcile script completed fully and successfully\"",
-				"\"successful git push to minion-meta dev\"",
-				"\"Recommendation: safe to retry this run\""
+				"note states reconcile script completed: 120 handoffs refreshed, proposals index written, push succeeded",
+				"only the single agent invocation step failed before producing turns"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T16:52:00.381Z"
+			"scoredAt": "2026-10-16T17:10:47.750Z"
 		},
 		{
 			"key": "issue:minion-meta#766",
@@ -34196,38 +34189,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:32:02.784Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "700b102c4f660248585f49daa2c35a61f54b9547fd0450784023f7c0f09c9a4b",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The 'markers' listed all point at one generated file (rankings/index.json) yet describe entirely unrelated domains (POS sessions, HR schema, backup scheduler), indicating the handoff-sweep misread cached summary text as literal source TODOs rather than a real open end.",
-			"evidence": [
-				"17+ marker snippets spanning POS, HR schema, phone failure, backup scheduler all cited at rankings/index.json",
-				"rankings/index.json is a generated index artifact, not source code expected to carry TODO(handoff) comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T13:10:32.750Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
