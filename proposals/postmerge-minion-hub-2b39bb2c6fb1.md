@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-2b39bb2c6fb1
 title: "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/FormField.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-16
 updated: 2026-10-16
 repos: [minion-hub]
