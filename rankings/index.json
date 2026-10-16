@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T22:10:24.178Z",
+	"generatedAt": "2026-10-16T22:40:08.165Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -17879,7 +17879,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/FormField.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2b39bb2c6fb1.md",
 			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "e22b51dcd2d94e917d2c51ee3104bc0a6fe5af82d225bdc66f8f27bc9c49b9bc",
+			"sourceFingerprint": "8aede317c6ee4aea8d389a62a68da62e10c86bab967a726cdb665205c2a995f8",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -17888,20 +17888,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Clear, bounded accessibility ordering bug in a shared foundational form component with a concrete fix direction affecting all its consumers.",
+			"rationale": "An approved, well-specified accessibility ordering bug in a shared foundation component with a clear bounded fix direction is ready for execution.",
 			"evidence": [
-				"aria-describedby lists helper before error while the DOM renders error first in FormField.svelte",
-				"Diagnosed as a screen-reader ordering bug in a widely-used foundation component"
+				"TODO(handoff): describedby lists helper before error while the DOM renders error first",
+				"status: approved",
+				"file: src/lib/components/ui/foundations/FormField.svelte"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T21:59:56.865Z"
+			"scoredAt": "2026-10-16T22:40:08.023Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2d7b4a1718f3",
@@ -22816,38 +22817,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T22:23:20.564Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already fixed the TOOL_ORDER omission for the two CRM tools and added a regression test, leaving no open work.",
-			"evidence": [
-				"commit adds both tool ids to TOOL_ORDER",
-				"adds regression test asserting TOOL_REGISTRY subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T22:10:24.040Z"
 		},
 		{
 			"key": "issue:minion-meta#415",
@@ -35497,6 +35466,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T01:52:23.197Z"
+		},
+		{
+			"key": "issue:minion-meta#818",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#818 [monitor:unstick] rank run abb28c2c (minion-meta) failed: both ranking providers unavailable on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/818",
+			"sourceUpdatedAt": "2026-10-16T22:17:20Z",
+			"sourceFingerprint": "07e422c18154d53a481c29779a655c0a49f680a748d20db537c7a54b49d07cfb",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The issue's own diagnosis identifies a transient dual-provider outage with no task-logic error, making it non-actionable noise rather than a real defect.",
+			"evidence": [
+				"Diagnosis: transient/infra provider fault, not a genuine task failure",
+				"Catalog build succeeded (1078 goals written, 7 candidates pending)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T22:40:08.023Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
