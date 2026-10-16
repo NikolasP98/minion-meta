@@ -11,7 +11,7 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 
 ## Authority chain (highest first)
 
-1. `packages/design-tokens/contract.json` (meta-repo) — machine truth. 16 themes × 43 resolved tokens, 10 accent pairs, 34 compat aliases. `tokens.css` is **generated** (`pnpm --filter @minion-stack/design-tokens generate`); `utilities.css` is hand-authored in the same package. Build fails on stale CSS, incomplete theme, unknown alias, or <AA contrast.
+1. `packages/design-tokens/contract.json` (meta-repo) — machine truth. Generated theme/token/accent/alias counts and digests are in `packages/design-tokens/inventory.json`; do not duplicate them in prose. `tokens.css` is **generated** (`pnpm --filter @minion-stack/design-tokens generate`); `utilities.css` is hand-authored in the same package. Build fails on stale CSS, incomplete theme, unknown alias, or <AA contrast.
 2. `specs/2026-07-13-hub-ui-coherence-implementation-spec.md` §D2 (meta-repo) — sole normative naming policy. §D3 theme, §D4 typography, §D5 primitives, §D6 layout/archetypes, §D9 a11y.
 3. `minion_hub/scripts/DESIGN-LINT.md` — enforcement mechanics.
 
@@ -20,7 +20,7 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 - **Semantic tokens only.** Never a literal hex/rgb, Tailwind palette utility (`bg-slate-500`), arbitrary size (`text-[16px]`, `p-[13px]`), raw shadow, raw duration/easing, or numeric z-index in `.svelte` files. Raw colors are legal only in `app.css` and `themes/*.ts`.
 - **⛔ Forbidden names (hard-fail):** `--accent`, `--accent-bg`, `--accent-rgb`, `--color-background`, `--color-bg1`, `--color-error`, `--color-primary`, `--color-primary-foreground`. Migrate consumers to the semantic role; never re-declare these.
 - **Never hand-edit `tokens.css`.** Extend `contract.json` and regenerate.
-- **Theme = `data-theme` on `<html>` only.** No Tailwind `dark:` variants (dead code here — no class/media wiring), no `prefers-color-scheme`, no per-theme selectors in components. Components read semantic tokens; themes swap the values.
+- **Theme values use `data-minion-theme` (or migration `data-theme-preset`) on `<html>`.** Hub may mirror its selection to `data-theme` for consumer-owned decoration. No Tailwind `dark:` variants (dead code here — no class/media wiring), no `prefers-color-scheme`, no per-theme selectors in components. Components read semantic tokens; themes swap the values.
 - **Accent is a pair.** `--color-accent` always with `--color-on-accent`. Categorical `--color-purple/pink/cyan/emerald/neutral` are for charts/data-viz ONLY, never action or status semantics.
 - **On-accent prefers white** (user directive 2026-07-16): white text whenever it clears AA 4.5 on the accent; black ONLY on bright accents where white can't (amber/cyan/green/orange). Dark accent options are tuned to 600-scale shades so white passes — never "fix" contrast by flipping a dark accent back to black text, and never pick on-accent by raw max-contrast (`onAccentFor` in hub encodes the white-first rule).
 - **Compat aliases** (`--color-bg`, `--color-foreground`, `--color-muted`, `--shadow-sm`, `--hairline`, …) are legal but write new code with the canonical names.
@@ -62,7 +62,7 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 | Tables | `DataTable` (custom cells via its single `cell` snippet) | `$lib/components/data-table` |
 | Page scaffold | `PageHeader` + section shells per route archetype (spec §D6) | `$lib/components/layout` |
 
-Known gaps with NO primitive yet (proposals in `specs/2026-07-15-ui-design-governance-hardening.md`): icon-size scale (use `size={16}` md / `{14}` sm / `{12}` xs until tokenized — do not invent new values), Chip/Tag, Avatar, `.clamp-2/3`, `.transition-fast`. Hand-roll minimally and note it; do not create a new local system.
+Known gaps with NO primitive yet (proposals in `specs/2026-07-15-ui-design-governance-hardening.md`): icon-size scale (use `size={16}` md / `{14}` sm / `{12}` xs until tokenized — do not invent new values), Chip/Tag, Avatar. Hand-roll minimally and note it; do not create a new local system. Shared `.clamp-2/3`, `.transition-fast` and `.transition-colors-fast` utilities are implemented; import the shared utilities stylesheet.
 
 ## Layout contracts (root-caused 2026-07-15 — violating these caused 7 shipped bugs)
 
@@ -118,3 +118,16 @@ New semantic need → add token to `contract.json` with every theme mode enumera
 | "I'll add the exception file entry later" | Later = CI failure. Do it in the same change, capped. |
 | "This component is special" | Special = an exception category + cap + reason, not a bypass. |
 | "Skip the lint, the diff is tiny" | The ratchet compares files, not diffs. Run both gates. |
+
+## Durable foundations qualification
+
+The source inventory at `packages/design-tokens/inventory.json` is generated and
+checked with the package. Normal primary/secondary/tertiary text must pass 4.5:1 on
+canvas, all three surfaces and overlay for every theme; do not remove a failing
+pair from the supported matrix. Shared `.t-*` utilities own functional typography.
+Consumers import both token and utility CSS and never override role sizes locally.
+Coarse targets belong to shared control hooks; Toggle's visual track is separate
+from its hit target. Decorative themes target stable `data-part` hooks rather than
+generic elements or class substrings. Qualify computed styles and actual targets
+from each installed archive. Evidence: specs/012-design-system-durability/spec.md;
+source checks: packages/design-tokens/tests and packages/ui/src/lib/primitives.test.ts.
