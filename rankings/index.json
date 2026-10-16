@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T11:40:17.832Z",
+	"generatedAt": "2026-10-16T12:10:02.280Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20102,38 +20102,6 @@
 			"scoredAt": "2026-10-15T00:21:32.057Z"
 		},
 		{
-			"key": "issue:minion-meta#501",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#501 [monitor:unstick] run d2eb2587 (minion-meta reconcile) — agent exec failure, exit-126/turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/501",
-			"sourceUpdatedAt": "2026-09-18T10:17:26Z",
-			"sourceFingerprint": "a81a5eb0be1207b3d01aa7a059317b7210935418f7bf81149d4234401a04b837",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake gives a clean infra diagnosis (exit-126, turns=0) with a concrete, bounded fix path of retrying and checking the runner's claude CLI install/PATH.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 — a clean infra signature per the note",
-				"recommendation: retry the run and have a human check the runner box's claude CLI install/PATH/permissions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T11:51:24.756Z"
-		},
-		{
 			"key": "issue:minion-meta#545",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21449,38 +21417,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Commit already lands the TOOL_ORDER fix with a regression test, so the tracked deploy is already satisfied.",
-			"evidence": [
-				"adds crm tool ids next to crm_query in TOOL_ORDER",
-				"adds regression test asserting TOOL_REGISTRY keys subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T11:40:17.688Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
@@ -32333,6 +32269,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T05:10:44.249Z"
+		},
+		{
+			"key": "issue:minion-meta#501",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#501 [monitor:unstick] run d2eb2587 (minion-meta reconcile) — agent exec failure, exit-126/turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/501",
+			"sourceUpdatedAt": "2026-09-18T10:17:26Z",
+			"sourceFingerprint": "a81a5eb0be1207b3d01aa7a059317b7210935418f7bf81149d4234401a04b837",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a stale automated monitor intake reporting a single exit-126/turns=0 agent-launch failure that the alert itself says is a clean infra signature with reconcile state already safely advanced and pushed.",
+			"evidence": [
+				"source: unstick, fingerprint unstick-unknown-d2eb2587",
+				"git push dev->dev succeeded, merge-scan state persisted before failure",
+				"exit-126, turns=0, permission_denials=0 — process never started a turn"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T12:10:02.091Z"
 		},
 		{
 			"key": "issue:minion-meta#502",
