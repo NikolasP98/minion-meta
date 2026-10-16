@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T12:40:02.505Z",
+	"generatedAt": "2026-10-16T13:10:32.897Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2163,39 +2163,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T04:23:51.709Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A committed fix instantiates two previously-missing CRM tools that hub-facing prompts and the /crm/insights panel already depend on, so deployment/verification closes a real functional gap.",
-			"evidence": [
-				"TOOL_ORDER never listed the two tool ids so createMinionTools() never instantiated them",
-				"hub's per-turn envelope instructs the model to call both by name",
-				"adds a regression test asserting TOOL_REGISTRY is a subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T12:40:02.348Z"
 		},
 		{
 			"key": "issue:minion-meta#730",
@@ -17316,6 +17283,38 @@
 			"scoredAt": "2026-10-15T13:22:00.640Z"
 		},
 		{
+			"key": "issue:minion-meta#739",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#739 [monitor:unstick] reconcile run 4668a9c7: claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/739",
+			"sourceUpdatedAt": "2026-10-02T12:17:35Z",
+			"sourceFingerprint": "42730b6033742726df514f33d90efb717891159efe513b89e1eeff7f2ea2c76c",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single exit-126/turns=0 claude-CLI exec failure on the runner has a clear diagnosis but no confirmed recurrence, so it needs a quick runner-permissions check before becoming a committed goal.",
+			"evidence": [
+				"exit_code=1 top-level, run note cites exit-126 turns=0",
+				"deterministic steps (handoff refresh, merge-scan, push) completed cleanly per log tail"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T13:10:32.750Z"
+		},
+		{
 			"key": "issue:minion-meta#772",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27420,38 +27419,6 @@
 			"scoredAt": "2026-10-15T17:21:28.290Z"
 		},
 		{
-			"key": "issue:minion-meta#739",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#739 [monitor:unstick] reconcile run 4668a9c7: claude agent exec failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/739",
-			"sourceUpdatedAt": "2026-10-02T12:17:35Z",
-			"sourceFingerprint": "42730b6033742726df514f33d90efb717891159efe513b89e1eeff7f2ea2c76c",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Deterministic pipeline succeeded but the claude agent step failed with exit-126/turns=0, pointing to a runner-box exec/permissions issue rather than a task-logic bug.",
-			"evidence": [
-				"status=error, top-level exit_code=1 but deterministic steps completed cleanly",
-				"exit-126, turns=0, permission_denials=0 signature suggests box-level CLI invocation problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T12:51:10.461Z"
-		},
-		{
 			"key": "issue:minion-meta#756",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31130,38 +31097,6 @@
 			"scoredAt": "2026-10-16T01:28:24.030Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "d3c1a2d6a7a72cd76fef1618b4f52519ac6d0abb8e846543024a59dc956d3c5d",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "All 18 cited markers point at lines inside rankings/index.json itself, which appears to be the sweep matching quoted TODO text embedded in other candidates' evidence strings rather than real code TODOs.",
-			"evidence": [
-				"every marker location is rankings/index.json, a generated data file, not source code",
-				"marker snippets read as quoted evidence text from unrelated repos, not actual TODO(handoff) comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:12:53.591Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-322a0d0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34265,6 +34200,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:32:02.784Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "700b102c4f660248585f49daa2c35a61f54b9547fd0450784023f7c0f09c9a4b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The 'markers' listed all point at one generated file (rankings/index.json) yet describe entirely unrelated domains (POS sessions, HR schema, backup scheduler), indicating the handoff-sweep misread cached summary text as literal source TODOs rather than a real open end.",
+			"evidence": [
+				"17+ marker snippets spanning POS, HR schema, phone failure, backup scheduler all cited at rankings/index.json",
+				"rankings/index.json is a generated index artifact, not source code expected to carry TODO(handoff) comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T13:10:32.750Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
