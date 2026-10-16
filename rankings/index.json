@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T11:09:58.480Z",
+	"generatedAt": "2026-10-16T11:40:17.832Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11782,6 +11782,38 @@
 			"scoredAt": "2026-10-15T23:21:46.658Z"
 		},
 		{
+			"key": "issue:minion-meta#600",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#600 [monitor:unstick] reconcile proposals failed to launch agent (run abbdc7f6, minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/600",
+			"sourceUpdatedAt": "2026-09-25T10:19:16Z",
+			"sourceFingerprint": "eb021b076266a41fe65790ad7a7c27279b393a695d0c259ca766cac4cd31a018",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A recurring exit-126/turns=0 failure launching the claude provider for reconcile runs points to a runner host PATH/permissions problem worth investigating.",
+			"evidence": [
+				"same exit-126 turns=0 signature hit run abbdc7f6 and run c99f511b ~2.5h apart",
+				"diagnosis recommends checking runner host permissions/PATH for the claude CLI binary"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T11:40:17.688Z"
+		},
+		{
 			"key": "issue:minion-meta#642",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15266,38 +15298,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T09:11:31.900Z"
-		},
-		{
-			"key": "issue:minion-meta#600",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#600 [monitor:unstick] reconcile proposals failed to launch agent (run abbdc7f6, minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/600",
-			"sourceUpdatedAt": "2026-09-25T10:19:16Z",
-			"sourceFingerprint": "eb021b076266a41fe65790ad7a7c27279b393a695d0c259ca766cac4cd31a018",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A recurring exit-126 agent-launch failure on the reconcile automation is diagnosed with a clear next step but requires human runner-host access to fix, so it isn't yet actionable as paid execution work.",
-			"evidence": [
-				"exit 126, turns=0 recurring, also hit run c99f511b ~2.5h earlier on same repo",
-				"diagnosis: claude provider process never started executing; side effects already idempotent"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T11:21:24.048Z"
 		},
 		{
 			"key": "issue:minion-meta#674",
@@ -21449,6 +21449,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit already lands the TOOL_ORDER fix with a regression test, so the tracked deploy is already satisfied.",
+			"evidence": [
+				"adds crm tool ids next to crm_query in TOOL_ORDER",
+				"adds regression test asserting TOOL_REGISTRY keys subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T11:40:17.688Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
@@ -35532,14 +35564,14 @@
 			"confidence": 9,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a monitor test-probe with no real content or consequence, not actionable work.",
+			"rationale": "This is an automated test probe with no substantive content or actionable request.",
 			"evidence": [
-				"title: '[monitor:unstick] test-probe'",
-				"summary body is just 'probe'"
+				"fingerprint: unstick-probe-test",
+				"body text is just 'probe'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T11:21:24.048Z"
+			"scoredAt": "2026-10-16T11:40:17.688Z"
 		},
 		{
 			"key": "issue:minion-meta#644",
