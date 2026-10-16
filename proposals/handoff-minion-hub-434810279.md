@@ -29,13 +29,3 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/ui/foundations/FormField.svelte:46` — describedby lists helper before error while the DOM renders error first;
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/ui/foundations/FormField.svelte#L46
-
-## Reconciliation note (2026-10-16, proposal-sweep)
-
-Same marker, same file and line, same day as `postmerge-minion-hub-2b39bb2c6fb1`
-(the handoff-ledger sweep and the post-merge discovery scan both caught the
-identical `TODO(handoff)` at `FormField.svelte:46`). Not auto-merged: the
-postmerge finding is already `status: approved` and has left this stage, so
-this sweep does not edit it or fold content into it. Flagged
-`duplicate_candidate` only — a human should confirm and close this marker
-once the approved finding resolves the underlying ordering bug.
