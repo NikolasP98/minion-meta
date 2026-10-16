@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import { pgTable, uuid, text, timestamp, bigint, uniqueIndex, index } from 'drizzle-orm/pg-core';
 import { profiles } from './profiles.js';
 
@@ -25,6 +26,9 @@ export const userIdentities = pgTable(
     secretIv: text('secret_iv'),
     expiresAt: bigint('expires_at', { mode: 'number' }),
     verifiedAt: bigint('verified_at', { mode: 'number' }),
+    claimRevision: bigint('claim_revision', { mode: 'bigint' })
+      .notNull()
+      .default(sql`nextval('public.channel_claim_revision_seq')`),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },

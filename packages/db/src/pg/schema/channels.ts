@@ -1,5 +1,6 @@
 import {
   pgTable,
+  check,
   uuid,
   text,
   timestamp,
@@ -34,10 +35,14 @@ export const channels = pgTable(
     // gateway's per-account config. Nullable for legacy rows; the natural upsert
     // key for a linked account is (tenant_id, gateway_id, type, account_id).
     accountId: text('account_id'),
+    // Provider identity is reserved before pairing and verified from the socket self ID.
+    providerAccountId: text('provider_account_id'),
+    providerAccountVerifiedAt: timestamp('provider_account_verified_at', { withTimezone: true }),
     // Scope classifier (specs/2026-07-19-channel-scoping-fix-plan.md P0).
+    // WhatsApp is always org-scoped; user scope is supported only by other transports.
     // Set  => account is USER-scoped: it belongs to this person and follows them
-    //         across every org they're a member of (their own WhatsApp/Telegram/
-    //         Discord), so the same real account is never duplicated per org.
+    //         across every org they're a member of (their own Telegram/Discord),
+    //         so the same real account is never duplicated per org.
     //         tenant_id remains the "home" org (it is NOT NULL) but stops gating
     //         visibility.
     // Null => account is ORG-scoped via tenant_id (shared business accounts).
@@ -59,11 +64,19 @@ export const channels = pgTable(
     enabled: boolean('enabled').notNull().default(true),
     // Reply behavior. 'none' = noAgent (never reply, even owner/self); 'bound' =
     // reply only where a channel_bindings row matches. No 'auto' on purpose.
-    replies: text('replies', { enum: ['none', 'bound'] }).notNull().default('none'),
+    replies: text('replies', { enum: ['none', 'bound'] })
+      .notNull()
+      .default('none'),
     // DM sender access gate (consulted only when replies='bound'). [] = nobody,
     // ['*'] = anyone. Replaces the old dm_policy enum (derivable from this).
-    allowFrom: text('allow_from').array().notNull().default(sql`'{}'`),
-    groupAllowFrom: text('group_allow_from').array().notNull().default(sql`'{}'`),
+    allowFrom: text('allow_from')
+      .array()
+      .notNull()
+      .default(sql`'{}'`),
+    groupAllowFrom: text('group_allow_from')
+      .array()
+      .notNull()
+      .default(sql`'{}'`),
     // Groups reply only when @-mentioned.
     requireMention: boolean('require_mention').notNull().default(true),
 
@@ -84,6 +97,20 @@ export const channels = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
+    check(
+      'channels_whatsapp_provider_format',
+      sql`${t.type} <> 'whatsapp' OR ${t.providerAccountId} IS NULL OR ${t.providerAccountId} ~ '^[1-9][0-9]{6,14}$'`,
+    ),
+    uniqueIndex('channels_whatsapp_auth_ref_unique')
+      .on(t.authRef)
+      .where(sql`${t.type} = 'whatsapp' AND ${t.authRef} IS NOT NULL`),
+    check(
+      'channels_whatsapp_org_scope',
+      sql`${t.type} <> 'whatsapp' OR ${t.ownerProfileId} IS NULL`,
+    ),
+    uniqueIndex('channels_whatsapp_provider_unique')
+      .on(t.type, t.providerAccountId)
+      .where(sql`${t.type} = 'whatsapp' AND ${t.providerAccountId} IS NOT NULL`),
     index('idx_channels_tenant_gateway').on(t.tenantId, t.gatewayId),
     index('channels_owner_profile_idx').on(t.ownerProfileId),
     uniqueIndex('channels_uniq_type_label').on(t.tenantId, t.gatewayId, t.type, t.label),
