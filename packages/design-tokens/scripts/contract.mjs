@@ -81,3 +81,14 @@ export function contrastRatio(foreground, background) {
     (Math.min(foregroundLuminance, backgroundLuminance) + 0.05)
   );
 }
+
+/** Ordinary text is supported on every base surface, including raised cards. */
+export function normalTextContrastFailures(contract) {
+  const { foregrounds, backgrounds, minimumRatio } = contract.contrast.normalText;
+  return Object.entries(contract.themes).flatMap(([themeId, theme]) =>
+    foregrounds.flatMap((foreground) => backgrounds.flatMap((background) => {
+      const ratio = contrastRatio(theme.colors[foreground], theme.colors[background]);
+      return ratio < minimumRatio ? [{ themeId, foreground, background, ratio }] : [];
+    })),
+  );
+}

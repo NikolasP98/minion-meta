@@ -11,7 +11,7 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 
 ## Authority chain (highest first)
 
-1. `packages/design-tokens/contract.json` (meta-repo) — machine truth. 16 themes × 43 resolved tokens, 10 accent pairs, 34 compat aliases. `tokens.css` is **generated** (`pnpm --filter @minion-stack/design-tokens generate`); `utilities.css` is hand-authored in the same package. Build fails on stale CSS, incomplete theme, unknown alias, or <AA contrast.
+1. `packages/design-tokens/contract.json` (meta-repo) — machine truth. Generated theme/token/accent/alias counts and digests are in `packages/design-tokens/inventory.json`; do not duplicate them in prose. `tokens.css` is **generated** (`pnpm --filter @minion-stack/design-tokens generate`); `utilities.css` is hand-authored in the same package. Build fails on stale CSS, incomplete theme, unknown alias, or <AA contrast.
 2. `specs/2026-07-13-hub-ui-coherence-implementation-spec.md` §D2 (meta-repo) — sole normative naming policy. §D3 theme, §D4 typography, §D5 primitives, §D6 layout/archetypes, §D9 a11y.
 3. `minion_hub/scripts/DESIGN-LINT.md` — enforcement mechanics.
 
@@ -20,7 +20,7 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 - **Semantic tokens only.** Never a literal hex/rgb, Tailwind palette utility (`bg-slate-500`), arbitrary size (`text-[16px]`, `p-[13px]`), raw shadow, raw duration/easing, or numeric z-index in `.svelte` files. Raw colors are legal only in `app.css` and `themes/*.ts`.
 - **⛔ Forbidden names (hard-fail):** `--accent`, `--accent-bg`, `--accent-rgb`, `--color-background`, `--color-bg1`, `--color-error`, `--color-primary`, `--color-primary-foreground`. Migrate consumers to the semantic role; never re-declare these.
 - **Never hand-edit `tokens.css`.** Extend `contract.json` and regenerate.
-- **Theme = `data-theme` on `<html>` only.** No Tailwind `dark:` variants (dead code here — no class/media wiring), no `prefers-color-scheme`, no per-theme selectors in components. Components read semantic tokens; themes swap the values.
+- **Theme values use `data-minion-theme` (or migration `data-theme-preset`) on `<html>`.** Hub may mirror its selection to `data-theme` for consumer-owned decoration. No Tailwind `dark:` variants (dead code here — no class/media wiring), no `prefers-color-scheme`, no per-theme selectors in components. Components read semantic tokens; themes swap the values.
 - **Accent is a pair.** `--color-accent` always with `--color-on-accent`. Categorical `--color-purple/pink/cyan/emerald/neutral` are for charts/data-viz ONLY, never action or status semantics.
 - **On-accent prefers white** (user directive 2026-07-16): white text whenever it clears AA 4.5 on the accent; black ONLY on bright accents where white can't (amber/cyan/green/orange). Dark accent options are tuned to 600-scale shades so white passes — never "fix" contrast by flipping a dark accent back to black text, and never pick on-accent by raw max-contrast (`onAccentFor` in hub encodes the white-first rule).
 - **Compat aliases** (`--color-bg`, `--color-foreground`, `--color-muted`, `--shadow-sm`, `--hairline`, …) are legal but write new code with the canonical names.
@@ -64,7 +64,7 @@ One design system, machine-enforced. Semantic tokens and shared primitives only;
 | Tables (ANY `<table>`) | `DataTable` — per-column `cells`/`headers` snippet records first, then the `cell`/`headerCell` fallbacks, plus `rowActions`/`empty`/`errorContent`/`footerCell`/`groupRow`; `variant` = PRESET only (explicit prop > `chrome` > variant); `variant="plain"` for embedded read-mostly tables (preset: no chrome, `height: fit`, page scrolls, `resizable` stays TRUE); cell editing is opt-in per column (`editable` + primitive `type`) with `onSaveRow` persisting the full editable snapshot — never hand-roll `<table>` for a row list (matrices/heatmaps, transposed resolvers, data-entry form grids, chart a11y fallbacks and markdown-rendered tables are the only exceptions) | `$lib/components/data-table` |
 | Page scaffold | `PageHeader` + section shells per route archetype (spec §D6) | `$lib/components/layout` |
 
-Known gaps with NO primitive yet (proposals in `specs/2026-07-15-ui-design-governance-hardening.md`): `.clamp-2/3`, `.transition-fast`, and the record-detail card recipe (`.card`/`.card-h`/`.kv` — exact tokens below, copied per route until promoted). Icon sizes ARE tokenized (`iconSizes`) and Chip/Tag IS a family (`ui/Chip`, `ui/EntityChip`, `tags/TagChip|TagDot|TagOptionList|TagsField|TagFilter|InlineTagsCell`) — hand-rolling either is a regression, not a gap. Hand-roll the remaining gaps minimally and note it; do not create a new local system.
+Implemented shared utilities include `.clamp-2/3`, `.transition-fast` and `.transition-colors-fast`; import the shared utilities stylesheet. The remaining composition recipe is the record-detail card recipe (`.card`/`.card-h`/`.kv` — exact tokens below, copied per route until promoted). Icon sizes ARE tokenized (`iconSizes`) and Chip/Tag IS a family (`ui/Chip`, `ui/EntityChip`, `tags/TagChip|TagDot|TagOptionList|TagsField|TagFilter|InlineTagsCell`) — hand-rolling either is a regression, not a gap. Hand-roll the remaining gaps minimally and note it; do not create a new local system.
 
 ## Async feedback & autosave contracts (owner directive 2026-10-10 — "visual feedback = trust")
 
@@ -137,7 +137,7 @@ Owner taste extracted from the 2026-09-16 → 2026-09-28 window (100 hub commits
 - **Geometry = props that drive BOTH the JS arithmetic and the CSS custom properties, declared exactly once inline on the root** (`bc3d97f4` `--cal-*`). A JS constant plus a CSS copy drifts.
 - **Per-column customisation is a keyed snippet RECORD (`cells`/`headers`) consulted before the single fallback snippet** (`0e5eac77`). Vocabulary is injectable (`statusTones`, `colorSources`, field catalogs); the root takes `class`/`style`/`...rest`; public CSS vars are listed in the component doc comment.
 - **Generic page behaviour lives in a `kit/` beside the component as `create*` factories** (`scheduling/kit/`, `data-table/kit/` — `e74d7f9e`, `4e5350ce`), not in the page. **The URL is the contract**, mirrored through one coalesced `replaceState` per microtask from the CONSUMER's `$effect` calling `sync()` (a bare `$effect` never runs in this repo's vitest harness — false-green trap).
-- **Per-viewer conveniences (colour source, days-per-screen, preview mode) = namespaced `localStorage` behind a factory (`createCalendarPrefs(ns)`), every read/write `try/catch`ed, and a refactor MUST preserve the key strings** (`e74d7f9e`). Preferences the user expects to FOLLOW them across devices (nav order, locale, landing page, record-overview visibility) = a `/api/me/preferences/<section>` section. Org-wide presentation (labels, hidden fields, ID prefixes, open mode) = `app_table_config` via `/settings/tables` (`b76d58f2`) — data, not code.
+- **Per-viewer conveniences (colour source, days-per-screen, preview mode) = namespaced `localStorage` behind a factory (`createCalendarPrefs(ns)`), every read/write `try/catch`ed, and a refactor MUST preserve the key strings** (`e74d7f9e`). The one sanctioned exception is an identity re-scoping approved by spec: feature 012 (2026-10-16) moved every per-viewer key under `minion:preferences:v1:[actor,org]:…` once, and legacy unscoped values are deliberately NOT imported because they cannot be attributed to an identity (spec I03) — the one-time reset is disclosed in the release note. Preferences the user expects to FOLLOW them across devices (nav order, locale, landing page, record-overview visibility) = a `/api/me/preferences/<section>` section. Org-wide presentation (labels, hidden fields, ID prefixes, open mode) = `app_table_config` via `/settings/tables` (`b76d58f2`) — data, not code.
 - **Every effect that resets scroll or refetches is keyed on the QUERY INPUTS as a signature string, never on derived rows or bindable objects** (`05bc2c2e`, `0e5eac77` — snap-to-top fired on every save).
 
 ### Tables
@@ -282,3 +282,17 @@ New semantic need → add token to `contract.json` with every theme mode enumera
   payload test and `tests/fixtures/notification-health/Fixture.svelte`, which types itself against
   `PageData`. Same class as the POS service's frozen export inventory — update them in the same
   commit.
+
+
+## Durable foundations qualification
+
+The source inventory at `packages/design-tokens/inventory.json` is generated and
+checked with the package. Normal primary/secondary/tertiary text must pass 4.5:1 on
+canvas, all three surfaces and overlay for every theme; do not remove a failing
+pair from the supported matrix. Shared `.t-*` utilities own functional typography.
+Consumers import both token and utility CSS and never override role sizes locally.
+Coarse targets belong to shared control hooks; Toggle's visual track is separate
+from its hit target. Decorative themes target stable `data-part` hooks rather than
+generic elements or class substrings. Qualify computed styles and actual targets
+from each installed archive. Evidence: specs/012-design-system-durability/spec.md;
+source checks: packages/design-tokens/tests and packages/ui/src/lib/primitives.test.ts.
