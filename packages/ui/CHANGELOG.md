@@ -1,5 +1,11 @@
 # @minion-stack/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- 69ec050: Qualify text contrast on all base surfaces, make touch targets intrinsic, retain form guidance during validation, and publish reproducible design-system inventories and composition rules.
+
 ## 0.2.0
 
 ### Minor Changes
