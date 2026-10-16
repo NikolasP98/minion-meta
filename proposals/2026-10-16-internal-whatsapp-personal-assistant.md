@@ -263,3 +263,22 @@ feature activation, and deployment are separate release actions.
   corpus. Do not activate the WhatsApp account before that switch and restart.
   Import preserves newer canonical records and delete tombstones. Production
   import and activation have not been performed.
+
+- **SDK execution surface:** the qualified runtime pins the checked tool names
+  and uses an empty SDK resource loader, preventing implicit native host bash,
+  workspace extensions and MCP discovery from restoring rejected tools. Explicit
+  codemode, SDK package/extension and hosted-tool configurations remain rejected
+  until isolated authority propagation is implemented. The SDK gate has the
+  matching `TODO(handoff)` in `internal-assistant-sdk.ts`.
+- **Existing durable extraction threshold:** the current runner supplies two
+  recent messages while the LLM extractor's default threshold is four. Canonical
+  migration preserves that gate and the working heuristic automatic saves;
+  it does not silently lower the threshold. A future shared session accumulator
+  should enable the configured LLM policy without introducing a second durable
+  memory store. The extraction call has a matching `TODO(handoff)`.
+- **Memory failure qualification:** canonical auto-saves are awaited in both
+  channels. HTTP cancellation cannot undo SQL already in progress; an ambiguous
+  memory commit must be reconciled, not replayed. For an opted-in ordinary Hub
+  agent, a failed canonical save can make completed inference return an error;
+  qualify that Hub chat behavior before activation. The callsite in gateway
+  `src/agents/pi-embedded-runner/run/attempt.ts` carries the matching TODO.

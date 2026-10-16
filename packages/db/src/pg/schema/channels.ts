@@ -41,8 +41,8 @@ export const channels = pgTable(
     // Scope classifier (specs/2026-07-19-channel-scoping-fix-plan.md P0).
     // WhatsApp is always org-scoped; user scope is supported only by other transports.
     // Set  => account is USER-scoped: it belongs to this person and follows them
-    //         across every org they're a member of (their own WhatsApp/Telegram/
-    //         Discord), so the same real account is never duplicated per org.
+    //         across every org they're a member of (their own Telegram/Discord),
+    //         so the same real account is never duplicated per org.
     //         tenant_id remains the "home" org (it is NOT NULL) but stops gating
     //         visibility.
     // Null => account is ORG-scoped via tenant_id (shared business accounts).

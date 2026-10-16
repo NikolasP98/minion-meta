@@ -121,3 +121,44 @@ Live pairing, delivery/media/role parity, 24-hour idle and host-restart tests ar
 still required before activation. Unknown action receipts need manual domain
 reconciliation until business transactions and receipt updates are atomic.
 The source TODOs and proposal ledger track these open boundaries.
+
+## Final independent qualified-slice review
+
+A separate reviewer assessed the assembled implementation after SDK construction
+was tested against the installed SDK. Standards: PASS for the reviewed qualified
+internal slice. Specification: PARTIAL / NOT READY. Full capability parity,
+target-data migration proof, live role/media/idle/restart traces and transactional
+coupling of business effects remain open. The implementation does not claim
+exactly-once external delivery or guaranteed uninterrupted connectivity.
+
+Meta draft PR 810 passed its full CI verification. Hub draft PR 544 is open.
+Gateway SDK regression tests verify that native host bash and workspace extensions
+cannot be restored after the checked tool surface; tool search isolation is
+also being applied to ordinary Hub conversations. Canonical heuristic automatic
+saves now run through the shared service and are awaited, with cancellation and
+uncertain-effect fencing. The inherited LLM extraction threshold is preserved
+and tracked separately in the proposal ledger.
+
+The orchestrator separately inspected the reviewer's final SDK and catalog fixes,
+including checked-name selection, sandbox project trust, static internal resources
+and snapshot handles retained through tool wrappers. No additional bypass was
+found. The reviewer then independently inspected the canonical automatic-extraction
+implementation: no additional scope leak found; cancellation/ambiguous SQL commits
+and completed-inference memory failures are explicitly recorded in the ledger.
+
+Latest local evidence: Hub full suite passed 7,254 tests (260 skipped) across 836
+passing files (five skipped), plus three architecture checks; 22 native PostgreSQL
+integration tests passed. Exact-tree Hub check passed with zero errors/warnings.
+Gateway changed-test selection passed 111 tests across 20 files, with six additional
+CUID/UUID channel-ID validation cases. Gateway build including SDK declarations and combined check passed after the
+CUID schema fix. Built CLI help smoke passed. The subsequent lost-acknowledgement
+local-authority fence passed 16 focused tests and is receiving a final build.
+Hub CI test/check-and-build passed; its native QA job exposed fixture role/vector
+schema assumptions. The correction passed all 22 native tests against both
+public.vector and extensions.vector layouts; the CI rerun is pending. These facts do not close
+live-account or full-capability parity gates.
+
+Review branches: [meta #810](https://github.com/NikolasP98/minion-meta/pull/810),
+[Hub #544](https://github.com/NikolasP98/minion_hub/pull/544), and
+[gateway #330](https://github.com/NikolasP98/minion-ai/pull/330). All remain drafts.
+No merge, production migration, activation, pairing or live send was performed.
