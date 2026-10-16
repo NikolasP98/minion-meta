@@ -282,3 +282,12 @@ feature activation, and deployment are separate release actions.
   agent, a failed canonical save can make completed inference return an error;
   qualify that Hub chat behavior before activation. The callsite in gateway
   `src/agents/pi-embedded-runner/run/attempt.ts` carries the matching TODO.
+
+- **Scanner audit prerequisite:** the generated WhatsApp manifest's truncated
+  SHA-256 schema checksum is a confirmed non-secret. Gateway
+  [audit PR #331](https://github.com/NikolasP98/minion-ai/pull/331) adds only its
+  exact fingerprint and evidence, including a different-digest negative control.
+  Existing CI requires independent human audit and explicit acceptance of baseline
+  updates. Feature PR #330 must inherit that approved baseline; its secrets check
+  remains blocked until then. The generating schema has a matching TODO. No
+  scanner policy or checksum algorithm was changed to bypass this requirement.

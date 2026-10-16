@@ -108,8 +108,7 @@ The following are local results, not deployed or live-account evidence:
   warning); 32 tests pass. Spec index (287 entries) and proposal index (804) pass.
 - Hub focused authority/credential/memory boundary suite passed 182 tests;
   native PostgreSQL integration exercises real leases, claim revisions, RLS,
-  deduplication, memory migration and delete tombstones. Final counts and broad
-  check results will be recorded after the last receipt-locking changes.
+  deduplication, memory migration and delete tombstones. Final results appear below.
 - Gateway focused authority/business/credential suite passed 156 tests; executor
   and canonical memory suite passed 24 tests. Supervisor/status tests passed 22,
   including stale-heartbeat recovery, teardown order and unchanged legacy cadence.
@@ -134,7 +133,7 @@ exactly-once external delivery or guaranteed uninterrupted connectivity.
 Meta draft PR 810 passed its full CI verification. Hub draft PR 544 is open.
 Gateway SDK regression tests verify that native host bash and workspace extensions
 cannot be restored after the checked tool surface; tool search isolation is
-also being applied to ordinary Hub conversations. Canonical heuristic automatic
+also applies to ordinary Hub conversations. Canonical heuristic automatic
 saves now run through the shared service and are awaited, with cancellation and
 uncertain-effect fencing. The inherited LLM extraction threshold is preserved
 and tracked separately in the proposal ledger.
@@ -152,11 +151,22 @@ integration tests passed. Exact-tree Hub check passed with zero errors/warnings.
 Gateway changed-test selection passed 111 tests across 20 files, with six additional
 CUID/UUID channel-ID validation cases. Gateway build including SDK declarations and combined check passed after the
 CUID schema fix. Built CLI help smoke passed. The subsequent lost-acknowledgement
-local-authority fence passed 16 focused tests and is receiving a final build.
-Hub CI test/check-and-build passed; its native QA job exposed fixture role/vector
-schema assumptions. The correction passed all 22 native tests against both
-public.vector and extensions.vector layouts; the CI rerun is pending. These facts do not close
-live-account or full-capability parity gates.
+local-authority fence passed 16 focused tests and the final build, including SDK
+declarations. Hub production build and client-boundary checks passed. Hub CI
+test/check-and-build and native QA now pass after correcting fixture role/vector
+schema assumptions; all 22 native tests also passed locally against both
+public.vector and extensions.vector layouts. The Vercel preview remains pending.
+These facts do not close live-account or full-capability parity gates.
+
+Gateway CI build, check, Linux test partitions, protocol and Windows checks passed.
+Its secrets job and dependent Linux-required aggregate failed on false positives:
+environment-variable names and the generated WhatsApp manifest checksum. Narrow
+inline annotations identify the variable names. The checksum requires the separate
+[audited baseline PR #331](https://github.com/NikolasP98/minion-ai/pull/331); it
+contains the derivation and positive/negative scanner evidence. Existing policy
+intentionally rejects baseline changes in a feature PR, including the audit PR
+until independently reviewed and explicitly accepted. No scanner guard was
+weakened. Gateway #330 must inherit the accepted baseline and pass CI before merge.
 
 Review branches: [meta #810](https://github.com/NikolasP98/minion-meta/pull/810),
 [Hub #544](https://github.com/NikolasP98/minion_hub/pull/544), and
