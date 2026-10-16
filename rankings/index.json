@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T14:39:57.282Z",
+	"generatedAt": "2026-10-16T15:10:05.917Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5265,39 +5265,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A real bug fix (two CRM tools missing from TOOL_ORDER, so never instantiated despite hub UI depending on them) already landed as a commit, so the deploy candidate is about verifying rollout rather than new work.",
-			"evidence": [
-				"TOOL_ORDER never listed crm_conversation_themes/search_crm_conversations ids",
-				"createMinionTools() filters strictly by TOOL_ORDER membership",
-				"regression test added asserting TOOL_REGISTRY subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T13:40:01.899Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -13233,6 +13200,39 @@
 			"scoredAt": "2026-10-16T07:10:38.177Z"
 		},
 		{
+			"key": "pr:minion-meta#810",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#810 feat(whatsapp): bind internal assistant accounts to one organization",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/810",
+			"sourceUpdatedAt": "2026-10-16T14:59:21Z",
+			"sourceFingerprint": "009e72452394a7177f9990a38d6192b152c7c9320e93b29f994fab37c8251d47",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Draft PR with clear spec but explicitly unfinished implementation, multiple open gates, and no production rollout, so it needs continued dev work rather than immediate execution or pruning.",
+			"evidence": [
+				"Keep this PR in draft: full capability parity, coordinated migration and live-account qualification remain release gates",
+				"Default-agent activation blocker: this draft cannot yet activate an ordinary newly provisioned personal agent",
+				"Container command lifetime is also unqualified...pending owned process isolation and acknowledged revocation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T15:10:05.758Z"
+		},
+		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16726,42 +16726,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "pr:minion-meta#810",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#810 feat(whatsapp): bind internal assistant accounts to one organization",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/810",
-			"sourceUpdatedAt": "2026-10-16T09:07:25Z",
-			"sourceFingerprint": "b25e28fd198623e85a4fd2c543a32eac83ad25902451fd72ddbf49dc1628ace7",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#330",
-				"pr:minion_hub#544"
-			],
-			"rationale": "The foundational schema/spec PR is locally validated but intentionally kept in draft pending the same cross-repo capability-parity and audit gates as its dependents.",
-			"evidence": [
-				"Keep this PR in draft: full capability parity, coordinated migration and live-account qualification remain release gates",
-				"Gateway scanner audit prerequisite ... needs independent audit and acceptance",
-				"The changeset publishes a patch to @minion-stack/db; release is not authorized by this draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:11:31.900Z"
 		},
 		{
 			"key": "proposal:2026-08-23-hub-archived-warehouse-submit-guard",
