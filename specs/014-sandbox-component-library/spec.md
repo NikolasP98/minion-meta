@@ -33,7 +33,7 @@
 ## Requirements
 - FR-001 Library rows are ordinary `sandbox_elements` rows on page `library`; no new table.
 - FR-002 Visibility: creator or published; enforced in SQL, not in the client.
-- FR-003 `published` can only be changed by the creator (SQL guard); other fields keep the existing admin rule.
+- FR-003 Library rows are written (any field, including `published`) and deleted only by their creator; the SQL predicate `page <> 'library' or created_by = viewer` is on every update/delete. A non-creator gets not-found. (Tightened after the commit security review: the first cut guarded only `published`.)
 - FR-004 Adding to a page is a copy of `title, html, css, js, w, h`.
 - FR-005 `EditableGrid` without `bind:editing` behaves exactly as before.
 
