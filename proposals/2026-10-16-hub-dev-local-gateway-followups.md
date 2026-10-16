@@ -1,9 +1,12 @@
 ---
 id: 2026-10-16-hub-dev-local-gateway-followups
 title: 'dev:local --gateway — open items'
-status: open
+status: draft
 created: 2026-10-16
 repos: [minion_hub, minion]
+tags: [logic, infra]
+value: 7
+effort: M
 spec: specs/011-dev-local-gateway-mode/
 ---
 
@@ -41,7 +44,7 @@ the gateway token as `apiKey`; the matching `gateway` row carries `legacy_server
 (`minion_hub/src/server/auth/resolve-identity.ts:114`) matches on.
 
 **Next step**: find which URL the gateway's `tool-rbac` capability fetch actually calls and
-why it produces no snapshot — a wrong path, a a pre-flight failure, or a rejection the gateway
+why it produces no snapshot — a wrong path, a pre-flight failure, or a rejection the gateway
 swallows. Start at `minion/src/agents/tool-rbac` and `minion/src/agents/tools/hub/hub-common.ts`.
 This is the difference between a local assistant that can chat and one that can work.
 
