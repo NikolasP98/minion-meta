@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T08:10:03.691Z",
+	"generatedAt": "2026-10-16T08:40:24.381Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7977,6 +7977,40 @@
 			"scoredAt": "2026-10-11T00:30:17.772Z"
 		},
 		{
+			"key": "pr:minion_hub#544",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#544 feat(whatsapp): let verified members reach their personal agents",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/544",
+			"sourceUpdatedAt": "2026-10-16T08:26:32Z",
+			"sourceFingerprint": "14b2a90acd0f09fa3596b3ed87ca7216ab93af69961ef731c0ac93fb43e01cc1",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion-meta#810"
+			],
+			"rationale": "This draft hub implementation is explicitly blocked on release gates and is the counterpart half of the same WhatsApp binding feature as the linked schema PR, so they should be tracked as one goal.",
+			"evidence": [
+				"This is a draft. Full capability parity and live-account qualification remain blocked in the gateway runtime.",
+				"Related schema/spec: https://github.com/NikolasP98/minion-meta/pull/810"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T08:40:24.225Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9347,6 +9381,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T06:40:34.650Z"
+		},
+		{
+			"key": "pr:minion-meta#810",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#810 feat(whatsapp): bind internal assistant accounts to one organization",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/810",
+			"sourceUpdatedAt": "2026-10-16T08:19:18Z",
+			"sourceFingerprint": "5311823c6ea8e156b9c04dd9f0eff6fd09d43f12e231805c34713d7ef333e153",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#544"
+			],
+			"rationale": "The canonical schema/spec draft shares the same feature branch and release gates as the hub PR, making the two halves of one initiative better tracked together.",
+			"evidence": [
+				"Gateway and Hub implementation use branch feat/internal-whatsapp-20261016 in their respective repositories",
+				"Keep this PR in draft: full capability parity, coordinated migration and live-account qualification remain release gates"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T08:40:24.225Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -11228,6 +11296,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A committed fix with a regression test restores two CRM tools that were silently never instantiated, so it mainly needs deployment follow-through.",
+			"evidence": [
+				"TOOL_ORDER never listed their ids despite registry entries, metas, permissions, and endpoints",
+				"Adds a regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T08:40:24.225Z"
 		},
 		{
 			"key": "issue:minion-meta#335",
