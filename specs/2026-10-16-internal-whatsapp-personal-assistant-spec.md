@@ -549,6 +549,16 @@ product scope. The proposal ledger and source `TODO(handoff)` markers track it.
 Until the missing runners preserve authority, activation remains gated unless
 the owner explicitly accepts a shared restricted capability policy.
 
+This gap affects ordinary newly provisioned personal agents, not only optional
+extensions. Hub `personal-agent-provisioner.ts:getProvisioningPayload` supplies
+only name/workspace to `agents.create`; existing provisioning marks the agent
+active without a runtime-policy preflight. Gateway sandbox defaults are `off`.
+The new runtime requires an isolated shared configuration and rejects the normal
+standard-policy session/process tools. Consequently this draft cannot activate
+an ordinary new personal agent as-is. Completing shared isolation and signed
+delegation is required to deliver the approved scope; neither an `active` database
+row nor passing transport tests establishes personal-agent capability parity.
+
 For an authorized release, perform these steps in order:
 
 1. Run Hub `bun run whatsapp:inventory` against the intended database and resolve

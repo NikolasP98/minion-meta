@@ -291,3 +291,14 @@ feature activation, and deployment are separate release actions.
   updates. Feature PR #330 must inherit that approved baseline; its secrets check
   remains blocked until then. The generating schema has a matching TODO. No
   scanner policy or checksum algorithm was changed to bypass this requirement.
+
+- **Default provisioning blocker:** Hub personal-agent provisioning currently
+  sends only name/workspace and marks the row active without a runtime-policy
+  preflight. Gateway defaults to sandbox off; the new internal runtime rejects
+  that configuration and several standard-policy tools (process/session tools,
+  messaging, TTS, summarize, and conditionally CRM search/SDK inspection). Thus
+  ordinary newly provisioned personal agents cannot activate under this draft.
+  Implement shared isolation and signed delegation, including background-process
+  lifetime and completion authority; do not remove tools to declare parity. The
+  runtime gate has the matching TODO. This is unfinished implementation, distinct
+  from release authorization and live qualification.

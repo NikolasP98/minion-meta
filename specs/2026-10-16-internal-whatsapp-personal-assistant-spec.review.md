@@ -172,3 +172,12 @@ Review branches: [meta #810](https://github.com/NikolasP98/minion-meta/pull/810)
 [Hub #544](https://github.com/NikolasP98/minion_hub/pull/544), and
 [gateway #330](https://github.com/NikolasP98/minion-ai/pull/330). All remain drafts.
 No merge, production migration, activation, pairing or live send was performed.
+
+Final default-policy inspection confirmed an additional practical consequence of
+the known parity gap: ordinary Hub provisioning sends only name/workspace and
+marks an agent active without sandbox/tool preflight. Gateway defaults to sandbox
+off, which the internal runtime rejects. Its standard policy also includes
+process/session tools and other capabilities outside the qualified surface.
+This draft is therefore not activatable for an ordinary newly provisioned personal
+agent. Shared isolation/delegation remains substantive implementation work; it is
+not merely a deployment checkbox. See the proposal's default-provisioning entry.
