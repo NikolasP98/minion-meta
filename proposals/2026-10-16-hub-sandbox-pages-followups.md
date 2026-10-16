@@ -28,3 +28,9 @@ Spec: `specs/010-hub-sandbox-pages/`. POC: hub branch `feat/sandbox-pages-poc` (
 9. **Live chat proof is pending a gateway.** `dev:local` ships no gateway (`MINION_GATEWAY_URL` empty in `.env.qa`), so the POC was proven through the same tool path the assistant uses (`__minionAssist.executeTool`), not through a model turn. Run the owner's prompt on a gateway-backed preview after approval.
 10. **QA-stack defect found on the way:** `bun run qa:reset` restores an older snapshot while cluster roles persist, so `20261003150000_notification_event_outbox.sql` refuses ("Notification role already exists"). Workaround: `qa:down --volumes` + `dev:local`. The guard should tolerate pre-existing roles when the baseline is being restored.
 11. **Element limits.** 64 KB per element and 1000 rows per query are fixed constants; no per-org quota, no rate limit on `/api/sandbox/query`.
+
+## Added 2026-10-16 (spec 013 — canvas awareness, editable layout, two-tier builder)
+- `describeElement` infers datasets/chart type from the element JS by regex (`src/lib/sandbox/canvas.ts`, `TODO(handoff)`); an element that builds its query spec dynamically reports "no query". Upgrade: a declared `meta` field on the element record written by `sandbox.upsert_element`.
+- Tier 1 as a sub-session (`sessions_spawn`) so element HTML/JS never enters the main assistant context; today both tiers run in one turn.
+- `EditableGrid` controlled mode: during a drag the preview order can differ from the saved order for one write round-trip (Playwright proof 2026-10-16: dragged cell at index 1 after drop, index 0 after Done; final state correct). Cause: `saved` is cleared when `items` reload mid-drag. Fix: ignore reloads while `dragId`/`resizeId` is set.
+- The sandbox now inherits `EditableGrid`'s narrow-container fallback (one column ≤ 620px) instead of its old 2-column step at 1024px.
