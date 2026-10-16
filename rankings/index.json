@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T07:10:38.341Z",
+	"generatedAt": "2026-10-16T07:40:00.059Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2802,38 +2802,6 @@
 			"scoredAt": "2026-10-16T01:23:15.739Z"
 		},
 		{
-			"key": "run:minion (gateway)#38808987126",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38808987126",
-			"sourceUpdatedAt": "2026-10-15T21:48:35Z",
-			"sourceFingerprint": "85acd6225d579e20057b4f5579c91642bdee2c2caf2dbb29ea85fac237a9d445",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI failure on the gateway's DEV branch is potentially release-blocking but the record carries no failure detail to act on yet.",
-			"evidence": [
-				"status failure on push to DEV",
-				"title/summary give no job or step diagnostic info"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T21:51:43.806Z"
-		},
-		{
 			"key": "spec:2026-08-31-factory-supervised-release-defense-in-depth-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3921,6 +3889,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T18:51:50.506Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A real bug fix (tools missing from TOOL_ORDER) was committed, but this deploy-health candidate just reflects a commit log rather than an actionable open task.",
+			"evidence": [
+				"TOOL_ORDER never listed crm tool ids so they were never instantiated",
+				"regression test added asserting TOOL_REGISTRY subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T07:39:59.891Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -27789,6 +27789,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T21:52:11.157Z"
+		},
+		{
+			"key": "run:minion (gateway)#38868043873",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38868043873",
+			"sourceUpdatedAt": "2026-10-16T07:37:30Z",
+			"sourceFingerprint": "e9fb885841392150cd03a1d42fba88f9caf80eb024349faadac6c26e8d74f9a8",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI run triggered via workflow_dispatch, not a goal requiring ranking or action.",
+			"evidence": [
+				"workflow_dispatch on DEV",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T07:39:59.891Z"
 		},
 		{
 			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
