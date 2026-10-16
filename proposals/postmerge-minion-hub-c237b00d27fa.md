@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-c237b00d27fa
 title: "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz (minion_hub)"
-status: draft
+status: review
 created: 2026-10-16
 updated: 2026-10-16
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz`
@@ -37,3 +38,14 @@ This matters because **a tarball was committed directly to git** — likely a bu
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/545
 - file: `deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz`
 - checked: 2026-10-16
+
+## Reconciliation note (2026-10-16, proposal-sweep)
+
+Same class of finding already tracked under `2026-09-08-platform-qc-remediation`'s
+"Dependency/release provenance (UI-06)" priority item (no blanket version
+bump; publish distinct package versions/digests before adoption). That doc's
+packaging work so far is scoped to `@minion-stack/shared`
+("Shared package release emission gate"), not `@minion-stack/ui`. Flagged
+`duplicate_candidate` rather than merged — a human should confirm this
+specific package/version is covered by the same remediation slice before
+folding it in or closing it separately.
