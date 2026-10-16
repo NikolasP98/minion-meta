@@ -17,18 +17,20 @@
     "contract.schema.json",
     "tokens.css",
     "utilities.css",
-    "README.md"
+    "README.md",
+    "inventory.json"
   ],
   "exports": {
     "./audit": "./audit.mjs",
     "./contract.json": "./contract.json",
     "./contract.schema.json": "./contract.schema.json",
     "./tokens.css": "./tokens.css",
-    "./utilities.css": "./utilities.css"
+    "./utilities.css": "./utilities.css",
+    "./inventory.json": "./inventory.json"
   },
   "scripts": {
-    "generate": "node scripts/generate-css.mjs",
-    "check:generated": "node scripts/generate-css.mjs --check",
+    "generate": "node scripts/generate-css.mjs && node scripts/generate-inventory.mjs",
+    "check:generated": "node scripts/generate-css.mjs --check && node scripts/generate-inventory.mjs --check",
     "build": "pnpm run check:generated && pnpm run test",
     "typecheck": "pnpm run check:generated",
     "test": "node --test tests/*.test.mjs"

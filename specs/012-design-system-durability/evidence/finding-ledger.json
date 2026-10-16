@@ -1,0 +1,408 @@
+{
+  "generated": "2026-10-16",
+  "source": ".lavish/design-system-audit-2026-10-16/evidence/{system-audit.findings.json,patterns-history.json}",
+  "deployment": {
+    "status": "pending",
+    "note": "filled from evidence/deployment.md after merges and production alias verification"
+  },
+  "findings": [
+    {
+      "id": "DS-01",
+      "title": "Contrast qualification misses raised surfaces",
+      "severity": "High",
+      "initiative": "I02",
+      "status": "implemented",
+      "implementation": "contract.json 1.1.0 270-pair matrix; 12 light-theme foregrounds adjusted; tokens tests 15/15; browser 270/270 ≥4.5 (design-browser-contrast.json)",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-02",
+      "title": "Hub redefines shared typography classes with smaller values",
+      "severity": "High",
+      "initiative": "I02",
+      "status": "implemented",
+      "implementation": "hub app.css drops duplicate .t-* ownership, imports shared utilities.css; recipes fixture computed roles; specs/012-design-system-durability/evidence/review-components-root.md",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-03",
+      "title": "Editable layouts parse and trust unversioned persisted objects",
+      "severity": "High",
+      "initiative": "I03",
+      "status": "implemented",
+      "implementation": "versioned parsers editable-grid.ts/card-fields.ts/daily-cards.ts with malformed/duplicate/non-finite tests; specs/012-design-system-durability/evidence/layouts-implementation.md",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-04",
+      "title": "Personal dashboard storage is scoped to dashboard ID only",
+      "severity": "Medium",
+      "initiative": "I03",
+      "status": "implemented",
+      "implementation": "createScopedPreference actor/org/surface keys; legacy unscoped values not migrated; storage-denial handling",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-05",
+      "title": "Layout reordering and resizing expose pointer-only operations",
+      "severity": "High",
+      "initiative": "I04",
+      "status": "implemented",
+      "implementation": "EditableGrid keyboard move/resize/hide/reset + aria-live announcements + focus retention; browser matrix dashboard keyboard cell",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-06",
+      "title": "Dense grid packing can reorder visual reading order",
+      "severity": "Medium",
+      "initiative": "I04",
+      "status": "implemented",
+      "implementation": "DOM-aligned layout flow in EditableGrid; container-driven compact mode",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-07",
+      "title": "Site's gate remains materially weaker than Hub's",
+      "severity": "Medium",
+      "initiative": "I08",
+      "status": "implemented",
+      "implementation": "site scripts/design-lint.mjs per-file ratchet, fail closed, fork-point base, CI exact base; negative tests 5/5",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-08",
+      "title": "Decorative themes override broad element/class selectors",
+      "severity": "Medium",
+      "initiative": "I02",
+      "status": "implemented",
+      "implementation": "CRT/voxelized selectors narrowed to data-part hooks; negative native control in controls recipe; browser decoration-isolation cell",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-09",
+      "title": "Shared touch sizing is opt-in rather than intrinsic",
+      "severity": "Medium",
+      "initiative": "I01/I02",
+      "status": "implemented",
+      "implementation": "intrinsic coarse targets in shared Toggle/Checkbox/Radio (+label min-width fix in pack h3bfd6bda); specs/012-design-system-durability/evidence/browser/controls-targets.json",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-10",
+      "title": "Package identity and source drift obscure qualification",
+      "severity": "Medium",
+      "initiative": "I01/I08",
+      "status": "implemented",
+      "implementation": "scripts/pack-design-system.mjs content-derived versions + receipt; consumer artifact tests pin receipt sha f5399651…",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-11",
+      "title": "Governance prose contains stale contradictory instructions",
+      "severity": "Medium",
+      "initiative": "I01",
+      "status": "implemented",
+      "implementation": "generated inventory.json; README maturity/deprecation rules; governance skill durable-qualification section",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-12",
+      "title": "Local lint success can conceal skipped changed-file enforcement",
+      "severity": "Medium",
+      "initiative": "I08",
+      "status": "implemented",
+      "implementation": "hub scripts/design-lint.mjs fails closed on missing base, reports fork point; design-lint.test.ts 3/3",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-13",
+      "title": "Pattern and customization APIs need a composed contract",
+      "severity": "Medium",
+      "initiative": "I07",
+      "status": "implemented",
+      "implementation": "hub tests/fixtures/design-durability recipes (collection, calendar, board, gallery, detail, form, dashboard, workspace, controls) + README placement/scroll/state ownership",
+      "deployment": "pending"
+    },
+    {
+      "id": "DS-14",
+      "title": "Primitive test coverage is mainly SSR structure at the package boundary",
+      "severity": "Medium",
+      "initiative": "I07/I08",
+      "status": "implemented",
+      "implementation": "browser matrix on the installed archive across themes/widths/pointer/zoom/keyboard; specs/012-design-system-durability/evidence/browser/matrix.md",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-01",
+      "title": "Persisted layout decoding is not a reusable validated contract",
+      "severity": "high",
+      "initiative": "I03",
+      "status": "implemented",
+      "implementation": "reusable validated parsers (see DS-03)",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-02",
+      "title": "Saved layouts do not have a clear persistence or failure promise",
+      "severity": "high",
+      "initiative": "I03",
+      "status": "implemented",
+      "implementation": "daily layout save outcomes: local-only/unknown/acknowledged; explicit \"Use saved layout\"; server keeps last-saved org only (documented limitation)",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-03",
+      "title": "Personalization scope is implicit and varies by surface",
+      "severity": "medium",
+      "initiative": "I03",
+      "status": "implemented",
+      "implementation": "explicit actor/org/surface scope for every personal preference (see DS-04)",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-04",
+      "title": "Dynamic layout catalog, insertion behavior and live configuration are not one contract",
+      "severity": "medium",
+      "initiative": "I03",
+      "status": "implemented",
+      "implementation": "catalog merge with aliases on every read; new cards take catalog position",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-05",
+      "title": "Autosave presentation cannot express the richer mutation outcomes",
+      "severity": "high",
+      "initiative": "I05",
+      "status": "implemented",
+      "implementation": "SaveStatus/SaveIndicator conflict | unknown | committed-refreshing; specs/012-design-system-durability/evidence/review-outcomes.md",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-06",
+      "title": "Versioned write adoption remains incomplete after the S4 follow-up",
+      "severity": "high",
+      "initiative": "I05",
+      "status": "implemented",
+      "implementation": "stock/items + scheduling/event-types PATCH require expectedUpdatedAt (400/409/404, DB-produced token); native PostgreSQL 5/5; dispatch-time token in hosts",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-07",
+      "title": "Dialog dirty protection still relies on consumer discipline",
+      "severity": "medium",
+      "initiative": "I05",
+      "status": "implemented",
+      "implementation": "explicit dirty baselines via Dialog/Modal; specs/012-design-system-durability/evidence/dialog-dirty-inventory.md",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-08",
+      "title": "DataTable keyboard interaction exceeds its exposed accessibility semantics",
+      "severity": "high",
+      "initiative": "I06",
+      "status": "implemented",
+      "implementation": "DataTable interactionMode + logical onRowActivate/getRowLabel/ariaLabel; sort rank announced",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-09",
+      "title": "Accessible names and residual errors remain outside the locale contract",
+      "severity": "medium",
+      "initiative": "I07",
+      "status": "implemented",
+      "implementation": "localized notification counts, calendar navigation, Sidebar/TimeOffCalendar/newContact names (en+es)",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-10",
+      "title": "The capture contract lacks critical durable-edit states",
+      "severity": "medium",
+      "initiative": "I07",
+      "status": "implemented",
+      "implementation": "fixture state selector covers conflict/unknown/committed-refreshing/local-only (visual placement evidence only)",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-11",
+      "title": "Form primitives lack a form-wide validation and guidance pattern",
+      "severity": "medium",
+      "initiative": "I06",
+      "status": "implemented",
+      "implementation": "canonical ErrorSummary + FormField helper+error ids; follow-up T028 on describedby order",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-12",
+      "title": "Shared record activation still relies on DOM coupling",
+      "severity": "medium",
+      "initiative": "I06",
+      "status": "implemented",
+      "implementation": "Picker no longer derives activation identity from DOM row indices",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-13",
+      "title": "Destructive confirmation has not converged on one interaction contract",
+      "severity": "medium",
+      "initiative": "I07",
+      "status": "implemented",
+      "implementation": "canonical ConfirmDialog for secret clearing and channel deletion; uncertain outcomes disable replay",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-14",
+      "title": "Legacy audit status is disconnected from merged implementation",
+      "severity": "medium",
+      "initiative": "I08",
+      "status": "implemented",
+      "implementation": "this ledger + proposal follow-ups table reconcile audit IDs to source/deploy receipts",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-15",
+      "title": "DataView is a headless selector, not yet a layout wrapper contract",
+      "severity": "medium",
+      "initiative": "I06",
+      "status": "decided",
+      "implementation": "DataView stays headless: collection/calendar pilots on existing shells did not prove a shared missing responsibility (spec I06, approved pass 2)",
+      "deployment": "pending"
+    },
+    {
+      "id": "PH-16",
+      "title": "DataTable preset and capability precedence need an executable API matrix",
+      "severity": "medium",
+      "initiative": "I06",
+      "status": "implemented",
+      "implementation": "explicit-false-over-preset precedence tests in data-view/DataTable",
+      "deployment": "pending"
+    }
+  ],
+  "historicalDispositions": [
+    {
+      "historicalItem": "Oct10 #1 DataView migration",
+      "status": "resolved in source",
+      "detail": "Catalog/sell use DataView, BoardView and shared view-pref; later sellable-card composition follows.",
+      "evidence": "e666c47d (#487); 024cd8b1 (#537)",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #2 preference idioms",
+      "status": "partial",
+      "detail": "View preference kit adopted by catalog/sell; server/device/org scope and calendar/card storage remain distinct.",
+      "evidence": "src/lib/components/data-view/view-pref.svelte.ts; calendar-prefs.svelte.ts; card-fields.svelte.ts",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #3 toolbar rows",
+      "status": "resolved in source",
+      "detail": "Shared .view-toolbar applied; interaction placement and responsive proof remain per surface.",
+      "evidence": "b1f7a59f (#489); TimeOffCalendar.svelte:166",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #4 six always-visible actions",
+      "status": "resolved in source",
+      "detail": "BookingsView hover rail and pointer-event behavior changed.",
+      "evidence": "b1f7a59f (#489); DataTable.svelte:5293-5305",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #5 orphan bookings view",
+      "status": "open in source",
+      "detail": "/scheduling/bookings still renders BookingsView rather than shared calendar/filter/switcher host.",
+      "evidence": "src/routes/(app)/scheduling/bookings/+page.svelte:5-24",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #6 third calendar renderer",
+      "status": "superseded / partial",
+      "detail": "S3 persisted date/view and adopted toolbar; vendor @event-calendar/core remains. Decide whether common behavior contracts suffice before forced replacement.",
+      "evidence": "665e52cf (#490); TimeOffCalendar.svelte:6-12,104-147",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #7 optimistic runtime kind",
+      "status": "resolved in source",
+      "detail": "CommandPolicy now confirmed | optimistic; createAutosave uses optimistic.",
+      "evidence": "c7f5b84c (#493); services/actions/definition.ts:29-37",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #8 second autosave wave",
+      "status": "partial",
+      "detail": "Second wave merged; home persona/channel/backups indicators exist. Do not treat every old candidate as automatically safe for autosave.",
+      "evidence": "c8a510db (#496); home/settings/+page.svelte:194-230",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #9 bare locale",
+      "status": "largely resolved in source",
+      "detail": "Full lexical scan finds only one no-arg call in server crm-journey; this is lexical evidence, not all localization proof.",
+      "evidence": "d3b2621f (#494); patterns-history.inventory.json",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #10 header truncation",
+      "status": "resolved in source with a11y follow-up",
+      "detail": "Header titles added and later widths improved. Native title alone is not robust touch/keyboard long-label disclosure.",
+      "evidence": "d3b2621f (#494); dafd1780 (#533); DataTable.svelte:3574,3583",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #11 shells locale",
+      "status": "resolved in source by recorded merge",
+      "detail": "Shell labels included in S5b; full runtime language switch not tested in this workstream.",
+      "evidence": "d3b2621f (#494)",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #12 dead keys",
+      "status": "resolved in source by recorded merge",
+      "detail": "S5b records dead-key cleanup.",
+      "evidence": "d3b2621f (#494)",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #13 version contract",
+      "status": "partial / still open for named targets",
+      "detail": "Six different guarded operations landed; stock items and event types still unguarded.",
+      "evidence": "c7f5b84c (#493); PH-06",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct10 #14 non-OK newContact",
+      "status": "resolved in source; transport residual",
+      "detail": "HTTP non-OK now toasts; thrown fetch still no catch.",
+      "evidence": "crm/customers/+page.svelte:637-653; PH-09",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Sep21 action-tracking and optimistic-interaction reviews",
+      "status": "partial adoption",
+      "detail": "Runtime, status components, autosave policy and some guards exist. 43-family catalog remains a useful operation qualification checklist; generic receipt/unknown handling is not implied.",
+      "evidence": "audits/2026-09-21-hub-action-tracking/EVALUATION.md; audits/2026-09-21-hub-optimistic-interactions/catalog.json",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct14 daily dashboard agent/live configuration",
+      "status": "open, explicitly documented",
+      "detail": "Manual per-user layout shipped; foreign-principal writer, live adoption and agent vocabulary explicitly TODO.",
+      "evidence": "proposals/2026-10-14-hub-daily-dashboard.md; daily/+page.svelte:13-17",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "July governance hardening P1-P9",
+      "status": "historical, partially superseded",
+      "detail": "Icon sizes, Chip, Avatar, primitives and ratchets are now present. Do not reopen original counts. P10 content layout and P11 forwarded-class conformance require separate package revalidation.",
+      "evidence": "specs/2026-07-15-ui-design-governance-hardening.md:63-105",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    },
+    {
+      "historicalItem": "Oct03 Hub/gateway readiness",
+      "status": "paused history, not resumed",
+      "detail": "Use findings as design evidence only; no implementation/deployment or closure claims inferred from old report.",
+      "evidence": "MEMORY.md:92-109; .lavish/hub-gateway-readiness-2026-10-03/report.html",
+      "reverified": "2026-10-16: unchanged by feature 012 unless noted in implementation evidence"
+    }
+  ]
+}
