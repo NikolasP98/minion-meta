@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T15:40:35.233Z",
+	"generatedAt": "2026-10-16T16:10:33.547Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3066,6 +3066,78 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T17:51:55.358Z"
+		},
+		{
+			"key": "pr:minion (gateway)#330",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#330 feat(whatsapp): connect verified teammates to their personal agents",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/330",
+			"sourceUpdatedAt": "2026-10-16T15:47:25Z",
+			"sourceFingerprint": "40241deb626c93fb56e3574c991611f754fd5d61e6f42adb5fb98d3a272e56b3",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#544",
+				"pr:minion-meta#810"
+			],
+			"rationale": "Gateway half of a three-repo WhatsApp-to-personal-agent feature still gated on draft status and cross-repo activation order.",
+			"evidence": [
+				"Draft remains gated on full capability parity and live-account qualification",
+				"Hub implementation must ship first (PR #544)",
+				"Production build and fresh CI are being completed; prior-head results are not current-head release proof"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T16:10:33.407Z"
+		},
+		{
+			"key": "pr:minion_hub#544",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#544 feat(whatsapp): let verified members reach their personal agents",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/544",
+			"sourceUpdatedAt": "2026-10-16T15:46:51Z",
+			"sourceFingerprint": "1b720a0a300f939691752d3821a12cb6d23e56b33ae5a39357521a7920421fd2",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#330",
+				"pr:minion-meta#810"
+			],
+			"rationale": "Hub half of the same linked WhatsApp feature set, explicitly sequenced with the gateway and schema PRs and still draft pending migration/activation.",
+			"evidence": [
+				"Related specification/schema: minion-meta#810; Gateway: minion-ai#330",
+				"Migration 20261016120000_internal_whatsapp.sql must precede gateway activation",
+				"Remains a draft; ordinary provisioned agents still lack shared isolated job/delegation integration"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T16:10:33.407Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-igv-rate-from-org-config",
@@ -7045,6 +7117,42 @@
 			"scoredAt": "2026-10-16T08:10:03.497Z"
 		},
 		{
+			"key": "pr:minion-meta#810",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#810 feat(whatsapp): bind internal assistant accounts to one organization",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/810",
+			"sourceUpdatedAt": "2026-10-16T15:40:08Z",
+			"sourceFingerprint": "09b99c400b7d3010c2ea461eb1d73254c58573ab4c3cf0720a01ed12893c6446",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#330",
+				"pr:minion_hub#544"
+			],
+			"rationale": "Canonical schema/spec anchor for the same three-way WhatsApp feature, explicitly linking gateway #330 and hub #544 as dependent implementations.",
+			"evidence": [
+				"Gateway: minion-ai#330; Hub: minion_hub#544; Scanner audit prerequisite: minion-ai#331",
+				"Shared DB build/typecheck/lint and 32 tests passed on the schema changes",
+				"Keep this PR in draft; Section 12 documents coordinated release and live-account tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T16:10:33.407Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-factory-0290030",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10601,43 +10709,6 @@
 			"scoredAt": "2026-10-14T17:51:55.358Z"
 		},
 		{
-			"key": "pr:minion (gateway)#330",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#330 feat(whatsapp): connect verified teammates to their personal agents",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/330",
-			"sourceUpdatedAt": "2026-10-16T09:07:31Z",
-			"sourceFingerprint": "bd488a477c14d235949bd74a9b1f6e6417e2ad3d77d9752c260081b775314cb7",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#544",
-				"pr:minion-meta#810",
-				"pr:minion (gateway)#331"
-			],
-			"rationale": "A large, well-specified WhatsApp integration remains explicitly blocked on live-account qualification, an unmerged security audit, and an unresolved default-agent activation gate.",
-			"evidence": [
-				"Draft remains gated on full capability parity and live-account qualification",
-				"Default-agent activation blocker: ... cannot yet activate an ordinary newly provisioned personal agent",
-				"Secrets job is blocked by the generated schema checksum false positive"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:11:31.900Z"
-		},
-		{
 			"key": "pr:minion_hub#279",
 			"kind": "pr",
 			"stage": "development",
@@ -10701,42 +10772,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T15:40:35.099Z"
-		},
-		{
-			"key": "pr:minion_hub#544",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#544 feat(whatsapp): let verified members reach their personal agents",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/544",
-			"sourceUpdatedAt": "2026-10-16T09:07:25Z",
-			"sourceFingerprint": "3e8268892884abad0dfec9db5f4e1aa2940ac4674091505bb73738f19be36335",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#330",
-				"pr:minion-meta#810"
-			],
-			"rationale": "Extensively validated Hub-side WhatsApp work is blocked by the same unresolved default-agent-activation and process-isolation gates as its gateway counterpart.",
-			"evidence": [
-				"This draft cannot yet activate an ordinary newly provisioned personal agent",
-				"Container command lifetime is also unqualified ... Admitted exec/process execution is therefore blocked",
-				"Full capability parity and live-account qualification remain blocked in the gateway runtime"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:11:31.900Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -13195,39 +13230,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T07:10:38.177Z"
-		},
-		{
-			"key": "pr:minion-meta#810",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#810 feat(whatsapp): bind internal assistant accounts to one organization",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/810",
-			"sourceUpdatedAt": "2026-10-16T14:59:21Z",
-			"sourceFingerprint": "009e72452394a7177f9990a38d6192b152c7c9320e93b29f994fab37c8251d47",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Draft PR with clear spec but explicitly unfinished implementation, multiple open gates, and no production rollout, so it needs continued dev work rather than immediate execution or pruning.",
-			"evidence": [
-				"Keep this PR in draft: full capability parity, coordinated migration and live-account qualification remain release gates",
-				"Default-agent activation blocker: this draft cannot yet activate an ordinary newly provisioned personal agent",
-				"Container command lifetime is also unqualified...pending owned process isolation and acknowledged revocation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T15:10:05.758Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -16076,20 +16078,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 6
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The merge-scan lists concrete medium-severity empty-catch and unchecked-access findings at specific file:line locations in gateway shutdown code and tests, which are bounded and actionable.",
+			"rationale": "Concrete, file-and-line-scoped reliability findings (silently swallowed shutdown errors, unchecked array access in tests) are small and immediately actionable.",
 			"evidence": [
-				"server-close.ts:184/189 empty-catch swallows quiesce()/close() errors, hiding shutdown failures",
-				"bridge-ws.test.ts:549,563 unchecked array/find access could crash tests"
+				"server-close.ts:184/189 empty-catch swallows quiesce()/close() errors, making shutdown failures invisible",
+				"bridge-ws.test.ts:549/563 unchecked array/find() access could crash"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T15:51:37.011Z"
+			"scoredAt": "2026-10-16T16:10:33.407Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-bb06e3a",
@@ -29624,6 +29626,39 @@
 			"scoredAt": "2026-10-15T19:56:02.583Z"
 		},
 		{
+			"key": "issue:minion-meta#502",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#502 [monitor:unstick] reconcile run d5454de8: claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/502",
+			"sourceUpdatedAt": "2026-09-18T14:17:27Z",
+			"sourceFingerprint": "0a73412e6957a3a158d176c0414da334641dad592d691ac041b64dbdb3be7ace",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A self-diagnosed transient exit-126 runner failure whose core reconcile work already succeeded, leaving only an unscoped future classifier idea.",
+			"evidence": [
+				"reconcile core work completed successfully ... git push to minion-meta:dev succeeded",
+				"exit 126 means the command/binary could not be executed at all, before any agent turn began",
+				"Recommendation: safe to retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T16:10:33.407Z"
+		},
+		{
 			"key": "issue:minion-meta#505",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29849,38 +29884,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T17:21:46.968Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The commit already adds the missing tool ids to TOOL_ORDER plus a regression test, so the fix is shipped and nothing remains outstanding.",
-			"evidence": [
-				"Adds both ids next to crm_query in TOOL_ORDER",
-				"regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T15:40:35.099Z"
 		},
 		{
 			"key": "issue:minion-meta#382",
@@ -32297,38 +32300,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T12:10:02.091Z"
-		},
-		{
-			"key": "issue:minion-meta#502",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#502 [monitor:unstick] reconcile run d5454de8: claude agent exec failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/502",
-			"sourceUpdatedAt": "2026-09-18T14:17:27Z",
-			"sourceFingerprint": "0a73412e6957a3a158d176c0414da334641dad592d691ac041b64dbdb3be7ace",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted diagnosis states the reconcile side effects already landed and the exit-126/turns=0 failure is a transient runner issue safe to retry, not bounded dev work.",
-			"evidence": [
-				"quoted diagnosis: 'reconcile side effects ... already landed, so a retry mainly needs to get the claude agent step executing again'",
-				"quoted diagnosis: 'Recommendation: safe to retry'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T15:51:37.011Z"
 		},
 		{
 			"key": "issue:minion-meta#507",
