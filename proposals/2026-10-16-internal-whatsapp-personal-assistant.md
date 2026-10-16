@@ -302,3 +302,13 @@ feature activation, and deployment are separate release actions.
   lifetime and completion authority; do not remove tools to declare parity. The
   runtime gate has the matching TODO. This is unfinished implementation, distinct
   from release authorization and live qualification.
+
+- **Container command lifetime:** stopping the host `docker exec` client does
+  not establish that in-container descendants stopped. Even foreground shell
+  commands can detach children. Admitted `exec` and `process` therefore fail
+  closed, including the low-level process runner, until container-owned process
+  groups/cgroups, revocation cancellation acknowledgement and admitted completion
+  delivery exist. Ordinary Hub behavior is unchanged; shell execution is not part
+  of the qualified WhatsApp slice. Matching TODOs are in gateway
+  `src/agents/bash/internal-assistant-process-lifetime.ts`. This must be completed
+  alongside shared isolation to meet the original capability-parity requirement.

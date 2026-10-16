@@ -543,7 +543,7 @@ The development branch stays disabled by default until qualification passes.
 
 ## 12. Implemented release controls and operator sequence
 
-The runtime currently refuses custom/plugin/host/CLI execution and unsigned
+The runtime currently refuses shell/process/custom/plugin/host/CLI execution and unsigned
 session delegation. This is a technical parity gap, not a change to the approved
 product scope. The proposal ledger and source `TODO(handoff)` markers track it.
 Until the missing runners preserve authority, activation remains gated unless
@@ -581,7 +581,7 @@ For an authorized release, perform these steps in order:
    network `none`, no extra mounts/setup commands/secret environment, read-only
    root, capabilities dropped, filesystem `workspaceOnly`, sandbox exec and no
    elevated or host-browser access. Configure the shared sandbox tool allowlist;
-   the default session/delegation tools are currently rejected. Do not enable
+   shell/process and the default session/delegation tools are currently rejected. Do not enable
    the account by silently reducing existing Hub capabilities.
 6. Bind the canonical provider account to exactly one organization and one
    durable auth directory. Enable the Hub flag and that channel's

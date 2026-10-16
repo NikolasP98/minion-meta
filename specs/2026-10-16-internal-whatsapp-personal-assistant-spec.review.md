@@ -181,3 +181,32 @@ process/session tools and other capabilities outside the qualified surface.
 This draft is therefore not activatable for an ordinary newly provisioned personal
 agent. Shared isolation/delegation remains substantive implementation work; it is
 not merely a deployment checkbox. See the proposal's default-provisioning entry.
+
+Two final boundary fixes were independently inspected by the orchestrator. Tool
+qualification now uses the same authoritative L1 permission filter before checking
+the original plugin/channel tool objects, and still runs before relevance filtering.
+Denied tools cannot reject a turn or reappear through dynamic loading; permitted
+unqualified tools still fail closed. Ordinary Hub tool construction gains no extra
+lookup. Separately, exec/process and the low-level process runner now refuse
+admitted execution: killing a host Docker client cannot prove its in-container
+descendants stopped. The shared qualified surface excludes shell execution until
+admission-owned process isolation and revocation are implemented.
+
+Focused results for those corrections: 25 tests across four permission/runtime/
+catalog files passed; 17 process-boundary tests passed. The existing five real
+background/PTY/yield/timeout cases passed with `/usr/bin` first in PATH. Their first
+run failed because the mise node shim rejected the test HOME's config trust; no
+ordinary Hub behavior was changed to address that environment issue.
+
+The combined post-review unit selection passed 106 tests across 19 files. The
+post-review production build passed, including extension bundles and SDK type
+declarations. Meta verification and Hub application/native QA CI passed at the
+previous documented heads; new commits require their own checks. Gateway's
+scanner baseline prerequisite and the full-parity activation blockers remain open.
+
+Final gateway combined `pnpm check` passed after correcting a test fixture's
+literal result type: format, TypeScript, lint (57 existing warnings, zero errors),
+manifest validation and all 161 capability entries. The product runtime was
+unchanged by that test-only correction. Gateway feature head is `87e6810590c`;
+Hub feature head is `787eb035`. Final pushes require fresh CI; no green-CI or
+release-readiness claim is made for an unobserved head.
