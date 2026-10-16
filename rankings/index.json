@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T20:09:59.414Z",
+	"generatedAt": "2026-10-16T20:40:21.176Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4031,6 +4031,40 @@
 			"scoredAt": "2026-10-13T18:51:50.506Z"
 		},
 		{
+			"key": "pr:minion (gateway)#332",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#332 fix(hub-tools): send x-minion-server-id on gateway→hub tool calls",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/332",
+			"sourceUpdatedAt": "2026-10-16T20:32:58Z",
+			"sourceFingerprint": "317dfa87222784542467b4c36c70dd2ab112349a013ca128ad4a3c94d0ebc655",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#811"
+			],
+			"rationale": "Fixes a concrete 403 loop in multi-org gateway token resolution with tests passing and a linked spec.",
+			"evidence": [
+				"sends x-minion-server-id header to fix wrong-row token resolution",
+				"133 tests passed, oxlint/oxfmt clean"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T20:40:21.032Z"
+		},
+		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -5302,38 +5336,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Commit fixes a real registry/TOOL_ORDER gap preventing two CRM tools from ever loading, with a regression test added, so verification is straightforward.",
-			"evidence": [
-				"TOOL_ORDER never listed their ids so createMinionTools() filters them out",
-				"adds regression test asserting TOOL_REGISTRY keys subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T20:09:59.258Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -10969,6 +10971,38 @@
 			"scoredAt": "2026-10-12T12:31:08.781Z"
 		},
 		{
+			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Deprecated i18n adapter has a demonstrated concurrency bug but migration requires re-verifying external API before implementation can start.",
+			"evidence": [
+				"setLanguageTag concurrency test shows deterministic locale bleed under Promise.all",
+				"plan requires re-reading paraglide-js v2 docs before coding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T20:40:21.032Z"
+		},
+		{
 			"key": "proposal:2026-09-11-hub-telemetry-boundary-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13362,38 +13396,6 @@
 			"scoredAt": "2026-10-12T12:31:08.781Z"
 		},
 		{
-			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Deprecated i18n adapter has a documented concurrency locale-bleed defect and a clear file-level migration plan, but no evidence of production impact yet.",
-			"evidence": [
-				"locale-parity.test.ts shows setLanguageTag cross-talk under concurrent requests",
-				"5 files (i18n.ts, hooks.server.ts, hooks.ts, canonical-path.ts, svelte.config.js) identified as needing changes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T20:21:12.233Z"
-		},
-		{
 			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15671,6 +15673,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T15:52:12.710Z"
+		},
+		{
+			"key": "pr:minion-meta#811",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#811 docs(spec): 012 — assistant tool-call hygiene",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/811",
+			"sourceUpdatedAt": "2026-10-16T20:32:46Z",
+			"sourceFingerprint": "e1a4c8c90361792285903d3ce36cdf781a4faf811bad2b0ef5f79357b2012bf2",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#332"
+			],
+			"rationale": "Spec documenting the same hub-tools fix plus a smaller hub follow-up, best tracked alongside the gateway PR.",
+			"evidence": [
+				"spec covers both the gateway fix PR and a hub #542 follow-up item"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-workdetail-summary-first",
@@ -26058,20 +26093,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "A committed tarball is a minor repo-hygiene issue but the reconciliation note flags that the suggested fix may not apply since the package is still unpublished, so a human decision is needed before action.",
+			"rationale": "Committed tarball bloats repo but the suggested bun-install fix may not apply while the package remains unpublished, per the reconciliation note.",
 			"evidence": [
-				"reconciliation note says fix 'may not apply while the package remains unpublished'",
-				"duplicate_candidate flagged against 2026-09-08-platform-qc-remediation.md"
+				"flagged duplicate_candidate pending license text and immutable version",
+				"fix suggestion may not apply while package is unpublished"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T20:21:12.233Z"
+			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
@@ -34574,6 +34609,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T03:52:23.150Z"
+		},
+		{
+			"key": "run:pixel-agents#38961199807",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "pixel-agents",
+			"title": "CI",
+			"sourceUrl": "https://github.com/pixel-agents-hq/pixel-agents/actions/runs/38961199807",
+			"sourceUpdatedAt": "2026-10-16T20:30:14Z",
+			"sourceFingerprint": "6a707735f72b897847dd7d574390d25c9d2bea1d48b40b022b53330955b619ea",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 5
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is just an in-progress CI run on main with no actionable content beyond pipeline status.",
+			"evidence": [
+				"status in_progress",
+				"summary: push on main"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
 			"key": "issue:minion-meta#666",
