@@ -17,50 +17,38 @@ Open-items ledger for the hub branch `feat/dev-local-gateway` (spec
 that mode on a live local stack on 2026-10-16; none of it blocks the mode's own goal (the
 floating assistant is online locally and answers — proven), and none of it is fixed by it.
 
-## 1. The local agent gets no hub data tools — `tool-rbac` finds no capability snapshot
+## 1. RESOLVED — the local agent had no hub tools: `hubMetrics.enabled` was missing
 
-**Observed.** With the local gateway up and the assistant online, `/en/sandbox` was asked
-*"show me revenue by product for this month as a bar chart"*. The agent answered *"I'll check
-the available datasets first."* then *"Let me look up the datasets."* and stalled. No chart
-was rendered: `iframe[sandbox]` stayed at 1 and `canvas` at 1, before and after.
+**Was**: with the gateway up and the assistant online, `/en/sandbox` asked for a revenue chart
+answered *"Let me look up the datasets."* and stalled, with
+`[agents/tool-rbac] hub capability fetch returned no snapshot` in the gateway log and an active
+tool set of only the 14 generic tools.
 
-The gateway log says why:
+**Root cause**: `resolveHubMetricsConfig` computes
+`valid = enabled && hubUrl && apiKey && serverId`
+(`minion/src/gateway/hub-metrics-config.ts:107`), where `enabled` is strictly
+`cfg.enabled === true`. The `minion.json` the bootstrap wrote carried `hubUrl`, `apiKey` and
+`serverId` but no `enabled`, so `valid` was false,
+`minion/src/gateway/server.impl.ts:1038-1053` called `setHubRest(null)`, and every hub tool
+answered *"hub is not connected"*. The gateway never issued an outbound request, which is why
+the hub dev server logged none. `MINION_SECRETS_KEY` was a red herring: it gates the secrets
+vault only, with documented graceful degradation (`server.impl.ts:421,457`).
 
-```
-[agents/tool-rbac] hub capability fetch returned no snapshot for personal-17d814…;
-                   permission-gated tools will be denied this window
-[agents/tool-select] [jit-select] {"catalogSize":14,"activeIds":["message","search_tools",
-  "load_tools","sessions_send","sessions_spawn","image","session_status","web_fetch",
-  "web_search","subagents","tts","sessions_list","sessions_history","summarize"]}
-```
+**Fixed** on `feat/dev-local-gateway`: `enabled: true`, plus `writeGatewayState` reconciling
+`gateway.hubMetrics` into an existing config (so a rotated token lands) and restarting the
+container when the config moved. Re-proved: the agent read real finance data and rendered a
+`REVENUE BY CUSTOMER — OCTOBER 2026` bar chart into a new `iframe[sandbox]`.
 
-The agent's active tool set is the 14 generic tools. No CRM, POS, stock or finance tool is in
-it, so there is no path from the prompt to the data. The hub dev server's log shows **no**
-inbound `/api/gateway/*` request at all for that window, so the capability fetch is failing
-before it reaches the hub, not being rejected by it. `gateway.hubMetrics` was written into the
-container's `minion.json` with `hubUrl=http://127.0.0.1:5199`, `serverId=qa-local-gateway` and
-the gateway token as `apiKey`; the matching `gateway` row carries `legacy_server_id =
-'qa-local-gateway'` and the sealed same token, which is what `resolveServerTokenAuth`
-(`minion_hub/src/server/auth/resolve-identity.ts:114`) matches on.
+**Still open from this**: a gateway whose hub link is misconfigured degrades silently to a
+tool-less agent. A startup log line naming `valid=false` and which field was missing would have
+turned a two-hour hunt into a one-line read. Worth proposing upstream in `minion`.
 
-**Next step**: find which URL the gateway's `tool-rbac` capability fetch actually calls and
-why it produces no snapshot — a wrong path, a pre-flight failure, or a rejection the gateway
-swallows. Start at `minion/src/agents/tool-rbac` and `minion/src/agents/tools/hub/hub-common.ts`.
-This is the difference between a local assistant that can chat and one that can work.
+## 2. `chat_artifact` and `canvas` denials are logged but not fatal
 
-## 2. `chat_artifact` and `canvas` are denied to a `standard` agent
-
-Same window, independent of item 1:
-
-```
-[security/denial-event] [DENIAL] tool_policy | chat_artifact | agentType (standard)
-[security/denial-event] [DENIAL] tool_policy | canvas        | agentType (standard)
-```
-
-Even with data in hand the agent could not have drawn the chart: the two tools that render one
-are gated on the agent's archetype, and `agents.create` makes a `standard` agent. Decide
-whether the local bootstrap should create the personas' agents with a different archetype, or
-whether the sandbox page's flow is meant to go through a different agent entirely.
+`[DENIAL] tool_policy | chat_artifact | agentType (standard)` and the same for `canvas` appear
+on every turn, yet the agent did render the chart once its hub tools worked — so the sandbox
+card goes through a different path. The denial lines are noise at best and a misleading signal
+at worst; worth confirming they are expected for a `standard` agent.
 
 ## 3. Gateway-mode rows are outside the seed matrix and its contract test
 
