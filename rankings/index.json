@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T11:39:52.747Z",
+	"generatedAt": "2026-10-17T12:40:13.828Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5162,6 +5162,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
+			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
+			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already ships the fix for the missing gateway-to-hub header, so the deployment health item describes work already completed.",
+			"evidence": [
+				"commit 1e7ec283 adds x-minion-server-id header to gateway→hub tool calls, fixing 403s from ambiguous token-to-row resolution"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T12:40:13.689Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -16860,6 +16891,38 @@
 			"scoredAt": "2026-10-17T11:39:52.610Z"
 		},
 		{
+			"key": "issue:minion-meta#514",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#514 [monitor:unstick] reconcile run a9044137 (minion-meta): claude provider exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/514",
+			"sourceUpdatedAt": "2026-09-19T10:17:29Z",
+			"sourceFingerprint": "cb154288a28debe009f64527462d19c354bd369ebb3a520da2ba5c632d902929",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The automated diagnosis identifies a recurring exit-126 infra fault for the claude binary with a concrete, bounded check to run on the runner.",
+			"evidence": [
+				"same exit-126/turns=0 signature recurred twice (a9044137 and companion run d863cd7d) in one window",
+				"diagnosis recommends checking runner box permissions/PATH/sandbox for the claude executable"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T12:40:13.689Z"
+		},
+		{
 			"key": "proposal:2026-08-23-hub-archived-warehouse-submit-guard",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27895,6 +27958,37 @@
 			"scoredAt": "2026-10-16T18:40:05.461Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 100375 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-17T12:23:06Z",
+			"sourceFingerprint": "eb2be62e4400d2dcef030d6fe9552e227ceace92d0686160d5ab9a2f058f9d17",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A raw dump of over 100000 upstream commits with no triage or scoping is not an actionable task as written.",
+			"evidence": [
+				"issue body lists 100375 new upstream commits with no selection, risk assessment, or scoped merge plan"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T12:40:13.689Z"
+		},
+		{
 			"key": "issue:minion-meta#460",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32576,38 +32670,6 @@
 			"scoredAt": "2026-10-17T04:05:06.282Z"
 		},
 		{
-			"key": "issue:minion-meta#514",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#514 [monitor:unstick] reconcile run a9044137 (minion-meta): claude provider exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/514",
-			"sourceUpdatedAt": "2026-09-19T10:17:29Z",
-			"sourceFingerprint": "cb154288a28debe009f64527462d19c354bd369ebb3a520da2ba5c632d902929",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake describes an infra exec-126 fault on a runner box that the diagnosis itself says is safe to retry and not a genuine task/spec failure.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0",
-				"Recommendation: safe to retry - the pipeline logic itself is fine"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T11:51:06.564Z"
-		},
-		{
 			"key": "issue:minion-meta#541",
 			"kind": "issue",
 			"stage": "proposal",
@@ -35058,38 +35120,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T17:51:58.013Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 100118 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-17T06:22:30Z",
-			"sourceFingerprint": "ea2f662f61743d67b6f7f0451ba87cd22e1e2d3d92004598b3c586f4acf9c1c7",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 0
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated upstream-sync notice listing over 100,000 commits with no scoped, actionable task.",
-			"evidence": [
-				"100118 new commit(s) available",
-				"tags: upstream-sync"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:36:09.620Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
