@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-17)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/+page.svelte:891` — the dialog names the VISIT's service titles, not every
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/+page.svelte#L891
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/+page.svelte:912` — the dialog names the VISIT's service titles, not every
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/+page.svelte#L912
