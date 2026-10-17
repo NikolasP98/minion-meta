@@ -4,6 +4,7 @@ pass: 3
 verdict: pending
 reviewer: root-reconciliation
 created: 2026-10-17
+reviewed_commit: 61f41156
 ---
 
 # Pass 3 — consumer-first correction awaiting review
@@ -13,7 +14,14 @@ audit confirms S5 trust consumers are still missing while the old plan places
 S4 producer retrofit first. The correction moves consumers first, retains
 current topic/manifest risk policy, removes stale corpus counts, and covers
 every new approval/admission edge. Spec Kit feature 104 supplies the remaining
-slice plan. Independent review and owner security approval remain pending.
+slice plan. Independent planning review is recorded below; owner security
+approval remains pending.
+
+Independent planning re-review at `61f41156` passes Standards and Spec after
+correcting retry topics/risk/policy compatibility and human/unclassified
+admission wording. Both entry points specify pinned canonical file resolution
+and revision comparison. This is plan readiness; the pending verdict remains
+until owner security approval, and certifies no implementation or release.
 
 The original pass-2 record is retained below as history; its approval language
 does not override this sidecar's current pending verdict.

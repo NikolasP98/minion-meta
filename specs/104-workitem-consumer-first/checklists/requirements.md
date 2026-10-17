@@ -21,7 +21,8 @@
 
 - [x] Every requirement maps to stories and acceptance scenarios.
 - [x] The consumer slice is independent of producer/backfill deployment.
-- [ ] Independent plan review and owner security approval are recorded.
+- [x] Independent plan review passes Standards and Spec at `61f41156`.
+- [ ] Owner security approval is recorded before implementation.
 
 ## Notes
 
