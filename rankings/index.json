@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T20:29:32.347Z",
+	"generatedAt": "2026-10-17T20:58:34.080Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26046,38 +26046,6 @@
 			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit is itself the completed fix for the gateway→hub 403 header bug, leaving no outstanding deployment action.",
-			"evidence": [
-				"fix(hub-tools): send x-minion-server-id on gateway→hub tool calls (#332)",
-				"commit already merged per summary"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T20:29:32.226Z"
-		},
-		{
 			"key": "pr:minion (gateway)#315",
 			"kind": "pr",
 			"stage": "development",
@@ -29686,38 +29654,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T14:21:18.524Z"
-		},
-		{
-			"key": "issue:minion-meta#751",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#751 [monitor:unstick] rank board goals run 285f5e11 failed: both ranking providers returned invalid JSON",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/751",
-			"sourceUpdatedAt": "2026-10-03T20:17:18Z",
-			"sourceFingerprint": "abd494adeedcfe17b18989dbab3d1301acb6cd5076f1f5753e4835c52412f30e",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake explicitly diagnoses a transient upstream provider JSON parse failure with no spec or data bug and recommends simple retry, so it is not actionable work in itself.",
-			"evidence": [
-				"This looks like a transient upstream provider/infra fault ... rather than a spec or data bug — the catalog itself built successfully",
-				"Recommendation: retry the run as-is; no spec or input fix is indicated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T20:49:12.337Z"
 		},
 		{
 			"key": "issue:minion-meta#755",
@@ -35148,6 +35084,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:53:38.303Z"
+		},
+		{
+			"key": "issue:minion-meta#751",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#751 [monitor:unstick] rank board goals run 285f5e11 failed: both ranking providers returned invalid JSON",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/751",
+			"sourceUpdatedAt": "2026-10-03T20:17:18Z",
+			"sourceFingerprint": "abd494adeedcfe17b18989dbab3d1301acb6cd5076f1f5753e4835c52412f30e",
+			"score": 15,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Issue itself concludes this is a transient upstream provider JSON-parse fault with no spec or data fix indicated, just a suggestion to retry.",
+			"evidence": [
+				"fallback also failed or returned invalid JSON",
+				"Recommendation: retry the run as-is; no spec or input fix is indicated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T20:58:33.947Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-2704064834",
