@@ -2,14 +2,16 @@
 
 **Input**: [plan.md](plan.md), [spec.md](spec.md), [research.md](research.md),
 [data-model.md](data-model.md), [admission contract](contracts/admission.md).
-**Prerequisite**: Owner security approval of the revised parent spec. All tasks
-below remain pending; this planning PR authorizes no implementation or release.
+**Prerequisite**: Owner security approval of the revised parent spec is recorded
+from merged PR #835 and the owner's confirmation. Implementation merge/release
+remains human-gated. Interactive execution follows the same scoped contract;
+the held dispatch procedure applies whenever a production Factory run is used.
 Factory paths below are relative to that independent repository.
 
 ## Phase 1: Setup
 
-- [ ] T001 Record owner approval and current source revisions in the parent spec `specs/2026-08-18-factory-workitem-handoff-schema-spec.md` before code.
-- [ ] T002 Follow plan.md's held dispatch procedure: establish/verify the existing operator brake through supported deployment (safe active-container adoption or drain), preserve prior pause authority, fetch this feature's complete plan/tasks at the approved flat parent's reviewed last-touch commit, and submit one Factory S5-only task. Before releasing only an owned unchanged hold, verify queued/never-started state, full stored task and exact `spec_commit_sha`; mismatch cancels only that untouched row and requires source refresh/review. Create an isolated Factory feature branch at the registered base and read `AGENTS.md`, `runner/package.json`, `runner/src/lifecycle.ts` and `runner/src/index.ts`.
+- [X] T001 Record owner approval and current source revisions in the parent spec `specs/2026-08-18-factory-workitem-handoff-schema-spec.md` before code. Owner reviewed meta `0dc0ece6`; Factory base `43a174b2`.
+- [ ] T002 For automated execution follow plan.md's held dispatch procedure, preserving prior pause authority and validating the never-started run's full task and exact `spec_commit_sha` before release. Interactive execution instead uses an isolated Factory feature branch with the full reviewed plan/tasks loaded directly, never POSTs an unstamped run, and changes no production pause state. Read Factory `AGENTS.md`, `runner/package.json`, `runner/src/lifecycle.ts` and `runner/src/index.ts` before either path.
 
 ## Phase 2: Foundational contract
 
