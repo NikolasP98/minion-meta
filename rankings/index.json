@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T04:09:55.320Z",
+	"generatedAt": "2026-10-17T04:32:16.953Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -633,41 +633,6 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
-			"key": "pr:minion_hub#541",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#541 fix(security): gateway credential endpoints are scoped to the gateway's org; channel-identities requires a server token or admin",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/541",
-			"sourceUpdatedAt": "2026-10-15T21:15:56Z",
-			"sourceFingerprint": "8162e70e70addf283b4fef9e4bebe94da3be654fe46c1cc0fdc3cc848c3c87fb",
-			"score": 82,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-15-agent-harness-restoration",
-				"pr:minion_hub#540"
-			],
-			"rationale": "Fixes two CRITICAL cross-org authorization defects (S1/S2) with scoped tests and non-leaking fallback responses, ready to merge.",
-			"evidence": [
-				"gateway branch exempted the ownership check, letting any org's token read any user's decrypted Google refresh token",
-				"channel-identities returned every user's phone/channel mapping to any logged-in member"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T21:22:11.240Z"
-		},
-		{
 			"key": "proposal:2026-10-13-gateway-swarm-blue-green-slots",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -969,6 +934,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T13:51:35.437Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-807f018d50fd",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/channel-identities/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-807f018d50fd.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "54bb1d35aa2952328bd5d855b79fb1de77d653417c9fc74e9be611ac1eb2128a",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A merged endpoint returns channel identities across all organizations instead of org-scoping them, a real multi-tenant data isolation breach with a clear, bounded fix.",
+			"evidence": [
+				"TODO(handoff) states the result is still platform-wide, not org-scoped",
+				"diagnosis flags violation of the canonical withOrgCore access pattern"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-tenant-boundaries-spec",
@@ -2662,40 +2659,6 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
-			"key": "pr:minion_hub#554",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#554 fix(pos): a role that cannot void a sale is not offered it, and a refusal says why",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/554",
-			"sourceUpdatedAt": "2026-10-17T04:00:40Z",
-			"sourceFingerprint": "c0dfa3e5c555b51a3d371e7dcdf243e2fde3e380042536e5da00a1af690c7c05",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#823"
-			],
-			"rationale": "Production RBAC gap is blocking a real customer org from voiding paid tickets, and the fix is tested and ready as a draft PR.",
-			"evidence": [
-				"FACES staff role got generic 403 toast trying to void a paid ticket on production",
-				"17 tests pass including 5 new role-gating cases"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:05:06.282Z"
-		},
-		{
 			"key": "spec:2026-08-31-factory-supervised-release-defense-in-depth-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3994,40 +3957,6 @@
 			"scoredAt": "2026-10-13T18:51:50.506Z"
 		},
 		{
-			"key": "pr:minion (gateway)#332",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#332 fix(hub-tools): send x-minion-server-id on gateway→hub tool calls",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/332",
-			"sourceUpdatedAt": "2026-10-16T20:32:58Z",
-			"sourceFingerprint": "317dfa87222784542467b4c36c70dd2ab112349a013ca128ad4a3c94d0ebc655",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#811"
-			],
-			"rationale": "Fixes a concrete 403 loop in multi-org gateway token resolution with tests passing and a linked spec.",
-			"evidence": [
-				"sends x-minion-server-id header to fix wrong-row token resolution",
-				"133 tests passed, oxlint/oxfmt clean"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T20:40:21.032Z"
-		},
-		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -4584,6 +4513,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:34:30.416Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
+			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
+			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#39001758368",
+				"run:minion (gateway)#39001758370"
+			],
+			"rationale": "The commit fixes a real cross-org 403 permission bug but lands in the same DEV push where both CI and npm publish failed, so deploy health needs joint triage with those runs.",
+			"evidence": [
+				"commit fixes 403 caused by missing x-minion-server-id header",
+				"same-repo DEV push triggered CI and npm publish failures within ~2 minutes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
 		},
 		{
 			"key": "issue:minion-meta#354",
@@ -6508,39 +6472,6 @@
 			"scoredAt": "2026-10-10T20:14:10.244Z"
 		},
 		{
-			"key": "run:minion (gateway)#38868043873",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/38868043873",
-			"sourceUpdatedAt": "2026-10-16T07:53:24Z",
-			"sourceFingerprint": "8d93a4475251c3147c6f3ee28328f6da902b896618efbea688b27199daf00a69",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failed CI run on the DEV branch via manual dispatch lacks detail on cause or scope, warranting investigation before further action.",
-			"evidence": [
-				"status failure",
-				"workflow_dispatch on DEV",
-				"CI workflow for minion gateway repo"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T08:10:03.497Z"
-		},
-		{
 			"key": "spec:2026-09-02-hub-team-hr-module-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -6850,41 +6781,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T06:21:35.749Z"
-		},
-		{
-			"key": "pr:minion-meta#809",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#809 docs(spec): 011 — dev:local gateway mode",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/809",
-			"sourceUpdatedAt": "2026-10-16T08:05:45Z",
-			"sourceFingerprint": "196a2c3c5f3442fd7bd648ddc5c173f602da28b7369eccad0645de874a0b2216",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#543"
-			],
-			"rationale": "The companion Spec Kit spec/plan/tasks artifact for the same dev-local-gateway feature is well-specified with explicit DELTA rows and constitution checks, open and awaiting progress alongside its implementation PR.",
-			"evidence": [
-				"nine-row DELTA table (D1-D9) each with closing proof",
-				"proposal-index check passed (803 proposals, index up to date)",
-				"Principle V applies, implementation PR opens as draft for owner review and merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T08:10:03.497Z"
 		},
 		{
 			"key": "pr:minion-meta#810",
@@ -7720,6 +7616,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:30:17.772Z"
+		},
+		{
+			"key": "pr:minion_hub#542",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#542 feat(sandbox): admin-only Sandbox page — agent-built visuals in sandboxed iframes over one configurable, RBAC-aware query endpoint (POC)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/542",
+			"sourceUpdatedAt": "2026-10-17T04:27:36Z",
+			"sourceFingerprint": "44b6c6770d1d33e005b6e77f5544b4a68bdc37bf3c5e9d1482ab04c9ff470c0d",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-16-hub-sandbox-builder-context-engineering"
+			],
+			"rationale": "A well-specified, admin-only sandbox POC with passing gates and fixed security findings is ready for owner review and merge.",
+			"evidence": [
+				"449 vitest passing including sandbox suites",
+				"2 HIGH security fail-open findings fixed with tests",
+				"draft PR awaiting owner approval gate per Principle V"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -9680,39 +9611,6 @@
 			"scoredAt": "2026-10-15T18:21:17.909Z"
 		},
 		{
-			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "3e87c90d1c3ca27b620741f3e1e41cdf1785974f3addd182f742dbb1c9414070",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Measured per-turn token cost problem with a concrete router design, endpoint, and test ledger ready to implement.",
-			"evidence": [
-				"Envelope total ≈16,096 chars ≈ 4,000 tokens...every turn",
-				"New shared manifest table",
-				"turn-router.test.ts (11 cases"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T01:52:23.197Z"
-		},
-		{
 			"key": "proposal:2026-10-12-hub-onboarding-org-user",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10439,73 +10337,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:21:58.865Z"
-		},
-		{
-			"key": "pr:minion_hub#542",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#542 feat(sandbox): admin-only Sandbox page — agent-built visuals in sandboxed iframes over one configurable, RBAC-aware query endpoint (POC)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/542",
-			"sourceUpdatedAt": "2026-10-16T23:35:57Z",
-			"sourceFingerprint": "46917c1865557d75eaf65b6cdc58ca333aee5a473ad586f193fdcb1a1addc2d5",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#819"
-			],
-			"rationale": "A well-gated admin-only POC with passing checks and a security review, but explicitly draft/local-only with out-of-scope items deferred to a followups proposal.",
-			"evidence": [
-				"POC, draft — owner approval gate per Principle V",
-				"Security review: 2 HIGH fail-open findings → fixed with tests",
-				"local stack has no gateway... all in meta proposal with TODO(handoff) at each site"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:40:14.863Z"
-		},
-		{
-			"key": "pr:minion_hub#543",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#543 feat(qa): dev:local --gateway — a local Minion gateway so the assistant is online on a dev server",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/543",
-			"sourceUpdatedAt": "2026-10-16T15:30:22Z",
-			"sourceFingerprint": "d6406da6e70a316a9498264f7264acf45770d4bf48829924589a58b6acbac769",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A well-specified draft PR with detailed implementation already addressing the owner's explicit request for a local gateway, needing only owner review/merge.",
-			"evidence": [
-				"Owner quote: 'at least there should be a mode where a local server can ship with it enabled'",
-				"Two review fixes (permissions, hubMetrics.enabled) already folded in"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T15:40:35.099Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -11576,6 +11407,38 @@
 			"scoredAt": "2026-10-16T11:40:17.688Z"
 		},
 		{
+			"key": "issue:minion-meta#608",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#608 [monitor:unstick] reconcile run 4d7752c5 (minion-meta): agent launch exit-126, task work completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/608",
+			"sourceUpdatedAt": "2026-09-26T03:17:59Z",
+			"sourceFingerprint": "0b11c19e4e065e76411582b3f7380f7b78fc21d2446dd79f4add237a445d3812",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A recurring exit-126 agent-launch failure across three runs in 90 minutes has a clear, bounded fix recommendation even though the underlying task output still succeeded.",
+			"evidence": [
+				"exit code 126 with turns=0 across 3 runs in ~90 minutes",
+				"diagnosis recommends checking claude CLI exec permissions rather than a spec fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
+		},
+		{
 			"key": "issue:minion-meta#642",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12463,6 +12326,76 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
+			"key": "run:minion (gateway)#39001758368",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "npm publish",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39001758368",
+			"sourceUpdatedAt": "2026-10-17T04:13:59Z",
+			"sourceFingerprint": "fbef93337bcc4c12e23ea3107ac0b0cf5b35b864f7c0ad16c3ad2403b25a5ef0",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#39001758370",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "This npm-publish failure landed on the same DEV push as a CI failure and a deploy health record, so it should be triaged jointly rather than as an isolated run.",
+			"evidence": [
+				"npm publish run failed on push to DEV",
+				"same-minute CI run on the same branch also failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
+		},
+		{
+			"key": "run:minion (gateway)#39001758370",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39001758370",
+			"sourceUpdatedAt": "2026-10-17T04:15:26Z",
+			"sourceFingerprint": "f259fec1672ead5455720ee2f4bf63da482ebd5d5742292e3011836f03a246b5",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"run:minion (gateway)#39001758368",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "This CI failure landed on the same DEV push as the npm-publish failure and the gateway header-fix deploy, so these three should be investigated as one build-breakage goal.",
+			"evidence": [
+				"CI run failed on push to DEV within 2 minutes of the npm publish failure",
+				"both runs are in the same repo as the just-landed x-minion-server-id header fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-msteams-large-upload-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -12848,6 +12781,40 @@
 			"scoredAt": "2026-10-17T00:40:38.379Z"
 		},
 		{
+			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-10-16-hub-sandbox-builder-context-engineering"
+			],
+			"rationale": "The ledger shows most of the JEV turn router already measured and tested, so the goal needs re-scoping to just the remaining open items like threshold calibration.",
+			"evidence": [
+				"measured envelope drop from a ~16,096 char baseline with test proof",
+				"DELTA table lists completed callsite wiring and PostHog event work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
+		},
+		{
 			"key": "issue:minion-meta#424",
 			"kind": "issue",
 			"stage": "proposal",
@@ -13056,75 +13023,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T23:12:37.126Z"
-		},
-		{
-			"key": "pr:minion_hub#552",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#552 feat(qa): seed 90 days of realistic bookings, sales and invoices for the business org",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/552",
-			"sourceUpdatedAt": "2026-10-17T03:48:52Z",
-			"sourceFingerprint": "6ff7b9e410e1a802d8c2651c750329ccca66037b2c9e8ea4f1da4e3c35342db5",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#821"
-			],
-			"rationale": "Open PR with proven idempotent 90-day QA seed generator, passing gates including DB-backed tests, that fixes empty time-based views on the QA sandbox.",
-			"evidence": [
-				"bun run vitest run scripts/qa/seed → 0 (240 tests)",
-				"Applied to running dev:local stack, 192 bookings proven non-zero",
-				"bun run check → 0 errors"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T03:51:00.439Z"
-		},
-		{
-			"key": "pr:minion_hub#553",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#553 fix(assistant): no empty bubble while the reply is pending",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/553",
-			"sourceUpdatedAt": "2026-10-17T04:01:23Z",
-			"sourceFingerprint": "876fbe3cdd90f3a8d4a50d5851adbbaf2dcbd36eabf7f3130b73d150abbe7d94",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#822"
-			],
-			"rationale": "Well-documented UI fix with passing tests and Playwright reproduction proof is ready to merge.",
-			"evidence": [
-				"23 tests pass across ui-blocks.test.ts and src/lib/chat",
-				"Playwright MutationObserver proof shows zero empty bubble states after the fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:05:06.282Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -14423,6 +14321,39 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
+			"key": "pr:minion-meta#809",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#809 docs(spec): 011 — dev:local gateway mode",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/809",
+			"sourceUpdatedAt": "2026-10-17T04:20:07Z",
+			"sourceFingerprint": "036a24dc79a4cd40e4624952badb79fead66fc26cdcebca6e89aad16e127bc6e",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A thoroughly specified, evidence-backed spec for enabling local gateway testing is ready to move into implementation.",
+			"evidence": [
+				"AS-IS lists four file:line mechanisms keeping the assistant offline locally",
+				"nine-row DELTA table with proof plan",
+				"proposal-index check passed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
+		},
+		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15472,109 +15403,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T15:52:12.710Z"
-		},
-		{
-			"key": "pr:minion-meta#811",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#811 docs(spec): 012 — assistant tool-call hygiene",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/811",
-			"sourceUpdatedAt": "2026-10-16T20:32:46Z",
-			"sourceFingerprint": "e1a4c8c90361792285903d3ce36cdf781a4faf811bad2b0ef5f79357b2012bf2",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#332"
-			],
-			"rationale": "Spec documenting the same hub-tools fix plus a smaller hub follow-up, best tracked alongside the gateway PR.",
-			"evidence": [
-				"spec covers both the gateway fix PR and a hub #542 follow-up item"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T20:40:21.032Z"
-		},
-		{
-			"key": "pr:minion-meta#812",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#812 docs(spec): 013 — sandbox canvas awareness, editable layout, two-tier builder",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/812",
-			"sourceUpdatedAt": "2026-10-16T21:09:01Z",
-			"sourceFingerprint": "899221c71427cf5e6eb900aae8594fb2cbb917461afc776222f865cbc4e3360f",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#542",
-				"pr:minion-meta#808"
-			],
-			"rationale": "This is an owner iteration spec whose implementation lands inside hub #542, so it should be grouped with that PR rather than tracked separately.",
-			"evidence": [
-				"Implementation lands inside hub #542",
-				"Owner iteration on the sandbox POC",
-				"Out of scope: tier 1 as a sub-session"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T21:10:08.903Z"
-		},
-		{
-			"key": "pr:minion-meta#823",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#823 docs(spec): 017 — POS void refusal names its reason (FACES staff lacks pos:manage)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/823",
-			"sourceUpdatedAt": "2026-10-17T03:55:09Z",
-			"sourceFingerprint": "47523ad9aa4ed6999f2b51c2b8e769801d9b018e33a2c270990df777a18e3961",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#554"
-			],
-			"rationale": "Spec Kit documentation for the POS void RBAC fix is complete and passes the spec-index check.",
-			"evidence": [
-				"spec/plan/tasks for 017-faces-pos-void-failure written",
-				"spec-index.mjs --check passes with 288 specs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:05:06.282Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-workdetail-summary-first",
@@ -17587,6 +17415,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T07:52:21.014Z"
+		},
+		{
+			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Sandbox builder — programmatic context engineering (defaults, lint-as-feedback, JEV style cards, pi context pruning)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-16-hub-sandbox-builder-context-engineering.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "95afc3b5d30009d8f2f8f2eba3f273ad62bd8aa4e2d504eb510b4daa1f6688bf",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#542",
+				"proposal:2026-10-12-hub-assistant-jev-context-router"
+			],
+			"rationale": "This follow-up context-engineering work for sandbox charts and JEV manifests directly extends the sandbox PR and the JEV turn router, so it should be tracked as one goal rather than three.",
+			"evidence": [
+				"cites the same sandbox bridge.ts/tools.ts files as pr:minion_hub#542",
+				"proposes reusing assistant-router.service.ts JEV classifier from the turn-router work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1643634086",
@@ -20152,38 +20015,6 @@
 			"scoredAt": "2026-10-17T00:40:38.379Z"
 		},
 		{
-			"key": "issue:minion-meta#608",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#608 [monitor:unstick] reconcile run 4d7752c5 (minion-meta): agent launch exit-126, task work completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/608",
-			"sourceUpdatedAt": "2026-09-26T03:17:59Z",
-			"sourceFingerprint": "0b11c19e4e065e76411582b3f7380f7b78fc21d2446dd79f4add237a445d3812",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The diagnosis is clear and the task output already succeeded, but the fix requires a human infra check of the launcher image rather than a scoped engineering task.",
-			"evidence": [
-				"agent process exited 126 with turns=0, consistent with exec-time failure, not a task/spec problem",
-				"identical signature across 3 runs in ~90 minutes; recommend a host-classifier signature, not a spec fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T04:21:54.495Z"
-		},
-		{
 			"key": "issue:minion-meta#639",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22226,38 +22057,6 @@
 			"scoredAt": "2026-10-16T22:10:24.040Z"
 		},
 		{
-			"key": "pr:minion-meta#824",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#824 docs(proposal): sandbox builder — programmatic context engineering",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/824",
-			"sourceUpdatedAt": "2026-10-17T04:00:20Z",
-			"sourceFingerprint": "e5f3d31d2af97e5cfc7330af9b29dcb824111d4517f6a1de57e32c5a7c276295",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Reasonable value-ordered proposal for sandbox builder context engineering but still at proposal stage without a plan or implementation evidence.",
-			"evidence": [
-				"four mechanisms S1-S4 listed in value order with explicit out-of-scope items",
-				"no plan.md or tasks.md referenced yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:05:06.282Z"
-		},
-		{
 			"key": "proposal:2026-10-14-hub-global-class-selector-lint",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23373,74 +23172,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T19:51:35.163Z"
-		},
-		{
-			"key": "pr:minion-meta#821",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#821 docs(spec): 015 QA seed — 90 days of realistic business activity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/821",
-			"sourceUpdatedAt": "2026-10-17T03:49:02Z",
-			"sourceFingerprint": "44af684a8e8a8a4c81d02c2050d9b3209c2ed901d41c7806fa0b2de1efa3871c",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#552"
-			],
-			"rationale": "Spec Kit documentation companion to minion_hub#552 that should be evaluated/merged alongside its implementation PR.",
-			"evidence": [
-				"Spec Kit artifacts for minion_hub #552",
-				"same diagnosis and out-of-scope notes as #552"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T03:51:00.439Z"
-		},
-		{
-			"key": "pr:minion-meta#822",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#822 docs(spec): 016 floating assistant — no empty bubble while the reply is pending",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/822",
-			"sourceUpdatedAt": "2026-10-17T03:52:31Z",
-			"sourceFingerprint": "728fe4f25a6cb75ca609c195cb8a424fcbfa0272b4b15a4c8cb23f0a902a1634",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#553"
-			],
-			"rationale": "Spec Kit documentation companion to the hub empty-bubble fix is complete and ready to merge alongside it.",
-			"evidence": [
-				"spec/plan/tasks for 016-assistant-empty-turn-bubble written",
-				"references hub PR #553 as the implementation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:05:06.282Z"
 		},
 		{
 			"key": "proposal:2026-08-17-meta-spec-index-project-possibly-shipped",
@@ -28794,41 +28525,6 @@
 			"scoredAt": "2026-10-13T05:18:54.558Z"
 		},
 		{
-			"key": "pr:minion-meta#819",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#819 docs(spec): 014 — sandbox component library (save, share, drag in)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/819",
-			"sourceUpdatedAt": "2026-10-16T23:33:02Z",
-			"sourceFingerprint": "5857ee73578b080fd42db1cb95bf8190a176555c6fe9ae6853ee07aa39c33c6e",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#542"
-			],
-			"rationale": "A small spec doc for a sandbox component-library feature whose implementation is stated to land inside hub #542, so it should not be tracked as a separate goal.",
-			"evidence": [
-				"Implementation lands inside hub #542",
-				"Out of scope: agent-facing library tool, previews/thumbnails, versioning, cross-org sharing",
-				"status: open"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:40:14.863Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29174,6 +28870,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:15:50.643Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "50f393b420ee06e5c582549b63286c43e00174e125433b4401c4eafd46b9cc4e",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This automated ledger bundles many unrelated TODO markers across different subsystems into one artifact, so it cannot produce one effective outcome and should be split into per-issue goals.",
+			"evidence": [
+				"lists 17+ distinct markers spanning POS voids, HR schema, auth gating, and phone failures",
+				"each marker references a different file/line with no shared theme"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:32:16.747Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
@@ -34979,38 +34707,6 @@
 			"scoredAt": "2026-10-17T04:05:06.282Z"
 		},
 		{
-			"key": "run:minion_hub#39001025607",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39001025607",
-			"sourceUpdatedAt": "2026-10-17T04:02:06Z",
-			"sourceFingerprint": "dbe8db71c429e105cc68bcbb0175788fd057286803d763108d1f5547e199746d",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run status is not an actionable goal and will resolve on its own.",
-			"evidence": [
-				"status is in_progress",
-				"triggered by a push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:05:06.282Z"
-		},
-		{
 			"key": "issue:minion-meta#666",
 			"kind": "issue",
 			"stage": "proposal",
@@ -35873,38 +35569,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:17:03.102Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "65c8c5043628af72d584bfe5f29d19ce8d6a078e414b1f742833e1da4fbfa7bb",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This handoff marker cites line numbers inside rankings/index.json itself (the ranking output file) quoting fragments of other proposals' text, not real TODO markers in source code.",
-			"evidence": [
-				"all cited locations are 'rankings/index.json' lines",
-				"quoted snippets are prose fragments from unrelated proposal summaries, not code comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:09:55.152Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
