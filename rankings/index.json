@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-16T23:50:42.644Z",
+	"generatedAt": "2026-10-17T00:01:40.237Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7724,74 +7724,6 @@
 			"scoredAt": "2026-10-14T07:52:21.014Z"
 		},
 		{
-			"key": "issue:minion-meta#743",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#743 [monitor:unstick] reconcile run a5fa3e14 (minion-meta): claude agent exec failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/743",
-			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
-			"sourceFingerprint": "6d07186d1654c6db0af411f66c9e908eaaf972051e82f2b0dd551650015b6d2d",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#744"
-			],
-			"rationale": "Automated exit-126 exec failure alert duplicating #744's diagnosis of the same runner-level claude-binary issue and should become one fix-the-box goal.",
-			"evidence": [
-				"exit-126, turns=0 indicates binary not executable, not task logic",
-				"identical signature in run f8c07e90 ~30 min earlier same repo"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T23:51:20.697Z"
-		},
-		{
-			"key": "issue:minion-meta#744",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#744 [monitor:unstick] reconcile run f8c07e90 (minion-meta): claude agent exec failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/744",
-			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
-			"sourceFingerprint": "9ef0ed064d5e18aa81d0cbd5d9aef74a2588edfa2b319e5edeaef28e0242acf8",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#743"
-			],
-			"rationale": "Second instance of the same persistent runner-level claude-binary exec failure as #743; should be consolidated into a single infra fix goal.",
-			"evidence": [
-				"same exit-126/turns=0 signature as run a5fa3e14 about 30 minutes later",
-				"recommends checking runner provisioning/permissions before retry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-09T23:51:20.697Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9392,6 +9324,74 @@
 			"scoredAt": "2026-10-15T01:22:04.986Z"
 		},
 		{
+			"key": "issue:minion-meta#743",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#743 [monitor:unstick] reconcile run a5fa3e14 (minion-meta): claude agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/743",
+			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
+			"sourceFingerprint": "6d07186d1654c6db0af411f66c9e908eaaf972051e82f2b0dd551650015b6d2d",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#744"
+			],
+			"rationale": "Same exit-126/turns=0 runner-level agent-exec failure signature as #744, 30 minutes apart, so both should become one host-provisioning fix/classifier goal.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0",
+				"identical signature occurred in run f8c07e90 ~30 minutes earlier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T00:01:40.082Z"
+		},
+		{
+			"key": "issue:minion-meta#744",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#744 [monitor:unstick] reconcile run f8c07e90 (minion-meta): claude agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/744",
+			"sourceUpdatedAt": "2026-10-02T23:17:33Z",
+			"sourceFingerprint": "9ef0ed064d5e18aa81d0cbd5d9aef74a2588edfa2b319e5edeaef28e0242acf8",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#743"
+			],
+			"rationale": "Duplicate runner-level exec-126 signature paired with #743; grouping into one fix-the-box + classifier goal avoids redundant work.",
+			"evidence": [
+				"exec-level/infra failure (126 = found but not executable)",
+				"same signature as run a5fa3e14 (also minion-meta reconcile) about 30 minutes later"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T00:01:40.082Z"
+		},
+		{
 			"key": "issue:minion-meta#795",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9422,39 +9422,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T02:21:17.608Z"
-		},
-		{
-			"key": "pr:minion_hub#549",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#549 feat(design): page archetype conformance, one dominant header action, collapse-by-purpose on pilots",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/549",
-			"sourceUpdatedAt": "2026-10-16T23:45:27Z",
-			"sourceFingerprint": "b3b7fa520ee298d000a17f9be56046fcb7c58f072a2969fa262f6b910864fa26",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A well-specified, broadly-scoped design-conformance PR with concrete tests is already drafted and just needs coordinator check/build to land.",
-			"evidence": [
-				"Spec 013 Stream C items 4, 6, 7",
-				"91 conforming / 46 allow-listed pages tracked by new archetype tests",
-				"Draft — the coordinator runs check/build and marks it ready"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:50:42.504Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -13121,38 +13088,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T20:52:04.898Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The missing-TOOL_ORDER bug is already fixed and shipped with a regression test, so no further action remains.",
-			"evidence": [
-				"Adds both ids next to crm_query in TOOL_ORDER",
-				"regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:50:42.504Z"
 		},
 		{
 			"key": "issue:minion-meta#424",
@@ -23922,6 +23857,38 @@
 			"scoredAt": "2026-10-16T01:29:38.644Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "954eb4397c312e7286168ef454aa9230ab2bd3b8a41375098c64f472f8f7a58f",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is an aggregated ledger of 18+ unrelated TODO(handoff) markers across many files/features, so it cannot become one actionable goal as framed.",
+			"evidence": [
+				"18 distinct rankings/index.json line markers listed",
+				"markers span unrelated topics (POS, auth, backup scheduler, a11y, db schema)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T00:01:40.082Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-1b3a991",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34402,39 +34369,6 @@
 			"scoredAt": "2026-10-12T12:32:02.784Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "08d172bf3843ea23396c26d291b0efa0180711f79bf42d247332fac8f9cbb775",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This proposal bundles dozens of unrelated markers from disparate domains into one file, so it cannot be resolved as a single coherent goal.",
-			"evidence": [
-				"rankings/index.json:16832 startBackupScheduler() has no call site anywhere in src/",
-				"rankings/index.json:6566 provider JSON reader is not byte bounded before res.json()",
-				"rankings/index.json:4684 an unlock deletes the row and leaves no audit trace"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:50:42.504Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34858,14 +34792,14 @@
 			"scoredAt": "2026-10-10T03:52:23.150Z"
 		},
 		{
-			"key": "run:minion_hub#38983291025",
+			"key": "run:minion_hub#38984214882",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38983291025",
-			"sourceUpdatedAt": "2026-10-16T23:47:59Z",
-			"sourceFingerprint": "e1cf5ba5432d34e05b1a319cfa1804d4b487acbf13623bee2080ba592e9ec13b",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/38984214882",
+			"sourceUpdatedAt": "2026-10-16T23:59:33Z",
+			"sourceFingerprint": "8c7a4b7070f251240f076a24d0e5a392ed7ecad5cb2918d3f8e536d4d5fc525f",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -34874,20 +34808,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 2,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "An in-progress routine CI run carries no actionable detail beyond automatic status tracking.",
+			"rationale": "This is just an in-progress CI run status entry, not an actionable work item.",
 			"evidence": [
-				"push on master",
-				"status in_progress"
+				"status: in_progress",
+				"push on master"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:50:42.504Z"
+			"scoredAt": "2026-10-17T00:01:40.082Z"
 		},
 		{
 			"key": "run:pixel-agents#38982888702",
