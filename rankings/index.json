@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T07:31:28.889Z",
+	"generatedAt": "2026-10-17T07:40:15.436Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9370,6 +9370,38 @@
 			"scoredAt": "2026-10-10T22:23:20.564Z"
 		},
 		{
+			"key": "run:minion (gateway)#39013875383",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39013875383",
+			"sourceUpdatedAt": "2026-10-17T07:32:08Z",
+			"sourceFingerprint": "b80ac708e9d9c3640d83c4878e726b1998281fc10a1558bfc507454134de4722",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the DEV branch can block gateway work but the catalog provides no failure detail to act on directly.",
+			"evidence": [
+				"CI workflow_dispatch run on DEV",
+				"status: failure, updatedAt 2026-10-17T07:32:08Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T07:40:15.272Z"
+		},
+		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -10260,6 +10292,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
+			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
+			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The cited commit already fixes the missing x-minion-server-id header, but deployment status is unknown so rollout needs verification rather than new work.",
+			"evidence": [
+				"commit 1e7ec283 adds x-minion-server-id header to gateway→hub tool calls",
+				"status: unknown, updatedAt 2026-10-17"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T07:40:15.272Z"
 		},
 		{
 			"key": "pr:minion (gateway)#257",
@@ -12372,41 +12436,6 @@
 			"evidence": [
 				"npm publish run failed on push to DEV",
 				"same-minute CI run on the same branch also failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:32:16.747Z"
-		},
-		{
-			"key": "run:minion (gateway)#39001758370",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39001758370",
-			"sourceUpdatedAt": "2026-10-17T04:15:26Z",
-			"sourceFingerprint": "f259fec1672ead5455720ee2f4bf63da482ebd5d5742292e3011836f03a246b5",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"run:minion (gateway)#39001758368",
-				"deploy:minion (gateway)"
-			],
-			"rationale": "This CI failure landed on the same DEV push as the npm-publish failure and the gateway header-fix deploy, so these three should be investigated as one build-breakage goal.",
-			"evidence": [
-				"CI run failed on push to DEV within 2 minutes of the npm publish failure",
-				"both runs are in the same repo as the just-landed x-minion-server-id header fix"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -21644,6 +21673,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:15:50.643Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "429c94587e8a48a33e7bc1a410c5dfe346c7c9e6b72305a6b4cae89545bc3a17",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This sweep bundles roughly seventeen unrelated TODO markers spanning org-scoping, audit trails, WebGL budgets, and schema drops into one proposal, so it can't be executed as a single coherent goal.",
+			"evidence": [
+				"markers span org-scope race windows, audit trace gaps, and WebGL context budgets",
+				"status: review, auto-filed by handoff-sweep"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T07:40:15.272Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-86254ea",
@@ -34246,38 +34307,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:32:02.784Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "a538506013e43658241b12cdef3c9b3833d3af04c47c8822161179075fffe649",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The proposal bundles many unrelated TODO markers under a single generated-file reference, leaving no coherent single scope to execute against.",
-			"evidence": [
-				"Markers span unrelated topics such as serverId empty and WebGL-context budget",
-				"All markers attributed to one generated file, rankings/index.json"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T07:31:28.732Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
