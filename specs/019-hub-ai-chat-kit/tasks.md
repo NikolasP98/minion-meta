@@ -1,0 +1,21 @@
+# Tasks: Hub AI chat kit
+
+- [ ] T001 `ai/ai-state.ts`, `ai/sources.ts` + `sources.test.ts` (FR-008)
+- [ ] T002 `AiToolCall.svelte` + status ring (FR-007)
+- [ ] T003 `AiReasoning.svelte` (FR-006)
+- [ ] T004 `AiSources.svelte` (FR-008)
+- [ ] T005 `AiApproval.svelte` (FR-009)
+- [ ] T006 `AiConversation.svelte` (FR-004)
+- [ ] T007 `AiPromptInput.svelte` (FR-001, FR-002)
+- [ ] T008 `AiMessage.svelte` + `MessageActions` reveal (FR-005)
+- [ ] T009 Paraglide keys `en`/`es` + `i18n:compile` (FR-010)
+- [ ] T010 `ChatBlocks.svelte` adopts T002–T004 (S2, FR-011)
+- [ ] T011 `AssistChoice.svelte` → AiApproval
+- [ ] T012 `abortChat()` in `chat-rpc.ts` (FR-003)
+- [ ] T013 `ChatPanel.svelte` → AiConversation + AiPromptInput + AiMessage via ChatMessage
+- [ ] T014 `FloatingAssistant.svelte` → AiConversation + AiPromptInput (Stop)
+- [ ] T015 `/home` thread → AiConversation; `.ai-message-root` on bubble rows
+- [ ] T016 mounted tests: prompt input, reasoning, approval
+- [ ] T017 gates: `bun run check`, scoped `vitest`, `lint:design && lint:tokens`, prettier on changed files
+- [ ] T018 browser proof on `dev:local` (screenshots: reasoning/tools/sources, jump pill, stop)
+- [ ] T019 ledger: `TODO(handoff)` + proposal for `/home` composer migration
