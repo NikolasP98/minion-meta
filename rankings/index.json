@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T12:40:13.828Z",
+	"generatedAt": "2026-10-17T13:09:52.946Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5162,37 +5162,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already ships the fix for the missing gateway-to-hub header, so the deployment health item describes work already completed.",
-			"evidence": [
-				"commit 1e7ec283 adds x-minion-server-id header to gateway→hub tool calls, fixing 403s from ambiguous token-to-row resolution"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T12:40:13.689Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -35835,7 +35804,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "7347ef84f90d11a584bf3049bda91a4621b6b9c6a0a15b6bc51d58a22447b7a2",
+			"sourceFingerprint": "6a0bb9f45f6612a9337048dbed4213189b803473b7d416dc68d6e34ddb6c90e2",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -35847,17 +35816,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 2,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The markers are quoted lines from rankings/index.json itself, a generated ranking-output data file, not an actionable source-code defect.",
+			"rationale": "The marker list points to line numbers inside rankings/index.json itself (the ranking output artifact), not actual source code, making this a non-actionable, self-referential handoff entry.",
 			"evidence": [
-				"all cited locations point to rankings/index.json, the ranking system's own output file",
-				"summary explicitly says markers are 'text copied out of repository source' but the file is JSON ranking data, not implementation code"
+				"all cited paths are 'rankings/index.json' lines, not application source files",
+				"file is described as a sweep-generated handoff marker aggregator, not a real defect report"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T09:09:55.689Z"
+			"scoredAt": "2026-10-17T13:09:52.804Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
