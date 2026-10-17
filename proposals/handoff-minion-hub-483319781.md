@@ -1,7 +1,9 @@
 ---
 id: handoff-minion-hub-483319781
 title: Handoff marker — src/routes/api/gateway/channel-identities/+server.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-807f018d50fd
+duplicate_candidate: postmerge-minion-hub-807f018d50fd
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]
