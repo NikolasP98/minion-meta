@@ -1,12 +1,24 @@
 ---
 spec: 2026-08-18-factory-workitem-handoff-schema-spec
-pass: 2
-verdict: approved
-reviewer: factory-review
-created: 2026-08-18
+pass: 3
+verdict: pending
+reviewer: root-reconciliation
+created: 2026-10-17
 ---
 
-# Pass 2 correctness review
+# Pass 3 — consumer-first correction awaiting review
+
+The former approval is not current execution authority. The October source
+audit confirms S5 trust consumers are still missing while the old plan places
+S4 producer retrofit first. The correction moves consumers first, retains
+current topic/manifest risk policy, removes stale corpus counts, and covers
+every new approval/admission edge. Spec Kit feature 104 supplies the remaining
+slice plan. Independent review and owner security approval remain pending.
+
+The original pass-2 record is retained below as history; its approval language
+does not override this sidecar's current pending verdict.
+
+## Historical pass 2 — 2026-08-18
 
 - Set `status: approved`, `pass: 2`, and `verdict: approved` because every correctness issue was resolvable from the proposal, live source, related specs, and operator memory without a human product decision.
 - Reframed the opening around the proposal's exact four defects and definition of done, removing claims that were not carried through by the implementation plan.
