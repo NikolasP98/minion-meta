@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T01:40:42.650Z",
+	"generatedAt": "2026-10-17T02:10:14.943Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -969,39 +969,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T13:51:35.437Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/stock.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dba9eee424f4.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "fa0322a2d8248399df28189ebe7585d67c722923e11b19785bc02c1722e9051b",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Concurrency race in invoice/stock transactions risks financial data corruption and explicitly blocks a named rollout plan, making it the highest-urgency item in this batch.",
-			"evidence": [
-				"\"blocks rollout (plan 10-03) because embedded PostgreSQL dev tests don't catch multi-process contention\"",
-				"marker cites meta proposals/2026-09-08-platform-qc-remediation.md (HDS-06)",
-				"fix direction specifies SERIALIZABLE isolation and real-PostgreSQL concurrency tests"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:52:05.642Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-tenant-boundaries-spec",
@@ -4487,6 +4454,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T09:22:21.495Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/stock.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dba9eee424f4.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "fa0322a2d8248399df28189ebe7585d67c722923e11b19785bc02c1722e9051b",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "References a named remediation spec (HDS-06) and blocks a rollout plan, but the TODO itself is a qualification task not yet scoped into bounded work.",
+			"evidence": [
+				"TODO(handoff): Qualify separate-connection invoice/stock crash races in plan 10-03 before rollout",
+				"See meta proposals/2026-09-08-platform-qc-remediation.md (HDS-06)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T02:10:14.767Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-shells-lifecycle-stubs-spec",
@@ -8598,42 +8597,6 @@
 			"scoredAt": "2026-10-17T00:40:38.379Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-e29218b380bb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in supabase/migrations/20260909090300_job_effect_receipts.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e29218b380bb.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "2f178d296fba2aa7aa243fdc172627eb864b42f6321f7473e7a56adcb43b2860",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-cf95482ec332",
-				"proposal:postmerge-minion-hub-de95b8a03fe5"
-			],
-			"rationale": "Receipt retention and indeterminate-provider recovery policy for job_effect_receipts.sql is the same undecided lifecycle policy that the tombstone and manifest findings also depend on.",
-			"evidence": [
-				"file: supabase/migrations/20260909090300_job_effect_receipts.sql",
-				"\"without it, jobs can get stuck when provider status is unknown\"",
-				"also filed via separate handoff-ledger sweep, confirming recurrence"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:52:05.642Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10874,42 +10837,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T10:10:24.250Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-cf95482ec332",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in supabase/migrations/20260909090500_job_effect_page_batches.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-cf95482ec332.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "7f3d9e36281ed346d27812d999b22d5433e9020698ce251d59fa138638793bdf",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-e29218b380bb",
-				"proposal:postmerge-minion-hub-de95b8a03fe5"
-			],
-			"rationale": "Tombstone/retention and orphan-recovery policy for job-effect-page-batches overlaps directly with the receipt-retention and manifest-reconstruction findings from the same merged migration set.",
-			"evidence": [
-				"file: supabase/migrations/20260909090500_job_effect_page_batches.sql",
-				"fix direction: add deleted_at tombstone column with configurable retention TTL",
-				"same merged PR #248 as the related receipt findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:52:05.642Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ec72b2caa7d2",
@@ -16420,6 +16347,41 @@
 			"scoredAt": "2026-10-14T21:21:43.232Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-cf95482ec332",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20260909090500_job_effect_page_batches.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-cf95482ec332.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "7f3d9e36281ed346d27812d999b22d5433e9020698ce251d59fa138638793bdf",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-de95b8a03fe5",
+				"proposal:postmerge-minion-hub-e29218b380bb"
+			],
+			"rationale": "Same merged PR and migration set as two sibling findings asking for an undefined retention/recovery policy for job-effect data.",
+			"evidence": [
+				"TODO(handoff): Historical receipt/tombstone retention and missing-owner recovery need",
+				"merged PR #248, same repo/branch as e29218b380bb and de95b8a03fe5"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T02:10:14.767Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16452,14 +16414,14 @@
 			"scoredAt": "2026-10-14T05:21:58.865Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-de95b8a03fe5",
+			"key": "proposal:postmerge-minion-hub-e29218b380bb",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-de95b8a03fe5.md",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20260909090300_job_effect_receipts.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e29218b380bb.md",
 			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "2ad81d6174ade87296bafd695ba464febab0f9d6ec6fd3ded7311a0ff43f6208",
+			"sourceFingerprint": "2f178d296fba2aa7aa243fdc172627eb864b42f6321f7473e7a56adcb43b2860",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -16468,24 +16430,23 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-cf95482ec332",
-				"proposal:postmerge-minion-hub-e29218b380bb"
+				"proposal:postmerge-minion-hub-de95b8a03fe5"
 			],
-			"rationale": "Legacy receipt manifest reconstruction is a historical-data gap in the same job-effect receipt lifecycle as the retention and tombstone findings in this batch.",
+			"rationale": "Duplicates the retention/recovery-policy theme of two sibling findings from the same merged PR on the same job-effect tables.",
 			"evidence": [
-				"\"Legacy receipts cannot reconstruct a complete source manifest\"",
-				"two fix options given: backfill migration or compatibility shim",
-				"same merged PR #248, same service family as related findings"
+				"TODO(handoff): Choose receipt retention and indeterminate-provider recovery policy before",
+				"merged PR #248, same branch/commit as cf95482ec332 and de95b8a03fe5"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T01:52:05.642Z"
+			"scoredAt": "2026-10-17T02:10:14.767Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e6dfb5bc8792",
@@ -19044,6 +19005,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T05:18:54.558Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-de95b8a03fe5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-de95b8a03fe5.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "2ad81d6174ade87296bafd695ba464febab0f9d6ec6fd3ded7311a0ff43f6208",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-cf95482ec332",
+				"proposal:postmerge-minion-hub-e29218b380bb"
+			],
+			"rationale": "Part of the same job-effect-pages PR and subsystem as two sibling retention/recovery findings, with an unresolved choice between migration backfill or shim.",
+			"evidence": [
+				"TODO(handoff): Legacy receipts cannot reconstruct a complete source manifest.",
+				"merged PR #248 shared with cf95482ec332 and e29218b380bb"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T02:10:14.767Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
@@ -28018,38 +28014,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already adds both missing tool ids to TOOL_ORDER and includes a regression test, so the fix is already shipped and nothing remains actionable.",
-			"evidence": [
-				"commit adds search_crm_conversations and crm_conversation_themes to TOOL_ORDER next to crm_query",
-				"adds regression test asserting TOOL_REGISTRY keys are a subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T01:40:42.509Z"
 		},
 		{
 			"key": "issue:minion-meta#460",
