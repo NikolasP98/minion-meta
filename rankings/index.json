@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T22:30:30.905Z",
+	"generatedAt": "2026-10-17T22:39:41.532Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2757,6 +2757,39 @@
 			"scoredAt": "2026-10-14T05:58:35.205Z"
 		},
 		{
+			"key": "pr:minion-meta#835",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#835 docs(spec): correct WorkItem trust rollout before producer backfill",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/835",
+			"sourceUpdatedAt": "2026-10-17T22:37:35Z",
+			"sourceFingerprint": "96016b70011983a5f8675cf43e0abe697a675ad4e65bb19970758fcb0be82e33",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A detailed, independently re-reviewed Spec Kit plan corrects a trust-gate ordering bug that could let legacy metadata gain automatic approval, and is ready to proceed pending the already-identified owner security gate.",
+			"evidence": [
+				"plan.puts the strict consumer gate first and returns the goal to review",
+				"Spec Kit feature specs/104-workitem-consumer-first/ with spec, plan, 20 ordered tasks",
+				"explicitly remains pending owner security approval before code and owner merge before release"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T22:39:41.398Z"
+		},
+		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5161,6 +5194,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
+			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
+			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The missing header already caused broad 403s on permission-gated hub tools and a fix is committed, so remaining work is confirming the deploy actually resolved it.",
+			"evidence": [
+				"commit fixes missing x-minion-server-id causing 403 on every permission-gated hub tool",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T22:39:41.398Z"
 		},
 		{
 			"key": "issue:minion-meta#476",
@@ -21727,38 +21792,6 @@
 			"scoredAt": "2026-10-15T01:22:04.986Z"
 		},
 		{
-			"key": "pr:minion_hub#564",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#564 feat(chat): assistant steps fold into one labelled line",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/564",
-			"sourceUpdatedAt": "2026-10-17T22:25:38Z",
-			"sourceFingerprint": "87396c2c62322462b3e87115a1cf02dd431c678fbc7c08ad65e67c3450bd7bf0",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR with passing automated gates is close to mergeable, needing only browser verification to finish.",
-			"evidence": [
-				"vitest 41/41 passing, svelte-check 0 new errors, lint:tokens 0",
-				"summary notes: 'Not verified in a browser yet'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T22:30:26.814Z"
-		},
-		{
 			"key": "pr:minion-meta#524",
 			"kind": "pr",
 			"stage": "development",
@@ -24059,38 +24092,6 @@
 			"scoredAt": "2026-10-17T01:13:23.492Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-2467706586",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2467706586.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "173420345783642c924b9ded3d75c447aeff0b8980843174388ebefb98e7ee50",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Narrow, well-defined single-line migration cleanup with a clear definition of done.",
-			"evidence": [
-				"drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
-				"single marker, file supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql:17"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T19:58:43.420Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2650013771",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24309,6 +24310,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:17:03.102Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "340b8913b400fcb002c485142196a1c2d1c895bb386fa210b519d3cb7a7e175d",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This auto-filed marker bundles 17+ unrelated TODO findings scattered across one large file into a single proposal, so it cannot produce one effective, scoped outcome as written.",
+			"evidence": [
+				"Markers (as of 2026-10-17) lists 17 distinct unrelated TODO lines",
+				"file: rankings/index.json across lines 1491-13526+"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T22:39:41.398Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
@@ -25913,39 +25946,6 @@
 			"scoredAt": "2026-10-17T01:18:03.900Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "70961bc62aa294385bdbc3c96ea09f27f220db50de2e697e19b6b39275774053",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The marker bundles dozens of unrelated one-line TODOs scattered across rankings/index.json into a single proposal with no coherent scope or verifiable outcome.",
-			"evidence": [
-				"\"the result is still platform-wide, not org-scoped\"",
-				"\"an unlock deletes the row and leaves no audit trace\"",
-				"\"no WebGL-context budget. Chromium keeps ~16 live contexts\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T18:32:56.745Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27492,6 +27492,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T23:10:22.972Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-43a174b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 43a174b",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-43a174b.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "f1fc43dfca6179c1507ab6048d69f629ba9f5d05d3f5d8d3b3d29f94f9e1247a",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The findings are narrowly scoped, concrete, test-only null-check fixes that are straightforward to implement now.",
+			"evidence": [
+				".get(id) result cast to type without null check; will fail if query returns no rows",
+				"medium severity, test files only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T22:39:41.398Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-7012cd5",
@@ -34229,6 +34261,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T04:05:06.282Z"
+		},
+		{
+			"key": "run:minion_hub#39075803621",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39075803621",
+			"sourceUpdatedAt": "2026-10-17T22:37:19Z",
+			"sourceFingerprint": "d53050addac3c3f226df8abb2e422a89ff4d6f4c8c92e62ed97a8165eaa910f2",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status, not an actionable work item or goal in itself.",
+			"evidence": [
+				"CI push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T22:39:41.398Z"
 		},
 		{
 			"key": "issue:minion-meta#666",
