@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T10:09:50.721Z",
+	"generatedAt": "2026-10-17T10:39:51.454Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2226,6 +2226,39 @@
 			"scoredAt": "2026-10-15T02:04:19.179Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Unscoped CRM rollups breaking multi-tenant isolation is a concrete data-isolation defect with a clear fix direction and merged-PR evidence.",
+			"evidence": [
+				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
+				"TODO(handoff): scope word-frequency/sentiment/win-index rollups by owner",
+				"merged PR: https://github.com/NikolasP98/minion_hub/pull/268"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T10:39:51.316Z"
+		},
+		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3488,38 +3521,6 @@
 			"scoredAt": "2026-10-14T05:21:58.865Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Unscoped CRM rollup aggregation breaks multi-tenant data isolation across owners, a concrete security/data-boundary defect with a clear fix direction.",
-			"evidence": [
-				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
-				"Add owner_id grouping to word-frequency, sentiment, and win-index aggregation queries"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T10:21:05.886Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-whatsapp-cloud-template-fallback-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3954,39 +3955,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T18:51:50.506Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Missing header causes systemic 403s on permission-gated hub tools when a gateway serves multiple org-scoped hub rows, a real functional regression with a linked spec.",
-			"evidence": [
-				"fix(hub-tools): send x-minion-server-id on gateway→hub tool calls (#332)",
-				"agent's assignment check answers 403, so every permission-gated hub tool is denied",
-				"Spec: minion-meta specs/012-assistant-tool-call-hygiene"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T10:09:50.571Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -29415,6 +29383,38 @@
 			"scoredAt": "2026-10-12T02:56:17.748Z"
 		},
 		{
+			"key": "issue:minion-meta#398",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#398 [monitor:unstick] Requeued transient failure of run 68142f89",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/398",
+			"sourceUpdatedAt": "2026-09-12T08:17:02Z",
+			"sourceFingerprint": "90cea18b6911f353323b63f94653de8efa648402be99e6c9248afb23b445d082",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated monitor requeue note for a transient push failure with no indication of persistent failure, so it's not actionable goal work.",
+			"evidence": [
+				"source: unstick",
+				"note=push failed; requeue -> 201"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T10:39:51.316Z"
+		},
+		{
 			"key": "issue:minion-meta#418",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34993,38 +34993,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:53:38.303Z"
-		},
-		{
-			"key": "issue:minion-meta#398",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#398 [monitor:unstick] Requeued transient failure of run 68142f89",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/398",
-			"sourceUpdatedAt": "2026-09-12T08:17:02Z",
-			"sourceFingerprint": "90cea18b6911f353323b63f94653de8efa648402be99e6c9248afb23b445d082",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor requeue note for a single transient push failure with no indication of recurrence or unresolved impact.",
-			"evidence": [
-				"class=C note=push failed; requeue -> 201",
-				"source: unstick, single transient fingerprint"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T10:21:05.886Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-2704064834",
