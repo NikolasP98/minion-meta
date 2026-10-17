@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-fbbb4b2d4696
 title: "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]
