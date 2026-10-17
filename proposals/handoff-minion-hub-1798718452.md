@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1798718452
 title: Handoff marker — src/lib/sandbox/canvas.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: postmerge-minion-hub-222d6a6aa4c3
 ---
 
 # Handoff marker — src/lib/sandbox/canvas.ts
