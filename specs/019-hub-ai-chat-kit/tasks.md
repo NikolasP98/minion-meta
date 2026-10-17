@@ -19,3 +19,10 @@
 - [x] T017 gates: `bun run check`, scoped `vitest`, `lint:design && lint:tokens`, prettier on changed files
 - [x] T018 browser proof on `dev:local` (evidence/): reasoning/tools, hover reveal, jump pill (scrollTop held at 0 during stream), floating Stop (run ended 176 ms after click). Sources NOT live-proven: local gateway lacks a Brave key — unit + mounted tests only (ledger item 3)
 - [x] T019 ledger: `TODO(handoff)` + proposal for `/home` composer migration
+
+## Amendment A — orb face
+- [ ] T020 `ai/orb-color.ts` (+test): accent hex → OkLab stops, light/dark mixes
+- [ ] T021 `ai/AiOrb.svelte` WebGL2 port with painted fallback + context release
+- [ ] T022 `ai/AiOrbFace.svelte`: expressions, blink, gaze, saccades, error, done, listening
+- [ ] T023 swap 4 `OpenHumanAvatar` + 4 `Sparkles` sites; delete the mascot
+- [ ] T024 gates + dev:local screenshots

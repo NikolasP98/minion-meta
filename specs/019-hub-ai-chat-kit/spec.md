@@ -36,6 +36,25 @@ Invariants: every animation has a reduced-motion path with no movement; semantic
 | S2 renderer | `ChatBlocks.svelte`: reasoning → AiReasoning, tool row → AiToolCall (group row reuses the ring), AiSources under the answer | existing `blocks.test.ts` green; mounted render shows the ring states; local `dev:local` screenshot of a turn with reasoning + tools + sources |
 | S3 surfaces | `ChatPanel`, `FloatingAssistant`, `/home` thread → AiConversation; `ChatPanel` + `FloatingAssistant` composer → AiPromptInput with Stop → new `abortChat()` sending `chat.abort {sessionKey}`; `AssistChoice` → AiApproval; `MessageActions` reveal on hover/focus-within | `bun run check`, `bun run test` (scoped), `lint:design && lint:tokens`; browser check on `dev:local`: scroll up during a reply shows the pill, Stop ends the run |
 
+## Amendment A — the assistant gets a face (owner, 2026-10-17)
+
+**Input**: "implement this face [SmoothUI `ai-orb-face`] as the default instead of the old yellow friend … I also want the floating sparkle to be replaced (both expanded and collapsed). Reverse engineer it as well." (screenshots: /home greeting avatar; floating panel header; collapsed launcher).
+
+**AS-IS** (hub `feat/ai-components` @ `2fee80ba`, rebased on master `55b577de`).
+- The assistant's face is `my-agent/OpenHumanAvatar.svelte` — a yellow blob mascot ported from OpenHuman, lip-synced from the call's `mouth` ref. Used 4×: /home greeting (`home/+page.svelte:816`), /home call view (`:857`), the floating call pill (`FloatingAssistant.svelte:713`) and the live-call strip (`:873`).
+- The floating assistant's identity is the lucide `Sparkles` glyph 4×: docked launcher (`:783`), pill launcher chip (`:789`), panel header (`:830`), empty-state badge (`:952`).
+
+**TO-BE.**
+- New `ai/AiOrb.svelte` (port of SmoothUI `orb`, WebGL2 sphere impostor with OkLab marbling, seamless loop, pauses off-screen and under reduced motion, painted fallback when WebGL is unavailable or the context is lost) and `ai/AiOrbFace.svelte` (port of `ai-orb-face`: two capsule eyes with named expressions, blinking, pointer gaze, thinking saccades, error spiral + wobble, done hop, listening breath from a live amplitude).
+- The body is tinted from the theme accent (`theme.accent.value`, same source as the Thinking shader) mixed toward white for the second stop; eyes are the accent darkened toward black — follows Settings → Accent live.
+- All four `OpenHumanAvatar` uses and all four `Sparkles` uses become `AiOrbFace`. State mapping: call `idle/listening/thinking/speaking` → face `idle/listening/thinking/streaming` (speaking amplitude = live mouth openness); chat `sending` → thinking, streaming → streaming, `lastError` → error.
+- `OpenHumanAvatar.svelte` is deleted (no other consumer).
+
+**DELTA.**
+| # | Transition | Proof |
+|---|---|---|
+| S4 face | new `AiOrb`, `AiOrbFace`, `orb-color.ts` (+test); 8 call sites swapped; mascot deleted | colour helper unit test; mounted face test (expression per state, error spiral, decorative vs labelled); `svelte-check`; design/token lint; screenshots on dev:local (/home greeting, collapsed + docked launcher, panel header) |
+
 ## User Scenarios & Testing
 
 ### User Story 1 — Follow a working assistant without losing your place (P1)
