@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T08:39:45.086Z",
+	"generatedAt": "2026-10-17T09:09:55.840Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3954,38 +3954,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T18:51:50.506Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged fix for a gateway auth-header bug exists but deployment health status is unknown so follow-up verification is warranted.",
-			"evidence": [
-				"commit fixes missing x-minion-server-id header causing 403s",
-				"status is unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T08:09:49.686Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -25940,39 +25908,6 @@
 			"scoredAt": "2026-10-17T01:18:03.900Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "ed10809412453ea28f7096f04e35045464c0f23cd6b0144375f5b5b296fe507d",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated handoff marker aggregating dozens of unrelated TODO snippets from a generated rankings file rather than one actionable, scoped goal.",
-			"evidence": [
-				"source: handoff-sweep",
-				"markers point to many unrelated lines across rankings/index.json",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T08:09:49.686Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35856,6 +35791,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:11:11.488Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "7347ef84f90d11a584bf3049bda91a4621b6b9c6a0a15b6bc51d58a22447b7a2",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The markers are quoted lines from rankings/index.json itself, a generated ranking-output data file, not an actionable source-code defect.",
+			"evidence": [
+				"all cited locations point to rankings/index.json, the ranking system's own output file",
+				"summary explicitly says markers are 'text copied out of repository source' but the file is JSON ranking data, not implementation code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T09:09:55.689Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
