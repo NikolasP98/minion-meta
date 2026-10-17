@@ -2,7 +2,7 @@
 
 **Feature Branch**: `docs/spec-019-hub-ai-chat-kit` | **Repos & PR bases**: minion_hub → `master` (hub `feat/ai-components`) · minion-meta → `dev` (this spec)
 
-**Created**: 2026-10-17 | **Status**: Implemented — hub PR pending owner merge | **Tags**: ui (render + one existing RPC; no data, no routes, no schema) | **Human gates**: owner merge (non-trivial UI)
+**Created**: 2026-10-17 | **Status**: Shipped — hub #557 (`2f117462`) + #560 (`e4d0573d`) live in production | **Tags**: ui (render + one existing RPC; no data, no routes, no schema) | **Human gates**: owner merge (non-trivial UI)
 
 **Input**: Owner, 2026-10-17: "improve our ai components. Look into this library's 'ai' components, then reverse engineer and implement in minion hub" — SmoothUI `ai-prompt-input`, `ai-conversation`, `ai-message`, `ai-sources`, `ai-reasoning`, `ai-tool-call`, `ai-approval` (smoothui.dev; source `github.com/educlopez/smoothui` `packages/smoothui/components/ai-*`, MIT, © 2024 Eduardo Calvo — read in full 2026-10-17).
 
