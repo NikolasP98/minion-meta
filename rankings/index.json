@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T06:10:26.196Z",
+	"generatedAt": "2026-10-17T06:19:24.007Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2659,40 +2659,6 @@
 			"scoredAt": "2026-10-12T02:53:59.779Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-0e411cc7fa9c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/personal-agent-provisioner.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0e411cc7fa9c.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "bfd14149fca35e9a1398ce319c08f6cc01f8b5666c0e032b173abe4493d22e63",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-718953183"
-			],
-			"rationale": "Empty gateway_id orphans provisioned personal agents, breaking routing, with a detailed diagnosis and fix direction already drafted.",
-			"evidence": [
-				"'personal_agents.gateway_id is left empty when agents are provisioned... agents to be orphaned in the database'",
-				"merged PR #542 on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T05:41:52.845Z"
-		},
-		{
 			"key": "spec:2026-08-31-factory-supervised-release-defense-in-depth-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -4023,6 +3989,41 @@
 			"scoredAt": "2026-10-13T18:51:50.506Z"
 		},
 		{
+			"key": "pr:minion_hub#558",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#558 fix(assistant): page tools that only read now hand their results back, so the sandbox assistant stops stalling",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/558",
+			"sourceUpdatedAt": "2026-10-17T06:17:21Z",
+			"sourceFingerprint": "3ddb06d1f96e56ad23222dae997195da8a32a0f8929e5caf25dfdc4a9bcc9e58",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion-meta#828"
+			],
+			"rationale": "Well-specified, tested hotfix for a prod assistant stall on /sandbox should be grouped with its spec PR as one unit of work.",
+			"evidence": [
+				"Prod: assistant says 'let me first see what datasets...' and stops on /sandbox",
+				"readOnlyHint was ignored for sandbox.* tools, dropping results and skipping follow-up turns",
+				"154 vitest assistant+sandbox tests pass including a new case"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:19:23.856Z"
+		},
+		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -4413,6 +4414,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:18:58.516Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-0e411cc7fa9c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/personal-agent-provisioner.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0e411cc7fa9c.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "25af5ae0972d07c6e9fe75a9bd41b2199ba8c3953b26dfa6820fe92a0cee313a",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding that gateway_id is written empty, orphaning provisioned personal agents and breaking their routing to a gateway, with a clear diagnosis and fix direction.",
+			"evidence": [
+				"TODO(handoff): serverId is written empty, so personal_agents.gateway_id",
+				"Diagnosis: provisioned agents are orphaned in the database with no way to route through a gateway",
+				"Status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:19:23.856Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-531a2204dc23",
@@ -7017,38 +7051,6 @@
 			"scoredAt": "2026-10-14T07:22:18.731Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The commit message describes a hub-tool 403 bug that is already fixed and shipped, leaving no outstanding execution.",
-			"evidence": [
-				"fix(hub-tools): send x-minion-server-id on gateway→hub tool calls (#332)",
-				"commit 1e7ec283ebf0 already merged per sourceUrl"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:10:26.060Z"
-		},
-		{
 			"key": "issue:minion-meta#265",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9113,6 +9115,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T02:21:17.608Z"
+		},
+		{
+			"key": "pr:minion-meta#828",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#828 docs(spec): 021 — assistant read-only page tools return their results (hotfix)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/828",
+			"sourceUpdatedAt": "2026-10-17T06:17:15Z",
+			"sourceFingerprint": "bd450893188dc1ad9057907ae5c9c968f4a616af03bfe1da3d93b35094e5377f",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#558"
+			],
+			"rationale": "Spec document for the assistant read-tool-results hotfix in #558 is the same unit of work and should be grouped rather than ranked independently.",
+			"evidence": [
+				"Spec for hub fix/assistant-read-tool-results hotfix",
+				"Addresses prod stall where read-only tool results never returned to the model"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:19:23.856Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -12800,6 +12836,41 @@
 			"scoredAt": "2026-10-14T01:22:00.333Z"
 		},
 		{
+			"key": "pr:minion_hub#557",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#557 feat(chat): AI chat kit — live reasoning, tool status rings, sources, approvals and a Stop button",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/557",
+			"sourceUpdatedAt": "2026-10-17T06:16:07Z",
+			"sourceFingerprint": "8a070f5288f9d58a24fc748fd01ba9b1b4c8030d430915be8a198cc7687ec304",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion-meta#827"
+			],
+			"rationale": "UI chat-kit feature is complete with passing tests and token-lint checks, and should be tracked as one goal with its paired spec PR rather than ranked separately.",
+			"evidence": [
+				"14 mounted/unit tests pass in src/lib/components/ai/, plus 286 related chat/gateway/assistant tests",
+				"svelte-check reports 0 errors (aside from unrelated missing-env PostHog imports)",
+				"Spec PR #827 documents this same work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:19:23.856Z"
+		},
+		{
 			"key": "proposal:2026-09-29-hub-data-view-container",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16197,7 +16268,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/canvas.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-222d6a6aa4c3.md",
 			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "0c40659bf1083338c42e35eb0fca0b973c11e98ebbf640b58587a1cca32be554",
+			"sourceFingerprint": "d211b98e94f8aef20b4f5315278c84a196145b5f03305955152dea0f5e8e5425",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -16206,20 +16277,21 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 4
+				"specification": 5,
+				"implementation": 2
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Marker text itself is truncated and the proposed fix (swap regex inference for a full AST parser) is a bigger scope than the vague finding justifies as-is.",
+			"rationale": "Approved finding about regex-based element inference risking silent canvas failures, but the proposed AST-parser rewrite needs scoping before it is an actionable, bounded task.",
 			"evidence": [
-				"marker cuts off at 'an element that builds'",
-				"fix direction proposes replacing regex with an AST-based parser (Acorn/SWC), a materially larger change than the stated TODO"
+				"TODO(handoff): regex inference over the element JS",
+				"Fix direction proposes replacing regex with an AST-based parser (Acorn/SWC)",
+				"Status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T05:41:52.845Z"
+			"scoredAt": "2026-10-17T06:19:23.856Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-310f268c7aca",
@@ -17441,6 +17513,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T05:18:54.558Z"
+		},
+		{
+			"key": "pr:minion-meta#827",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#827 docs(spec): 019 — hub AI chat kit (SmoothUI-derived)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/827",
+			"sourceUpdatedAt": "2026-10-17T06:09:32Z",
+			"sourceFingerprint": "b458b8272800e898f1049e11237af5fa096023ef2202e2944067f9c855e0d312",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#557"
+			],
+			"rationale": "This Spec Kit artifact documents the same AI chat kit work as hub PR #557 and represents one goal, not a separate one.",
+			"evidence": [
+				"Spec Kit feature specs/019-hub-ai-chat-kit/ linked to hub PR #557",
+				"Tasks T001-T019 already done in the hub PR",
+				"Follow-ups ledgered separately in proposals/2026-10-17-hub-ai-chat-kit-followups.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:19:23.856Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -27588,38 +27695,6 @@
 			"scoredAt": "2026-10-12T09:51:12.968Z"
 		},
 		{
-			"key": "pr:minion_hub#556",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#556 feat(assistant): the Thinking indicator is a small cel-shaded 3D shader in your accent colour",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/556",
-			"sourceUpdatedAt": "2026-10-17T06:04:45Z",
-			"sourceFingerprint": "064d34e123d277f94d7d61bffa5992fb9c00cb3859acf7c2d3273f6ef78ab069",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 10
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A cosmetic UI PR with spec reference, passing gates (svelte-check, lint, vitest 5/5) and headless-rendered verification is ready to merge now.",
-			"evidence": [
-				"Gates: svelte-check 0 errors, lint:design 0 new debt, vitest 5/5",
-				"Exported GLSL compiled + rendered headless with 3 accents on light/dark"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:10:26.060Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-1396972732",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33737,6 +33812,74 @@
 			"scoredAt": "2026-10-12T09:22:04.054Z"
 		},
 		{
+			"key": "issue:minion-meta#829",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#829 [monitor:unstick] rank board goals (f97d5310) - gateway source unavailable for ranking catalog",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/829",
+			"sourceUpdatedAt": "2026-10-17T06:17:31Z",
+			"sourceFingerprint": "c13b4f6bef711d6a416ae2f00e23301f3aa64d67a9178bc18ab1339800b11e67",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#830"
+			],
+			"rationale": "A single transient gateway-fetch failure where the script intentionally aborted rather than build a partial catalog, with only a retry recommendation and no concrete fix needed yet.",
+			"evidence": [
+				"Script intentionally aborted rather than build an incomplete catalog when the gateway source was unreachable",
+				"Recommendation: retry; only add a classifier/backoff signature if this guard recurs across multiple runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:19:23.856Z"
+		},
+		{
+			"key": "issue:minion-meta#830",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#830 [monitor:unstick] discovery minion-hub@21c00d1 (e2b82485) - diagnosis call failed/empty on last item",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/830",
+			"sourceUpdatedAt": "2026-10-17T06:17:36Z",
+			"sourceFingerprint": "4d910154d2898c048b7c3b3b4c0c755140adab3d910f937a02d898277b0e9389",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#829"
+			],
+			"rationale": "A single-run transient diagnosis-call failure after five successful items, flagged as non-systematic with only a retry recommendation rather than a concrete code fix.",
+			"evidence": [
+				"5 postmerge discovery records succeeded before the final diagnosis call errored or returned empty",
+				"Recommendation: retry the run; add classifier/backoff only if the pattern recurs across multiple runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:19:23.856Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36025,6 +36168,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#39009291885",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39009291885",
+			"sourceUpdatedAt": "2026-10-17T06:16:26Z",
+			"sourceFingerprint": "1eb9e0c681aabc6a561adfbe4147e3621d49ea3a5ca29f52adca7b5b8ba67b92",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status triggered by a push to master, not a work item to rank as a board goal.",
+			"evidence": [
+				"kind: run, stage: testing, status: in_progress",
+				"title: CI, summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:19:23.856Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
