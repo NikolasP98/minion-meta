@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T22:55:28.434Z",
+	"generatedAt": "2026-10-17T23:26:08.594Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2656,38 +2656,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A header-mismatch bug causing 403s on permission-gated hub tools is a real reliability fix but the deployment health signal alone doesn't confirm post-merge verification.",
-			"evidence": [
-				"fixes x-minion-server-id header missing on gateway→hub tool calls causing 403",
-				"references spec 012-assistant-tool-call-hygiene"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T22:55:28.314Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-legacy-develop-token-scope",
@@ -8106,6 +8074,114 @@
 			"scoredAt": "2026-10-15T06:11:48.041Z"
 		},
 		{
+			"key": "issue:minion-meta#634",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#634 [monitor:unstick] reconcile proposals: agent launch exit-126 after successful git work (run a687f47e)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/634",
+			"sourceUpdatedAt": "2026-09-26T22:18:30Z",
+			"sourceFingerprint": "7c4509c037b6eb0b4f981bb935b61ceb3fa225218ed3e25a0ad6dcdbf6e193bc",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#635",
+				"issue:minion-meta#636",
+				"issue:minion-meta#518"
+			],
+			"rationale": "Recurring box-level claude-CLI launch fault (8 occurrences in one window) duplicated across #635/#636/#518 and should become one worker-image fix goal instead of three near-identical tickets.",
+			"evidence": [
+				"identical signature ... recurred across 8 minion-meta reconcile runs between 2026-09-26T20:13Z and 22:01Z",
+				"verify the claude CLI is installed/executable and reachable on PATH in the reconcile worker image"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:26:08.457Z"
+		},
+		{
+			"key": "issue:minion-meta#635",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#635 [monitor:unstick] reconcile proposals: agent launch exit-126 after successful git work (run 240d45f5)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/635",
+			"sourceUpdatedAt": "2026-09-26T22:18:30Z",
+			"sourceFingerprint": "bfa32832f5dd042719b3452beee014f5f29a1e5169ec8410ad75d5887b68b7b0",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#634",
+				"issue:minion-meta#636",
+				"issue:minion-meta#518"
+			],
+			"rationale": "Duplicate report of the same exit-126/turns=0 claude-launch cluster as #634/#636/#518; should be merged into a single consolidated infra-fix goal.",
+			"evidence": [
+				"run 240d45f5 wrote 526 proposals and pushed to minion-meta:dev (rebased after a rejected push)",
+				"recurred across 8 minion-meta reconcile runs between 2026-09-26T20:13Z and 22:01Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:26:08.457Z"
+		},
+		{
+			"key": "issue:minion-meta#636",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#636 [monitor:unstick] reconcile proposals: agent launch exit-126 after successful git work (run 5e079acb)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/636",
+			"sourceUpdatedAt": "2026-09-26T22:18:30Z",
+			"sourceFingerprint": "3cdc1f32c65eae9ea87a87bc0d35628aea7dee9d8d5ff1476a7956192b2b9d66",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#634",
+				"issue:minion-meta#635",
+				"issue:minion-meta#518"
+			],
+			"rationale": "Duplicate report of the same exit-126/turns=0 claude-launch cluster as #634/#635/#518; should be merged into a single consolidated infra-fix goal.",
+			"evidence": [
+				"run 5e079acb wrote 524 proposals and pushed to minion-meta:dev (rebased after a rejected push)",
+				"This is not a task-logic failure, it looks like an exec/permission fault launching the claude CLI"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:26:08.457Z"
+		},
+		{
 			"key": "issue:minion-meta#654",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12994,112 +13070,37 @@
 			"scoredAt": "2026-10-16T10:10:24.250Z"
 		},
 		{
-			"key": "issue:minion-meta#634",
-			"kind": "issue",
-			"stage": "proposal",
+			"key": "pr:minion-meta#837",
+			"kind": "pr",
+			"stage": "development",
 			"repo": "minion-meta",
-			"title": "#634 [monitor:unstick] reconcile proposals: agent launch exit-126 after successful git work (run a687f47e)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/634",
-			"sourceUpdatedAt": "2026-09-26T22:18:30Z",
-			"sourceFingerprint": "7c4509c037b6eb0b4f981bb935b61ceb3fa225218ed3e25a0ad6dcdbf6e193bc",
+			"title": "#837 docs(review): ground cost telemetry before resuming work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/837",
+			"sourceUpdatedAt": "2026-10-17T22:58:38Z",
+			"sourceFingerprint": "10e3fcaa25241ce763065165c7b594017e0da328f9b61484f3f4cd24269294cb",
 			"score": 46,
 			"band": "low",
 			"axes": {
 				"criticality": 4,
-				"importance": 5,
-				"impact": 5
+				"importance": 6,
+				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#635",
-				"issue:minion-meta#636",
-				"issue:minion-meta#518"
-			],
-			"rationale": "Documents a confirmed recurring host-level claude-CLI launch fault across 8 reconcile runs that is a real but infra-only reliability issue duplicated across three near-identical tickets needing consolidation.",
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Documentation-only review that correctly grounds a stalled cost-telemetry proposal with a valid changes-requested verdict, without authorizing further build work.",
 			"evidence": [
-				"identical signature ... recurred across 8 minion-meta reconcile runs between 2026-09-26T20:13Z and 22:01Z",
-				"run a687f47e wrote 526 proposals and pushed to minion-meta:dev (rebased after a rejected push)"
+				"original run 60bca3bb failed after pass 2 because same-provider fallback emitted invalid verdict: degraded",
+				"records a valid changes-requested decision from fresh Factory source research",
+				"No production write or runtime change is included"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T23:12:37.126Z"
-		},
-		{
-			"key": "issue:minion-meta#635",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#635 [monitor:unstick] reconcile proposals: agent launch exit-126 after successful git work (run 240d45f5)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/635",
-			"sourceUpdatedAt": "2026-09-26T22:18:30Z",
-			"sourceFingerprint": "bfa32832f5dd042719b3452beee014f5f29a1e5169ec8410ad75d5887b68b7b0",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#634",
-				"issue:minion-meta#636",
-				"issue:minion-meta#518"
-			],
-			"rationale": "Same recurring exit-126 host fault as sibling tickets filed at the identical timestamp, pointing to one underlying infra issue rather than three separate goals.",
-			"evidence": [
-				"run 240d45f5 wrote 526 proposals and pushed to minion-meta:dev (rebased after a rejected push)",
-				"recurred across 8 minion-meta reconcile runs between 2026-09-26T20:13Z and 22:01Z"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T23:12:37.126Z"
-		},
-		{
-			"key": "issue:minion-meta#636",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#636 [monitor:unstick] reconcile proposals: agent launch exit-126 after successful git work (run 5e079acb)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/636",
-			"sourceUpdatedAt": "2026-09-26T22:18:30Z",
-			"sourceFingerprint": "3cdc1f32c65eae9ea87a87bc0d35628aea7dee9d8d5ff1476a7956192b2b9d66",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#634",
-				"issue:minion-meta#635",
-				"issue:minion-meta#518"
-			],
-			"rationale": "Third near-duplicate ticket for the same claude-CLI exit-126 host fault; the recommended host-classifier fix should be tracked once, not per duplicate.",
-			"evidence": [
-				"run 5e079acb wrote 524 proposals and pushed to minion-meta:dev (rebased after a rejected push)",
-				"Recommend adding git-work-succeeded + exit-126 + turns=0 as a new host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T23:12:37.126Z"
+			"scoredAt": "2026-10-17T23:26:08.457Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -17231,6 +17232,42 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
+			"key": "issue:minion-meta#518",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#518 [monitor:unstick] reconcile proposals - run 2511d09b unrecognised failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/518",
+			"sourceUpdatedAt": "2026-09-19T22:17:32Z",
+			"sourceFingerprint": "ccd1a0d65c749259ebc75037cd3c4f80aacf11a4632ee5ba2bc07f707061c136",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#634",
+				"issue:minion-meta#635",
+				"issue:minion-meta#636"
+			],
+			"rationale": "Same exit-126/turns=0 claude-launch signature as the clustered #634-#636 reports and should consolidate into one reconcile-worker CLI fix goal rather than a standalone retry-only ticket.",
+			"evidence": [
+				"exit-126 with turns=0 indicates the claude provider agent process itself failed to start",
+				"proposals/index.json written with 470 proposals, pushed successfully"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:26:08.457Z"
+		},
+		{
 			"key": "issue:minion-meta#677",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17504,6 +17541,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T05:18:54.558Z"
+		},
+		{
+			"key": "pr:minion_hub#565",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#565 feat(chat): Working for N s with contextual verbs; 3D spinner on every chat surface",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/565",
+			"sourceUpdatedAt": "2026-10-17T23:08:53Z",
+			"sourceFingerprint": "a13954e34ea3379c1fc5fea3afd8bdb271e6ab97ca0c25bf0b9c24bcb225de78",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#838"
+			],
+			"rationale": "Ready PR with linked spec and passing gates (273/273 tests, svelte-check clean) implementing a cross-surface chat UX improvement, with only browser verification outstanding.",
+			"evidence": [
+				"273/273 vitest incl. 3 new cases; svelte-check 0 new errors",
+				"Not verified in a browser yet",
+				"Spec: minion-meta #838 (specs/026)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:26:08.457Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -19098,6 +19170,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T02:51:48.161Z"
+		},
+		{
+			"key": "pr:minion-meta#838",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#838 docs(spec): 026 — Working for N s + contextual step verbs",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/838",
+			"sourceUpdatedAt": "2026-10-17T23:05:27Z",
+			"sourceFingerprint": "65661c351b6b21771b6edfe22cca983aee06e549b37f18f494646fe77762e583",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#565"
+			],
+			"rationale": "Companion spec PR formalizing the already-implemented contextual-verb/spinner feature landing in minion_hub#565.",
+			"evidence": [
+				"Spec for the Notion-style step header and verbs + 3D spinner on every AI chat surface"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:26:08.457Z"
 		},
 		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
@@ -21617,42 +21722,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:09:02.141Z"
-		},
-		{
-			"key": "issue:minion-meta#518",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#518 [monitor:unstick] reconcile proposals - run 2511d09b unrecognised failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/518",
-			"sourceUpdatedAt": "2026-09-19T22:17:32Z",
-			"sourceFingerprint": "ccd1a0d65c749259ebc75037cd3c4f80aacf11a4632ee5ba2bc07f707061c136",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#634",
-				"issue:minion-meta#635",
-				"issue:minion-meta#636"
-			],
-			"rationale": "Describes the same reconcile-worker exit-126-after-successful-git-work signature as the near-duplicate tickets filed a week later, so it should be consolidated into one infra goal rather than tracked separately.",
-			"evidence": [
-				"exit-126 with turns=0 ... classic not-executable/permission-denied exit code",
-				"proposals/index.json written with 470 proposals, and the result was pushed to git successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T23:12:37.126Z"
 		},
 		{
 			"key": "issue:minion-meta#522",
