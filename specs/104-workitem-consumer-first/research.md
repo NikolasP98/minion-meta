@@ -68,5 +68,15 @@ Current `runner/src/index.ts` `/runs` loads `specs/<canonicalSpecId>/plan.md` an
 `tasks.md`. This feature directory is 104 while its flat parent retains a legacy
 date-based id. Explicit per-repo dispatch must supply the complete plan/tasks in
 the task payload from the approved spec's reviewed commit and verify storage.
+`/runs` resolves the flat file's last-touch commit independently and calls
+`enqueue()` immediately. Therefore post-insert inspection is safe only under the
+existing verified operator brake. `runner/src/dispatch-policy.ts` reads
+`FACTORY_DISPATCH_PAUSED` from process environment; README documents restart
+semantics, and `pump()` preserves queued rows under the brake. Use the supported
+operator deployment procedure with safe active-container adoption or wait for
+active work to drain. Before releasing an owned unchanged hold, verify the
+never-started row's full task and exact `spec_commit_sha`. Mismatch means cancel
+only that row under the hold and refresh/review the source, not execute stale
+context. Preserve other operators' existing/concurrent pause authority.
 Body links are not evidence of context delivery. This uses the existing explicit
 task interface and makes no new directory-bridge implementation claim.

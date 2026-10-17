@@ -65,8 +65,22 @@ dispatch to Factory. Current `/runs` collects plan/tasks automatically only from
 `specs/<canonicalSpecId>/`; feature 104 has a different directory name. Therefore
 the operator must fetch this feature's plan/tasks at the same reviewed meta
 commit as the approved flat parent and include their complete contents in the
-explicit `task` payload, with an S5-only scope. Verify the stored run task carries
-those contents before execution. A body link alone is insufficient. Do not add
+explicit `task` payload, with an S5-only scope. Before POST, establish and verify
+the existing operator brake (`FACTORY_DISPATCH_PAUSED=1`) through the supported
+deployment procedure, preserving active containers. This is process environment,
+not a live pause endpoint; do not assume an API toggle. If a safe restart/adoption
+cannot be proved, wait for active work to drain before changing it. Record the
+prior operator state and coordinate the hold with its owner. While held, verify
+the returned row remains never-started and queued, its full task matches the
+submitted context, and `spec_commit_sha` equals the approved flat file's reviewed
+commit (the last-touch commit, not merely the current branch tip). `/runs`
+independently resolves that commit and immediately calls `enqueue()`, so checking
+after an unheld POST is too late. On mismatch, cancel only this never-started row
+under the hold, retain its history, and refresh/review the source before retrying.
+Release only this operator-owned unchanged hold, restoring the recorded prior
+state through the supported procedure; never clear a pre-existing/concurrent
+pause. If ownership cannot be proved, leave it held and request owner direction.
+A body link alone is insufficient. Do not add
 duplicate board goals or assume a bridge not present in the current collector.
 Parent/S5 topics include test and docs for its new tests and README changes.
 

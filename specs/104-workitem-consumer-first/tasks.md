@@ -9,7 +9,7 @@ Factory paths below are relative to that independent repository.
 ## Phase 1: Setup
 
 - [ ] T001 Record owner approval and current source revisions in the parent spec `specs/2026-08-18-factory-workitem-handoff-schema-spec.md` before code.
-- [ ] T002 Before dispatch, fetch `specs/104-workitem-consumer-first/plan.md` and `tasks.md` at the approved flat parent's reviewed meta commit, include their full contents in the explicit Factory S5-only task and verify stored delivery; create an isolated Factory feature branch at the registered base and read `AGENTS.md`, `runner/package.json`, `runner/src/lifecycle.ts` and `runner/src/index.ts`.
+- [ ] T002 Follow plan.md's held dispatch procedure: establish/verify the existing operator brake through supported deployment (safe active-container adoption or drain), preserve prior pause authority, fetch this feature's complete plan/tasks at the approved flat parent's reviewed last-touch commit, and submit one Factory S5-only task. Before releasing only an owned unchanged hold, verify queued/never-started state, full stored task and exact `spec_commit_sha`; mismatch cancels only that untouched row and requires source refresh/review. Create an isolated Factory feature branch at the registered base and read `AGENTS.md`, `runner/package.json`, `runner/src/lifecycle.ts` and `runner/src/index.ts`.
 
 ## Phase 2: Foundational contract
 

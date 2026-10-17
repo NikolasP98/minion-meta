@@ -6,7 +6,18 @@ Use temporary DB fixtures; production proposals are not test fixtures.
 
 The legacy parent needs explicit Factory-only S5 dispatch. Fetch this feature's
 plan/tasks from the same reviewed meta commit as its approved flat spec, include
-their full contents in the task payload, and verify the stored task. Current
+their full contents in the task payload. Before POST, establish and verify the
+existing `FACTORY_DISPATCH_PAUSED=1` operator brake through the supported
+deployment procedure, preserving active containers or waiting for them to drain
+if safe adoption cannot be proved. Record prior pause state and hold ownership;
+this environment setting requires a runner restart, not an API toggle. While
+held, verify the returned run remains queued/never-started, its stored complete
+task matches, and `spec_commit_sha` equals the approved flat file's reviewed
+last-touch commit. On mismatch cancel only that never-started row, retain its
+history, and refresh/review the source. Restore only an unchanged hold owned by
+this procedure; never clear another operator's pause. Uncertain ownership stays
+held for owner direction. Do not submit first and inspect after execution starts.
+Current
 automatic plan/task collection uses a directory matching the flat spec id and
 does not resolve this feature's body link.
 
