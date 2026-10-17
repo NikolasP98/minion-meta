@@ -55,6 +55,18 @@ Invariants: every animation has a reduced-motion path with no movement; semantic
 |---|---|---|
 | S4 face | new `AiOrb`, `AiOrbFace`, `orb-color.ts` (+test); 8 call sites swapped; mascot deleted | colour helper unit test; mounted face test (expression per state, error spiral, decorative vs labelled); `svelte-check`; design/token lint; screenshots on dev:local (/home greeting, collapsed + docked launcher, panel header) |
 
+## Amendment B — close the open ends (owner, 2026-10-17: "address the still open items")
+
+**AS-IS** (hub master `e4d0573d`). (1) /home has no Stop control (`my-agent/ChatInput.svelte` has no send button). (2) Live tool rings spin until the turn commits: the gateway emits tool completion as `phase: "result"` (`minion/src/agents/pi-embedded/pi-embedded-subscribe.handlers.tools.ts:352`), the hub only handles `phase === 'end'` (`services/gateway.svelte.ts:1236`). (3) Sources were never seen live: the local gateway has no Brave key; and on /home the tool turn and the answer are separate rows (`renderedMessages` maps raw messages 1:1), so sources would render ABOVE the answer.
+
+**TO-BE / DELTA.**
+| # | Transition | Proof |
+|---|---|---|
+| B1 | `onChatEvent` treats `result` (and legacy `end`) as tool completion | dev:local: live ring `running → success` at 6.1 s while Stop was still showing |
+| B2 | `ChatInput` `running`/`onstop` props: the ↵ hint becomes Stop; /home wires `abortChat` | dev:local: Stop clicked mid-story, run ended in 119 ms |
+| B3 | /home `renderedMessages` iterates `foldToolTurns(messages)` | dev:local with a temporary Brave key in the QA gateway config (restored byte-identical): sources stack with 5 real links under the answer, `target=_blank rel=noopener noreferrer` |
+| B4 | `AiPromptInput.submitLabel`; factory mode passes `factoryDesk_submit` | svelte-check |
+
 ## User Scenarios & Testing
 
 ### User Story 1 — Follow a working assistant without losing your place (P1)
