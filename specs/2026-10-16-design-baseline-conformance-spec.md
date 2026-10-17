@@ -1,11 +1,11 @@
 ---
 id: 2026-10-16-design-baseline-conformance-spec
 title: Design-system baseline and conformance
-stage: dev
-status: implementing
-pass: 1
+stage: deploy
+status: shipped
+pass: 2
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-17
 repos: [minion-meta, minion_hub, minion_site]
 proposal: 2026-10-16-design-baseline-conformance
 verdict: approved
