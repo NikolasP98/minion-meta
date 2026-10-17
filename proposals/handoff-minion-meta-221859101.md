@@ -45,67 +45,67 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6267
 - `NikolasP98/minion-meta@dev rankings/index.json:6301` — 'Gate constrained capabilities before component mounting, audit token/method authority'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6301
-- `NikolasP98/minion-meta@dev rankings/index.json:8677` — remove once the phone failure is root-caused.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8677
-- `NikolasP98/minion-meta@dev rankings/index.json:10680` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10680
-- `NikolasP98/minion-meta@dev rankings/index.json:10714` — the owner also asked to configure this via agent builder",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10714
-- `NikolasP98/minion-meta@dev rankings/index.json:12306` — 'Replace raw upstream error messages with an approved safe RPC projection'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12306
-- `NikolasP98/minion-meta@dev rankings/index.json:13334` — no WebGL-context budget. Chromium keeps ~16 live contexts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13334
-- `NikolasP98/minion-meta@dev rankings/index.json:13434` — the anti-join has no index to lean on",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13434
-- `NikolasP98/minion-meta@dev rankings/index.json:16114` — spec §4.1 also lists reschedule, charge in POS and book the...",
+- `NikolasP98/minion-meta@dev rankings/index.json:8644` — remove once the phone failure is root-caused.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8644
+- `NikolasP98/minion-meta@dev rankings/index.json:10647` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10647
+- `NikolasP98/minion-meta@dev rankings/index.json:10681` — the owner also asked to configure this via agent builder",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10681
+- `NikolasP98/minion-meta@dev rankings/index.json:12273` — 'Replace raw upstream error messages with an approved safe RPC projection'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12273
+- `NikolasP98/minion-meta@dev rankings/index.json:13301` — no WebGL-context budget. Chromium keeps ~16 live contexts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13301
+- `NikolasP98/minion-meta@dev rankings/index.json:13401` — the anti-join has no index to lean on",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13401
+- `NikolasP98/minion-meta@dev rankings/index.json:16081` — spec §4.1 also lists reschedule, charge in POS and book the...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16081
+- `NikolasP98/minion-meta@dev rankings/index.json:16114` — regex inference over the element JS",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16114
-- `NikolasP98/minion-meta@dev rankings/index.json:16147` — regex inference over the element JS",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16147
-- `NikolasP98/minion-meta@dev rankings/index.json:16182` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16182
-- `NikolasP98/minion-meta@dev rankings/index.json:16382` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16382
-- `NikolasP98/minion-meta@dev rankings/index.json:16481` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16481
-- `NikolasP98/minion-meta@dev rankings/index.json:16513` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16513
-- `NikolasP98/minion-meta@dev rankings/index.json:16549` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16549
-- `NikolasP98/minion-meta@dev rankings/index.json:16616` — Choose receipt retention and indeterminate-provider recovery policy before",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16616
-- `NikolasP98/minion-meta@dev rankings/index.json:17696` — describedby lists helper before error while the DOM renders error first",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17696
-- `NikolasP98/minion-meta@dev rankings/index.json:17729` — tagOptions is the FILTER's list — the event-scope registry",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17729
+- `NikolasP98/minion-meta@dev rankings/index.json:16149` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16149
+- `NikolasP98/minion-meta@dev rankings/index.json:16349` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16349
+- `NikolasP98/minion-meta@dev rankings/index.json:16448` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16448
+- `NikolasP98/minion-meta@dev rankings/index.json:16480` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16480
+- `NikolasP98/minion-meta@dev rankings/index.json:16516` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16516
+- `NikolasP98/minion-meta@dev rankings/index.json:16583` — Choose receipt retention and indeterminate-provider recovery policy before",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16583
+- `NikolasP98/minion-meta@dev rankings/index.json:17628` — describedby lists helper before error while the DOM renders error first",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17628
+- `NikolasP98/minion-meta@dev rankings/index.json:17661` — tagOptions is the FILTER's list — the event-scope registry",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17661
 - `NikolasP98/minion-meta@dev rankings/index.json:19216` — Legacy receipts cannot reconstruct a complete source manifest.",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19216
-- `NikolasP98/minion-meta@dev rankings/index.json:21739` — it cannot preselect the event itself — no hub route",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21739
-- `NikolasP98/minion-meta@dev rankings/index.json:21771` — onArtifactCallback/onChoice are NOT routed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21771
-- `NikolasP98/minion-meta@dev rankings/index.json:21805` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21805
-- `NikolasP98/minion-meta@dev rankings/index.json:24214` — Qualify Pixi/Habbo/Rapier motion, camera...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24214
-- `NikolasP98/minion-meta@dev rankings/index.json:24548` — @minion-stack/ui's Button.svelte spreads {...rest}",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24548
-- `NikolasP98/minion-meta@dev rankings/index.json:24711` — 'host error-log scrubbing is separate from the sanitized' pipeline",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24711
-- `NikolasP98/minion-meta@dev rankings/index.json:24935` — ?booking= deep-link query param is not wired",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24935
-- `NikolasP98/minion-meta@dev rankings/index.json:26305` — swap for listElements from $server/sandbox/sandbox.service",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26305
-- `NikolasP98/minion-meta@dev rankings/index.json:26337` — the PREDICATE is covered here, the WIRING is not — no test",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26337
-- `NikolasP98/minion-meta@dev rankings/index.json:26369` — add global server custom-property sort/filter/export planning",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26369
-- `NikolasP98/minion-meta@dev rankings/index.json:28928` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28928
-- `NikolasP98/minion-meta@dev rankings/index.json:29032` — tags are NOT inline-editable here while /pos/catalog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29032
-- `NikolasP98/minion-meta@dev rankings/index.json:29172` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29172
-- `NikolasP98/minion-meta@dev rankings/index.json:31470` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31470
-- `NikolasP98/minion-meta@dev rankings/index.json:34992` — src/lib/sandbox/tools.ts declares the same string instead of",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34992
+- `NikolasP98/minion-meta@dev rankings/index.json:21772` — it cannot preselect the event itself — no hub route",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21772
+- `NikolasP98/minion-meta@dev rankings/index.json:21804` — onArtifactCallback/onChoice are NOT routed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21804
+- `NikolasP98/minion-meta@dev rankings/index.json:21838` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21838
+- `NikolasP98/minion-meta@dev rankings/index.json:24280` — Qualify Pixi/Habbo/Rapier motion, camera...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24280
+- `NikolasP98/minion-meta@dev rankings/index.json:24614` — @minion-stack/ui's Button.svelte spreads {...rest}",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24614
+- `NikolasP98/minion-meta@dev rankings/index.json:24777` — 'host error-log scrubbing is separate from the sanitized' pipeline",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24777
+- `NikolasP98/minion-meta@dev rankings/index.json:25001` — ?booking= deep-link query param is not wired",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25001
+- `NikolasP98/minion-meta@dev rankings/index.json:26371` — swap for listElements from $server/sandbox/sandbox.service",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26371
+- `NikolasP98/minion-meta@dev rankings/index.json:26403` — the PREDICATE is covered here, the WIRING is not — no test",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26403
+- `NikolasP98/minion-meta@dev rankings/index.json:26435` — add global server custom-property sort/filter/export planning",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26435
+- `NikolasP98/minion-meta@dev rankings/index.json:28994` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28994
+- `NikolasP98/minion-meta@dev rankings/index.json:29098` — tags are NOT inline-editable here while /pos/catalog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29098
+- `NikolasP98/minion-meta@dev rankings/index.json:29238` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29238
+- `NikolasP98/minion-meta@dev rankings/index.json:31536` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31536
+- `NikolasP98/minion-meta@dev rankings/index.json:35058` — src/lib/sandbox/tools.ts declares the same string instead of",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35058
