@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T23:26:08.594Z",
+	"generatedAt": "2026-10-17T23:30:02.780Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -101,39 +101,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:43:57.675Z"
-		},
-		{
-			"key": "spec:2026-08-18-factory-workitem-handoff-schema-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion-factory",
-			"title": "Typed WorkItem fields + commit-pinned, structured handoffs across the factory pipeline",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-18-factory-workitem-handoff-schema-spec.md",
-			"sourceUpdatedAt": "2026-08-28",
-			"sourceFingerprint": "f62f01e09baf7f0248e304a936fa70e3bf2b49df4a2f7ad862501e4f4e00d3df",
-			"score": 93,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 10,
-				"impact": 9
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 9
-			},
-			"confidence": 9,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Execute because multiple confirmed factory integrity defects affect immutable handoffs, review evidence, repository routing, and lifecycle safety across the pipeline.",
-			"evidence": [
-				"Mutable spec fetches affect manual runs, auto-queue, and automerge.",
-				"Multi-repo dispatch currently selects the first mapped repository.",
-				"New spec_sha handling is required across requeue and fix paths."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-08-31T07:48:43.709Z"
 		},
 		{
 			"key": "spec:2026-08-17-site-device-identity-role-escalation-spec",
@@ -4216,39 +4183,6 @@
 			"scoredAt": "2026-10-12T02:56:17.748Z"
 		},
 		{
-			"key": "pr:minion-meta#835",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#835 docs(spec): correct WorkItem trust rollout before producer backfill",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/835",
-			"sourceUpdatedAt": "2026-10-17T22:44:12Z",
-			"sourceFingerprint": "d3541f65228857f5ef2eec590f0bbeed976c99be4918370a4ea68d88225aa613",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Doc-only plan correction fixing a trust-ordering gap is independently reviewed and ready to merge even though owner security approval and implementation remain pending.",
-			"evidence": [
-				"independent review found and fixed retry-authority gap",
-				"Standards and Spec pass for commit 61f41156",
-				"owner security approval still pending before code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T22:52:28.692Z"
-		},
-		{
 			"key": "proposal:2026-08-29-base-meta-status-revision-binding-required",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4609,6 +4543,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:34:30.416Z"
+		},
+		{
+			"key": "spec:2026-08-18-factory-workitem-handoff-schema-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-factory",
+			"title": "Typed WorkItem fields + commit-pinned, structured handoffs across the factory pipeline",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-08-18-factory-workitem-handoff-schema-spec.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "8a40a6f8aa3eedccba228a19dcb84bf282acc7f6167a7246374133b7aaa58401",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The spec documents concrete remaining integrity gaps (WorkItem trust fields absent from admission gates, legacy monitor intake) with a linked implementation plan and tasks, making it the actionable continuation.",
+			"evidence": [
+				"status: review",
+				"plan/tasks exist at specs/104-workitem-consumer-first/",
+				"remaining gaps: trust fields absent from new approval/admission gates; monitor intake still uses legacy issues"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:30:02.630Z"
 		},
 		{
 			"key": "issue:minion-meta#354",
@@ -7627,38 +7594,6 @@
 			"evidence": [
 				"DoD spans signed webhook, outbox row, deterministic scanner, LLM synthesis, and delayed rescan",
 				"out of scope explicitly defers dependency graphs 'after the slice proves the loop'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T12:26:34.201Z"
-		},
-		{
-			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Typed WorkItem + signed handoff bundle across factory stages",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-factory-workitem-handoff-schema.md",
-			"sourceUpdatedAt": "2026-08-18",
-			"sourceFingerprint": "a3a51605d9dd46566b610eaf5d721b864229577951697581476c2bbe947a7c62",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A typed WorkItem contract would fix real integrity gaps (mutable-id handoffs, grep-parsed reviewer output, first-match multi-repo resolution) but as written it bundles several independent schema/process changes into one goal.",
-			"evidence": [
-				"specs fetched by mutable id+branch, not pinned commit SHA",
-				"multi-repo specs map to the FIRST recognized repo only in queue.ts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -17543,41 +17478,6 @@
 			"scoredAt": "2026-10-13T05:18:54.558Z"
 		},
 		{
-			"key": "pr:minion_hub#565",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#565 feat(chat): Working for N s with contextual verbs; 3D spinner on every chat surface",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/565",
-			"sourceUpdatedAt": "2026-10-17T23:08:53Z",
-			"sourceFingerprint": "a13954e34ea3379c1fc5fea3afd8bdb271e6ab97ca0c25bf0b9c24bcb225de78",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#838"
-			],
-			"rationale": "Ready PR with linked spec and passing gates (273/273 tests, svelte-check clean) implementing a cross-surface chat UX improvement, with only browser verification outstanding.",
-			"evidence": [
-				"273/273 vitest incl. 3 new cases; svelte-check 0 new errors",
-				"Not verified in a browser yet",
-				"Spec: minion-meta #838 (specs/026)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T23:26:08.457Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18100,6 +18000,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:56:17.748Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
+			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
+			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit fixing the missing server-id header on gateway-to-hub tool calls is already merged, so this deployment-health entry is already-satisfied.",
+			"evidence": [
+				"commit message: fix(hub-tools): send x-minion-server-id on gateway→hub tool calls (#332)",
+				"entry is a completed commit, not a pending deploy"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:30:02.630Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -19203,6 +19135,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T23:26:08.457Z"
+		},
+		{
+			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Typed WorkItem + signed handoff bundle across factory stages",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-factory-workitem-handoff-schema.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "ac4ce6783c711b0685ccbf85e84af253e6ed3b47b25ebc8861e02fc008005bbe",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"spec:2026-08-18-factory-workitem-handoff-schema-spec"
+			],
+			"rationale": "The proposal's definition of done has already transitioned into the linked spec/Spec-Kit feature, making this proposal entry a superseded duplicate of that goal.",
+			"evidence": [
+				"status: in-spec",
+				"remaining work explicitly deferred to Spec Kit feature 104/parent spec in same batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:30:02.630Z"
 		},
 		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
@@ -34330,6 +34296,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T04:05:06.282Z"
+		},
+		{
+			"key": "run:minion_hub#39079094783",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39079094783",
+			"sourceUpdatedAt": "2026-10-17T23:27:30Z",
+			"sourceFingerprint": "1474a623077f055d9ee123ef94dc0954d9930516c7d35473f7cbbdde5c310665",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master, not a scoped work item that warrants board ranking.",
+			"evidence": [
+				"kind: run, stage: testing",
+				"status: in_progress, summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T23:30:02.630Z"
 		},
 		{
 			"key": "issue:minion-meta#666",
