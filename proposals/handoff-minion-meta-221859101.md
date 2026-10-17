@@ -43,14 +43,14 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6273
 - `NikolasP98/minion-meta@dev rankings/index.json:8621` — remove once the phone failure is root-caused.",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8621
-- `NikolasP98/minion-meta@dev rankings/index.json:10793` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10793
-- `NikolasP98/minion-meta@dev rankings/index.json:10827` — the owner also asked to configure this via agent builder",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10827
-- `NikolasP98/minion-meta@dev rankings/index.json:12359` — 'Replace raw upstream error messages with an approved safe RPC projection'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12359
-- `NikolasP98/minion-meta@dev rankings/index.json:13348` — the anti-join has no index to lean on",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13348
+- `NikolasP98/minion-meta@dev rankings/index.json:10826` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10826
+- `NikolasP98/minion-meta@dev rankings/index.json:10860` — the owner also asked to configure this via agent builder",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10860
+- `NikolasP98/minion-meta@dev rankings/index.json:12392` — 'Replace raw upstream error messages with an approved safe RPC projection'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12392
+- `NikolasP98/minion-meta@dev rankings/index.json:13416` — the anti-join has no index to lean on",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13416
 - `NikolasP98/minion-meta@dev rankings/index.json:16100` — spec §4.1 also lists reschedule, charge in POS and book the...",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16100
 - `NikolasP98/minion-meta@dev rankings/index.json:16135` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
@@ -71,29 +71,29 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17611
 - `NikolasP98/minion-meta@dev rankings/index.json:19098` — Legacy receipts cannot reconstruct a complete source manifest.",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19098
-- `NikolasP98/minion-meta@dev rankings/index.json:21726` — it cannot preselect the event itself — no hub route",
+- `NikolasP98/minion-meta@dev rankings/index.json:21694` — it cannot preselect the event itself — no hub route",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21694
+- `NikolasP98/minion-meta@dev rankings/index.json:21726` — onArtifactCallback/onChoice are NOT routed",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21726
-- `NikolasP98/minion-meta@dev rankings/index.json:21758` — onArtifactCallback/onChoice are NOT routed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21758
-- `NikolasP98/minion-meta@dev rankings/index.json:21792` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21792
-- `NikolasP98/minion-meta@dev rankings/index.json:24140` — Qualify Pixi/Habbo/Rapier motion, camera...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24140
-- `NikolasP98/minion-meta@dev rankings/index.json:24474` — @minion-stack/ui's Button.svelte spreads {...rest}",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24474
-- `NikolasP98/minion-meta@dev rankings/index.json:24605` — 'host error-log scrubbing is separate from the sanitized' pipeline",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24605
-- `NikolasP98/minion-meta@dev rankings/index.json:24829` — ?booking= deep-link query param is not wired",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24829
-- `NikolasP98/minion-meta@dev rankings/index.json:26436` — the PREDICATE is covered here, the WIRING is not — no test",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26436
-- `NikolasP98/minion-meta@dev rankings/index.json:26469` — add global server custom-property sort/filter/export planning",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26469
-- `NikolasP98/minion-meta@dev rankings/index.json:29100` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29100
-- `NikolasP98/minion-meta@dev rankings/index.json:29204` — tags are NOT inline-editable here while /pos/catalog and...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29204
-- `NikolasP98/minion-meta@dev rankings/index.json:29377` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29377
-- `NikolasP98/minion-meta@dev rankings/index.json:31771` — Qualify full Workshop composition and remaining keyboard camera",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31771
+- `NikolasP98/minion-meta@dev rankings/index.json:21760` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21760
+- `NikolasP98/minion-meta@dev rankings/index.json:24142` — Qualify Pixi/Habbo/Rapier motion, camera...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24142
+- `NikolasP98/minion-meta@dev rankings/index.json:24476` — @minion-stack/ui's Button.svelte spreads {...rest}",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24476
+- `NikolasP98/minion-meta@dev rankings/index.json:24607` — 'host error-log scrubbing is separate from the sanitized' pipeline",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24607
+- `NikolasP98/minion-meta@dev rankings/index.json:24831` — ?booking= deep-link query param is not wired",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24831
+- `NikolasP98/minion-meta@dev rankings/index.json:26438` — the PREDICATE is covered here, the WIRING is not — no test",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26438
+- `NikolasP98/minion-meta@dev rankings/index.json:26471` — add global server custom-property sort/filter/export planning",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26471
+- `NikolasP98/minion-meta@dev rankings/index.json:29102` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29102
+- `NikolasP98/minion-meta@dev rankings/index.json:29206` — tags are NOT inline-editable here while /pos/catalog and...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29206
+- `NikolasP98/minion-meta@dev rankings/index.json:29379` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29379
+- `NikolasP98/minion-meta@dev rankings/index.json:31806` — Qualify full Workshop composition and remaining keyboard camera",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31806
