@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T17:40:12.463Z",
+	"generatedAt": "2026-10-17T18:09:58.097Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1302,38 +1302,6 @@
 			"scoredAt": "2026-10-12T12:30:14.278Z"
 		},
 		{
-			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Backups and retention pruning silently never run, and the proposal gives a clear bounded wire-or-delete decision with explicit DELTA.",
-			"evidence": [
-				"startBackupScheduler() has zero call sites anywhere in the repo",
-				"no backup is ever taken and retention pruning never runs, silently"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T17:51:58.013Z"
-		},
-		{
 			"key": "spec:2026-08-22-hub-load-nav-performance-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2159,6 +2127,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T21:59:56.865Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
+			"sourceUpdatedAt": "2026-10-03",
+			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Backups and retention pruning silently never run because the scheduler has zero call sites, risking unrecoverable data loss with a clear two-option fix already specified.",
+			"evidence": [
+				"startBackupScheduler() has zero call sites anywhere in the repo",
+				"no backup is ever taken and retention pruning never runs, silently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T18:09:57.950Z"
 		},
 		{
 			"key": "proposal:2026-10-03-notification-recon",
@@ -22531,38 +22531,6 @@
 			"scoredAt": "2026-10-10T22:23:20.564Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already merges the fix for the gateway header/403 issue, leaving no described remaining action.",
-			"evidence": [
-				"commit 1e7ec283 'fix(hub-tools): send x-minion-server-id on gateway→hub tool calls (#332)'",
-				"summary states the ledger flusher already sent the header and the tool pack fix is now applied"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T17:40:12.329Z"
-		},
-		{
 			"key": "issue:minion-meta#415",
 			"kind": "issue",
 			"stage": "proposal",
@@ -35139,20 +35107,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 7
+				"specification": 5,
+				"implementation": 6
 			},
 			"confidence": 5,
-			"recommendation": "execute",
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Single medium-severity, narrowly scoped hardcoded-constant cleanup with an exact file/line target.",
+			"rationale": "This is a single medium-severity cosmetic finding about a hardcoded timeout constant name in a test file, with negligible production consequence.",
 			"evidence": [
-				"medium ... hardcoded-config ... server.maintenance-timer-ownership.e2e.test.ts:156",
-				"should be imported as a named constant ... consistent with TICK_INTERVAL_MS"
+				"medium severity, hardcoded-config finding",
+				"60_000 timeout value should be a named constant, consistent with existing constants on same line"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T17:51:58.013Z"
+			"scoredAt": "2026-10-17T18:09:57.950Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
