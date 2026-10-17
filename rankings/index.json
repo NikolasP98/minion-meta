@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T04:40:10.631Z",
+	"generatedAt": "2026-10-17T05:11:13.799Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -936,38 +936,6 @@
 			"scoredAt": "2026-10-14T13:51:35.437Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-807f018d50fd",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/channel-identities/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-807f018d50fd.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "54bb1d35aa2952328bd5d855b79fb1de77d653417c9fc74e9be611ac1eb2128a",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A merged endpoint returns channel identities across all organizations instead of org-scoping them, a real multi-tenant data isolation breach with a clear, bounded fix.",
-			"evidence": [
-				"TODO(handoff) states the result is still platform-wide, not org-scoped",
-				"diagnosis flags violation of the canonical withOrgCore access pattern"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:32:16.747Z"
-		},
-		{
 			"key": "spec:2026-10-03-notification-tenant-boundaries-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1494,6 +1462,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T08:21:48.244Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-807f018d50fd",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/channel-identities/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-807f018d50fd.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "0590179e88d195cb34b0b140354eb9ce138e93b147c3f73917179745500d8171",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding of a multi-tenant data isolation breach: channel-identities endpoint returns platform-wide data instead of org-scoped.",
+			"evidence": [
+				"TODO(handoff): the result is still platform-wide, not org-scoped",
+				"violates the canonical withOrgCore org-scoped access pattern"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T05:11:13.649Z"
 		},
 		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
@@ -2822,6 +2822,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-13T16:22:04.338Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
+			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
+			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already-committed fix for a cross-org auth bug; this is deployment-health tracking, not open design work.",
+			"evidence": [
+				"commit: ledger flusher already sent the header, the tool pack did not",
+				"missing header caused 403 on permission-gated hub tools"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T05:11:13.649Z"
 		},
 		{
 			"key": "issue:minion-meta#595",
@@ -4312,38 +4344,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:53:38.303Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-483319781",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/api/gateway/channel-identities/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-483319781.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "bcf1bda463e3157f40e52e13e49c7aa8a295de02806612aa31b78517e308ccc8",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Channel-identities endpoint returning platform-wide rather than org-scoped results is a multi-tenant correctness gap worth specifying into a fix.",
-			"evidence": [
-				"the result is still platform-wide, not org-scoped",
-				"src/routes/api/gateway/channel-identities/+server.ts:29"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:40:10.470Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3287487637",
@@ -18605,39 +18605,6 @@
 			"scoredAt": "2026-10-10T19:00:16.165Z"
 		},
 		{
-			"key": "pr:minion_hub#542",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#542 feat(sandbox): admin-only Sandbox page — agent-built visuals in sandboxed iframes over one configurable, RBAC-aware query endpoint (POC)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/542",
-			"sourceUpdatedAt": "2026-10-17T04:34:23Z",
-			"sourceFingerprint": "fe81b6bbbec6202eebaa1aefc0692c37c6948cb2a709bda877dba1c49198d4f3",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified admin-only POC PR with passing gates and addressed security findings, ready for owner review/merge.",
-			"evidence": [
-				"vitest 449 passed, svelte-check 0 errors",
-				"2 HIGH fail-open findings fixed with tests",
-				"admin-only POC, out-of-scope items tracked separately"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:40:10.470Z"
-		},
-		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20965,6 +20932,40 @@
 			"scoredAt": "2026-10-12T12:33:09.197Z"
 		},
 		{
+			"key": "pr:minion_hub#542",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#542 feat(sandbox): admin-only Sandbox page — agent-built visuals in sandboxed iframes over one configurable, RBAC-aware query endpoint (POC)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/542",
+			"sourceUpdatedAt": "2026-10-17T05:01:01Z",
+			"sourceFingerprint": "586bce828c129e61e3808ec43b175d078f88929bea51c72571b04374c4001b4e",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#555"
+			],
+			"rationale": "Admin-only sandbox POC has passing gates and a documented out-of-scope ledger, ready for an owner merge decision.",
+			"evidence": [
+				"svelte-check 0 errors, vitest 449 passed",
+				"2 HIGH security findings already fixed with tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T05:11:13.649Z"
+		},
+		{
 			"key": "spec:2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -22018,6 +22019,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T23:51:10.688Z"
+		},
+		{
+			"key": "pr:minion_hub#555",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#555 feat(sandbox): d3 (slim bundle) and ECharts GL as lazy vendor assets",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/555",
+			"sourceUpdatedAt": "2026-10-17T04:56:43Z",
+			"sourceFingerprint": "10b31db183fbbc1c831e386816507dae211aedf85ec3e82d4aa4453957e71d23",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#542",
+				"pr:minion-meta#825"
+			],
+			"rationale": "Vendor asset work for the sandbox is fully gated and benchmarked, with a known WebGL context-limit gap already ledgered.",
+			"evidence": [
+				"bun run check and vitest suites pass",
+				"20 bar3D elements lose 4 of 20 WebGL contexts, logged as TODO(handoff)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T05:11:13.649Z"
 		},
 		{
 			"key": "pr:minion-meta#815",
@@ -26209,6 +26245,40 @@
 			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
+			"key": "pr:minion-meta#825",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#825 docs(spec): 018 — sandbox vendors: slim d3 and ECharts GL, with the memory bill",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/825",
+			"sourceUpdatedAt": "2026-10-17T04:54:59Z",
+			"sourceFingerprint": "d3df79cc0f46d8aa3786f57afb853b8563b46f85aa93da86305c7f417171f83e",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#555"
+			],
+			"rationale": "Spec-kit artifact documenting the already-implemented d3/echarts-gl vendor work from minion_hub#555.",
+			"evidence": [
+				"specs/018-sandbox-d3-and-3d-vendors/{spec,plan,tasks}.md",
+				"references implementation PR minion_hub#555"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T05:11:13.649Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26288,21 +26358,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A concrete test coverage gap (integration testing for merge-target wiring in scheduling) is clearly scoped with a specific fix direction (happy-path + edge case integration test).",
+			"rationale": "Approved, bounded gap: scheduling merge-target has unit tests but no integration test covering its wiring.",
 			"evidence": [
 				"TODO(handoff): the PREDICATE is covered here, the WIRING is not — no test",
-				"approved status, clear fix direction with specific test cases",
-				"file and PR #370 identified"
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T04:51:12.695Z"
+			"scoredAt": "2026-10-17T05:11:13.649Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b9ec3f0147a5",
@@ -28867,38 +28936,6 @@
 			"scoredAt": "2026-10-17T01:15:50.643Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "50f393b420ee06e5c582549b63286c43e00174e125433b4401c4eafd46b9cc4e",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This automated ledger bundles many unrelated TODO markers across different subsystems into one artifact, so it cannot produce one effective outcome and should be split into per-issue goals.",
-			"evidence": [
-				"lists 17+ distinct markers spanning POS voids, HR schema, auth gating, and phone failures",
-				"each marker references a different file/line with no shared theme"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:32:16.747Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29053,21 +29090,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 4
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A UX inconsistency (CRM tags read-only vs inline-editable in catalog) is documented with a clear fix direction but is low urgency and needs a decision on whether to implement or document-as-intentional.",
+			"rationale": "Approved, bounded UX-consistency fix to make CRM customer tags inline-editable like /pos/catalog.",
 			"evidence": [
-				"TODO(handoff): tags are NOT inline-editable here while /pos/catalog and...",
-				"approved status, updated 2026-09-26",
-				"auto-diagnosis proposes comparing tag components"
+				"TODO(handoff): tags are NOT inline-editable here while /pos/catalog",
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T04:51:12.695Z"
+			"scoredAt": "2026-10-17T05:11:13.649Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-509e3a8d8c64",
@@ -35566,6 +35602,38 @@
 			"scoredAt": "2026-10-17T01:17:03.102Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "638638661873f04a2d3aec79754d6054d8ad0b0b53e8c674a1d125ec4ca18144",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Cited markers point at rankings/index.json line numbers and quote other proposals' own summary prose, indicating the sweep matched its own generated ranking data rather than real source TODOs.",
+			"evidence": [
+				"markers reference rankings/index.json lines, not application source files",
+				"marker text matches prose from unrelated proposals' diagnosis sections"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T05:11:13.649Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3652542388",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35628,38 +35696,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
-			"key": "run:minion_hub#39002721714",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39002721714",
-			"sourceUpdatedAt": "2026-10-17T04:30:24Z",
-			"sourceFingerprint": "7e00e8c6f37b5391ec0d720bc594593c44692d5763528e6f7bec63acdcff22fe",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 9,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress automatic CI run status, not an actionable goal.",
-			"evidence": [
-				"CI run in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:40:10.470Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
