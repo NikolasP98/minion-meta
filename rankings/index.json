@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T11:09:55.397Z",
+	"generatedAt": "2026-10-17T11:39:52.747Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2657,39 +2657,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A missing header causes erroneous 403s across permission-gated hub tools whenever a gateway serves multiple org-scoped rows, and a fix with a spec reference is already committed.",
-			"evidence": [
-				"send x-minion-server-id on gateway→hub tool calls (#332)",
-				"agent's assignment check answers 403 ... every permission-gated hub tool is denied",
-				"Spec: minion-meta specs/012-assistant-tool-call-hygiene"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T11:09:55.255Z"
 		},
 		{
 			"key": "spec:2026-08-31-factory-supervised-release-defense-in-depth-spec",
@@ -13731,38 +13698,6 @@
 			"scoredAt": "2026-10-12T12:25:05.160Z"
 		},
 		{
-			"key": "issue:minion-meta#399",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#399 [monitor:unstick] discovery run 18219c9f (minion-hub) failed: missing merge_event_id",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/399",
-			"sourceUpdatedAt": "2026-09-12T09:17:17Z",
-			"sourceFingerprint": "8ce51eab7ca1c9a45612b2ca3ea4da6880e919f027ddae4b99f5825b22c6ee5d",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A discovery run was dispatched without a required merge_event_id causing immediate prep failure, indicating a spec/trigger bug worth fixing but not yet scoped into an actionable fix.",
-			"evidence": [
-				"error: 'discovery run 18219c9f has no merge_event_id'",
-				"exit_code -1, no log emitted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T11:21:07.829Z"
-		},
-		{
 			"key": "issue:minion-meta#408",
 			"kind": "issue",
 			"stage": "proposal",
@@ -16891,6 +16826,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
+		},
+		{
+			"key": "issue:minion-meta#399",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#399 [monitor:unstick] discovery run 18219c9f (minion-hub) failed: missing merge_event_id",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/399",
+			"sourceUpdatedAt": "2026-09-12T09:17:17Z",
+			"sourceFingerprint": "8ce51eab7ca1c9a45612b2ca3ea4da6880e919f027ddae4b99f5825b22c6ee5d",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A discovery run failed precondition by lacking a required merge_event_id, indicating a spec/trigger bug worth fixing but not urgent since it fails fast without side effects.",
+			"evidence": [
+				"error: 'discovery run 18219c9f has no merge_event_id'",
+				"exit_code -1, no log emitted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T11:39:52.610Z"
 		},
 		{
 			"key": "proposal:2026-08-23-hub-archived-warehouse-submit-guard",
@@ -28307,6 +28274,38 @@
 			"scoredAt": "2026-10-17T09:41:29.136Z"
 		},
 		{
+			"key": "issue:minion-meta#616",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#616 [monitor:unstick] reconcile proposals run d829bb3f: agent exec failed (exit-126) after successful sweep",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/616",
+			"sourceUpdatedAt": "2026-09-26T10:17:36Z",
+			"sourceFingerprint": "087c3741e1b2ea03b6cd3c9faf3f01e23872acd9a993f0f5a34aa1e01702778e",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Substantive reconcile work (proposals, git push) already completed successfully and only the cosmetic trailing agent step failed, so no real fix is needed beyond runner infra hygiene.",
+			"evidence": [
+				"refreshed ~90 handoffs, ran merge-scan, wrote proposals/index.json, pushed dev branch",
+				"failure is isolated to the trailing reconcile-agent step: exit-126, turns=0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T11:39:52.610Z"
+		},
+		{
 			"key": "issue:minion-meta#657",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33001,38 +33000,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T07:10:38.177Z"
-		},
-		{
-			"key": "issue:minion-meta#616",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#616 [monitor:unstick] reconcile proposals run d829bb3f: agent exec failed (exit-126) after successful sweep",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/616",
-			"sourceUpdatedAt": "2026-09-26T10:17:36Z",
-			"sourceFingerprint": "087c3741e1b2ea03b6cd3c9faf3f01e23872acd9a993f0f5a34aa1e01702778e",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The substantive reconcile work (proposals, git push) already succeeded and the trailing agent step failure is cosmetic infra noise, not a real task failure.",
-			"evidence": [
-				"run's substantive output (proposals, git push) already landed successfully",
-				"exit-126 ... looks like a runner-box/infra fault, not a genuine reconcile failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T11:21:07.829Z"
 		},
 		{
 			"key": "issue:minion-meta#632",
