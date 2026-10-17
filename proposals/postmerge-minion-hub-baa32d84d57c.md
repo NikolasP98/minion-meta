@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-baa32d84d57c
 title: "Post-merge finding — scan-gap in static/vendor/d3-slim.min.js (minion_hub)"
-status: draft
+status: review
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `static/vendor/d3-slim.min.js`
@@ -37,3 +38,15 @@ This signals a **vendor dependency committed as source** — minified third-part
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/542
 - file: `static/vendor/d3-slim.min.js`
 - checked: 2026-10-17
+
+## Reconciliation note (2026-10-17, proposal-sweep)
+
+Same class of finding already tracked under `2026-09-08-platform-qc-remediation`'s
+"Dependency/release provenance (UI-06)" priority item (no blanket version bump;
+publish distinct package versions/digests before adoption) and its sibling
+vendored-tarball findings (e.g. `postmerge-minion-hub-0f6b2d0e3194`). Flagged
+`duplicate_candidate` rather than merged: that doc's packaging work so far is
+scoped to `@minion-stack/*` workspace tarballs, not a third-party chart library
+committed as a minified vendor file, so a human should confirm this specific
+file is covered by the same remediation slice before folding it in or closing
+it separately.
