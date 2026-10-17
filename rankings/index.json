@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T02:10:14.943Z",
+	"generatedAt": "2026-10-17T02:40:35.996Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3413,21 +3413,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 4,
+				"implementation": 3
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Four ingest/corpus services still lack JobExecution ownership gates, a security-relevant gap already tracked twice (postmerge scan and handoff ledger) against a named remediation proposal.",
+			"rationale": "Missing JobExecution ownership gates across four ingest/corpus services is a real authorization gap tied to a broader remediation effort, but the exact gate rule still depends on an external proposal (HDS-05).",
 			"evidence": [
-				"Adopt JobExecution in statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp and brain_corpus_business",
-				"their domain effects still need ownership gates",
-				"Merged from handoff-minion-hub-1757377296 (same marker)"
+				"TODO names four services (statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp, brain_corpus_business) lacking ownership gates",
+				"references meta proposals/2026-09-08-platform-qc-remediation.md (HDS-05) for the exact rule, not yet resolved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T02:22:13.723Z"
+			"scoredAt": "2026-10-17T02:40:35.843Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
@@ -6313,38 +6312,6 @@
 			"scoredAt": "2026-10-16T00:21:29.103Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b6caed3b36fd.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "992bb74eef0d67d3d0440bfde4986adb9d7afdb12e75709b81954868e9daed2a",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An unbounded provider JSON read before res.json() is a concrete DoS exposure with a specific, boundable fix (size limit / streaming cap).",
-			"evidence": [
-				"TODO(handoff): provider JSON reader is not byte bounded before res.json()",
-				"Fix direction: enforce a maximum response size ... ~10MB threshold"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T02:22:13.723Z"
-		},
-		{
 			"key": "spec:2026-10-03-readiness-pos-plan-operation-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7592,6 +7559,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T19:21:24.616Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/job-effect-pages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b6caed3b36fd.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "992bb74eef0d67d3d0440bfde4986adb9d7afdb12e75709b81954868e9daed2a",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Unbounded provider JSON parsing before res.json() is a concrete, bounded DoS fix with a clear concrete mitigation path.",
+			"evidence": [
+				"TODO: provider JSON reader not byte bounded before res.json()",
+				"diagnosis proposes Content-Length check or size-limiting stream wrapper (~10MB threshold)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T02:40:35.843Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bb9baf1f3156",
@@ -12305,6 +12304,38 @@
 			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c1b3044762bb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "7682aec710bf82b606bd084bd2ce4bab0b3e99ebfd167951dfbe380ac4729da2",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Orphaned blob risk on failed/concurrent imports is a real data-consistency issue but needs a transactional/GC design decided before scoping implementation.",
+			"evidence": [
+				"TODO: Reconcile uploaded blobs after failed/concurrent import creation",
+				"diagnosis suggests transactional upload plus GC job keyed on import ID, not yet designed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T02:40:35.843Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16298,20 +16329,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
+				"specification": 3,
 				"implementation": 3
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The TODO flags a missing indeterminate-state recovery policy but the fix direction is only generic guidance without a defined policy to implement yet.",
+			"rationale": "The TODO flags a real gap in indeterminate job recovery semantics but the diagnosis gives only generic policy options, not a concrete design to implement.",
 			"evidence": [
 				"TODO(handoff): Add an explicitly reviewed indeterminate recovery policy",
-				"Fix direction: Document the recovery policy ... implement guards"
+				"diagnosis lists generic options (backoff retry, dead-letter queue, state-machine reset) without a chosen design"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T02:22:13.723Z"
+			"scoredAt": "2026-10-17T02:40:35.843Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
@@ -18387,38 +18418,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T09:12:53.591Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/finance-statements.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c1b3044762bb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "7682aec710bf82b606bd084bd2ce4bab0b3e99ebfd167951dfbe380ac4729da2",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Orphaned blobs from failed/concurrent imports are a real but non-urgent consistency/cost issue with a reasonably specific fix direction.",
-			"evidence": [
-				"TODO(handoff): Reconcile uploaded blobs after failed/concurrent import creation",
-				"Fix direction: Wrap blob uploads in a transaction ... blob-garbage-collection job"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-10T02:22:13.723Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c2239f0660dc",
@@ -21038,6 +21037,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
+			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
+			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already adds both missing tool ids to TOOL_ORDER plus a regression test, so the fix is already shipped.",
+			"evidence": [
+				"commit adds crm tool ids next to crm_query in TOOL_ORDER",
+				"adds regression test asserting TOOL_REGISTRY keys subset of TOOL_ORDER"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T02:40:35.843Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
