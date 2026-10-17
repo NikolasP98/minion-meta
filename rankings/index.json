@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T02:40:35.996Z",
+	"generatedAt": "2026-10-17T03:09:53.305Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10509,6 +10509,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T15:40:35.099Z"
+		},
+		{
+			"key": "pr:minion_hub#550",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#550 ci(ui-audit): conformance ledger ratchet, one-command sweep, summary and qa-stack step (spec 014 F)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/550",
+			"sourceUpdatedAt": "2026-10-17T03:06:43Z",
+			"sourceFingerprint": "057cbb09d6199260f079e26312c14505e913b4d60bc4a077eb5e9a8857b625c4",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#551"
+			],
+			"rationale": "CI-integrated conformance ledger with tests and dry-run evidence is a bounded, ready-to-merge QA infra improvement.",
+			"evidence": [
+				"adds CI qa-stack step running audit:ui:sweep --ci",
+				"14 node:test + 9 vitest cases cover ledger and sweep logic",
+				"decrease-only ratchet enforced via --compare exit codes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T03:09:53.160Z"
+		},
+		{
+			"key": "pr:minion_hub#551",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#551 test(ui-audit): conformance rules, dense-aware targets, rendered-DOM archetype landmarks, shared allow-list (spec 014 E)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/551",
+			"sourceUpdatedAt": "2026-10-17T03:06:41Z",
+			"sourceFingerprint": "4bfcf8fc30fa332457d458c93a1d126bdbb3642738b99480de76b89d11234284",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#550"
+			],
+			"rationale": "Prerequisite conformance rules, markers, and allow-list are implemented with a large passing test suite and directly feed #550's harness.",
+			"evidence": [
+				"173 passed across 4 test files",
+				"54-entry allow-list derived from single source to avoid drift",
+				"dense-aware target exclusions prevent false positives in grids"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T03:09:53.160Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -21037,38 +21107,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/39be924dcd6aa6a4d62266c3f6a09ee6c7a274c0",
-			"sourceUpdatedAt": "2026-10-15T21:19:27Z",
-			"sourceFingerprint": "c811d7d826827e7e9d2aed5f1f5616cb6a45f7fa9ef5caa34ef290444a7f3794",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already adds both missing tool ids to TOOL_ORDER plus a regression test, so the fix is already shipped.",
-			"evidence": [
-				"commit adds crm tool ids next to crm_query in TOOL_ORDER",
-				"adds regression test asserting TOOL_REGISTRY keys subset of TOOL_ORDER"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T02:40:35.843Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
