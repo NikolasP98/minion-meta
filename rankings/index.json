@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T04:32:16.953Z",
+	"generatedAt": "2026-10-17T04:40:10.631Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4314,6 +4314,38 @@
 			"scoredAt": "2026-10-14T18:53:38.303Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-483319781",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/api/gateway/channel-identities/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-483319781.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "bcf1bda463e3157f40e52e13e49c7aa8a295de02806612aa31b78517e308ccc8",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Channel-identities endpoint returning platform-wide rather than org-scoped results is a multi-tenant correctness gap worth specifying into a fix.",
+			"evidence": [
+				"the result is still platform-wide, not org-scoped",
+				"src/routes/api/gateway/channel-identities/+server.ts:29"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:40:10.470Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3287487637",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4513,41 +4545,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:34:30.416Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"run:minion (gateway)#39001758368",
-				"run:minion (gateway)#39001758370"
-			],
-			"rationale": "The commit fixes a real cross-org 403 permission bug but lands in the same DEV push where both CI and npm publish failed, so deploy health needs joint triage with those runs.",
-			"evidence": [
-				"commit fixes 403 caused by missing x-minion-server-id header",
-				"same-repo DEV push triggered CI and npm publish failures within ~2 minutes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:32:16.747Z"
 		},
 		{
 			"key": "issue:minion-meta#354",
@@ -7616,41 +7613,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T00:30:17.772Z"
-		},
-		{
-			"key": "pr:minion_hub#542",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#542 feat(sandbox): admin-only Sandbox page — agent-built visuals in sandboxed iframes over one configurable, RBAC-aware query endpoint (POC)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/542",
-			"sourceUpdatedAt": "2026-10-17T04:27:36Z",
-			"sourceFingerprint": "44b6c6770d1d33e005b6e77f5544b4a68bdc37bf3c5e9d1482ab04c9ff470c0d",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-16-hub-sandbox-builder-context-engineering"
-			],
-			"rationale": "A well-specified, admin-only sandbox POC with passing gates and fixed security findings is ready for owner review and merge.",
-			"evidence": [
-				"449 vitest passing including sandbox suites",
-				"2 HIGH security fail-open findings fixed with tests",
-				"draft PR awaiting owner approval gate per Principle V"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:32:16.747Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -18641,6 +18603,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T19:00:16.165Z"
+		},
+		{
+			"key": "pr:minion_hub#542",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#542 feat(sandbox): admin-only Sandbox page — agent-built visuals in sandboxed iframes over one configurable, RBAC-aware query endpoint (POC)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/542",
+			"sourceUpdatedAt": "2026-10-17T04:34:23Z",
+			"sourceFingerprint": "fe81b6bbbec6202eebaa1aefc0692c37c6948cb2a709bda877dba1c49198d4f3",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified admin-only POC PR with passing gates and addressed security findings, ready for owner review/merge.",
+			"evidence": [
+				"vitest 449 passed, svelte-check 0 errors",
+				"2 HIGH fail-open findings fixed with tests",
+				"admin-only POC, out-of-scope items tracked separately"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:40:10.470Z"
 		},
 		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
@@ -34132,7 +34127,7 @@
 			"title": "Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3035029616.md",
 			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "1f6d25a76894b35815e6110ec4f5dcfffa11627224087253c19752e4f233fd10",
+			"sourceFingerprint": "d49c975df3a27d5a75f1ea3d018425401ea24f1be54cf8411084bb7d22b59ed1",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -34142,19 +34137,19 @@
 			},
 			"readiness": {
 				"specification": 4,
-				"implementation": 5
+				"implementation": 3
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "A draft-status, unreviewed cosmetic dialog-text bug about visit service titles has low stakes and no independent review yet.",
+			"rationale": "Minor dialog-display correctness issue whose full scope is unclear from the truncated marker text.",
 			"evidence": [
-				"+page.svelte:891 — dialog names the VISIT's service titles, not every",
-				"status: draft"
+				"dialog names the VISIT's service titles, not every",
+				"single TODO(handoff) marker, no further detail"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T01:14:51.994Z"
+			"scoredAt": "2026-10-17T04:40:10.470Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3998033254",
@@ -35633,6 +35628,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
+		},
+		{
+			"key": "run:minion_hub#39002721714",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39002721714",
+			"sourceUpdatedAt": "2026-10-17T04:30:24Z",
+			"sourceFingerprint": "7e00e8c6f37b5391ec0d720bc594593c44692d5763528e6f7bec63acdcff22fe",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 9,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress automatic CI run status, not an actionable goal.",
+			"evidence": [
+				"CI run in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T04:40:10.470Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
