@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-807f018d50fd
 title: "Post-merge finding — todo-handoff in src/routes/api/gateway/channel-identities/+server.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]
