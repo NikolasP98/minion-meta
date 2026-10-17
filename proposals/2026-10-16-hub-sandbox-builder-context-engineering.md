@@ -5,7 +5,7 @@ status: draft
 created: 2026-10-16
 updated: 2026-10-16
 repos: [minion_hub, minion, minion-meta]
-tags: [logic, agent]
+tags: [logic]
 value: 8
 effort: M
 parent: 2026-10-16-hub-sandbox-pages-followups
