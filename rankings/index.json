@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T05:42:53.185Z",
+	"generatedAt": "2026-10-17T06:10:26.196Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7017,6 +7017,38 @@
 			"scoredAt": "2026-10-14T07:22:18.731Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
+			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
+			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit message describes a hub-tool 403 bug that is already fixed and shipped, leaving no outstanding execution.",
+			"evidence": [
+				"fix(hub-tools): send x-minion-server-id on gateway→hub tool calls (#332)",
+				"commit 1e7ec283ebf0 already merged per sourceUrl"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:10:26.060Z"
+		},
+		{
 			"key": "issue:minion-meta#265",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8649,38 +8681,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T00:40:38.379Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-5e6d2717c59c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/bridge.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5e6d2717c59c.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "3708d7d0202dd90a9a1e4663af00b043a9f494f9efd97e33453a5e3ffb698fbd",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "WebGL context leak in the workshop canvas is a real reliability bug but the fix (lifecycle tracking, shared renderer, telemetry) needs design decisions before it's a bounded ticket.",
-			"evidence": [
-				"TODO cites no WebGL-context budget vs Chromium's ~16 live context ceiling",
-				"PixiJS 8 renderer creates a context per agent sprite in pixiCanvas action"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T05:42:53.034Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -13338,6 +13338,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T05:40:36.571Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-5e6d2717c59c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/bridge.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5e6d2717c59c.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "208b495d59daa6510ea24a035d4e466902f84811b5d44a1443a30f929b640952",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-489bd42e8ffa",
+				"proposal:postmerge-minion-hub-77196cfff827"
+			],
+			"rationale": "Uncapped WebGL contexts in the workshop canvas risk silent rendering failures and memory leaks, but it stems from the same PR #542 sandbox area as two related findings so should be grouped rather than tracked alone.",
+			"evidence": [
+				"TODO(handoff): no WebGL-context budget. Chromium keeps ~16 live contexts",
+				"causing silent rendering failures and memory leaks as users add agents or navigate away/back"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:10:26.060Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5ecd8380b71c",
@@ -24218,37 +24253,6 @@
 			"scoredAt": "2026-10-10T22:27:23.009Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-489bd42e8ffa",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/sandbox/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-489bd42e8ffa.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "8b05e87bc1187c684014bb5b547b179c9550af78d27c1fc69c01db3011a9fcc6",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Simple, clearly specified swap of inline element-listing logic for the canonical listElements service call.",
-			"evidence": [
-				"fix: 'replace it with an import and call to listElements from $server/sandbox/sandbox.service'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T05:41:52.845Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-77c392e264f4",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26308,6 +26312,41 @@
 			"scoredAt": "2026-10-17T01:14:51.994Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-489bd42e8ffa",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/sandbox/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-489bd42e8ffa.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "94bf8e800a357f0dc20aa4f113f6202f425ad946010a56eb59175be21358e737",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-5e6d2717c59c",
+				"proposal:postmerge-minion-hub-77196cfff827"
+			],
+			"rationale": "A small code-duplication TODO from the same merged PR #542 sandbox files is best consolidated with the other two sandbox findings into one cleanup goal.",
+			"evidence": [
+				"TODO(handoff): swap for `listElements` from $server/sandbox/sandbox.service",
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/542"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:10:26.060Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27547,6 +27586,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T09:51:12.968Z"
+		},
+		{
+			"key": "pr:minion_hub#556",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#556 feat(assistant): the Thinking indicator is a small cel-shaded 3D shader in your accent colour",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/556",
+			"sourceUpdatedAt": "2026-10-17T06:04:45Z",
+			"sourceFingerprint": "064d34e123d277f94d7d61bffa5992fb9c00cb3859acf7c2d3273f6ef78ab069",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 10
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A cosmetic UI PR with spec reference, passing gates (svelte-check, lint, vitest 5/5) and headless-rendered verification is ready to merge now.",
+			"evidence": [
+				"Gates: svelte-check 0 errors, lint:design 0 new debt, vitest 5/5",
+				"Exported GLSL compiled + rendered headless with 3 accents on light/dark"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:10:26.060Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1396972732",
@@ -31407,38 +31478,6 @@
 			"scoredAt": "2026-10-10T22:27:23.009Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-77196cfff827",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/host.svelte.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77196cfff827.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "7f9ee62654d6073ec5f651a4992d944860f76789520ff7589a6310c72ff12a6e",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Trivial, low-risk, fully bounded fix: extract a duplicated string constant into a shared constants file.",
-			"evidence": [
-				"TODO states host.svelte.ts and tools.ts declare the same string",
-				"Fix direction is a single mechanical extraction with no open design questions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T05:42:53.034Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-7b8cd069cbf5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34988,6 +35027,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:17:03.102Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-77196cfff827",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/host.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77196cfff827.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "355231ae881917f0269ce0a4f738be829dc1fcb1998663f211b101c8168b8037",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-489bd42e8ffa",
+				"proposal:postmerge-minion-hub-5e6d2717c59c"
+			],
+			"rationale": "A trivial duplicated-string-constant TODO from the same merged PR #542 sandbox files has minimal standalone impact and fits better as part of one consolidated sandbox cleanup goal.",
+			"evidence": [
+				"TODO(handoff): `src/lib/sandbox/tools.ts` declares the same string instead of",
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/542"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T06:10:26.060Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cb4eec61bb4f",
