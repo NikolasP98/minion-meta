@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-0ae065b0656b
 title: "Post-merge finding — todo-handoff in src/lib/chat/ChatBlocks.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]

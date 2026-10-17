@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1571826655
 title: Handoff marker — src/lib/components/my-agent/ChatInput.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: postmerge-minion-hub-39411599b9a2
 ---
 
 # Handoff marker — src/lib/components/my-agent/ChatInput.svelte

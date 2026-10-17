@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-3199921640
 title: Handoff marker — src/lib/chat/ChatBlocks.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: postmerge-minion-hub-0ae065b0656b
 ---
 
 # Handoff marker — src/lib/chat/ChatBlocks.svelte
