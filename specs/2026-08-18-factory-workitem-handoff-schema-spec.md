@@ -11,7 +11,7 @@ repos: [minion-factory, minion-meta]
 proposal: 2026-08-17-factory-workitem-handoff-schema
 verdict: pending
 review_reason: "Consumer-first correction awaits renewed review and owner security approval; do not repeat the stale whole-spec task or deploy producer retrofit before strict trust checks."
-tags: [logic, infra, security]
+tags: [logic, infra, security, test, docs]
 type: infra
 ---
 
@@ -237,7 +237,7 @@ become invented authority. Producer and meta changes never share one dev branch.
 
 ### Slice 5 — WorkItem-aware factory consumers (minion-factory, 4–6h)
 
-**Topics:** `logic`, `infra`, `security`, `test`
+**Topics:** `logic`, `infra`, `security`, `test`, `docs`
 
 **Execution order:** this consumer slice precedes S4. Feature 104 contains the
 current narrow implementation plan. Producer and backfill edits ship separately.

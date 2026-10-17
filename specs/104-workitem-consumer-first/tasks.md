@@ -9,7 +9,7 @@ Factory paths below are relative to that independent repository.
 ## Phase 1: Setup
 
 - [ ] T001 Record owner approval and current source revisions in the parent spec `specs/2026-08-18-factory-workitem-handoff-schema-spec.md` before code.
-- [ ] T002 Create an isolated Factory feature branch targeting its registered base, and inspect `AGENTS.md`, `runner/package.json`, `runner/src/lifecycle.ts` and `runner/src/index.ts` at the current base.
+- [ ] T002 Before dispatch, fetch `specs/104-workitem-consumer-first/plan.md` and `tasks.md` at the approved flat parent's reviewed meta commit, include their full contents in the explicit Factory S5-only task and verify stored delivery; create an isolated Factory feature branch at the registered base and read `AGENTS.md`, `runner/package.json`, `runner/src/lifecycle.ts` and `runner/src/index.ts`.
 
 ## Phase 2: Foundational contract
 

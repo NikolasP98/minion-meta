@@ -61,3 +61,12 @@ snapshots; existing rows and manifests are never recomputed.
 slice does not add a proposal-byte snapshot/commit handoff; it must not claim
 end-to-end immutable proposal execution. Existing spec commit pinning is a
 different contract. The parent retains this limitation for follow-up assessment.
+
+## Decision: explicit legacy-parent context delivery
+
+Current `runner/src/index.ts` `/runs` loads `specs/<canonicalSpecId>/plan.md` and
+`tasks.md`. This feature directory is 104 while its flat parent retains a legacy
+date-based id. Explicit per-repo dispatch must supply the complete plan/tasks in
+the task payload from the approved spec's reviewed commit and verify storage.
+Body links are not evidence of context delivery. This uses the existing explicit
+task interface and makes no new directory-bridge implementation claim.

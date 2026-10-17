@@ -58,6 +58,18 @@ runner/src/index.test.ts               actual HTTP rejection and accepted contro
 are regression boundaries. Do not replace their authority with mutable proposal
 fields. Meta S4, producer edits and typed monitor intake remain later work.
 
+### Legacy parent dispatch
+
+The parent declares multiple repos, so its S5 run requires explicit per-repo
+dispatch to Factory. Current `/runs` collects plan/tasks automatically only from
+`specs/<canonicalSpecId>/`; feature 104 has a different directory name. Therefore
+the operator must fetch this feature's plan/tasks at the same reviewed meta
+commit as the approved flat parent and include their complete contents in the
+explicit `task` payload, with an S5-only scope. Verify the stored run task carries
+those contents before execution. A body link alone is insufficient. Do not add
+duplicate board goals or assume a bridge not present in the current collector.
+Parent/S5 topics include test and docs for its new tests and README changes.
+
 ## AS-IS evidence and decisions
 
 See [research.md](research.md) for the deployed revision and source seams.

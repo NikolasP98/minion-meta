@@ -4,6 +4,12 @@ Prerequisites: owner security approval recorded on the revised spec, an isolated
 Factory feature branch, and the repository's declared runner dependencies.
 Use temporary DB fixtures; production proposals are not test fixtures.
 
+The legacy parent needs explicit Factory-only S5 dispatch. Fetch this feature's
+plan/tasks from the same reviewed meta commit as its approved flat spec, include
+their full contents in the task payload, and verify the stored task. Current
+automatic plan/task collection uses a directory matching the flat spec id and
+does not resolve this feature's body link.
+
 From the Factory repository's `runner/` directory:
 
 ```bash
