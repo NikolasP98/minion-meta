@@ -29,3 +29,6 @@ Header "Working for 3s ⌄" → "Worked for 15s"; steps hang off a left rail; ea
 
 ## Out of scope
 Rotating "personality" verbs; per-object deep links in step rows (Notion's page chips); approval/stopped states.
+
+## Amendment A (2026-10-17, hotfix hub #566)
+Owner: header stuck on "Working for 0 s". Cause: `liveSeconds` derived from a non-reactive `startedAt` that was null on first evaluation → short-circuit, no dependency on the clock. Fix: `startedAt` is `$state`; start kept per turn key so a remount keeps counting. Proof: fake-timer mounted case (3 s, remount +2 s = 5 s), red on master.
