@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T07:16:22.388Z",
+	"generatedAt": "2026-10-17T07:31:28.889Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1429,40 +1429,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T22:23:20.564Z"
-		},
-		{
-			"key": "pr:minion_hub#561",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#561 fix(sandbox): totals like \"revenue this month\" load instead of failing with a server error",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/561",
-			"sourceUpdatedAt": "2026-10-17T07:14:50Z",
-			"sourceFingerprint": "b724edb2f9939f171b5e00d2a1156e0eb72900443e7248cd91d0fcd5a285c7e5",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#832"
-			],
-			"rationale": "Production 500 errors on sandbox totals queries are already fixed with a referenced spec and passing gates, ready to merge.",
-			"evidence": [
-				"Prod logs 07:07 UTC: 4× 500 on /api/sandbox/query",
-				"sandbox suites 95/95, svelte-check 0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T07:16:22.239Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-d1c5d80",
@@ -5195,38 +5161,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:53:59.779Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
-			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
-			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The commit fixes a real 403 auth bug for shared-token gateways but as a deploy-health entry it only needs deployment verification, not new work.",
-			"evidence": [
-				"fix sends x-minion-server-id header on gateway→hub tool calls",
-				"without it the hub resolves to the wrong org row and denies permission-gated tools"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T07:16:22.239Z"
 		},
 		{
 			"key": "issue:minion-meta#405",
@@ -14240,39 +14174,6 @@
 			"scoredAt": "2026-10-15T01:22:04.986Z"
 		},
 		{
-			"key": "pr:minion-meta#832",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#832 docs(spec): 023 — sandbox totals queries (hotfix)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/832",
-			"sourceUpdatedAt": "2026-10-17T07:14:33Z",
-			"sourceFingerprint": "5737df91ab285cd828a8fc6f1f016c0aa620c23723bde0b00e2f4a51f353d24b",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#561"
-			],
-			"rationale": "This is the companion spec document for the same sandbox hotfix as pr:minion_hub#561 and should be tracked as one merge unit.",
-			"evidence": [
-				"Spec for hub fix/sandbox-aggregate-queries (prod 500s on KEY METRICS)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T07:16:22.239Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-release-probe-red-and-silent",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18860,6 +18761,38 @@
 			"scoredAt": "2026-10-10T19:00:16.165Z"
 		},
 		{
+			"key": "pr:minion-meta#827",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#827 docs(spec): 019 — hub AI chat kit (SmoothUI-derived)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/827",
+			"sourceUpdatedAt": "2026-10-17T07:17:23Z",
+			"sourceFingerprint": "d32fbd796d58e87817e68259cb8731eaba147d7b21b214d2e9ad3df7fb5ac767",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Spec-kit artifacts and implementation tasks are complete with follow-ups tracked separately, so the PR is ready to move to review/merge.",
+			"evidence": [
+				"Tasks T001–T019 done in the hub PR",
+				"Tags: ui only. No data, routes, schema or security surface"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T07:31:28.732Z"
+		},
+		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21181,39 +21114,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:33:09.197Z"
-		},
-		{
-			"key": "pr:minion-meta#827",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#827 docs(spec): 019 — hub AI chat kit (SmoothUI-derived)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/827",
-			"sourceUpdatedAt": "2026-10-17T06:39:28Z",
-			"sourceFingerprint": "d29cccf62a05d415998335997936525a50dedf7b06f0e386a32abd7fd68d41a5",
-			"score": 37,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Spec-Kit-compliant open PR for a scoped UI-only feature with tasks already completed in the linked hub PR is ready to move toward merge.",
-			"evidence": [
-				"AS-IS/TO-BE/DELTA with anchors to hub origin/master",
-				"tasks T001-T019 done",
-				"tags: ui only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:57:04.450Z"
 		},
 		{
 			"key": "spec:2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec",
@@ -29954,68 +29854,6 @@
 			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
-			"key": "run:minion_hub#39012856329",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39012856329",
-			"sourceUpdatedAt": "2026-10-17T07:14:00Z",
-			"sourceFingerprint": "6db6bda67edad56fa31056807f69295317444a89a553e7be6ba237e0e3a13cde",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on master is pipeline telemetry rather than an independently actionable goal.",
-			"evidence": [
-				"CI push on master, status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T07:16:22.239Z"
-		},
-		{
-			"key": "run:minion_hub#39012909805",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39012909805",
-			"sourceUpdatedAt": "2026-10-17T07:14:46Z",
-			"sourceFingerprint": "c605f3ac899409a29a6064cd58052a886240bfaece2166099985d873d718c3b2",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress workflow run triggered by an issue comment is bot/CI telemetry, not a standalone goal.",
-			"evidence": [
-				"Claude Code run, issue_comment on master, status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T07:16:22.239Z"
-		},
-		{
 			"key": "issue:minion-meta#382",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34410,6 +34248,38 @@
 			"scoredAt": "2026-10-12T12:32:02.784Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "a538506013e43658241b12cdef3c9b3833d3af04c47c8822161179075fffe649",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The proposal bundles many unrelated TODO markers under a single generated-file reference, leaving no coherent single scope to execute against.",
+			"evidence": [
+				"Markers span unrelated topics such as serverId empty and WebGL-context budget",
+				"All markers attributed to one generated file, rankings/index.json"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T07:31:28.732Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34832,6 +34702,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T04:05:06.282Z"
+		},
+		{
+			"key": "run:minion_hub#39013793906",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39013793906",
+			"sourceUpdatedAt": "2026-10-17T07:29:13Z",
+			"sourceFingerprint": "cc7dbf366cf53a30f78442ab453950c9e0a44f62d90b0764f2a38b8f141bd7e7",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run is a status signal rather than an actionable board goal.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T07:31:28.732Z"
 		},
 		{
 			"key": "issue:minion-meta#666",
@@ -36024,38 +35926,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:11:11.488Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "f1fc4cedc1e9bfabfc470232c9780458add4b60240ca9a5e60d0fa58af945fc4",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The markers point into rankings/index.json itself, a generated ranking artifact, making this a self-referential sweep artifact rather than an actionable code finding.",
-			"evidence": [
-				"all 17 markers cite lines inside rankings/index.json",
-				"source: handoff-sweep (automatic filing, not a human-authored finding)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T07:10:19.835Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
