@@ -3,7 +3,7 @@ id: 2026-10-12-hub-assistant-jev-context-router
 title: Hub assistant — JEV turn router, open ends and threshold calibration
 status: draft
 created: 2026-10-12
-updated: 2026-10-13
+updated: 2026-10-16
 repos: [minion_hub]
 tags: [logic, security]
 value: 8
@@ -148,3 +148,12 @@ cost ≈ **$0.000022 per turn** (~525 input tokens).
    so the bubble appears ~0.6 s after Enter. Acceptable per the brief, but if it
    reads as lag the fix is to push the bubble through the existing path first and
    send the gateway request after the decision resolves.
+9. **Guard timeout leaves the in-flight indicator up (pre-existing, surfaced by
+   spec 016).** `chat-rpc.ts:293-298` flips `sending` off after 120 s and reloads
+   history but never nulls `chat.stream`/`runId`, so a run that produced no final
+   event keeps whatever the floating assistant shows for "in flight" — before
+   spec 016 either nothing (`stream === ''`) or a partial dashed bubble, after it
+   the "Thinking…" row — until the next send or New chat. Fix belongs with the
+   lost-reply root cause (`chat.guard_timeout` crumb): null the stream on the
+   guard AND decide whether late deltas of that run may still stream.
+   (`specs/016-assistant-empty-turn-bubble/spec.md`, 2026-10-16)
