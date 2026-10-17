@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2467706586
 title: Handoff marker — supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-fbbb4b2d4696
 created: 2026-10-17
 updated: 2026-10-17
 repos: [minion-hub]
