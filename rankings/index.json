@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-17T19:28:42.200Z",
+	"generatedAt": "2026-10-17T19:43:26.932Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8418,6 +8418,40 @@
 			"scoredAt": "2026-10-16T23:32:09.705Z"
 		},
 		{
+			"key": "pr:minion-meta#833",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#833 docs(spec): 024 — one stock path per sellable (retire the hidden stock bridge)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/833",
+			"sourceUpdatedAt": "2026-10-17T19:30:06Z",
+			"sourceFingerprint": "c6653d1316e0c9dc6ebdddde9c297544023634b2b2315921b3044a7ae951be19",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-fbbb4b2d4696"
+			],
+			"rationale": "Spec Kit PR for retiring the hidden stock bridge plus its named follow-up proposal to drop the retired column is the same work as the open migration todo-handoff finding.",
+			"evidence": [
+				"summary states 'follow-up proposal to drop the retired column'",
+				"targets hub #563 product/service stock bridge retirement"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T19:43:26.804Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9402,6 +9436,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-10T22:23:20.564Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "93315fb9248cb9b530c7c232382513bc787e34ce3da3cefe69f8a219340c8e6c",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion-meta#833"
+			],
+			"rationale": "Merged migration left stk_items.fin_product_id and its unique constraint live despite intent to retire them, causing schema drift that should be resolved alongside the spec PR tracking the same retirement.",
+			"evidence": [
+				"TODO(handoff): drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
+				"diagnosis notes DROP COLUMN/CONSTRAINT statements are missing from the migration"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T19:43:26.804Z"
 		},
 		{
 			"key": "run:minion (gateway)#39013875383",
@@ -21253,6 +21321,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/1e7ec283ebf095eabb54258a85f9bf1866e0d74e",
+			"sourceUpdatedAt": "2026-10-17T04:13:30Z",
+			"sourceFingerprint": "d91f6cdd7857bd7fe3b4e69aba050352ad11558952ed573e5be556d5eb6fc564",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Deploy-health entry is just the commit message of an already-merged fix with no indication of ongoing failure.",
+			"evidence": [
+				"commit 1e7ec28 fixes missing header, already merged",
+				"status unknown with no failure signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T19:43:26.804Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
@@ -34522,6 +34622,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T04:05:06.282Z"
+		},
+		{
+			"key": "run:minion_hub#39063508021",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39063508021",
+			"sourceUpdatedAt": "2026-10-17T19:41:08Z",
+			"sourceFingerprint": "aef7da1235199b2a42ee309c98a5661aaab3b5112fe016d5dd826f0713459d45",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A routine in-progress CI run on master push with no failure reported is not yet actionable.",
+			"evidence": [
+				"status: in_progress",
+				"trigger: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-17T19:43:26.804Z"
 		},
 		{
 			"key": "issue:minion-meta#666",
