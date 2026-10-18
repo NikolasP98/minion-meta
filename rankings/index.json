@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T08:25:40.894Z",
+	"generatedAt": "2026-10-18T08:55:36.208Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -23258,6 +23258,37 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3cafb0e00efaba5cce032a7edef066f29589b337",
+			"sourceUpdatedAt": "2026-10-18T02:19:07Z",
+			"sourceFingerprint": "11f1b317b9e074aa8c6cf0a47c918a9d70102be39a05b347e15aa71904265038",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A CI commit note about SSH failure handling and lock retries doesn't itself indicate an active deployment problem needing urgent action.",
+			"evidence": [
+				"commit message: CI: preserve Swarm SSH failures and bounded lock retries (#336)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T08:55:36.079Z"
+		},
+		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30135,6 +30166,38 @@
 			"scoredAt": "2026-10-16T17:10:47.750Z"
 		},
 		{
+			"key": "issue:minion-meta#416",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#416 [monitor:unstick] rank run 009fa02a: both bounded providers failed batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/416",
+			"sourceUpdatedAt": "2026-09-13T07:17:38Z",
+			"sourceFingerprint": "eab4e4f658fe399f7e4c346e31658d87c06334be004aefa38b92b07a6798852d",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a one-off transient dual-provider failure flagged by the issue itself as likely not a code bug, with a suggested retry rather than concrete action.",
+			"evidence": [
+				"reads as a transient LLM-provider fault, not a code or spec bug",
+				"Recommendation: retry the run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T08:55:36.079Z"
+		},
+		{
 			"key": "issue:minion-meta#417",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32470,38 +32533,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T07:56:07.068Z"
-		},
-		{
-			"key": "issue:minion-meta#416",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#416 [monitor:unstick] rank run 009fa02a: both bounded providers failed batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/416",
-			"sourceUpdatedAt": "2026-09-13T07:17:38Z",
-			"sourceFingerprint": "eab4e4f658fe399f7e4c346e31658d87c06334be004aefa38b92b07a6798852d",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a single automated alert describing a transient dual-provider ranking failure whose own note says to just retry, with no evidence of recurrence to justify new work.",
-			"evidence": [
-				"batch 1 ranking failed on both bounded LLM providers... Recommendation: retry the run",
-				"If this both-providers-fail pattern recurs across rank runs, it is a good candidate for a new host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T08:51:13.808Z"
 		},
 		{
 			"key": "issue:minion-meta#428",
