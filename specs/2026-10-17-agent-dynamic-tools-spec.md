@@ -87,3 +87,11 @@ Automatic dependency upgrades, model changes, deployment, arbitrary endpoint gen
 ## Verification
 
 Run gateway `pnpm generate:tools`, focused Vitest discovery/transport/progress suites, `pnpm check`, `pnpm build`, and `pnpm test`. Run Hub focused contract/PGlite/prompt suites, `bun run check`, `bun run test`, and `bun run build`. Validate proposal/spec indices. Record exact results and missing runtime qualification before requesting release.
+
+## Qualification addendum: dedicated checksum audit
+
+AS-IS: the fixture's two public SHA-256 digests trigger the secret detector. The scanner rejects every baseline-changing PR, including a dedicated audit. The existing `2026-08-24-minion-ai-secret-baseline-refresh` proposal explicitly requires temporary authorization in `.github/scripts/ci-security-scope.sh`. Audit PR334 also inherited a tracked machine-specific dependency symlink; removing that exact link is already qualified in PR333.
+
+TO-BE: PR334 can validate exactly the two reviewed checksum entries while every changed commit remains scanned. Only the same-repository PR334, its named audit branch, and DEV base may use this one-time allowance. Bind the full before/after baseline to immutable reviewed Git objects. Missing or mismatched event identity, other baseline changes (including changes later reverted), other PRs and new secret findings still fail. No detector/file exclusion, general label bypass, automatic approval, merge or deployment authority is added. Owner security review and merge approval remain required.
+
+DELTA: remove the inherited root dependency link; implement the exact audit-context/baseline checks in the existing scanner; add positive, tampering, wrong-context and continued-scanning regressions. Run the scanner contract tests, shell checks and PR CI. Once the reviewed baseline lands, ordinary implementation PR333 must refresh its base and pass the unchanged ordinary-PR baseline rule. The exception is unusable from any later PR.

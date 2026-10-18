@@ -46,3 +46,7 @@ These drafts implement the S1/S2 incident and dynamic-discovery foundation. The 
 ## Qualification blocker: audited checksum baseline
 
 Gateway PR333 remains blocked by the repository rule that an implementation branch cannot allowlist its own secret-scan findings. Dedicated audit https://github.com/NikolasP98/minion-ai/pull/334 contains only the two public contract-checksum entries from the synthetic fixture. Its PR security gate intentionally also rejects baseline changes; the owner must authorize the existing audited baseline-update process. No scanner or approval rule was weakened. Once the audited entries land on DEV, update PR333's base and repeat CI. The exact guard lives in `.github/scripts/ci-security-scope.sh`; its existing baseline-refresh TODO links the broader audit proposal.
+
+### Qualification repair prepared for owner review
+
+PR334 now also removes the inherited dependency symlink. The security proposal already specifies a temporary dedicated-update allowance; the dynamic-tools spec addendum limits it to PR334's exact repository/branch/base and immutable reviewed two-entry baseline transition. Ordinary PRs and all changed-commit scans remain enforced. This is a security-policy change prepared as a draft, not owner approval or authorization to merge. Root and independent reviewer must verify context failures, historical tampering and real scanner execution before requesting release.
