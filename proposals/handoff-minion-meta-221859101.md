@@ -41,69 +41,69 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4611
 - `NikolasP98/minion-meta@dev rankings/index.json:4643` — Qualify separate-connection invoice/stock crash races in plan 10-03 before rollout",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4643
-- `NikolasP98/minion-meta@dev rankings/index.json:6485` — 'Gate constrained capabilities before component mounting, audit token/method authority'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6485
-- `NikolasP98/minion-meta@dev rankings/index.json:6549` — drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6549
-- `NikolasP98/minion-meta@dev rankings/index.json:6582` — realization admission not persisted with status change",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6582
-- `NikolasP98/minion-meta@dev rankings/index.json:9067` — remove once the phone failure is root-caused.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9067
-- `NikolasP98/minion-meta@dev rankings/index.json:10747` — HC-017 — while a copy is being dragged only THAT copy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10747
-- `NikolasP98/minion-meta@dev rankings/index.json:11169` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11169
-- `NikolasP98/minion-meta@dev rankings/index.json:11203` — the owner also asked to configure this via agent builder",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11203
-- `NikolasP98/minion-meta@dev rankings/index.json:12521` — 'Replace raw upstream error messages with an approved safe RPC projection'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12521
-- `NikolasP98/minion-meta@dev rankings/index.json:13681` — no WebGL-context budget. Chromium keeps ~16 live contexts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13681
-- `NikolasP98/minion-meta@dev rankings/index.json:13781` — the anti-join has no index to lean on",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13781
-- `NikolasP98/minion-meta@dev rankings/index.json:16961` — spec §4.1 also lists reschedule, charge in POS and book the...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16961
-- `NikolasP98/minion-meta@dev rankings/index.json:16994` — regex inference over the element JS",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16994
-- `NikolasP98/minion-meta@dev rankings/index.json:17095` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17095
-- `NikolasP98/minion-meta@dev rankings/index.json:17261` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17261
-- `NikolasP98/minion-meta@dev rankings/index.json:17426` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17426
-- `NikolasP98/minion-meta@dev rankings/index.json:17492` — startBackupScheduler() has no call site anywhere in src/",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17492
-- `NikolasP98/minion-meta@dev rankings/index.json:17528` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17528
-- `NikolasP98/minion-meta@dev rankings/index.json:17595` — Choose receipt retention and indeterminate-provider recovery policy before",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17595
-- `NikolasP98/minion-meta@dev rankings/index.json:18600` — describedby lists helper before error while the DOM renders error first",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18600
-- `NikolasP98/minion-meta@dev rankings/index.json:18633` — tagOptions is the FILTER's list — the event-scope registry",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18633
-- `NikolasP98/minion-meta@dev rankings/index.json:20124` — add global server custom-property sort/filter/export planning",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20124
-- `NikolasP98/minion-meta@dev rankings/index.json:20159` — Legacy receipts cannot reconstruct a complete source manifest.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20159
-- `NikolasP98/minion-meta@dev rankings/index.json:22762` — it cannot preselect the event itself — no hub route",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22762
-- `NikolasP98/minion-meta@dev rankings/index.json:22794` — onArtifactCallback/onChoice are NOT routed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22794
-- `NikolasP98/minion-meta@dev rankings/index.json:22828` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22828
-- `NikolasP98/minion-meta@dev rankings/index.json:25199` — @minion-stack/ui's Button.svelte spreads {...rest}",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25199
-- `NikolasP98/minion-meta@dev rankings/index.json:25327` — 'host error-log scrubbing is separate from the sanitized' pipeline",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25327
-- `NikolasP98/minion-meta@dev rankings/index.json:26700` — swap for listElements from $server/sandbox/sandbox.service",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26700
-- `NikolasP98/minion-meta@dev rankings/index.json:26732` — the PREDICATE is covered here, the WIRING is not — no test",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26732
-- `NikolasP98/minion-meta@dev rankings/index.json:29175` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29175
-- `NikolasP98/minion-meta@dev rankings/index.json:29313` — tags are NOT inline-editable here while /pos/catalog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29313
-- `NikolasP98/minion-meta@dev rankings/index.json:29485` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29485
-- `NikolasP98/minion-meta@dev rankings/index.json:35255` — src/lib/sandbox/tools.ts declares the same string instead of",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35255
+- `NikolasP98/minion-meta@dev rankings/index.json:6517` — 'Gate constrained capabilities before component mounting, audit token/method authority'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6517
+- `NikolasP98/minion-meta@dev rankings/index.json:6581` — drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6581
+- `NikolasP98/minion-meta@dev rankings/index.json:6614` — realization admission not persisted with status change",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6614
+- `NikolasP98/minion-meta@dev rankings/index.json:9132` — remove once the phone failure is root-caused.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9132
+- `NikolasP98/minion-meta@dev rankings/index.json:10778` — HC-017 — while a copy is being dragged only THAT copy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10778
+- `NikolasP98/minion-meta@dev rankings/index.json:11200` — drop column (proposal #16) in src/server/db/pg-hr-schema.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11200
+- `NikolasP98/minion-meta@dev rankings/index.json:11234` — the owner also asked to configure this via agent builder",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11234
+- `NikolasP98/minion-meta@dev rankings/index.json:12620` — 'Replace raw upstream error messages with an approved safe RPC projection'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12620
+- `NikolasP98/minion-meta@dev rankings/index.json:13780` — no WebGL-context budget. Chromium keeps ~16 live contexts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13780
+- `NikolasP98/minion-meta@dev rankings/index.json:13880` — the anti-join has no index to lean on",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13880
+- `NikolasP98/minion-meta@dev rankings/index.json:17060` — spec §4.1 also lists reschedule, charge in POS and book the...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17060
+- `NikolasP98/minion-meta@dev rankings/index.json:17093` — regex inference over the element JS",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17093
+- `NikolasP98/minion-meta@dev rankings/index.json:17194` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17194
+- `NikolasP98/minion-meta@dev rankings/index.json:17360` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17360
+- `NikolasP98/minion-meta@dev rankings/index.json:17525` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17525
+- `NikolasP98/minion-meta@dev rankings/index.json:17591` — startBackupScheduler() has no call site anywhere in src/",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17591
+- `NikolasP98/minion-meta@dev rankings/index.json:17627` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17627
+- `NikolasP98/minion-meta@dev rankings/index.json:17694` — Choose receipt retention and indeterminate-provider recovery policy before",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17694
+- `NikolasP98/minion-meta@dev rankings/index.json:18699` — describedby lists helper before error while the DOM renders error first",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18699
+- `NikolasP98/minion-meta@dev rankings/index.json:18732` — tagOptions is the FILTER's list — the event-scope registry",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18732
+- `NikolasP98/minion-meta@dev rankings/index.json:20223` — add global server custom-property sort/filter/export planning",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20223
+- `NikolasP98/minion-meta@dev rankings/index.json:20258` — Legacy receipts cannot reconstruct a complete source manifest.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20258
+- `NikolasP98/minion-meta@dev rankings/index.json:22825` — it cannot preselect the event itself — no hub route",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22825
+- `NikolasP98/minion-meta@dev rankings/index.json:22857` — onArtifactCallback/onChoice are NOT routed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22857
+- `NikolasP98/minion-meta@dev rankings/index.json:22891` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22891
+- `NikolasP98/minion-meta@dev rankings/index.json:25121` — @minion-stack/ui's Button.svelte spreads {...rest}",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25121
+- `NikolasP98/minion-meta@dev rankings/index.json:25249` — 'host error-log scrubbing is separate from the sanitized' pipeline",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25249
+- `NikolasP98/minion-meta@dev rankings/index.json:26727` — swap for listElements from $server/sandbox/sandbox.service",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26727
+- `NikolasP98/minion-meta@dev rankings/index.json:26759` — the PREDICATE is covered here, the WIRING is not — no test",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26759
+- `NikolasP98/minion-meta@dev rankings/index.json:29234` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29234
+- `NikolasP98/minion-meta@dev rankings/index.json:29372` — tags are NOT inline-editable here while /pos/catalog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29372
+- `NikolasP98/minion-meta@dev rankings/index.json:29544` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29544
+- `NikolasP98/minion-meta@dev rankings/index.json:35313` — src/lib/sandbox/tools.ts declares the same string instead of",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35313
