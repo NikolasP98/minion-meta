@@ -29,3 +29,5 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-ai@DEV .github/scripts/ci-security-scope.sh:41` — Audit and refresh the February 2026 baseline before adding
   https://github.com/NikolasP98/minion-ai/blob/DEV/.github/scripts/ci-security-scope.sh#L41
+- `NikolasP98/minion-ai@DEV .github/scripts/ci-security-scope.sh:64` — Retire this PR334-only exception after the audited baseline lands;
+  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/scripts/ci-security-scope.sh#L64
