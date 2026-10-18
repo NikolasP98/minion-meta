@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T05:25:51.019Z",
+	"generatedAt": "2026-10-18T05:55:57.198Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14084,14 +14084,14 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Clear, bounded timezone bug in notification dedup logic with a specified fix direction and multi-org blast radius.",
+			"rationale": "Timezone-based dedup key is a correctness bug affecting all multi-timezone orgs' notification behavior, with a clear fix direction.",
 			"evidence": [
-				"guard key uses browser local date instead of org timezone",
-				"diagnosis flags multi-org users getting wrong dedup results"
+				"Marker: 'guard key uses the BROWSER's local date, not the org's'",
+				"Diagnosis cites cache misses/duplicates across timezones"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T05:51:40.403Z"
+			"scoredAt": "2026-10-18T05:55:57.044Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b4c1ff54fd37",
@@ -20235,38 +20235,6 @@
 			"scoredAt": "2026-10-13T02:52:08.482Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-563d320153c1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/visit-unpaid.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-563d320153c1.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "1e3e92903b04f7c1ef14065e23d307f71dea75fcb7c2fdf4deff4ffb079f18a0",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-scoped, already-diagnosed fix for an unwired deep-link param breaking inbox notification navigation.",
-			"evidence": [
-				"TODO(handoff) names exact file and a matching gap in appointment-overdue.ts",
-				"Definition of done and concrete fix direction are both specified"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T05:51:40.403Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-6ccc8172373b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22771,6 +22739,38 @@
 			"scoredAt": "2026-10-17T05:41:52.845Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-563d320153c1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/visit-unpaid.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-563d320153c1.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "1e3e92903b04f7c1ef14065e23d307f71dea75fcb7c2fdf4deff4ffb079f18a0",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Bounded, well-specified UX bug with a clear existing pattern (appointment-overdue.ts) to copy and a concrete test to add.",
+			"evidence": [
+				"Marker: 'see appointment-overdue.ts — same unwired deep-link param'",
+				"Definition of done and fix direction both specified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T05:55:57.044Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-67ebd1f1b0f0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24992,20 +24992,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 3
+				"specification": 5,
+				"implementation": 4
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Fix direction itself says to first confirm intended behavior against an unverified spec slice, so scope isn't yet actionable.",
+			"rationale": "The marker itself suggests this gap may be an intentional spec-deferred skip, so scope needs confirming against the Slice 4 spec before treating it as a bug fix.",
 			"evidence": [
-				"marker cites a spec Slice 4 behavior as SKIPPED, not confirmed",
-				"fix direction's first step is to locate and confirm the spec before implementing"
+				"Marker: 'channel.whatsapp_logged_out (spec Slice 4) is SKIPPED — no'",
+				"Fix direction says 'if intentionally deferred, move TODO to a proposal instead' (already true here)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T05:51:40.403Z"
+			"scoredAt": "2026-10-18T05:55:57.044Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9cd4a3e7f998",
@@ -30133,6 +30133,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T17:21:46.968Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3cafb0e00efaba5cce032a7edef066f29589b337",
+			"sourceUpdatedAt": "2026-10-18T02:19:07Z",
+			"sourceFingerprint": "11f1b317b9e074aa8c6cf0a47c918a9d70102be39a05b347e15aa71904265038",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Summary describes an already-merged CI commit (#336) with no further defined work or open scope.",
+			"evidence": [
+				"summary: 'CI: preserve Swarm SSH failures and bounded lock retries (#336)'",
+				"status: unknown, kind: deploy (health tracking, not a goal)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T05:55:57.044Z"
 		},
 		{
 			"key": "issue:minion-meta#386",
