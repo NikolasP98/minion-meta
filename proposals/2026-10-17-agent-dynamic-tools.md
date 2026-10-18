@@ -50,3 +50,5 @@ Gateway PR333 remains blocked by the repository rule that an implementation bran
 ### Qualification repair prepared for owner review
 
 PR334 now also removes the inherited dependency symlink. The security proposal already specifies a temporary dedicated-update allowance; the dynamic-tools spec addendum limits it to PR334's exact repository/branch/base and immutable reviewed two-entry baseline transition. Ordinary PRs and all changed-commit scans remain enforced. This is a security-policy change prepared as a draft, not owner approval or authorization to merge. Root and independent reviewer must verify context failures, historical tampering and real scanner execution before requesting release.
+
+After the audited baseline lands, retire PR334's one-time scanner allowance and its dedicated regression fixtures in a normal follow-up. The exact source site carries `TODO(handoff)` pointing to the existing baseline-refresh proposal; ordinary baseline immutability and commit-delta scans must remain unchanged.
