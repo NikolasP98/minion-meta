@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T06:56:07.640Z",
+	"generatedAt": "2026-10-18T07:25:36.884Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -20862,14 +20862,14 @@
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "A deliberate guard refused a partial catalog for minion_hub but the log lacks evidence of whether the source unavailability is transient or a real config issue, so a human check is needed before action.",
+			"rationale": "A guarded refusal to emit a partial catalog for minion_hub needs a human check of source config/reachability before any fix is actionable.",
 			"evidence": [
-				"throws at line 107 \"ranking catalog source unavailable for minion_hub; refusing a partial catalog\"",
-				"no earlier fetch/network trace to determine transient vs config problem"
+				"throws at line 107 'ranking catalog source unavailable for minion_hub; refusing a partial catalog'",
+				"no earlier fetch/network trace to confirm transient vs config issue"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T07:21:10.790Z"
+			"scoredAt": "2026-10-18T07:25:36.752Z"
 		},
 		{
 			"key": "issue:minion-meta#419",
@@ -23260,38 +23260,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3cafb0e00efaba5cce032a7edef066f29589b337",
-			"sourceUpdatedAt": "2026-10-18T02:19:07Z",
-			"sourceFingerprint": "11f1b317b9e074aa8c6cf0a47c918a9d70102be39a05b347e15aa71904265038",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This deploy-health entry is just a CI commit note about SSH failure handling with unknown status, giving no incident evidence to act on.",
-			"evidence": [
-				"status: unknown",
-				"summary is a single CI commit message, not an incident report"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T06:56:07.471Z"
 		},
 		{
 			"key": "issue:minion-meta#415",
@@ -27394,19 +27362,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 2
+				"implementation": 4
 			},
-			"confidence": 6,
-			"recommendation": "prune",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The actual reconcile work (push, state persistence) completed successfully; the only failure was a transient exit-126 agent launch issue on a worker host that the log itself recommends simply retrying.",
+			"rationale": "Diagnosis shows a transient host-level exec failure (exit-126, 0 turns) after the real work already completed, so only a worker-host check/retry is needed.",
 			"evidence": [
-				"push of dev (b2e22c6..3c15df0) to minion-meta succeeded",
-				"exit-126 with turns=0 indicates the provider process never launched, a host/environment issue, not a repo problem"
+				"exit-126 with turns=0 means claude CLI never began executing",
+				"git push and state persistence already succeeded before the agent step"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T07:21:10.790Z"
+			"scoredAt": "2026-10-18T07:25:36.752Z"
 		},
 		{
 			"key": "issue:minion-meta#680",
@@ -35784,6 +35752,37 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
+			"key": "issue:minion-meta#644",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#644 [monitor:unstick] probe-check-60ff7393-e",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/644",
+			"sourceUpdatedAt": "2026-09-27T06:18:03Z",
+			"sourceFingerprint": "b5b9f5d6b07c31cac56dabb89f75462dea76f234a9de30175ca2f90e9c5a97af",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an empty probe body check with no actionable content.",
+			"evidence": [
+				"summary is just 'probe body check e'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T07:25:36.752Z"
+		},
+		{
 			"key": "issue:minion-meta#689",
 			"kind": "issue",
 			"stage": "proposal",
@@ -36290,37 +36289,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T11:40:17.688Z"
-		},
-		{
-			"key": "issue:minion-meta#644",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#644 [monitor:unstick] probe-check-60ff7393-e",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/644",
-			"sourceUpdatedAt": "2026-09-27T06:18:03Z",
-			"sourceFingerprint": "b5b9f5d6b07c31cac56dabb89f75462dea76f234a9de30175ca2f90e9c5a97af",
-			"score": 0,
-			"band": "low",
-			"axes": {
-				"criticality": 0,
-				"importance": 0,
-				"impact": 0
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 9,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a content-free probe/test entry with no actionable information.",
-			"evidence": [
-				"summary is just \"probe body check e\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T07:21:10.790Z"
 		}
 	]
 }
