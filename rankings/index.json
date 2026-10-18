@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T02:05:58.968Z",
+	"generatedAt": "2026-10-18T02:27:15.837Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1232,6 +1232,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T03:41:12.124Z"
+		},
+		{
+			"key": "pr:minion (gateway)#335",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#335 fix(release): promote current agent tools and grounded catalog answers",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/335",
+			"sourceUpdatedAt": "2026-10-18T02:23:23Z",
+			"sourceFingerprint": "a5963288f77238555a7f777918527c6e5708044916e6a7ed7bc756e6b1d0074a",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#337"
+			],
+			"rationale": "High-stakes production release promotion is explicitly held in draft pending #337's test correction and full CI qualification.",
+			"evidence": [
+				"\"Keep this promotion in draft\" due to stale crm_query test assertions",
+				"requires owner approval for production merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
 		},
 		{
 			"key": "pr:minion_hub#340",
@@ -3059,6 +3093,40 @@
 			"scoredAt": "2026-10-16T16:10:33.407Z"
 		},
 		{
+			"key": "pr:minion (gateway)#337",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#337 test(agents): align CRM assertions with retired SQL tool",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/337",
+			"sourceUpdatedAt": "2026-10-18T02:22:54Z",
+			"sourceFingerprint": "dca6192b55936fbd75a08cc72c93fdd6ab47720e07840e084fa52afd7d831413",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#335"
+			],
+			"rationale": "Small, fully-verified test correction that directly unblocks the larger release PR and only awaits hosted CI.",
+			"evidence": [
+				"before/after test results: 4 passed/2 failed -> 6 passed",
+				"independent review approved; only hosted CI pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
+		},
+		{
 			"key": "pr:minion_hub#544",
 			"kind": "pr",
 			"stage": "development",
@@ -4678,6 +4746,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T09:22:21.495Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-98cf2e865d44",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/assistant/dispatch.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-98cf2e865d44.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "ecf18febf73217f60db538fe16986784f74c92857a855d879459744a72a97d59",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved security gap where client-side answer-first prompts cannot stop forged/unsolicited navigation without server-issued intent grants.",
+			"evidence": [
+				"TODO(handoff) in dispatch.ts flags missing server-issued request intent grant",
+				"Status approved; diagnosis proposes OAuth-consent-like grant/validation flow"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:27:15.698Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
@@ -7790,40 +7890,6 @@
 			"scoredAt": "2026-10-17T05:42:53.034Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-98cf2e865d44",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/assistant/dispatch.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-98cf2e865d44.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "4f160f8973041663d9fb5c3af237bd83c24669d340f117e791caa8454865c985",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-10-17-agent-dynamic-tools-spec"
-			],
-			"rationale": "The TODO explicitly points to the dynamic-tools spec as its intended fix path for binding UI navigation effects to server-issued intent grants.",
-			"evidence": [
-				"marker: 'See meta proposals/2026-10-17-agent-dynamic-tools.md'",
-				"diagnosis: client-side answer-first prompts can be bypassed without server-side validation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:05:58.834Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8837,6 +8903,38 @@
 			"scoredAt": "2026-10-18T02:05:03.633Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-51b3968",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 51b3968",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-51b3968.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "ed0078f3eb381a4d6920ce1fc6807a79f040176b89fa766bd069047cc0a9ef57",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple high-severity unchecked-access and silent-catch findings in core tool governance/search code pose real crash and observability risk.",
+			"evidence": [
+				"tool-policy-pipeline.ts:104 TypeError risk on undefined policy.allow",
+				"hub-query-tools.ts:213 empty catch silently hides tool init failures"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:27:15.698Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-e98422b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9792,6 +9890,38 @@
 			"scoredAt": "2026-10-18T01:56:41.547Z"
 		},
 		{
+			"key": "issue:minion-meta#843",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#843 [monitor:unstick] rank run 362ba500 (minion-meta): batch validation failure, not infra",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/843",
+			"sourceUpdatedAt": "2026-10-18T02:17:32Z",
+			"sourceFingerprint": "940ec0519b69783de64cbb4e16b0a39798802635613d0529a70bf67486f5471d",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring deterministic failure in the ranking pipeline itself needs human root-cause inspection before any fix can be scoped.",
+			"evidence": [
+				"same signature recurred twice ~30min apart (362ba500, 425c197d)",
+				"no infra signal; recommends human inspection, not retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
+		},
+		{
 			"key": "proposal:2026-08-24-minion-ai-npm-trusted-publishing",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10053,6 +10183,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:00:07.556Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-4221605246",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/assistant/dispatch.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4221605246.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "0fafb977fb1d76e514c05a542bfa60a75e237e24feee7195faf2f701da6f30b3",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-3908790574"
+			],
+			"rationale": "Preventing unsolicited navigation via a server-issued intent grant is a real correctness/security gap but needs design before execution.",
+			"evidence": [
+				"marker: 'answer-first prompts alone cannot prevent unsolicited navigation'",
+				"references meta proposals/2026-10-17-agent-dynamic-tools.md, same as #335's navigation-fence concern"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7e2a23e32c73",
@@ -11878,74 +12042,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:31:08.781Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-1915380054",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/agents/pi-embedded-runner/compact.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-1915380054.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "5bf49813686fe9fae13b2c87b7838e36f2a852197f69158b8514696051fba32c",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-3154969482"
-			],
-			"rationale": "This is the same 'move transcript sanitization onto the canonical path' fix duplicated in attempt.ts and should be resolved as one change.",
-			"evidence": [
-				"Marker: 'move transcript sanitization onto the canonical path —'",
-				"Identical phrase appears verbatim in handoff-minion-ai-3154969482"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T01:57:37.627Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-3154969482",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/agents/pi-embedded-runner/run/attempt.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3154969482.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "884bedcb65e996533948a2a3589ed4d18ae7e518039622984479c52297501c59",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-1915380054"
-			],
-			"rationale": "Duplicate of the compact.ts transcript-sanitization marker; both files point to the same canonical-path fix.",
-			"evidence": [
-				"Marker: 'move transcript sanitization onto the canonical path —'",
-				"Same phrase in handoff-minion-ai-1915380054 (compact.ts)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T01:57:37.627Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1020011068",
@@ -16326,40 +16422,6 @@
 			"scoredAt": "2026-10-18T01:56:41.547Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-1396972732",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/agents/pi-embedded-runner/system-prompt.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-1396972732.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "30c0c439cab061f6f515feea4c7b64bdf3f6115e29e3e0187cc2edcac926694d",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-17-agent-dynamic-tools"
-			],
-			"rationale": "This marker's private-API SDK migration is the same open follow-up already named inside the larger dynamic-tools proposal in this batch.",
-			"evidence": [
-				"TODO text: 'replace the private pokes with the supported surface'",
-				"dynamic-tools proposal cites 'previous SDK prompt override uses a private API changed in SDK1.1'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T01:56:41.547Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3159127524",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16393,6 +16455,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T01:57:37.627Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3908790574",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/agents/pi-embedded-runner/run/tool-progress.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3908790574.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "db862a3a1da41d4e520cfe4f6b41727e4ce849c2c7bc5aad10350fbf3c442115",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-4221605246"
+			],
+			"rationale": "Thin one-line marker about enforcing recovery effects in Hub needs spec work before it is actionable.",
+			"evidence": [
+				"marker references meta proposals/2026-10-17-agent-dynamic-tools.md",
+				"status draft, no implementation detail given"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2650013771",
@@ -22131,6 +22227,74 @@
 			"scoredAt": "2026-10-18T01:56:41.547Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-1915380054",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/agents/pi-embedded-runner/compact.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-1915380054.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "761392fed279693c01ff5e9ad30c383a352daebbfc624f296ad3791cb0036abe",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-3154969482"
+			],
+			"rationale": "Single-line TODO duplicates the same canonical-path sanitization fix needed in a sibling file, better handled as one goal.",
+			"evidence": [
+				"marker text identical to proposal:handoff-minion-ai-3154969482",
+				"both target pi-embedded-runner transcript handling"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3154969482",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/agents/pi-embedded-runner/run/attempt.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3154969482.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "a38937b60f22e33b5a1c626b796a4e3ab190d5da544da36fb9499579e055f0e6",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-1915380054"
+			],
+			"rationale": "Identical 'move transcript sanitization onto canonical path' marker as the compact.ts proposal, so the two fixes belong in one goal.",
+			"evidence": [
+				"status review, one line ahead in pipeline",
+				"same marker wording as proposal:handoff-minion-ai-1915380054"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1649151658",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24007,6 +24171,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T01:58:33.712Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-648930682",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/agents/pi-embedded-runner/run.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-648930682.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "6337c4f99100fa9b3f754acb8c678cd28e8fe40718289507c516ef9383244c59",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Request-wide budget-sharing idea is only a one-line note with no bounded design yet.",
+			"evidence": [
+				"marker references meta proposals/2026-10-17-agent-dynamic-tools.md",
+				"status draft, single-line scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-326061439",
@@ -28287,6 +28483,38 @@
 			"scoredAt": "2026-10-12T09:22:04.054Z"
 		},
 		{
+			"key": "pr:minion_hub#569",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#569 feat(appearance): Crystal orbs is the default thinking spinner",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/569",
+			"sourceUpdatedAt": "2026-10-18T02:02:42Z",
+			"sourceFingerprint": "7dce62265dee39f62b57033c4e57cc819e014bb47cd7d4094fcf96db759b89a7",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, low-risk UI default change with passing tests and clear scope.",
+			"evidence": [
+				"vitest 54/54 passing",
+				"single default-value change with migration for existing users"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
+		},
+		{
 			"key": "pr:minion-meta#555",
 			"kind": "pr",
 			"stage": "development",
@@ -28612,38 +28840,6 @@
 			"scoredAt": "2026-10-18T02:01:15.130Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-3035029616",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3035029616.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "bd203d24c2dba728d6c73282dd181d2771a30d3844e63a82fc5603ce083cc851",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A UI copy/label bug in the appointments dialog is low-stakes and narrowly scoped.",
-			"evidence": [
-				"dialog names the VISIT's service titles, not every",
-				"file: src/routes/(app)/pos/appointments/+page.svelte:912"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:02:05.622Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-3215540846",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28733,38 +28929,6 @@
 			"rationale": "The marker text itself is truncated and names only a vague composition/camera/keyboard relationship, giving no verifiable outcome to target.",
 			"evidence": [
 				"Marker text ends mid-sentence: 'Full Workshop composition/camera and keyboard relationship/element'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:02:58.509Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-4221605246",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/assistant/dispatch.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4221605246.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "24ab386f1dac6dc93ff9d492f2f81a98811ccd444d2bc2fd2677fb79c2eea83b",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 2,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Still in draft status with a single truncated marker about silent follow-up turns, leaving no clear scope or outcome to act on.",
-			"evidence": [
-				"status: draft",
-				"silent follow-up turns are persisted in the gateway transcript"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -33866,6 +34030,38 @@
 			"scoredAt": "2026-10-12T12:32:02.784Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-3035029616",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3035029616.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "5962e743550f846050501a77bb9e62f736e136b1922b1514f8225b4fb0ef22e6",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-localized dialog-naming correctness bug with a clearly identified line and file.",
+			"evidence": [
+				"marker pinpoints +page.svelte:912 dialog naming mismatch",
+				"status review, no dependency complexity noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:26:46.079Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3998033254",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33928,6 +34124,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:32:02.784Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "c9d9276fa58d67f274c77dfd92178eb8e3ecd433799d06b420729d414d583fd2",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is a self-referential ledger listing many unrelated pre-existing markers inside the ranking file itself, not a single bounded fix.",
+			"evidence": [
+				"Marker text is itself a list of markers copied from many unrelated files/lines",
+				"Definition of done requires removing scattered markers across the whole index file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:27:15.698Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
@@ -34024,6 +34252,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:05:58.834Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-3cafb0e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 3cafb0e",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-3cafb0e.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "aa3436546c6054b93993cda6f435dc47059cd223cbbfeaf381157cc2686ac86a",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single medium-severity unchecked-access bug in a test file is a small, well-located, bounded fix.",
+			"evidence": [
+				"test/ci/swarm-status-capture.test.ts:80 unchecked .find() result access"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T02:27:15.698Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
@@ -35512,20 +35771,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 1
+				"specification": 3,
+				"implementation": 2
 			},
 			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake reports a class-C transient push failure that was already successfully requeued (201 response).",
+			"rationale": "Automated transient-failure alert that already shows a successful requeue (201) with no remaining open condition.",
 			"evidence": [
-				"class=C note=push failed; requeue -> 201 {\"id\":\"5bd89914\"}",
-				"fingerprint: unstick-transient-88a1cc23"
+				"note shows requeue returned 201",
+				"class=C transient classification"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T02:21:38.333Z"
+			"scoredAt": "2026-10-18T02:26:46.079Z"
 		},
 		{
 			"key": "issue:minion-meta#789",
@@ -35651,38 +35910,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:04:08.744Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "2562420c453ac65c7a5ac736b5cbc59f172d4bb067c942bc57e6fb4a6e8c22ef",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The flagged markers are rationale/evidence text embedded in the rankings output file itself, not actionable code TODOs.",
-			"evidence": [
-				"markers quote disparate unrelated topics (org-scoping, WebGL budget, anti-join index)",
-				"file is rankings/index.json, the ranking catalog output itself"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:05:03.633Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
@@ -35813,78 +36040,14 @@
 			"scoredAt": "2026-10-12T02:21:58.179Z"
 		},
 		{
-			"key": "run:minion (gateway)#39088101066",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "npm publish",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39088101066",
-			"sourceUpdatedAt": "2026-10-18T01:53:30Z",
-			"sourceFingerprint": "b1cef6bc3822f4c5ff9c287c8f1ede331c01024fc41a921ad112f9fe55fa100f",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress npm publish CI run on push with no reported failure to act on.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV, npm publish workflow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:05:58.834Z"
-		},
-		{
-			"key": "run:minion (gateway)#39088101078",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39088101078",
-			"sourceUpdatedAt": "2026-10-18T01:53:45Z",
-			"sourceFingerprint": "834d525a08c3b75ec8163bd1a0adc9a3fa6c70984f3e5a365f8c7c3b0e945e8b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress Docker Release CI run on push with no reported failure to act on.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV, Docker Release workflow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:05:58.834Z"
-		},
-		{
 			"key": "run:minion (gateway)#39088101086",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion (gateway)",
 			"title": "CI",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39088101086",
-			"sourceUpdatedAt": "2026-10-18T01:53:27Z",
-			"sourceFingerprint": "b948e100d856cc3f5840344a20f9728bdf34bc8c132a861ecba14c17afe8c6a0",
+			"sourceUpdatedAt": "2026-10-18T02:22:31Z",
+			"sourceFingerprint": "145a0e7872adf14c032bf80dc26b7f2be068cc0c52b98f094a7312aab8e3fb92",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -35893,52 +36056,19 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 1,
 				"implementation": 1
 			},
 			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Routine pending CI run on push with no reported failure to act on.",
+			"rationale": "An in-progress routine CI run on a push is not a decidable work item.",
 			"evidence": [
-				"status: pending",
-				"push on DEV, CI workflow"
+				"status in_progress, CI workflow triggered by push on DEV"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:05:58.834Z"
-		},
-		{
-			"key": "run:minion_hub#39088116243",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39088116243",
-			"sourceUpdatedAt": "2026-10-18T01:53:47Z",
-			"sourceFingerprint": "bac32903c22a9737873f5bbbe5a9a183b43858a99f700e52e48e69e684be83ef",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run on push with no reported failure to act on.",
-			"evidence": [
-				"status: in_progress",
-				"push on master, CI workflow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:05:58.834Z"
+			"scoredAt": "2026-10-18T02:27:15.698Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
