@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T19:25:35.426Z",
+	"generatedAt": "2026-10-18T19:55:57.029Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -23290,38 +23290,6 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A routine CI fix commit for test isolation and retired-tool assertions, with no indication of ongoing deployment failure.",
-			"evidence": [
-				"fix(ci): use isolated forks for Linux qualification",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T19:25:35.298Z"
-		},
-		{
 			"key": "issue:minion-meta#418",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23846,78 +23814,6 @@
 			"scoredAt": "2026-10-18T15:25:52.428Z"
 		},
 		{
-			"key": "issue:minion-meta#536",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#536 [monitor:unstick] reconcile run 82695d34 (minion-meta): agent launch exit-126, infra fault",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/536",
-			"sourceUpdatedAt": "2026-09-20T18:17:53Z",
-			"sourceFingerprint": "988485c2741ff995023bdf6d53cf395f668fecccc85b7c4e3d292eff5827bf8a",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#537",
-				"issue:minion-meta#648"
-			],
-			"rationale": "Automated diagnosis shows a transient agent-launch exit-126 infra fault that recurred within 6 minutes and recommends a dedicated host-classifier signature, which is the same fix needed by #537 and #648.",
-			"evidence": [
-				"exit-126/turns=0/cost=0 claude provider launch failure",
-				"recurred twice within 6 minutes per diagnosis (see also run a8a056ea)",
-				"recommendation is to add agent-launch-exit-126 host classifier signature, not touch reconcile spec"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T19:51:35.163Z"
-		},
-		{
-			"key": "issue:minion-meta#537",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#537 [monitor:unstick] reconcile run a8a056ea (minion-meta): agent launch exit-126, infra fault",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/537",
-			"sourceUpdatedAt": "2026-09-20T18:17:53Z",
-			"sourceFingerprint": "81bb5d88b19c4405218d3b82895388c31cefa667845afd72139e08e9d40e2afb",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#536",
-				"issue:minion-meta#648"
-			],
-			"rationale": "Identical exit-126 agent-launch signature to #536 six minutes apart, best resolved as one host-classifier-signature goal alongside #536 and #648.",
-			"evidence": [
-				"same signature as run 82695d34, 6 minutes earlier",
-				"exit_code=1/turns=0/cost=0 for claude provider invocation",
-				"reconcile wrapper's own work completed cleanly, isolating fault to runner box"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T19:51:35.163Z"
-		},
-		{
 			"key": "issue:minion-meta#539",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24191,75 +24087,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T09:41:29.136Z"
-		},
-		{
-			"key": "issue:minion-meta#648",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#648 [monitor:unstick] reconcile run 92fa6565 (minion-meta): claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/648",
-			"sourceUpdatedAt": "2026-09-27T18:17:17Z",
-			"sourceFingerprint": "6af46596724b717ce37de4c286f24ad0e447f6342f732754a5b47febe28752fb",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#536",
-				"issue:minion-meta#537"
-			],
-			"rationale": "Same exit-126/turns=0 claude-provider launch fault as #536/#537, a week later, reinforcing the case for one consolidated host-classifier fix rather than three separate tickets.",
-			"evidence": [
-				"exit-126 with turns=0 and permission_denials=0 from claude provider step",
-				"reconcile logic itself completed normally (handoffs, merge-scan, index.json, push)",
-				"recommendation to add exit-126+turns=0 signature to host classifier"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T19:51:35.163Z"
-		},
-		{
-			"key": "issue:minion-meta#752",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#752 [monitor:unstick] run 4dc4d935 (minion-meta rank): both bounded LLM providers failed on batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/752",
-			"sourceUpdatedAt": "2026-10-04T19:17:23Z",
-			"sourceFingerprint": "85d132db3f853ddad9f2c85d4618221def68e33c4b46b925410f0a1a1a9ace16",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A distinct provider-failure signature (both bounded LLM providers invalid/unavailable on rank batch 1) that the diagnosis itself says should only become a host-classifier action if it recurs across multiple runs.",
-			"evidence": [
-				"claude and codex both errored or returned invalid JSON on batch 1 of 871 candidates",
-				"exit code 1, ~1m43s runtime, $0.14 cost, no partial ranking output",
-				"diagnosis recommends retry first; new signature only warranted if pattern recurs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T19:51:35.163Z"
 		},
 		{
 			"key": "proposal:2026-08-17-meta-spec-index-project-possibly-shipped",
@@ -26569,6 +26396,111 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T20:40:21.032Z"
+		},
+		{
+			"key": "issue:minion-meta#536",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#536 [monitor:unstick] reconcile run 82695d34 (minion-meta): agent launch exit-126, infra fault",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/536",
+			"sourceUpdatedAt": "2026-09-20T18:17:53Z",
+			"sourceFingerprint": "988485c2741ff995023bdf6d53cf395f668fecccc85b7c4e3d292eff5827bf8a",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#537",
+				"issue:minion-meta#648"
+			],
+			"rationale": "Monitor-intake exit-126 agent-launch fault that self-resolved in pipeline logic and recurred with #537/#648, so it belongs with them as one host-classifier feature rather than three separate tickets.",
+			"evidence": [
+				"exit_code=1/exit-126/turns=0/cost_usd=0 for the claude provider launch, not task logic",
+				"recurred twice within 6 minutes (see also run a8a056ea)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T19:55:56.897Z"
+		},
+		{
+			"key": "issue:minion-meta#537",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#537 [monitor:unstick] reconcile run a8a056ea (minion-meta): agent launch exit-126, infra fault",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/537",
+			"sourceUpdatedAt": "2026-09-20T18:17:53Z",
+			"sourceFingerprint": "81bb5d88b19c4405218d3b82895388c31cefa667845afd72139e08e9d40e2afb",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#536",
+				"issue:minion-meta#648"
+			],
+			"rationale": "Identical exit-126/turns=0 signature to #536 six minutes apart, confirming a recurring infra fault that should be consolidated into one host-classifier goal with #536 and #648.",
+			"evidence": [
+				"same signature as run 82695d34, 6 minutes earlier",
+				"reconcile wrapper's own work completed cleanly with no errors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T19:55:56.897Z"
+		},
+		{
+			"key": "issue:minion-meta#648",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#648 [monitor:unstick] reconcile run 92fa6565 (minion-meta): claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/648",
+			"sourceUpdatedAt": "2026-09-27T18:17:17Z",
+			"sourceFingerprint": "6af46596724b717ce37de4c286f24ad0e447f6342f732754a5b47febe28752fb",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#536",
+				"issue:minion-meta#537"
+			],
+			"rationale": "A week-later recurrence of the same exit-126/turns=0 claude-provider launch fault seen in #536/#537, reinforcing the case for a single consolidated host-classifier goal rather than per-run tickets.",
+			"evidence": [
+				"exit-126 with turns=0 and permission_denials=0 from the claude provider step",
+				"reconcile pipeline logic completed normally (529 proposals written, dev pushed)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T19:55:56.897Z"
 		},
 		{
 			"key": "pr:minion (gateway)#315",
@@ -33747,6 +33679,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T09:12:53.591Z"
+		},
+		{
+			"key": "issue:minion-meta#752",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#752 [monitor:unstick] run 4dc4d935 (minion-meta rank): both bounded LLM providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/752",
+			"sourceUpdatedAt": "2026-10-04T19:17:23Z",
+			"sourceFingerprint": "85d132db3f853ddad9f2c85d4618221def68e33c4b46b925410f0a1a1a9ace16",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A single-occurrence transient provider/JSON failure on rank batch 1 with no partial-output or spec problem and only a retry recommendation, so it is not yet actionable work.",
+			"evidence": [
+				"both bounded providers (claude, codex) either errored or returned invalid JSON for batch 1",
+				"catalog clone and 871-goal write succeeded; no partial ranking output"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T19:55:56.897Z"
 		},
 		{
 			"key": "issue:minion-meta#753",
