@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T02:56:28.570Z",
+	"generatedAt": "2026-10-18T03:26:05.619Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1240,8 +1240,8 @@
 			"repo": "minion (gateway)",
 			"title": "#335 fix(release): promote current agent tools and grounded catalog answers",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/335",
-			"sourceUpdatedAt": "2026-10-18T02:35:20Z",
-			"sourceFingerprint": "fdda9465c9c69561fd1640db99ba8c96bb9c19475b717e9d6853b9af8c2b72e0",
+			"sourceUpdatedAt": "2026-10-18T03:12:08Z",
+			"sourceFingerprint": "522ee1c1907350d83a1b4b953d0273fb1d3e1023d8973f786ae39d715616f303",
 			"score": 73,
 			"band": "high",
 			"axes": {
@@ -1251,23 +1251,22 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 5
+				"implementation": 4
 			},
 			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
 				"pr:minion (gateway)#337",
-				"run:minion (gateway)#39089656756"
+				"pr:minion-meta#844"
 			],
-			"rationale": "Release promotion is well-documented but explicitly held in draft pending the #337 merge and a clean full DEV qualification run.",
+			"rationale": "Release promotion is detailed and important but explicitly held in draft pending #337's fix and an unresolved full-DEV qualification.",
 			"evidence": [
-				"Full DEV CI 39088101086 found two stale assertions blocking qualification",
-				"Linux shard2 interrupted by unexplained runner shutdown, cause unknown",
-				"PR explicitly kept in draft pending companion merge"
+				"Keep this promotion in draft... Companion #337 corrects those assertions",
+				"Linux shard interrupted by runner shutdown; exact resulting full DEV qualification remains required"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:56:28.417Z"
+			"scoredAt": "2026-10-18T03:26:05.470Z"
 		},
 		{
 			"key": "pr:minion_hub#340",
@@ -4385,6 +4384,42 @@
 			"scoredAt": "2026-10-12T02:56:17.748Z"
 		},
 		{
+			"key": "pr:minion (gateway)#337",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#337 fix(ci): restore CRM retirement checks and isolate Linux tests",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/337",
+			"sourceUpdatedAt": "2026-10-18T03:11:35Z",
+			"sourceFingerprint": "068ebc15b800b12c181c7961eed67d6024991c019f7cf6d035dbcab606bca950",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#335",
+				"pr:minion-meta#844"
+			],
+			"rationale": "Small, scoped CI fix with passing full local suite and independent review that directly unblocks the #335 release qualification.",
+			"evidence": [
+				"Scope is two files: test/crm-tool-descriptions.test.ts and ci.yml",
+				"local suite union: 1,390 files / 13,366 tests passed",
+				"Independent review approved both scoped changes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T03:26:05.470Z"
+		},
+		{
 			"key": "proposal:2026-08-29-base-meta-status-revision-binding-required",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5097,6 +5132,41 @@
 			"scoredAt": "2026-10-14T17:51:55.358Z"
 		},
 		{
+			"key": "pr:minion_hub#570",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#570 fix(assistant): open suggested pages only when you click",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/570",
+			"sourceUpdatedAt": "2026-10-18T03:08:56Z",
+			"sourceFingerprint": "bbacafa220cf5f95b80fa56953f01ab9954434caf1c5ea08265bec10ac410607",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#844"
+			],
+			"rationale": "Well-specified fix preventing unintended assistant navigation, backed by extensive passing tests and an exact-head CI run.",
+			"evidence": [
+				"only clicking the rendered link changes pages",
+				"exact-head CI at fce1bda7: 882 files / 7,773 tests passed",
+				"42 focused independent review tests passed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T03:26:05.470Z"
+		},
+		{
 			"key": "proposal:2026-09-02-gateway-client-tools-webmcp-bridge",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5738,41 +5808,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T09:21:59.455Z"
-		},
-		{
-			"key": "pr:minion (gateway)#337",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#337 test(agents): align CRM assertions with retired SQL tool",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/337",
-			"sourceUpdatedAt": "2026-10-18T02:35:05Z",
-			"sourceFingerprint": "ea4e3dc627fa11dbaf87c7dab1906ee9407e82f99e3520c38d3d3eebe102078d",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#335"
-			],
-			"rationale": "Small, reviewed, CI-passing test correction is the explicit named blocker for the larger #335 release promotion.",
-			"evidence": [
-				"Hosted CI39089867147 passed: 14 passing, 0 failures, 15 skipped",
-				"Independent review approved the one-file correction",
-				"#335 names this PR as its qualification blocker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:56:28.417Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -7061,41 +7096,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T06:21:35.749Z"
-		},
-		{
-			"key": "pr:minion_hub#570",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#570 fix(assistant): open suggested pages only when you click",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/570",
-			"sourceUpdatedAt": "2026-10-18T02:54:19Z",
-			"sourceFingerprint": "eeac1bda427be1eda114931055886bd0ca18b099b5b11c166903ec02c733d91a",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#844"
-			],
-			"rationale": "Spec-backed assistant-trust fix has partial validation but is still draft with full build and CI pending before it is mergeable.",
-			"evidence": [
-				"Full local unit suite and production build are pending; CI is pending",
-				"Loopback fixture explicitly does not qualify authenticated full-Hub or model behavior",
-				"Status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:56:28.417Z"
 		},
 		{
 			"key": "pr:minion-meta#810",
@@ -8774,6 +8774,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T19:43:26.804Z"
+		},
+		{
+			"key": "pr:minion-meta#844",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#844 docs(spec): require click-to-open navigation and full release checks",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/844",
+			"sourceUpdatedAt": "2026-10-18T03:11:52Z",
+			"sourceFingerprint": "b9bd17aff6846aa7d96d000f44dfead49ef843f8c43e1f3da81d0b024a614305",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#570",
+				"pr:minion (gateway)#337"
+			],
+			"rationale": "Spec has completed two-pass review and documents the already-validated contract gating the companion implementation PRs.",
+			"evidence": [
+				"two independent spec passes, independent implementation review",
+				"Spec/proposal index checks pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T03:26:05.470Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -13626,40 +13661,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T23:26:08.457Z"
-		},
-		{
-			"key": "pr:minion-meta#844",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#844 docs(spec): require a user click for assistant navigation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/844",
-			"sourceUpdatedAt": "2026-10-18T02:53:49Z",
-			"sourceFingerprint": "dd38e3a43ac5b9989952f4b578dfbd32964c510cce37db324f17d555c512ccec",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#570"
-			],
-			"rationale": "The navigation-confirmation spec passed two independent reviews and the required index checks, and unblocks the dependent hub implementation.",
-			"evidence": [
-				"Two independent reviews approved behavior and boundary requirements",
-				"spec-index and proposal-index checks passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:56:28.417Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -32266,6 +32267,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T23:40:32.591Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3cafb0e00efaba5cce032a7edef066f29589b337",
+			"sourceUpdatedAt": "2026-10-18T02:19:07Z",
+			"sourceFingerprint": "11f1b317b9e074aa8c6cf0a47c918a9d70102be39a05b347e15aa71904265038",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Entry is just a merged commit message with no described outstanding deployment problem.",
+			"evidence": [
+				"summary is the commit message for merged #336",
+				"status is unknown with no issue or action described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T03:26:05.470Z"
 		},
 		{
 			"key": "issue:minion-meta#345",
