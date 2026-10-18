@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-ai-1396972732
 title: Handoff marker — src/agents/pi-embedded-runner/system-prompt.ts (minion-ai)
-status: draft
+status: closed
 created: 2026-10-13
 updated: 2026-10-18
 repos: [minion-ai]
@@ -28,3 +28,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-ai@DEV src/agents/pi-embedded-runner/system-prompt.ts:164` — replace the private pokes with the supported surface — a
   https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded-runner/system-prompt.ts#L164
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-18; the sweep closed this proposal.

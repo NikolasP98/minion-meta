@@ -28,3 +28,5 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/assistant/dispatch.ts:12` — silent follow-up turns are persisted in the gateway transcript
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/dispatch.ts#L12
+- `NikolasP98/minion_hub@master src/lib/assistant/dispatch.ts:25` — Bind UI effects to a server-issued request intent grant; answer-first prompts alone cannot prevent unsolicited navigation. See meta proposals/2026-10-17-agent-dynamic-tools.md.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/dispatch.ts#L25
