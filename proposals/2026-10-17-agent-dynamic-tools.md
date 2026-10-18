@@ -42,3 +42,7 @@ These are retained follow-ups, not claims that the full lifecycle audit is resol
 - Reviewed spec: https://github.com/NikolasP98/minion-meta/pull/840
 
 These drafts implement the S1/S2 incident and dynamic-discovery foundation. The open lifecycle work above remains open; production release and model qualification are separate evidence levels.
+
+## Qualification blocker: audited checksum baseline
+
+Gateway PR333 remains blocked by the repository rule that an implementation branch cannot allowlist its own secret-scan findings. Dedicated audit https://github.com/NikolasP98/minion-ai/pull/334 contains only the two public contract-checksum entries from the synthetic fixture. Its PR security gate intentionally also rejects baseline changes; the owner must authorize the existing audited baseline-update process. No scanner or approval rule was weakened. Once the audited entries land on DEV, update PR333's base and repeat CI. The exact guard lives in `.github/scripts/ci-security-scope.sh`; its existing baseline-refresh TODO links the broader audit proposal.
