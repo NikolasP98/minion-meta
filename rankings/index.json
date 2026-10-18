@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T14:55:37.971Z",
+	"generatedAt": "2026-10-18T15:25:52.560Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -23295,6 +23295,40 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
+			"key": "issue:minion-meta#418",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#418 [monitor:unstick] run 574d1e71 (minion-meta reconcile) - provider exec failure exit-126",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/418",
+			"sourceUpdatedAt": "2026-09-13T14:17:28Z",
+			"sourceFingerprint": "4a9336574fb2b3c5e466b5525dc2835a23a12477e29d6f67964ab19c3447da16",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#535"
+			],
+			"rationale": "This is one instance of a recurring exit-126 provider-exec failure in the reconcile pipeline that should be consolidated with the duplicate report into a single host-classifier goal.",
+			"evidence": [
+				"exit-126, turns=0, permission_denials=0 at the claude provider invocation step",
+				"reconcile pipeline's own substantive work completed successfully before the failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T15:25:52.428Z"
+		},
+		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23749,6 +23783,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T17:10:22.947Z"
+		},
+		{
+			"key": "issue:minion-meta#535",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#535 [monitor:unstick] run 62ff2f55 (minion-meta reconcile) failed to launch agent process: exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/535",
+			"sourceUpdatedAt": "2026-09-20T14:17:27Z",
+			"sourceFingerprint": "e14a587c3a88f099f0fb894478c198ee05b772b971e68404c55840f15ece6f16",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#418"
+			],
+			"rationale": "Same exit-126 exec-failure signature recurring a week after #418, explicitly proposing a new host classifier, so the two reports should merge into one goal rather than being tracked separately.",
+			"evidence": [
+				"exit-126/turns=0/permission_denials=0 pattern recurring across runs",
+				"proposes a new host classifier signature agent-exec-126"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T15:25:52.428Z"
 		},
 		{
 			"key": "issue:minion-meta#536",
@@ -29841,40 +29909,6 @@
 			"scoredAt": "2026-10-17T10:39:51.316Z"
 		},
 		{
-			"key": "issue:minion-meta#418",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#418 [monitor:unstick] run 574d1e71 (minion-meta reconcile) - provider exec failure exit-126",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/418",
-			"sourceUpdatedAt": "2026-09-13T14:17:28Z",
-			"sourceFingerprint": "4a9336574fb2b3c5e466b5525dc2835a23a12477e29d6f67964ab19c3447da16",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#535"
-			],
-			"rationale": "A recurring transient exit-126 provider-exec monitor alert that the diagnosis itself says is infra-transient and only worth action if it recurs, which it has.",
-			"evidence": [
-				"exit-126, turns=0, cost_usd=0 while reconcile pipeline work completed successfully",
-				"diagnosis recommends retry, and a host-classifier signature only if it recurs across runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T15:23:41.808Z"
-		},
-		{
 			"key": "issue:minion-meta#486",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29940,40 +29974,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T16:10:33.407Z"
-		},
-		{
-			"key": "issue:minion-meta#535",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#535 [monitor:unstick] run 62ff2f55 (minion-meta reconcile) failed to launch agent process: exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/535",
-			"sourceUpdatedAt": "2026-09-20T14:17:27Z",
-			"sourceFingerprint": "e14a587c3a88f099f0fb894478c198ee05b772b971e68404c55840f15ece6f16",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#418"
-			],
-			"rationale": "Same recurring exit-126 provider-exec-launch pattern as #418 a week later, so the pair is better tracked as one infra-classifier goal than two separate alerts.",
-			"evidence": [
-				"exit-126, turns=0, permission_denials=0 while reconcile sweep itself finished (80 handoffs, proposals/index.json written, push succeeded)",
-				"diagnosis explicitly proposes a new host classifier signature if this recurs across runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T15:23:41.808Z"
 		},
 		{
 			"key": "issue:minion-meta#577",
@@ -32306,6 +32306,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T23:40:32.591Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 8
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already restored CRM retirement checks and isolated Linux tests, so the deployment-health signal reflects completed, merged work rather than an open action.",
+			"evidence": [
+				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
+				"co-authored-by minion-factory, implying the fix already landed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T15:25:52.428Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
