@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T19:55:57.029Z",
+	"generatedAt": "2026-10-18T20:26:01.231Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11560,22 +11560,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 5
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#419"
 			],
-			"rationale": "Reports the same exit-126/turns=0 claude-provider launch signature recurring across at least three runs, pointing to a systemic worker-image issue worth fixing once as a combined goal with #419.",
+			"rationale": "Explicitly documents the same exit-126/turns=0 provider-launch signature recurring across multiple runs, strengthening the case for one combined infra-fix-plus-classifier goal with the related issue.",
 			"evidence": [
-				"identical exit-126/turns=0/permission_denials=0 signature also seen on runs 82695d34 and a8a056ea",
-				"recommendation: verify claude binary/wrapper executable/resolvable on runner box; add host classifier signature"
+				"identical exit-126/turns=0/permission_denials=0 signature also seen on runs 82695d34 and a8a056ea (same repo, within ~25 min)",
+				"diagnosis: infra/box fault, not a task failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T20:21:22.773Z"
+			"scoredAt": "2026-10-18T20:26:01.086Z"
 		},
 		{
 			"key": "issue:minion-meta#547",
@@ -20816,22 +20816,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 5
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#538"
 			],
-			"rationale": "Diagnosed as an infra provider-launch exit-126/0-turns fault whose underlying pattern and fix overlap with #538, so they should be consolidated into one goal.",
+			"rationale": "This is one instance of a recurring claude-provider exit-126/turns=0 launch fault that should be consolidated with the related issue into a single host-level infra fix plus classifier signature.",
 			"evidence": [
-				"exit_code=1, provider=claude, exit-126, turns=0",
-				"recommendation: retry; underlying merge-scan work already succeeded"
+				"provider=claude, exit-126, turns=0, permission_denials=0",
+				"recommendation: retry; if exit-126 recurs across runs, add as distinct classifier signature"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T20:21:22.773Z"
+			"scoredAt": "2026-10-18T20:26:01.086Z"
 		},
 		{
 			"key": "issue:minion-meta#422",
@@ -28284,6 +28284,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already merged a fix for CRM retirement checks and Linux test isolation, leaving no outstanding action.",
+			"evidence": [
+				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
+				"test(agents): align CRM assertions with retired SQL tool"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T20:26:01.086Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
