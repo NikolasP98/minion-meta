@@ -6,7 +6,7 @@ pass: 1
 status: implementing
 verdict: approved
 created: 2026-10-17
-updated: 2026-10-17
+updated: 2026-10-18
 repos: [minion, minion_hub]
 proposal: 2026-10-17-agent-dynamic-tools
 ---
@@ -95,3 +95,11 @@ AS-IS: the fixture's two public SHA-256 digests trigger the secret detector. The
 TO-BE: PR334 can validate exactly the two reviewed checksum entries while every changed commit remains scanned. Only the same-repository PR334, its named audit branch, and DEV base may use this one-time allowance. Bind the full before/after baseline to immutable reviewed Git objects. Missing or mismatched event identity, other baseline changes (including changes later reverted), other PRs and new secret findings still fail. No detector/file exclusion, general label bypass, automatic approval, merge or deployment authority is added. Owner security review and merge approval remain required.
 
 DELTA: remove the inherited root dependency link; implement the exact audit-context/baseline checks in the existing scanner; add positive, tampering, wrong-context and continued-scanning regressions. Run the scanner contract tests, shell checks and PR CI. Once the reviewed baseline lands, ordinary implementation PR333 must refresh its base and pass the unchanged ordinary-PR baseline rule. The exception is unusable from any later PR.
+
+## Linux qualification repair
+
+AS-IS: full DEV Linux shards repeatedly ended with runner-shutdown/exit143, without a reported failed assertion, OOM or timeout. Their VM-pool path uses more concurrent workers than the supported process-fork path. The underlying hosted-runner shutdown cause is unresolved. Separately, two CRM factory assertions still require the intentionally retired SQL tool.
+
+TO-BE: retain every suite, assertion, failure gate and the25-minute job timeout while using the existing isolated process-fork mode with one worker per project on Linux. Both shards must use the same pool because partition membership differs between pool implementations. Other platform jobs remain unchanged. Factory tests must assert retirement and preserve active-tool checks.
+
+DELTA: PR337 corrects the stale assertions and sets OPENCLAW_TEST_VM_FORKS=0 plus OPENCLAW_TEST_WORKERS=1 in the existing Linux matrix setup. Root independently reviewed the workflow scope and supported test-runner flags. Local full-suite collection exposed missing native dependency builds and a mise Node shim issue; these are being repaired without source, dependency-version or lockfile changes. Full local qualification and exact resulting DEV CI are pending. Scoped PR smoke checks do not qualify full DEV or production; no weakened gate or production promotion is authorized by this addendum.
