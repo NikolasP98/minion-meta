@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T05:55:57.198Z",
+	"generatedAt": "2026-10-18T06:25:46.106Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -19651,38 +19651,6 @@
 			"scoredAt": "2026-10-12T09:22:04.054Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-39a05376c28e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/daily-feed.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-39a05376c28e.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "05267a4d575ca5c3a3fabfb1f24c7e487fe7f739ae753a38db2142d7349a2d4f",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The finding itself states the fix requires a new shared-schema table affecting all consumers and should be a spec task, not a direct hotfix.",
-			"evidence": [
-				"no org business-hours/timezone table exists yet (AS-IS)",
-				"This should be a spec task, not a hotfix — it touches shared schema and affects all consumers"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T06:21:21.157Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-5886b6d51578",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22187,6 +22155,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:33:09.197Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-39a05376c28e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/daily-feed.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-39a05376c28e.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "05267a4d575ca5c3a3fabfb1f24c7e487fe7f739ae753a38db2142d7349a2d4f",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-152748b32645"
+			],
+			"rationale": "The finding itself states this requires a shared-schema migration affecting multiple consumers and should go through a spec rather than being executed as a direct fix.",
+			"evidence": [
+				"fix direction explicitly says 'this should be a spec task, not a hotfix'",
+				"requires new org_business_hours table in @minion-stack/db affecting all consumers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T06:25:45.965Z"
 		},
 		{
 			"key": "spec:2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec",
@@ -25524,38 +25526,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:30:14.278Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-152748b32645",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/appointment-overdue.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-152748b32645.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "0217f5beeb5fdac4fdc802ba407078a23a175b7c4af3341b0e993103939f278f",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Bounded UI wiring gap with a clear fix direction for a shareable appointment deep-link, though impact is limited to one feature surface.",
-			"evidence": [
-				"TODO(handoff): ?booking= deep-link query param is not wired",
-				"Fix direction: parse query param and pass to component's initial state/store"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T06:21:21.157Z"
 		},
 		{
 			"key": "issue:minion-meta#496",
@@ -29251,6 +29221,40 @@
 			"scoredAt": "2026-10-13T21:52:15.982Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-152748b32645",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/appointment-overdue.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-152748b32645.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "0217f5beeb5fdac4fdc802ba407078a23a175b7c4af3341b0e993103939f278f",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-39a05376c28e"
+			],
+			"rationale": "Well-scoped UX wiring gap with a clear fix direction and single-file blast radius makes this actionable as a small bounded task.",
+			"evidence": [
+				"TODO(handoff) marker names exact file and missing booking param wiring",
+				"fix direction specifies parsing query param and passing to initial state"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T06:25:45.965Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-380ed33fff7f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30133,38 +30137,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T17:21:46.968Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3cafb0e00efaba5cce032a7edef066f29589b337",
-			"sourceUpdatedAt": "2026-10-18T02:19:07Z",
-			"sourceFingerprint": "11f1b317b9e074aa8c6cf0a47c918a9d70102be39a05b347e15aa71904265038",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Summary describes an already-merged CI commit (#336) with no further defined work or open scope.",
-			"evidence": [
-				"summary: 'CI: preserve Swarm SSH failures and bounded lock retries (#336)'",
-				"status: unknown, kind: deploy (health tracking, not a goal)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T05:55:57.044Z"
 		},
 		{
 			"key": "issue:minion-meta#386",
