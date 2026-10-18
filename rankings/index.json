@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T20:55:28.405Z",
+	"generatedAt": "2026-10-18T21:25:59.932Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11440,6 +11440,74 @@
 			"scoredAt": "2026-10-12T12:23:42.174Z"
 		},
 		{
+			"key": "issue:minion-meta#422",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#422 [monitor:unstick] reconcile proposals run 9c3275fd: claude agent exit-126 (never started)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/422",
+			"sourceUpdatedAt": "2026-09-13T19:18:27Z",
+			"sourceFingerprint": "d285271fb211d40b2527a0ab38324dee7afd73421c1b6ecf6860ade15c4e9398",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#423"
+			],
+			"rationale": "Recurring exit-126 claude-CLI launch failure across 3 runs blocks the reconcile agent step and duplicates #423 so both should become one fix-the-runner-exec goal.",
+			"evidence": [
+				"same exit-126 turns=0 signature recurred identically at 17:56, 18:50, 18:55 UTC",
+				"deterministic sweep (proposals/index.json, push) still completes, isolating the fault to the claude agent launch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T21:25:59.800Z"
+		},
+		{
+			"key": "issue:minion-meta#423",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#423 [monitor:unstick] reconcile proposals run 1943e666: claude agent exit-126 (never started)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/423",
+			"sourceUpdatedAt": "2026-09-13T19:18:27Z",
+			"sourceFingerprint": "13682e0a3f3b302970a6e07c1c74c2d68bc19567b9fbbcc958a3c8b199b81a85",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#422"
+			],
+			"rationale": "Identical exit-126 claude-CLI signature to #422, representing the same recurring runner-exec fault that should be tracked as a single goal.",
+			"evidence": [
+				"note: 'reconcile agent failed (provider=claude; exit-126; turns=0; permission_denials=0)'",
+				"recommendation in log: human should check claude CLI file permissions/PATH on the runner"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T21:25:59.800Z"
+		},
+		{
 			"key": "issue:minion-meta#433",
 			"kind": "issue",
 			"stage": "proposal",
@@ -20834,74 +20902,6 @@
 			"scoredAt": "2026-10-18T20:26:01.086Z"
 		},
 		{
-			"key": "issue:minion-meta#422",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#422 [monitor:unstick] reconcile proposals run 9c3275fd: claude agent exit-126 (never started)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/422",
-			"sourceUpdatedAt": "2026-09-13T19:18:27Z",
-			"sourceFingerprint": "d285271fb211d40b2527a0ab38324dee7afd73421c1b6ecf6860ade15c4e9398",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#423"
-			],
-			"rationale": "This is the same recurring 'claude agent exit-126' infra signature reported three times in one day and duplicated in #423, so it should become one tracked infra-fix goal rather than two.",
-			"evidence": [
-				"'This exact signature (exit-126, turns=0, provider=claude) recurred identically across 3 runs today'",
-				"'a human should check the claude CLI invocation on the runner'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T21:21:39.668Z"
-		},
-		{
-			"key": "issue:minion-meta#423",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#423 [monitor:unstick] reconcile proposals run 1943e666: claude agent exit-126 (never started)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/423",
-			"sourceUpdatedAt": "2026-09-13T19:18:27Z",
-			"sourceFingerprint": "13682e0a3f3b302970a6e07c1c74c2d68bc19567b9fbbcc958a3c8b199b81a85",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#422"
-			],
-			"rationale": "Identical text and failure signature to #422 (same runner exit-126 issue reported on a different run id), so these should be merged into a single infra-fix goal.",
-			"evidence": [
-				"title and body are byte-identical to #422 aside from the run id",
-				"'recurring infra fault -- the claude CLI appears to have lost execute permission or its exec path broke'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T21:21:39.668Z"
-		},
-		{
 			"key": "issue:minion-meta#448",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28286,38 +28286,6 @@
 			"scoredAt": "2026-10-16T18:40:05.461Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already merged a fix for CRM retirement checks and Linux test isolation, leaving no outstanding action.",
-			"evidence": [
-				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"test(agents): align CRM assertions with retired SQL tool"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T20:26:01.086Z"
-		},
-		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32563,6 +32531,38 @@
 			"scoredAt": "2026-10-18T07:56:07.068Z"
 		},
 		{
+			"key": "issue:minion-meta#421",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#421 [monitor:unstick] rank board goals run b01dbb6b: bounded-provider fallback exhausted",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/421",
+			"sourceUpdatedAt": "2026-09-13T19:18:14Z",
+			"sourceFingerprint": "23d7cc314fb8044c60fb3ae0d7f1bca8bd6f52f8eeb11fab7b91b8db6cb751e2",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Self-diagnosed transient provider flake with its own recommendation to simply retry, not an actionable dev goal.",
+			"evidence": [
+				"cost_usd=0.147 shows billed call before failing, consistent with upstream flakiness",
+				"note explicitly recommends retrying as-is and only escalating if batch 1 keeps failing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T21:25:59.800Z"
+		},
+		{
 			"key": "issue:minion-meta#428",
 			"kind": "issue",
 			"stage": "proposal",
@@ -35705,14 +35705,14 @@
 			"scoredAt": "2026-10-17T05:40:35.665Z"
 		},
 		{
-			"key": "issue:minion-meta#421",
+			"key": "issue:minion-meta#420",
 			"kind": "issue",
 			"stage": "proposal",
 			"repo": "minion-meta",
-			"title": "#421 [monitor:unstick] rank board goals run b01dbb6b: bounded-provider fallback exhausted",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/421",
-			"sourceUpdatedAt": "2026-09-13T19:18:14Z",
-			"sourceFingerprint": "23d7cc314fb8044c60fb3ae0d7f1bca8bd6f52f8eeb11fab7b91b8db6cb751e2",
+			"title": "#420 [monitor:unstick] test",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/420",
+			"sourceUpdatedAt": "2026-09-13T19:18:02Z",
+			"sourceFingerprint": "b969012c5d436f978164654cd701a54cea07b6873ea00c1504a217f05dfa0f3d",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -35721,20 +35721,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 2
+				"specification": 1,
+				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The alert's own diagnosis attributes the failure to transient upstream provider flakiness and recommends simply retrying, which is not a standalone work item.",
+			"rationale": "Automated test-fingerprint intake with no real content beyond the literal string 'test detail'.",
 			"evidence": [
-				"'Diagnosis: transient/infra fault on batch 1 ... not a task-logic failure'",
-				"'Recommendation: retry the rank run as-is'"
+				"fingerprint: unstick-unknown-test",
+				"summary body is just 'test detail'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T21:21:39.668Z"
+			"scoredAt": "2026-10-18T21:25:59.800Z"
 		},
 		{
 			"key": "issue:minion-meta#461",
@@ -36311,38 +36311,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
-			"key": "issue:minion-meta#420",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#420 [monitor:unstick] test",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/420",
-			"sourceUpdatedAt": "2026-09-13T19:18:02Z",
-			"sourceFingerprint": "b969012c5d436f978164654cd701a54cea07b6873ea00c1504a217f05dfa0f3d",
-			"score": 0,
-			"band": "low",
-			"axes": {
-				"criticality": 0,
-				"importance": 0,
-				"impact": 0
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 9,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Title and body are literally just a test fixture with no real content to act on.",
-			"evidence": [
-				"title: '#420 [monitor:unstick] test'",
-				"summary body is only 'test detail'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T21:21:39.668Z"
 		},
 		{
 			"key": "issue:minion-meta#445",
