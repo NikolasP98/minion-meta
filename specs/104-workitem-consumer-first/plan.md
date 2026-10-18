@@ -48,11 +48,20 @@ Implementation paths, relative to the independent Factory repository:
 ```text
 runner/src/workitem.ts                 strict DB-free validator/parser (new)
 runner/src/workitem.test.ts            contract behavior (new)
+runner/src/workitem-admission.ts       shared pinned-source/revision boundary (new)
 runner/src/manifest.ts                 reuse/export risk aggregation if needed
+runner/src/topics.ts                  fresh canonical policy for WorkItem gates
+runner/src/topics.test.ts             stale-cache outage refusal controls
 runner/src/lifecycle.ts                eligibility, approval commit, spec admission
 runner/src/lifecycle.test.ts           real approval/sweep persistence behavior
+runner/src/requeue.ts                  existing automatic spec-retry admission
+runner/src/requeue.test.ts             retry authority and concurrency controls
+runner/src/promotion-circuit.ts        unchanged breaker read shared without cycles
+runner/src/queue.ts                    re-export existing breaker API unchanged
 runner/src/index.ts                    existing POST /pipeline/spec
 runner/src/index.test.ts               actual HTTP rejection and accepted controls
+agent/spec.sh                         exact-site execution-content handoff TODO
+README.md                             intake contract and migration limitations
 ```
 
 `runner/src/automerge.ts`, scheduling, queue ranking and existing run manifests
