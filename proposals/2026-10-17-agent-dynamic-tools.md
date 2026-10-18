@@ -3,7 +3,7 @@ id: 2026-10-17-agent-dynamic-tools
 title: Discover current authorized tools and answer catalog questions directly
 status: approved
 created: 2026-10-17
-updated: 2026-10-17
+updated: 2026-10-18
 repos: [minion_hub, minion]
 tags: [logic, security, data, test]
 value: 10
@@ -52,3 +52,7 @@ Gateway PR333 remains blocked by the repository rule that an implementation bran
 PR334 now also removes the inherited dependency symlink. The security proposal already specifies a temporary dedicated-update allowance; the dynamic-tools spec addendum limits it to PR334's exact repository/branch/base and immutable reviewed two-entry baseline transition. Ordinary PRs and all changed-commit scans remain enforced. This is a security-policy change prepared as a draft, not owner approval or authorization to merge. Root and independent reviewer must verify context failures, historical tampering and real scanner execution before requesting release.
 
 After the audited baseline lands, retire PR334's one-time scanner allowance and its dedicated regression fixtures in a normal follow-up. The exact source site carries `TODO(handoff)` pointing to the existing baseline-refresh proposal; ordinary baseline immutability and commit-delta scans must remain unchanged.
+
+## Current qualification and production boundary
+
+Production inspection still finds the gateway revision predating dynamic tool discovery. PR #337 includes the CRM test correction and supported Linux process-fork qualification mode; full DEV results remain required before promotion #335. Repeated hosted-runner shutdowns have no established root cause. The specification records the unchanged coverage/failure gates and pending proof. The separate click-to-open Hub guard is tracked by proposal 2026-10-18-assistant-navigation-confirmation; neither repair is described as live before deployment receipts.
