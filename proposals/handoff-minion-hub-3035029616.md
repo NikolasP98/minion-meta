@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-3035029616
 title: Handoff marker — src/routes/(app)/pos/appointments/+page.svelte (minion_hub)
-status: draft
+status: review
+duplicate_candidate: postmerge-minion-hub-35d07a5dbdde
 created: 2026-09-02
 updated: 2026-10-18
 repos: [minion-hub]
@@ -28,3 +29,9 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/routes/(app)/pos/appointments/+page.svelte:912` — the dialog names the VISIT's service titles, not every
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/+page.svelte#L912
+
+<!-- Reconciliation note (2026-10-18): byte-identical marker text and file to
+     postmerge-minion-hub-35d07a5dbdde (status: approved, already past this
+     stage, not editable here). This handoff marker is plausibly fully
+     resolved by that approved finding; flagging rather than closing since
+     only a human can confirm the approved fix covers this exact line. -->

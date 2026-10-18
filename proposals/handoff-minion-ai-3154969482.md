@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-ai-3154969482
 title: Handoff marker — src/agents/pi-embedded-runner/run/attempt.ts (minion-ai)
-status: draft
+status: review
+duplicate_candidate: handoff-minion-ai-1915380054
 created: 2026-10-13
 updated: 2026-10-18
 repos: [minion-ai]
@@ -28,3 +29,12 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-ai@DEV src/agents/pi-embedded-runner/run/attempt.ts:161` — move transcript sanitization onto the canonical path —
   https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded-runner/run/attempt.ts#L161
+
+<!-- Reconciliation note (2026-10-18): this marker's text is byte-identical to
+     handoff-minion-ai-1915380054 (src/agents/pi-embedded-runner/compact.ts:705),
+     filed the same day. Plausibly one underlying "move transcript sanitization
+     onto the canonical path" work item surfaced at two call sites, but each
+     handoff marker auto-closes independently when its own file's TODO comment
+     is removed — merging would break that per-file closure tracking if only
+     one site gets fixed first. Flagging for a human to confirm scope rather
+     than auto-merging. -->

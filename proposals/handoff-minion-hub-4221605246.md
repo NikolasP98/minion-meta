@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-4221605246
 title: Handoff marker — src/lib/assistant/dispatch.ts (minion_hub)
-status: draft
+status: review
+duplicate_candidate: postmerge-minion-hub-98cf2e865d44
 created: 2026-09-02
 updated: 2026-10-18
 repos: [minion-hub]
@@ -30,3 +31,12 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/dispatch.ts#L12
 - `NikolasP98/minion_hub@master src/lib/assistant/dispatch.ts:25` — Bind UI effects to a server-issued request intent grant; answer-first prompts alone cannot prevent unsolicited navigation. See meta proposals/2026-10-17-agent-dynamic-tools.md.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/dispatch.ts#L25
+
+<!-- Reconciliation note (2026-10-18): the line:25 marker here is byte-identical
+     to the sole marker in postmerge-minion-hub-98cf2e865d44 (status: approved,
+     already past this stage, not editable here). This marker also covers an
+     independent line:12 open end that the postmerge finding does not mention,
+     so this proposal is not a pure subset — flagging rather than merging into
+     the approved proposal. A human should confirm whether the line:25 half of
+     this marker is already covered by the approved finding and, if so, narrow
+     this proposal to the remaining line:12 item. -->
