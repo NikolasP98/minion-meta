@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1895569552
 title: Handoff marker — src/lib/assistant/global-tools.ts (minion_hub)
-status: draft
+status: review
 created: 2026-10-18
 updated: 2026-10-18
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-12f7ab774cda
 ---
 
 # Handoff marker — src/lib/assistant/global-tools.ts
