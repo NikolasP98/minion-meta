@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T09:56:31.960Z",
+	"generatedAt": "2026-10-18T10:26:02.857Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9016,7 +9016,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/assistant/global-tools.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-12f7ab774cda.md",
 			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "f5bd8ebc42c0420898783fe06aea3e31f44d50b7ecd09435853a2be06dcedf42",
+			"sourceFingerprint": "d75be979f67c2f0e39878fdc9a4e24e675a37c3d7793ee7e6b446aa055956328",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -9025,22 +9025,22 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 4
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-1d6db60d6d7b"
 			],
-			"rationale": "Shares the same missing request-bound-intent root cause and referenced fix proposal as the forms.ts finding, so they should be resolved as one goal.",
+			"rationale": "Shares the same root cause and referenced fix proposal as the forms.ts finding and should become one request-context-threading goal.",
 			"evidence": [
-				"TODO(handoff) marker cites the same proposals/2026-10-18-assistant-navigation-confirmation.md",
-				"Diagnosis describes a correctness gap where tools execute without knowing why the user requested them"
+				"TODO references proposals/2026-10-18-assistant-navigation-confirmation.md",
+				"diagnosis flags missing request-bound intent for native guide tools"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:29:01.404Z"
+			"scoredAt": "2026-10-18T10:26:02.715Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1d6db60d6d7b",
@@ -9050,7 +9050,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/assistant/forms.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1d6db60d6d7b.md",
 			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "1ccbdcab72dd773a7099abd9220a8723612716a572467b50161827ab6c1adec3",
+			"sourceFingerprint": "cc30ccc7f5acfb618c043d57bd437aa0804984f765461d67f756a49cf992e559",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -9059,22 +9059,22 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 4
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-12f7ab774cda"
 			],
-			"rationale": "Same root cause (no request-bound intent context) and same referenced navigation-confirmation proposal as the global-tools.ts finding, warranting one combined goal.",
+			"rationale": "Companion finding to the global-tools.ts TODO, needing the same request-bound intent context fix.",
 			"evidence": [
-				"TODO(handoff) marker cites proposals/2026-10-18-assistant-navigation-confirmation.md",
-				"Diagnosis notes form-fills can cross-wire across concurrent requests without this context"
+				"TODO references same proposals/2026-10-18-assistant-navigation-confirmation.md",
+				"fix direction: bind form-fill ops to request context or implement confirmation gate"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:29:01.404Z"
+			"scoredAt": "2026-10-18T10:26:02.715Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -9836,6 +9836,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T22:27:13.427Z"
+		},
+		{
+			"key": "run:minion (gateway)#39115342620",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39115342620",
+			"sourceUpdatedAt": "2026-10-18T10:10:32Z",
+			"sourceFingerprint": "507fd9e5dcc82118427c5510aa5e17b0039ac4b3e6dc5c5baa033a36397590f6",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failing CI run on the DEV branch blocks integration but the catalog gives no failure detail to act on yet.",
+			"evidence": [
+				"CI run status failure on push to DEV",
+				"no job/log detail included in candidate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T10:26:02.715Z"
 		},
 		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
@@ -22025,40 +22057,6 @@
 			"scoredAt": "2026-10-16T23:32:19.678Z"
 		},
 		{
-			"key": "run:minion (gateway)#39115342620",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39115342620",
-			"sourceUpdatedAt": "2026-10-18T09:48:36Z",
-			"sourceFingerprint": "06f5eb9b82c100b6e4e7c5c3391da37a864850606d9aca86fac2b2d35ace395f",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#335"
-			],
-			"rationale": "An in-progress CI run on DEV is simply the qualification gate for PR #335 completing, not an independent work item to specify or implement.",
-			"evidence": [
-				"stage: testing, status: in_progress",
-				"push on DEV, referenced by PR #335 as 'Full DEV push CI39115342620 is running'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:56:31.834Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -28261,6 +28259,38 @@
 			"scoredAt": "2026-10-16T18:40:05.461Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Deploy health entry only restates an already-merged CI fix commit with no pending actionable gap.",
+			"evidence": [
+				"commit message describes fix(ci) already restoring CRM checks",
+				"status is unknown with no further detail beyond the commit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T10:26:02.715Z"
+		},
+		{
 			"key": "issue:minion-meta#460",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33885,6 +33915,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T22:52:28.692Z"
+		},
+		{
+			"key": "issue:minion-meta#846",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#846 [monitor:unstick] rank run 66f5f64f: both bounded providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/846",
+			"sourceUpdatedAt": "2026-10-18T10:17:29Z",
+			"sourceFingerprint": "70eb179e32ade6ce216f5dfaf1cafca80c5602fba99076791b0a46bb90d59732",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Diagnosed as a single transient dual-provider JSON failure recommended for retry, not a persistent defect requiring dev work.",
+			"evidence": [
+				"diagnosis: transient dual-provider fault, not a spec or environment defect",
+				"recommendation: safe to retry as-is"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T10:26:02.715Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
