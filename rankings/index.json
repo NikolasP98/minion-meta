@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T22:25:34.397Z",
+	"generatedAt": "2026-10-18T23:26:32.509Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4365,20 +4365,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 5
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Real open security/authorization gaps (R2/R4) remain tracked with the sweeper cron deliberately disabled, but the proposal text is heavily garbled, undermining confidence in exact scope.",
+			"rationale": "Most line items (R1,R3,R5-R8) are already merged/deployed per the proposal's own status notes, leaving only R2/R4/R9 as real open security/race-condition work bundled inside a much larger, hard-to-parse document.",
 			"evidence": [
-				"\"R2/R4: attachment record authorization, link/sweeper coordination and booking-delete references remain open\"",
-				"\"Keep sweeper cron disabled\""
+				"R3/R5/R6/R8 deployed and R1/R7 merged to DEV per PR292; R2/R4 remain open per the update log",
+				"R9 (realpathSafe lexical fallback) is listed as an additional finding with no fix status given"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T22:51:45.353Z"
+			"scoredAt": "2026-10-18T23:26:32.363Z"
 		},
 		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
@@ -10485,6 +10485,76 @@
 			"scoredAt": "2026-10-12T12:34:30.416Z"
 		},
 		{
+			"key": "issue:minion-meta#424",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#424 [monitor:unstick] reconcile run 0efde7a0: claude agent invocation exit-126 after successful deterministic reconcile",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/424",
+			"sourceUpdatedAt": "2026-09-13T21:17:49Z",
+			"sourceFingerprint": "f46503c2830d5af97a225264df50a29cfdbd8ea17d722106e97613ccd77df545",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#425",
+				"issue:minion-meta#649"
+			],
+			"rationale": "Same exit-126/turns=0/permission_denials=0 launcher signature recurs across four reconcile runs, so the underlying infra fix belongs to one grouped goal rather than three parallel tickets.",
+			"evidence": [
+				"diagnosis cites identical signature in runs 0efde7a0, 510720bc, 9c3275fd, 1943e666",
+				"deterministic reconcile phases completed before the agent-launch failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T23:26:32.363Z"
+		},
+		{
+			"key": "issue:minion-meta#425",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#425 [monitor:unstick] reconcile run 510720bc: claude agent invocation exit-126 after successful deterministic reconcile",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/425",
+			"sourceUpdatedAt": "2026-09-13T21:17:49Z",
+			"sourceFingerprint": "536e2b881bc43765bda4f191fe534af0cb7e5da82dd02791ee64570c6e1397a7",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#424",
+				"issue:minion-meta#649"
+			],
+			"rationale": "Sibling of #424/#649 with the same exit-126 launcher signature; grouping avoids duplicate host-classifier work.",
+			"evidence": [
+				"fingerprint unstick-unknown-510720bc matches sibling runs 0efde7a0, 9c3275fd, 1943e666",
+				"recommendation is to verify claude CLI exec permissions/PATH on the runner image"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T23:26:32.363Z"
+		},
+		{
 			"key": "issue:minion-meta#584",
 			"kind": "issue",
 			"stage": "proposal",
@@ -10536,8 +10606,8 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 7,
+				"implementation": 6
 			},
 			"confidence": 5,
 			"recommendation": "group",
@@ -10545,14 +10615,14 @@
 				"issue:minion-meta#424",
 				"issue:minion-meta#425"
 			],
-			"rationale": "Another instance of the same recurring infra-launch-failure signature with persisted upstream work, reinforcing the case for one consolidated host-fix goal rather than three parallel tickets.",
+			"rationale": "Third sibling of the same recurring exit-126 launcher signature; one grouped infra goal is more effective than three.",
 			"evidence": [
-				"86+ handoffs refreshed, 529 proposals written, successful git push before exit-126 at claude provider step",
-				"turns=0, permission_denials=0 matches sibling runs' signature"
+				"86+ handoffs refreshed and git push succeeded before the claude-provider step errored exit-126, turns=0",
+				"same exit-126/turns=0/permission_denials=0 pattern as 0efde7a0 and 510720bc"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T23:01:59.751Z"
+			"scoredAt": "2026-10-18T23:26:32.363Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -13349,76 +13419,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T04:32:16.747Z"
-		},
-		{
-			"key": "issue:minion-meta#424",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#424 [monitor:unstick] reconcile run 0efde7a0: claude agent invocation exit-126 after successful deterministic reconcile",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/424",
-			"sourceUpdatedAt": "2026-09-13T21:17:49Z",
-			"sourceFingerprint": "f46503c2830d5af97a225264df50a29cfdbd8ea17d722106e97613ccd77df545",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#425",
-				"issue:minion-meta#649"
-			],
-			"rationale": "Duplicate monitor-intake report of the same recurring claude-provider exit-126 launch failure signature after successful deterministic reconcile, best consolidated into one host-infra fix goal.",
-			"evidence": [
-				"exit 126, turns=0, permission_denials=0 after deterministic reconcile completed",
-				"same signature reported across runs 0efde7a0, 510720bc, 9c3275fd, 1943e666"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T23:01:59.751Z"
-		},
-		{
-			"key": "issue:minion-meta#425",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#425 [monitor:unstick] reconcile run 510720bc: claude agent invocation exit-126 after successful deterministic reconcile",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/425",
-			"sourceUpdatedAt": "2026-09-13T21:17:49Z",
-			"sourceFingerprint": "536e2b881bc43765bda4f191fe534af0cb7e5da82dd02791ee64570c6e1397a7",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#424",
-				"issue:minion-meta#649"
-			],
-			"rationale": "Sibling report of the identical exit-126 claude-provider launcher failure signature; should be merged with related tickets rather than tracked separately.",
-			"evidence": [
-				"exit 126, turns=0, permission_denials=0, same signature as 0efde7a0/9c3275fd/1943e666",
-				"deterministic reconcile phases completed successfully before the agent step failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T23:01:59.751Z"
 		},
 		{
 			"key": "issue:minion-meta#597",
@@ -23320,38 +23320,6 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already restored the CRM retirement checks and isolated the Linux tests, so the deployment-health item reflects completed work, not an open goal.",
-			"evidence": [
-				"commit message: 'fix(ci): restore CRM retirement checks and isolate Linux tests (#337)'",
-				"entry is a single merged commit, not a tracked open deployment problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T21:56:08.070Z"
-		},
-		{
 			"key": "issue:minion-meta#418",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25784,6 +25752,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T05:10:44.249Z"
+		},
+		{
+			"key": "issue:minion-meta#848",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#848 [monitor:unstick] rank run 2eb62c83 failed: both bounded providers rejected batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/848",
+			"sourceUpdatedAt": "2026-10-18T23:17:24Z",
+			"sourceFingerprint": "f1f69418e7e1e7d2815118cf67a4e14868c0b35da27e5466db7d8e4b84b73038",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single billed-but-failed ranking batch with a distinct symptom (both providers rejecting/invalid JSON) rather than the exit-126 pattern, and the log itself suggests a simple retry, so it does not yet warrant dedicated execution.",
+			"evidence": [
+				"cost $0.1446 shows calls were made and billed before failing, not a zero-attempt dispatch fault",
+				"diagnosis frames this as likely transient upstream LLM fault, recommending retry first"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T23:26:32.363Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-mention-contrast",
@@ -29171,6 +29171,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:04:08.744Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "dc4c6198ce89e45506615f3c651cbbac9fc7f3768fb128dc1a8f6c5028491b60",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The flagged 'markers' are quoted fragments inside the ranking pipeline's own generated rankings/index.json output rather than genuine source TODO(handoff) comments, so the right fix is excluding generated artifacts from the handoff sweep, not resolving each quoted line.",
+			"evidence": [
+				"all markers point into rankings/index.json, a generated ranking-output file, not application source",
+				"the proposal itself says the markers are 'text copied out of repository source this sweep did not write'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T23:26:32.363Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
@@ -36179,39 +36211,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:04:08.744Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "e081deba952c1c94c6fa55737948c5e6fc7f8479b4537315a1e7a9abc2586581",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a handoff-sweep artifact flagging TODO-like text inside rankings/index.json itself, which is a generated ranking output file whose 'markers' are just quoted fragments from unrelated prior candidates (POS sessions, WebGL contexts, phone failures), not real code TODOs needing resolution.",
-			"evidence": [
-				"title says 'Handoff marker — rankings/index.json (minion-meta)'",
-				"summary explicitly notes markers are 'text copied out of repository source this sweep did not write' and lists incoherent cross-domain fragments",
-				"repo is minion-meta and the flagged file is the ranking data file, not application source"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T18:55:41.476Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
