@@ -29,8 +29,16 @@ The reviewed spec covers a live Hub query manifest, price ranking, gateway dynam
 - Source changes and focused test evidence do not prove production deployment or answer quality with a selected model. Complete exact-candidate local/browser/provider evaluation before release.
 - UI markdown fences still require a typed, request-bound effect protocol; answer-first prompts do not constitute deterministic navigation authorization.
 - Selection defaults remain shadow pending task-quality evaluation. Coding tools are not yet dynamically restricted by information-request intent.
-- Forty tool calls is a hard safety ceiling across attempts, not the intended interactive lookup latency/cost target. A shared wall-clock/token/cost budget and measured selection quality remain separate work.
+- Forty tool calls is a hard safety ceiling across internal attempts in one embedded run, not the intended interactive lookup latency/cost target. A shared wall-clock/token/cost budget, cross-provider write receipts and measured selection quality remain separate work. Higher-level provider fallback creates a new guard state if the answer-only recovery itself fails.
 - Pending classifier cancellation, draft admission and late UI session ownership require the broader lifecycle repair.
 - Custom script credentials, approval receipts, provisioning, cache/memory scope and model selection require their own authority and runtime qualification.
 
 These are retained follow-ups, not claims that the full lifecycle audit is resolved. Existing audit material remains local; no production transcript or credentials are published here.
+
+## Implementation drafts
+
+- Hub: https://github.com/NikolasP98/minion_hub/pull/567
+- Gateway: https://github.com/NikolasP98/minion-ai/pull/333
+- Reviewed spec: https://github.com/NikolasP98/minion-meta/pull/840
+
+These drafts implement the S1/S2 incident and dynamic-discovery foundation. The open lifecycle work above remains open; production release and model qualification are separate evidence levels.

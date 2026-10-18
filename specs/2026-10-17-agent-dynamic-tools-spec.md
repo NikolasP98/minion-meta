@@ -28,7 +28,7 @@ A reported catalog-price question produced repeated discovery and shell no-ops, 
 3. The deployed Hub owns a read-only capability declaration next to its implementation. Gateway fetches declarations each tool build. Compatible additions need no gateway code change. Retirement removes a tool on the next build; an old invocation is rejected by contract revision before data access.
 4. Discovery returns current schemas and provenance. Loading may activate tools within the running SDK session; it must never claim a schema is callable before activation. No browser navigation or shell workaround is needed to answer a data query.
 5. Hub manifest identity is derived by `resolveAssistantPrincipal`; execution repeats RBAC and tenant checks. Manifest metadata never grants authority. Requests never choose an arbitrary host, method or action route.
-6. Tool errors retain status, stable code, retryability and outcome. Ambiguous writes are never automatically retried. Fetches accept cancellation and have finite deadlines.
+6. Tool errors retain status, stable code, retryability and outcome. The transport never automatically replays a write; an ambiguous outcome triggers answer-only recovery within the current embedded run. Higher-level provider fallback still needs a request-wide receipt and budget. Fetches accept cancellation and have finite deadlines.
 7. Personal assistant runs have a bounded execution policy. Repeated discovery, permanent errors, identical outcomes and total call exhaustion lead to one answer-only recovery step, then termination. Coding-agent limits remain unchanged.
 8. Native SDK/plugin/skill references describe runtime inventory and installed versions. Remote docs remain references, never executable update instructions. There is no guarantee that external vendors will never deprecate an API.
 
@@ -75,6 +75,10 @@ Pass1 (dynamic_catalog, behavior): approved; same-run activation must be proven 
 ## SDK compatibility correction
 
 The supported SDK1.1 resource-loader systemPrompt option replaces the obsolete private `_rebuildSystemPrompt` override in both ordinary runs and compaction. An actual SDK session test proves the prompt persists after same-run tool activation. SDK registration receives the explicit permitted tool names so defaults cannot reintroduce denied tools.
+
+## Scope integration correction
+
+Live query tools carry an internal required Hub scope; custom scripts require execution scope. The agent-type policy enrolls actual runtime instances without bypassing subsequent profile/agent denies or Hub RBAC. Scope restrictions must survive config validation and resolved-agent projection. Pipeline tests cover default standard agents, restricted agents, removed scopes and explicit denies.
 
 ## Out of scope
 
