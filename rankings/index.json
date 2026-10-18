@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T09:29:01.552Z",
+	"generatedAt": "2026-10-18T09:56:31.960Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -842,8 +842,8 @@
 			"repo": "minion (gateway)",
 			"title": "#335 fix(release): promote current agent tools and grounded catalog answers",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/335",
-			"sourceUpdatedAt": "2026-10-18T09:26:31Z",
-			"sourceFingerprint": "fbe0dfd952334a62a15bec6447acf7ef774fb97ec249f9f3e972f1e5fe5b0698",
+			"sourceUpdatedAt": "2026-10-18T09:29:37Z",
+			"sourceFingerprint": "acdfeab6a58317f9518bd8185ebdfefc043c2cde382b4f3aef1f5363ad10d591",
 			"score": 78,
 			"band": "high",
 			"axes": {
@@ -853,22 +853,23 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 6,
-			"recommendation": "execute",
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"deploy:minion (gateway)",
+				"spec:2026-10-17-agent-dynamic-tools-spec",
+				"proposal:2026-10-17-agent-dynamic-tools",
 				"run:minion (gateway)#39115342620"
 			],
-			"rationale": "A fully scoped, mostly-validated release PR fixing production tool-discovery/catalog answers is held in draft only pending the now-merged #337 fix and a clean full DEV qualification rerun.",
+			"rationale": "A detailed, draft release PR fixing a production catalog-answer/navigation bug remains blocked on companion #337 and full DEV CI qualification, so it is not yet actionable.",
 			"evidence": [
-				"PR blocked specifically on stale crm-tool-descriptions.test.ts assertions, which #337 addresses",
-				"Companion Hub PR #567 and spec #840 merged; Hub production deploy 7148598004 succeeded"
+				"\"Keep this promotion in draft\" due to stale crm_query test assertions",
+				"\"Full DEV qualification remains required on merged #337 before promotion\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:29:01.404Z"
+			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
@@ -1397,6 +1398,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T22:27:13.427Z"
+		},
+		{
+			"key": "spec:2026-10-17-agent-dynamic-tools-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Current tools and answer-first business queries",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-17-agent-dynamic-tools-spec.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "c00e85cb2277bfa4ddbdb89bf84b3b05cbf13afc4bff6094125b5b66b603fb6d",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#335",
+				"proposal:2026-10-17-agent-dynamic-tools"
+			],
+			"rationale": "Detailed, actively implementing spec with explicit invariants and a defined cross-repo contract driving the dynamic-tools fix.",
+			"evidence": [
+				"status: implementing",
+				"defines explicit TO-BE invariants and a cross-repository tool-catalog contract"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-d1c5d80",
@@ -1962,40 +1998,6 @@
 			"scoredAt": "2026-10-17T22:26:31.986Z"
 		},
 		{
-			"key": "proposal:2026-10-17-agent-dynamic-tools",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Discover current authorized tools and answer catalog questions directly",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-17-agent-dynamic-tools.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "c9a42c35dbc3a4652d526b21e1c216ebe68d8e4f3f256cd9dade92c168eda517",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-1396972732"
-			],
-			"rationale": "Core dynamic-tool-discovery work is drafted and partly merged, but the gateway PR remains blocked on an owner-authorized security-baseline exception that cannot be self-approved.",
-			"evidence": [
-				"Gateway PR333 blocked because an implementation branch cannot allowlist its own secret-scan findings",
-				"Hub PR567 and reviewed spec PR840 already drafted/merged; PR334 baseline update awaits owner authorization"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T01:56:41.547Z"
-		},
-		{
 			"key": "spec:2026-08-17-sdlc-phase-gates-scoring-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2060,40 +2062,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:53:42.841Z"
-		},
-		{
-			"key": "spec:2026-10-17-agent-dynamic-tools-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion",
-			"title": "Current tools and answer-first business queries",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-17-agent-dynamic-tools-spec.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "875ae192d5dba30b1e226e30b81cd1d308db48ee742154ef66f51cba207c770e",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-98cf2e865d44"
-			],
-			"rationale": "Cross-repo tool-catalog security/reliability contract already in implementing status with RBAC, bounded-execution, and error-retryability invariants affecting gateway and hub.",
-			"evidence": [
-				"status: implementing, updated 2026-10-17",
-				"defines cross-repo /api/gateway/query/tool-catalog contract with RBAC/tenant re-checks"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:05:58.834Z"
 		},
 		{
 			"key": "issue:minion-meta#730",
@@ -3292,6 +3260,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T09:22:21.495Z"
+		},
+		{
+			"key": "proposal:2026-10-17-agent-dynamic-tools",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Discover current authorized tools and answer catalog questions directly",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-17-agent-dynamic-tools.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "5a92edd2880d198f48ea83e2e1db5b767205c615eccfe4c3110c74e982b73f33",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-17-agent-dynamic-tools-spec",
+				"pr:minion (gateway)#335"
+			],
+			"rationale": "Approved proposal with substantial implementation already merged elsewhere still lists open lifecycle/verification items that keep it from being closed.",
+			"evidence": [
+				"\"Implementation drafts\" lists Hub #567, Gateway #333, meta #840",
+				"\"These are retained follow-ups, not claims that the full lifecycle audit is resolved\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1194287278",
@@ -5871,6 +5874,42 @@
 			"scoredAt": "2026-10-14T11:21:44.413Z"
 		},
 		{
+			"key": "proposal:2026-10-18-assistant-navigation-confirmation",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Keep assistant navigation under user control",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-18-assistant-navigation-confirmation.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "a199d2f34c3bfb51d36e037684b95ae9288607cc05b4b45e5fb615f209eda3f6",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-18-assistant-navigation-confirmation-spec",
+				"proposal:handoff-minion-hub-1895569552",
+				"proposal:handoff-minion-hub-2083655976"
+			],
+			"rationale": "Well-articulated in-spec proposal addressing a real trust gap (assistant falsely claiming navigation) but implementation evidence is not yet present.",
+			"evidence": [
+				"\"the assistant must not claim it opened a page\"",
+				"status: in-spec with companion spec already drafted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
+		},
+		{
 			"key": "proposal:ci-minion-site-claude-code",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6681,6 +6720,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:57:28.771Z"
+		},
+		{
+			"key": "spec:2026-10-18-assistant-navigation-confirmation-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "User-confirmed assistant navigation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-18-assistant-navigation-confirmation-spec.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "381cb9fea597e95589694261626125b4bf95821c465fb31f3e30d64a4f776488",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-18-assistant-navigation-confirmation",
+				"proposal:handoff-minion-hub-1895569552"
+			],
+			"rationale": "Clear, implementing-stage spec with a concrete DELTA table and review requirements for fixing false navigation claims.",
+			"evidence": [
+				"status: implementing",
+				"DELTA table lists tool implementation, rendering, batch execution, prompts, replay boundaries"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
 			"key": "proposal:2026-09-20-hub-component-service-centralization",
@@ -10186,40 +10260,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:00:07.556Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-4221605246",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/assistant/dispatch.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4221605246.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "0fafb977fb1d76e514c05a542bfa60a75e237e24feee7195faf2f701da6f30b3",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-3908790574"
-			],
-			"rationale": "Preventing unsolicited navigation via a server-issued intent grant is a real correctness/security gap but needs design before execution.",
-			"evidence": [
-				"marker: 'answer-first prompts alone cannot prevent unsolicited navigation'",
-				"references meta proposals/2026-10-17-agent-dynamic-tools.md, same as #335's navigation-fence concern"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T02:26:46.079Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7e2a23e32c73",
@@ -16570,6 +16610,74 @@
 			"scoredAt": "2026-10-18T02:26:46.079Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1895569552",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/assistant/global-tools.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1895569552.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "759ed4a3d0419fa69b51c88312d6723c0b837d987b57ecbb675eedeb2fa8b017",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2083655976",
+				"proposal:2026-10-18-assistant-navigation-confirmation"
+			],
+			"rationale": "This marker and the forms.ts marker describe the same native request-bound-intent gap already tracked by the navigation-confirmation proposal, so they should become one goal.",
+			"evidence": [
+				"\"Independent native guides need request-bound intent... See meta proposals/2026-10-18-assistant-navigation-confirmation.md\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2083655976",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/assistant/forms.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2083655976.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "c32e3dbe17578265f529f3aacad9b72b8b4afa86d424c09f6024297c6fca06f8",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-1895569552",
+				"proposal:2026-10-18-assistant-navigation-confirmation"
+			],
+			"rationale": "Describes the identical native-effect request-bound-intent gap as the global-tools.ts marker, pointing to the same navigation-confirmation proposal.",
+			"evidence": [
+				"\"Independent native fills lack request-bound intent... native effect grants need meta proposals/2026-10-18-assistant-navigation-confirmation.md\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2650013771",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21917,6 +22025,40 @@
 			"scoredAt": "2026-10-16T23:32:19.678Z"
 		},
 		{
+			"key": "run:minion (gateway)#39115342620",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39115342620",
+			"sourceUpdatedAt": "2026-10-18T09:48:36Z",
+			"sourceFingerprint": "06f5eb9b82c100b6e4e7c5c3391da37a864850606d9aca86fac2b2d35ace395f",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#335"
+			],
+			"rationale": "An in-progress CI run on DEV is simply the qualification gate for PR #335 completing, not an independent work item to specify or implement.",
+			"evidence": [
+				"stage: testing, status: in_progress",
+				"push on DEV, referenced by PR #335 as 'Full DEV push CI39115342620 is running'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -23155,40 +23297,6 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 10
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion (gateway)#335"
-			],
-			"rationale": "Already-merged CI fix (#337) that resolves the stale CRM assertions blocking PR #335's qualification, so no further work remains here.",
-			"evidence": [
-				"Commit message: fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"PR #335 names this same fix as its qualification blocker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:29:01.404Z"
-		},
-		{
 			"key": "issue:minion-meta#427",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24157,37 +24265,6 @@
 			"scoredAt": "2026-10-17T03:41:12.124Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-2877399286",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "9c6bdd0db9836e39727e5d326d88643124c2b48e1b2c1cd07426c3c17af264d1",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Promoting Bun 1.4 out of CI shadow mode is a reasonably clear CI-infra task but readiness depends on shadow evidence not shown here.",
-			"evidence": [
-				"Marker: 'Reach Bun 1.4 parity before promoting it from shadow evidence'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T01:57:37.627Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3238987400",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24446,6 +24523,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:02:05.622Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-4221605246",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/assistant/dispatch.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4221605246.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "0df8b546cc96fdc17624ce832308601aa4722a70fe4384e842740a4b39800cbd",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A terse, standalone marker about silent follow-up turns persisting in the transcript lacks enough scope detail to size or act on confidently.",
+			"evidence": [
+				"\"silent follow-up turns are persisted in the gateway transcript\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-732128239",
@@ -28978,38 +29086,6 @@
 			"scoredAt": "2026-10-18T02:04:08.744Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "30083726225a9bd8a4a3a56a3927ee370bf89437bd7cc29981be8dcadbff313c",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This omnibus ledger bundles over a dozen unrelated quoted TODO fragments scattered across rankings/index.json into one proposal, so no single coherent fix can be scoped from it as-is.",
-			"evidence": [
-				"17+ unrelated marker lines spanning different line numbers and topics",
-				"definition of done is 'no more markers in the file', not a specific fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T06:56:07.471Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31326,6 +31402,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T21:51:40.079Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-2877399286",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "c67a5b4ceb9ead4ab17d41ed52b17c9793ffad986789382dc6902d17d216e405",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, bounded CI parity marker with a clear single action and no blocking dependencies noted.",
+			"evidence": [
+				"\"Reach Bun 1.4 parity before promoting it from shadow evidence\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3042701035",
@@ -34693,106 +34800,6 @@
 			"scoredAt": "2026-10-17T04:05:06.282Z"
 		},
 		{
-			"key": "run:minion (gateway)#39115342616",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Workflow Sanity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39115342616",
-			"sourceUpdatedAt": "2026-10-18T09:26:35Z",
-			"sourceFingerprint": "b0977aa1c533da2d8cf6a2d2c2e583eff8808a5fd48388789645b709823f6a01",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion (gateway)#39115342620"
-			],
-			"rationale": "Routine in-progress sanity CI run triggered by a DEV push, not an independent actionable goal beyond the PR/deploy it validates.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV, workflow name Workflow Sanity"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:29:01.404Z"
-		},
-		{
-			"key": "run:minion (gateway)#39115342620",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39115342620",
-			"sourceUpdatedAt": "2026-10-18T09:26:36Z",
-			"sourceFingerprint": "f081eebc78ebe7bc518fc26cb15875689a7b31c0b9ecc1fb6f5855e65741cdd3",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion (gateway)#39115342616"
-			],
-			"rationale": "Routine in-progress CI run on the same DEV push as the sanity workflow, redundant as a standalone board goal.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV, workflow name CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:29:01.404Z"
-		},
-		{
-			"key": "run:minion_hub#39115306155",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39115306155",
-			"sourceUpdatedAt": "2026-10-18T09:26:09Z",
-			"sourceFingerprint": "327a404039d051279a736499490096998a4c691835473affeb539472f053bf2d",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run on hub master with no distinct scope or actionable outcome of its own.",
-			"evidence": [
-				"status: in_progress",
-				"push on master, workflow name CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:29:01.404Z"
-		},
-		{
 			"key": "issue:minion-meta#666",
 			"kind": "issue",
 			"stage": "proposal",
@@ -36089,6 +36096,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:04:08.744Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "b81d71d37e69a429225e0f3dce398f837cd16cc0289d175cc95080205857b1cd",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This marker is the ranking system's own index file self-referentially flagged, bundling dozens of unrelated quoted fragments rather than one coherent, actionable finding.",
+			"evidence": [
+				"source file is rankings/index.json, the ranking output itself",
+				"markers span unrelated topics (POS sessions, WebGL contexts, HR schema) with no single actionable scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
