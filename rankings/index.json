@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-18T11:25:39.140Z",
+	"generatedAt": "2026-10-18T11:55:34.645Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7539,6 +7539,38 @@
 			"scoredAt": "2026-10-15T18:50:14.074Z"
 		},
 		{
+			"key": "issue:minion-meta#534",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#534 [monitor:unstick] reconcile agent exit-126 on run 7f9b94e4 (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/534",
+			"sourceUpdatedAt": "2026-09-20T10:17:32Z",
+			"sourceFingerprint": "be01cb96455f9df6b7186e7258be50bdc45820a2c7587f7dc44dcf5a9ec5ac5b",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring exit-126/turns=0 signature across 5 consecutive runs points to a runner/box-level permission or PATH fault needing human infra check rather than a code fix.",
+			"evidence": [
+				"exit-126, turns=0, cost_usd=0 recurs identically across 5 consecutive reconcile runs between 07:24 and 09:56 UTC",
+				"diagnosis states reconcile script itself completed successfully; failure is downstream in the claude CLI exec step"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-18T11:55:34.526Z"
+		},
+		{
 			"key": "issue:minion-meta#701",
 			"kind": "issue",
 			"stage": "proposal",
@@ -9345,38 +9377,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T10:56:03.483Z"
-		},
-		{
-			"key": "issue:minion-meta#534",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#534 [monitor:unstick] reconcile agent exit-126 on run 7f9b94e4 (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/534",
-			"sourceUpdatedAt": "2026-09-20T10:17:32Z",
-			"sourceFingerprint": "be01cb96455f9df6b7186e7258be50bdc45820a2c7587f7dc44dcf5a9ec5ac5b",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Recurring exit-126/turns=0 signature points to a runner-box CLI permission/PATH fault, not a spec-level task fix, so this needs to be reframed as infra/runner remediation rather than executed as-is.",
-			"evidence": [
-				"exit-126, turns=0, cost_usd=0 recurring identically across 5 consecutive runs 07:24-09:56 UTC",
-				"diagnosis states claude CLI process itself never executed (permission-denied on exec), box-level not task/logic failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-11T11:51:07.590Z"
 		},
 		{
 			"key": "issue:minion-meta#627",
@@ -23293,38 +23293,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI fix commit landed for test isolation but no deployment failure or health issue is evidenced, so this is routine maintenance rather than urgent.",
-			"evidence": [
-				"commit message: fix(ci): restore CRM retirement checks and isolate Linux tests",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T11:25:39.007Z"
 		},
 		{
 			"key": "issue:minion-meta#427",
