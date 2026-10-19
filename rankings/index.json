@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T03:27:53.252Z",
+	"generatedAt": "2026-10-19T03:56:03.340Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6285,21 +6285,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 5
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Approved finding identifies a concrete production data-loss risk from dropped join requests under load, with an actionable fix direction using existing queue infrastructure.",
+			"rationale": "This approved finding identifies a concrete risk of silently dropped join requests with a clear fix direction toward a durable queue.",
 			"evidence": [
-				"bounded best-effort fan-out may silently drop join requests under load",
-				"approved status",
-				"check minion_hub/src/server/ for existing job infrastructure"
+				"bounded best-effort fan-out may silently drop join requests under load or network failure",
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T03:51:49.903Z"
+			"scoredAt": "2026-10-19T03:56:03.195Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-570b9d39c7eb",
@@ -6396,39 +6395,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:58:35.205Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-7cff7d845501",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7cff7d845501.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "d82da978eee109746c075aaf5ab11404f13a4a316d45dc42f155221adf7f67b6",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding identifies a concrete race condition between a read and moveGroup write with a clear, bounded fix of wrapping both in one transaction.",
-			"evidence": [
-				"this read and moveGroup are two transactions, so a visit could race",
-				"approved status",
-				"Fix direction: wrap both in a single Drizzle transaction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T03:51:49.903Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9b86db24576e",
@@ -9901,6 +9867,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T12:33:09.197Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7cff7d845501",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7cff7d845501.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "d82da978eee109746c075aaf5ab11404f13a4a316d45dc42f155221adf7f67b6",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This approved finding identifies a concrete race condition between a read and moveGroup write with a clear single-transaction fix.",
+			"evidence": [
+				"this read and moveGroup are two transactions, so a visit",
+				"Wrap both the read and moveGroup call in a single Drizzle transaction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T03:56:03.195Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9d6b626ef615",
@@ -18429,39 +18427,6 @@
 			"scoredAt": "2026-10-15T01:22:04.986Z"
 		},
 		{
-			"key": "proposal:2026-09-27-hub-column-presentation-admission",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Extend column presentation to native and other custom columns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-27-hub-column-presentation-admission.md",
-			"sourceUpdatedAt": "2026-09-27",
-			"sourceFingerprint": "63cce8ddf3ab8bc8292b7816110eb935ab89b514230959b13733abe9d81a60b2",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Scope is reasonably defined but the user explicitly deferred this expansion until after calculated columns, so it is not yet actionable.",
-			"evidence": [
-				"The user explicitly deferred this expansion until after calculated columns",
-				"draft status",
-				"depends on the calculated-column-formatting spec"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T03:51:49.903Z"
-		},
-		{
 			"key": "proposal:2026-09-29-hub-table-filters-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19524,39 +19489,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:51:48.799Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-78f81166a2c1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/notifications/catalog.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-78f81166a2c1.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "e906c6b011eb9e3f068711f5d4c0eda430919076b8267119cf84b5675533c4b7",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The source marker text is truncated and the auto-diagnosis itself admits uncertainty about exactly what must be registered, so the problem needs clarification before it can be executed.",
-			"evidence": [
-				"marker text cuts off at 'their'",
-				"diagnosis notes the text cuts off at 'their' but asserts the concern is clear",
-				"approved status despite an incomplete source marker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T03:51:49.903Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
@@ -23303,6 +23235,38 @@
 			"scoredAt": "2026-10-16T22:10:24.040Z"
 		},
 		{
+			"key": "proposal:2026-09-27-hub-column-presentation-admission",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Extend column presentation to native and other custom columns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-27-hub-column-presentation-admission.md",
+			"sourceUpdatedAt": "2026-09-27",
+			"sourceFingerprint": "63cce8ddf3ab8bc8292b7816110eb935ab89b514230959b13733abe9d81a60b2",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The proposal itself states the user explicitly deferred this expansion until after calculated columns ships, so it is not ready to execute now.",
+			"evidence": [
+				"The user explicitly deferred this expansion until after calculated columns",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T03:56:03.195Z"
+		},
+		{
 			"key": "proposal:2026-10-14-hub-global-class-selector-lint",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24521,6 +24485,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T01:18:58.516Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-78f81166a2c1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/notifications/catalog.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-78f81166a2c1.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "e906c6b011eb9e3f068711f5d4c0eda430919076b8267119cf84b5675533c4b7",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The source marker text is truncated mid-sentence, so the exact registration requirement for notification producers/consumers is unclear and needs scoping first.",
+			"evidence": [
+				"Marker text: ...must register their",
+				"the text cuts off at \"their\", but the concern is clear"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T03:56:03.195Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-821abba8cc10",
@@ -28104,6 +28100,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already restored the CRM retirement checks and isolated the Linux tests, leaving no outstanding deployment issue.",
+			"evidence": [
+				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T03:56:03.195Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -32855,21 +32882,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 2
+				"specification": 3,
+				"implementation": 1
 			},
 			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The log shows the reconcile work completed successfully and the alert itself classifies the exit-126 as a transient runner-host fault, not a genuine task failure.",
+			"rationale": "The log's own assessment calls the exit-126/turns=0 failure a transient infra blip after the reconcile work had already completed successfully, needing only a human-triggered retry.",
 			"evidence": [
-				"host-side reconcile script ran to completion normally",
-				"Assessment: transient/infra fault on the runner host",
-				"turns=0, exit_code 126 isolated to launching the claude binary"
+				"Assessment: transient/infra fault on the runner host, not a genuine task or spec failure",
+				"reconcile logic had already completed its useful work"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T03:51:49.903Z"
+			"scoredAt": "2026-10-19T03:56:03.195Z"
 		},
 		{
 			"key": "issue:minion-meta#542",
