@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T22:55:55.549Z",
+	"generatedAt": "2026-10-19T23:25:51.399Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -21903,6 +21903,40 @@
 			"scoredAt": "2026-10-18T21:56:08.070Z"
 		},
 		{
+			"key": "issue:minion-meta#550",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#550 [monitor:unstick] reconcile run 7517eadc (minion-meta) — reconcile agent exec fault, deterministic sweep succeeded",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/550",
+			"sourceUpdatedAt": "2026-09-21T22:17:27Z",
+			"sourceFingerprint": "278885be7ad7d5f466dd0b09d00274cd5cff0801a614bb70aca24053e9ecee48",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#667"
+			],
+			"rationale": "Transient runner-box exec fault (exit-126, turns=0) in the reconcile-agent sub-step, with the real reconcile work already committed and pushed, so this is low urgency but matches a recurring signature worth consolidating with the other instance.",
+			"evidence": [
+				"exit-126 with turns=0 and permission_denials=0, classified transient/infra",
+				"dev branch already pushed (8116aec..c780928) before the failure, no data lost"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T23:25:51.269Z"
+		},
+		{
 			"key": "issue:minion-meta#617",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21935,6 +21969,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T17:10:22.947Z"
+		},
+		{
+			"key": "issue:minion-meta#667",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#667 [monitor:unstick] reconcile proposals run f9a80427 (minion-meta) - claude exec failure exit-126, turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/667",
+			"sourceUpdatedAt": "2026-09-28T22:17:37Z",
+			"sourceFingerprint": "617363571830da8715305fcbd95b277358254ea8de249d46477b6f6bea31d6f7",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#550"
+			],
+			"rationale": "Same exit-126/turns=0/cost=0 exec-permission signature on the claude CLI sub-step recurring a week after #550, so grouping into one 'fix runner box claude exec permissions' goal is more actionable than tracking each occurrence.",
+			"evidence": [
+				"provider=claude, exit-126, turns=0, permission_denials=0, cost_usd=0",
+				"merge-scan/proposal work already committed and pushed (db3b6a0..4a6db04)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T23:25:51.269Z"
 		},
 		{
 			"key": "issue:minion-meta#723",
@@ -30497,38 +30565,6 @@
 			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit shows the CI/test fix already merged, so no further deploy-health action remains.",
-			"evidence": [
-				"commit message: fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T22:55:55.416Z"
-		},
-		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31053,40 +31089,6 @@
 			"scoredAt": "2026-10-17T09:40:44.997Z"
 		},
 		{
-			"key": "issue:minion-meta#550",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#550 [monitor:unstick] reconcile run 7517eadc (minion-meta) — reconcile agent exec fault, deterministic sweep succeeded",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/550",
-			"sourceUpdatedAt": "2026-09-21T22:17:27Z",
-			"sourceFingerprint": "278885be7ad7d5f466dd0b09d00274cd5cff0801a614bb70aca24053e9ecee48",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#667"
-			],
-			"rationale": "Transient exec-fault (exit-126, turns=0) already auto-recovered upstream, duplicate pattern of #667 best handled as one host-classifier fix.",
-			"evidence": [
-				"exit-126 with turns=0 and permission_denials=0, classified transient/infra",
-				"reconcile state already persisted and dev branch pushed before failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T23:21:10.992Z"
-		},
-		{
 			"key": "issue:minion-meta#565",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31295,40 +31297,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T19:26:06.437Z"
-		},
-		{
-			"key": "issue:minion-meta#667",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#667 [monitor:unstick] reconcile proposals run f9a80427 (minion-meta) - claude exec failure exit-126, turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/667",
-			"sourceUpdatedAt": "2026-09-28T22:17:37Z",
-			"sourceFingerprint": "617363571830da8715305fcbd95b277358254ea8de249d46477b6f6bea31d6f7",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#550"
-			],
-			"rationale": "Same exit-126/turns=0 runner-exec fault pattern as #550 with upstream work already committed, better addressed as one combined host-classifier/runner-permission fix.",
-			"evidence": [
-				"provider=claude, exit-126, turns=0, cost_usd=0",
-				"545 proposals written and pushed before the downstream claude-agent step failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T23:21:10.992Z"
 		},
 		{
 			"key": "issue:minion-meta#683",
