@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T04:44:23.640Z",
+	"generatedAt": "2026-10-19T04:55:59.305Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6726,6 +6726,38 @@
 			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
+			"key": "pr:minion_hub#572",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#572 fix(shell): ship the install icons",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/572",
+			"sourceUpdatedAt": "2026-10-19T04:48:33Z",
+			"sourceFingerprint": "08932e5020eaf7300792a62ac0d572098e1cb82cb6b25896eac22f8b9ec80bcb",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR with a clearly identified root cause and a small, scoped fix that unblocks PWA install for all hub users in production.",
+			"evidence": [
+				"\".vercelignore excludes *.png, so /icons/*.png never uploaded... blocks install\"",
+				"\"Adds !static/icons/*.png\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T04:55:59.160Z"
+		},
+		{
 			"key": "proposal:2026-09-20-hub-component-service-centralization",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9768,38 +9800,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T01:55:43.340Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-3c21d7c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 3c21d7c",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-3c21d7c.md",
-			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "8bdff768857893e17c898cce8e1f681eabdebcd386e298541e17b6b9863888f6",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two concrete, file/line-located defects (a missing null check risking a throw, and an unvalidated input) are bounded and directly fixable.",
-			"evidence": [
-				"high unchecked-access: test/ci/ci-workflow.test.ts:320 .find() result used without null check",
-				"medium unvalidated-input: scripts/ci/tq016-windows-qualification.mjs:27 missing object check"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T04:51:55.559Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
@@ -14742,6 +14742,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T02:57:01.849Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-3c21d7c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 3c21d7c",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-3c21d7c.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "8bdff768857893e17c898cce8e1f681eabdebcd386e298541e17b6b9863888f6",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two concrete, file/line-specific defects (unvalidated input and unchecked access) in CI scripts are bounded and ready to fix.",
+			"evidence": [
+				"\"validateIdentity immediately accesses identity.repository without checking if identity is an object\"",
+				"\"formatStep from .find() result may be undefined... will throw\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T04:55:59.160Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-base-1d2151b",
@@ -23299,6 +23331,37 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit is already merged, so this deploy-health entry tracks already-satisfied work rather than an open task.",
+			"evidence": [
+				"commit message shows fix already merged: 'fix(ci): restore CRM retirement checks and isolate Linux tests (#337)'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T04:55:59.160Z"
+		},
+		{
 			"key": "issue:minion-meta#418",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25785,6 +25848,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:04:23.249Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-19",
+			"sourceFingerprint": "533ea548165d95ed07837acd8fe9c09fdd865c8057c7c22d8c7b6eded0372257",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This ledger entry bundles over a dozen unrelated TODO markers across different repos and files into a single goal, so it needs to be split per-marker before any one can be actionably executed.",
+			"evidence": [
+				"16+ distinct marker lines spanning unrelated files like pg-hr-schema.ts, ci-workflow, and session logic",
+				"\"Definition of done: the marker's open end is resolved\" applies ambiguously to a multi-item list"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T04:55:59.160Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
@@ -36395,38 +36490,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T02:59:54.516Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-19",
-			"sourceFingerprint": "9beeb7ffe8834e14068d90c1db86f2edab19cfca0c5376e5b989096aa1e155c9",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The flagged lines are quoted marker text embedded inside the rankings data file itself, not real TODO comments in source code.",
-			"evidence": [
-				"target file is rankings/index.json, the ranking history artifact",
-				"excerpts are fragments of other proposals' rationale strings, not code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T03:05:36.111Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-403744372",
