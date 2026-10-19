@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T21:55:40.346Z",
+	"generatedAt": "2026-10-19T22:25:45.466Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7930,38 +7930,6 @@
 			"scoredAt": "2026-10-19T13:04:24.614Z"
 		},
 		{
-			"key": "issue:minion-meta#361",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#361 [monitor:unstick] Run 04b8ae73: self-test stalled until 90m wall-clock kill",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/361",
-			"sourceUpdatedAt": "2026-08-31T20:17:36Z",
-			"sourceFingerprint": "9c0e9f73c053430950e135de96a979f24aadb3816a659017e3f28b95bb369367",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The diagnosis gives concrete next steps for the self-test stall but the actual hanging command is still unidentified, so the fix isn't yet bounded.",
-			"evidence": [
-				"self-test attempt 1 ... killed it (exit 137)",
-				"Add a host-classifier signature ... during self-test (exit 137)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T22:21:24.782Z"
-		},
-		{
 			"key": "issue:minion-meta#467",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8985,17 +8953,17 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "An escalated gate failure after three exhausted attempts needs human triage before any scoped fix can be defined.",
+			"rationale": "An automated worker-containment gate failed review three times and needs human judgment, but the alert lacks enough detail to act on directly.",
 			"evidence": [
 				"3 attempts exhausted (review verdict: FAIL)",
-				"Worker containment S5 adversarial E2E"
+				"Human judgment needed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T22:21:24.782Z"
+			"scoredAt": "2026-10-19T22:25:45.320Z"
 		},
 		{
 			"key": "issue:minion-meta#532",
@@ -20563,6 +20531,38 @@
 			"scoredAt": "2026-10-19T12:28:01.151Z"
 		},
 		{
+			"key": "issue:minion-meta#361",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#361 [monitor:unstick] Run 04b8ae73: self-test stalled until 90m wall-clock kill",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/361",
+			"sourceUpdatedAt": "2026-08-31T20:17:36Z",
+			"sourceFingerprint": "9c0e9f73c053430950e135de96a979f24aadb3816a659017e3f28b95bb369367",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A self-test stall with insufficient per-command logging has a clear diagnostic next step but isn't itself a confirmed code defect yet.",
+			"evidence": [
+				"self-test attempt 1 emitted no subcommand result before 90m wall-clock kill (exit 137)",
+				"recommendation: run self-test commands individually with per-command timing and timeouts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T22:25:45.320Z"
+		},
+		{
 			"key": "issue:minion-meta#389",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30463,38 +30463,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T17:21:46.968Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine CI test-fix commit already merged, not an open goal needing ranking.",
-			"evidence": [
-				"commit message: fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"status unknown but change already committed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T20:25:50.967Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
