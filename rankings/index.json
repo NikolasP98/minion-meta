@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T14:56:22.088Z",
+	"generatedAt": "2026-10-19T15:26:02.277Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -23943,6 +23943,38 @@
 			"scoredAt": "2026-10-17T09:41:29.136Z"
 		},
 		{
+			"key": "issue:minion-meta#665",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#665 [monitor:unstick] reconcile proposals run 0ac66fb8 failed (exit-126, turns=0) despite apparent success",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/665",
+			"sourceUpdatedAt": "2026-09-28T14:17:33Z",
+			"sourceFingerprint": "3267402d68cd40eb49d1662d7fd153abf38db11cb45265caa8cad686822de0cf",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An exit-126 agent-launch failure during a reconcile run that otherwise completed and pushed successfully suggests an isolated runner permissions/PATH issue needing human host-level verification rather than a repo code fix.",
+			"evidence": [
+				"exit-126 turns=0 flagged despite reconcile scaffold completing (545 proposals written, push de20de7..2000ad8)",
+				"recommendation in alert is to check runner's claude CLI exec permissions/PATH"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T15:26:02.149Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26084,38 +26116,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T20:40:21.032Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already merged the CI restoration fix, leaving no forward-looking action for this deploy-health entry.",
-			"evidence": [
-				"commit 5096950e 'restore CRM retirement checks and isolate Linux tests' is already merged",
-				"summary describes a completed fix, not an open deployment issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T14:56:21.947Z"
 		},
 		{
 			"key": "issue:minion-meta#536",
@@ -33637,38 +33637,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T11:25:39.007Z"
-		},
-		{
-			"key": "issue:minion-meta#665",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#665 [monitor:unstick] reconcile proposals run 0ac66fb8 failed (exit-126, turns=0) despite apparent success",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/665",
-			"sourceUpdatedAt": "2026-09-28T14:17:33Z",
-			"sourceFingerprint": "3267402d68cd40eb49d1662d7fd153abf38db11cb45265caa8cad686822de0cf",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Monitor intake describes an infra exit-126 on agent launch while the reconcile scaffold itself completed and pushed successfully, so no actionable defect remains beyond an optional host PATH/exec-permission check.",
-			"evidence": [
-				"exit-126 turns=0 (agent process failed to start)",
-				"log tail shows reconcile scaffold completed fully and pushed de20de7..2000ad8"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T15:21:20.383Z"
 		},
 		{
 			"key": "issue:minion-meta#668",
