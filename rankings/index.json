@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T19:26:06.580Z",
+	"generatedAt": "2026-10-19T19:55:57.068Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11525,40 +11525,6 @@
 			"scoredAt": "2026-10-18T21:25:59.800Z"
 		},
 		{
-			"key": "issue:minion-meta#433",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#433 [monitor:unstick] run 46644dbd (minion-meta reconcile) - claude provider exit-126, zero turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/433",
-			"sourceUpdatedAt": "2026-09-14T18:17:34Z",
-			"sourceFingerprint": "a36b64db5d4f6d01afd691f52c7f26a3a37ab63877af113511437e95d4eca443",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#549"
-			],
-			"rationale": "Same recurring claude-provider exit-126/turns=0 infra signature as #549, best consolidated into one host-classifier/runner-fix goal.",
-			"evidence": [
-				"provider=claude, exit-126, turns=0, permission_denials=0",
-				"reconcile pipeline itself completed normally with no errors"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T19:51:24.274Z"
-		},
-		{
 			"key": "issue:minion-meta#444",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11680,21 +11646,21 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 5
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#433"
 			],
-			"rationale": "Duplicate recurrence of the same claude exit-126/turns=0 exec fault as #433, indicating a runner-box issue worth one combined fix/classifier goal.",
+			"rationale": "Same exit-126/turns=0 claude-provider exec fault recurring a week after #433, strengthening the case for one combined host-classifier/infra-fix goal instead of two separate tickets.",
 			"evidence": [
-				"claude-provider agent step exited 126 with turns=0 and permission_denials=0",
-				"no evidence of bad input, bad repo state, or logic error in reconcile logic"
+				"identical signature provider=claude, exit-126, turns=0 as #433",
+				"note explicitly flags recurrence as worth a dedicated host-classifier signature"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T19:51:24.274Z"
+			"scoredAt": "2026-10-19T19:55:56.931Z"
 		},
 		{
 			"key": "issue:minion-meta#585",
@@ -15097,6 +15063,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T23:56:04.939Z"
+		},
+		{
+			"key": "issue:minion-meta#433",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#433 [monitor:unstick] run 46644dbd (minion-meta reconcile) - claude provider exit-126, zero turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/433",
+			"sourceUpdatedAt": "2026-09-14T18:17:34Z",
+			"sourceFingerprint": "a36b64db5d4f6d01afd691f52c7f26a3a37ab63877af113511437e95d4eca443",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#549"
+			],
+			"rationale": "Single transient exit-126/turns=0 infra fault during an otherwise-successful reconcile run, recommended for retry and signature-tracking rather than immediate fix.",
+			"evidence": [
+				"reconcile pipeline completed normally (push succeeded) aside from claude provider exit-126, turns=0",
+				"recommendation is to retry and watch for recurrence as a host-classifier signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T19:55:56.931Z"
 		},
 		{
 			"key": "issue:minion-meta#462",
@@ -28346,38 +28346,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The commit already merged the CI fix restoring CRM checks and isolating Linux tests, so there is no remaining goal work.",
-			"evidence": [
-				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"Co-authored-by: minion-factory <factory@minion-ai.org>"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T19:26:06.437Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
