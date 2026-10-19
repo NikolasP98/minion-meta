@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T01:55:43.476Z",
+	"generatedAt": "2026-10-19T02:25:56.635Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5259,38 +5259,6 @@
 			"scoredAt": "2026-10-17T03:41:12.124Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-519a349c5d17",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A shared database schema file consumed by both hub and site needs cross-project migration/type verification before this can be treated as bounded execution work.",
-			"evidence": [
-				"file is src/server/db/schema/unified-events.ts, a shared schema per @minion-stack/db consumed by minion_hub and minion_site",
-				"status is draft; fix direction requires verifying migrations and running checks in both projects"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
 			"key": "spec:2026-09-13-pos-scheduling-packages-payment-plans-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -6520,6 +6488,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T00:21:29.103Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f523e410f9a1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f523e410f9a1.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "d06e5cf42a05ea2d3b84a813e1effe0456348640266408e696d5337126b71585",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Posting null finProductId risks broken sale records and accounting workflows, and bounded fix steps are already laid out.",
+			"evidence": [
+				"this synthetic line posts finProductId: null",
+				"causing data integrity issues and breaking POS accounting workflows"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T02:25:56.492Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
@@ -9071,6 +9071,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T10:26:02.715Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-519a349c5d17",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Shared schema file touches both hub and site so migrations and cross-project type-checks need verification before it causes breakage.",
+			"evidence": [
+				"unified-events.ts is a shared database schema file consumed by both minion_hub and minion_site",
+				"Verify migrations were generated and are idempotent"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T02:25:56.492Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -12694,39 +12726,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T00:40:38.379Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f523e410f9a1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f523e410f9a1.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "d06e5cf42a05ea2d3b84a813e1effe0456348640266408e696d5337126b71585",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved finding flags a POS checkout line that posts a null finProductId, risking invalid sale records, though the marker's 'synthetic line' wording leaves the production-path scope uncertain.",
-			"evidence": [
-				"marker text: 'this synthetic line posts finProductId: null'",
-				"diagnosis warns of invalid sale records or broken POS accounting workflows",
-				"status is approved with a concrete 4-step fix direction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T02:21:58.179Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-d5d1a8c9d6a9",
@@ -21370,38 +21369,6 @@
 			"scoredAt": "2026-10-14T04:21:24.125Z"
 		},
 		{
-			"key": "issue:minion-meta#782",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#782 [monitor:unstick] rank run 9380e3bb: batch 2 provider failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/782",
-			"sourceUpdatedAt": "2026-10-12T02:17:17Z",
-			"sourceFingerprint": "9394b74ad89d9d58689a493b4bf6cbc5ede2564944ecef76772f3c941a2f0a6b",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single transient dual-provider failure stalled one rank batch, and the report itself says a fix is only worth building if this pattern recurs across runs.",
-			"evidence": [
-				"batch 2 failed after Claude was unavailable and Codex then hit a transient provider failure on retry 1/3",
-				"recommendation in the alert is to retry the run, adding a classifier only 'if batch-2-style dual-provider failures recur across multiple runs'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T02:21:58.179Z"
-		},
-		{
 			"key": "issue:minion-meta#795",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26425,38 +26392,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T20:40:21.032Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Commit shows CI restoration work landed but no current failure signal is given to act on.",
-			"evidence": [
-				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"status unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T01:55:43.340Z"
 		},
 		{
 			"key": "issue:minion-meta#536",
@@ -32263,6 +32198,38 @@
 			"scoredAt": "2026-10-15T01:32:04.292Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A leftover template TODO blocks the handoff-routing pipeline but the fix itself is a minor documentation correction.",
+			"evidence": [
+				"Template text instead of concrete details makes the comment useless",
+				"TODO(handoff): <what, why, pointer>"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T02:25:56.492Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33934,6 +33901,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T22:26:31.986Z"
+		},
+		{
+			"key": "issue:minion-meta#782",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#782 [monitor:unstick] rank run 9380e3bb: batch 2 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/782",
+			"sourceUpdatedAt": "2026-10-12T02:17:17Z",
+			"sourceFingerprint": "9394b74ad89d9d58689a493b4bf6cbc5ede2564944ecef76772f3c941a2f0a6b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Transient dual-provider failure already mitigated by retry and not a spec or logic bug requiring action now.",
+			"evidence": [
+				"both bounded providers failing on the same batch",
+				"Recommendation: retry the run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T02:25:56.492Z"
 		},
 		{
 			"key": "issue:minion-meta#787",
@@ -36338,38 +36337,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:05:58.834Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The flagged marker text is the handoff-ledger policy sentence quoted from AGENTS.md itself, not an actual pending TODO in code, so there is nothing to fix.",
-			"evidence": [
-				"marker text reads '...comment at the exact site, and (2) a proposal in minion-meta proposals/...' which matches AGENTS.md's own SDLC policy wording",
-				"flagged file is AGENTS.md (the instructions document), not application code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T02:21:58.179Z"
 		},
 		{
 			"key": "issue:minion-meta#445",
