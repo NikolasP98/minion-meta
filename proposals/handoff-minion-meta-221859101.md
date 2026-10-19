@@ -57,12 +57,12 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11040
 - `NikolasP98/minion-meta@dev rankings/index.json:11074` — the owner also asked to configure this via agent builder",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11074
-- `NikolasP98/minion-meta@dev rankings/index.json:12749` — 'Replace raw upstream error messages with an approved safe RPC projection'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12749
-- `NikolasP98/minion-meta@dev rankings/index.json:13928` — no WebGL-context budget. Chromium keeps ~16 live contexts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13928
-- `NikolasP98/minion-meta@dev rankings/index.json:14028` — the anti-join has no index to lean on",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14028
+- `NikolasP98/minion-meta@dev rankings/index.json:12715` — 'Replace raw upstream error messages with an approved safe RPC projection'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12715
+- `NikolasP98/minion-meta@dev rankings/index.json:13894` — no WebGL-context budget. Chromium keeps ~16 live contexts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13894
+- `NikolasP98/minion-meta@dev rankings/index.json:13994` — the anti-join has no index to lean on",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13994
 - `NikolasP98/minion-meta@dev rankings/index.json:16922` — spec §4.1 also lists reschedule, charge in POS and book the...",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16922
 - `NikolasP98/minion-meta@dev rankings/index.json:16955` — regex inference over the element JS",
@@ -93,23 +93,23 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22482
 - `NikolasP98/minion-meta@dev rankings/index.json:22516` — this hasn't been exercised against a live local Supabase",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22516
-- `NikolasP98/minion-meta@dev rankings/index.json:24811` — @minion-stack/ui's Button.svelte spreads {...rest}",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24811
-- `NikolasP98/minion-meta@dev rankings/index.json:24971` — 'host error-log scrubbing is separate from the sanitized' pipeline",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24971
-- `NikolasP98/minion-meta@dev rankings/index.json:26509` — swap for listElements from $server/sandbox/sandbox.service",
+- `NikolasP98/minion-meta@dev rankings/index.json:24779` — @minion-stack/ui's Button.svelte spreads {...rest}",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24779
+- `NikolasP98/minion-meta@dev rankings/index.json:24939` — 'host error-log scrubbing is separate from the sanitized' pipeline",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24939
+- `NikolasP98/minion-meta@dev rankings/index.json:26477` — swap for listElements from $server/sandbox/sandbox.service",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26477
+- `NikolasP98/minion-meta@dev rankings/index.json:26509` — the PREDICATE is covered here, the WIRING is not — no test",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26509
-- `NikolasP98/minion-meta@dev rankings/index.json:26541` — the PREDICATE is covered here, the WIRING is not — no test",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26541
-- `NikolasP98/minion-meta@dev rankings/index.json:29573` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29573
-- `NikolasP98/minion-meta@dev rankings/index.json:29711` — tags are NOT inline-editable here while /pos/catalog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29711
-- `NikolasP98/minion-meta@dev rankings/index.json:29883` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29883
+- `NikolasP98/minion-meta@dev rankings/index.json:29509` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29509
+- `NikolasP98/minion-meta@dev rankings/index.json:29647` — tags are NOT inline-editable here while /pos/catalog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29647
+- `NikolasP98/minion-meta@dev rankings/index.json:29819` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29819
 - `NikolasP98/minion-meta@dev rankings/index.json:32333` — brief-debloat-c §3 asked for this to be wrapped in",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32333
 - `NikolasP98/minion-meta@dev rankings/index.json:32433` — <what, why, pointer>"
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32433
-- `NikolasP98/minion-meta@dev rankings/index.json:35510` — src/lib/sandbox/tools.ts declares the same string instead of",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35510
+- `NikolasP98/minion-meta@dev rankings/index.json:35478` — src/lib/sandbox/tools.ts declares the same string instead of",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35478
