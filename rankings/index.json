@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T18:56:01.940Z",
+	"generatedAt": "2026-10-19T19:26:06.580Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -28348,6 +28348,38 @@
 			"scoredAt": "2026-10-16T18:40:05.461Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit already merged the CI fix restoring CRM checks and isolating Linux tests, so there is no remaining goal work.",
+			"evidence": [
+				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
+				"Co-authored-by: minion-factory <factory@minion-ai.org>"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T19:26:06.437Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31199,6 +31231,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T09:40:44.997Z"
+		},
+		{
+			"key": "issue:minion-meta#666",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#666 [monitor:unstick] reconcile run bcc267f4 (minion-meta) failed at agent launch, exit-126/turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/666",
+			"sourceUpdatedAt": "2026-09-28T18:17:31Z",
+			"sourceFingerprint": "563480fb542d4af39eaf1a326f8556d9c006c36d0d8c166ad8e6217ea9244ab0",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The log evidence shows the reconcile sweep fully completed and persisted its output before a transient exit-126 agent-launch fault, and the intake itself states no data-level fix is needed and nothing was lost.",
+			"evidence": [
+				"log tail shows sweep ran to completion (pushed dev 97ee89d..70172d9) before the failure was recorded",
+				"'no data-level fix needed and nothing appears lost (index + push already landed)'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T19:26:06.437Z"
 		},
 		{
 			"key": "issue:minion-meta#667",
@@ -34907,38 +34971,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:01:01.753Z"
-		},
-		{
-			"key": "issue:minion-meta#666",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#666 [monitor:unstick] reconcile run bcc267f4 (minion-meta) failed at agent launch, exit-126/turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/666",
-			"sourceUpdatedAt": "2026-09-28T18:17:31Z",
-			"sourceFingerprint": "563480fb542d4af39eaf1a326f8556d9c006c36d0d8c166ad8e6217ea9244ab0",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The log tail confirms the reconcile sweep fully completed and persisted its output before an infra-level exit-126 agent-launch fault, so there is no data loss or task failure to remediate.",
-			"evidence": [
-				"log shows push and state already persisted before failure",
-				"exit-126/turns=0 indicates agent binary could not execute, a transient host fault not a reconcile defect"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T19:21:20.599Z"
 		},
 		{
 			"key": "issue:minion-meta#687",
