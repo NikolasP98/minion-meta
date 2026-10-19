@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T07:26:20.917Z",
+	"generatedAt": "2026-10-19T07:55:48.707Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9896,38 +9896,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T22:27:13.427Z"
-		},
-		{
-			"key": "run:minion (gateway)#39115342620",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39115342620",
-			"sourceUpdatedAt": "2026-10-18T10:10:32Z",
-			"sourceFingerprint": "507fd9e5dcc82118427c5510aa5e17b0039ac4b3e6dc5c5baa033a36397590f6",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on the DEV branch blocks integration but the catalog gives no failure detail to act on yet.",
-			"evidence": [
-				"CI run status failure on push to DEV",
-				"no job/log detail included in candidate"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T10:26:02.715Z"
 		},
 		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
@@ -30152,38 +30120,6 @@
 			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already restored the CI checks and merged, leaving no outstanding deployment-health action.",
-			"evidence": [
-				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"Co-authored-by: minion-factory"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T07:26:20.790Z"
-		},
-		{
 			"key": "issue:minion-meta#386",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32986,21 +32922,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 1
+				"specification": 4,
+				"implementation": 2
 			},
-			"confidence": 7,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The intake's own diagnosis shows the reconcile sweep already succeeded and the only failure was a transient exit-126 runner fault, with retry already recommended, so no further goal action is needed.",
+			"rationale": "Automated monitor intake confirms the underlying reconcile sweep already succeeded and only a transient exit-126 runner glitch needs a retry, not a tracked goal.",
 			"evidence": [
-				"reconcile sweep completed successfully, side effects already pushed",
-				"downstream claude-provider step failed exit-126, turns=0",
-				"diagnosis explicitly calls this transient/infra, not a spec problem"
+				"reconcile side effects already landed so a retry mainly needs to re-attempt the claude-agent step",
+				"exit-126, turns=0, permission_denials=0 ... looks like a transient/infra fault on the runner"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T07:40:55.186Z"
+			"scoredAt": "2026-10-19T07:55:48.578Z"
 		},
 		{
 			"key": "issue:minion-meta#543",
@@ -36495,6 +36430,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:06:48.004Z"
+		},
+		{
+			"key": "run:minion (gateway)#39218402545",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39218402545",
+			"sourceUpdatedAt": "2026-10-19T07:52:07Z",
+			"sourceFingerprint": "39dbaa14682da448110daa3cdaea18436aaed9377b2b025b1c2070d3928dc678",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run with no indication of failure or actionable work item.",
+			"evidence": [
+				"workflow_dispatch on DEV",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T07:55:48.578Z"
 		},
 		{
 			"key": "issue:minion-meta#445",
