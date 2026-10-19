@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-ai-3908790574
 title: Handoff marker — src/agents/pi-embedded-runner/run/tool-progress.ts (minion-ai)
-status: draft
+status: review
+duplicate_candidate: 2026-10-17-agent-dynamic-tools
 created: 2026-10-18
 updated: 2026-10-19
 repos: [minion-ai]
