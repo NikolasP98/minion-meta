@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T06:25:57.054Z",
+	"generatedAt": "2026-10-19T06:56:57.505Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11959,20 +11959,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 4
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Draft security/permissions slice with risk:high tag but no concrete evidence of scope or test status beyond manifest metadata.",
+			"relatedKeys": [
+				"issue:minion-meta#755"
+			],
+			"rationale": "Draft security/permissions factory PR whose linked monitor issue reports a non-retryable stall, so it needs human judgment before further automated work.",
 			"evidence": [
-				"tags: risk:high, topic:security, topic:permissions",
-				"status: draft, gates not described as passed"
+				"status: draft, review gates not yet passed",
+				"linked issue #755 reports the same factory run (3c6f0c86) stalled with 0 file changes"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T06:51:24.945Z"
+			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -12368,6 +12370,38 @@
 			"scoredAt": "2026-10-19T03:04:23.249Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-19",
+			"sourceFingerprint": "9f464c493c5009539b17ed768121a945d866d719771b394e9bc41e1d6189ed67",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles over a dozen unrelated open-items (auth gating, audit-trail gaps, schema drops, race conditions, UI limits) into one marker sweep with no single scoped outcome, so it needs to be split into individual actionable items.",
+			"evidence": [
+				"14+ distinct TODO(handoff) markers spanning auth, DB schema, audit trail, and UI concerns",
+				"definition of done is only 'no more markers in the file', an unbounded closing condition"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T06:56:57.383Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-bb06e3a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12399,38 +12433,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T17:40:12.329Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-f4c1a23",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ f4c1a23",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f4c1a23.md",
-			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "fc8a4b1538b1c69bd835fc4470c082d10fb01f6a57d7e7838079e43274e91053",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Concrete file:line findings of unchecked-access bugs in test files that can crash CI, with a clear fix pattern (add null checks).",
-			"evidence": [
-				"high: diagnosticStep from .find() used without undefined check (ci-workflow.test.ts:341)",
-				"high: callbacks[0]() accessed without bounds check (test-parallel-diagnostics.test.ts:160)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T06:51:24.945Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-10e9567",
@@ -16925,6 +16927,38 @@
 			"scoredAt": "2026-10-16T16:10:33.407Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-f4c1a23",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ f4c1a23",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f4c1a23.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "fc8a4b1538b1c69bd835fc4470c082d10fb01f6a57d7e7838079e43274e91053",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete high-severity unchecked-access bugs in CI test helpers are precisely located and have straightforward fixes, making this immediately actionable.",
+			"evidence": [
+				"test/ci/test-parallel-diagnostics.test.ts:160 array index accessed without bounds check, would crash",
+				"test/ci/ci-workflow.test.ts:341 .find() result used without undefined check"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T06:56:57.383Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-be019c6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17851,6 +17885,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T12:40:13.689Z"
+		},
+		{
+			"key": "issue:minion-meta#755",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#755 [monitor:auto-fix] retry stopped: auto: readiness-agent-event-audience-spec S1 — non-retryable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/755",
+			"sourceUpdatedAt": "2026-10-05T06:02:38Z",
+			"sourceFingerprint": "92e9828c55a1f4054b859de5172807fc4b395f2e0bc96156dbf7645411845289",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#297"
+			],
+			"rationale": "Automated monitor explicitly states human judgment is required before another paid run on the related factory PR, so this is a decision point rather than ready work.",
+			"evidence": [
+				"reason=non-retryable; latest develop attempt made no changes (rc=0, files=0)",
+				"links directly to PR #297 via the same factory run fingerprint"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
 			"key": "proposal:2026-08-23-hub-archived-warehouse-submit-guard",
@@ -22092,6 +22160,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T03:16:23.398Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 101494 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-19T06:35:05Z",
+			"sourceFingerprint": "26435a0a2435cf577119caaf8ce843d21e0dee66450988b5cb7f0b1feeaf9aaf",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A raw dump of 100k+ upstream commits with no scoped task or acceptance criteria cannot be executed as-is and needs to be reframed into a bounded sync task.",
+			"evidence": [
+				"title cites 101494 new commit(s) available",
+				"summary is an unstructured list of commit subject lines with no defined outcome"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
 			"key": "issue:minion-meta#530",
@@ -28140,71 +28240,6 @@
 			"scoredAt": "2026-10-16T18:40:05.461Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged commit record restoring CI checks, already satisfied with no forward-looking work remaining.",
-			"evidence": [
-				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"status: unknown, already committed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T06:25:56.928Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 101184 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-19T00:42:23Z",
-			"sourceFingerprint": "6c939423968233214a3c5468f0f7a2adc868c21370bc91a7d93d969eff9cb1d7",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated upstream-sync notification listing 100k+ commits with no scoped problem statement or actionable task.",
-			"evidence": [
-				"title: 'Upstream sync: 101184 new commit(s) available'",
-				"tags: upstream-sync",
-				"body is a raw commit log dump, not a defined goal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T00:55:36.244Z"
-		},
-		{
 			"key": "issue:minion-meta#460",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30115,38 +30150,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T14:21:18.524Z"
-		},
-		{
-			"key": "issue:minion-meta#755",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#755 [monitor:auto-fix] retry stopped: auto: readiness-agent-event-audience-spec S1 — non-retryable",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/755",
-			"sourceUpdatedAt": "2026-10-05T06:02:38Z",
-			"sourceFingerprint": "92e9828c55a1f4054b859de5172807fc4b395f2e0bc96156dbf7645411845289",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Autofix run already terminated as non-retryable with zero file changes, leaving no further automated action possible.",
-			"evidence": [
-				"reason=non-retryable; latest=develop attempt 2 made no changes (rc=0, files=0)",
-				"explicitly states human judgment required, not an execution path"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T06:51:24.945Z"
 		},
 		{
 			"key": "run:minion (gateway)#31686911500",
@@ -34439,38 +34442,6 @@
 			"scoredAt": "2026-10-12T12:32:02.784Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-19",
-			"sourceFingerprint": "786d54f8d9ee8227c4522955b2c5feb4a1ed745f74e3dbfa89a93866a70fada7",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The markers point at line numbers inside rankings/index.json, the generated ranking-data file itself, so this is the handoff sweep flagging quoted excerpts from unrelated findings rather than a real actionable code defect.",
-			"evidence": [
-				"all 16 markers cite 'rankings/index.json' lines, a generated data artifact, not source code",
-				"summary explicitly warns each marker is 'text copied out of repository source this sweep did not write'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T05:25:50.277Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3236367837",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35395,7 +35366,7 @@
 			"title": "Post-merge finding — scan-gap in static/icons/icon-192.png (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2a4c42f3e48c.md",
 			"sourceUpdatedAt": "2026-10-19",
-			"sourceFingerprint": "abcf5b9e784ab729adb28e62e6fbf67ed34483f38c2294d489f7e496d0b0f11d",
+			"sourceFingerprint": "fcb57a5daf02dcfa1919b2243a89a0e63693f8960a6e78cf70c8291a9ce19630",
 			"score": 16,
 			"band": "low",
 			"axes": {
@@ -35404,24 +35375,24 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-33076005ee63",
 				"proposal:postmerge-minion-hub-6fd06a2d2a88",
 				"proposal:postmerge-minion-hub-fd25ab52c591"
 			],
-			"rationale": "Diagnosed as a benign scanner limitation on binary files from the same merged PR; should become one goal to exclude binary extensions rather than four separate findings.",
+			"rationale": "One of four near-identical scan-gap findings from the same merged PR, all caused by the same root issue of binary files lacking text diffs, and should become a single scanner-config fix.",
 			"evidence": [
-				"Binary files like PNG icons naturally have no textual diff... This is expected behavior, not a problem",
-				"merged PR: #571"
+				"diagnosis itself states 'This is expected behavior, not a problem'",
+				"fix direction: exclude binary extensions like .png from the scan config"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T04:44:23.505Z"
+			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-33076005ee63",
@@ -35431,7 +35402,7 @@
 			"title": "Post-merge finding — scan-gap in static/icons/apple-touch-icon.png (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-33076005ee63.md",
 			"sourceUpdatedAt": "2026-10-19",
-			"sourceFingerprint": "aa006c78ac761ec7b3a91ddd152d31bdd0aba15763998558b6f23ed79de0192b",
+			"sourceFingerprint": "be9a966d513d160affb0b49d4243eb95f12b58f88bc660afd5572b9550c7d566",
 			"score": 16,
 			"band": "low",
 			"axes": {
@@ -35440,24 +35411,24 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-2a4c42f3e48c",
 				"proposal:postmerge-minion-hub-6fd06a2d2a88",
 				"proposal:postmerge-minion-hub-fd25ab52c591"
 			],
-			"rationale": "Same binary-scan-gap pattern from the same merged PR as three sibling findings; consolidate into one scanner-config fix.",
+			"rationale": "One of four near-identical scan-gap findings from the same merged PR #571, all stemming from binary PNGs not generating diffs; belongs in one consolidated scanner-config fix.",
 			"evidence": [
-				"Binary assets like apple-touch-icon.png don't generate text diffs on GitHub",
-				"merged PR: #571"
+				"same merged PR #571 and repo as three sibling icon-file findings",
+				"fix direction proposes enabling binary file tracking in scan config"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T04:44:23.505Z"
+			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6fd06a2d2a88",
@@ -35467,7 +35438,7 @@
 			"title": "Post-merge finding — scan-gap in static/icons/icon-maskable-512.png (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6fd06a2d2a88.md",
 			"sourceUpdatedAt": "2026-10-19",
-			"sourceFingerprint": "f3218d7b1138e39f08c26782778dc5b3c5920f8c1495e0db9e53c5d7be817026",
+			"sourceFingerprint": "9337b7aafa7e5e5f400c7d57767fd583c6e0eb8b273655dc9d924aeb266d0168",
 			"score": 16,
 			"band": "low",
 			"axes": {
@@ -35476,24 +35447,24 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-2a4c42f3e48c",
 				"proposal:postmerge-minion-hub-33076005ee63",
 				"proposal:postmerge-minion-hub-fd25ab52c591"
 			],
-			"rationale": "Same binary-scan-gap pattern from the same merged PR as three sibling icon findings; consolidate rather than track separately.",
+			"rationale": "One of four near-identical scan-gap findings from the same merged PR, all caused by binary files being undiffable; should be consolidated into one scanner-config goal instead of four.",
 			"evidence": [
-				"binary files like PNG can't be diffed traditionally",
-				"merged PR: #571"
+				"same merged PR #571 as three sibling icon-file findings",
+				"diagnosis notes binary files can't be diffed, a known scanner limitation"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T04:44:23.505Z"
+			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-77196cfff827",
@@ -35602,7 +35573,7 @@
 			"title": "Post-merge finding — scan-gap in static/icons/icon-512.png (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fd25ab52c591.md",
 			"sourceUpdatedAt": "2026-10-19",
-			"sourceFingerprint": "be491b2b9e78d58875deb378dfd5f8a17db918cca532e0c4fa7363cea8a5455c",
+			"sourceFingerprint": "b62660fd6e336f3a5bac8626304b7a50563bed6320bbdb15b41fabb087e944c9",
 			"score": 16,
 			"band": "low",
 			"axes": {
@@ -35611,24 +35582,24 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-2a4c42f3e48c",
 				"proposal:postmerge-minion-hub-33076005ee63",
 				"proposal:postmerge-minion-hub-6fd06a2d2a88"
 			],
-			"rationale": "Fourth instance of the identical binary-scan-gap pattern from the same merged PR; consolidate into one scanner-config goal.",
+			"rationale": "One of four near-identical scan-gap findings from the same merged PR, each with the same underlying cause (binary PNGs lack diffs); best resolved as a single scanner-config change rather than four separate proposals.",
 			"evidence": [
-				"Binary files (like PNGs) can't be scanned by diff tools",
-				"merged PR: #571"
+				"same merged PR #571 as three sibling icon-file findings",
+				"fix direction overlaps with siblings: track or exclude binary extensions"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T04:44:23.505Z"
+			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
 			"key": "issue:minion-meta#751",
