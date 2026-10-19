@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T07:55:48.707Z",
+	"generatedAt": "2026-10-19T08:26:05.076Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -19694,6 +19694,38 @@
 			"scoredAt": "2026-10-14T08:51:49.802Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already merged a fix for CRM retirement checks and Linux test isolation, leaving no forward action.",
+			"evidence": [
+				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
+				"commit already present on repo history"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-19T08:26:04.945Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32533,20 +32565,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 4,
+				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake reports a one-off infra exit-126 with no state corruption and work already completed/pushed, so no action is needed beyond optional retry.",
+			"rationale": "The monitor's own diagnosis classifies this as a transient infra-level launch fault with no corruption, all downstream work completed, and safe-to-retry status.",
 			"evidence": [
-				"note=exit-126, turns=0, cost_usd=0 before any work",
-				"sweep already persisted progress and pushed to dev"
+				"note=exit-126, turns=0, permission_denials=0, cost_usd=0",
+				"Recommendation: safe to retry as-is (no state corruption evident)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-12T08:21:17.114Z"
+			"scoredAt": "2026-10-19T08:26:04.945Z"
 		},
 		{
 			"key": "issue:minion-meta#436",
@@ -36438,8 +36470,8 @@
 			"repo": "minion (gateway)",
 			"title": "CI",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39218402545",
-			"sourceUpdatedAt": "2026-10-19T07:52:07Z",
-			"sourceFingerprint": "39dbaa14682da448110daa3cdaea18436aaed9377b2b025b1c2070d3928dc678",
+			"sourceUpdatedAt": "2026-10-19T08:11:48Z",
+			"sourceFingerprint": "601425d06d7aa7c04c5c68e77013a0dd7ea6d70dee854b4509973f39208318fe",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -36448,20 +36480,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 1,
+				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run with no indication of failure or actionable work item.",
+			"rationale": "This is only a status snapshot of an in-progress CI workflow dispatch, not an actionable goal.",
 			"evidence": [
 				"workflow_dispatch on DEV",
 				"status: in_progress"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T07:55:48.578Z"
+			"scoredAt": "2026-10-19T08:26:04.945Z"
 		},
 		{
 			"key": "issue:minion-meta#445",
