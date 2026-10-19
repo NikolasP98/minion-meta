@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-33076005ee63
 title: "Post-merge finding — scan-gap in static/icons/apple-touch-icon.png (minion_hub)"
-status: draft
+status: review
 created: 2026-10-19
 updated: 2026-10-19
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `static/icons/apple-touch-icon.png`
