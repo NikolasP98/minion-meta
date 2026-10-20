@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-20T01:56:36.999Z",
+	"generatedAt": "2026-10-20T02:26:06.445Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13956,20 +13956,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "An anti-join query lacking an index forces full table scans that will scale poorly as ticket volume grows, with a concrete fix direction already given.",
+			"rationale": "Missing index on an anti-join causes full table scans that will worsen as ticket volume grows, with a clear bounded fix (add index + migration).",
 			"evidence": [
-				"TODO(handoff): the anti-join has no index to lean on",
-				"anti-joins without indexes force full table scans... O(n*m) query time that scales poorly"
+				"anti-join without index forces full table scan on pos_ticket_lines",
+				"scales poorly as ticket volume grows"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T02:22:18.707Z"
+			"scoredAt": "2026-10-20T02:26:06.301Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
@@ -22599,70 +22599,6 @@
 			"scoredAt": "2026-10-18T05:55:57.044Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-67ebd1f1b0f0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/accounts/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-67ebd1f1b0f0.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "91613fa78563ad6ed289d257efbd82cc87afb5b3ac7f0361302cfa10611dc25d",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A clearly-scoped, approved TODO-handoff finding with an identified file and a straightforward fix direction.",
-			"evidence": [
-				"TODO(handoff): it cannot preselect the event itself — no hub route",
-				"Fix direction: add optional query parameter eventId and preselect that event"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T02:22:18.707Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b993a41e7c7.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "a023b726001aad6e3328cac8fa38d5fbeb9bb0ee835f2000d278b2dcb7e695ff",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The auto-diagnosis for this TODO-handoff finding never completed — it shows only tool-call stubs with no actual analysis or fix direction, so the finding isn't yet actionable.",
-			"evidence": [
-				"TODO(handoff): onArtifactCallback/onChoice are NOT routed",
-				"Diagnosis (auto) contains only Read tool-call invocations, no analysis or fix direction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T02:22:18.707Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-91262d537ce6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23153,6 +23089,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T22:10:24.040Z"
+		},
+		{
+			"key": "pr:minion-meta#849",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#849 docs(spec): 028 — hub app-feel shell + backlog of the remaining items",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/849",
+			"sourceUpdatedAt": "2026-10-20T02:11:38Z",
+			"sourceFingerprint": "52e402903ede4f19150cc0309d5d1ff7f0597d8fa45d4d60f410f49d029271db",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open spec PR for hub app-feel shell backlog is already in development and should proceed through review.",
+			"evidence": [
+				"Spec for hub #571",
+				"open PR in minion-meta"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T02:26:06.301Z"
 		},
 		{
 			"key": "proposal:2026-08-28-gateway-plugin-effect-disposers",
@@ -24695,6 +24663,38 @@
 			"scoredAt": "2026-10-17T00:40:38.379Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b993a41e7c7.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "a023b726001aad6e3328cac8fa38d5fbeb9bb0ee835f2000d278b2dcb7e695ff",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The callback routing gap is plausible but the auto-diagnosis is incomplete, only showing tool invocations with no concrete fix direction.",
+			"evidence": [
+				"TODO(handoff): onArtifactCallback/onChoice are NOT routed",
+				"diagnosis section shows only read-tool calls, no stated fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T02:26:06.301Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-99075985a806",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25239,6 +25239,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:01:01.753Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-67ebd1f1b0f0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/accounts/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-67ebd1f1b0f0.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "91613fa78563ad6ed289d257efbd82cc87afb5b3ac7f0361302cfa10611dc25d",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified, bounded fix to add an eventId query param so the POS accounts page can be deep-linked with a preselected event.",
+			"evidence": [
+				"TODO(handoff) marker in pos/accounts/+page.svelte",
+				"fix direction: add query param, parse on load, preselect event"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T02:26:06.301Z"
 		},
 		{
 			"key": "issue:minion-meta#496",
@@ -26127,38 +26159,6 @@
 			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "CI fix for CRM retirement checks and Linux test isolation is already merged, leaving nothing further to execute.",
-			"evidence": [
-				"commit fixes CRM retirement checks and isolates Linux tests (#337)",
-				"co-authored by minion-factory"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T01:56:36.858Z"
-		},
-		{
 			"key": "issue:minion-meta#536",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26394,39 +26394,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T23:55:52.539Z"
-		},
-		{
-			"key": "pr:minion-meta#849",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#849 docs(spec): 028 — hub app-feel shell",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/849",
-			"sourceUpdatedAt": "2026-10-19T04:29:40Z",
-			"sourceFingerprint": "05eba72e3d7ce0a9a0de6b98670ffed417b2498969f0ba4943d40511c329e56b",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open spec PR feeding hub #571 work is already in development and just needs review/merge.",
-			"evidence": [
-				"title: docs(spec): 028 — hub app-feel shell",
-				"status: open",
-				"Spec for hub #571"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T04:44:23.505Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
@@ -33401,21 +33368,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 4,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "A month-old single-occurrence transient OS-level exec failure with no recurrence evidence and the only recommendation is to retry the run.",
+			"rationale": "Diagnosis identifies a one-off transient OS-level exec failure (exit-126, 0 turns, 0 cost) with retry as the only action, not a recurring actionable defect.",
 			"evidence": [
-				"exit-126, turns=0, permission_denials=0, cost_usd=0",
-				"Recommendation: retry the run",
-				"updatedAt 2026-09-22 with no recurrence noted"
+				"exit-126, turns=0, cost=0 before any LLM turn ran",
+				"diagnosis calls it a transient host-environment fault and recommends retry"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T02:22:18.707Z"
+			"scoredAt": "2026-10-20T02:26:06.301Z"
 		},
 		{
 			"key": "issue:minion-meta#572",
