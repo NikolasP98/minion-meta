@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-20T05:40:47.441Z",
+	"generatedAt": "2026-10-20T05:56:30.825Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4740,6 +4740,40 @@
 			"scoredAt": "2026-10-17T20:29:32.226Z"
 		},
 		{
+			"key": "spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Tables — configurable open mode (page/modal/tray), floating bulk bar; stock entries provenance + item detail restructure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "247add6b861c7ebd99c69cd5d7a6b3aa14fc0a092fb769e60d7e66de3135baa3",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-09-28-hub-stock-receipt-purchase-link"
+			],
+			"rationale": "Large, already-partially-shipped hub UI spec (core merged) with detailed AS-IS/TO-BE and defined Playwright/vitest verification, broadly affecting table UX across the app.",
+			"evidence": [
+				"core landed at commit 781a53b6 on feat/table-open-modes-bulk-bar",
+				"verification plan names specific Playwright spec plus full vitest/svelte-check/lint:design gates"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
 			"key": "spec:2026-09-29-hub-table-toolbar-notion-filters-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -6336,41 +6370,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:53:38.303Z"
-		},
-		{
-			"key": "spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Tables — configurable open mode (page/modal/tray), floating bulk bar; stock entries provenance + item detail restructure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "247add6b861c7ebd99c69cd5d7a6b3aa14fc0a092fb769e60d7e66de3135baa3",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-09-28-hub-stock-receipt-purchase-link"
-			],
-			"rationale": "Actively implementing, broadly-scoped Notion-grade record UX spec with a core slice already merged and a concrete verification plan.",
-			"evidence": [
-				"status implementing with core DONE commit 781a53b6 on feat/table-open-modes-bulk-bar",
-				"defines AS-IS/TO-BE/DELTA with explicit out-of-scope boundaries",
-				"verification via Playwright record-peek.spec.ts plus vitest/svelte-check/lint:design/lint:tokens"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T05:52:06.585Z"
 		},
 		{
 			"key": "pr:minion-meta#810",
@@ -14885,6 +14884,40 @@
 			"scoredAt": "2026-10-15T03:16:23.398Z"
 		},
 		{
+			"key": "proposal:2026-09-28-hub-stock-receipt-purchase-link",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Stock receipts have no purchase-record link — Document column is blind for receipts",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-stock-receipt-purchase-link.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "d7a85a734e1ef6d7db941fa1f57df286ced0392c7bdabd939f7ad227f91668ce",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec"
+			],
+			"rationale": "Well-scoped gap proposal with explicit AS-IS/TO-BE/DELTA closing a real provenance hole in the stock module, though it still needs a data-model decision before coding.",
+			"evidence": [
+				"receipts carry no metadata key linking to a purchase record while issues already do",
+				"filed from the same Bundle B work as the open table-open-modes spec"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-111011530",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17101,21 +17134,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 6
 			},
-			"confidence": 4,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Approved, bounded fix for a flagged financial-aggregation correctness risk (possible double counting) in commitments totals.",
+			"rationale": "Approved finding on a financial totals/variance calculation with a plausible double-counting risk and a concrete diagnosis path.",
 			"evidence": [
-				"TODO(handoff) flags realizedSpend/variance as literal column totals",
-				"diagnosis warns of double-counting risk if commitments are hierarchical",
-				"status is approved"
+				"TODO flags realizedSpend/variance as literal column totals, risking parent/child double-counting",
+				"status approved with a clear grep-based diagnosis starting point"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T05:52:06.585Z"
+			"scoredAt": "2026-10-20T05:56:30.705Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b09a8df58dcf",
@@ -19520,41 +19552,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:53:38.303Z"
-		},
-		{
-			"key": "proposal:2026-09-28-hub-stock-receipt-purchase-link",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Stock receipts have no purchase-record link — Document column is blind for receipts",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-stock-receipt-purchase-link.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "d7a85a734e1ef6d7db941fa1f57df286ced0392c7bdabd939f7ad227f91668ce",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec"
-			],
-			"rationale": "The feature gap is real but the proposal itself says a data-model decision (new fin_purchases table vs. reusing an existing record) must be made before a spec can even be written.",
-			"evidence": [
-				"receipt metadata has no purchaseId key unlike invoice issues' invoiceId",
-				"proposal states a data-model call is needed before a spec is written",
-				"entryDocument() always returns null for receipts today"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T05:52:06.585Z"
 		},
 		{
 			"key": "proposal:2026-10-09-native-formatting-coverage",
@@ -22260,39 +22257,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T09:51:52.103Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-de7821f4ab4f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-de7821f4ab4f.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "bca044403ce09b928b29f01242effe7ac568775c651b66cfe78f2668b118e26d",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved type-safety gap between FilterValue and TableFilterValue risks runtime filter mismatches, with a concrete generic-alignment fix specified.",
-			"evidence": [
-				"TODO(handoff) flags FilterValue/TableFilterValue type misalignment",
-				"fix direction specifies FilterValue<T> matching TableFilterValue's type parameter",
-				"AGENTS.md mandates strict TypeScript everywhere"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T05:52:06.585Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e0651859d6e7",
@@ -25272,6 +25236,111 @@
 			"scoredAt": "2026-10-20T03:55:40.536Z"
 		},
 		{
+			"key": "issue:minion-meta#556",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#556 [monitor:unstick] reconcile proposals a907657f - claude agent exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/556",
+			"sourceUpdatedAt": "2026-09-22T04:17:47Z",
+			"sourceFingerprint": "99aa4f8b84bf93d27d8f6aab059e634be45d2d85eefa12a38bf60c839728f949",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#557",
+				"issue:minion-meta#558"
+			],
+			"rationale": "Three issues report the identical exit-126/turns=0 executor-launch signature from the same 2026-09-22 window and should become one host-classifier ticket.",
+			"evidence": [
+				"same fingerprint pattern 'unstick-unknown-*' and identical diagnosis text",
+				"4 occurrences within 2 hours on 2026-09-22, none reported since"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
+			"key": "issue:minion-meta#557",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#557 [monitor:unstick] reconcile proposals 3985ae74 - claude agent exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/557",
+			"sourceUpdatedAt": "2026-09-22T04:17:51Z",
+			"sourceFingerprint": "4ecab2eeecb92c9b002a6381fe3fe33b562ceb8c3d2a3820132c6a7000ca49bf",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#556",
+				"issue:minion-meta#558"
+			],
+			"rationale": "Duplicate of #556/#558 — same executor exit-126 signature and diagnosis, should be merged into a single host-infra ticket.",
+			"evidence": [
+				"identical diagnosis block to #556 and #558",
+				"dated 2026-09-22, no further recurrence noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
+			"key": "issue:minion-meta#558",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#558 [monitor:unstick] reconcile proposals ebc3bd69 - claude agent exec failure (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/558",
+			"sourceUpdatedAt": "2026-09-22T04:17:55Z",
+			"sourceFingerprint": "5cd92331f6ac6eafecedbf17d417ed08ab1cc7f773a4d20c8110ff0e9eea9162",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#556",
+				"issue:minion-meta#557"
+			],
+			"rationale": "Duplicate of #556/#557 — same executor exit-126 signature and diagnosis, should be merged into a single host-infra ticket.",
+			"evidence": [
+				"identical diagnosis block to #556 and #557",
+				"dated 2026-09-22, no further recurrence noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
 			"key": "issue:minion-meta#591",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26028,38 +26097,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T20:40:21.032Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged CI/test fix commit already applied, not an open goal requiring further action.",
-			"evidence": [
-				"title: fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"commit already co-authored and merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T05:40:47.300Z"
 		},
 		{
 			"key": "issue:minion-meta#536",
@@ -27232,114 +27269,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T16:26:45.359Z"
-		},
-		{
-			"key": "issue:minion-meta#556",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#556 [monitor:unstick] reconcile proposals a907657f - claude agent exec failure (exit-126, turns=0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/556",
-			"sourceUpdatedAt": "2026-09-22T04:17:47Z",
-			"sourceFingerprint": "99aa4f8b84bf93d27d8f6aab059e634be45d2d85eefa12a38bf60c839728f949",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#557",
-				"issue:minion-meta#558"
-			],
-			"rationale": "Duplicate executor-level exit-126/turns=0 signature already fully diagnosed and recommended as a single host-classifier ticket, so three near-identical issues should become one.",
-			"evidence": [
-				"same exit-126/turns=0 signature recurred across 4 runs on 2026-09-22",
-				"diagnosis confirms reconcile logic itself completed successfully each time",
-				"diagnosis explicitly proposes a single new host classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T05:52:06.585Z"
-		},
-		{
-			"key": "issue:minion-meta#557",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#557 [monitor:unstick] reconcile proposals 3985ae74 - claude agent exec failure (exit-126, turns=0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/557",
-			"sourceUpdatedAt": "2026-09-22T04:17:51Z",
-			"sourceFingerprint": "4ecab2eeecb92c9b002a6381fe3fe33b562ceb8c3d2a3820132c6a7000ca49bf",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#556",
-				"issue:minion-meta#558"
-			],
-			"rationale": "Duplicate executor-level exit-126/turns=0 signature already fully diagnosed and recommended as a single host-classifier ticket, so three near-identical issues should become one.",
-			"evidence": [
-				"same exit-126/turns=0 signature recurred across 4 runs on 2026-09-22",
-				"diagnosis confirms reconcile logic itself completed successfully each time",
-				"diagnosis explicitly proposes a single new host classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T05:52:06.585Z"
-		},
-		{
-			"key": "issue:minion-meta#558",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#558 [monitor:unstick] reconcile proposals ebc3bd69 - claude agent exec failure (exit-126, turns=0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/558",
-			"sourceUpdatedAt": "2026-09-22T04:17:55Z",
-			"sourceFingerprint": "5cd92331f6ac6eafecedbf17d417ed08ab1cc7f773a4d20c8110ff0e9eea9162",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#556",
-				"issue:minion-meta#557"
-			],
-			"rationale": "Duplicate executor-level exit-126/turns=0 signature already fully diagnosed and recommended as a single host-classifier ticket, so three near-identical issues should become one.",
-			"evidence": [
-				"same exit-126/turns=0 signature recurred across 4 runs on 2026-09-22",
-				"diagnosis confirms reconcile logic itself completed successfully each time",
-				"diagnosis explicitly proposes a single new host classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T05:52:06.585Z"
 		},
 		{
 			"key": "issue:minion-meta#566",
@@ -29797,6 +29726,70 @@
 			"scoredAt": "2026-10-18T05:25:50.877Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dc247fbe1f2a.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "2e8b0bdf7e426640a28d72151975fba59eea744540de959c43de485d96e3a3cf",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved cleanup to remove duplicated search/filter UI now superseded by DataTable's built-in filtering, reducing divergence risk.",
+			"evidence": [
+				"AgentMemoryPanel retains its own search/category UI after DataTable absorbed that behavior",
+				"fix direction and verification step are already specified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-de7821f4ab4f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-de7821f4ab4f.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "bca044403ce09b928b29f01242effe7ac568775c651b66cfe78f2668b118e26d",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved type-safety gap between FilterValue and TableFilterValue generics with a concrete fix direction, lower urgency than data-correctness items.",
+			"evidence": [
+				"TODO notes the two generic types aren't type-aligned, risking runtime filter mismatches",
+				"fix direction specifies threading a shared type parameter through both components"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-de937a67722d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32244,39 +32237,6 @@
 			"scoredAt": "2026-10-19T02:25:56.492Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dc247fbe1f2a.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "2e8b0bdf7e426640a28d72151975fba59eea744540de959c43de485d96e3a3cf",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, low-risk cleanup to remove UI duplicated since the DataTable refactor, with a concrete fix direction already given.",
-			"evidence": [
-				"TODO(handoff) notes duplicate search/category UI vs DataTable's built-in filtering",
-				"fix direction: remove local UI, rely on DataTable state",
-				"status is approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T05:52:06.585Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34260,6 +34220,38 @@
 			"scoredAt": "2026-10-20T03:02:47.350Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-20",
+			"sourceFingerprint": "dcc9ef10d4e0fb284a841d69d881bb8e3266e4ad1f5993911e87c7b00e6bb2c7",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles 15+ unrelated TODO markers scattered across a generated rankings/index.json file into one proposal, so no single actionable scope can be executed as-is.",
+			"evidence": [
+				"markers span org-scoping, race windows, audit traces, schema drops, and UI drag bugs with no common thread",
+				"definition of done only requires removing marker comments, not fixing the underlying issues"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-12c3ee1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34682,38 +34674,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T04:05:06.282Z"
-		},
-		{
-			"key": "run:minion_hub#39375979678",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39375979678",
-			"sourceUpdatedAt": "2026-10-20T05:38:45Z",
-			"sourceFingerprint": "50479328bf450a3655147fde33e3f9c0384910f9ddf3881fb79f783467368fc7",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is just an in-progress routine CI run on master with no indication of failure or actionable work.",
-			"evidence": [
-				"status: in_progress",
-				"push on master, kind: run/testing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T05:40:47.300Z"
 		},
 		{
 			"key": "issue:minion-meta#687",
@@ -36484,38 +36444,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T03:01:49.603Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-20",
-			"sourceFingerprint": "66d1520cb272155e6646449a99bd81a27bc51a2610380c3f3e0f628b2afe046b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The 16 \"markers\" are quoted evidence/rationale fragments embedded in the rankings output JSON itself, not real TODO(handoff) comments in source code.",
-			"evidence": [
-				"target file is rankings/index.json, the ranking pipeline's own data output",
-				"quoted fragments read as prior evidence strings (e.g. \"this narrows the race window, it does not close it\"), not code comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T03:04:22.703Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
