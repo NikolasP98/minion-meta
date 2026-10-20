@@ -31,4 +31,4 @@
 
 ## Open ends
 - No offline support (deliberate; a service worker needs its own spec covering deploy skew and auth).
-- Tauri custom titlebar / native menus (item 6) and module state keep-alive (item 3) are separate specs.
+- Remaining ArtCraft-comparison items are in the backlog as draft proposals `proposals/2026-10-19-hub-{module-state-keep-alive,optimistic-everywhere,tauri-native-shell,context-menu-and-drop,offline-service-worker}`.
