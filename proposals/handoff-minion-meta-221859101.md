@@ -101,15 +101,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26586
 - `NikolasP98/minion-meta@dev rankings/index.json:26618` — the PREDICATE is covered here, the WIRING is not — no test",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26618
-- `NikolasP98/minion-meta@dev rankings/index.json:29437` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29437
-- `NikolasP98/minion-meta@dev rankings/index.json:29575` — tags are NOT inline-editable here while /pos/catalog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29575
-- `NikolasP98/minion-meta@dev rankings/index.json:29712` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29712
-- `NikolasP98/minion-meta@dev rankings/index.json:32125` — brief-debloat-c §3 asked for this to be wrapped in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32125
-- `NikolasP98/minion-meta@dev rankings/index.json:32225` — <what, why, pointer>"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32225
-- `NikolasP98/minion-meta@dev rankings/index.json:35173` — src/lib/sandbox/tools.ts declares the same string instead of",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35173
+- `NikolasP98/minion-meta@dev rankings/index.json:29571` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29571
+- `NikolasP98/minion-meta@dev rankings/index.json:29709` — tags are NOT inline-editable here while /pos/catalog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29709
+- `NikolasP98/minion-meta@dev rankings/index.json:29846` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29846
+- `NikolasP98/minion-meta@dev rankings/index.json:32223` — brief-debloat-c §3 asked for this to be wrapped in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32223
+- `NikolasP98/minion-meta@dev rankings/index.json:32323` — <what, why, pointer>"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32323
+- `NikolasP98/minion-meta@dev rankings/index.json:35271` — src/lib/sandbox/tools.ts declares the same string instead of",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35271
