@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-20T16:26:01.883Z",
+	"generatedAt": "2026-10-20T16:56:26.637Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -634,41 +634,6 @@
 			"scoredAt": "2026-08-31T08:21:50.290Z"
 		},
 		{
-			"key": "proposal:2026-10-13-gateway-swarm-blue-green-slots",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Gateway Swarm blue/green slots — follow-ups",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-gateway-swarm-blue-green-slots.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "ef955c9b68bb435a71fecf6b059a4733c2687f9395bb2623ef62d4c35efb4d29",
-			"score": 82,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 3
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"deploy:minion (gateway)",
-				"proposal:handoff-minion-ai-4020222934"
-			],
-			"rationale": "Documents a real production deploy failure caused by the slot-a-only controller assumption and gives a concrete DELTA to prevent recurrence.",
-			"evidence": [
-				"'16:1xZ ... deploy-production.yml, which failed while slot b was live'",
-				"delivered by hand via slot-switch.sh as a workaround"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
-		},
-		{
 			"key": "spec:2026-10-03-readiness-agent-event-audience-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -933,6 +898,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T13:51:35.437Z"
+		},
+		{
+			"key": "proposal:2026-10-13-gateway-swarm-blue-green-slots",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Gateway Swarm blue/green slots — follow-ups",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-gateway-swarm-blue-green-slots.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "ef955c9b68bb435a71fecf6b059a4733c2687f9395bb2623ef62d4c35efb4d29",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:merge-scan-minion-ai-f2de5e0"
+			],
+			"rationale": "A documented production deploy failure already occurred because controller/workflow scripts target only slot-a, and the proposal gives a concrete, testable DELTA to close that gap.",
+			"evidence": [
+				"16:1xZ promotion failed while slot b was live, fixed by hand",
+				"DELTA row 1 adds failing-closed slot derivation with a test fixture"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T16:56:26.472Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-orchestration-authority-spec",
@@ -26159,6 +26158,38 @@
 			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy entry reports a CI fix already merged (#337), leaving no remaining actionable work.",
+			"evidence": [
+				"commit message shows fix(ci) already merged",
+				"restores CRM checks and isolates Linux tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T16:56:26.472Z"
+		},
+		{
 			"key": "issue:minion-meta#536",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27981,6 +28012,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T23:10:22.972Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-f2de5e0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ f2de5e0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f2de5e0.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "1fb11ec5ec82bfe0f2cce6bdac4febb1573f7dd6ae1c49943c69a29f40b4126d",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two medium-severity findings pinpoint hardcoded production IPs in cutover.sh that should be moved to an env var, a small well-scoped fix.",
+			"evidence": [
+				"cutover.sh:6 and :9 hardcode IP 152.53.91.108",
+				"finding recommends externalizing to env var"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T16:56:26.472Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-43a174b",
@@ -31959,38 +32022,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T04:44:23.505Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-f2de5e0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ f2de5e0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f2de5e0.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "1fb11ec5ec82bfe0f2cce6bdac4febb1573f7dd6ae1c49943c69a29f40b4126d",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, precisely located hardcoded-IP findings in cutover.sh with an obvious, low-risk fix (externalize to env var).",
-			"evidence": [
-				"two medium findings at cutover.sh:6 and :9",
-				"same remediation (env var) for both"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:52:07.690Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-0f5a066",
