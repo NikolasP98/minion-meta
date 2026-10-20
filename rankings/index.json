@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-19T23:55:43.681Z",
+	"generatedAt": "2026-10-20T00:25:47.129Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26887,6 +26887,40 @@
 			"scoredAt": "2026-10-19T12:27:04.166Z"
 		},
 		{
+			"key": "issue:minion-meta#362",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#362 [monitor:unstick] Run 05da2dd1: fallback agent stalled until 90m wall-clock kill",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/362",
+			"sourceUpdatedAt": "2026-08-31T22:17:42Z",
+			"sourceFingerprint": "f0ae3cbf9fa5a2121c5dd71d584212c570d21bec2fbee48af4d0315a206c23ff",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#434"
+			],
+			"rationale": "A single transient wall-clock kill of a fallback agent with a suggested classifier improvement but no confirmed recurrence pattern yet.",
+			"evidence": [
+				"exit 137 after ~90 minutes wall-clock budget",
+				"no fallback completion recorded after Claude quota switch to codex:default"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T00:25:46.987Z"
+		},
+		{
 			"key": "issue:minion-meta#408",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27017,6 +27051,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T12:56:33.737Z"
+		},
+		{
+			"key": "issue:minion-meta#434",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#434 [monitor:unstick] reconcile run dc183386: agent exec failed post-work (exit-126, turns=0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/434",
+			"sourceUpdatedAt": "2026-09-14T22:17:24Z",
+			"sourceFingerprint": "e44b411cf4707e2edf66470294347241bbfaa618b6fdc0b5152994d3a3d1060a",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"issue:minion-meta#362"
+			],
+			"rationale": "Reported as a likely runner-box/infra fault (exit-126, turns=0) after scripted work already completed, recommended for retry rather than immediate engineering work.",
+			"evidence": [
+				"scripted reconcile steps completed and persisted before failure",
+				"exit-126 with turns=0 and permission_denials=0 suggests binary-not-executable infra issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T00:25:46.987Z"
 		},
 		{
 			"key": "issue:minion-meta#446",
@@ -30565,38 +30633,6 @@
 			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged CI fix commit, not an open goal requiring ranking.",
-			"evidence": [
-				"Commit message shows CI test fixes already merged",
-				"No open scope or outcome stated beyond the completed fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T23:55:43.556Z"
-		},
-		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30765,41 +30801,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T16:26:45.359Z"
-		},
-		{
-			"key": "issue:minion-meta#434",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#434 [monitor:unstick] reconcile run dc183386: agent exec failed post-work (exit-126, turns=0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/434",
-			"sourceUpdatedAt": "2026-09-14T22:17:24Z",
-			"sourceFingerprint": "e44b411cf4707e2edf66470294347241bbfaa618b6fdc0b5152994d3a3d1060a",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#362"
-			],
-			"rationale": "Another one-off infra exec failure with a simple retry recommendation and a proposed host-classifier signature, which overlaps with the other unstick monitor intake and should be grouped rather than tracked separately.",
-			"evidence": [
-				"exit-126 turns=0, looks like runner-box/infra fault",
-				"recommendation: safe to retry the run as-is",
-				"good candidate for a new host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T00:21:37.191Z"
 		},
 		{
 			"key": "issue:minion-meta#437",
@@ -32724,41 +32725,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T03:21:59.140Z"
-		},
-		{
-			"key": "issue:minion-meta#362",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#362 [monitor:unstick] Run 05da2dd1: fallback agent stalled until 90m wall-clock kill",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/362",
-			"sourceUpdatedAt": "2026-08-31T22:17:42Z",
-			"sourceFingerprint": "f0ae3cbf9fa5a2121c5dd71d584212c570d21bec2fbee48af4d0315a206c23ff",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#434"
-			],
-			"rationale": "A transient fallback-stall diagnosis with only a retry recommendation and a suggested future classifier, best combined with the similar infra issue into one classifier-building goal.",
-			"evidence": [
-				"diagnosis: transient/infra stall, not an evidenced task failure",
-				"recommendation: retry after quota resets",
-				"suggests automating a new classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T00:21:37.191Z"
 		},
 		{
 			"key": "issue:minion-meta#402",
