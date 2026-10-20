@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-20T23:25:41.315Z",
+	"generatedAt": "2026-10-20T23:56:08.134Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2294,6 +2294,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T09:22:21.495Z"
+		},
+		{
+			"key": "pr:minion_hub#574",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#574 fix(assistant): restore business tools through verified gateway assignment",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/574",
+			"sourceUpdatedAt": "2026-10-20T23:52:01Z",
+			"sourceFingerprint": "5ef0368eba1699b130357a7da5ff0719845f5e4b5f227b03d01cb1158c9366be",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#338",
+				"pr:minion-meta#847"
+			],
+			"rationale": "This Hub assignment-repair PR is the data/authority-sensitive core of the same cross-repo fix and should be tracked as one goal with its companion PRs.",
+			"evidence": [
+				"Explicitly flagged as a data/authority-sensitive release pending owner approval",
+				"7802/7805 local tests passed with 3 environmental timeout failures",
+				"Real loopback proof shows 403->200 after verified binding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T23:56:07.994Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -5446,6 +5482,42 @@
 			"scoredAt": "2026-10-14T09:21:59.455Z"
 		},
 		{
+			"key": "pr:minion (gateway)#338",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#338 fix(agents): report unavailable tools and prevent malformed chat replies",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/338",
+			"sourceUpdatedAt": "2026-10-20T23:49:41Z",
+			"sourceFingerprint": "d457cc1d930609f49f183ebae6e97f932142daae153e72028edba7a44fbba65b",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#574",
+				"pr:minion-meta#847"
+			],
+			"rationale": "This gateway sanitization fix is one companion piece of a single cross-repo catalog-assignment fix already tied together by the linked spec.",
+			"evidence": [
+				"References companion Hub PR574 and spec meta PR847",
+				"Full workflow dispatch run is pending; draft not release-qualified",
+				"7 CI-fixture failures traced to host Node shim, not logic"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T23:56:07.994Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7760,6 +7832,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:05:34.311Z"
+		},
+		{
+			"key": "pr:minion-meta#847",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#847 docs(spec): repair unavailable assistant tools and malformed replies",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/847",
+			"sourceUpdatedAt": "2026-10-20T23:49:37Z",
+			"sourceFingerprint": "5293eccb3bac448762b422967ef1a182deed34a39f569b5abb23eeefbdb3a3cb",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#338",
+				"pr:minion_hub#574"
+			],
+			"rationale": "This spec is the design document unifying the gateway and Hub PRs into one approved repair effort, so it belongs in the same tracked goal rather than scored alone.",
+			"evidence": [
+				"States behavior and authority reviews approved the design before implementation",
+				"Notes implementation/qualification in progress in isolated Gateway and Hub branches",
+				"Requires separate production adoption evidence before release"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T23:56:07.994Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -10949,39 +11057,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:21:58.865Z"
-		},
-		{
-			"key": "pr:minion-meta#847",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#847 docs(spec): repair unavailable assistant tools and malformed replies",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/847",
-			"sourceUpdatedAt": "2026-10-20T23:22:35Z",
-			"sourceFingerprint": "120f4cdb98e4987917d8b794ef71c794ed21b6d6c2d053695f1365d2c751cc04",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Draft spec/PR addressing assistant tool-discovery and malformed-reply bugs is reviewed but implementation/qualification still in progress with no production adoption evidence yet.",
-			"evidence": [
-				"status: draft",
-				"Implementation and qualification are in progress in isolated Gateway and Hub branches",
-				"Production configuration and assignment repairs require a concrete reviewed release procedure and owner approval"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T23:25:41.161Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -22761,38 +22836,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:04:24.614Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A CI fix commit restoring retired-tool checks and isolating Linux tests has no indication of ongoing deployment failure requiring urgent action.",
-			"evidence": [
-				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T23:25:41.161Z"
 		},
 		{
 			"key": "issue:minion-meta#418",
