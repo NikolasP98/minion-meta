@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-20T03:05:29.756Z",
+	"generatedAt": "2026-10-20T03:25:42.680Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22947,6 +22947,38 @@
 			"scoredAt": "2026-10-19T13:04:24.614Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A CI/test fix commit landed but this entry is a generic deployment-health rollup without a clear open problem to execute against.",
+			"evidence": [
+				"commit fixes CI test isolation and CRM assertions",
+				"tagged deployment, no further described gap"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T03:25:42.540Z"
+		},
+		{
 			"key": "issue:minion-meta#418",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33494,20 +33526,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Quoted diagnosis describes a transient agent-launch exec failure (exit 126) after the deterministic reconcile work already succeeded, making this a self-resolving monitor alert rather than actionable work.",
+			"rationale": "The diagnosis in the issue itself identifies this as a transient infra fault (exit 126 before agent turns) with the actual reconcile work already completed successfully, so no further action is needed beyond a retry.",
 			"evidence": [
-				"status=error/exit_code=1 but run note shows exit 126, turns=0 before agent reasoning",
-				"deterministic reconcile steps (clone, merge-scan, proposals/index.json, push) completed successfully"
+				"deterministic reconcile sweep completed and pushed successfully",
+				"failure was agent-launch exit 126 with turns=0, a worker-box issue not a spec/code problem"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T03:21:21.605Z"
+			"scoredAt": "2026-10-20T03:25:42.540Z"
 		},
 		{
 			"key": "issue:minion-meta#702",
