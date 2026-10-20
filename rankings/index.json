@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-20T15:56:18.561Z",
+	"generatedAt": "2026-10-20T16:26:01.883Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2394,6 +2394,39 @@
 			"scoredAt": "2026-10-17T18:09:57.950Z"
 		},
 		{
+			"key": "proposal:2026-10-13-hub-first-paint-performance",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Measured production data shows ssr disabled plus a dual-locale Paraglide barrel drive 3.2-7.7s FCP despite a 5ms server, and the fix path (enable SSR / split locale bundle) is concrete.",
+			"evidence": [
+				"FCP ≈3.2s on /en/login vs server-timing app;dur=5",
+				"Paraglide barrel chunk is 246.5KB br / 1059KB raw, 59% of first-paint JS",
+				"src/routes/+layout.ts sets ssr=false leaving HTML with no markup to paint"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T16:26:01.723Z"
+		},
+		{
 			"key": "proposal:ci-minion-ai-deploy-gateway-devprd-channels",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3119,39 +3152,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:26:22.622Z"
-		},
-		{
-			"key": "proposal:2026-10-13-hub-first-paint-performance",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 4
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Precisely measured, root-caused first-paint regression (both-locale Paraglide bundle, 59% of blocking JS) affecting every visitor, with a clear fix target but no code changed yet.",
-			"evidence": [
-				"FCP ~3.2s on /en/login (n=6), up to 7.7s on appointments",
-				"chunks/0o58oGzS2.js: 246.5 KB br, both locales shipped to every visitor",
-				"No code change was made: every cheap win is already in the tree"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T16:22:04.338Z"
 		},
 		{
 			"key": "issue:minion-meta#595",
@@ -28280,38 +28280,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already merged CI fixes for CRM retirement checks and Linux test isolation, so there is no pending action.",
-			"evidence": [
-				"commit message describes fixes already merged",
-				"co-authored by minion-factory, status unknown but content is a completed commit"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T15:56:18.425Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
