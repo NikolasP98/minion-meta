@@ -71,10 +71,38 @@ personal-agent assignments unchanged.
 
 ## Qualification still pending
 
-Repository-wide tests, checks, final builds and exact commit identities will be
-recorded after completion. The current Hub base also has newer upstream changes
-to integrate before final acceptance. Focused passing tests are not a substitute
-for those gates.
+The source candidates are reviewable in:
+
+- Gateway [PR338](https://github.com/NikolasP98/minion-ai/pull/338), head
+  `43f3fa9bbe9d3db1466120314804e715e0d4e700` (runtime source commit
+  `37411570cf4c8fb58ce13fad9ba24f4172b40193`; the follow-up only adds the changelog reference).
+- Hub [PR574](https://github.com/NikolasP98/minion_hub/pull/574), head
+  `afc242e898fc6b58a2d561deb04a8a985f528327`, cleanly rebased onto master `d42a14a`.
+
+Gateway `pnpm check` passed with zero errors and 57 existing lint warnings; the
+full build, including plugin-SDK declarations, passed. The local full test
+attempt ended with signal143 before the main unit/extension reports; its
+completed process-isolated group passed 17 files and 223 tests. Seven CI-fixture
+failures were caused by the host mise Node shim rejecting isolated HOME. Both
+files passed all 48 tests when replayed with `/usr/bin` first in PATH, with no
+source or assertion change. The initial local attempt is incomplete evidence.
+
+Gateway PR CI uses smoke tests behind the historical shard names. Exact run
+[39516579150](https://github.com/NikolasP98/minion-ai/actions/runs/39516579150)
+covered 20 files and 177 tests in its Linux smoke jobs; it is not full-suite
+proof. The full workflow was explicitly dispatched at the same candidate in
+[39517416592](https://github.com/NikolasP98/minion-ai/actions/runs/39517416592).
+That result and complete configuration coverage remain pending.
+
+Hub's pre-integration full run completed 890 files: 883 passed, 2 failed and
+5 skipped; 7,802 tests passed, 3 failed and 263 skipped. The failures were two
+Git-commit signing timeouts and one frontend-scanner timeout. After integration,
+a focused four-file replay passed all 62 tests, including every ACI and scanner
+case, the binding tests and the incoming PostgreSQL-pool tests. It used the real
+Node binary and disabled Git signing only for the test process; test timeouts
+and assertions were unchanged. The final integrated check/build and repeated
+loopback acceptance are pending. Hub hosted CI provides an additional exact-head
+full-suite gate.
 
 The prior release's full Windows failures remain separate qualification debt.
 One personal agent per profile still has one home-gateway binding. Mutation
