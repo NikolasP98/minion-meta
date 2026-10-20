@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-20T20:25:41.234Z",
+	"generatedAt": "2026-10-20T20:56:23.235Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4838,41 +4838,6 @@
 			"scoredAt": "2026-10-20T05:56:30.705Z"
 		},
 		{
-			"key": "spec:2026-09-29-hub-table-toolbar-notion-filters-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Tables — Notion-style filters (basic + advanced rule tree), group-by picker, trailing add-column, table options menu; catalog \"Show inactive\" becomes an Active filter",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-29-hub-table-toolbar-notion-filters-spec.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "9a30dc708a8e551de466b7b953b11c4be47f2865bc7645a680cbda3c45e8ecff",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-09-29-hub-data-view-container"
-			],
-			"rationale": "A detailed AS-IS/TO-BE spec with explicit scope boundaries is already in the implementing stage for the shared DataTable component used across the hub.",
-			"evidence": [
-				"status: implementing",
-				"DataTable.svelte 4366 lines ... Toolbar (.dt-toolbar, line ~2429)",
-				"Out of scope: persisting filters across reloads ... saved filter views"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T20:52:04.898Z"
-		},
-		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6434,6 +6399,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:53:38.303Z"
+		},
+		{
+			"key": "spec:2026-09-29-hub-table-toolbar-notion-filters-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Tables — Notion-style filters (basic + advanced rule tree), group-by picker, trailing add-column, table options menu; catalog \"Show inactive\" becomes an Active filter",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-29-hub-table-toolbar-notion-filters-spec.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "9a30dc708a8e551de466b7b953b11c4be47f2865bc7645a680cbda3c45e8ecff",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-09-29-hub-data-view-container"
+			],
+			"rationale": "Already in implementing status with a highly detailed spec, and finishing it unblocks the broader DataView proposal that depends on its filter/group model.",
+			"evidence": [
+				"status: implementing",
+				"DataTable.svelte is 4366 lines across 46 instances in 34 files",
+				"referenced as the in-flight prerequisite by the DataView proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T20:56:23.103Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -9283,6 +9283,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T08:21:48.244Z"
+		},
+		{
+			"key": "proposal:2026-09-29-hub-data-view-container",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Data view container — one configurable host for table / board / calendar / chart / map views with shared filters, groups and advanced filters",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-data-view-container.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "e796f55aa5c983b72a2d09d99ac0e19cdc4545001ec922cfe80edef9d37ac257",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-09-29-hub-table-toolbar-notion-filters-spec"
+			],
+			"rationale": "A broad, strategic DataTable/view-unification proposal with deep AS-IS analysis but it explicitly depends on the in-flight filters spec landing before it can be scoped into actionable work.",
+			"evidence": [
+				"DataTable has 46 instances in 34 files",
+				"proposal states it should own filter/group config being added by the in-flight filters spec",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T20:56:23.103Z"
 		},
 		{
 			"key": "proposal:ci-minion-site-claude-code",
@@ -13568,41 +13603,6 @@
 			"scoredAt": "2026-10-18T01:37:26.163Z"
 		},
 		{
-			"key": "proposal:2026-09-29-hub-data-view-container",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Data view container — one configurable host for table / board / calendar / chart / map views with shared filters, groups and advanced filters",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-data-view-container.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "e796f55aa5c983b72a2d09d99ac0e19cdc4545001ec922cfe80edef9d37ac257",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"spec:2026-09-29-hub-table-toolbar-notion-filters-spec"
-			],
-			"rationale": "An ambitious cross-cutting DataView redesign spanning 46 DataTable instances lacks a bounded TO-BE/DELTA and should be reframed against the already-implementing filter/group spec it depends on before becoming an executable goal.",
-			"evidence": [
-				"DataTable.svelte ... 4366 lines, 79 typed props",
-				"46 instances in 34 files",
-				"let the new component own the filter / group / advanced-filter configuration that the in-flight spec ... is adding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T20:52:04.898Z"
-		},
-		{
 			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15071,6 +15071,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T04:55:59.160Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-e8cac06",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ e8cac06",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-e8cac06.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "1ea424d043a6f67b9d06c5ab70075d973047b59f56a066cba0fdaa7f8b84ef5e",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two concrete, file-and-line-located defects (silent error swallow and unvalidated filename input) in a small automation script are bounded and actionable now.",
+			"evidence": [
+				"high: agent/lib/jev.sh:131 empty-catch, violates rc-0-writes-file contract",
+				"medium: agent/lib/jev.sh:56 unvalidated-input tag parameter used in filenames"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T20:56:23.103Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-490d681c114f",
@@ -17644,38 +17676,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T06:56:57.383Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-factory-e8cac06",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ e8cac06",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-e8cac06.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "1ea424d043a6f67b9d06c5ab70075d973047b59f56a066cba0fdaa7f8b84ef5e",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two concrete, file/line-pinned findings describe small, bounded fixes: a silent write failure returning rc 0 and an unvalidated filename parameter risking path traversal.",
-			"evidence": [
-				"agent/lib/jev.sh:131 (empty-catch) ... rc 0 returned, violating the contract that rc 0 writes the file",
-				"agent/lib/jev.sh:56 (unvalidated-input) ... path traversal or write failures"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T20:52:04.898Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-234ac5245d15",
@@ -30613,38 +30613,6 @@
 			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
-			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
-			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit already restored CRM retirement checks and isolated Linux tests, so the deploy-health signal reflects a fix already landed with no further action implied.",
-			"evidence": [
-				"fix(ci): restore CRM retirement checks and isolate Linux tests (#337)",
-				"Co-authored-by: minion-factory"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T19:56:14.311Z"
-		},
-		{
 			"key": "issue:minion-meta#386",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33553,6 +33521,39 @@
 			"scoredAt": "2026-10-20T07:26:24.669Z"
 		},
 		{
+			"key": "issue:minion-meta#687",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#687 [monitor:unstick] reconcile proposals failed (minion-meta) - run 8b52e51a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/687",
+			"sourceUpdatedAt": "2026-09-29T20:17:32Z",
+			"sourceFingerprint": "846519010acc5d647e168d01ebe3b11e22a1a2986cb7cd2a7d056dfc59669f63",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single exit-126/turns=0 infra blip where the underlying reconcile work already completed and succeeded, so it is only actionable if the signature recurs.",
+			"evidence": [
+				"exit_code=1, exit-126, turns=0",
+				"pre-agent reconcile work completed cleanly with push to dev succeeding",
+				"Recommendation: retry the run; watch for recurrence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T20:56:23.103Z"
+		},
+		{
 			"key": "issue:minion-meta#702",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34694,39 +34695,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T04:05:06.282Z"
-		},
-		{
-			"key": "issue:minion-meta#687",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#687 [monitor:unstick] reconcile proposals failed (minion-meta) - run 8b52e51a",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/687",
-			"sourceUpdatedAt": "2026-09-29T20:17:32Z",
-			"sourceFingerprint": "846519010acc5d647e168d01ebe3b11e22a1a2986cb7cd2a7d056dfc59669f63",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A single transient exit-126/turns=0 runner failure that self-resolved (the reconcile push still succeeded), with no evidence of recurrence to act on yet.",
-			"evidence": [
-				"Run status=error, exit_code=1 ... exit-126, turns=0",
-				"agent never produced a turn ... infra/environment fault on the runner box",
-				"Recommendation: retry the run; if ... recurs across repos, check"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T20:52:04.898Z"
 		},
 		{
 			"key": "issue:minion-meta#707",
