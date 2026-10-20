@@ -91,7 +91,13 @@ Using the runtime's configured callback credentials and server hint, verify
 that `query/tool-catalog` and `query/tool-permissions` return an authorized
 catalog including `catalog_query`. Do not substitute a corrected request
 header for the runtime's configured hint when claiming the configuration is
-fixed. Then perform the approved bounded production acceptance question:
+fixed. Existing Gateway permission snapshots have a 60-second cache lifetime,
+including failed snapshots. After verifying the callback and assignment, allow
+that lifetime to expire before starting a fresh acceptance run if the runtime
+still holds an earlier denied snapshot. Do not replay the assignment or widen
+permissions to work around the cache.
+
+Then perform the approved bounded production acceptance question:
 “what are the most expensive services we sell”. Require services ranked by
 sale price with source links, no automatic navigation, no repeated discovery,
 and no visible DSML. A healthy container alone does not prove this behavior.
