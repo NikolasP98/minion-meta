@@ -6,7 +6,7 @@ pass: 1
 status: implementing
 verdict: approved
 created: 2026-10-18
-updated: 2026-10-18
+updated: 2026-10-20
 repos: [minion, minion_hub]
 proposal: 2026-10-18-assistant-capability-failure-recovery
 ---
@@ -59,3 +59,30 @@ No test may fill in the missing assignment directly to claim hosted provisioning
 ## Out of scope
 
 No general multi-organization delegation, model replacement, brain-authority restoration, arbitrary SQL, tool-text execution, permission widening or automatic production assignment repair. Existing full Windows qualification debt is tracked separately.
+
+## Implementation review corrections
+
+Independent implementation review identified these necessary corrections within
+the repair boundaries:
+
+- Apply the same control-text boundary to visible reasoning and displayed
+  provider errors, while leaving raw error classification intact. An escaped,
+  unmatched or paragraph-spanning backtick pair is not a valid inline-code
+  exemption. Preserve complete Markdown examples and native tool calls.
+- Bind-only retries of an active NULL-assigned agent must preserve its runtime
+  personality. A late client failure callback must not demote a verified active
+  assignment. Verify current organization authority before accepting an existing
+  active binding.
+- Gateway lease reads must use the actual postgres-js result-array contract.
+  Prove a current lease wins over an older candidate using real SQL and verify
+  the other runtime receives no provisioning RPC.
+- Existing subscriber qualification exposed two missing browser/canvas action
+  descriptions and a stale same-action retry fixture. Preserve the declared
+  action verb in inferred tool summaries. Keep mutation fingerprint matching
+  strict; make the same-action fixture repeat identical arguments rather than
+  weakening production write-outcome checks.
+
+The release procedure is tracked at
+`audits/2026-10-18-assistant-capability-repair/release-procedure.md`. These
+corrections do not authorize a production merge, configuration change or
+assignment mutation.

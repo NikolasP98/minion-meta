@@ -3,7 +3,7 @@ id: 2026-10-18-assistant-capability-failure-recovery
 title: Restore assigned assistant tools and contain malformed model output
 status: in-spec
 created: 2026-10-18
-updated: 2026-10-18
+updated: 2026-10-20
 repos: [minion, minion_hub]
 spawned_spec: 2026-10-18-assistant-capability-failure-recovery-spec
 ---
@@ -27,3 +27,12 @@ Implement the matching spec with independent behavior and authority reviews. Pro
 ## Retained boundaries
 
 A personal_agents row currently has one gateway binding per profile. This repair must not silently move an existing binding on organization switches; broader concurrent multi-organization delegation requires its own scoped contract. Brain authority remains unchanged. Full Windows qualification debt is tracked in2026-08-23-minion-ai-ci-baseline-debt. No model upgrade or permission bypass is included.
+
+Implementation review also confirmed that `tool-mutation.ts` fingerprints target
+fields and display metadata rather than the complete request payload. Different
+same-length file contents can therefore share a fingerprint. The qualification
+fixture now respects the existing comparison contract, but this does not prove
+full request equivalence. A separate change must bind mutation recovery to a
+canonical request identity and test equal-display/different-payload collisions.
+The exact implementation site carries a matching TODO(handoff). This catalog
+read/output repair does not change mutation replay semantics.
