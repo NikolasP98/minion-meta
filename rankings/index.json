@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-20T11:25:55.363Z",
+	"generatedAt": "2026-10-20T11:55:49.960Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22771,6 +22771,38 @@
 			"scoredAt": "2026-10-19T13:04:24.614Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/5096950e517ce4710b38babdbcb244efe754f722",
+			"sourceUpdatedAt": "2026-10-18T09:26:29Z",
+			"sourceFingerprint": "1ffa2e45cfebc1ac95cf4e0ad64eaebbe1649e6c31ccae4b4c88c14ca3cce63d",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a merged CI fix restoring test checks, not an open actionable goal.",
+			"evidence": [
+				"commit title 'fix(ci): restore CRM retirement checks and isolate Linux tests (#337)'",
+				"already merged with co-author minion-factory"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-20T11:55:49.835Z"
+		},
+		{
 			"key": "issue:minion-meta#418",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30709,20 +30741,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The diagnosis itself states the underlying reconcile work already completed and pushed successfully, and only an infra-level agent-launch exit-126 needs a safe retry, so this is not independently actionable work.",
+			"rationale": "The diagnosis itself states the reconciliation data was already committed and pushed, and the only remaining issue is a one-off infra exit-126 safe to retry as-is.",
 			"evidence": [
-				"reconcile sweep ... completed successfully",
-				"Recommendation: safe to retry as-is; the reconciliation data itself is already committed and pushed"
+				"'the reconciliation data itself is already committed and pushed, so a retry only needs to get past the agent-launch step'",
+				"'turns=0, permission_denials=0' indicates no task-logic failure occurred"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-13T11:51:16.411Z"
+			"scoredAt": "2026-10-20T11:55:49.835Z"
 		},
 		{
 			"key": "issue:minion-meta#443",
