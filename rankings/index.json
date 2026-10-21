@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T03:57:57.152Z",
+	"generatedAt": "2026-10-21T04:27:20.942Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1264,76 +1264,6 @@
 			"scoredAt": "2026-10-17T03:41:12.124Z"
 		},
 		{
-			"key": "pr:minion (gateway)#338",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#338 fix(agents): report unavailable tools and prevent malformed chat replies",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/338",
-			"sourceUpdatedAt": "2026-10-21T00:13:52Z",
-			"sourceFingerprint": "cb85844ac4c4697ea70ba3a4b93cd6bf027b620335838c839e23057d2b798b4c",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#574",
-				"pr:minion-meta#847"
-			],
-			"rationale": "This is one leg of a single cross-repo fix for tool-discovery and malformed chat output that should be tracked as one goal with its hub and spec companions.",
-			"evidence": [
-				"links to spec PR847 and hub companion PR574",
-				"full Linux CI reported 13,414 tests passing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T00:26:35.139Z"
-		},
-		{
-			"key": "pr:minion_hub#574",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#574 fix(assistant): restore business tools through verified gateway assignment",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/574",
-			"sourceUpdatedAt": "2026-10-20T23:59:55Z",
-			"sourceFingerprint": "20b4deb5d95a0bd45c36466252f0ee48424ccd857345f431bd784522e8611c0f",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#338",
-				"pr:minion-meta#847"
-			],
-			"rationale": "Companion Hub-side change for the same verified-assignment/tool-discovery fix as the gateway and spec PRs, best tracked together.",
-			"evidence": [
-				"references same spec PR847 and gateway PR338",
-				"CI passed 7,806 tests; production release still pending owner approval"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T00:26:35.139Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1495,6 +1425,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T09:56:31.834Z"
+		},
+		{
+			"key": "spec:2026-10-18-assistant-capability-failure-recovery-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Assigned assistant capability discovery and bounded output recovery",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-18-assistant-capability-failure-recovery-spec.md",
+			"sourceUpdatedAt": "2026-10-20",
+			"sourceFingerprint": "6af203712a1020b9f3bec4007ef0e1df37e659747e7a68bb14442c4bddd7b92f",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-18-assistant-capability-failure-recovery",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "Core gateway reliability/security spec covering truthful capability discovery and malformed-output containment is actively implementing with clear invariants.",
+			"evidence": [
+				"status: implementing",
+				"Six-call discovery guard and 40-call hard ceiling remain enforced"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
@@ -3066,6 +3031,38 @@
 			"scoredAt": "2026-10-19T13:04:24.614Z"
 		},
 		{
+			"key": "issue:minion-meta#705",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#705 [monitor:unstick] Reconcile run db3dd4c6 - claude agent exec failure (exit-126, 0 turns)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/705",
+			"sourceUpdatedAt": "2026-09-30T03:18:08Z",
+			"sourceFingerprint": "6f002a126390988bfb5855e9904d017539fbf302b954d44ebd862aee87b43bbf",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A recurring identical exit-126 claude-exec failure points to a persistent worker-box fault with a clear, bounded human-check fix.",
+			"evidence": [
+				"identical signature recurred in run 07e319f5 ~2h17m earlier the same night",
+				"exit 126 conventionally means the process could not be executed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3464,41 +3461,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T16:10:33.407Z"
-		},
-		{
-			"key": "pr:minion-meta#847",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#847 docs(spec): repair unavailable assistant tools and malformed replies",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/847",
-			"sourceUpdatedAt": "2026-10-21T00:13:55Z",
-			"sourceFingerprint": "ec8512b6c9f1f08eb5a8eee931304a50eb86d654663f1bbab3ec8105a7bc6acd",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#338",
-				"pr:minion_hub#574"
-			],
-			"rationale": "This spec/doc record ties the gateway and hub fixes into one reviewed change and should rank as part of that single goal.",
-			"evidence": [
-				"explicitly links gateway PR338 and hub PR574 as source candidates",
-				"notes production release still pending owner approval"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T00:26:35.139Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-igv-rate-from-org-config",
@@ -6262,7 +6224,7 @@
 			"title": "Post-merge finding — todo-handoff in src/routes/(app)/+layout.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-63d95b819dee.md",
 			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "6f8ae8013db76b7232fde12a0c39976aabc128c76fdf1bfd03ebcf41f506d896",
+			"sourceFingerprint": "b0732cfb116fe2888fdea1caacd0cce9e5c6b39c35decc878e0c141cd409fe25",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -6271,20 +6233,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 7,
+				"implementation": 4
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Stale-session access to CRM/POS financial operations is a concrete security gap with a clear fix direction referencing an existing session pattern.",
+			"rationale": "Stale Supabase session reuse on CRM/POS routes is a security/compliance risk with a clear, bounded fix direction.",
 			"evidence": [
-				"Marker: 'Qualify CRM/POS leave-return with an authenticated session'",
-				"Fix direction points to minion_hub/src/server/auth/ existing pattern"
+				"stale auth tokens could be used for sensitive operations, creating security and compliance risks",
+				"Add session refresh logic in onMount and/or afterNavigate to verify the Supabase session is still valid"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T03:57:51.545Z"
+			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-774c6bbb4186",
@@ -6349,40 +6311,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T05:58:35.205Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-79144f323b5a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in .github/workflows/desktop-release.yml (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-79144f323b5a.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "b4f30c89d0265296319869566fb5038794ac1f85df7aee5517a900f9b1e4f583",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-635403793743"
-			],
-			"rationale": "Missing desktop signing credentials would block shipping any desktop build, but the fix depends on external certificate provisioning not yet scoped.",
-			"evidence": [
-				"Marker: 'Configure signing credentials and qualify installed sign-in/drop'",
-				"Diagnosis: 'desktop app unable to ship' without OS-specific signing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T03:57:51.545Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9b86db24576e",
@@ -7195,6 +7123,41 @@
 			"scoredAt": "2026-10-20T20:56:23.103Z"
 		},
 		{
+			"key": "pr:minion_hub#576",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#576 fix(desktop): download unsigned preview installers without signing setup",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/576",
+			"sourceUpdatedAt": "2026-10-21T04:24:23Z",
+			"sourceFingerprint": "e2c4311abd761bd716724248c35a2b3dea56fd79c0de4c593025d2f14e858a86",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-635403793743",
+				"proposal:postmerge-minion-hub-79144f323b5a"
+			],
+			"rationale": "Draft PR is fully validated and ready to merge, shipping unsigned preview installers per the owner's explicit decision.",
+			"evidence": [
+				"seven release-contract tests pass, both workflows pass actionlint",
+				"every uploaded GitHub asset digest matched before publication; no binary bytes were modified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
+		},
+		{
 			"key": "pr:minion-base#43",
 			"kind": "pr",
 			"stage": "development",
@@ -7393,6 +7356,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T01:56:36.858Z"
+		},
+		{
+			"key": "proposal:2026-10-18-assistant-capability-failure-recovery",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Restore assigned assistant tools and contain malformed model output",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-18-assistant-capability-failure-recovery.md",
+			"sourceUpdatedAt": "2026-10-20",
+			"sourceFingerprint": "59e58048ccc74edba190ed4b20266ab70a094f720bf8ecdea90fdabc55afbc00",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"spec:2026-10-18-assistant-capability-failure-recovery-spec"
+			],
+			"rationale": "This proposal's own status is in-spec, meaning it has already been superseded by the matching spec which is further along at implementing.",
+			"evidence": [
+				"status: in-spec",
+				"Implement the matching spec with independent behavior and authority reviews"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1194287278",
@@ -7698,8 +7695,8 @@
 			"repo": "minion-meta",
 			"title": "#265 [monitor:unstick] Factory queue wedged",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/265",
-			"sourceUpdatedAt": "2026-10-07T08:17:02Z",
-			"sourceFingerprint": "59e52648e9d7d7e32176842bd0d348fecf4cb04b7de005c80a534608ddc6b7c1",
+			"sourceUpdatedAt": "2026-10-21T04:17:02Z",
+			"sourceFingerprint": "bc7ccf5d57476aeaabd42cba35f6fee8894c9fe9561e082016a0b96a9b0fcc29",
 			"score": 55,
 			"band": "medium",
 			"axes": {
@@ -7708,20 +7705,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 6
+				"specification": 3,
+				"implementation": 4
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "A queue-wedged alert from a week ago with only a vague symptom description and no confirmation it is still active warrants a fresh check before committing work.",
+			"rationale": "Automated alert reports a possibly-wedged factory queue but offers no confirmation the runner is still stuck now.",
 			"evidence": [
 				"queued run(s) with nothing running for >15m; runner may need a restart",
-				"updatedAt 2026-10-07, 7 days stale"
+				"updated 2026-10-21T04:17:02Z"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T08:51:49.802Z"
+			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
 			"key": "issue:minion-meta#483",
@@ -9405,40 +9402,6 @@
 			"scoredAt": "2026-10-19T02:25:56.492Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-635403793743",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src-tauri/src/lib.rs (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-635403793743.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "bde134c388f5dfb6ff48cc549641e289cbe2e5a822a0b1ed4ba3ccf003e49247",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-79144f323b5a"
-			],
-			"rationale": "OAuth and file-drop behavior in the new Tauri desktop webviews is a real functional gap for a new platform surface but needs a cross-OS QA plan before it's actionable.",
-			"evidence": [
-				"Marker: 'Qualify provider sign-in and file drops in installed OS webviews'",
-				"File src-tauri/src/lib.rs in merged PR #575 introducing desktop support"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T03:57:51.545Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-763d076153d2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10131,39 +10094,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T22:27:13.427Z"
-		},
-		{
-			"key": "run:minion (gateway)#39387743794",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39387743794",
-			"sourceUpdatedAt": "2026-10-20T08:16:37Z",
-			"sourceFingerprint": "88249fe995ad698a6f798ee45cc49ec11c51c77cf0e07c7150b276188e7ee00a",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failing workflow_dispatch CI run on DEV today needs investigation but the catalog gives no diagnostic detail to act on yet.",
-			"evidence": [
-				"status: failure",
-				"workflow_dispatch on DEV",
-				"updatedAt: 2026-10-20T08:16:37Z"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T08:26:09.789Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-current-org-getter-spec",
@@ -11724,39 +11654,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T21:51:43.806Z"
-		},
-		{
-			"key": "proposal:2026-09-29-hub-pos-calendar-container-cancel-drag",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "POS calendar — container status from active members, optimistic cancel, drag-to-reorder / drag-out-to-separate in the fan deck",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-pos-calendar-container-cancel-drag.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "244680993223fbcfd346e8124a5d939495334b6d662918288ca1d4299555cd7d",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A direct owner-reported UX bug (container status and feedback correctness) with a detailed AS-IS/TO-BE spec and concrete file-level implementation plan makes this ready for execution.",
-			"evidence": [
-				"owner request with screenshots describing container showing cancelled when only lead was cancelled",
-				"TO-BE specifies optimistic setStatus via createOptimistic overlay and a new reorder API with service-level test plan",
-				"existing code anchors cited: BookingCalendar.svelte, booking-mover.ts:82, scheduling-bookings.service.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T04:21:24.125Z"
 		},
 		{
 			"key": "proposal:2026-10-09-gateway-startup-heap-profiling",
@@ -14602,6 +14499,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T12:56:33.737Z"
+		},
+		{
+			"key": "proposal:2026-09-29-hub-pos-calendar-container-cancel-drag",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "POS calendar — container status from active members, optimistic cancel, drag-to-reorder / drag-out-to-separate in the fan deck",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-pos-calendar-container-cancel-drag.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "244680993223fbcfd346e8124a5d939495334b6d662918288ca1d4299555cd7d",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Detailed owner-requested UX proposal for the POS calendar remains in draft proposal stage with no spec or implementation started.",
+			"evidence": [
+				"status: draft",
+				"no API to change groupSeq order; stamps are written by group create/merge/detach only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-277751425",
@@ -17770,6 +17699,41 @@
 			"scoredAt": "2026-10-17T05:41:52.845Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-635403793743",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src-tauri/src/lib.rs (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-635403793743.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "f31267b513c637cf15df8760a0715f3a102915a518868422dc041fddef73311c",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-79144f323b5a",
+				"pr:minion_hub#576"
+			],
+			"rationale": "OAuth/file-drop qualification for Tauri desktop webviews is an explicitly deferred preview limitation that pairs with the signing-credentials TODO into one desktop-qualification goal.",
+			"evidence": [
+				"TODO(handoff): Qualify provider sign-in and file drops in installed OS webviews",
+				"documented ... preview limitations rather than signing gates"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-66d88ed81830",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17802,6 +17766,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T09:21:59.455Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-79144f323b5a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in .github/workflows/desktop-release.yml (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-79144f323b5a.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "9f746c11e5cd8df0513c9b4d860b90ac4c91183f5d094421cc91f86a80a1f151",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-635403793743",
+				"pr:minion_hub#576"
+			],
+			"rationale": "Signing-credential setup for the desktop release workflow pairs with the sign-in/file-drop qualification TODO to form one signed-desktop-release goal.",
+			"evidence": [
+				"TODO(handoff): Configure signing credentials and qualify installed sign-in/drop",
+				"Unsigned desktop binaries can't be distributed securely or verified by end users"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-93789f3a94af",
@@ -20719,6 +20718,72 @@
 			"scoredAt": "2026-10-14T10:52:02.834Z"
 		},
 		{
+			"key": "run:minion (gateway)#39543796081",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39543796081",
+			"sourceUpdatedAt": "2026-10-21T04:24:05Z",
+			"sourceFingerprint": "50ae1c601b620c57855cb1238be46ebfe9d57ab2a9932e79d6e28fc4a8a4a1e7",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An in-progress Docker Release CI run on DEV with no failure signal yet offers no actionable decision beyond monitoring.",
+			"evidence": [
+				"status: in_progress",
+				"stage: testing",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:20.769Z"
+		},
+		{
+			"key": "run:minion_hub#39543822305",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39543822305",
+			"sourceUpdatedAt": "2026-10-21T04:24:14Z",
+			"sourceFingerprint": "28153b24fbf1e0ff93635aa8b9902e57146daf8829efa6971afc30626d8a81be",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on master with no failure signal yet offers no actionable decision beyond monitoring.",
+			"evidence": [
+				"status: in_progress",
+				"stage: testing",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:20.769Z"
+		},
+		{
 			"key": "issue:minion-meta#306",
 			"kind": "issue",
 			"stage": "proposal",
@@ -21417,39 +21482,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T07:26:20.790Z"
-		},
-		{
-			"key": "issue:minion-meta#705",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#705 [monitor:unstick] Reconcile run db3dd4c6 - claude agent exec failure (exit-126, 0 turns)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/705",
-			"sourceUpdatedAt": "2026-09-30T03:18:08Z",
-			"sourceFingerprint": "6f002a126390988bfb5855e9904d017539fbf302b954d44ebd862aee87b43bbf",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The reconciliation pipeline itself succeeded and only the LLM agent sub-step failed with a host-level exec error twice, so this needs a human checking worker-box PATH/exec permissions rather than a code change.",
-			"evidence": [
-				"exit 126 with 0 turns, 0 permission denials",
-				"identical signature recurred in run 07e319f5 ~2h17m earlier",
-				"recommendation text itself suggests a host classifier rule, not a dev task"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T04:21:24.125Z"
 		},
 		{
 			"key": "issue:minion-meta#790",
@@ -26986,6 +27018,70 @@
 			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
+			"key": "run:minion (gateway)#39543796011",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "npm publish",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39543796011",
+			"sourceUpdatedAt": "2026-10-21T04:23:49Z",
+			"sourceFingerprint": "6598bef6ff9d358a6714b0dd29cc2962d3b1a428fe8b4790e76a62d4bb17fe14",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI publish run triggered by a DEV push; monitor to completion rather than treat as a standalone goal.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
+		},
+		{
+			"key": "run:minion (gateway)#39543796036",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39543796036",
+			"sourceUpdatedAt": "2026-10-21T04:23:59Z",
+			"sourceFingerprint": "eff9d5706d3720fc7cb68274a841344761e569b84afaceb38e7cb2b0ed97420f",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run triggered by a DEV push; monitor to completion rather than treat as a standalone goal.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T04:27:07.333Z"
+		},
+		{
 			"key": "issue:minion-meta#536",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29075,38 +29171,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T21:52:11.157Z"
-		},
-		{
-			"key": "run:minion_hub#39540341303",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39540341303",
-			"sourceUpdatedAt": "2026-10-21T03:45:50Z",
-			"sourceFingerprint": "0e823e62e6076f6011acec8bc9b8c5501c24122a928d5487dee3eb1b4b4e8bc2",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single in-progress CI run on master has no actionable scope until it completes and reveals a result.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T03:47:57.992Z"
 		},
 		{
 			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
