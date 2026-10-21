@@ -1,7 +1,7 @@
 ---
 id: 2026-10-21-windows-qualification-process-identity
 title: Track Windows qualification process ownership by birth identity
-status: draft
+status: review
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion]
@@ -34,3 +34,9 @@ Bind ownership to observed process birth identity and parent lifetime. Never ado
 ## Lifecycle exception and completion
 
 This bounded monitor hotfix bypasses a new standalone spec because native evidence and a direct regression establish the defect. It changes no product runtime, test inventory, deadline, workflow admission or production configuration. Local replay cannot close native acceptance. Keep #342 and #339 held until the required source-bound Windows evidence passes. No merging of evidence across failed attempts and no retry-to-green loop.
+
+## Prepared correction
+
+Gateway [PR #344](https://github.com/NikolasP98/minion-ai/pull/344), exact head `e706031737d73e0366a78997d6a229d302022171`, changes only the qualification helper and its tests. The before regression fails with owned-process rejection; all 40 helper tests pass after. Full `pnpm check` passes with 0 errors and 57 existing warnings. Independent standards/spec review passes.
+
+The tracker excludes baseline birth identities, requires an exact currently observed owned parent and chronological birth evidence for adoption, retains proven descendants and refuses ownership transfer across PID reuse. Timeout termination requires parseable root birth and a wholly proven current numeric descendant closure. Additive root/ownership evidence makes later diagnosis auditable. Replay of the actual 142-row baseline and 141-row after snapshot reproduces four false-owned rows with the old tracker and none with the correction; all six unknown survivors from attempt 1 remain rejected. The modeled root collision is labeled an inference. Native ten-run/full-shard acceptance remains pending after separate human-reviewed merge; no gate is waived.
