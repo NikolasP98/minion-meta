@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T16:55:47.813Z",
+	"generatedAt": "2026-10-21T17:25:55.561Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -25907,6 +25907,38 @@
 			"scoredAt": "2026-10-20T05:25:47.993Z"
 		},
 		{
+			"key": "run:minion (gateway)#31686911500",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/31686911500",
+			"sourceUpdatedAt": "2026-09-12T09:31:57Z",
+			"sourceFingerprint": "08122e13e4c986b0a2c34dd42ccc1ad6458c9234ddd8151631e56ef9975fd17e",
+			"score": 32,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A failed CI run on a PR review comment trigger needs investigation but the catalog gives no failure detail beyond status, so scope is unclear.",
+			"evidence": [
+				"status: failure",
+				"pull_request_review_comment on DEV, updated 2026-09-12"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T17:25:55.377Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -29021,21 +29053,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 6
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The reconcile data landed successfully; only the downstream agent invocation failed with a narrow exec/permission signature (exit-126, turns=0) that is clearly diagnosed and actionable.",
+			"rationale": "Automated monitor diagnosis points to a transient agent-launch exec failure (exit-126) on one run while the underlying reconcile data landed successfully, so this needs a retry/verify rather than new engineering work.",
 			"evidence": [
-				"exit-126, turns=0, cost_usd=0, under 1 second runtime",
-				"reconcile sweep itself completed fine (proposals/index.json written, dev branch pushed)",
-				"recommendation: retry + check claude CLI binary permissions/PATH on runner"
+				"exit-126, turns=0, worker finished in under 1 second",
+				"reconcile sweep itself completed and proposals/index.json was written"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T17:21:46.968Z"
+			"scoredAt": "2026-10-21T17:25:55.377Z"
 		},
 		{
 			"key": "issue:minion-meta#720",
@@ -31639,38 +31670,6 @@
 			"scoredAt": "2026-10-21T04:57:54.316Z"
 		},
 		{
-			"key": "run:minion (gateway)#31686911500",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/31686911500",
-			"sourceUpdatedAt": "2026-09-12T09:31:57Z",
-			"sourceFingerprint": "08122e13e4c986b0a2c34dd42ccc1ad6458c9234ddd8151631e56ef9975fd17e",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a single stale CI failure over a month old with no further diagnostic detail, likely superseded by subsequent runs.",
-			"evidence": [
-				"status: failure, updatedAt 2026-09-12T09:31:57Z",
-				"title/summary give only 'Claude Code' / pull_request_review_comment on DEV with no further detail"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T17:21:46.968Z"
-		},
-		{
 			"key": "issue:minion-meta#386",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33635,38 +33634,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:26:22.622Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/fb9a03f06c7dae71667f7ede6a8a265bc5b394b2",
-			"sourceUpdatedAt": "2026-10-21T08:36:22Z",
-			"sourceFingerprint": "8721998c5c021e02d17e380356e6ab669e44068876afac9754da659287737267",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deploy-health log entry referencing an already-merged CI containment fix with no remaining scope or open work.",
-			"evidence": [
-				"summary references merged PR #345 fixing Windows CI containment",
-				"status is unknown with no distinguishing goal content beyond the commit message"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T16:26:14.872Z"
 		},
 		{
 			"key": "issue:minion-meta#347",
