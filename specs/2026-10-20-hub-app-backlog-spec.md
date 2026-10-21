@@ -46,10 +46,10 @@ There is a manifest but no offline navigation fallback.
 - Tauri loads the hosted Hub, has a custom draggable titlebar, native menus,
   tray and validated `minion://` links. No server or credentials bundled.
   Remote content receives only the window-control capability it needs.
-  Signed installers are required by the owner. Prepare a master-only workflow
-  that verifies Apple/Windows signatures, signs Linux installers/checksums, and
-  assembles all supported platforms as a draft GitHub Release with install links.
-  Unsigned PR qualification artifacts must never enter release assembly.
+  The owner explicitly requests unsigned preview installers for immediate
+  download. Prepare a master-only manual workflow that builds with `--no-sign`,
+  checks all five installers and publishes a clearly labeled prerelease or draft
+  with install links and checksums. Signing credentials are not prerequisites.
 - Navigations always use the network. Cache only current immutable build assets
   and a public branded offline document. Never cache API, authenticated HTML,
   navigation errors, or version metadata. Offline recovery retries the actual
@@ -67,9 +67,9 @@ There is a manifest but no offline navigation fallback.
    disabled actions, target disposal, rejected uploads and cancellation.
 4. Replace the Node sidecar with the remote Tauri shell. Rust tests validate
    origin/deep-link mapping; cargo check qualifies the actual Rust API surface.
-   Add cross-platform installer qualification, fail-closed signing checks,
-   complete-matrix/source/digest validation and draft-only release assembly.
-   Exercise detached-signature verification with a temporary Linux fixture key.
+   Add cross-platform installer qualification, complete-matrix/source/digest
+   validation and unsigned-preview release assembly. Verify accurate unsigned
+   notes and reject changed assets, wrong revisions and false signature claims.
 5. Add offline worker and fallback. An executable worker harness proves no HTML
    or API caching, offline response, update cleanup, and build identity changes.
 6. Run focused tests, design/token lint, check, tests and production build.
@@ -77,9 +77,10 @@ There is a manifest but no offline navigation fallback.
 
 ## Out of scope
 
-Production deployment/publication, acquisition of signing credentials, offline
-business writes, background synchronization and a bundled application server are
-outside this implementation. Preparing signed release automation is in scope. No authentication or authorization policy is expanded.
+Offline business writes, background synchronization and a bundled application
+server are outside this implementation. Unsigned preview publication is now
+explicitly authorized by the owner. Authentication and authorization policy stay
+unchanged; installer signing is not a current release requirement.
 
 ## Review and release
 
@@ -114,15 +115,13 @@ by these candidate receipts.
 
 ## Installer release review
 
-The owner's follow-up requires signed installers and GitHub Releases installation
-links. Author standards review separates pull-request builds (no credentials,
-read-only token) from master-only protected signing jobs and a draft-only writer.
-Author spec review checks all five installer assets, exact source SHA/digests,
-mandatory OS signature verification and rejection of unsigned qualification
-receipts. Release preparation does not authorize merge, hosted deployment or
-publication. Signing credential setup and installed runtime qualification remain
-tracked in the native-shell proposal and the source workflow TODO(handoff).
-
+The owner withdrew the signed-only requirement and requested immediate unsigned
+downloads on 2026-10-20. This supersedes the earlier credential/signature gates.
+Author Standards review preserves read-only PR jobs, manual master-only release
+writes, complete artifact checks and immutable existing releases. Author Spec
+review checks removal of signing setup and accurate unsigned-preview labeling.
+Publication of the first preview is explicitly authorized by the current user
+instruction; future workflow dispatch can select a draft or published prerelease.
 
 ## Cross-platform build receipt
 
@@ -130,9 +129,10 @@ Hub candidate `991b029ec1db6173b13d374714bdc45c13a8f94b` passed all five jobs in
 [Desktop qualification 39531728582](https://github.com/NikolasP98/minion_hub/actions/runs/39531728582):
 release-contract tests and native Rust tests/packaging on Linux x64, Windows x64,
 macOS Apple Silicon and Intel. Five unsigned qualification installers were
-retained as Actions artifacts, never Releases assets. This proves cross-platform
-compilation and packaging; Apple/Windows signing and installed runtime remain
-unproven until credentials and OS qualification are available.
+initially retained as Actions artifacts. The owner subsequently authorized
+publishing those unsigned artifacts after exact Git-tree and digest verification.
+This proves cross-platform compilation and packaging. Installed runtime remains
+unproven on every supported OS; it is disclosed as a preview limitation.
 
 The same candidate passed the web CI check-and-build job, including typecheck,
 formatting, design/token gates and production build. The ordinary test job,
@@ -163,11 +163,36 @@ deployment identity and alias evidence, not authenticated feature/OS runtime QA.
 Post-merge CI was still running at that verification; its completed jobs had no
 failures. The earlier exact-candidate qualification remains linked above.
 
-The signed desktop workflow is now present on `master`. The repository still
-has no `desktop-signing` environment or Apple/Azure/OpenPGP signing secrets.
-No desktop workflow was dispatched without those credentials, and the Hub
-Releases page still has no installer release. Installed OS-webview sign-in,
-restart persistence, native controls, deep links and file drops remain release
-gates. Source merge does not establish those runtime results.
+The first unsigned desktop preview is now published at
+[desktop-v0.0.1](https://github.com/NikolasP98/minion_hub/releases/tag/desktop-v0.0.1).
+The owner revoked the signing requirement before publication. Installed
+OS-webview sign-in, restart persistence, native controls, deep links and file
+drops remain runtime qualification work tracked by the native-shell proposal.
 
 The companion metadata PR #850 remains a separate owner-controlled merge.
+
+
+## Unsigned preview publication
+
+The current owner instruction is: "For now, no signing. Please forget and revert
+any signing reqs and try again. I want to be able to download this asap."
+Signing accounts, enrollment, certificates, private keys and the desktop-signing
+environment are therefore removed as release prerequisites.
+
+Release `desktop-v0.0.1`, ID `419156659`, was published as an unsigned prerelease
+at `2026-10-21T04:22:48Z`. It contains Linux DEB/AppImage, Windows EXE and both
+macOS DMGs, plus `SHA256SUMS` and a provenance manifest. Every GitHub asset digest
+matched the verified local file before publication. An unauthenticated checksum
+download also matched after publication.
+
+The actual build commit `d2a5d552f800e33c4209a478080a0bb6ac3e799e` and release
+commit `26e82cfc90f8279875dfa64b89e9a50a6f1323fe` have the exact same full Git
+tree `5903f62d63b995702a757e5d1e05e44a1de74d8b`. No installer bytes changed.
+
+[Hub PR #576](https://github.com/NikolasP98/minion_hub/pull/576) removes the older
+signing pipeline, secret references and GPG script/test, permits unsigned
+assembly, and updates the release guide. Seven contract tests, actionlint and
+Bash syntax checks pass. Its merge is a separate owner-controlled action; the
+published downloads are available immediately and do not depend on that merge.
+The release notes disclose unsigned/unnotarized OS warnings and outstanding
+installed-runtime checks rather than claiming full OS qualification.

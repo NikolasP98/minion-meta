@@ -30,47 +30,23 @@ on `feat/app-backlog`. Merge and deployment remain owner-gated.
 
 ## Release qualification
 
-The owner selected Tauri on 2026-10-20. The candidate builds a native Linux
-executable and passes Rust deep-link tests. Installed OS-webview provider login and native HTML5 file-drop delivery,
-code signing and installer distribution have not been exercised.
-`TODO(handoff)` at the native navigation policy in `src-tauri/src/lib.rs` tracks
-the installed-login and file-drop checks before distributing installers.
+The owner selected Tauri on 2026-10-20. Native Rust tests and installer builds
+pass on Linux x64, Windows x64 and macOS Apple Silicon/Intel. The owner then
+revoked the signed-installer requirement and explicitly requested immediate
+unsigned downloads. Signing is not a current prerequisite.
 
+The first [unsigned preview](https://github.com/NikolasP98/minion_hub/releases/tag/desktop-v0.0.1)
+is public with all five installers, checksums and exact CI/source provenance.
+The build's full Git tree matches approved merge `26e82cfc`; every uploaded asset
+digest matched before publication, and the public checksum download was checked.
+[Hub PR #576](https://github.com/NikolasP98/minion_hub/pull/576) removes signing
+branches, credentials and the signing environment from future release workflows.
 
-## Signed GitHub release preparation
+Installed OS-webview provider sign-in, restart persistence, native controls,
+deep links and file-drop delivery remain runtime qualification work. The source
+`TODO(handoff)` at native navigation and the release receipt track those gaps.
+They are disclosed preview limitations, not requirements to obtain signing keys.
 
-The owner requested installation links on the Hub repository's Releases page
-and required signed installers on 2026-10-20. The candidate now has a
-`desktop-release.yml` workflow that runs only from `master` and assembles a draft
-`desktop-vX.Y.Z` release. It collects Linux x64 DEB/AppImage, Windows x64 NSIS,
-and macOS Apple Silicon/Intel DMG installers, source identity and checksums.
-The draft's notes contain direct download links. Publication remains a separate
-owner action; generated web changelog tags remain under `hub-v*`.
-
-Signing is mandatory: Apple Developer ID plus notarization/stapled tickets,
-trusted timestamped Windows Authenticode signatures on the app and installer,
-and detached OpenPGP signatures on Linux installers/checksums. Missing signing
-credentials or failed verification prevents draft assembly. Pull-request builds
-are labeled unsigned Actions qualification artifacts and cannot enter releases.
-
-Open release gates: configure the protected `desktop-signing` environment and
-its Apple/Azure/OpenPGP credentials using `src-tauri/README.md`; qualify the signed
-builds, installed provider login/restart persistence, native controls, deep links
-and HTML5 file drops on each OS; deploy the matching hosted titlebar code with
-source-identity evidence; obtain independent PR review and owner approval before
-merge/publication. Repository secrets inspected before preparation contained no
-signing credentials. No private keys were created or requested in chat.
-The exact workflow signing step has `TODO(handoff)` pointing here. Linux signing
-is tested with a temporary fixture key; this does not qualify real release keys
-or Apple/Windows signing. Cross-platform Rust tests and all five installer packaging checks passed on
-`991b029e` in run 39531728582; these unsigned qualification artifacts are not
-signed release evidence.
-
-Linux archive inspection found the bundler's launcher omitted the URI argument
-although its MIME handler was registered. The candidate now supplies a desktop
-template with `%u` and checks the packaged DEB launcher in both Linux workflows.
-The check failed on the previous archive and passed on a rebuilt local debug
-archive. AppImage desktop integration and installed deep-link delivery remain
-part of OS qualification; an unintegrated portable image does not register an
-OS handler merely by existing on disk. The same pinned bundler reuses the Debian
-desktop template for AppImage packaging.
+Linux archive inspection found and corrected an omitted URI argument in the
+bundler's desktop entry. Its template now passes `%u`, checked against the actual
+DEB in CI. AppImage OS protocol registration requires desktop integration.
