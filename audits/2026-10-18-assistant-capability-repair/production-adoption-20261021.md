@@ -197,3 +197,8 @@ Gateway #348 passed all applicable CI checks in `39682003226`; root independentl
 ## Fresh complete qualification after the reviewed aggregate correction
 
 Integrated #342 source `5d72bb8a404bd2bf82487a07279464f87585544e`, tree `4fd43a7db99192b90f594941d24c5c098b5085fd`, passed 46 helper contracts, 135 unit assertions plus the separate one-case Teams extension suite, and full repository check with zero errors, 57 existing warnings and both generators. The four reviewed test-file delta is unchanged; all workflow/CI infrastructure matches DEV `f95ef46b`. The exact clean source was pushed for fresh CI [39682653940](https://github.com/NikolasP98/minion-ai/actions/runs/39682653940), attempt 1, now queued. All native/fixed-ten/full shard and required aggregate gates must pass, followed by final integrated DEV qualification. Older failed runs remain failed. No production mutation occurred.
+
+
+## Read-only reload preflight while fresh qualification runs
+
+FACES remains on the prior immutable image, container `98139d0bb172`, with the old callback ID. The live process has only the expected state-directory override, no explicit config path override, and configuration enables default hybrid/300 ms reload while external restart is disabled. The canonical root-owned controller and lock are present, and installed controller SHA-256 exactly matches reviewed source. Stop-first/parallelism-one service update policy is retained. The expected CLI entry and personal-agent session store exist; no session contents or runtime tool execution were requested. Receipt: `faces-reload-readonly-preflight-20261021T2158Z.json`. These are preparation facts requiring a fresh post-deployment check, not proof of configuration repair. No production mutation occurred.
