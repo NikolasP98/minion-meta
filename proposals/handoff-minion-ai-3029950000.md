@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-ai-3029950000
 title: Handoff marker — scripts/ci/tq016-windows-qualification.mjs (minion-ai)
-status: draft
+status: review
+duplicate_candidate: 2026-10-09-windows-release-qualification
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-ai]

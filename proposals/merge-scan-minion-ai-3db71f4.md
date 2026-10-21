@@ -1,7 +1,8 @@
 ---
 id: merge-scan-minion-ai-3db71f4
 title: Merge-scan deficiencies — minion-ai @ 3db71f4
-status: draft
+status: review
+duplicate_candidate: 2026-10-17-agent-dynamic-tools
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-ai]
