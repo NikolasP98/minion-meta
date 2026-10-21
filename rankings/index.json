@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T19:26:03.942Z",
+	"generatedAt": "2026-10-21T19:55:54.807Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -29662,38 +29662,6 @@
 			"scoredAt": "2026-10-16T18:40:05.461Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/fb9a03f06c7dae71667f7ede6a8a265bc5b394b2",
-			"sourceUpdatedAt": "2026-10-21T08:36:22Z",
-			"sourceFingerprint": "8721998c5c021e02d17e380356e6ab669e44068876afac9754da659287737267",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged CI fix commit surfaced as a deploy-health candidate with no outstanding action described.",
-			"evidence": [
-				"Merge pull request #345 fix(ci): contain Windows qualification processes",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T19:26:03.802Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34236,17 +34204,18 @@
 				"specification": 5,
 				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Automated monitor intake describes a single transient exit-126/turns=0 provider launch fault with no recurrence evidence, so no action is currently warranted beyond passive tracking.",
+			"rationale": "Automated monitor intake describes a transient exit-126/turns=0 provider-launch fault with the actual reconcile work completing successfully, so no real task failure remains to execute.",
 			"evidence": [
-				"exit 126, turns=0, permission_denials=0",
-				"reconcile script itself completed normally (push succeeded, index written)"
+				"reconcile script itself completed normally: ... git push of dev succeeded",
+				"agent invocation (provider=claude), which exited 126 with turns=0 and permission_denials=0",
+				"Recommendation for a human: safe to retry the run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T19:51:29.572Z"
+			"scoredAt": "2026-10-21T19:55:54.622Z"
 		},
 		{
 			"key": "issue:minion-meta#586",
