@@ -57,3 +57,18 @@ Using that returned, independently matched session key, POST to the running Gate
 No callback server-id header, agentId/orgId override, fabricated browser principal, model call or message send. HTTP validates Gateway credentials and derives agent/policies from the key (`src/gateway/tools-invoke-http.ts:147,198`); it does not itself validate persisted-session ownership. Tool construction refreshes the Hub catalog and appends its tools (`src/agents/minion-tools.ts:434`), then HTTP applies existing tool policies/deny rules (`tools-invoke-http.ts:255`). The model JIT shortlist is not used here; no load_tools call is required. Do not widen policies if unavailable.
 
 The catalog and query use getHubRest(), including its current in-memory serverId (`src/agents/tools/hub/hub-common.ts:89,104`), and the tool rejects a connection change between discovery and execution (`src/agents/tool-search/hub-query-tools.ts:264`). Validate nested tool result, organization, catalog data and source links; HTTP200 alone is insufficient. A 404 is ambiguous (catalog/assignment/policy/schema/connection), not proof of stale state. Tool construction/tracking may update local caches/storage; this is a business-data read, not a zero-internal-write guarantee. Successful operator probing does not replace the owner's authenticated chat acceptance.
+
+## Supported local session selection alternative
+
+If truthful operator RPC lacks read scopes without an existing paired device,
+do not enroll a device or change client identity to obtain them. The supported
+local CLI can read the independently verified existing personal-agent store:
+`node <installed minion.mjs> sessions --json --store <existing store path>`.
+At candidate `ab18426b`, there is no `--agent` option
+(`src/cli/program/register.status-health-sessions.ts:114` and
+`src/cli/commands/sessions.ts:175`). The prepared private probe requires exactly
+one returned canonical direct session for the verified personal agent and fails
+closed on missing or ambiguous context. It does not create a session, choose the
+newest one or construct a key. Missing optional runtime proof does not expand
+authority or add a release-approval gate; retain lifecycle/backend evidence and
+the pending owner chat check as distinct outcomes.

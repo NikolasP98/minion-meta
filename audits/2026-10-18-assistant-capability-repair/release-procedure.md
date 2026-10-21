@@ -79,8 +79,9 @@ Follow [runtime reload verification](runtime-reload-verification.md) for the
 effective config path, source-pinned restart markers, canonical controller lock
 and conditional FACES-only restart fallback. `tools.reload` alone does not
 replace the in-memory Hub REST client. Select an existing persisted personal
-agent session through the supported `sessions.list` RPC before any bounded
-Gateway `/tools/invoke` check; never construct a session key. Successful operator
+agent session through the supported `sessions.list` RPC or the independently
+verified existing store via the supported CLI before any bounded Gateway
+`/tools/invoke` check; never construct a session key. Successful operator
 execution is separate from the owner's authenticated Hub chat acceptance.
 
 ## Assignment and runtime proof
