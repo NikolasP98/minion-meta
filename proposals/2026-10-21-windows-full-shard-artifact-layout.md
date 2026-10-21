@@ -32,3 +32,7 @@ This corrects the artifact-consumer implementation of the existing two-pass-appr
 ## Prepared correction
 
 Gateway [#347](https://github.com/NikolasP98/minion-ai/pull/347), head `7342e171e63ea6a2f5902cfb7f7c9c5e996d90d9`, tree `8fadca6f7edae10aafb2784a4abb4b436cae2f95`, changes exactly the verifier and its tests. Independent Standards and Spec reviews passed. Local verification passed 43 helper contracts and 69 workflow/diagnostic assertions; full repository check passed with zero errors, 57 existing warnings and both generators. Native PR CI remains pending.
+
+## Integration proof
+
+CI `39675104942` passed all applicable checks, including 17 real Windows contracts and required Linux artifact verification. Root independently reverified downloaded receipt `12382285767`. Normal authorized integration merged #347 at `8ca6fd7f4710acb18faddb3f76ae00594ce6d451`, tree `8fadca6f7edae10aafb2784a4abb4b436cae2f95`, identical to reviewed source. Fresh #342 product qualification and final DEV qualification remain pending; this proposal stays open until those checks exercise the corrected aggregate path end to end.
