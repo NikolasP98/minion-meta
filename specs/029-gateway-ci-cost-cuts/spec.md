@@ -55,7 +55,8 @@ Root causes:
 
 ## Amendment 2 (owner, 2026-10-21): lane flags
 - **FR-005**: CI lanes toggle via repository variables, without a commit: `CI_MACOS` (default off, replaces the hard-coded pause), `CI_ANDROID`, `CI_PLATFORM_AUDIT`, and `CI_UPSTREAM_MONITOR` (default on, `off` skips). The flag list lives at the top of `ci.yml`. Windows is excluded because its aggregators verify receipts; see the follow-up in `proposals/2026-10-21-gateway-macos-ci-pause.md`.
-- Test: `gates lanes on repository-variable flags`.
+- **FR-006 (owner, 2026-10-21: "gate all of them", "windows should also be disabled")**: `CI_WINDOWS` (default **off**) gates all Windows jobs and both of their gates. `CI_DOCKER_RELEASE` and `CI_NPM_PUBLISH` default on.
+- Tests: `gates lanes on repository-variable flags` and `skips every Windows lane and its gates unless CI_WINDOWS is on`.
 
 ## Requirements
 - **FR-001**: `macos` job condition = not docs-only AND `run_macos == 'true'`, regardless of event.

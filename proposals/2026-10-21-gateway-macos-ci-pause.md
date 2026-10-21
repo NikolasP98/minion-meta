@@ -1,6 +1,6 @@
 ---
 id: 2026-10-21-gateway-macos-ci-pause
-title: Resume the gateway macOS CI lane when Mac releases restart
+title: Resume the gateway macOS and Windows CI lanes
 status: draft
 created: 2026-10-21
 updated: 2026-10-21
@@ -15,6 +15,6 @@ repos: [minion-ai]
 
 **Risk while paused**: Swift and macOS-only regressions accumulate silently. The first resumed run may be red.
 
-## Follow-up: Windows lane flag (not built)
+## Windows: also paused (owner, 2026-10-21)
 
-The flag system (minion-ai #349) covers `CI_MACOS`, `CI_ANDROID`, `CI_PLATFORM_AUDIT`, and `CI_UPSTREAM_MONITOR`. Windows (~17% of October spend) is not flaggable. `windows-full-required` re-verifies the full Windows shards on DEV, and `linux-required` re-verifies the `windows-process-helper-contract` receipt. Skipping either Windows job turns those gates red. A `CI_WINDOWS` flag needs both aggregators to accept `skipped` when the flag is off. That is a TQ-016 qualification-policy change, so it gets an owner decision first.
+`CI_WINDOWS` defaults off (minion-ai #349). All five Windows jobs skip, including the `windows-full-required` gate. `linux-required` treats the native process-helper contract as not admitted while the flag is off. **Risk while paused**: nothing qualifies Windows compatibility (TQ-016) or the Windows process-helper contract. Resume with `gh variable set CI_WINDOWS -R NikolasP98/minion-ai --body on`. The gates then demand receipts again, so the first run may be red.
