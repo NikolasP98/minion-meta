@@ -8,6 +8,9 @@ p=pathlib.Path(__file__).parent
 app=pathlib.Path('/home/nikolas/AppImages/minion_hub.appimage')
 launcher=pathlib.Path('/home/nikolas/.local/share/applications/minion_hub.desktop')
 profile=pathlib.Path('/home/nikolas/.local/share/app.minionhub.desktop')
+# TODO(handoff): Observe the six-hour-plus-jitter background check in a long
+# running installed session; this four-minute observer covers startup/menu only.
+# Tracked in proposals/2026-10-21-hub-desktop-updates.md, Installed Linux result.
 end=time.monotonic()+240
 last=None
 with (p/'runtime-events.jsonl').open('a') as f:

@@ -109,3 +109,17 @@ manager boundary are explicit. Pass 2: ten native tests and eleven release contr
 Paid OS publisher signing, notarization, binary delta patches, app-store delivery,
 mobile shells, application/database migrations and automatic restart of an active
 editing session are outside this change. Hosted web deployments remain independent.
+
+## Live Linux qualification update
+
+The owner explicitly requested installed automatic-update testing after
+bootstrapping 0.0.2. The proposal records a bounded Linux-only feed activation
+exception to the original all-target preactivation gate. Installed 0.0.2 → 0.0.3
+download, integrity verification, AppImage replacement and restart passed.
+Native available/current notices and Continue were exercised. Full receipts and
+real native screenshots are in
+`specs/evidence/hub-desktop-updates-2026-10-21/README.md`.
+Windows/macOS native upgrade qualification, the six-hour timer observation and
+the host's AT-SPI inspection abort remain explicitly unqualified. The source
+installation TODO and proposal continue to track the operating-system gap; the
+qualification observer has the matching native-accessibility handoff comment.

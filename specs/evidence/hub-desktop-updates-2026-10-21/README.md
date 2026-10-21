@@ -109,3 +109,43 @@ qualification is pending. Users install this compiled package once to replace
 0.0.1. Publication proves download availability and package integrity, not native
 old-to-new replacement or relaunch. Those remain tracked in the proposal and
 native installation site's `TODO(handoff)`.
+
+## Installed Linux update, owner-requested qualification
+
+The owner requested a new release after installing 0.0.2. This bounded live test
+used [0.0.3](https://github.com/NikolasP98/minion_hub/releases/tag/desktop-v0.0.3),
+built from the same merged source by
+[run 39565407981](https://github.com/NikolasP98/minion_hub/actions/runs/39565407981).
+[Release receipt](release-0.0.3.json) records all 15 anonymously downloaded asset
+hashes, five installers and four verified updater signatures. The mutable feed
+advertises only Linux x64 AppImage. Windows/macOS installed upgrades remain open.
+
+These captures are from the installed native WebKitGTK updater, with real IPC
+and the public GitHub feed; they replace neither the earlier synthetic fixtures
+nor the separate operating-system qualification gaps:
+
+- [Available notice in the running 0.0.2 client](native-available-0.0.3.png).
+- [Automatic startup download at 1 percent](native-startup-1pct.png).
+- [Automatic startup download at 65 percent](native-startup-65pct.png).
+- [Updated client reports the latest version](native-current-0.0.3.png).
+
+[Installed receipt](installed-linux-update.json) records the before/after hashes
+and process identities. Continue left 0.0.2 unchanged; subsequent startup
+automatically downloaded, verified and installed 0.0.3. Its process restarted
+into authenticated Hub navigation, preserving the launcher, mode 0755, profile
+directory and URI handler. The operator did not copy a new binary into the
+installation. No hosted application screenshots or profile contents are committed.
+
+The AppImage aborted when inspected through AT-SPI on this host (libdbus signature
+assertion). The download/install/restart test therefore used a transient
+`NO_AT_BRIDGE=1` environment. It did not modify the permanent launcher or system
+accessibility. After qualification the updated client was relaunched without
+that variable and remained open; assistive-technology compatibility is still
+unqualified and tracked in the proposal and observer's `TODO(handoff)`.
+
+The six-hour background timer was not waited out. The active-session notice
+was triggered from the native Check for updates menu.
+[Live feed checks](live-feed-checks.json) prove HTTP 200 with 744 bytes and a
+conditional repeat returning HTTP 304 with zero body bytes. These are operator
+HTTP checks, not captured client traffic. The installed client separately proved
+that its real feed, download and installation path works.

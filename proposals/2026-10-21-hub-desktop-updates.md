@@ -116,3 +116,30 @@ cannot qualify assistive-technology compatibility. Reproduce and repair the
 AppImage/host accessibility interaction, then repeat native tree assertions on
 the regular launcher. The qualification observer contains the matching
 `TODO(handoff)` at the missing native-accessibility assertion site.
+
+## Installed Linux result
+
+The controlled live test passed for 0.0.2 → 0.0.3 AppImage. Release build
+[39565407981](https://github.com/NikolasP98/minion_hub/actions/runs/39565407981)
+passed all four native test/build jobs and release assembly. All 15 public assets
+matched GitHub digests; five installers and four updater signatures verified
+against the permanent trust root. The channel advertises Linux x64 only.
+
+The running 0.0.2 client showed an available-version notice from its native menu.
+Continue returned to Hub with the old hash unchanged. At the next startup, the
+client downloaded and verified the package, replaced the existing AppImage and
+restarted itself. The installed hash matches the verified 0.0.3 release exactly.
+No operator copied a new executable to the installed path. The launcher, file
+permissions, profile directory and URI handler survived. Authenticated Hub
+navigation returned without a sign-in form. A subsequent native check showed
+that the installed version is current.
+
+The initial automatic update ran with the transient accessibility bypass noted
+above. Afterward, 0.0.3 was relaunched without `NO_AT_BRIDGE` and remained open in
+its normal environment; no permanent launcher or accessibility setting changed.
+The six-hour timer was not waited out: the active check used the native menu.
+Windows and both macOS upgrade paths and native accessibility remain open.
+[Installed evidence](../specs/evidence/hub-desktop-updates-2026-10-21/installed-linux-update.json)
+and four real native-window captures are in the evidence directory.
+The public feed returned 744 bytes; a conditional repeat returned HTTP 304 and
+zero body bytes.
