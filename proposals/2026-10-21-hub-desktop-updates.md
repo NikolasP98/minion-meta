@@ -46,8 +46,11 @@ installed old-to-new update proof exist.
 
 [Hub PR #577](https://github.com/NikolasP98/minion_hub/pull/577) contains startup
 installation, active checks and notices, a static GitHub feed, integrity-key
-configuration, local-only updater IPC and the release workflows. It depends on
-[Hub PR #576](https://github.com/NikolasP98/minion_hub/pull/576).
+configuration, local-only updater IPC and the release workflows. It merged as
+`b7990051`; [Hub PR #576](https://github.com/NikolasP98/minion_hub/pull/576)
+was closed as superseded because #577 already included its unsigned-installer
+changes. The merged tree matches the qualified candidate exactly. Post-merge
+[Hub CI](https://github.com/NikolasP98/minion_hub/actions/runs/39555999713) passes.
 
 Ten Rust tests pass on all four targets and eleven release contracts pass.
 The full Hub CI run also passes. Downloaded CI candidates have five verified
@@ -56,6 +59,23 @@ is in `specs/evidence/hub-desktop-updates-2026-10-21/ci-artifacts.json`.
 Source/CI qualification
 is separate from installed old-to-new package replacement and relaunch on Linux,
 Windows and both macOS targets. That installed proof remains required before the
-first updater publication. The exact native installation site carries
-`TODO(handoff)` with this proposal's ID. No new desktop release is published by
-this implementation task. Version 0.0.1 remains the public bootstrap limitation.
+first automatic update-channel activation. The exact native installation site
+carries `TODO(handoff)` with this proposal's ID.
+
+## Bootstrap download requested after merge
+
+The owner requested the new version's download after merging #577. Version 0.0.2
+was built from `b7990051` by
+[the desktop release workflow](https://github.com/NikolasP98/minion_hub/actions/runs/39560245259).
+The complete draft was downloaded and verified before publication. The unsigned
+[0.0.2 bootstrap preview](https://github.com/NikolasP98/minion_hub/releases/tag/desktop-v0.0.2)
+is public for manual installation and installed qualification. All 15 public
+assets return HTTP 200 without authentication and match their recorded digests;
+five installers and four updater payload signatures/signed versions verify
+against the production public key. Source is exactly
+`b7990051ac54d88d6c55c7b3c8a76904fed040bc`. Evidence is in
+`specs/evidence/hub-desktop-updates-2026-10-21/bootstrap-release.json`.
+
+This publication does not advance `desktop-updates/latest.json` or advertise
+automatic updates as deployed. The public notes state that the channel remains
+inactive. Keep it inactive until installed replacement/relaunch proof is complete.

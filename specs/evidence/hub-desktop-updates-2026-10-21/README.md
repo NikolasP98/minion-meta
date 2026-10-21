@@ -82,5 +82,30 @@ The receipts identify GitHub's PR merge commit
 tree. That identity was checked through the GitHub Git API and local Git.
 
 Installed old-to-new replacement and relaunch remain unproven on all four OS
-targets and are explicitly tracked before first updater publication. No new
-desktop release or `desktop-updates` feed was published by this task.
+targets and are explicitly tracked before first automatic update-channel
+activation. During implementation and CI qualification, no desktop release or
+`desktop-updates` feed was published.
+
+## Bootstrap preview after owner merge
+
+After merging Hub #577, the owner requested the new version's download.
+[Desktop release run 39560245259](https://github.com/NikolasP98/minion_hub/actions/runs/39560245259)
+built the merged source `b7990051ac54d88d6c55c7b3c8a76904fed040bc` with the
+permanent updater trust root. All four platform test/build jobs and complete
+release assembly passed. The draft was downloaded and checked with
+`scripts/desktop/verify-release.mjs`, including exact source identity, all hashes,
+five installers and four signed updater targets. GitHub's asset digests also
+matched every local file.
+
+The [0.0.2 unsigned bootstrap preview](https://github.com/NikolasP98/minion_hub/releases/tag/desktop-v0.0.2)
+is now public. All 15 assets were downloaded without authentication; each returned
+HTTP 200 and its streamed SHA-256 matched both the checked local file and GitHub's
+asset digest. [Publication receipt](bootstrap-release.json) records those checks.
+No installer or updater bytes changed between verification and publication.
+
+Only the versioned bootstrap preview was published. The automatic update channel
+was not created or advanced; release notes state that installed update/relaunch
+qualification is pending. Users install this compiled package once to replace
+0.0.1. Publication proves download availability and package integrity, not native
+old-to-new replacement or relaunch. Those remain tracked in the proposal and
+native installation site's `TODO(handoff)`.

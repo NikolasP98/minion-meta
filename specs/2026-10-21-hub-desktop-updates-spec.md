@@ -75,6 +75,13 @@ although the supported distribution targets are desktop only.
 | Optimization   | Desktop-only Rust library format                                          | Before/after outputs and build measurement, no invented runtime improvement                                                    |
 | Deployment     | First updater installer and subsequent update                             | Owner-approved release plus installed old-to-new proof; source/CI alone do not prove this                                      |
 
+The owner requested the new bootstrap download after merging Hub #577. A
+versioned unsigned preview may be published for manual installation and installed
+qualification after its release receipts verify. The automatic update channel
+must remain inactive until installed old-to-new replacement/relaunch is proven.
+Publishing that bootstrap download alone does not satisfy the Deployment row or
+establish automatic update runtime proof.
+
 ## Design and sources
 
 GitHub Releases is the existing distribution service. Its documented release
