@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-1049544011
 title: Handoff marker — src/agents/tool-governance/tool-mutation.ts (minion-ai)
-status: draft
+status: review
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-18-assistant-capability-failure-recovery
 ---
 
 # Handoff marker — src/agents/tool-governance/tool-mutation.ts
@@ -28,3 +29,12 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-ai@DEV src/agents/tool-governance/tool-mutation.ts:144` — Target/display fingerprints can collide for distinct payloads
   https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/tool-governance/tool-mutation.ts#L144
+
+## Reconciliation note (2026-10-21)
+
+`2026-10-18-assistant-capability-failure-recovery` (status: in-spec) already documents this
+exact finding verbatim — "tool-mutation.ts fingerprints target fields and display metadata
+rather than the complete request payload... The exact implementation site carries a matching
+TODO(handoff)" — and names it as retained follow-up work. This marker is very likely tracking
+the same open end rather than a new one; left as `review` for a human to confirm and close/merge
+since the candidate proposal is in-spec and out of scope for automated merge here.
