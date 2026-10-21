@@ -3,7 +3,7 @@ id: 2026-10-21-windows-qualification-kernel-containment-spec
 title: Kernel-contained Windows qualification with native infrastructure proof
 stage: spec
 status: review
-pass: 1
+pass: 2
 verdict: pending
 created: 2026-10-21
 updated: 2026-10-21
@@ -36,15 +36,15 @@ Preserve ten fresh invocations, exactly 74 passed assertions each, no skipped/fa
 ### A. Atomic containment and handle lifetime
 
 - Create one unnamed, non-inheritable job. Set `JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE`; leave both job breakaway flags disabled. Keep the supervising PowerShell/.NET process outside the new job, while tolerating the runner's enclosing job hierarchy only when native APIs verify compatibility.
-- Create the root with `STARTUPINFOEX`, `PROC_THREAD_ATTRIBUTE_JOB_LIST` and `CREATE_SUSPENDED`. Do not create and separately assign a running process. Associate the new job during creation, verify the returned process handle belongs to the job, capture its birth from the handle, then resume its first thread. Fail before execution on unsupported creation attributes, bad limits, startup, assignment or membership uncertainty. No legacy PID-tree fallback.
-- The private job handle must never be inherited by test descendants. Closing its final supervisor handle is the crash cleanup fallback. Retain root/job handles until evidence and cleanup are complete; close all native handles and attribute-list allocations on every path.
+- Create the root with `STARTUPINFOEX`, `PROC_THREAD_ATTRIBUTE_JOB_LIST` and `CREATE_SUSPENDED`. Do not create and separately assign a running process. Associate the new job during creation, verify `IsProcessInJob(rootProcessHandle, privateJobHandle)` for the exact intended job, capture its birth from the handle, then resume its first thread. A NULL job argument merely detecting the runner's outer job is insufficient; never inherit the private job handle into a fixture. Fail before execution on unsupported creation attributes, bad limits, startup, assignment or membership uncertainty. No legacy PID-tree fallback.
+- The private job handle must never be inherited by test descendants. Closing its final supervisor handle is the crash cleanup fallback. Retain the job handle through outcome and cleanup. Capture root birth/exit evidence before releasing completed root/thread handles, then release those completed-process references before final emptiness accounting. Do not retain diagnostic child-process references across that final accounting query. Close all native handles and attribute-list allocations on every path.
 - Use exact argument encoding, explicit environment/current directory and controlled standard handles. Stream stdout/stderr directly to the ordinal log file; a descendant holding a pipe must not strand completion. Compile the checked-in C# library once per run to private scratch with PowerShell `Add-Type`; use no downloaded package, workspace install or elevation.
 
 ### B. Lifecycle outcomes
 
 - Query authoritative job accounting and complete membership lists. Handle list growth/retry within a fixed bound; an incomplete/error query fails. Completion-port notifications alone never prove emptiness. Numeric PIDs remain diagnostic identifiers, not termination authority.
-- After ordinary root completion, root exit 0 plus authoritative zero active job members is necessary for success. If any member survives root exit, record a leak and fail before cleanup. A nonzero root exit, a deadline or a leak remains failed after successful cleanup.
-- On deadline, leak, protocol failure or normal teardown, terminate only the job by its retained handle, then confirm authoritative emptiness within the existing cleanup reserve. Never reopen arbitrary host PIDs to terminate them. An unconfirmed cleanup remains failure. Supervisor death must close the only job handle and terminate its members.
+- After ordinary root completion, root exit 0 plus authoritative zero active job members is necessary for success. If any member survives root exit, record a leak and fail before cleanup. Use bounded re-query after releasing completed-process references so their accounting delay cannot deadlock zero proof; this is not a grace period that converts a live surviving descendant into success. A nonzero root exit, a deadline or a leak remains failed after successful cleanup.
+- On deadline, leak, protocol failure or normal teardown, terminate only the job by its retained handle, then confirm authoritative emptiness within the existing cleanup reserve. Never reopen arbitrary host PIDs to terminate them. An unconfirmed cleanup remains failure. Supervisor death must close the only job handle and terminate its members. The crash fixture retains separate process handles for the known members and waits for their termination; it must not retain another job handle, which would defeat kill-on-last-close. Release those fixture process references after confirming termination.
 - Use the same-boot monotonic deadline in the supervisor so a blocked Node coordinator cannot leave test work beyond the deadline. Native compilation/startup overhead counts against existing budgets. Missing boot/deadline evidence fails; no wall-clock or reduced-count fallback.
 
 ### C. Evidence protocol
@@ -85,7 +85,7 @@ Wire protected helper/fixture paths, the native infrastructure check and its req
 
 | Contract | Required executable proof |
 | --- | --- |
-| Containment before execution | Native first action checks membership; unsupported startup never produces its action marker |
+| Containment before execution | Supervisor verifies exact private-job membership while suspended and proves the first-action marker absent until resume; unsupported startup never produces the marker |
 | Descendants and parent exit | Real child/grandchild and detached fixture; membership persists after parent/root exit |
 | Leak failure and cleanup | Nonempty job at root exit fails even after handle-based cleanup proves zero |
 | Deadline and crash | Same-boot cutoff; hung child; killed supervisor; all job members terminate within reserve |
