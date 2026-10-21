@@ -92,7 +92,7 @@ Author spec review found and corrected a deep-link conflict: general navigation
 no longer rewrites module-root URLs; resumption belongs only to shell selectors.
 Compiled Rust and focused mounted/browser evidence are recorded in the Hub
 `docs/verification/2026-10-20-app-backlog/README.md`. The full-suite, build and gate receipts are recorded there. Authenticated
-CRM/POS route qualification and installed desktop provider login remain explicit
+CRM/POS route qualification and installed desktop provider login/file drops remain explicit
 release checks in their matching proposals and source TODO(handoff) comments.
 Independent PR review remains separate from these author reviews.
 
