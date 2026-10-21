@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-f25d9dc6080e
 title: "Post-merge finding — todo-handoff in src/server/services/personal-agent-binding.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-hub]
