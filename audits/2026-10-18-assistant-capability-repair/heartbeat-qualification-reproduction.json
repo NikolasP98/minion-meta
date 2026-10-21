@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "baseSha": "71e8b2dcb748bce3970c78c5b3f6cbb4f71937ea",
+  "sourcePath": "src/infra/heartbeat-runner.respects-ackmaxchars-heartbeat-acks.test.ts",
+  "frozenSourceSha256": "014bca650a8ef2a0e1ca00ce2ed4cb217b7e5963580dc32bf3ac5952f5f064b5",
+  "intermediateSnapshotProvenance": "Reconstructed from exact git base and recorded sequential edit commands after execution; no execution-time hashes were captured for intermediate test/helper sources. Final frozen source copied and hashed directly.",
+  "snapshotSha256": {
+    "before.test.ts": "351ddee924952cdd12deb94142cc829db118d22784038612957b6801a489ab88",
+    "drain-only.test.ts": "78fc6b51cb1118160351655126687a1b5e67efc236ffe45fce367cc9873b8bb8",
+    "drain-explicit-bound.test.ts": "20bf1a84c7f36c6057760ef279064bbe6086bc175183d7047156c95351f0ac20",
+    "after.test.ts": "2444a2b7887eb8377e14c1d457f7a180fd6db9f215d7964e7b10038e0fa84fc7",
+    "fs-probe-v1.mjs": "3671cc84e7459d65fe5270867fc7414492b9289985704fbb8400e27b71c13703",
+    "fs-probe-v2.mjs": "e0944ecb94a3fa912f97f9b4e9855ba82fbbf70e799f25940013c7f4ff52c00c",
+    "final-frozen.test.ts": "014bca650a8ef2a0e1ca00ce2ed4cb217b7e5963580dc32bf3ac5952f5f064b5"
+  },
+  "logs": {
+    "heartbeat-qualification-baseline.log": {
+      "sha256": "b052fd9f6cbf4e80c01453821dea7da7a0db58cfc4bb6738aedb20b20a14f6b6",
+      "bytes": 2334
+    },
+    "heartbeat-fs-probe.log": {
+      "sha256": "8f8a1138376f9f8ad1fdfcba68ad16856cf2de6c9418388fa8996c5113c9df3a",
+      "bytes": 2293
+    },
+    "heartbeat-fs-probe-incontext.log": {
+      "sha256": "c664e8926726e8f3b8e87fe2a92f5354d3abd13fbe636da6513e4e28959292f8",
+      "bytes": 2293
+    },
+    "heartbeat-fs-delay-before.log": {
+      "sha256": "a6bdbaa38f18296ebfb69320a32501b8bfae0907311385b94e558edeef137748",
+      "bytes": 4094
+    },
+    "heartbeat-fs-delay-drain-only.log": {
+      "sha256": "9784acf6e5e9e967697131258f38b2a2e3ccd8587fd1a20ba1ed15f5107bcd92",
+      "bytes": 3241
+    },
+    "heartbeat-fs-delay-drain-bound.log": {
+      "sha256": "912f08e6ac0228d1c673b01594ec3f9067e4d131a92090f4323c3d4e12aac7f6",
+      "bytes": 3241
+    },
+    "heartbeat-fs-delay-drain-explicit-bound.log": {
+      "sha256": "e0917d92a2691e709ef0f26f2f91332af61127392bf47048e9e4b77175db93aa",
+      "bytes": 5059
+    },
+    "heartbeat-fs-delay-after.log": {
+      "sha256": "10fe93563ba90a47920258ab9659da281b5a5f4007a2369780ec98ea994f5a07",
+      "bytes": 2306
+    },
+    "heartbeat-qualification-after.log": {
+      "sha256": "4d68453b10949cd54f4b3114fd527d6e195850ab92fe34e5aa67ec196a43098c",
+      "bytes": 2332
+    },
+    "heartbeat-qualification-lint.log": {
+      "sha256": "3a6f852eab55a3bc8011b905e9d45b2e5ad0fce3855ba0368be960d214de151e",
+      "bytes": 91
+    }
+  },
+  "cases": {
+    "before": {
+      "snapshot": "before.test.ts",
+      "helper": "fs-probe-v1.mjs",
+      "syncDelayMs": 460,
+      "syncLimit": null,
+      "exitCode": 1,
+      "result": "first case timeout15000; successor expected1send got0; 2failed/10filtered"
+    },
+    "drain-only": {
+      "snapshot": "drain-only.test.ts",
+      "helper": "fs-probe-v2.mjs",
+      "syncDelayMs": 460,
+      "syncLimit": 34,
+      "exitCode": 1,
+      "result": "first case retains timeout15000; successor passes; 1failed/1passed/10filtered"
+    },
+    "drain-explicit-bound": {
+      "snapshot": "drain-explicit-bound.test.ts",
+      "helper": "fs-probe-v2.mjs",
+      "syncDelayMs": 460,
+      "syncLimit": 34,
+      "hookBudgetsMs": 100,
+      "exitCode": 1,
+      "result": "first testtimeout15000 plus onTestFinished timeout100; successor beforeEach timeout100 before runtime reset; 2failed/10filtered"
+    },
+    "after": {
+      "snapshot": "after.test.ts",
+      "helper": "fs-probe-v2.mjs",
+      "syncDelayMs": 460,
+      "syncLimit": null,
+      "exitCode": 0,
+      "result": "2passed/10filtered; first15790ms, successor15866ms"
+    },
+    "normal": {
+      "snapshot": "final-frozen.test.ts",
+      "helper": null,
+      "exitCode": 0,
+      "result": "12passed/0skipped;207ms testtime"
+    },
+    "lint": {
+      "exitCode": 0,
+      "result": "0warnings/0errors"
+    }
+  },
+  "notes": [
+    "Ten filtered tests in focused diagnostics are a selection, not source skips; normal file executes all12.",
+    "Earlier CLI --hookTimeout=100 diagnostic retained project hook defaults; it is not evidence of shortened hook enforcement. Only explicit-bound snapshot proves that behavior.",
+    "Native per-operation filesystem latency was not measured; delayed-fsync reproduction establishes a sufficient failure mechanism, not exclusive native causality.",
+    "No frozen source modifications or new test runs were made while preparing this receipt."
+  ],
+  "reconstructedAfterFormattedMatchesFrozen": true,
+  "archiveFile": "heartbeat-qualification-repro-20261021.tar.gz",
+  "archiveSha256": "359e3aa844a6ea2858192934619a74105b1b546b90b4ec47297baf3cb0e1376d",
+  "archiveMembers": 20,
+  "integratedSourceSha": "ab18426b3fc682d6c2c1b37c75411510d8bd81d3",
+  "integratedTree": "3fe16765343ac2e09f35a402d8935ac35e2bb22d",
+  "integratedBase": "8ca6fd7f4710acb18faddb3f76ae00594ce6d451",
+  "integratedLocalProof": {
+    "portableHelpers": 43,
+    "unitAssertions": 135,
+    "extensionsAssertions": 1,
+    "fullCheckExitCode": 0,
+    "warnings": 57,
+    "independentStandards": "PASS",
+    "independentSpec": "PASS"
+  },
+  "freshNativeQualification": "pending",
+  "productionMutation": false
+}

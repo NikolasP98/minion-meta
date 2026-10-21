@@ -28,3 +28,7 @@ Prepare an ACK-test-file-only wrapper that registers Vitest onTestFinished clean
 ## Lifecycle and release boundary
 
 This is a bounded extension of #342's observed test timing/cleanup hotfix, tracked alongside `2026-10-21-windows-release-qualification-timing`. It bypasses a new standalone spec while preserving the product and release contracts in `2026-10-18-assistant-capability-failure-recovery-spec.md` and the approved kernel qualification specification. The existing owner-authorized repair and conditional #342 merge remain applicable after complete checks. Source preparation and portable reproduction do not qualify native Windows, final integrated DEV, deployment or authenticated chat. No production mutation occurred.
+
+## Prepared and reviewed correction
+
+#342 source `ab18426b3fc682d6c2c1b37c75411510d8bd81d3`, tree `3fe16765343ac2e09f35a402d8935ac35e2bb22d`, includes the exact one-file heartbeat correction alongside its original three test fixes and merged artifact-path correction #347. Independent Standards and Spec reviews passed. Local 43 helper contracts, 136 assertions across the four affected suites and full repository check passed (zero errors, 57 existing warnings). Controlled delay/drain/hook-bound outcomes, complete original logs and explicitly reconstructed diagnostic snapshots are retained by `audits/2026-10-18-assistant-capability-repair/heartbeat-qualification-reproduction.json` and its checksum-bound archive. Fresh complete native Windows and final merged DEV qualification remain pending.
