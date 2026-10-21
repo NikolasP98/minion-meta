@@ -41,3 +41,21 @@ The existing public `desktop-v0.0.1/SHA256SUMS` release asset returned HTTP 200
 with 582 bytes and an ETag. Repeating its download with `If-None-Match` returned
 HTTP 304 with zero body bytes. This proves conditional delivery on the current
 release CDN; the new updater feed itself has not been published.
+
+## Publication dry run
+
+`publisher-dry-run.mjs` executes the Hub publisher with synthetic metadata, a
+synthetic token and an in-process HTTP stub. It performs no network requests or
+GitHub writes. Six scenarios passed: bootstrap channel creation, advancing an
+existing feed, rejecting a draft, rejecting a downgrade, repeating an identical
+feed without writes, and rejecting a missing public package before mutation.
+
+Run it against the candidate checkout:
+
+```sh
+node specs/evidence/hub-desktop-updates-2026-10-21/publisher-dry-run.mjs /path/to/minion_hub
+```
+
+The simulated mutation counts were 2 for bootstrap (create/upload), 2 for advance
+(delete/upload), and 0 for each remaining scenario. These are HTTP protocol and
+publication-order checks, not proof that a release has been published.
