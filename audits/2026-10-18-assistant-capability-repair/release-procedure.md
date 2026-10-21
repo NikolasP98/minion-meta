@@ -75,6 +75,14 @@ Record the exact command, backup identity, before/after non-secret field values
 and health receipt in the execution record. No restart has been performed by
 this prepared procedure.
 
+Follow [runtime reload verification](runtime-reload-verification.md) for the
+effective config path, source-pinned restart markers, canonical controller lock
+and conditional FACES-only restart fallback. `tools.reload` alone does not
+replace the in-memory Hub REST client. Select an existing persisted personal
+agent session through the supported `sessions.list` RPC before any bounded
+Gateway `/tools/invoke` check; never construct a session key. Successful operator
+execution is separate from the owner's authenticated Hub chat acceptance.
+
 ## Assignment and runtime proof
 
 Use the authenticated FACES owner's normal hosted ensure/completion path. The
