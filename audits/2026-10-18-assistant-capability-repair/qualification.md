@@ -104,7 +104,11 @@ Both report artifact digests were verified; the portable
 The dispatch security scan failed closed because this feature-branch event supplied
 no trusted BASE_SHA for commit-delta scanning. The normal PR security scan
 passed its actual PR diff. No security check was bypassed; test coverage and
-the overall dispatch conclusion must be reported separately.
+the overall dispatch conclusion must be reported separately. The completed
+dispatch failed solely at that security precheck. Windows lint and protocol
+passed; Windows smoke passed 509 tests (39 skipped) and diagnostics passed
+25 tests (1 skipped). These are smoke/diagnostic results, not the DEV-only
+full Windows release authority.
 
 Hub's pre-integration full run completed 890 files: 883 passed, 2 failed and
 5 skipped; 7,802 tests passed, 3 failed and 263 skipped. The failures were two
@@ -122,7 +126,14 @@ local check was stopped after hosted success and contributes no additional
 completion claim. The QA-stack job also passed. All 13 Hub PR checks, including the preview
 deployment, passed. Production adoption remains separate.
 
-The prior release's full Windows failures remain separate qualification debt.
+Full Windows qualification remains separate release debt. The latest unchanged
+DEV `5096950` run
+[39387743794](https://github.com/NikolasP98/minion-ai/actions/runs/39387743794)
+failed shard 2 in `src/infra/outbound/outbound.test.ts`: the synchronized
+real-process stale-lease reclaimer test exceeded 20 seconds. This observation
+supersedes the older failure list as the latest baseline result; it neither
+proves a product defect nor qualifies Windows for the new candidate. Full
+Windows authority runs on the exact merged DEV commit.
 One personal agent per profile still has one home-gateway binding. Mutation
 fingerprints still compare target/display metadata, which can collide for
 different same-length payloads; a matching TODO and proposal retain that gap.
