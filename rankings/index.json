@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T20:27:01.689Z",
+	"generatedAt": "2026-10-21T20:56:28.566Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -867,6 +867,39 @@
 			"scoredAt": "2026-10-19T03:27:16.894Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub stress-test defects — scheduling, stock, POS (3-agent QA stack pass)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-stress-test-defects-scheduling-stock-pos.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "8338aeb27dc121d062b6d0cf45528e6474a700c6457919f101062af86723a1fe",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple high-severity defects block core scheduling/POS flows with precise code-level root-cause pointers from live QA testing.",
+			"evidence": [
+				"org owners/admins get 403 creating a link because requireAdmin checks platform role not org role",
+				"drag-reschedule onto a conflict returns 409 with no toast or error shown to the user",
+				"anonymous public booking requests get 401 while authenticated ones get 404"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:56:28.400Z"
+		},
+		{
 			"key": "proposal:2026-10-13-gateway-swarm-blue-green-slots",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1032,39 +1065,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T21:28:38.145Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub stress-test defects — scheduling, stock, POS (3-agent QA stack pass)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-stress-test-defects-scheduling-stock-pos.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "8338aeb27dc121d062b6d0cf45528e6474a700c6457919f101062af86723a1fe",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Three-agent QA pass found high-severity defects including a non-functional public booking API and a silent-failure reschedule conflict, each with evidence and root-cause pointers.",
-			"evidence": [
-				"D2: drag-reschedule 409 conflict causes silent UI snap-back with no error shown",
-				"D3: org owners/admins get 403 creating scheduling links due to platform-role check instead of org-role check",
-				"D4: public booking API returns 401 for anonymous and 404 for authenticated, making anonymous booking impossible"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T20:51:37.696Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b8113b095cdf",
@@ -2928,41 +2928,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:27:07.333Z"
-		},
-		{
-			"key": "pr:minion (gateway)#342",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#342 test(agents): stabilize Windows release qualification timing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
-			"sourceUpdatedAt": "2026-10-21T20:20:55Z",
-			"sourceFingerprint": "9ca672f3908e422430f822e91fb2d94418467878a1257be178259c2480f5e294",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#339",
-				"proposal:2026-10-21-windows-qualification-admission-independence"
-			],
-			"rationale": "This bounded test-timing fix is the active blocker gating production promotion #339 and is mid-qualification with passing partial results.",
-			"evidence": [
-				"Fresh CI ... Native helper contract passed; fixed-ten qualification is running.",
-				"Full repository check passed: zero errors, 57 existing warnings."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -5518,6 +5483,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T03:55:43.101Z"
+		},
+		{
+			"key": "pr:minion (gateway)#342",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#342 test(agents): stabilize Windows release qualification timing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
+			"sourceUpdatedAt": "2026-10-21T20:34:26Z",
+			"sourceFingerprint": "d67f5d420445e16df0010eb05251de46460ecdf1edfd25ca91598b6120f27ad3",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#855"
+			],
+			"rationale": "Test-only Windows qualification fix has strong CI evidence and is the last gate before release promotion #339.",
+			"evidence": [
+				"Fresh CI 39669098214 passed native and fixed-ten lanes",
+				"Full repository check passed: zero errors",
+				"Remaining delta is exactly three reviewed test files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:56:28.400Z"
 		},
 		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
@@ -19597,15 +19597,14 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Automated merge-scan flags concrete unchecked-property-access risks with precise file:line locations that are small, bounded null-check fixes.",
+			"rationale": "Machine-identified unchecked-access risks across POS/scheduling/stock components are precisely localized and cheap to patch.",
 			"evidence": [
 				"SellableWizard.svelte:274 match.name.toLowerCase() assumes name is defined",
-				"BookingsView.svelte:357 match.name passed without null check despite comment noting API exposes display_name",
-				"candidates.map() accesses in two files lack null checks, producing 'undefined' in error messages"
+				"BookingsView.svelte:357 match.name passed without null check despite API exposing display_name"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T20:51:37.696Z"
+			"scoredAt": "2026-10-21T20:56:28.400Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-3c3dde2c9372",
@@ -27397,38 +27396,6 @@
 			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
-			"key": "run:minion (gateway)#39668833973",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39668833973",
-			"sourceUpdatedAt": "2026-10-21T20:20:30Z",
-			"sourceFingerprint": "d92efcbefd90d2499c319adf8cb1792110542bb00a9f12c09c0da12756df101f",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress CI run on DEV with no outcome yet, requiring only monitoring rather than a work decision.",
-			"evidence": [
-				"in_progress",
-				"push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T20:27:01.526Z"
-		},
-		{
 			"key": "issue:minion-meta#536",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29656,38 +29623,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/83c8f499674fe38be61ac9b03fa55c2253864900",
-			"sourceUpdatedAt": "2026-10-21T20:16:10Z",
-			"sourceFingerprint": "1aff350dac9c14fcbc3fc2ba25cf0c07891bc253426fc2d2f2d74d9fe2c5f060",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The referenced Windows CI containment fix (#346) is already merged, leaving no outstanding deployment action for this health entry.",
-			"evidence": [
-				"Merge pull request #346 from NikolasP98/fix/windows-job-containment",
-				"fix(ci): run Windows qualification alongside workflow tests"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -32559,6 +32494,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T00:26:34.061Z"
+		},
+		{
+			"key": "pr:minion-meta#855",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#855 docs(agents): retain Windows qualification and deployment evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/855",
+			"sourceUpdatedAt": "2026-10-21T20:30:32Z",
+			"sourceFingerprint": "a0b6cd7cccf5756cac9f28d1c7343796fef967b6d4d96aff20e012d67e26f633",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#342"
+			],
+			"rationale": "Pure evidence-retention documentation PR that changes no production state and adds no approval gate.",
+			"evidence": [
+				"No product source, production configuration, permissions or runtime state changed",
+				"adds no approval gate to the already-authorized release sequence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:56:28.400Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-personal-agent-entrypoint-test",
@@ -37448,6 +37417,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T03:06:20.457Z"
+		},
+		{
+			"key": "run:minion (gateway)#39668833973",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39668833973",
+			"sourceUpdatedAt": "2026-10-21T20:43:14Z",
+			"sourceFingerprint": "aa3a38ca8f29b51c40eac9004407aead8b5a0efa0f969963b6facb5fe8131f06",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run status is not an independently actionable goal item.",
+			"evidence": [
+				"status in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:56:28.400Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
