@@ -1,7 +1,8 @@
 ---
 id: merge-scan-minion-ai-fb9a03f
 title: Merge-scan deficiencies — minion-ai @ fb9a03f
-status: draft
+status: review
+duplicate_candidate: 2026-10-21-windows-qualification-kernel-containment
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-ai]

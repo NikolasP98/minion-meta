@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-ai-2327991570
 title: Handoff marker — scripts/ci/windows-job-object.mjs (minion-ai)
-status: draft
+status: review
+duplicate_candidate: 2026-10-21-windows-qualification-kernel-containment
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-ai]
