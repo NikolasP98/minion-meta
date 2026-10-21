@@ -21,13 +21,13 @@ Attempt 1 separately rejected new unknown Windows service processes at ordinal 9
 
 ## TO-BE
 
-Bind ownership to observed process birth identity and parent lifetime. Never adopt a stable pre-existing baseline process into a new test tree because its numeric parent PID was reused. Retain proven descendants after their observed parent exits. A reused PID must neither inherit old ownership nor conceal a new unknown survivor. Keep unknown ancestry fail-closed. Retain all ten invocations, exactly 74 passed assertions each, existing deadlines, exact source binding and full-shard gates.
+Bind ownership to observed process birth identity and parent lifetime. Never adopt a stable pre-existing baseline process into a new test tree because its numeric parent PID was reused. Retain proven descendants after their observed parent exits. A reused PID must neither inherit old ownership nor conceal a new unknown survivor. Before timeout tree termination, require a parseable exact root birth and prove every row in the current numeric descendant closure belongs to the recorded birth identities. If any reachable row is pre-existing, reused or unknown, refuse tree termination. A process snapshot followed by taskkill is not atomic; this does not claim to eliminate that remaining race. Keep unknown ancestry fail-closed. Retain all ten invocations, exactly 74 passed assertions each, existing deadlines, exact source binding and full-shard gates.
 
 ## DELTA
 
 1. Reproduce the actual native false ownership with a regression that fails before the change.
 2. Correct ownership accumulation and survivor classification using birth evidence and baseline identity. Do not exempt process names or broadly exclude OS service descendants.
-3. Add adversarial checks for baseline adoption, reused root and descendant PIDs, parent exit, missing ancestry and real owned/unowned survivors.
+3. Add adversarial checks for baseline adoption, reused root and descendant PIDs, parent exit, malformed root birth, missing ancestry, real owned/unowned survivors and timeout refusal for a stale baseline descendant link.
 4. Run focused helper tests, actual artifact replay, repository checks and independent standards/spec review. Prepare a separate reviewed PR; obtain human merge approval for its qualification implementation change.
 5. Refresh #342 only after the helper correction is merged. Require a complete new native qualification and both full shards, then final merged DEV qualification before production promotion #339.
 
