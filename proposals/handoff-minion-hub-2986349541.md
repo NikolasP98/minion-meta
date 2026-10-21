@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2986349541
 title: Handoff marker — .github/workflows/desktop-release.yml (minion_hub)
-status: draft
+status: merged
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: postmerge-minion-hub-79144f323b5a
 ---
 
 # Handoff marker — .github/workflows/desktop-release.yml
