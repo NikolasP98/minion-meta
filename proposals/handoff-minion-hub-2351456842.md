@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2351456842
 title: Handoff marker — src-tauri/src/updates.rs (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-c8246433d9b9
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-hub]

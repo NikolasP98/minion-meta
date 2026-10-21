@@ -40,3 +40,9 @@ The `TODO(handoff)` marker at `src-tauri/src/updates.rs` is removed, or intentio
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/577
 - file: `src-tauri/src/updates.rs`
 - checked: 2026-10-21
+
+## Cross-reference
+
+The factory handoff-ledger sweep independently filed the same marker as
+`handoff-minion-hub-2351456842` (same file, same line 303, same marker text);
+that proposal has been merged into this one as the richer, canonical record.
