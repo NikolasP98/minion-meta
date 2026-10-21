@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T07:57:14.020Z",
+	"generatedAt": "2026-10-21T08:26:53.312Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1529,39 +1529,6 @@
 			"scoredAt": "2026-10-19T13:01:56.016Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-d1c5d80",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ d1c5d80",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-d1c5d80.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "0fabf2c5b81fe8181570b001d0bc2e49db9a1cb3b717a0f6c03944b5e4d5ff6c",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Missing org-isolation filter risks cross-tenant data leakage alongside several unchecked-access crash risks in scheduling services, all precisely localized.",
-			"evidence": [
-				"tag-links.service.ts:117 missing eq(crmContactTags.orgId, ctx.tenantId) filter",
-				"scheduling.service.ts:261/476 destructures .returning() without checking row exists",
-				"SellableWizard.svelte:361 accesses sellable.productId without validating response"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T08:21:48.244Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-807f018d50fd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1761,6 +1728,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:27:53.094Z"
+		},
+		{
+			"key": "pr:minion (gateway)#345",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#345 fix(ci): contain Windows qualification processes with kernel jobs",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/345",
+			"sourceUpdatedAt": "2026-10-21T08:20:13Z",
+			"sourceFingerprint": "5c6fdc65e85fc8cb2010083ba430ca06bcf12e188c0e6b74152865845b3fae81",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#342",
+				"pr:minion-meta#852"
+			],
+			"rationale": "The kernel-containment fix has full passing CI evidence and is reported ready for human merge, directly unblocking the stalled Windows qualification chain.",
+			"evidence": [
+				"CI 39568008279 succeeded, all 17 actual Windows cases passed",
+				"#852 states Gateway #345 is ready for human merge at 6c11a01"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T08:26:53.177Z"
 		},
 		{
 			"key": "pr:minion_hub#340",
@@ -2332,41 +2334,6 @@
 			"scoredAt": "2026-10-15T09:22:21.495Z"
 		},
 		{
-			"key": "pr:minion (gateway)#345",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#345 fix(ci): contain Windows qualification processes with kernel jobs",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/345",
-			"sourceUpdatedAt": "2026-10-21T07:50:04Z",
-			"sourceFingerprint": "35b677aa06d31780c2c9b12fecffc915f38cfcb9cefbbb492a41e8b900614942",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#342",
-				"pr:minion-meta#852"
-			],
-			"rationale": "A fully spec'd kernel-containment fix is drafted and unblocks #342 and release #339, with only native CI proof remaining.",
-			"evidence": [
-				"full two-pass-reviewed spec exists at specs/2026-10-21-windows-qualification-kernel-containment-spec.md",
-				"41 portable and 70 workflow tests pass; native Windows proof still pending"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:56:55.013Z"
-		},
-		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -2596,6 +2563,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T03:02:28.102Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-d1c5d80",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ d1c5d80",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-d1c5d80.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "0fabf2c5b81fe8181570b001d0bc2e49db9a1cb3b717a0f6c03944b5e4d5ff6c",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The bundled findings include a high-severity cross-tenant data isolation gap in tag-links.service.ts that needs a prompt, scoped fix.",
+			"evidence": [
+				"Missing org isolation in getContactTagsBulk query; lacks eq(crmContactTags.orgId...) risking cross-tenant data access",
+				"high severity unvalidated-input finding at tag-links.service.ts:117"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T08:26:53.177Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5accda62ce08",
@@ -3130,41 +3129,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:27:07.333Z"
-		},
-		{
-			"key": "pr:minion (gateway)#342",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#342 test(agents): stabilize Windows release qualification timing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
-			"sourceUpdatedAt": "2026-10-21T07:48:34Z",
-			"sourceFingerprint": "c17ecb3eafd3b08363ae3057c3f6d47f8774d078206556d68299d4ff0907d487",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#345",
-				"pr:minion-meta#852"
-			],
-			"rationale": "This test-stabilization PR gates production promotion #339 but remains draft and blocked on the native qualification fix in #345.",
-			"evidence": [
-				"remains draft; production promotion #339 remains held",
-				"blocked by whole-host process rule rejecting new processes despite 74/74 passing assertions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:56:55.013Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -4416,6 +4380,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:26:22.622Z"
+		},
+		{
+			"key": "pr:minion (gateway)#342",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#342 test(agents): stabilize Windows release qualification timing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
+			"sourceUpdatedAt": "2026-10-21T08:20:30Z",
+			"sourceFingerprint": "2ec59bb2ee826ecc3be884814ecae259f4062032ffdf98ff651127dca7ba7ce3",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#345",
+				"pr:minion-meta#852"
+			],
+			"rationale": "This draft test-stabilization PR remains blocked on the native qualification work tracked in #345 so it cannot be executed standalone yet.",
+			"evidence": [
+				"status: draft; full shards have not been admitted and no failed gate is waived",
+				"production promotion #339 remains held"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T08:26:53.177Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -7021,39 +7020,6 @@
 			"scoredAt": "2026-10-19T12:57:47.793Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-auto-response",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Auto response on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The log pinpoints a missing private-key secret input for create-github-app-token, making this a small bounded config fix with a clear DoD.",
-			"evidence": [
-				"Error: Input required and not supplied: private-key",
-				"Latest completed run on main failed 2026-08-28",
-				"DoD: workflow green or deliberately disabled"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T08:21:48.244Z"
-		},
-		{
 			"key": "spec:2026-09-02-hub-team-hr-module-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -9590,39 +9556,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T17:55:34.896Z"
-		},
-		{
-			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Well-documented governance gaps but bundles five distinct producer fixes that should be split into separately scoped specs before execution.",
-			"evidence": [
-				"G2 reviewer only scores 4 of 6 required rubric axes",
-				"No G1 proposal-scorer producer exists yet",
-				"129 of 198 specs have no sidecar at all"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T08:21:48.244Z"
 		},
 		{
 			"key": "proposal:2026-09-29-hub-data-view-container",
@@ -15090,41 +15023,6 @@
 			"scoredAt": "2026-10-21T01:26:40.945Z"
 		},
 		{
-			"key": "pr:minion-meta#852",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#852 docs(agents): record production verification and remaining deployment work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/852",
-			"sourceUpdatedAt": "2026-10-21T07:54:31Z",
-			"sourceFingerprint": "0f518501edf8af3849275a8e8e8ebf16c596e3ef2c8ae8712bf89353807893e1",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#342",
-				"pr:minion (gateway)#345"
-			],
-			"rationale": "This is a documentation ledger recording the state of #342/#345 and the held production promotion, awaiting owner review rather than independent execution.",
-			"evidence": [
-				"records Gateway #343 and #344 merged while #342 remains draft",
-				"owner will perform the final FACES question once notified ready"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:56:55.013Z"
-		},
-		{
 			"key": "proposal:2026-08-17-site-member-gateway-swallowed-errors",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15452,6 +15350,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:00:36.825Z"
+		},
+		{
+			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The scoring-pipeline gaps are well documented but no G1 producer or full-axis G2 writer exists yet, so this needs further scoping before dispatch.",
+			"evidence": [
+				"No G1 producer exists",
+				"The live writer never emits collisions/testability"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T08:26:53.177Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-minion-run-dev-switcher",
@@ -16705,6 +16635,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T22:52:28.692Z"
+		},
+		{
+			"key": "pr:minion-meta#852",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#852 docs(agents): record production verification and remaining deployment work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/852",
+			"sourceUpdatedAt": "2026-10-21T08:20:39Z",
+			"sourceFingerprint": "834b7c0eaa7aeae3b291d522cf9a417a6b4bdd19ba20259416189c1a6f79b2a4",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#345",
+				"pr:minion (gateway)#342"
+			],
+			"rationale": "This docs PR accurately records the verified deployment and qualification state with passing index checks and is low-risk to merge.",
+			"evidence": [
+				"Validation: proposal index 870, spec index 292 and whitespace checks pass",
+				"No production Gateway/FACES mutation occurred"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T08:26:53.177Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-g0-ci-watch-auto-close",
@@ -18056,6 +18021,38 @@
 			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
+			"key": "proposal:ci-minion-ai-auto-response",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Auto response on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The failure is a single clear missing-input bug in a GitHub Action with an exact fix target and definition of done.",
+			"evidence": [
+				"Error: Input required and not supplied: private-key",
+				"Definition of done: the workflow's latest completed run on main is green"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T08:26:53.177Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-4251576030",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18318,6 +18315,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T00:26:34.061Z"
+		},
+		{
+			"key": "pr:minion-meta#853",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#853 docs(spec): Hub desktop automatic updates and qualification evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/853",
+			"sourceUpdatedAt": "2026-10-21T08:17:40Z",
+			"sourceFingerprint": "a6cf26de12c7682e560ed88f7df984ca69fbe5c908065e053ba3def5ea2de1af",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The updater contract has a real installed-upgrade evidence trail for the Linux channel with remaining OS qualification clearly scoped as follow-up.",
+			"evidence": [
+				"A real installed Linux AppImage updated from 0.0.2 to 0.0.3 through the public channel",
+				"all four native test/build jobs and release assembly passed in Hub run 39565407981"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T08:26:53.177Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -22231,38 +22260,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T05:25:47.993Z"
-		},
-		{
-			"key": "pr:minion-meta#853",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#853 docs(spec): Hub desktop automatic updates and qualification evidence",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/853",
-			"sourceUpdatedAt": "2026-10-21T07:39:23Z",
-			"sourceFingerprint": "83aa2138c9b6f74374489c947671da4a2dc0f5cb95de944088ae070cf86d0c6e",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Desktop updater evidence and publication are largely complete but installed update/relaunch qualification is explicitly still pending before activation.",
-			"evidence": [
-				"release workflow passes all four native test/build jobs",
-				"release notes state installed update/relaunch qualification remains pending"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:56:55.013Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
@@ -31381,6 +31378,40 @@
 			"scoredAt": "2026-10-14T17:21:46.968Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/2231ac53aa31c368cb857f22de8ec05861a4f83b",
+			"sourceUpdatedAt": "2026-10-21T07:10:41Z",
+			"sourceFingerprint": "7655c5bdf39db319cda5e75e0817e52e3a245e2e7a50908ec8eec5177df7337a",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#345"
+			],
+			"rationale": "This deploy-health record only reflects an already-merged commit with no outstanding action described.",
+			"evidence": [
+				"status: unknown, summary references merged PR #344",
+				"no next action beyond the recorded merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T08:26:53.177Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -35492,38 +35523,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T04:05:06.282Z"
-		},
-		{
-			"key": "run:minion (gateway)#39563414951",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39563414951",
-			"sourceUpdatedAt": "2026-10-21T07:43:09Z",
-			"sourceFingerprint": "ae9f2ff60396d8ade25614dce8f4ec4ba712db92dad1a19b5cf62a6cb08f219a",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is just an in-progress manually triggered CI run with no described problem or actionable goal.",
-			"evidence": [
-				"workflow_dispatch on DEV branch, status in_progress",
-				"No summary beyond the trigger type"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:57:13.897Z"
 		},
 		{
 			"key": "issue:minion-meta#601",
