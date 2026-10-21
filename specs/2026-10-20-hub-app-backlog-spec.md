@@ -46,6 +46,10 @@ There is a manifest but no offline navigation fallback.
 - Tauri loads the hosted Hub, has a custom draggable titlebar, native menus,
   tray and validated `minion://` links. No server or credentials bundled.
   Remote content receives only the window-control capability it needs.
+  Signed installers are required by the owner. Prepare a master-only workflow
+  that verifies Apple/Windows signatures, signs Linux installers/checksums, and
+  assembles all supported platforms as a draft GitHub Release with install links.
+  Unsigned PR qualification artifacts must never enter release assembly.
 - Navigations always use the network. Cache only current immutable build assets
   and a public branded offline document. Never cache API, authenticated HTML,
   navigation errors, or version metadata. Offline recovery retries the actual
@@ -63,6 +67,9 @@ There is a manifest but no offline navigation fallback.
    disabled actions, target disposal, rejected uploads and cancellation.
 4. Replace the Node sidecar with the remote Tauri shell. Rust tests validate
    origin/deep-link mapping; cargo check qualifies the actual Rust API surface.
+   Add cross-platform installer qualification, fail-closed signing checks,
+   complete-matrix/source/digest validation and draft-only release assembly.
+   Exercise detached-signature verification with a temporary Linux fixture key.
 5. Add offline worker and fallback. An executable worker harness proves no HTML
    or API caching, offline response, update cleanup, and build identity changes.
 6. Run focused tests, design/token lint, check, tests and production build.
@@ -70,9 +77,9 @@ There is a manifest but no offline navigation fallback.
 
 ## Out of scope
 
-Production deployment, installer signing/distribution, offline business writes,
-background synchronization and a bundled application server are outside this
-implementation. No authentication or authorization policy is expanded.
+Production deployment/publication, acquisition of signing credentials, offline
+business writes, background synchronization and a bundled application server are
+outside this implementation. Preparing signed release automation is in scope. No authentication or authorization policy is expanded.
 
 ## Review and release
 
@@ -103,3 +110,15 @@ Independent PR review remains separate from these author reviews.
 fixture. This meta change includes PR #849's source proposal/spec commit as a
 prerequisite; #849 itself was not modified. No merge or deployment is authorized
 by these candidate receipts.
+
+
+## Installer release review
+
+The owner's follow-up requires signed installers and GitHub Releases installation
+links. Author standards review separates pull-request builds (no credentials,
+read-only token) from master-only protected signing jobs and a draft-only writer.
+Author spec review checks all five installer assets, exact source SHA/digests,
+mandatory OS signature verification and rejection of unsigned qualification
+receipts. Release preparation does not authorize merge, hosted deployment or
+publication. Signing credential setup and installed runtime qualification remain
+tracked in the native-shell proposal and the source workflow TODO(handoff).
