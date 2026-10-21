@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T07:27:57.815Z",
+	"generatedAt": "2026-10-21T07:57:14.020Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1497,42 +1497,6 @@
 			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
-			"key": "pr:minion (gateway)#342",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#342 test(agents): stabilize Windows release qualification timing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
-			"sourceUpdatedAt": "2026-10-21T07:12:29Z",
-			"sourceFingerprint": "57d019ce20119bc0a3e55a114ca68b929070fe44ed22fb84d5923c359c8f0fd8",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#339",
-				"pr:minion-meta#852",
-				"deploy:minion (gateway)"
-			],
-			"rationale": "Bounded test-only hotfix is the active blocker standing between the merged observer repair and production promotion #339.",
-			"evidence": [
-				"Local helper tests 40/40, workflow tests 29/29, outbound tests 74/74 passed",
-				"Production promotion #339 remains draft... no Gateway/FACES configuration write has occurred"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:27:09.761Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-722867358",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2368,6 +2332,41 @@
 			"scoredAt": "2026-10-15T09:22:21.495Z"
 		},
 		{
+			"key": "pr:minion (gateway)#345",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#345 fix(ci): contain Windows qualification processes with kernel jobs",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/345",
+			"sourceUpdatedAt": "2026-10-21T07:50:04Z",
+			"sourceFingerprint": "35b677aa06d31780c2c9b12fecffc915f38cfcb9cefbbb492a41e8b900614942",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#342",
+				"pr:minion-meta#852"
+			],
+			"rationale": "A fully spec'd kernel-containment fix is drafted and unblocks #342 and release #339, with only native CI proof remaining.",
+			"evidence": [
+				"full two-pass-reviewed spec exists at specs/2026-10-21-windows-qualification-kernel-containment-spec.md",
+				"41 portable and 70 workflow tests pass; native Windows proof still pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
+		},
+		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -3131,6 +3130,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:27:07.333Z"
+		},
+		{
+			"key": "pr:minion (gateway)#342",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#342 test(agents): stabilize Windows release qualification timing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
+			"sourceUpdatedAt": "2026-10-21T07:48:34Z",
+			"sourceFingerprint": "c17ecb3eafd3b08363ae3057c3f6d47f8774d078206556d68299d4ff0907d487",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#345",
+				"pr:minion-meta#852"
+			],
+			"rationale": "This test-stabilization PR gates production promotion #339 but remains draft and blocked on the native qualification fix in #345.",
+			"evidence": [
+				"remains draft; production promotion #339 remains held",
+				"blocked by whole-host process rule rejecting new processes despite 74/74 passing assertions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -7721,112 +7755,6 @@
 			"scoredAt": "2026-10-18T11:55:34.526Z"
 		},
 		{
-			"key": "issue:minion-meta#711",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#711 [monitor:unstick] reconcile run 5acf0014: claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/711",
-			"sourceUpdatedAt": "2026-09-30T07:18:06Z",
-			"sourceFingerprint": "7ce543a46ab9bf5a04f934c75b02515e8f834a6d16efb5e51bb4d145c117cb5d",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#712",
-				"issue:minion-meta#713",
-				"issue:minion-meta#444"
-			],
-			"rationale": "4th consecutive identical exit-126 signature within 45 minutes indicates a persistent worker/box fault needing a single infra fix.",
-			"evidence": [
-				"4th consecutive occurrence within 45 minutes (06:06-06:49 UTC)",
-				"recommend adding exit-126/turns=0 as a host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T07:52:21.014Z"
-		},
-		{
-			"key": "issue:minion-meta#712",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#712 [monitor:unstick] reconcile run e71278ed: claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/712",
-			"sourceUpdatedAt": "2026-09-30T07:18:06Z",
-			"sourceFingerprint": "fe655be068d90ead4980cfa4b334b9a444d25f133ddd2af6a72e618a08feecc9",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#711",
-				"issue:minion-meta#713"
-			],
-			"rationale": "Identical exit-126 signature recurring in the same incident window as #711/#713 points to one worker/box problem, not a task failure.",
-			"evidence": [
-				"3rd of 4 identical occurrences 06:06-06:49 UTC",
-				"claude-provider agent step fails immediately with no further output"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T07:52:21.014Z"
-		},
-		{
-			"key": "issue:minion-meta#713",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#713 [monitor:unstick] reconcile run 1a201df0: claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/713",
-			"sourceUpdatedAt": "2026-09-30T07:18:07Z",
-			"sourceFingerprint": "6ed914ad84a6463b928e49e8476e5fa4cd43acb62639069a977eadfa27d09acb",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#711",
-				"issue:minion-meta#712"
-			],
-			"rationale": "2nd of 4 identical exit-126 occurrences in the same window confirms a persistent worker/box issue rather than a one-off.",
-			"evidence": [
-				"2nd of 4 identical occurrences between 06:06-06:49 UTC",
-				"shell-phase succeeded; only the claude-provider step failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T07:52:21.014Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9228,6 +9156,39 @@
 			"scoredAt": "2026-10-19T02:25:56.492Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-6200323e3d73",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "c780367e267d02cc2dcd76e815abb7d4ed88e0ba6adb28318e8366d598f0e543",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The TODO marks a real schema ambiguity between reorder_qty/moq/item_group that could produce invalid purchase orders, with a diagnosis and fix direction already given.",
+			"evidence": [
+				"TODO(handoff): item_group/reorder_qty/moq marker in src/server/db/pg-schema/stock.ts",
+				"Diagnosis notes order generation breaks if reorder_qty violates vendor moq",
+				"Fix direction specifies schema decision, check constraint, and migration update"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:57:13.897Z"
+		},
+		{
 			"key": "spec:2026-10-03-readiness-server-telemetry-lifecycle-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -10148,40 +10109,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T18:52:29.865Z"
-		},
-		{
-			"key": "proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Stock items — MOQ, Group and Reorder qty become custom columns (core schema keeps only what logic reads)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-stock-item-optional-fields-to-custom-columns.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "0b48c2f71c5753ac0b71593e43882ec062e58cea4aab7a4363619e853e843b01",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-6200323e3d73"
-			],
-			"rationale": "Migration plan and implementation (Part 1 and Part 2 commits, idempotent backfill script with tests) are already in place and need only verification/merge.",
-			"evidence": [
-				"Part 1 5cc6ae6d core removal; Part 2 cdbd69e0 idempotent backfill script with tests",
-				"dry-run default, snapshot, run-twice-safe invariant assertions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T07:52:21.014Z"
 		},
 		{
 			"key": "proposal:2026-10-07-hub-calendar-single-event-services",
@@ -12160,42 +12087,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T21:25:59.800Z"
-		},
-		{
-			"key": "issue:minion-meta#444",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#444 [monitor:unstick] run 1af9cb83 (minion-meta reconcile): unrecognised failure, exit-126/turns=0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/444",
-			"sourceUpdatedAt": "2026-09-16T06:17:24Z",
-			"sourceFingerprint": "5c18bc879c21a4406d0ec675a85625a3961d66a6f408f959694c5f2f6267f976",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#711",
-				"issue:minion-meta#712",
-				"issue:minion-meta#713"
-			],
-			"rationale": "Same exit-126/turns=0 claude-provider launch failure signature recurs across multiple reconcile runs and should be fixed as one host/infra issue.",
-			"evidence": [
-				"exit-126 turns=0 permission_denials=0",
-				"shell-phase completed fine, only the claude-provider step failed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T07:52:21.014Z"
 		},
 		{
 			"key": "issue:minion-meta#481",
@@ -14335,40 +14226,6 @@
 			"scoredAt": "2026-10-17T23:26:08.457Z"
 		},
 		{
-			"key": "pr:minion-meta#853",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#853 docs(spec): Hub desktop automatic updates and qualification evidence",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/853",
-			"sourceUpdatedAt": "2026-10-21T06:26:09Z",
-			"sourceFingerprint": "294334da34ff92149aa4f12fcd55a1e8f250a0d54348f83538bc7ec8f1a87893",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c8246433d9b9"
-			],
-			"rationale": "Strong packaging/test evidence for the Hub desktop updater is undercut by the same installed-relaunch qualification gap tracked separately as a handoff marker in updates.rs.",
-			"evidence": [
-				"Installed old-to-new replacement/relaunch remains a publication prerequisite",
-				"candidate c0528fed passes all four native test/packaging targets and complete web CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T06:35:10.658Z"
-		},
-		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14596,40 +14453,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T18:50:14.074Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-6200323e3d73",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "c780367e267d02cc2dcd76e815abb7d4ed88e0ba6adb28318e8366d598f0e543",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns"
-			],
-			"rationale": "This TODO's moq/reorder_qty/item_group schema-ambiguity concerns the same fields already being moved to custom columns in the companion proposal, so they should be resolved together.",
-			"evidence": [
-				"TODO covers item_group/reorder_qty/moq overlapping semantics",
-				"same fields are the subject of the stock-optional-fields-to-custom-columns migration from PR #420"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T07:52:21.014Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
@@ -15265,6 +15088,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T01:26:40.945Z"
+		},
+		{
+			"key": "pr:minion-meta#852",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#852 docs(agents): record production verification and remaining deployment work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/852",
+			"sourceUpdatedAt": "2026-10-21T07:54:31Z",
+			"sourceFingerprint": "0f518501edf8af3849275a8e8e8ebf16c596e3ef2c8ae8712bf89353807893e1",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#342",
+				"pr:minion (gateway)#345"
+			],
+			"rationale": "This is a documentation ledger recording the state of #342/#345 and the held production promotion, awaiting owner review rather than independent execution.",
+			"evidence": [
+				"records Gateway #343 and #344 merged while #342 remains draft",
+				"owner will perform the final FACES question once notified ready"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
 		},
 		{
 			"key": "proposal:2026-08-17-site-member-gateway-swallowed-errors",
@@ -17436,38 +17294,6 @@
 			"scoredAt": "2026-10-14T10:52:02.834Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-198db99358ad",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellCart.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-198db99358ad.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "f2fbe8eb409b19c7bff35df3513e409fc72e97f1bb931cb15691686870f7d970",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A clear, scoped POS UX bug (one-way discount editor) with approved status and a concrete fix direction is ready to implement.",
-			"evidence": [
-				"discount editor is one-way once opened, per TODO(handoff) marker",
-				"approved status, merged PR #278 for context"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T07:52:21.014Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-20449cc8b981",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18661,14 +18487,14 @@
 			"scoredAt": "2026-10-15T01:22:04.986Z"
 		},
 		{
-			"key": "proposal:2026-09-29-hub-table-filters-followups",
+			"key": "proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion_hub",
-			"title": "Table toolbar + Notion-style filters — open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "fa7c95518037b5adec5e75e0d6a74e2113811c8eb06feda350127eb0afa9e900",
+			"title": "Stock items — MOQ, Group and Reorder qty become custom columns (core schema keeps only what logic reads)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-stock-item-optional-fields-to-custom-columns.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "0b48c2f71c5753ac0b71593e43882ec062e58cea4aab7a4363619e853e843b01",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -18677,20 +18503,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 8,
+				"implementation": 7
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This ledger bundles eight distinct UX/schema follow-ups of varying urgency that should be triaged into separately scoped specs rather than treated as one goal.",
+			"rationale": "Core removal and backfill script implementation are both already committed with tests, leaving only verification and the scheduled column drop.",
 			"evidence": [
-				"item 3 already closed 2026-09-29 while items 1,2,4-8 remain open",
-				"covers server-mode filter parsing, persistence, record-editor adoption, and schema cleanup"
+				"branch feat/stock-optional-fields-custom has commits 5cc6ae6d and cdbd69e0 with tests",
+				"migration script supports dry-run, idempotency via templateKey, and snapshotting"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T07:52:21.014Z"
+			"scoredAt": "2026-10-21T07:56:55.013Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-inbox-notifications-reminders",
@@ -22407,6 +22233,38 @@
 			"scoredAt": "2026-10-20T05:25:47.993Z"
 		},
 		{
+			"key": "pr:minion-meta#853",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#853 docs(spec): Hub desktop automatic updates and qualification evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/853",
+			"sourceUpdatedAt": "2026-10-21T07:39:23Z",
+			"sourceFingerprint": "83aa2138c9b6f74374489c947671da4a2dc0f5cb95de944088ae070cf86d0c6e",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Desktop updater evidence and publication are largely complete but installed update/relaunch qualification is explicitly still pending before activation.",
+			"evidence": [
+				"release workflow passes all four native test/build jobs",
+				"release notes state installed update/relaunch qualification remains pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22692,6 +22550,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T09:56:32.230Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-198db99358ad",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellCart.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-198db99358ad.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "f2fbe8eb409b19c7bff35df3513e409fc72e97f1bb931cb15691686870f7d970",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved, concretely located UX bug (one-way discount editor) with a clear fix direction is ready for implementation.",
+			"evidence": [
+				"status approved with exact file src/lib/components/pos/SellCart.svelte",
+				"diagnosis specifies adding a close affordance or toggle pattern as the fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-310f268c7aca",
@@ -24201,41 +24091,6 @@
 			"scoredAt": "2026-10-19T15:26:02.149Z"
 		},
 		{
-			"key": "pr:minion-meta#852",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#852 docs(agents): record production verification and remaining deployment work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/852",
-			"sourceUpdatedAt": "2026-10-21T07:23:32Z",
-			"sourceFingerprint": "b0426492a7afefb71084fa0f94da4e38b8a871ec4711e0b60081976105046e83",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#339",
-				"pr:minion (gateway)#342"
-			],
-			"rationale": "Documentation record of the current blocked production-promotion status; its value is secondary to actually resolving #339/#342.",
-			"evidence": [
-				"full Windows shard 2 failed four tests and did not run its gateway configuration",
-				"proposal index passes for 869 proposals; spec index passes for 291 specs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:27:09.761Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25723,6 +25578,38 @@
 			"scoredAt": "2026-10-21T04:56:58.311Z"
 		},
 		{
+			"key": "proposal:2026-09-29-hub-table-filters-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Table toolbar + Notion-style filters — open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "fa7c95518037b5adec5e75e0d6a74e2113811c8eb06feda350127eb0afa9e900",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is a bundled ledger of eight unrelated follow-up items rather than one verifiable goal, so it should be split into individually scoped goals.",
+			"evidence": [
+				"lists 8 distinct open ends across server filters, persistence, record-editor adoption, and schema cleanup",
+				"item 3 already closed 2026-09-29, showing items resolve independently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-0f6b2d0e3194",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26486,6 +26373,111 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T03:41:12.124Z"
+		},
+		{
+			"key": "issue:minion-meta#711",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#711 [monitor:unstick] reconcile run 5acf0014: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/711",
+			"sourceUpdatedAt": "2026-09-30T07:18:06Z",
+			"sourceFingerprint": "7ce543a46ab9bf5a04f934c75b02515e8f834a6d16efb5e51bb4d145c117cb5d",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#712",
+				"issue:minion-meta#713"
+			],
+			"rationale": "This is one of three duplicate monitor-intake reports of the identical recurring exit-126 incident from 2026-09-30 and should consolidate into a single host-classifier fix goal.",
+			"evidence": [
+				"4th consecutive identical signature within 45 minutes per the report",
+				"recommends adding a new host-classifier signature rather than treating each occurrence separately"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
+		},
+		{
+			"key": "issue:minion-meta#712",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#712 [monitor:unstick] reconcile run e71278ed: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/712",
+			"sourceUpdatedAt": "2026-09-30T07:18:06Z",
+			"sourceFingerprint": "fe655be068d90ead4980cfa4b334b9a444d25f133ddd2af6a72e618a08feecc9",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#711",
+				"issue:minion-meta#713"
+			],
+			"rationale": "Duplicate report of the same recurring exit-126 incident cluster as #711 and #713.",
+			"evidence": [
+				"3rd of 4 identical occurrences between 06:06-06:49 UTC",
+				"same fingerprint pattern as #711/#713"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
+		},
+		{
+			"key": "issue:minion-meta#713",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#713 [monitor:unstick] reconcile run 1a201df0: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/713",
+			"sourceUpdatedAt": "2026-09-30T07:18:07Z",
+			"sourceFingerprint": "6ed914ad84a6463b928e49e8476e5fa4cd43acb62639069a977eadfa27d09acb",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#711",
+				"issue:minion-meta#712"
+			],
+			"rationale": "Duplicate report of the same recurring exit-126 incident cluster as #711 and #712.",
+			"evidence": [
+				"2nd of 4 identical occurrences between 06:06-06:49 UTC",
+				"identical shell-phase success plus claude-provider exit-126 signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
 		},
 		{
 			"key": "issue:minion-meta#727",
@@ -35502,6 +35494,38 @@
 			"scoredAt": "2026-10-17T04:05:06.282Z"
 		},
 		{
+			"key": "run:minion (gateway)#39563414951",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39563414951",
+			"sourceUpdatedAt": "2026-10-21T07:43:09Z",
+			"sourceFingerprint": "ae9f2ff60396d8ade25614dce8f4ec4ba712db92dad1a19b5cf62a6cb08f219a",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is just an in-progress manually triggered CI run with no described problem or actionable goal.",
+			"evidence": [
+				"workflow_dispatch on DEV branch, status in_progress",
+				"No summary beyond the trigger type"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:57:13.897Z"
+		},
+		{
 			"key": "issue:minion-meta#601",
 			"kind": "issue",
 			"stage": "proposal",
@@ -36660,6 +36684,38 @@
 			"scoredAt": "2026-10-21T00:26:35.139Z"
 		},
 		{
+			"key": "issue:minion-meta#444",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#444 [monitor:unstick] run 1af9cb83 (minion-meta reconcile): unrecognised failure, exit-126/turns=0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/444",
+			"sourceUpdatedAt": "2026-09-16T06:17:24Z",
+			"sourceFingerprint": "5c18bc879c21a4406d0ec675a85625a3961d66a6f408f959694c5f2f6267f976",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A single, self-recovered transient exit-126 occurrence from three weeks ago with no recurrence evidence in this batch.",
+			"evidence": [
+				"diagnosis classifies it as likely transient/infra fault, not a task failure",
+				"updatedAt 2026-09-16, no further occurrences reported since"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T07:56:55.013Z"
+		},
+		{
 			"key": "issue:minion-meta#461",
 			"kind": "issue",
 			"stage": "proposal",
@@ -37173,68 +37229,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T03:06:20.457Z"
-		},
-		{
-			"key": "run:minion (gateway)#39560179920",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39560179920",
-			"sourceUpdatedAt": "2026-10-21T07:14:15Z",
-			"sourceFingerprint": "c173e274bae1b74dd997c202522d767bbf3bf54f412148a0ae9e4bb58179dd8a",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a live CI run status, not an actionable work item to rank as a goal.",
-			"evidence": [
-				"push on DEV, status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:27:57.667Z"
-		},
-		{
-			"key": "run:minion_hub#39560245259",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "Desktop release with automatic updates",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39560245259",
-			"sourceUpdatedAt": "2026-10-21T07:11:45Z",
-			"sourceFingerprint": "0b13c453ac4d0feb08426430025774609b899e04f9ce56379608589530a6ad5b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a live CI workflow-dispatch status, not an actionable work item to rank as a goal.",
-			"evidence": [
-				"workflow_dispatch on master, status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:27:57.667Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
