@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T15:56:00.543Z",
+	"generatedAt": "2026-10-21T16:26:15.051Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1898,38 +1898,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:07:59.514Z"
-		},
-		{
-			"key": "issue:minion_hub#205",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "#205 Salvage retained Hub WIP from PR #118 into current-base bounded slices",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/issues/205",
-			"sourceUpdatedAt": "2026-08-30T02:35:12Z",
-			"sourceFingerprint": "3d692c44c604643c5ddb529116e4a55a09f8e88f0da7c55ae37ad43b1f62f7c9",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Large multi-domain salvage effort is well-scoped with a clear, actionable first deliverable despite needing further planning before full implementation.",
-			"evidence": [
-				"96 changed files, 7,759 additions, three unaddressed High review findings",
-				"Required first output and bounded successor groups with explicit completion criteria are defined"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T16:21:41.266Z"
 		},
 		{
 			"key": "pr:minion_hub#466",
@@ -5048,6 +5016,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
+			"key": "issue:minion_hub#205",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "#205 Salvage retained Hub WIP from PR #118 into current-base bounded slices",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/issues/205",
+			"sourceUpdatedAt": "2026-08-30T02:35:12Z",
+			"sourceFingerprint": "3d692c44c604643c5ddb529116e4a55a09f8e88f0da7c55ae37ad43b1f62f7c9",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The salvage plan is clearly scoped with a concrete, actionable first deliverable (file-by-file reconciliation) even though the full multi-slice program needs further planning before code lands.",
+			"evidence": [
+				"PR #118 has 96 changed files, 7,759 additions, and three unaddressed High review findings",
+				"issue specifies a clear required first output and bounded successor groups with completion criteria"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T16:26:14.872Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -21022,20 +21022,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 6
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Diagnosis isolates a bounded infra permission/launch issue on the runner with already-checkpointed state ready to resume.",
+			"rationale": "The diagnosis is precise and points to a small, bounded infra fix (verify claude CLI executable/permissions on the runner box) that unblocks future automated reconcile runs.",
 			"evidence": [
-				"exit-126 turns=0 indicates claude binary not executable/missing on runner",
-				"merge-scan and proposals state already checkpointed, independent of the git/merge-scan scaffolding which succeeded"
+				"exit-126 turns=0 is diagnosed as the claude binary not being executable on the runner box",
+				"merge-scan state is already checkpointed so a rerun after the fix should pick up cleanly"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T16:21:41.266Z"
+			"scoredAt": "2026-10-21T16:26:14.872Z"
 		},
 		{
 			"key": "issue:minion-meta#456",
@@ -33635,6 +33635,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:26:22.622Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/fb9a03f06c7dae71667f7ede6a8a265bc5b394b2",
+			"sourceUpdatedAt": "2026-10-21T08:36:22Z",
+			"sourceFingerprint": "8721998c5c021e02d17e380356e6ab669e44068876afac9754da659287737267",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deploy-health log entry referencing an already-merged CI containment fix with no remaining scope or open work.",
+			"evidence": [
+				"summary references merged PR #345 fixing Windows CI containment",
+				"status is unknown with no distinguishing goal content beyond the commit message"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T16:26:14.872Z"
 		},
 		{
 			"key": "issue:minion-meta#347",
