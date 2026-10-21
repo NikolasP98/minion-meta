@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-21)
 
-- `NikolasP98/minion-ai@DEV src/agents/pi-embedded-runner/run/tool-progress.ts:6` — Text UI fences are executed by Hub, outside this native-tool guard; enforce final recovery effects there. See meta proposals/2026-10-17-agent-dynamic-tools.md.
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded-runner/run/tool-progress.ts#L6
+- `NikolasP98/minion-ai@DEV src/agents/pi-embedded-runner/run/tool-progress.ts:8` — Text UI fences are executed by Hub, outside this native-tool guard; enforce final recovery effects there. See meta proposals/2026-10-17-agent-dynamic-tools.md.
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded-runner/run/tool-progress.ts#L8

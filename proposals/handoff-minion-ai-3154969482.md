@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-21)
 
-- `NikolasP98/minion-ai@DEV src/agents/pi-embedded-runner/run/attempt.ts:161` — move transcript sanitization onto the canonical path —
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded-runner/run/attempt.ts#L161
+- `NikolasP98/minion-ai@DEV src/agents/pi-embedded-runner/run/attempt.ts:162` — move transcript sanitization onto the canonical path —
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded-runner/run/attempt.ts#L162
