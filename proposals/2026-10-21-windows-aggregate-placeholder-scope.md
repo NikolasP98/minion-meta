@@ -36,3 +36,7 @@ Gateway [#348](https://github.com/NikolasP98/minion-ai/pull/348), head `6b34c1e5
 ## Native proof and integration
 
 CI `39682003226` passed every applicable check. Root independently verified all 17 native cases in artifact `12384962009` against the live source/run/attempt, synthetic merge parents/tree and current helper hashes. Normal integration merged #348 at DEV `f95ef46b43f3f0c5337f6b7ac1992e9a113efcf3`; merged tree `1209d4f8b0d948c54d874b8e58b720ad71199a9e` exactly equals reviewed and CI-qualified source. Receipt: `audits/2026-10-18-assistant-capability-repair/windows-aggregate-scope-native-qualification.json`. The scope correction changes no qualification policy or authority, so the existing repair authorization applies. Fresh complete #342 and final integrated DEV qualification remain required.
+
+## Current qualification block
+
+Fresh corrected-source CI `39682653940`, attempt 1, passed earlier applicable checks, but GitHub refused both full Windows runners before allocation due failed payments or spending-limit admission. This is not a test result and grants no qualification. Source `5d72bb8a404bd2bf82487a07279464f87585544e` remains pushed and held pending owner billing resolution and a complete fresh attempt. Receipt: `audits/2026-10-18-assistant-capability-repair/windows-5d72-runner-admission-block.json`. No production mutation occurred.
