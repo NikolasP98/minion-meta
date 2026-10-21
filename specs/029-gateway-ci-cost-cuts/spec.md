@@ -34,6 +34,7 @@ Root causes:
 - macOS runs only when the scope detector says native code changed (`run_macos == 'true'`), for every event. A dispatch has no diff base, so the detector fails safe to `run_macos=true`. The full-platform audit therefore still runs macOS.
 - The full-platform audit runs weekly: Monday 07:23 UTC.
 - Upstream Monitor runs daily.
+- **Amended 2026-10-21 (owner): macOS lane PAUSED entirely (`if: false && …`) — Mac releases on hold; resume ledger `proposals/2026-10-21-gateway-macos-ci-pause.md`.**
 - Untouched: Windows / TQ-016 qualification, Linux required lanes, promotion contexts.
 
 ## User Scenarios & Testing
