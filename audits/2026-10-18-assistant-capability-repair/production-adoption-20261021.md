@@ -182,3 +182,8 @@ The source-only addendum `runtime-reload-verification.md` pins reload behavior t
 ## Complete full shards passed; unrelated matrix rejected by aggregate
 
 CI `39676361188` completed both full Windows shards successfully: 13,254 passed assertions, 203 pending, zero failed, across all eight report groups. Root retained both original ZIPs and independently passed the corrected complete identity-bound TQ-016 artifact CLI. Required aggregate job `119503820582` still failed: its global placeholder substring guard incorrectly matched the intentionally skipped Linux placeholder job `119488822820`, although both real Windows partitions existed exactly once and succeeded. Receipt: `windows-ab18426-full-shards-aggregate-failure.json`. Proposal `2026-10-21-windows-aggregate-placeholder-scope` defines the narrow implementation correction and retained invariants. The run remains failed; #342 and production promotion remain held. No production mutation occurred.
+
+
+## Aggregate scope correction reviewed and in native CI
+
+Gateway #348 is draft at `6b34c1e5360d3a0d786e18390bc2baf3b59484f7`, tree `1209d4f8b0d948c54d874b8e58b720ad71199a9e`. It changes only the existing helper's full-Windows placeholder scope and regression fixtures. Actual API replay, missing-shard negative replay, 46 combined Node contracts, complete repository check and independent Standards/Spec reviews passed. Both generator checks completed; zero errors and 57 existing warnings. CI `39682003226` remains in progress. It must qualify normally before integration, then #342 requires fresh complete product qualification. The prior failed aggregate remains failed and no production mutation occurred.
