@@ -2,9 +2,9 @@
 id: 2026-10-21-windows-qualification-kernel-containment-spec
 title: Kernel-contained Windows qualification with native infrastructure proof
 stage: spec
-status: review
+status: approved
 pass: 2
-verdict: pending
+verdict: approved
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion]

@@ -1,12 +1,13 @@
 ---
 id: 2026-10-21-windows-qualification-kernel-containment
 title: Qualify Windows test-process cleanup with kernel containment
-status: review
+status: in-spec
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion]
 tags: [infra, test]
 source: assistant-capability-production-adoption-2026-10-21
+spawned_spec: 2026-10-21-windows-qualification-kernel-containment-spec
 ---
 
 # Qualify Windows test-process cleanup with kernel containment
