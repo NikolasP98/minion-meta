@@ -27,3 +27,17 @@ Rust baseline: full release library output included an unused 221,744,274-byte
 static archive and 325,256-byte shared library. The desktop-only probe emits only
 rlib. Cold and dependency-rebuilding timings are not comparable; no measured
 installer-size or startup-speed improvement is claimed.
+
+## Packaged UI and live CDN checks
+
+The native UI bundle was rebuilt from Hub `f1f53848` and served on loopback.
+A pre-document native IPC stub and Spanish browser locale exercised the actual
+bundled `desktop/main.ts` entry, rather than a hot-reloaded language switch.
+[Spanish startup notice at 360 × 400](packaged-spanish-narrow.png) renders both
+buttons in Spanish, at 44 px high, with no horizontal overflow. This remains a
+browser proof with synthetic native IPC, not an installed OS update.
+
+The existing public `desktop-v0.0.1/SHA256SUMS` release asset returned HTTP 200
+with 582 bytes and an ETag. Repeating its download with `If-None-Match` returned
+HTTP 304 with zero body bytes. This proves conditional delivery on the current
+release CDN; the new updater feed itself has not been published.
