@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T18:58:42.470Z",
+	"generatedAt": "2026-10-21T19:26:03.942Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8046,38 +8046,6 @@
 			"scoredAt": "2026-10-17T22:27:13.427Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/run-migrations.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-928e5d399f1a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "95075896492dc53a23e4abe35a13a26d3db33b73dd5eba01c47f8e6c80aa676e",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An incomplete ALTER TABLE migration left as a TODO(handoff) can block schema pushes and cause runtime errors, with a clear fix direction and verification step given.",
-			"evidence": [
-				"TODO(handoff) marker in run-migrations.ts for 0008_workshop_thumbnail.sql",
-				"diagnosis: incomplete ALTER TABLE could block schema pushes or cause runtime errors"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T19:21:24.616Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-92e3e453a2ae",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13306,6 +13274,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T07:21:53.849Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/run-migrations.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-928e5d399f1a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "95075896492dc53a23e4abe35a13a26d3db33b73dd5eba01c47f8e6c80aa676e",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved finding names a specific incomplete ALTER TABLE migration that can block schema pushes and has a clear verifiable fix path.",
+			"evidence": [
+				"TODO(handoff): drizzle/0008_workshop_thumbnail.sql",
+				"status: approved",
+				"test locally with bun run db:push"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T19:26:03.802Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9e4f9427d5e3",
@@ -28595,14 +28596,14 @@
 			"relatedKeys": [
 				"issue:minion-meta#720"
 			],
-			"rationale": "A one-off exit-126 launch fault with zero permission denials and all state already persisted, explicitly marked safe to retry with no task-logic failure.",
+			"rationale": "Diagnosis indicates all reconcile state was already persisted and only a transient exit-126 launch fault needs a retry, which is not durable paid work.",
 			"evidence": [
-				"turns=0, permission_denials=0, scripted work already completed",
-				"recommendation: safe to retry"
+				"all reconciliation state was already persisted",
+				"Recommendation: safe to retry"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T19:21:24.616Z"
+			"scoredAt": "2026-10-21T19:26:03.802Z"
 		},
 		{
 			"key": "issue:minion-meta#503",
@@ -29028,14 +29029,14 @@
 			"relatedKeys": [
 				"issue:minion-meta#451"
 			],
-			"rationale": "Transient dual-provider batch failure on one ranking batch, explicitly diagnosed as safe to retry rather than a real task or spec defect.",
+			"rationale": "A transient dual-provider failure on one batch is explicitly described as safe to retry rather than a genuine task defect.",
 			"evidence": [
-				"both bounded providers failed on batch 1, cost_usd=0.132518 (calls attempted)",
-				"recommendation: safe to retry as-is"
+				"transient dual-provider hiccup",
+				"Recommendation: safe to retry as-is"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T19:21:24.616Z"
+			"scoredAt": "2026-10-21T19:26:03.802Z"
 		},
 		{
 			"key": "issue:minion-meta#721",
@@ -29659,6 +29660,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/fb9a03f06c7dae71667f7ede6a8a265bc5b394b2",
+			"sourceUpdatedAt": "2026-10-21T08:36:22Z",
+			"sourceFingerprint": "8721998c5c021e02d17e380356e6ab669e44068876afac9754da659287737267",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged CI fix commit surfaced as a deploy-health candidate with no outstanding action described.",
+			"evidence": [
+				"Merge pull request #345 fix(ci): contain Windows qualification processes",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T19:26:03.802Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
