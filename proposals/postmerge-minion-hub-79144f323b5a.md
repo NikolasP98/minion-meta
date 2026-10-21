@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-79144f323b5a
 title: "Post-merge finding — todo-handoff in .github/workflows/desktop-release.yml (minion_hub)"
-status: approved
+status: closed
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `.github/workflows/desktop-release.yml`
