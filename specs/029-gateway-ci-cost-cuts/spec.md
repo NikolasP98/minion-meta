@@ -53,6 +53,10 @@ Root causes:
 - Docs-only push: macOS skipped (unchanged).
 - macOS regression introduced by a non-native change: caught by the weekly audit, at most 7 days late. This is an accepted trade-off.
 
+## Amendment 2 (owner, 2026-10-21): lane flags
+- **FR-005**: CI lanes toggle via repository variables, without a commit: `CI_MACOS` (default off, replaces the hard-coded pause), `CI_ANDROID`, `CI_PLATFORM_AUDIT`, and `CI_UPSTREAM_MONITOR` (default on, `off` skips). The flag list lives at the top of `ci.yml`. Windows is excluded because its aggregators verify receipts; see the follow-up in `proposals/2026-10-21-gateway-macos-ci-pause.md`.
+- Test: `gates lanes on repository-variable flags`.
+
 ## Requirements
 - **FR-001**: `macos` job condition = not docs-only AND `run_macos == 'true'`, regardless of event.
 - **FR-002**: `nightly-full-platform.yml` schedule = weekly.
