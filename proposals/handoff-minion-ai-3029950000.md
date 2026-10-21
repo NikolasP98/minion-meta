@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-ai-3029950000
 title: Handoff marker — scripts/ci/tq016-windows-qualification.mjs (minion-ai)
-status: review
+status: closed
 duplicate_candidate: 2026-10-09-windows-release-qualification
 created: 2026-10-21
 updated: 2026-10-21
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-ai@DEV scripts/ci/tq016-windows-qualification.mjs:169` — confirm native ten-run acceptance after this monitor repair;
   https://github.com/NikolasP98/minion-ai/blob/DEV/scripts/ci/tq016-windows-qualification.mjs#L169
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-21; the sweep closed this proposal.
