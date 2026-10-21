@@ -1,9 +1,9 @@
 ---
 id: 2026-10-20-hub-app-backlog-spec
 title: Hub module continuity, immediate edits, record gestures, desktop and offline shell
-stage: dev
+stage: deploy
 pass: 1
-status: implementing
+status: merged
 verdict: pending
 created: 2026-10-20
 updated: 2026-10-20
@@ -139,4 +139,35 @@ formatting, design/token gates and production build. The ordinary test job,
 browser/database jobs and full seeded QA-stack conformance job also passed.
 All GitHub CI jobs were green; only the Vercel preview remained pending.
 Current status remains visible on [CI run 39531728687](https://github.com/NikolasP98/minion_hub/actions/runs/39531728687).
-No owner merge, deployment or installer publication occurred.
+At the pre-merge receipt above, no owner merge, deployment or installer publication had occurred.
+
+
+## Owner merge and deployment qualification
+
+The owner merged [Hub PR #575](https://github.com/NikolasP98/minion_hub/pull/575)
+on 2026-10-21 at 03:45:38 UTC (2026-10-20 in America/Lima), producing
+`26e82cfc90f8279875dfa64b89e9a50a6f1323fe`. The merged application, desktop and
+release-workflow sources match the qualified `991b029e` candidate. The spec now
+tracks `stage: deploy`, `status: merged`; it is not marked shipped.
+
+[Post-merge CI 39540341303](https://github.com/NikolasP98/minion_hub/actions/runs/39540341303)
+started on the merged revision. [Release notes 39540341274](https://github.com/NikolasP98/minion_hub/actions/runs/39540341274)
+completed successfully. Vercel metadata identifies the corresponding production
+build as `minion-799ebxtat-nikolasp98s-projects.vercel.app`, with
+`githubCommitSha=26e82cfc90f8279875dfa64b89e9a50a6f1323fe`. Its first observed
+state was BUILDING; the live alias initially pointed to the preceding deployment.
+Vercel reported successful deployment at 03:49:30 UTC. A fresh alias inspection
+then verified `hub.minion-ai.org` points to READY production deployment
+`dpl_6gFMkr5WqURf174VEzM1j59ERizp`, the same exact-commit build above. This is
+deployment identity and alias evidence, not authenticated feature/OS runtime QA.
+Post-merge CI was still running at that verification; its completed jobs had no
+failures. The earlier exact-candidate qualification remains linked above.
+
+The signed desktop workflow is now present on `master`. The repository still
+has no `desktop-signing` environment or Apple/Azure/OpenPGP signing secrets.
+No desktop workflow was dispatched without those credentials, and the Hub
+Releases page still has no installer release. Installed OS-webview sign-in,
+restart persistence, native controls, deep links and file drops remain release
+gates. Source merge does not establish those runtime results.
+
+The companion metadata PR #850 remains a separate owner-controlled merge.
