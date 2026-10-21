@@ -79,3 +79,40 @@ against the production public key. Source is exactly
 This publication does not advance `desktop-updates/latest.json` or advertise
 automatic updates as deployed. The public notes state that the channel remains
 inactive. Keep it inactive until installed replacement/relaunch proof is complete.
+
+## Owner-requested live Linux qualification
+
+The owner installed 0.0.2 and explicitly requested a new release to exercise the
+client's automatic download, replacement and restart. This authorizes a bounded
+first channel activation for installed qualification: build 0.0.3 from the same
+approved source, verify every versioned asset, publish the immutable preview,
+and advertise only `linux-x86_64` in the mutable channel during this test.
+Windows and both macOS targets remain excluded until installed qualification.
+The versioned release retains its complete four-target manifest. Expanding the
+channel later requires a newer version because publication rejects changes at
+the same version. This is a qualification exception to the previously inactive
+channel gate, not a claim that every operating system is qualified.
+
+The installed 0.0.2 AppImage and launcher have private rollback copies before
+activation. Evidence must distinguish client-driven installation from operator
+file replacement. Capture the installed hash before and after, native process
+replacement, updater state, launcher/profile continuity and public feed identity.
+If installation fails, stop channel rollout and retain the original package.
+
+## Native accessibility compatibility
+
+During installed Linux qualification, requesting the native AT-SPI tree caused
+two AppImage processes to abort. PID 1451691 exited with SIGABRT; its journal
+reports `atk-bridge: get_device_events_reply: unknown signature`, followed by a
+libdbus message-signature assertion (`a(sss)`). Systemd's trace ends in bundled
+`libdbus-1.so.3`; this establishes an abort in that dependency path, not its root
+cause. Available memory was 11 GiB when checked. No profile reset or data write
+was performed. The system-managed core remains private and was not extracted.
+
+Visible-window update qualification temporarily launches the unchanged package
+with `NO_AT_BRIDGE=1` in a transient user service. The permanent desktop launcher
+and system accessibility settings remain unchanged. Therefore this exercise
+cannot qualify assistive-technology compatibility. Reproduce and repair the
+AppImage/host accessibility interaction, then repeat native tree assertions on
+the regular launcher. The qualification observer contains the matching
+`TODO(handoff)` at the missing native-accessibility assertion site.
