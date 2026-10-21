@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-c8246433d9b9
 title: "Post-merge finding — todo-handoff in src-tauri/src/updates.rs (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-hub]
