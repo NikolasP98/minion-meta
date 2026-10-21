@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-b429bb5e2383
 title: "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/mobile.png (minion_hub)"
-status: draft
+status: review
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `docs/verification/2026-10-20-app-backlog/screenshots/mobile.png`

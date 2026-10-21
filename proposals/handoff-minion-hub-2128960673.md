@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2128960673
 title: Handoff marker — src/server/services/personal-agent-binding.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: postmerge-minion-hub-f25d9dc6080e
 ---
 
 # Handoff marker — src/server/services/personal-agent-binding.ts

@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-4176257990
 title: Handoff marker — src-tauri/src/lib.rs (minion_hub)
-status: draft
+status: merged
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: postmerge-minion-hub-635403793743
 ---
 
 # Handoff marker — src-tauri/src/lib.rs
