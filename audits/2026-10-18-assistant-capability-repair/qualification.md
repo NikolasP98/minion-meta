@@ -73,7 +73,7 @@ No model or production request is made. The receipt confirms zero remaining
 owned rows, the owned gateway stopped, and the hash of all pre-existing
 personal-agent assignments unchanged.
 
-## Qualification still pending
+## Source qualification and release limits
 
 The source candidates are reviewable in:
 
@@ -96,8 +96,12 @@ Gateway PR CI uses smoke tests behind the historical shard names. Exact run
 covered 20 files and 177 tests in its Linux smoke jobs; it is not full-suite
 proof. The full workflow was explicitly dispatched at the same candidate in
 [39517416592](https://github.com/NikolasP98/minion-ai/actions/runs/39517416592).
-Full test results and complete configuration coverage remain pending. The
-dispatch security scan failed closed because this feature-branch event supplied
+Its two full Linux shards passed all four configurations: 1,393 unique files
+(1,390 passed, 3 skipped), 13,414 tests passed, 17 skipped, zero failures and
+zero duplicate files. All eight group/shard exits were zero with no signal.
+Both report artifact digests were verified; the portable
+[full Linux receipt](gateway-full-linux-20261020.json) records each configuration.
+The dispatch security scan failed closed because this feature-branch event supplied
 no trusted BASE_SHA for commit-delta scanning. The normal PR security scan
 passed its actual PR diff. No security check was bypassed; test coverage and
 the overall dispatch conclusion must be reported separately.
@@ -115,8 +119,8 @@ tests. Its declared check reported zero errors and warnings; the production
 build, client-boundary and canary gates passed. The final loopback acceptance
 also passed on this candidate with the exact Gateway CI artifact. A redundant
 local check was stopped after hosted success and contributes no additional
-completion claim. The QA-stack job also passed. Preview deployment status is tracked separately
-from production adoption.
+completion claim. The QA-stack job also passed. All 13 Hub PR checks, including the preview
+deployment, passed. Production adoption remains separate.
 
 The prior release's full Windows failures remain separate qualification debt.
 One personal agent per profile still has one home-gateway binding. Mutation
