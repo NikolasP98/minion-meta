@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T19:55:54.807Z",
+	"generatedAt": "2026-10-21T20:27:01.689Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -701,42 +701,6 @@
 			"scoredAt": "2026-10-12T02:55:06.557Z"
 		},
 		{
-			"key": "pr:minion (gateway)#339",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#339 fix(agents): restore catalog answers and suppress malformed tool replies",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/339",
-			"sourceUpdatedAt": "2026-10-21T08:36:37Z",
-			"sourceFingerprint": "b7608e3117d401643c0771a80c892e9f3a1d8a4d8f209d58cf29dfac1fb8a76f",
-			"score": 81,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#342",
-				"pr:minion (gateway)#346",
-				"pr:minion-meta#854"
-			],
-			"rationale": "Production promotion is high-stakes but explicitly held pending #342 and #346, so it cannot proceed independently right now.",
-			"evidence": [
-				"Merged DEV CI ... FAILED full Windows shard 2 and its required aggregate. Production is held.",
-				"Test-only hotfix #342 must be reviewed/merged, then the final DEV commit must pass full Windows qualification before this promotion."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T08:56:58.337Z"
-		},
-		{
 			"key": "proposal:2026-10-15-agent-harness-restoration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1233,6 +1197,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T03:41:12.124Z"
+		},
+		{
+			"key": "pr:minion (gateway)#339",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#339 fix(agents): restore catalog answers and suppress malformed tool replies",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/339",
+			"sourceUpdatedAt": "2026-10-21T20:16:26Z",
+			"sourceFingerprint": "9859fa84ef528ab0c259f2680921cef41d51a2689dcf5b4f8e5023fb0188e23b",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#342",
+				"proposal:2026-10-21-windows-qualification-admission-independence"
+			],
+			"rationale": "Production promotion of the verified capability repair is held by a failed full Windows qualification shard pending the #342 fix.",
+			"evidence": [
+				"Merged DEV CI ... FAILED full Windows shard 2 and its required aggregate. Production is held.",
+				"Test-only hotfix #342 must be reviewed/merged, then the final DEV commit must pass full Windows qualification before this promotion."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
@@ -2269,77 +2268,6 @@
 			"scoredAt": "2026-10-15T09:22:21.495Z"
 		},
 		{
-			"key": "pr:minion (gateway)#342",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#342 test(agents): stabilize Windows release qualification timing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
-			"sourceUpdatedAt": "2026-10-21T08:48:08Z",
-			"sourceFingerprint": "5035bdf0a044ebd60b8d4d4ad03d4e72f6338b3f2e1b94a6ad4fd0d22695671d",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#346",
-				"pr:minion (gateway)#339",
-				"proposal:2026-10-21-windows-release-qualification-timing"
-			],
-			"rationale": "Locally validated test-timing fix is ready in substance but explicitly held until companion PR #346 merges and ten fresh qualification runs occur.",
-			"evidence": [
-				"Local integration ... incorporates DEV fb9a03f ... It passed 43 helper contracts, 116 focused assertions and full repository check",
-				"That local integration is deliberately not pushed ... Separate correction #346 is ready for human merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T08:56:58.337Z"
-		},
-		{
-			"key": "pr:minion (gateway)#346",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#346 fix(ci): run Windows qualification alongside workflow tests",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/346",
-			"sourceUpdatedAt": "2026-10-21T08:47:44Z",
-			"sourceFingerprint": "d8f43e1b8139ad3f9a8c2dd8b56be7fd94bd9981e1902e13b1337588183a47ea",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#342",
-				"pr:minion (gateway)#339"
-			],
-			"rationale": "This CI admission-separation fix has passing CI, independent review, and is explicitly ready for human merge, unblocking the rest of the qualification chain.",
-			"evidence": [
-				"Independent Standards PASS / Spec PASS, including separate real Git/shell replay.",
-				"Exact-head CI 39571506559 passed 17 fresh native Windows cases ... Source #346 is ready for human merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T08:56:58.337Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3000,6 +2928,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:27:07.333Z"
+		},
+		{
+			"key": "pr:minion (gateway)#342",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#342 test(agents): stabilize Windows release qualification timing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
+			"sourceUpdatedAt": "2026-10-21T20:20:55Z",
+			"sourceFingerprint": "9ca672f3908e422430f822e91fb2d94418467878a1257be178259c2480f5e294",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#339",
+				"proposal:2026-10-21-windows-qualification-admission-independence"
+			],
+			"rationale": "This bounded test-timing fix is the active blocker gating production promotion #339 and is mid-qualification with passing partial results.",
+			"evidence": [
+				"Fresh CI ... Native helper contract passed; fixed-ten qualification is running.",
+				"Full repository check passed: zero errors, 57 existing warnings."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -4616,6 +4579,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T18:56:17.309Z"
+		},
+		{
+			"key": "proposal:2026-10-21-windows-qualification-admission-independence",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Separate native contract admission from product qualification protection",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-admission-independence.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "b337388faf7e8e721fb7a1f1d566685f6aff04dfffd8967592c48a3d7d0fe1c5",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#342",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "The proposal's prepared correction PR #346 already appears merged in the gateway's deployment history, so its scoped admission-separation work is already satisfied.",
+			"evidence": [
+				"Gateway #346 ... passed native/portable CI 39571506559, independent Standards/Spec review and full local check.",
+				"Merge pull request #346 from NikolasP98/fix/windows-job-containment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-531a2204dc23",
@@ -24189,41 +24187,6 @@
 			"scoredAt": "2026-10-19T15:26:02.149Z"
 		},
 		{
-			"key": "pr:minion-meta#854",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#854 docs(agents): track Windows qualification admission correction",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/854",
-			"sourceUpdatedAt": "2026-10-21T08:50:03Z",
-			"sourceFingerprint": "0fdb53506599c81ebaf593edf71abb7c0b7ccc3767cfb56cc074182eb22dc87b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#346",
-				"pr:minion (gateway)#342"
-			],
-			"rationale": "This is a low-risk, ready-to-merge documentation PR tracking the already-validated qualification chain state.",
-			"evidence": [
-				"Source #346 is ready for human merge; immutable qualification receipt and independent shell replay are retained.",
-				"status: open"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T08:56:58.337Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24520,7 +24483,7 @@
 			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
 			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "c2052202ef4ae8668b7f8d2003fb230482eeabaf8b93e07c5f14a6bcc8f01ae6",
+			"sourceFingerprint": "8841d99598cff739c4b5d66a1ce64cda9ead12fec4c15a056b92a296ab31765a",
 			"score": 33,
 			"band": "low",
 			"axes": {
@@ -24529,19 +24492,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 3,
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Single low-urgency CI parity marker whose scope beyond the quoted line is unclear.",
+			"rationale": "A single narrow CI-parity TODO marker with no scoping beyond the inline comment needs a proper spec before it is actionable.",
 			"evidence": [
-				"Marker: 'Reach Bun 1.4 parity before promoting it from shadow evidence' at ci.yml:459"
+				"Reach Bun 1.4 parity before promoting it from shadow evidence",
+				"ci.yml:465"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T08:57:40.666Z"
+			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3238987400",
@@ -27433,6 +27397,38 @@
 			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
+			"key": "run:minion (gateway)#39668833973",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39668833973",
+			"sourceUpdatedAt": "2026-10-21T20:20:30Z",
+			"sourceFingerprint": "d92efcbefd90d2499c319adf8cb1792110542bb00a9f12c09c0da12756df101f",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI run on DEV with no outcome yet, requiring only monitoring rather than a work decision.",
+			"evidence": [
+				"in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:27:01.526Z"
+		},
+		{
 			"key": "issue:minion-meta#536",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29660,6 +29656,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/83c8f499674fe38be61ac9b03fa55c2253864900",
+			"sourceUpdatedAt": "2026-10-21T20:16:10Z",
+			"sourceFingerprint": "1aff350dac9c14fcbc3fc2ba25cf0c07891bc253426fc2d2f2d74d9fe2c5f060",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The referenced Windows CI containment fix (#346) is already merged, leaving no outstanding deployment action for this health entry.",
+			"evidence": [
+				"Merge pull request #346 from NikolasP98/fix/windows-job-containment",
+				"fix(ci): run Windows qualification alongside workflow tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -33879,21 +33907,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Diagnosis indicates the actual reconcile work succeeded and the failure is a transient worker-box exec fault (exit-126, turns=0) safe to retry, not an actionable task.",
+			"rationale": "A month-old worker-level exit-126 infra blip already diagnosed as a non-logic fault with a simple retry recommendation is likely stale.",
 			"evidence": [
-				"reconcile housekeeping completed with no errors",
-				"exit-126 with turns=0 signals agent process never executed a turn",
-				"recommendation: safe to retry once exec environment is confirmed healthy"
+				"exit-126 with turns=0 ... This is NOT a task/logic failure",
+				"worker_started_at 2026-09-16T17:58:14Z",
+				"Recommendation: safe to retry as-is once the box/exec environment is confirmed healthy"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T20:21:25.682Z"
+			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "issue:minion-meta#487",
@@ -35263,7 +35291,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "80b113411510455ca40c7c0383b8efc8aef6cbad4f8c613e74cb0fcaa2efa3e3",
+			"sourceFingerprint": "3ce276b8e3bcd616721e92f3e2ee2bf6d992786b69d43f88027cbf856d0dbd29",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -35273,19 +35301,19 @@
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 2
+				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 4,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "This bundles dozens of unrelated TODO markers scraped from the ranking system's own data file into one proposal, making it non-actionable as a single unit of work.",
+			"rationale": "The quoted markers read as fragments of rationale/evidence prose from past ranking entries rather than genuine code TODOs, suggesting the handoff-sweep is misidentifying matches inside a generated data file.",
 			"evidence": [
-				"markers span disparate topics: org-scoping, race windows, stock schema, audit trails",
-				"all point at rankings/index.json, a self-referential data artifact, not source code"
+				"rankings/index.json:1559 — the result is still platform-wide, not org-scoped",
+				"rankings/index.json:6081 — the session is drawn when the cashier clicks, not when the"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T18:58:06.929Z"
+			"scoredAt": "2026-10-21T20:27:01.526Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-12c3ee1",
