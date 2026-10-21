@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T05:56:28.195Z",
+	"generatedAt": "2026-10-21T06:26:45.035Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -867,6 +867,41 @@
 			"scoredAt": "2026-10-19T03:27:16.894Z"
 		},
 		{
+			"key": "pr:minion (gateway)#339",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#339 fix(agents): restore catalog answers and suppress malformed tool replies",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/339",
+			"sourceUpdatedAt": "2026-10-21T06:08:24Z",
+			"sourceFingerprint": "ab7075655a48199b7a89aabdd442e4e054a854e8dce5125f61539ef39ee23785",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#342",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "Production promotion of an assistant capability repair is high-stakes but currently blocked on a failed Windows qualification run and a pending test hotfix, so it is not actionable yet.",
+			"evidence": [
+				"Merged DEV CI ... FAILED full Windows shard 2 and its required aggregate. Production is held.",
+				"Test-only hotfix #342 must be reviewed/merged, then the final DEV commit must pass full Windows qualification before this promotion."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
+		},
+		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1728,41 +1763,6 @@
 			"scoredAt": "2026-10-19T03:27:53.094Z"
 		},
 		{
-			"key": "pr:minion (gateway)#339",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#339 fix(agents): restore catalog answers and suppress malformed tool replies",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/339",
-			"sourceUpdatedAt": "2026-10-21T05:35:39Z",
-			"sourceFingerprint": "660968d9e750fa32613522f3e8627572587ed640e293ae55bd7aa42647bbd08f",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#342",
-				"pr:minion (gateway)#343"
-			],
-			"rationale": "Production promotion is fully specified but explicitly held pending #343 then #342 then a fresh full Windows qualification.",
-			"evidence": [
-				"Merged DEV CI run 39546077771 failed full Windows shard 2",
-				"promotion stays held until #342 and #343 land and requalify"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
-		},
-		{
 			"key": "pr:minion_hub#340",
 			"kind": "pr",
 			"stage": "development",
@@ -1866,40 +1866,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T03:05:00.863Z"
-		},
-		{
-			"key": "spec:2026-10-03-notification-slice5-audience-projection-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Project notification events into exact per-recipient candidates under current authority",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-audience-projection-spec.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "5f99f3e9005281f6b140e6715834f66b873bbdbf4ef639c37df28439102683a1",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment"
-			],
-			"rationale": "A security/data-critical notification-projection contract central to the roadmap has churned through seven revisions still pending renewed two-pass review, so execution readiness lags its strategic weight.",
-			"evidence": [
-				"Revision history shows v1 through v7 each marked 'author response, pending renewed two-pass review'",
-				"status: implementing while tagged security, data, logic, test"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T05:58:35.205Z"
 		},
 		{
 			"key": "spec:2026-10-03-hub-calendar-temporal-readiness-spec",
@@ -3098,14 +3064,14 @@
 			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
-			"key": "pr:minion (gateway)#343",
+			"key": "pr:minion (gateway)#342",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion (gateway)",
-			"title": "#343 fix(ci): exclude snapshot collectors from Windows qualification",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/343",
-			"sourceUpdatedAt": "2026-10-21T05:49:43Z",
-			"sourceFingerprint": "ab5317bfad2a571c96c5ae942beb9a2cd82dcf2de47cc6f023b750581814acd8",
+			"title": "#342 test(agents): stabilize Windows release qualification timing",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
+			"sourceUpdatedAt": "2026-10-21T06:10:35Z",
+			"sourceFingerprint": "25457101e621c02b6a6ee0f121e3b40fcfbe79c3b7edbac2a85d3106a9142969",
 			"score": 65,
 			"band": "medium",
 			"axes": {
@@ -3114,23 +3080,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 8
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion (gateway)#342",
-				"pr:minion (gateway)#339"
+				"pr:minion (gateway)#339",
+				"deploy:minion (gateway)"
 			],
-			"rationale": "This is the next unblocking step in the release chain with concrete validation (observer/validator tests, replayed artifacts) and is open, not draft.",
+			"rationale": "This bounded test-only fix is validated and is the direct unblocker for the held production promotion.",
 			"evidence": [
-				"Observer tests 21/21 and validator tests 12/12 pass",
-				"replayed real Windows artifacts with no remaining survivors"
+				"Full pnpm check passed (0 errors, 57 existing warnings) ... Independent standards/spec reviews passed.",
+				"The owner authorized proceeding with final checks and then #342 after merging #343."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
+			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
@@ -3278,22 +3244,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 8,
+				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-03-notification-slice5-audience-projection-spec"
-			],
-			"rationale": "Narrow, well-evidenced RLS-blocking fix with frozen inputs and a proven native failure, but it is still cycling through unresolved review revisions before it can be executed.",
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Security-definer fix closes an RLS gap blocking notification quarantine while keeping worker row access scoped, with a detailed frozen-input migration plan.",
 			"evidence": [
-				"Native negative receipt and frozen-input hashes are documented for the RLS rejection",
-				"Revision history v1-v4 all show 'pending renewed two-pass review'"
+				"replaces direct worker UPDATE with SECURITY DEFINER function due to RLS rejection",
+				"v4 revision pending renewed two-pass review",
+				"tagged security, data"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T05:58:35.205Z"
+			"scoredAt": "2026-10-21T06:26:44.859Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-meta-pagination-spec",
@@ -3928,38 +3893,6 @@
 			"scoredAt": "2026-10-16T05:40:36.571Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6b39120c48a2.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "6d661b6862b97d190103f8af9457e34f99f77a79e75369046258435d79373258",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved proposal with a concrete diagnosis and fix direction for a payment-identity collision risk in POS processing is well-specified and actionable.",
-			"evidence": [
-				"relying solely on ID to distinguish entities ... creates collision risk",
-				"Fix direction: Add discriminated union types ... Enforce composite identity (type + ID) at every lookup boundary"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T06:21:43.730Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-9654a64b55fa",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4122,6 +4055,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:07:59.514Z"
+		},
+		{
+			"key": "spec:2026-10-03-notification-slice5-audience-projection-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Project notification events into exact per-recipient candidates under current authority",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-audience-projection-spec.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "5f99f3e9005281f6b140e6715834f66b873bbdbf4ef639c37df28439102683a1",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A security/data-tagged notification-authority spec that is actively implementing but has gone through seven revisions still pending renewed two-pass review, so it is not yet settled enough to treat as ready.",
+			"evidence": [
+				"v7 ... pending renewed two-pass review",
+				"Replaces the infeasible keep-PUBLIC source-policy design after an executable baseline reproduction found recursive RLS"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-finance-summary-spec",
@@ -6248,38 +6213,6 @@
 			"scoredAt": "2026-10-18T02:05:58.834Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77b26984c8ea.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "a60fb30d2077426782ace348ec78a357e5744e80ddd708205816c875f1808605",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear data-loss bug (package_id dropped on reschedule) with a concrete fix direction and test criterion, making it a bounded, actionable fix.",
-			"evidence": [
-				"Marker: 'RESCHEDULE currently loses the package link'",
-				"Fix direction specifies carrying forward package_id plus a concrete test assertion"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T05:58:35.205Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-9b86db24576e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7154,6 +7087,40 @@
 			"scoredAt": "2026-10-20T20:56:23.103Z"
 		},
 		{
+			"key": "pr:minion_hub#577",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#577 feat(desktop): install updates at startup and notify while Hub is open",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/577",
+			"sourceUpdatedAt": "2026-10-21T06:12:00Z",
+			"sourceFingerprint": "8dc53a8f0c018ddb3c872e8d3fc260ae554a0e2ac3d89520fe30eeba5eabbf38",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#853"
+			],
+			"rationale": "The desktop updater is extensively validated but still has outstanding four-OS packaging qualification and no proven installed update/relaunch, so it is not yet mergeable.",
+			"evidence": [
+				"The final four-OS packaging and broader CI runs are still being qualified.",
+				"Installed old-to-new update/relaunch is not yet proven on all four OS targets."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
+		},
+		{
 			"key": "pr:minion-base#43",
 			"kind": "pr",
 			"stage": "development",
@@ -7958,41 +7925,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T07:52:21.014Z"
-		},
-		{
-			"key": "pr:minion (gateway)#342",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#342 test(agents): stabilize Windows release qualification timing",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/342",
-			"sourceUpdatedAt": "2026-10-21T05:45:33Z",
-			"sourceFingerprint": "bc602b89e860409d6b249a2eb2f1234390f71a3fd20e74e2c9917d3efda37e16",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#343",
-				"pr:minion (gateway)#339"
-			],
-			"rationale": "Test-timing fix is well-specified and validated locally but the PR itself states it is not currently merge-ready until the observer repair in #343 lands first.",
-			"evidence": [
-				"\"It is not currently merge-ready\"",
-				"requires refresh against corrected DEV after #343"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
@@ -10357,40 +10289,6 @@
 			"scoredAt": "2026-10-20T05:25:47.993Z"
 		},
 		{
-			"key": "pr:minion_hub#577",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#577 feat(desktop): install updates at startup and notify while Hub is open",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/577",
-			"sourceUpdatedAt": "2026-10-21T05:52:00Z",
-			"sourceFingerprint": "a7bbeea6e70ec6b35b38261c3a153711b5e20f7e210172a952d9c9f61ebd1818",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#853"
-			],
-			"rationale": "Desktop auto-update is extensively validated locally but remains draft pending four-OS packaging CI and installed update/relaunch proof.",
-			"evidence": [
-				"Installed old-to-new update/relaunch is not yet proven on all four OS targets",
-				"final four-OS packaging and broader CI runs still being qualified"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
-		},
-		{
 			"key": "proposal:2026-08-24-minion-ai-npm-trusted-publishing",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10487,39 +10385,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T18:21:17.909Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-1049544011",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/agents/tool-governance/tool-mutation.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-1049544011.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "d039a6cea473a70e2ee04edfae739a3d0fb593857053836c9d8f5999552e2c9f",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A flagged fingerprint-collision correctness concern in tool-governance needs scoping before it can become an actionable fix.",
-			"evidence": [
-				"TODO(handoff) notes target/display fingerprints can collide for distinct payloads",
-				"src/agents/tool-governance/tool-mutation.ts:144",
-				"status draft, no validation evidence yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T04:56:58.311Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-368607906",
@@ -11362,6 +11227,41 @@
 			"scoredAt": "2026-10-21T05:56:28.048Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6b39120c48a2.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "6d661b6862b97d190103f8af9457e34f99f77a79e75369046258435d79373258",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-77b26984c8ea",
+				"proposal:postmerge-minion-hub-7ec5d7436363"
+			],
+			"rationale": "A clearly diagnosed POS identity-collision risk with a concrete fix direction and test guidance, already approved.",
+			"evidence": [
+				"relying solely on ID to distinguish entities ... creates collision risk",
+				"Add discriminated union types ... Enforce composite identity (type + ID) at every lookup boundary"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-6ccc8172373b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11429,6 +11329,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-15T18:50:14.074Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77b26984c8ea.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "a60fb30d2077426782ace348ec78a357e5744e80ddd708205816c875f1808605",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-6b39120c48a2",
+				"proposal:postmerge-minion-hub-7ec5d7436363"
+			],
+			"rationale": "Well-specified billing-affecting bug (reschedule drops package link) with a precise fix and test assertion, already approved.",
+			"evidence": [
+				"RESCHEDULE currently loses the package link",
+				"explicitly carry forward the package_id ... Add a test asserting originalBooking.package_id === rescheduledBooking.package_id"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
@@ -19929,6 +19864,41 @@
 			"scoredAt": "2026-10-20T01:56:36.858Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ec5d7436363.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "cf7ab4653cc7396bcb7f7eb2a43349a1184cee102cc0136825edb5b0aaf20d3a",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-6b39120c48a2",
+				"proposal:postmerge-minion-hub-77b26984c8ea"
+			],
+			"rationale": "The diagnosis section is a raw, incomplete agent transcript rather than a clear fix direction, so this needs rework before it is actionable.",
+			"evidence": [
+				"Diagnosis (auto) section shows unfinished tool-use narration: 'Let me read the file to understand the context.'",
+				"no concrete fix direction or test guidance is stated, unlike the two sibling postmerge findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20787,40 +20757,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T10:52:02.834Z"
-		},
-		{
-			"key": "run:minion (gateway)#39546077771",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39546077771",
-			"sourceUpdatedAt": "2026-10-21T05:34:54Z",
-			"sourceFingerprint": "a8da25c4a2b414dfc9a13eeb995512614347cfd30e1f67ff5b8203c095e5a011",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion (gateway)#343"
-			],
-			"rationale": "This is just the raw failing CI run already diagnosed and being remediated by the #343/#342 PR chain, so it adds no independent actionable work.",
-			"evidence": [
-				"same run cited as the failure driving #339, #342, and #343",
-				"#343 already proposes and validates the root-cause fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
 		},
 		{
 			"key": "issue:minion-meta#306",
@@ -21975,38 +21911,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T17:40:12.329Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ec5d7436363.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "cf7ab4653cc7396bcb7f7eb2a43349a1184cee102cc0136825edb5b0aaf20d3a",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The diagnosis section contains leaked raw agent-transcript fragments instead of an actual analysis, so the real issue and fix direction are unknown and cannot be acted on as written.",
-			"evidence": [
-				"Diagnosis body includes literal text like '<function_calls>' and '<invoke name=\"Glob\">' rather than findings",
-				"Marker text is cut off mid-sentence: \"'cancel a grant' action on /pos/accounts will hit this\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T05:58:35.205Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-8aa8cf0c136b",
@@ -24313,8 +24217,8 @@
 			"repo": "minion-meta",
 			"title": "#852 docs(agents): record production verification and remaining deployment work",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/852",
-			"sourceUpdatedAt": "2026-10-21T05:50:20Z",
-			"sourceFingerprint": "ca70aad1bfcdd5693b164cd1cff0cdfbe3b3b682e4c8579f3e5e6390083ffbd0",
+			"sourceUpdatedAt": "2026-10-21T06:23:23Z",
+			"sourceFingerprint": "225a0ce880f433aeb5d8efcabeb260df308299f149ae1d9e49deadecfebbb117",
 			"score": 33,
 			"band": "low",
 			"axes": {
@@ -24323,23 +24227,57 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 9
+				"specification": 7,
+				"implementation": 8
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
 				"pr:minion (gateway)#339",
-				"pr:minion (gateway)#343"
+				"pr:minion (gateway)#342"
 			],
-			"rationale": "A low-risk documentation record of verified status with passing proposal/spec index checks and no pending blockers of its own.",
+			"rationale": "A low-risk, validated documentation record of release-gate status that is ready to merge on its own.",
 			"evidence": [
 				"proposal index passes for 868 proposals; spec index passes for 291 specs",
-				"no credentials or private links included"
+				"This record does not claim production assistant acceptance."
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
+			"scoredAt": "2026-10-21T06:26:37.103Z"
+		},
+		{
+			"key": "pr:minion-meta#853",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#853 docs(spec): Hub desktop automatic updates and qualification evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/853",
+			"sourceUpdatedAt": "2026-10-21T05:57:17Z",
+			"sourceFingerprint": "72efda62a3bfd347606b19f3822e2f27fb22a83bc01b0a21dec2937a9a16b027",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#577"
+			],
+			"rationale": "Validated documentation tracking the desktop updater work, ready to merge independently of the underlying feature's remaining gaps.",
+			"evidence": [
+				"spec-index and proposal-index checks pass.",
+				"Installed old-to-new update/relaunch remains a publication prerequisite, documented at the native install site."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
@@ -27463,40 +27401,6 @@
 			"scoredAt": "2026-10-21T04:56:58.311Z"
 		},
 		{
-			"key": "pr:minion-meta#853",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#853 docs(spec): Hub desktop automatic updates and qualification evidence",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/853",
-			"sourceUpdatedAt": "2026-10-21T05:36:55Z",
-			"sourceFingerprint": "d89ce475a4009ddf90b4cae748841f01f1ed18934614a09616e66a4bc9fc8f75",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#577"
-			],
-			"rationale": "Spec/evidence tracking doc for the desktop updater is internally consistent and its own validation gates pass.",
-			"evidence": [
-				"spec-index and proposal-index checks pass",
-				"Hub local qualification passed 10 native tests, 11 release contracts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
-		},
-		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29384,6 +29288,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-14T21:52:11.157Z"
+		},
+		{
+			"key": "run:minion (gateway)#39553574393",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39553574393",
+			"sourceUpdatedAt": "2026-10-21T06:13:13Z",
+			"sourceFingerprint": "6686a2f4037ec961c1a633aff0c3486c5257bb02fff76ceab312ea20e3237e12",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run on DEV push with no indication of failure or blocking impact yet.",
+			"evidence": [
+				"status in_progress",
+				"push on DEV",
+				"CI workflow run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:44.859Z"
 		},
 		{
 			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
@@ -32910,39 +32847,6 @@
 			"scoredAt": "2026-10-21T03:05:00.863Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "c2753475a77243416ab869fe839b797f8c531eebe87a26083bd401268decc953",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The flagged markers are quoted evidence snippets embedded in the ranking system's own output artifact rather than coherent code TODOs with a verifiable outcome.",
-			"evidence": [
-				"Target file is rankings/index.json, this system's own output file",
-				"Markers span unrelated domains (POS sessions, DB schema drops, capability gating) with no common scope",
-				"No single verifiable fix is possible for a bundle of unrelated quoted strings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T04:56:58.311Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35065,6 +34969,38 @@
 			"scoredAt": "2026-10-21T01:26:52.427Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-1049544011",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/agents/tool-governance/tool-mutation.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-1049544011.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "b095ebbb1c78aaadf3ed97d4e6f7b9d2b290238b6f9f798b6cb3cf2bc995db78",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The reconciliation note itself identifies this as very likely a duplicate of an already in-spec tracked finding.",
+			"evidence": [
+				"already documents this exact finding verbatim ... and names it as retained follow-up work.",
+				"This marker is very likely tracking the same open end rather than a new one"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-4278431509",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35283,6 +35219,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T03:03:14.182Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "74393e70ead7634918f7aed94548810198373b91dff89e8a26ea9d32b059957e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a sweep artifact listing dozens of unrelated TODO markers embedded in a generated rankings file, not a coherent actionable item.",
+			"evidence": [
+				"markers span unrelated domains: org-scoping, race windows, POS sessions, audit traces, WebGL budgets",
+				"file: rankings/index.json (a generated ranking output, not source needing a fix)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-12c3ee1",
