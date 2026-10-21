@@ -1,9 +1,9 @@
 ---
 id: 2026-10-19-hub-optimistic-everywhere
 title: Every reversible hub edit updates instantly (finish the createOptimistic rollout)
-status: draft
+status: in-spec
 created: 2026-10-19
-updated: 2026-10-19
+updated: 2026-10-20
 repos: [minion_hub]
 tags: [ui, ux, logic]
 value: 8
@@ -21,3 +21,9 @@ Every reversible edit (toggles, selects, tags, renames, reorders, status changes
 
 ## DELTA
 Inventory the remaining DB-backed controls that bind `data.*` + `invalidate()` (grep + design-lint rule), migrate per module through `createOptimistic`/`createAutosave`, and add a lint ratchet so new non-optimistic controls fail CI.
+
+## Implementation
+
+Implementation and qualification are tracked in
+`specs/2026-10-20-hub-app-backlog-spec.md`. The candidate is [Hub PR #575](https://github.com/NikolasP98/minion_hub/pull/575)
+on `feat/app-backlog`. Merge and deployment remain owner-gated.

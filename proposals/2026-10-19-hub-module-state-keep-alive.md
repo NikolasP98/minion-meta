@@ -1,9 +1,9 @@
 ---
 id: 2026-10-19-hub-module-state-keep-alive
 title: Hub modules remember where you were (filters, scroll, selection) across module switches
-status: draft
+status: in-spec
 created: 2026-10-19
-updated: 2026-10-19
+updated: 2026-10-20
 repos: [minion_hub]
 tags: [ui, ux]
 value: 8
@@ -21,3 +21,18 @@ Returning to a module restores what the user left: scroll offset of the route vi
 
 ## DELTA
 Module-scoped `<script module>` stores (the assistant-launcher #539 pattern) or SvelteKit `snapshot` per module root; restore scroll on `afterNavigate` for the route viewport. Proof: mounted test leaves and re-enters a module and asserts restored state; browser check on /crm and /pos.
+
+## Implementation
+
+Implementation and qualification are tracked in
+`specs/2026-10-20-hub-app-backlog-spec.md`. The candidate is [Hub PR #575](https://github.com/NikolasP98/minion_hub/pull/575)
+on `feat/app-backlog`. Merge and deployment remain owner-gated.
+
+## Release qualification
+
+Mounted and headless browser fixtures exercise the actual shared table, filters,
+selection and context controls with synthetic rows. Authenticated CRM/POS route
+loads have not been exercised in this lane. `TODO(handoff)` at the app layout's
+`afterNavigate` registration points here and to the Hub verification receipt.
+Run the leave-return, deep-link, panel and scroll scenarios with an authenticated
+loopback QA session before release.
