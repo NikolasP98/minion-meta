@@ -1,7 +1,7 @@
 ---
 id: 2026-10-21-windows-qualification-observer
 title: Correct Windows qualification observer identity and reviewed test count
-status: draft
+status: review
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion]
@@ -41,3 +41,5 @@ Local fixture tests prove filtering and validation semantics, not native Windows
 ## Prepared correction
 
 Gateway PR #343 at `4afe610ffbdae4a125ef772005f9957a51df4479` changes only the helper and its test file. All 21 observer tests and 12 full-shard tests pass, including strict foreign-survivor and invalid-count cases; full repository checks pass with 0 errors and 57 existing warnings. Independent design/implementation review passed. Both actual Windows artifact arrays validate after omitting exactly their collectors, with PID 0 preserved. Actual native ten-run qualification remains pending after this separate human-reviewed merge.
+
+CI `39551465500` passed at `4afe610ffbdae4a125ef772005f9957a51df4479`: 60 workflow tests, 26 diagnostics tests, and 33 Node helper tests passed. All non-skipped PR checks succeeded. Native focused and full Windows were correctly not admitted for this protected-infrastructure change; they remain mandatory after the separate observer merge. PR #343 is ready for human review.
