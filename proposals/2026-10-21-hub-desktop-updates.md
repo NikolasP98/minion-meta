@@ -37,7 +37,8 @@ one manual bootstrap install; it cannot update code it does not contain.
 
 ## Qualification
 
-Implementation and platform qualification are in progress. Do not advertise an
+Implementation and four-target packaging CI are complete; installed update
+qualification remains open. Do not advertise an
 automatic update as deployed before an approved updater-enabled release and
 installed old-to-new update proof exist.
 
@@ -48,7 +49,11 @@ installation, active checks and notices, a static GitHub feed, integrity-key
 configuration, local-only updater IPC and the release workflows. It depends on
 [Hub PR #576](https://github.com/NikolasP98/minion_hub/pull/576).
 
-Ten Rust tests and eleven release contracts pass locally. Source/CI qualification
+Ten Rust tests pass on all four targets and eleven release contracts pass.
+The full Hub CI run also passes. Downloaded CI candidates have five verified
+installer hashes and four verified updater signatures/signed versions; evidence
+is in `specs/evidence/hub-desktop-updates-2026-10-21/ci-artifacts.json`.
+Source/CI qualification
 is separate from installed old-to-new package replacement and relaunch on Linux,
 Windows and both macOS targets. That installed proof remains required before the
 first updater publication. The exact native installation site carries

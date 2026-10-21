@@ -1,6 +1,6 @@
 # Desktop updater qualification
 
-Source: Hub PR #577, commit `9026275e`. Local actual-component fixture at
+UI capture source: Hub PR #577, commit `9026275e`. Local actual-component fixture at
 `http://127.0.0.1:5201/fixture.html`, dedicated headless Browser Harness session.
 Data and Tauri IPC are synthetic; these screenshots do not show an installed
 OS update or production behavior. Package installation/relaunch remains tracked
@@ -21,7 +21,7 @@ Local checks: ten Rust tests, eleven release contracts, updater UI build,
 svelte-check (zero errors/warnings), design ratchet, token integrity and actionlint.
 The full web suite passed 7,843 tests (263 skipped), plus three architecture
 tests. The production build and both client-boundary checks passed. Four-target
-packaging CI is recorded in the PR as it finishes. No new release was published during implementation.
+packaging CI passes as recorded below. No new release was published during implementation.
 
 Rust baseline: full release library output included an unused 221,744,274-byte
 static archive and 325,256-byte shared library. The desktop-only probe emits only
@@ -59,3 +59,28 @@ node specs/evidence/hub-desktop-updates-2026-10-21/publisher-dry-run.mjs /path/t
 The simulated mutation counts were 2 for bootstrap (create/upload), 2 for advance
 (delete/upload), and 0 for each remaining scenario. These are HTTP protocol and
 publication-order checks, not proof that a release has been published.
+
+## Final candidate and cross-platform CI
+
+Hub head `c0528fedf99a21b13870e8cfc46ae4cb9fc26ed2` passed both
+[desktop qualification](https://github.com/NikolasP98/minion_hub/actions/runs/39553642753)
+and [the complete web CI](https://github.com/NikolasP98/minion_hub/actions/runs/39553642738).
+Desktop qualification ran all ten native tests and packaged installers on Linux
+x64, Windows x64, macOS Apple Silicon and macOS Intel. The release-contract job
+also passed. Vercel's status for this head confirms successful preview deployment;
+this is not a production desktop release.
+
+All four uploaded platform artifacts were downloaded for read-only inspection.
+Five installer hashes and four updater payload signatures/signed versions verify.
+[Artifact receipts](ci-artifacts.json) retain file sizes, hashes and key digests.
+These use disposable CI keys; they cannot be published through the production
+update channel. The macOS archives contain the expected `.app` layout.
+
+The receipts identify GitHub's PR merge commit
+`4ce5c5f3ac84c8e3d1bfd4c2fe37365c55e371ae`. Its Git tree
+`062f37a84a5d63389cfb402ad85c64819dc2db6f` exactly matches the candidate head's
+tree. That identity was checked through the GitHub Git API and local Git.
+
+Installed old-to-new replacement and relaunch remain unproven on all four OS
+targets and are explicitly tracked before first updater publication. No new
+desktop release or `desktop-updates` feed was published by this task.

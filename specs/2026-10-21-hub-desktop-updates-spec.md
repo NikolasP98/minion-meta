@@ -95,7 +95,7 @@ preserved, explicit release approval retained. Pass 2: the implementation preser
 
 Spec pass 1: startup installation and active notification match the request;
 metadata remains static and bounded. The one-time bootstrap and Debian package
-manager boundary are explicit. Pass 2: ten native tests and eleven release contracts pass; actual-component UI qualification covers progress, retry/continue/download, keyboard access and narrow layout. Source is Hub PR #577. The web test run passed 7,843 tests (263 skipped), plus three architecture tests; the full production build and both client-boundary checks passed. Four-target CI and installed update/relaunch proof remain separate qualification stages.
+manager boundary are explicit. Pass 2: ten native tests and eleven release contracts pass; actual-component UI qualification covers progress, retry/continue/download, keyboard access and narrow layout. Source is Hub PR #577. The web test run passed 7,843 tests (263 skipped), plus three architecture tests; the full production build and both client-boundary checks passed. Final candidate `c0528fed` passes all four native test/packaging targets and complete web CI. Downloaded candidates have five verified installer hashes and four verified updater signatures/signed versions; see `specs/evidence/hub-desktop-updates-2026-10-21/ci-artifacts.json`. Installed update/relaunch proof remains a separate, pending publication prerequisite.
 
 ## Out of scope
 
