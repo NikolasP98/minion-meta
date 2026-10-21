@@ -135,8 +135,8 @@ compilation and packaging; Apple/Windows signing and installed runtime remain
 unproven until credentials and OS qualification are available.
 
 The same candidate passed the web CI check-and-build job, including typecheck,
-formatting, design/token gates and production build. The ordinary test job and
-browser/database jobs passed. The full seeded QA-stack conformance job was still
-running at this receipt; the Vercel preview was pending. Current status remains
-visible on [CI run 39531728687](https://github.com/NikolasP98/minion_hub/actions/runs/39531728687).
+formatting, design/token gates and production build. The ordinary test job,
+browser/database jobs and full seeded QA-stack conformance job also passed.
+All GitHub CI jobs were green; only the Vercel preview remained pending.
+Current status remains visible on [CI run 39531728687](https://github.com/NikolasP98/minion_hub/actions/runs/39531728687).
 No owner merge, deployment or installer publication occurred.
