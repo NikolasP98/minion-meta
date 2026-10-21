@@ -187,3 +187,13 @@ CI `39676361188` completed both full Windows shards successfully: 13,254 passed 
 ## Aggregate scope correction reviewed and in native CI
 
 Gateway #348 is draft at `6b34c1e5360d3a0d786e18390bc2baf3b59484f7`, tree `1209d4f8b0d948c54d874b8e58b720ad71199a9e`. It changes only the existing helper's full-Windows placeholder scope and regression fixtures. Actual API replay, missing-shard negative replay, 46 combined Node contracts, complete repository check and independent Standards/Spec reviews passed. Both generator checks completed; zero errors and 57 existing warnings. CI `39682003226` remains in progress. It must qualify normally before integration, then #342 requires fresh complete product qualification. The prior failed aggregate remains failed and no production mutation occurred.
+
+
+## Aggregate scope correction integrated after native proof
+
+Gateway #348 passed all applicable CI checks in `39682003226`; root independently verified native artifact `12384962009` with all 17 actual Windows cases and exact live source identity. Normal authorized integration merged DEV `f95ef46b43f3f0c5337f6b7ac1992e9a113efcf3`, tree `1209d4f8b0d948c54d874b8e58b720ad71199a9e`, identical to reviewed/qualified source. Receipt: `windows-aggregate-scope-native-qualification.json`. #342 now includes that DEV locally at `5d72bb8a404bd2bf82487a07279464f87585544e`, tree `4fd43a7db99192b90f594941d24c5c098b5085fd`; its delta remains exactly four reviewed test files and all CI infrastructure matches DEV. Integrated local checks are running before the fresh product qualification push. Prior failed evidence remains failed. No production mutation occurred.
+
+
+## Fresh complete qualification after the reviewed aggregate correction
+
+Integrated #342 source `5d72bb8a404bd2bf82487a07279464f87585544e`, tree `4fd43a7db99192b90f594941d24c5c098b5085fd`, passed 46 helper contracts, 135 unit assertions plus the separate one-case Teams extension suite, and full repository check with zero errors, 57 existing warnings and both generators. The four reviewed test-file delta is unchanged; all workflow/CI infrastructure matches DEV `f95ef46b`. The exact clean source was pushed for fresh CI [39682653940](https://github.com/NikolasP98/minion-ai/actions/runs/39682653940), attempt 1, now queued. All native/fixed-ten/full shard and required aggregate gates must pass, followed by final integrated DEV qualification. Older failed runs remain failed. No production mutation occurred.
