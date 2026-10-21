@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T13:25:58.093Z",
+	"generatedAt": "2026-10-21T13:56:03.990Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -903,39 +903,6 @@
 			"scoredAt": "2026-10-19T03:27:16.894Z"
 		},
 		{
-			"key": "proposal:2026-09-08-platform-qc-remediation",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Platform QC follow-ups — authorization, durable execution, compatibility and release evidence",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-08-platform-qc-remediation.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "c6b1a9c74cb1c88501bdf7cab7136f69c4f6057e6b6f07a64a4b9388c23ac9de",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Well-scoped security/durability remediation across multiple repos but still a draft proposal resting on an unverifiable private audit with no spec-stage review or implementation evidence yet.",
-			"evidence": [
-				"status is draft, updatedAt 2026-10-07",
-				"'Audit completed; implementation remains open' and 'This draft authorizes no production action'",
-				"cites raw SQL interpolation and secret logging risks in specific files (compile-flow.ts, +server.ts) without independently verifiable confirmation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T13:51:35.437Z"
-		},
-		{
 			"key": "proposal:2026-10-13-gateway-swarm-blue-green-slots",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1330,6 +1297,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:00:36.825Z"
+		},
+		{
+			"key": "proposal:2026-09-08-platform-qc-remediation",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Platform QC follow-ups — authorization, durable execution, compatibility and release evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-08-platform-qc-remediation.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "c6b1a9c74cb1c88501bdf7cab7136f69c4f6057e6b6f07a64a4b9388c23ac9de",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The proposal names concrete security and durability gaps across multiple services but remains an unauthorized draft citing a private, unpublished audit with implementation not yet started.",
+			"evidence": [
+				"This draft authorizes no production action. Audit completed; implementation remains open.",
+				"Priority slices cover assistant authorization, secret logging, flow authority, durable job effects, and shells contract",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T13:56:03.828Z"
 		},
 		{
 			"key": "spec:2026-08-22-factory-dev-staging-daily-production-promotion-spec",
@@ -26322,6 +26322,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T21:56:29.644Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/fb9a03f06c7dae71667f7ede6a8a265bc5b394b2",
+			"sourceUpdatedAt": "2026-10-21T08:36:22Z",
+			"sourceFingerprint": "8721998c5c021e02d17e380356e6ab669e44068876afac9754da659287737267",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged CI containment fix with no indication of unresolved deployment risk or pending action.",
+			"evidence": [
+				"Merge pull request #345 ... fix(ci): contain Windows qualification processes with kernel jobs",
+				"status: unknown, no outage or blocker signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-21T13:56:03.828Z"
 		},
 		{
 			"key": "issue:minion-meta#435",
