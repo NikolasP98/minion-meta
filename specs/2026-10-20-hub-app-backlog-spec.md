@@ -106,7 +106,7 @@ Independent PR review remains separate from these author reviews.
 ## Implementation candidate
 
 [Hub PR #575](https://github.com/NikolasP98/minion_hub/pull/575), source commit
-`dccb91a0`, contains all five implementations and the reproducible evidence
+`991b029ec1db6173b13d374714bdc45c13a8f94b`, contains all five implementations and the reproducible evidence
 fixture. This meta change includes PR #849's source proposal/spec commit as a
 prerequisite; #849 itself was not modified. No merge or deployment is authorized
 by these candidate receipts.
@@ -122,3 +122,21 @@ mandatory OS signature verification and rejection of unsigned qualification
 receipts. Release preparation does not authorize merge, hosted deployment or
 publication. Signing credential setup and installed runtime qualification remain
 tracked in the native-shell proposal and the source workflow TODO(handoff).
+
+
+## Cross-platform build receipt
+
+Hub candidate `991b029ec1db6173b13d374714bdc45c13a8f94b` passed all five jobs in
+[Desktop qualification 39531728582](https://github.com/NikolasP98/minion_hub/actions/runs/39531728582):
+release-contract tests and native Rust tests/packaging on Linux x64, Windows x64,
+macOS Apple Silicon and Intel. Five unsigned qualification installers were
+retained as Actions artifacts, never Releases assets. This proves cross-platform
+compilation and packaging; Apple/Windows signing and installed runtime remain
+unproven until credentials and OS qualification are available.
+
+The same candidate passed the web CI check-and-build job, including typecheck,
+formatting, design/token gates and production build. The ordinary test job and
+browser/database jobs passed. The full seeded QA-stack conformance job was still
+running at this receipt; the Vercel preview was pending. Current status remains
+visible on [CI run 39531728687](https://github.com/NikolasP98/minion_hub/actions/runs/39531728687).
+No owner merge, deployment or installer publication occurred.

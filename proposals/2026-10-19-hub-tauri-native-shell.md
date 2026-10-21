@@ -62,7 +62,9 @@ merge/publication. Repository secrets inspected before preparation contained no
 signing credentials. No private keys were created or requested in chat.
 The exact workflow signing step has `TODO(handoff)` pointing here. Linux signing
 is tested with a temporary fixture key; this does not qualify real release keys
-or Apple/Windows signing. Cross-platform installer checks are running on PR #575.
+or Apple/Windows signing. Cross-platform Rust tests and all five installer packaging checks passed on
+`991b029e` in run 39531728582; these unsigned qualification artifacts are not
+signed release evidence.
 
 Linux archive inspection found the bundler's launcher omitted the URI argument
 although its MIME handler was registered. The candidate now supplies a desktop
