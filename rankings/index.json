@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T15:26:41.563Z",
+	"generatedAt": "2026-10-21T15:56:00.543Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -25077,17 +25077,17 @@
 				"specification": 7,
 				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A clear, bounded fix (wiring SvelteKit depends/invalidate) addresses a known stale-data bug in a merged PR with an approved proposal.",
+			"rationale": "Clear, bounded fix (add depends()/invalidate() wiring) addressing stale data after flow exports in a specific file.",
 			"evidence": [
-				"TODO(handoff) marker names exact file and missing depends() call",
-				"proposal status is approved with a concrete fix described"
+				"TODO(handoff) marker names exact file and missing depends() wiring",
+				"merged PR #438 identifies the stale-data symptom and proposed fix"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T15:51:25.653Z"
+			"scoredAt": "2026-10-21T15:56:00.361Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-380ed33fff7f",
@@ -25859,19 +25859,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 3
+				"implementation": 5
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "A self-recovered transient git push failure plus a possible runner-level exit-126 binary issue needs host-level investigation rather than immediate code work.",
+			"rationale": "A one-off exit-126 provider launch failure self-recovered and the underlying reconcile succeeded, so this is low urgency unless it recurs.",
 			"evidence": [
-				"reconcile logic already succeeded end-to-end",
-				"provider=claude exited with code 126, turns=0, classic exec-permission failure"
+				"reconcile logic already succeeded (481 proposals written)",
+				"provider=claude exited 126, turns=0 — binary/PATH issue on runner, not logic failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-14T15:51:25.653Z"
+			"scoredAt": "2026-10-21T15:56:00.361Z"
 		},
 		{
 			"key": "issue:minion-meta#672",
@@ -35681,38 +35681,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T15:40:35.099Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/fb9a03f06c7dae71667f7ede6a8a265bc5b394b2",
-			"sourceUpdatedAt": "2026-10-21T08:36:22Z",
-			"sourceFingerprint": "8721998c5c021e02d17e380356e6ab669e44068876afac9754da659287737267",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This entry is a past merge of a CI fix with no open action remaining, not a forward-looking goal.",
-			"evidence": [
-				"summary is a merge commit message: 'fix(ci): contain Windows qualification processes'",
-				"status: unknown with no stated next step"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T15:26:41.392Z"
 		},
 		{
 			"key": "issue:minion-meta#516",
