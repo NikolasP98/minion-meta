@@ -87,11 +87,26 @@ If automatic ensure already completed after the Hub deployment, verify the
 result rather than replaying it. Preserve the existing agent ID, personality,
 workspace and profile pointer. Record the verified canonical assignment.
 
-Using the runtime's configured callback credentials and server hint, verify
-that `query/tool-catalog` and `query/tool-permissions` return an authorized
-catalog including `catalog_query`. Do not substitute a corrected request
-header for the runtime's configured hint when claiming the configuration is
-fixed. Existing Gateway permission snapshots have a 60-second cache lifetime,
+Using the runtime's configured callback credentials and server hint, require
+HTTP 200 from both `query/tool-catalog` and `query/tool-permissions`. The catalog
+must advertise one active `catalog_query` with a nonempty `contractRevision`
+and permission `pos:view`; the permissions response must grant `view` in
+`modules.pos`. These endpoints have different response shapes: only the catalog
+has a tools array. Require the same nonempty `principalId` and the expected
+FACES `orgId` in both responses. Missing or malformed fields fail verification.
+Do not substitute a corrected request header for the runtime's configured hint
+when claiming the configuration is fixed.
+
+A bounded backend execution check may read
+`GET /api/gateway/query/catalog` with `agentId` set to the persisted runtime
+agent, the expected FACES `orgId`, `kind=service`, `limit=3`, and the discovered
+tool's `contractRevision`. The top-level catalog `revision` is not the tool
+contract revision. Preserve missing-price counts, maximum-price ties and
+truncation when interpreting the current active sale-price ranking. A successful
+backend read proves typed execution through the configured callback authority;
+it does not prove Gateway activation or the user-facing answer.
+
+Existing Gateway permission snapshots have a 60-second cache lifetime,
 including failed snapshots. After verifying the callback and assignment, allow
 that lifetime to expire before starting a fresh acceptance run if the runtime
 still holds an earlier denied snapshot. Do not replay the assignment or widen
