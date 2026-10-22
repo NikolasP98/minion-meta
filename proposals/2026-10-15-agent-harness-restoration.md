@@ -1,18 +1,28 @@
 ---
 id: 2026-10-15-agent-harness-restoration
 title: Agent harness — restore the dead hub tool bridge, fix the JEV gate, then widen the agent surface
-status: draft
+status: review
 created: 2026-10-15
-updated: 2026-10-15
+updated: 2026-10-22
 repos: [minion_hub, minion, minion-meta]
 tags: [security, logic, data]
 value: 9
 effort: L
+duplicate_candidate: 2026-10-18-assistant-capability-failure-recovery
 ---
 
 # Agent harness restoration
 
 Audit: `audits/2026-10-15-agent-harness/00-synthesis.md` (A–E reports alongside).
+
+## Reconciliation note (2026-10-22)
+
+Slice S0a/S0b here (the `personal_agents.gateway_id` NULL → 403 repair) describes the
+same root cause as the AS-IS in `2026-10-18-assistant-capability-failure-recovery`
+(already `in-spec`, untouched by this sweep). Flagged `duplicate_candidate` for a human
+to confirm whether S0a/S0b is superseded by that spec or still needs independent
+tracking for the broader multi-org `gateway_id` design question (open question 1,
+below) that the narrower proposal does not address.
 
 ## Owner ask (verbatim, 2026-10-15)
 
