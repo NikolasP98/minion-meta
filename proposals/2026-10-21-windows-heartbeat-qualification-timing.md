@@ -1,7 +1,7 @@
 ---
 id: 2026-10-21-windows-heartbeat-qualification-timing
 title: Drain heartbeat delivery fixtures and scope their measured Windows budget
-status: draft
+status: approved
 created: 2026-10-21
 updated: 2026-10-22
 repos: [minion]
