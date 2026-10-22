@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-22T08:10:19.148Z",
+	"generatedAt": "2026-10-22T08:39:03.952Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8696,6 +8696,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T01:37:26.163Z"
+		},
+		{
+			"key": "issue:minion-meta#864",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#864 [monitor:unstick] run 683fe641 (minion-meta rank) - dual-provider ranking failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/864",
+			"sourceUpdatedAt": "2026-10-22T08:17:32Z",
+			"sourceFingerprint": "353c0a0f2210f40dbe319624fefd71d413e57f320819687b021b311836373d91",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The monitor log describes a 3rd consecutive recurring claude-unavailable/codex-fallback provider outage and suggests adding auto-retry/backoff to the host classifier, but the fix is not yet scoped to a concrete implementation.",
+			"evidence": [
+				"'3rd consecutive hourly rank run (05:21, 06:37, 07:37) hitting the same claude-unavailable -> codex-fallback-fails pattern'",
+				"'Recommendation: safe to retry the run as-is; no spec fix needed' but flags adding auto-retry/backoff to host classifier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:39:03.796Z"
 		},
 		{
 			"key": "pr:minion-meta#808",
@@ -29728,6 +29760,38 @@
 			"scoredAt": "2026-10-17T22:39:41.398Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-0f5a066",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The finding pinpoints an exact file/line missing a required TODO(handoff) marker for a documented open end, a small and clearly bounded fix.",
+			"evidence": [
+				"medium finding at 'src/routes/(app)/scheduling/resources/+page.server.ts:1' (missing-handoff)",
+				"'Open end rooms/equipment follow later documented in proposal but lacks in-code TODO(handoff) marker'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:39:03.796Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-site-4edd54f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29854,6 +29918,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/6d1cd8836ff7b82d21668c50cc20b9b6d1e79c18",
+			"sourceUpdatedAt": "2026-10-22T04:06:39Z",
+			"sourceFingerprint": "eaf80885a951cbda2fed44728afdeb064dc4a63b72f5db3a1f5e72e672011daa",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine merged docker-fix health snapshot with no indicated failure or open problem to act on.",
+			"evidence": [
+				"summary is 'Merge pull request #352... fix(docker): build plugin control UIs into the gateway image'",
+				"status: unknown, no failure signal noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:39:03.796Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
@@ -33525,38 +33621,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T04:44:23.505Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-0f5a066",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A documented open end lacking its required in-code TODO(handoff) marker is a small, bounded process-compliance fix with no functional risk.",
-			"evidence": [
-				"medium severity, missing-handoff finding",
-				"file src/routes/(app)/scheduling/resources/+page.server.ts:1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T08:26:56.937Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
