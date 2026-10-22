@@ -1,0 +1,46 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-answer-history-polish-20261021
+
+ ❯ src/lib/components/layout/FloatingAssistant.history.mounted.test.ts (2 tests | 2 failed) 221ms
+     × localizes an omission after tool-only history without changing the source: en 168ms
+     × localizes an omission after tool-only history without changing the source: es 50ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/components/layout/FloatingAssistant.history.mounted.test.ts > Floating Assistant history rendering > localizes an omission after tool-only history without changing the source: en
+AssertionError: expected '   Assistant               1 steps · …' not to contain '[chat.history omitted: message too la…'
+
+Expected: "[chat.history omitted: message too large]"
+Received: "   Assistant               1 steps · 1 tool uses   [chat.history omitted: message too large]           QA Service A, QA Service B, QA Service C. Catalog                 Chat    Factory  Viewing: /settings           "
+
+ ❯ src/lib/components/layout/FloatingAssistant.history.mounted.test.ts:47:46
+     45|     const view = render(FloatingAssistant);
+     46|     await vi.waitFor(() => expect(view.baseElement.textContent).toCont…
+     47|     expect(view.baseElement.textContent).not.toContain(marker);
+       |                                              ^
+     48|     expect(view.baseElement.textContent).toContain(lang === 'en'
+     49|       ? 'This earlier message is too large to display here.'
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/lib/components/layout/FloatingAssistant.history.mounted.test.ts > Floating Assistant history rendering > localizes an omission after tool-only history without changing the source: es
+AssertionError: expected '   Asistente               1 pasos · …' not to contain '[chat.history omitted: message too la…'
+
+Expected: "[chat.history omitted: message too large]"
+Received: "   Asistente               1 pasos · 1 herramientas usadas   [chat.history omitted: message too large]           QA Service A, QA Service B, QA Service C. Catalog                 Chat    Fábrica  Viendo: /settings           "
+
+ ❯ src/lib/components/layout/FloatingAssistant.history.mounted.test.ts:47:46
+     45|     const view = render(FloatingAssistant);
+     46|     await vi.waitFor(() => expect(view.baseElement.textContent).toCont…
+     47|     expect(view.baseElement.textContent).not.toContain(marker);
+       |                                              ^
+     48|     expect(view.baseElement.textContent).toContain(lang === 'en'
+     49|       ? 'This earlier message is too large to display here.'
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  00:34:13
+   Duration  26.74s (transform 21.48s, setup 29ms, import 26.11s, tests 221ms, environment 248ms)
