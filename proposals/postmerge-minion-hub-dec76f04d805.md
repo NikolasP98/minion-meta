@@ -42,3 +42,9 @@ Looking at the context, this TODO flags that legacy code paths calling the chat 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/587
 - file: `src/lib/services/gateway/chat-rpc.ts`
 - checked: 2026-10-22
+
+## Merged content
+
+From `handoff-minion-hub-3256969478` (factory handoff-ledger sweep, 2026-10-22): same
+marker, anchored at `NikolasP98/minion_hub@master src/lib/services/gateway/chat-rpc.ts:15`.
+https://github.com/NikolasP98/minion_hub/blob/master/src/lib/services/gateway/chat-rpc.ts#L15

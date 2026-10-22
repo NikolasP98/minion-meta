@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-3256969478
 title: Handoff marker — src/lib/services/gateway/chat-rpc.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-dec76f04d805
 created: 2026-10-22
 updated: 2026-10-22
 repos: [minion-hub]
