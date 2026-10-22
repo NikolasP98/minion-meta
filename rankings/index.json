@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-22T07:09:17.323Z",
+	"generatedAt": "2026-10-22T08:10:19.148Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3557,39 +3557,6 @@
 			"scoredAt": "2026-10-19T13:00:36.825Z"
 		},
 		{
-			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Post-merge review of the 2026-09-16 hub/meta merges — findings ledger",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-post-merge-review-findings.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "b4ad64eeaff0ca6cec583bb5704e6ea78dd898451be4f0498b72c64e313644c6",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An approved ledger bundling many findings of mixed severity, including unresolved security items, that is too broad to execute as a single unit and needs rescoping into discrete follow-ups.",
-			"evidence": [
-				"item 5: join approvals default every invitee to manager role via legacyRoleKey bug",
-				"item 8: public booking endpoint has no rate limit",
-				"several items already shipped via PR 1/2/3 while others remain open"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:21:53.849Z"
-		},
-		{
 			"key": "proposal:2026-10-03-gateway-managed-writer-leases",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4979,6 +4946,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T08:57:40.666Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Post-merge review of the 2026-09-16 hub/meta merges — findings ledger",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-post-merge-review-findings.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "b4ad64eeaff0ca6cec583bb5704e6ea78dd898451be4f0498b72c64e313644c6",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An approved 24-item findings ledger mixes already-fixed items (linked PRs in flight) with several open security/correctness gaps, so it needs to be split into discretely scoped follow-up tickets rather than tracked as one goal.",
+			"evidence": [
+				"Public booking is an unauthenticated write with no rate limit",
+				"walk-in partyId stamped on the ticket without an org check ... Open",
+				"several findings marked '→ PR' already in flight the same night"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
@@ -10791,6 +10791,251 @@
 			"scoredAt": "2026-10-22T04:09:09.513Z"
 		},
 		{
+			"key": "issue:minion-meta#468",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#468 [monitor:unstick] reconcile proposals run 22ebf5b4 -- claude agent exit-126 after successful pipeline work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/468",
+			"sourceUpdatedAt": "2026-09-17T05:18:13Z",
+			"sourceFingerprint": "e94c6d2d303b745233c9b8e6ea2bb07e71170618ba20619d5384a1f5fa23b62e",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#469",
+				"issue:minion-meta#472"
+			],
+			"rationale": "Recurring claude-CLI exit-126/turns=0 reconcile-agent exec failure on the runner box should be consolidated into one infra-fix goal instead of tracked as separate duplicate intakes.",
+			"evidence": [
+				"reconcile agent failed (provider=claude; exit-126; turns=0)",
+				"identical signature also hit runs dee5c72b and 31abd571 within ~2 hours"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
+		},
+		{
+			"key": "issue:minion-meta#469",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#469 [monitor:unstick] reconcile proposals run dee5c72b -- claude agent exit-126 after successful pipeline work",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/469",
+			"sourceUpdatedAt": "2026-09-17T05:18:14Z",
+			"sourceFingerprint": "2a803e5da58922f0ba8f08e54ac1fc7cbb135cd31292c530bf604dbcefa8be01",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#468",
+				"issue:minion-meta#473"
+			],
+			"rationale": "Second of the same exit-126/turns=0 reconcile-agent signature; should merge with sibling duplicates into one host-classifier/exec-permission fix goal.",
+			"evidence": [
+				"second of three near-identical exit-126/turns=0 failures on this repo within about 2 hours",
+				"push to minion-meta:dev succeeded via automatic rebase despite agent-step failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
+		},
+		{
+			"key": "issue:minion-meta#472",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#472 [monitor:unstick] reconcile run 9a8f5081 (minion-meta): agent exit-126/turns=0 but pipeline completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/472",
+			"sourceUpdatedAt": "2026-09-17T06:18:09Z",
+			"sourceFingerprint": "615667613219a5947940150bf5746f4ab79c328339e12723e034201a38eb13eb",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#473",
+				"issue:minion-meta#474"
+			],
+			"rationale": "One of 7 identical exit-126/turns=0 reconcile-agent exec failures in ~3 hours; consolidate into a single infra-fix goal rather than 7 separate tickets.",
+			"evidence": [
+				"same exact signature appears on 6 other reconcile runs in the last ~3 hours",
+				"pipeline ran to completion (proposals/index.json written: 467 proposals, push succeeded)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
+		},
+		{
+			"key": "issue:minion-meta#473",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#473 [monitor:unstick] reconcile run 9b4754db (minion-meta): agent exit-126/turns=0 but pipeline completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/473",
+			"sourceUpdatedAt": "2026-09-17T06:18:09Z",
+			"sourceFingerprint": "8d9d394ddb85d3f623c597b80129675d98f077e8070c6858204e2359d3b25392",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#472",
+				"issue:minion-meta#474"
+			],
+			"rationale": "Duplicate of the same recurring exit-126/turns=0 reconcile-agent exec fault; belongs in the consolidated infra-fix goal.",
+			"evidence": [
+				"same signature as run 9a8f5081",
+				"one of 7 recurring instances of the same exit-126/turns=0 pattern seen across the last ~3 hours"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
+		},
+		{
+			"key": "issue:minion-meta#474",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#474 [monitor:unstick] reconcile run 2ecf0c01 (minion-meta): agent exit-126/turns=0 but pipeline completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/474",
+			"sourceUpdatedAt": "2026-09-17T06:18:09Z",
+			"sourceFingerprint": "296808db370cbbe1b6846aef025f3b35ea759be395dba154d6db7f5635c36b7d",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#475",
+				"issue:minion-meta#472"
+			],
+			"rationale": "Another instance of the same recurring exit-126/turns=0 reconcile-agent exec fault; group rather than treat as a distinct issue.",
+			"evidence": [
+				"log tail shows a fully successful reconcile cycle ... while the run note reports reconcile agent failed",
+				"1 of 7 identical occurrences in the last ~3 hours"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
+		},
+		{
+			"key": "issue:minion-meta#475",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#475 [monitor:unstick] reconcile run b576aff3 (minion-meta): agent exit-126/turns=0 but pipeline completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/475",
+			"sourceUpdatedAt": "2026-09-17T06:18:10Z",
+			"sourceFingerprint": "0e69655036d5617b75c5962df2fa717981f705381c252cacbdba56120c956632",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#474",
+				"issue:minion-meta#581"
+			],
+			"rationale": "Same recurring exit-126/turns=0 reconcile-agent signature; group with siblings into one infra-permission-fix goal.",
+			"evidence": [
+				"push b64271a..e32c4a2 succeeded while reconcile agent step hit exit-126, turns=0",
+				"1 of 7 identical occurrences in the last ~3 hours on this repo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
+		},
+		{
+			"key": "issue:minion-meta#581",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#581 [monitor:unstick] reconcile run 7afab1d0 failed: claude provider exit-126, 0 turns",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/581",
+			"sourceUpdatedAt": "2026-09-24T06:17:34Z",
+			"sourceFingerprint": "05026a4c6cba524e316d14a366199cb65b310535232a17c0acc0c2f00f2ca689",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#475",
+				"issue:minion-meta#468"
+			],
+			"rationale": "A week-later occurrence of the same exit-126/turns=0 reconcile-agent exec fault, confirming it is an unresolved recurring infra defect worth one consolidated fix.",
+			"evidence": [
+				"proposals/index.json written with 481 proposals, and a successful git push",
+				"worker start-to-finish was well under a second, consistent with the claude CLI binary failing to exec"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
+		},
+		{
 			"key": "issue:minion-meta#584",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11290,19 +11535,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 7
+				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Multiple high-severity unchecked .returning()[0] accesses in production hr.service.ts risk runtime TypeErrors and have clear file/line fixes.",
+			"rationale": "Multiple high-severity unchecked .returning()[0] destructures and unvalidated query params in the HR scheduling service are concrete, bounded fixes with clear file:line targets.",
 			"evidence": [
-				"hr.service.ts:230,315,370,564 return rows without checking .returning()[0] for undefined",
-				"holidays/leave-allocations/leave-requests endpoints pass unvalidated query params into service calls"
+				"hr.service.ts:230/315/370/564 unchecked-access on .returning()[0]",
+				"holidays/leave-allocations/leave-requests endpoints pass query params unvalidated",
+				"status: draft, not yet reviewed/approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:38:11.789Z"
+			"scoredAt": "2026-10-22T08:10:18.992Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5886b6d51578",
@@ -13513,38 +13759,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:05:58.834Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-88c1258817d5",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-88c1258817d5.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "0edf71850efb1e0bc36fbfbeaea37d715a0bdfd3b071ee105e745933a4e61f4b",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Flags an incomplete stock entry form affecting core inventory workflows, but the diagnosis itself admits the exact missing columns are still unknown and need to be read from the full TODO before work can be scoped.",
-			"evidence": [
-				"TODO marker references 5 columns with only item/qty confirmed, '2-3 unknowns'",
-				"diagnosis explicitly says 'Read the full TODO to identify the missing column definitions'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:21:53.849Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-928e5d399f1a",
@@ -19773,6 +19987,39 @@
 			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-88c1258817d5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-88c1258817d5.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "0edf71850efb1e0bc36fbfbeaea37d715a0bdfd3b071ee105e745933a4e61f4b",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The actual missing-columns requirement is unknown and the auto-diagnosis is speculative (\"likely missing columns for X, Y, or Z\"), so the real scope needs investigation before this is actionable.",
+			"evidence": [
+				"diagnosis text includes a leaked grep command rather than a finished analysis",
+				"fix direction says missing columns are only guessed, not confirmed",
+				"status: approved but spec lacks a verifiable outcome"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:10:18.992Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21950,38 +22197,6 @@
 			"scoredAt": "2026-10-16T09:12:53.591Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-18215ee1e8fc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-18215ee1e8fc.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "2f8d6b5800f24d3b7155442494123184146032f69ebb563449b84e77e4a89f3e",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A narrow, well-diagnosed UX bug in Dialog.svelte with a concrete fix direction already specified, making it a small bounded task.",
-			"evidence": [
-				"Dialog reopen during pending close animation causes unexpected close",
-				"fix direction: cancel pending CSS transition or use transition.cancel() on reopen"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:21:53.849Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-676808e46687",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23714,77 +23929,6 @@
 			"scoredAt": "2026-10-21T03:56:41.822Z"
 		},
 		{
-			"key": "issue:minion-meta#468",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#468 [monitor:unstick] reconcile proposals run 22ebf5b4 -- claude agent exit-126 after successful pipeline work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/468",
-			"sourceUpdatedAt": "2026-09-17T05:18:13Z",
-			"sourceFingerprint": "e94c6d2d303b745233c9b8e6ea2bb07e71170618ba20619d5384a1f5fa23b62e",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#469",
-				"issue:minion-meta#470"
-			],
-			"rationale": "Automated infra alert about a claude-provider exit-126 fault that is part of a 3x repeated signature in the same window, better tracked as one host-classifier goal than three separate issues.",
-			"evidence": [
-				"provider=claude exit-126 turns=0 permission_denials=0",
-				"identical signature on runs dee5c72b and 31abd571 within ~2 hours",
-				"pipeline work itself completed and pushed successfully"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:21:53.849Z"
-		},
-		{
-			"key": "issue:minion-meta#469",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#469 [monitor:unstick] reconcile proposals run dee5c72b -- claude agent exit-126 after successful pipeline work",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/469",
-			"sourceUpdatedAt": "2026-09-17T05:18:14Z",
-			"sourceFingerprint": "2a803e5da58922f0ba8f08e54ac1fc7cbb135cd31292c530bf604dbcefa8be01",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#468",
-				"issue:minion-meta#470"
-			],
-			"rationale": "Sibling alert to #468/#470 describing the same recurring claude exit-126 infra signature, which should be consolidated into one classifier goal rather than ranked independently.",
-			"evidence": [
-				"second of three near-identical exit-126/turns=0 failures on this repo within about 2 hours",
-				"proposals/index.json write and push still succeeded"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:21:53.849Z"
-		},
-		{
 			"key": "issue:minion-meta#470",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23801,167 +23945,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 5,
+				"implementation": 4
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
-				"issue:minion-meta#468",
-				"issue:minion-meta#469"
+				"issue:minion-meta#863"
 			],
-			"rationale": "Ranking-run alert overlapping the same provider-outage window as #468/#469, pointing to one shared infra root cause worth tracking as a single goal.",
+			"rationale": "Transient dual-provider (claude+codex) failure on a ranking batch with only 3/507 goals unranked; should combine with the later recurrence into one provider-outage classifier goal.",
 			"evidence": [
-				"window 04:56:52-04:58:41 overlaps the three reconcile runs with exit-126",
-				"504/507 goals ranked before the provider gap, only 3 left unranked"
+				"claude batch 1 unavailable or invalid -- falling back to codex",
+				"504/507 goals were ranked successfully before the provider gap"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:21:53.849Z"
-		},
-		{
-			"key": "issue:minion-meta#472",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#472 [monitor:unstick] reconcile run 9a8f5081 (minion-meta): agent exit-126/turns=0 but pipeline completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/472",
-			"sourceUpdatedAt": "2026-09-17T06:18:09Z",
-			"sourceFingerprint": "615667613219a5947940150bf5746f4ab79c328339e12723e034201a38eb13eb",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#473",
-				"issue:minion-meta#474",
-				"issue:minion-meta#475"
-			],
-			"rationale": "Same recurring exit-126/turns=0 claude CLI exec signature appears across at least 7 reconcile runs in ~3 hours, indicating one infra root cause rather than five separate issues.",
-			"evidence": [
-				"run 9a8f5081: pipeline completed but reconcile agent step reports exit-126, turns=0",
-				"same signature recurs on 6 other runs within ~3 hours per the issue body"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:38:11.789Z"
-		},
-		{
-			"key": "issue:minion-meta#473",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#473 [monitor:unstick] reconcile run 9b4754db (minion-meta): agent exit-126/turns=0 but pipeline completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/473",
-			"sourceUpdatedAt": "2026-09-17T06:18:09Z",
-			"sourceFingerprint": "8d9d394ddb85d3f623c597b80129675d98f077e8070c6858204e2359d3b25392",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#472",
-				"issue:minion-meta#474",
-				"issue:minion-meta#581"
-			],
-			"rationale": "Identical exit-126/turns=0 claude CLI exec failure as sibling runs, pipeline itself succeeded, pointing to a shared infra fault needing one consolidated investigation.",
-			"evidence": [
-				"run 9b4754db: push 900ea96..2d7aa2b succeeded but reconcile agent exit_code=1, exit-126, turns=0",
-				"described as 1 of 7 recurring instances in the last ~3 hours"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:38:11.789Z"
-		},
-		{
-			"key": "issue:minion-meta#474",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#474 [monitor:unstick] reconcile run 2ecf0c01 (minion-meta): agent exit-126/turns=0 but pipeline completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/474",
-			"sourceUpdatedAt": "2026-09-17T06:18:09Z",
-			"sourceFingerprint": "296808db370cbbe1b6846aef025f3b35ea759be395dba154d6db7f5635c36b7d",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#472",
-				"issue:minion-meta#473",
-				"issue:minion-meta#475"
-			],
-			"rationale": "Another instance of the same exit-126/turns=0 exec failure with an otherwise-successful reconcile pipeline, best handled as one grouped infra goal.",
-			"evidence": [
-				"run 2ecf0c01: push a6bbd40..0d399fb succeeded, reconcile agent still exit-126/turns=0",
-				"noted as 1 of 7 identical occurrences in ~3 hours"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:38:11.789Z"
-		},
-		{
-			"key": "issue:minion-meta#475",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#475 [monitor:unstick] reconcile run b576aff3 (minion-meta): agent exit-126/turns=0 but pipeline completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/475",
-			"sourceUpdatedAt": "2026-09-17T06:18:10Z",
-			"sourceFingerprint": "0e69655036d5617b75c5962df2fa717981f705381c252cacbdba56120c956632",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#472",
-				"issue:minion-meta#473",
-				"issue:minion-meta#474"
-			],
-			"rationale": "Same exit-126/turns=0 claude CLI exec signature with successful pipeline fallback, part of the same cluster of 7 runs needing one root-cause fix.",
-			"evidence": [
-				"run b576aff3: push b64271a..e32c4a2 succeeded, reconcile agent exit-126/turns=0/permission_denials=0",
-				"1 of 7 identical occurrences in the last ~3 hours"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:38:11.789Z"
+			"scoredAt": "2026-10-22T08:09:54.837Z"
 		},
 		{
 			"key": "issue:minion-meta#480",
@@ -24204,42 +24203,6 @@
 			"scoredAt": "2026-10-21T23:55:58.056Z"
 		},
 		{
-			"key": "issue:minion-meta#581",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#581 [monitor:unstick] reconcile run 7afab1d0 failed: claude provider exit-126, 0 turns",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/581",
-			"sourceUpdatedAt": "2026-09-24T06:17:34Z",
-			"sourceFingerprint": "05026a4c6cba524e316d14a366199cb65b310535232a17c0acc0c2f00f2ca689",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#472",
-				"issue:minion-meta#473",
-				"issue:minion-meta#474"
-			],
-			"rationale": "Later recurrence (run 7afab1d0, a week after the first cluster) of the identical exit-126/turns=0 exec failure despite successful pipeline output, confirming an ongoing systemic cause worth one grouped fix.",
-			"evidence": [
-				"run 7afab1d0: dev push 93bf04a..b5f7771 succeeded, reconcile agent exit 126, 0 turns, 0 permission denials",
-				"diagnosis states worker finished in well under a second, consistent with claude CLI exec failure not a task failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:38:11.789Z"
-		},
-		{
 			"key": "issue:minion-meta#583",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24441,6 +24404,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T01:56:37.221Z"
+		},
+		{
+			"key": "issue:minion-meta#863",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#863 [monitor:unstick] rank run 450d8e8b: dual-provider failure on ranking batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/863",
+			"sourceUpdatedAt": "2026-10-22T07:17:27Z",
+			"sourceFingerprint": "3fbff78f6d714d27d1081defe9247cc28ab252e9fb68c2042cd29b1f9b84e6ce",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#470"
+			],
+			"rationale": "Second occurrence (~76 minutes apart) of both bounded providers failing on a ranking batch; pair with #470 into one provider-outage classifier goal.",
+			"evidence": [
+				"second occurrence of the identical note text within ~76 minutes on this repo",
+				"catalog build itself succeeded (1141 goals written, 5 pending candidates)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:09:54.837Z"
 		},
 		{
 			"key": "pr:minion-meta#861",
@@ -27400,6 +27397,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T01:56:36.858Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-18215ee1e8fc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-18215ee1e8fc.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "2f8d6b5800f24d3b7155442494123184146032f69ebb563449b84e77e4a89f3e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, narrowly-scoped Dialog reopen-during-close animation bug with a clear fix direction (cancel pending transition, reset DOM state).",
+			"evidence": [
+				"Dialog.svelte reopen mid-exit causes dialog to close unexpectedly",
+				"status: approved",
+				"fix direction specifies two concrete implementation options"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T08:10:18.992Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
@@ -35780,19 +35810,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 7,
 				"implementation": 7
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Single medium-severity null-check gap is confined to a test fixture helper and has a small, well-localized fix.",
+			"rationale": "A single, precisely located medium-severity test-fixture null-check bug is low risk but clear and quick to fix.",
 			"evidence": [
-				"tests/fixtures/overlay-native/verify.py:20 click_selector calls getBoundingClientRect() on a possibly-null selector result"
+				"tests/fixtures/overlay-native/verify.py:20 (unchecked-access)",
+				"click_selector constructs JS that calls .getBoundingClientRect() ... without checking if null/undefined first"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T07:38:11.789Z"
+			"scoredAt": "2026-10-22T08:09:54.837Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-77445c0",
