@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-37ac95d53900
 title: "Post-merge finding — todo-handoff in src/lib/components/scheduling/ConsumptionConfirmDialog.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-22
 updated: 2026-10-22
 repos: [minion-hub]
