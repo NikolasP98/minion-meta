@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-22T09:08:45.176Z",
+	"generatedAt": "2026-10-22T09:39:39.346Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2159,42 +2159,6 @@
 			"scoredAt": "2026-10-19T03:08:42.508Z"
 		},
 		{
-			"key": "issue:minion-meta#730",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#730 [monitor:unstick] reconcile proposals run 479de16d: agent exec failure (exit-126)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/730",
-			"sourceUpdatedAt": "2026-10-01T08:17:37Z",
-			"sourceFingerprint": "e27fc35fe86657477305530d700288665df2440742fcf1f3866666d62a7cdb7a",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#476",
-				"issue:minion-meta#477",
-				"issue:minion-meta#478"
-			],
-			"rationale": "Same exit-126 signature recurring two weeks after the first reports shows the runner fault is unresolved and warrants a single consolidated host-classifier fix.",
-			"evidence": [
-				"provider=claude, exit-126, turns=0, cost_usd=0",
-				"updatedAt 2026-10-01, ~2 weeks after #476/#477"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T09:22:21.495Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3643,19 +3607,18 @@
 				"implementation": 5
 			},
 			"confidence": 7,
-			"recommendation": "execute",
+			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-7c314d7486da"
 			],
-			"rationale": "A well-scoped ledger of eight concrete POS gaps (audit trail, edit guards, test coverage) with exact file sites and fix directions ready for prioritized dev slices.",
+			"rationale": "Well-itemized ledger of concrete POS follow-ups, but item 1 (unlock leaves no audit row in pos.service.ts) duplicates the separately filed postmerge audit-trail finding and should be merged into a single goal.",
 			"evidence": [
-				"unlocking a period leaves no audit row (pos.service.ts setPeriodLock)",
-				"customer/document and note edits on an open shift not implemented",
-				"serialized beta gate has no timing test"
+				"item 1: 'Unlocking a period leaves no audit row (hub #536, pos.service.ts setPeriodLock)'",
+				"postmerge-minion-hub-7c314d7486da flags the identical TODO(handoff) in the same file/PR"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T09:22:21.495Z"
+			"scoredAt": "2026-10-22T09:39:39.186Z"
 		},
 		{
 			"key": "proposal:2026-10-17-agent-dynamic-tools",
@@ -4713,41 +4676,6 @@
 			"scoredAt": "2026-10-22T02:35:44.595Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-7c314d7486da",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7c314d7486da.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "68e812ad226c969a85e77e597fff050f9d31f669e449650e2bc0f2abde5c64d2",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-15-hub-pos-shift-scoped-edits-followups"
-			],
-			"rationale": "Already-approved, well-specified fix for a compliance-relevant audit-trail gap on POS period unlocks with a clear fix direction.",
-			"evidence": [
-				"status: approved",
-				"TODO(handoff): an unlock deletes the row and leaves no audit trace",
-				"fix direction: write audit record before delete, then soft-delete or archive"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T09:22:21.495Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5476,114 +5404,6 @@
 			"scoredAt": "2026-10-18T04:26:03.320Z"
 		},
 		{
-			"key": "issue:minion-meta#476",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#476 [monitor:unstick] reconcile run 470dd1c9: claude provider exit-126 (turns=0), recurring infra fault",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/476",
-			"sourceUpdatedAt": "2026-09-17T07:17:39Z",
-			"sourceFingerprint": "ff0011e1573121ae128db3a7ad04240ba17ed1d6fb6241375fa694611294265a",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#477",
-				"issue:minion-meta#730",
-				"issue:minion-meta#478"
-			],
-			"rationale": "First report of a recurring claude-provider exit-126 infra fault that only stops the agent sub-step, not the reconcile's core work.",
-			"evidence": [
-				"note: provider=claude exit-126 turns=0 permission_denials=0",
-				"recurs across at least 8 reconcile runs in ~2 hours"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T09:22:21.495Z"
-		},
-		{
-			"key": "issue:minion-meta#477",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#477 [monitor:unstick] reconcile run a8f7a975: claude provider exit-126 (turns=0), same recurring infra fault",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/477",
-			"sourceUpdatedAt": "2026-09-17T07:17:47Z",
-			"sourceFingerprint": "504b9c8d859a8036bc51db2b2bfdd547d302e684257e1bc8cec6bec9f38b0002",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#476",
-				"issue:minion-meta#730",
-				"issue:minion-meta#478"
-			],
-			"rationale": "Duplicate signature of the same exit-126 runner fault reported minutes after #476.",
-			"evidence": [
-				"identical signature to 470dd1c9",
-				"part of a cluster of 8 reconcile runs sharing this exact fingerprint"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T09:22:21.495Z"
-		},
-		{
-			"key": "issue:minion-meta#478",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#478 [monitor:unstick] rank run 229f8829: both bounded providers (claude, codex) failed ranking batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/478",
-			"sourceUpdatedAt": "2026-09-17T07:18:27Z",
-			"sourceFingerprint": "b05241ac96bdb55a2d4e3c9894d638cde16f639509fb68a9a298fbfcbf9c7133",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#476",
-				"issue:minion-meta#477",
-				"issue:minion-meta#730"
-			],
-			"rationale": "Ranking batch failure may share the claude exit-126 root cause but adds a distinct codex invalid-JSON failure mode.",
-			"evidence": [
-				"claude batch 1 unavailable/invalid, fell back to codex, which also failed",
-				"recurring both-bounded-providers-failed pattern also seen in run 12f26383"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T09:22:21.495Z"
-		},
-		{
 			"key": "issue:minion-meta#488",
 			"kind": "issue",
 			"stage": "proposal",
@@ -6281,6 +6101,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:05:58.834Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7c314d7486da",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7c314d7486da.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "68e812ad226c969a85e77e597fff050f9d31f669e449650e2bc0f2abde5c64d2",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-10-15-hub-pos-shift-scoped-edits-followups"
+			],
+			"rationale": "Already-approved, clearly specified audit-trail fix for pos.service.ts unlock, but it's the same underlying gap as item 1 of the hub POS followups ledger and should be tracked as one goal.",
+			"evidence": [
+				"status: approved, with explicit fix direction (write audit record before delete, then soft-delete/archive)",
+				"followups proposal item 1 names the exact same file and setPeriodLock behavior"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T09:39:39.186Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9b86db24576e",
@@ -7859,6 +7713,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T11:55:34.526Z"
+		},
+		{
+			"key": "issue:minion-meta#730",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#730 [monitor:unstick] reconcile proposals run 479de16d: agent exec failure (exit-126)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/730",
+			"sourceUpdatedAt": "2026-10-01T08:17:37Z",
+			"sourceFingerprint": "e27fc35fe86657477305530d700288665df2440742fcf1f3866666d62a7cdb7a",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#476",
+				"issue:minion-meta#477"
+			],
+			"rationale": "Same claude exit-126/turns=0/cost=0 signature recurring two weeks after #476/#477 shows the underlying runner fault is still unresolved and these alerts should be merged into one host-classifier goal.",
+			"evidence": [
+				"provider=claude, exit-126, turns=0, cost_usd=0, same as earlier runs",
+				"updatedAt 2026-10-01 vs #476/#477 at 2026-09-17, showing the fault persisted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T09:39:39.186Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updatesellable-silent-drop",
@@ -11031,6 +10920,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T08:09:54.837Z"
+		},
+		{
+			"key": "issue:minion-meta#476",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#476 [monitor:unstick] reconcile run 470dd1c9: claude provider exit-126 (turns=0), recurring infra fault",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/476",
+			"sourceUpdatedAt": "2026-09-17T07:17:39Z",
+			"sourceFingerprint": "ff0011e1573121ae128db3a7ad04240ba17ed1d6fb6241375fa694611294265a",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#477",
+				"issue:minion-meta#730"
+			],
+			"rationale": "Duplicate monitor alert for the same recurring claude-provider exit-126/turns=0 runner fault that should be consolidated into one host-classifier fix rather than tracked separately.",
+			"evidence": [
+				"exit-126 turns=0 permission_denials=0 recurs across 8 reconcile runs in ~2 hours",
+				"git/merge-scan portion of the run completed and pushed successfully each time"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T09:39:39.186Z"
+		},
+		{
+			"key": "issue:minion-meta#477",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#477 [monitor:unstick] reconcile run a8f7a975: claude provider exit-126 (turns=0), same recurring infra fault",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/477",
+			"sourceUpdatedAt": "2026-09-17T07:17:47Z",
+			"sourceFingerprint": "504b9c8d859a8036bc51db2b2bfdd547d302e684257e1bc8cec6bec9f38b0002",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#476",
+				"issue:minion-meta#730"
+			],
+			"rationale": "Identical signature to #476 (claude exit-126, turns=0) from the same ~2-hour cluster, so these should become one goal instead of three duplicate alerts.",
+			"evidence": [
+				"note states 'identical signature to 470dd1c9'",
+				"part of a cluster of 8 reconcile runs sharing this exact fingerprint"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T09:39:39.186Z"
 		},
 		{
 			"key": "issue:minion-meta#581",
@@ -15465,6 +15424,40 @@
 			"scoredAt": "2026-10-21T07:27:57.667Z"
 		},
 		{
+			"key": "issue:minion-meta#478",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#478 [monitor:unstick] rank run 229f8829: both bounded providers (claude, codex) failed ranking batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/478",
+			"sourceUpdatedAt": "2026-09-17T07:18:27Z",
+			"sourceFingerprint": "b05241ac96bdb55a2d4e3c9894d638cde16f639509fb68a9a298fbfcbf9c7133",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"issue:minion-meta#476"
+			],
+			"rationale": "Bundles two distinct failure modes (claude-side exit-126 infra fault and a separate codex invalid-JSON parsing issue) that need splitting into separate actionable fixes rather than one combined goal.",
+			"evidence": [
+				"claude batch reported unavailable/invalid then fell back to codex, which also failed/returned invalid JSON",
+				"note explicitly calls the codex-side failure 'a separate, task-level issue' from the claude infra fault"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T09:39:39.186Z"
+		},
+		{
 			"key": "issue:minion-meta#482",
 			"kind": "issue",
 			"stage": "proposal",
@@ -17632,38 +17625,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:01:56.016Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-5e55396",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 5e55396",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5e55396.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "8b787c59d4aac4cd6c5c281d0251610de50252d13a52260b7d3f16a545deaf23",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Deterministic merge-scan with exact file:line medium-severity findings (unchecked access, empty catch) that are small, bounded fixes.",
-			"evidence": [
-				"message-ledger.ts:155 empty-catch swallows database.close() errors",
-				"bridge-ws.ts:118 JSON parse failure silently returns with no logging"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T09:22:21.495Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-5ff1c51",
@@ -23018,6 +22979,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T02:32:22.390Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-5e55396",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 5e55396",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5e55396.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "8b787c59d4aac4cd6c5c281d0251610de50252d13a52260b7d3f16a545deaf23",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Medium-severity unchecked-access and silently-swallowed-error findings are precisely localized with file:line references and are cheap, bounded fixes.",
+			"evidence": [
+				"empty-catch at message-ledger.ts:155 swallows database.close() errors silently",
+				"empty-catch at bridge-ws.ts:118 returns silently on JSON parse failure with no logging"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T09:39:39.186Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-fb9a03f",
@@ -29918,38 +29911,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T18:40:05.461Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/6d1cd8836ff7b82d21668c50cc20b9b6d1e79c18",
-			"sourceUpdatedAt": "2026-10-22T04:06:39Z",
-			"sourceFingerprint": "eaf80885a951cbda2fed44728afdeb064dc4a63b72f5db3a1f5e72e672011daa",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged docker-fix health snapshot with no indicated failure or open problem to act on.",
-			"evidence": [
-				"summary is 'Merge pull request #352... fix(docker): build plugin control UIs into the gateway image'",
-				"status: unknown, no failure signal noted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T08:39:03.796Z"
 		},
 		{
 			"key": "issue:minion-meta#333",
