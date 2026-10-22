@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-22T02:36:42.227Z",
+	"generatedAt": "2026-10-22T02:42:47.212Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -863,41 +863,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:27:16.894Z"
-		},
-		{
-			"key": "pr:minion (gateway)#339",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#339 fix(agents): restore catalog answers and suppress malformed tool replies",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/339",
-			"sourceUpdatedAt": "2026-10-22T02:15:58Z",
-			"sourceFingerprint": "1e5155cb0c74228e8361fa80fb1cfb4fe3e81385050da43b86ebc1c152eb0943",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#855"
-			],
-			"rationale": "Restores broken catalog/tool-reply behavior and is the gated promotion path to main, with its prerequisite PRs already merged and CI pending.",
-			"evidence": [
-				"Restore typed catalog answers and current tool discovery, stop unproductive recovery loops",
-				"PRs #349/#350 are merged",
-				"Final DEV CI ... is pending"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T02:26:52.612Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
@@ -5309,6 +5274,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:08:42.508Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/648f09565ea41ee719c83769542902f48a03ff98",
+			"sourceUpdatedAt": "2026-10-22T02:12:28Z",
+			"sourceFingerprint": "2351aab92b08c7655db2917d7b65927353f491c340ca6e292fd841e0cdaba9fe",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#855"
+			],
+			"rationale": "Commit fixes a real secret-versioning deploy bug but the candidate is a status check, not a scoped actionable task.",
+			"evidence": [
+				"fix(swarm): one runtime env file per tenant, content-named secret (#351)",
+				"stack deploy from the repo would put the old OpenRouter keys back"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T02:42:47.046Z"
 		},
 		{
 			"key": "issue:minion-meta#413",
@@ -12566,41 +12565,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T22:26:31.986Z"
-		},
-		{
-			"key": "pr:minion-meta#855",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#855 docs(agents): record credit-efficient release and runtime adoption evidence",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/855",
-			"sourceUpdatedAt": "2026-10-22T02:23:08Z",
-			"sourceFingerprint": "ad3041e2b63960587886a515a7cbb1ab75ae5f6eae83cb4cb170c769f48317f9",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#339"
-			],
-			"rationale": "This is the evidence/audit record for the exact same release tracked by gateway PR #339 and should be managed as one combined goal.",
-			"evidence": [
-				"Retain qualification, deployment and runtime evidence for the assistant capability repair",
-				"Gateway #342 passed selected-lane CI and merged at 6a085402",
-				"Normal promotion is Gateway #339"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T02:26:52.612Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -24279,6 +24243,41 @@
 			"scoredAt": "2026-10-22T01:56:37.221Z"
 		},
 		{
+			"key": "pr:minion-meta#855",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#855 docs(agents): record credit-efficient release and runtime adoption evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/855",
+			"sourceUpdatedAt": "2026-10-22T02:35:46Z",
+			"sourceFingerprint": "521730f5bd1a19e27e18fe6553163e17bc5bb2133abd1f4a007db59382fb16ed",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "This is a dense evidence/audit record rather than a clear actionable delivery item, and its own text flags pending CI and preparation-not-adoption status.",
+			"evidence": [
+				"Final DEV CI39710097268 is pending",
+				"Those are preparation, not production adoption",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T02:42:47.046Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29909,22 +29908,23 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 6,
 				"implementation": 2
 			},
-			"confidence": 5,
-			"recommendation": "group",
+			"confidence": 6,
+			"recommendation": "reevaluate",
 			"relatedKeys": [
 				"issue:minion-meta#578"
 			],
-			"rationale": "Diagnosis shows the underlying reconcile task already succeeded and the failure is a recurring infra exec flake best addressed alongside the similar provider-failure monitor issue as one classifier-rule goal.",
+			"rationale": "A recurring infra exit-126/turns=0 classifier gap is low urgency since the actual reconcile work already succeeded, but worth a host classifier fix.",
 			"evidence": [
-				"exit-126, turns=0 recurred 3x within ~2.5h",
-				"reconcile output already landed/pushed despite error status"
+				"recurred 3x within ~2.5h on minion-meta reconcile",
+				"exit-126, turns=0, permission_denials=0",
+				"This is infra, not a task failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T02:28:06.851Z"
+			"scoredAt": "2026-10-22T02:42:47.046Z"
 		},
 		{
 			"key": "issue:minion-meta#479",
@@ -29995,40 +29995,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T11:25:55.243Z"
-		},
-		{
-			"key": "issue:minion-meta#578",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#578 [monitor:unstick] Run ad4fda86 (rank board goals, minion-meta) failed: both LLM providers rejected ranking batch",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/578",
-			"sourceUpdatedAt": "2026-09-24T01:17:19Z",
-			"sourceFingerprint": "8eb8ec1c40e6b08805585a5303e0150b9d66480653cff5d9eb5d362b989cb115",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#460"
-			],
-			"rationale": "Transient LLM provider unavailability on a cheap, mostly-complete rank batch is another recurring monitor-intake infra signature that pairs with the exit-126 issue for a shared classifier-rule goal.",
-			"evidence": [
-				"both bounded providers unavailable or invalid JSON on batch 1",
-				"only 3/622 candidates pending, cost $0.15"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T02:28:06.851Z"
 		},
 		{
 			"key": "issue:minion-meta#582",
@@ -35790,38 +35756,6 @@
 			"scoredAt": "2026-10-22T01:56:37.221Z"
 		},
 		{
-			"key": "run:minion (gateway)#39710097268",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39710097268",
-			"sourceUpdatedAt": "2026-10-22T02:16:34Z",
-			"sourceFingerprint": "405506db5e9779d784e9ae3029ddbe039d7743ec42d26146db063cf1d621c231",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run on DEV, not itself a discrete goal to rank or schedule.",
-			"evidence": [
-				"stage: testing, status: in_progress",
-				"title: CI, push on DEV"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T02:36:42.051Z"
-		},
-		{
 			"key": "issue:minion-meta#601",
 			"kind": "issue",
 			"stage": "proposal",
@@ -35921,6 +35855,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T19:28:42.077Z"
+		},
+		{
+			"key": "issue:minion-meta#578",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#578 [monitor:unstick] Run ad4fda86 (rank board goals, minion-meta) failed: both LLM providers rejected ranking batch",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/578",
+			"sourceUpdatedAt": "2026-09-24T01:17:19Z",
+			"sourceFingerprint": "8eb8ec1c40e6b08805585a5303e0150b9d66480653cff5d9eb5d362b989cb115",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#460"
+			],
+			"rationale": "Transient provider fallback failure with cheap retry (3/622 pending, $0.15 cost) and no indication the issue recurred, so no standing action needed.",
+			"evidence": [
+				"Recommendation: retry the run; only 3/622 candidates were pending",
+				"Cost incurred was low ($0.15)",
+				"pipeline logic itself (clone, catalog write) succeeded fine"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T02:42:47.046Z"
 		},
 		{
 			"key": "issue:minion-meta#620",
