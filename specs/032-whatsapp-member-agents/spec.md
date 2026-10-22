@@ -127,6 +127,8 @@ All of it is stored in the hub, and each setting has one source of truth.
 - **FR-008:** `replies: none` (receive-only) blocks member mode too.
 - **FR-009:** Every member-mode decision is logged on the gateway: account, number fingerprint, member yes/no, agent id. Phone numbers appear in logs only as fingerprints.
 
+- **FR-019** (owner, 2026-10-22): a WhatsApp number an org provisions starts in **members-only** mode: closed to the public, with verified org members reaching their own assistant. That means auto-reply on, an empty customer allowlist, and member mode on. The setup wizard offers it as the default for org (operator) setups. Other channels and personal numbers keep their defaults. Existing accounts are unchanged.
+
 **P2 — linking**
 - **FR-010:** Pairing always runs on the gateway that owns the channel being linked, whichever gateway the browser is connected to.
 - **FR-011:** The gateway refuses to pair an account id that isn't registered for its org.
