@@ -2,7 +2,7 @@
 
 **Plan**: [plan.md](plan.md). Gate T000 blocks everything.
 
-- [ ] **T000** Owner approves spec.md (security-tagged, constitution V).
+- [x] **T000** Owner approves spec.md (security-tagged, constitution V).
 
 ## S1 — hub (minion_hub → master)
 - [ ] **T101** Test: an active personal agent with NULL gateway that is missing from the roster gets created, verified and bound; an active bound agent → no `agents.create`.

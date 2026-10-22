@@ -2,7 +2,7 @@
 
 **Feature Branch**: `spec/032-whatsapp-member-agents`
 **Created**: 2026-10-22
-**Status**: Draft — security-tagged (RBAC, tenant scoping): owner approves this spec before code and merges every slice
+**Status**: Approved by owner 2026-10-22 (defaults FR-006/007/008 accepted) — security-tagged (RBAC, tenant scoping): owner approves this spec before code and merges every slice
 **Input**: Owner, 2026-10-22: "allow all org users with a linked whatsapp account to be able to get responses from the whatsapp agent, as if they were talking to the web agent. Same one, same RBAC, just instead of the web channel, we're using the whatsapp channel." Plus: "design a better UI experience for the user for whatsapp/channel linking with callback function support", and fold in past channel-logic debt (permissions, who can speak, how it responds, who it responds as).
 
 ## AS-IS (evidence, 2026-10-22, gateway `origin/DEV` 6d1cd88, hub `origin/master`, production)
