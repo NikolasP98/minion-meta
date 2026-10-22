@@ -201,6 +201,17 @@ export class GatewayClient {
    * Nothing is ever retried automatically — see `canRetry()`.
    */
   async request<T>(method: string, params?: unknown, opts?: { timeoutMs?: number }): Promise<T> {
+    return this.beginRequest<T>(method, params, opts);
+  }
+
+  /**
+   * Initiate a request synchronously. Definite pre-send failures throw before returning;
+   * a returned promise means transport dispatch was attempted, never server acceptance.
+   * Socket-send failures, disconnects and acknowledgement loss reject that promise and
+   * may have an unknown remote outcome. Callers must never infer safe replay from them.
+   * Existing callers may continue using request() for Promise-only failure handling.
+   */
+  beginRequest<T>(method: string, params?: unknown, opts?: { timeoutMs?: number }): Promise<T> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const ws: any = this.ws;
     if (!ws || ws.readyState !== 1 /* OPEN */) {
@@ -243,7 +254,8 @@ export class GatewayClient {
       try {
         ws.send(wire);
       } catch (error) {
-        // The frame never left: release the slot now instead of leaking it until timeout/close.
+        // An injected transport can accept then throw. Release local bookkeeping,
+        // but retain an asynchronous unknown outcome rather than promise rollback.
         clearTimeout(timer);
         this.pending.delete(id);
         reject(GatewayError.client(
