@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-21T23:55:58.209Z",
+	"generatedAt": "2026-10-22T00:26:06.546Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7454,38 +7454,6 @@
 			"scoredAt": "2026-10-21T02:58:32.482Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-factory-0290030",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Concrete file:line findings across many factory scripts include a high-severity infinite-loop risk and silent test-failure masking that affect core factory automation reliability.",
-			"evidence": [
-				"rank.sh:74 FACTORY_RANK_BATCH_SIZE unvalidated causes infinite-loop risk in for-loop arithmetic",
-				"unslop.test.sh:63 bare grep lacks error handling, silently masking failed assertions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T00:21:32.057Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-distinct-visit-dates-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -9093,6 +9061,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:27:15.698Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-0290030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Contains concrete high-severity findings including a potential infinite loop in rank.sh and unchecked jq output, each with exact file:line locations making the fixes bounded and actionable.",
+			"evidence": [
+				"high: agent/rank.sh:74 'non-numeric or zero value causes infinite loop'",
+				"high: agent/rank.sh:71 'missing field silently becomes 0, loop doesn't run'",
+				"high: agent/lib/unslop.test.sh:63 'test proceeds to report success... even if assertions fail'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T00:26:06.371Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e98422b",
@@ -21184,22 +21185,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#457"
 			],
-			"rationale": "Identical exit-126/turns=0 infra-fault signature as #457 on the same day, so these should become one host-classifier goal rather than two.",
+			"rationale": "Self-diagnosed infra exit-126 flake with a safe-retry recommendation that duplicates sibling issue #457 and should be consolidated into one host-classifier goal.",
 			"evidence": [
-				"diagnosis states exit 126 turns=0 while the surrounding pipeline completed normally",
-				"recommends retry plus a human checking runner host claude CLI permissions/PATH"
+				"Diagnosis notes 'recurred 3x today... good candidate for a new host-classifier signature'",
+				"pipeline itself completed normally (453 proposals written, successful push)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T00:21:32.057Z"
+			"scoredAt": "2026-10-22T00:26:06.371Z"
 		},
 		{
 			"key": "issue:minion-meta#457",
@@ -21218,22 +21219,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#456"
 			],
-			"rationale": "Sibling run of #456 with the same exit-126 signature recurring 3x the same day; should be consolidated into one classifier/goal.",
+			"rationale": "Identical exit-126/turns=0 infra-fault signature and retry recommendation as #456, filed 16 seconds apart, warranting a single consolidated classifier goal.",
 			"evidence": [
-				"same pattern as sibling runs today per diagnosis text",
-				"recurring 3x today with identical signature across reconcile runs"
+				"fingerprint 'unstick-unknown-83034d70' vs sibling 'unstick-unknown-956f82ec'",
+				"'Recurring 3x today with identical signature across minion-meta reconcile runs'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T00:21:32.057Z"
+			"scoredAt": "2026-10-22T00:26:06.371Z"
 		},
 		{
 			"key": "issue:minion-meta#526",
@@ -25156,38 +25157,6 @@
 			"scoredAt": "2026-10-21T09:26:27.898Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-29ee60e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 29ee60e",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-29ee60e.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "0801b1505825de9297db2705ab04c8eb04746bef373cb47832e27eab50ba96d9",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Narrow but concrete empty-catch findings scoped to one component affect chat-session persistence reliability for the FloatingAssistant.",
-			"evidence": [
-				"localStorage.setItem silently fails during session persistence at FloatingAssistant.svelte:142",
-				"three findings all scoped to the same single file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T00:21:32.057Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27329,6 +27298,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T03:03:14.182Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-29ee60e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 29ee60e",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-29ee60e.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "0801b1505825de9297db2705ab04c8eb04746bef373cb47832e27eab50ba96d9",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Findings are well-specified with file:line detail but are limited to non-critical localStorage silent-failure edge cases in a floating assistant widget.",
+			"evidence": [
+				"high: FloatingAssistant.svelte:119 localStorage.getItem() silent failure during session restoration",
+				"medium: FloatingAssistant.svelte:469 noted as 'acceptable for non-critical cache'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T00:26:06.371Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-121dc587ec1f",
@@ -31763,6 +31764,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:57:54.316Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f95ef46b43f3f0c5337f6b7ac1992e9a113efcf3",
+			"sourceUpdatedAt": "2026-10-21T21:53:50Z",
+			"sourceFingerprint": "64fb7712dc4e4cbddee3d315a65cdf3b9851e07bf4d8210848597c9e2528f184",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit message shows the Windows-shard CI fix is already merged, leaving no outstanding deployment goal.",
+			"evidence": [
+				"commit title: 'fix(ci): verify full Windows shards independently of skipped Linux jobs (#348)'",
+				"status unknown with no further description of ongoing deployment risk"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T00:26:06.371Z"
 		},
 		{
 			"key": "issue:minion-meta#386",
