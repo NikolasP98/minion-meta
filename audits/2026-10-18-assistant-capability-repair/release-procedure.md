@@ -148,3 +148,7 @@ The current schema binds one personal agent per profile to one gateway. This
 repair does not provide concurrent multi-organization delegation. Full Windows
 qualification failures from the preceding release remain separately tracked;
 focused repair tests and Linux checks do not close those failures.
+
+## Owner lane-policy amendment, 2026-10-21
+
+The owner explicitly selected the new credit-efficient CI rules from specs029/030. Windows/macOS are intentionally disabled under their off defaults for this Linux Gateway release; an earlier mandatory platform requirement is superseded for this selected mode, not satisfied by skipped jobs. Require successful overall CI and applicable Linux/build/security validation on the exact integrated source. Do not infer success from Linux required alone if another applicable job failed. Preserve historical failed evidence and the independent future platform qualification ledger. Temporarily suppress intermediate Docker builds and unnecessary npm publication; restore original repository-variable state after the intended workflow has observed each selection. Enable the normal Docker release for the exact final production promotion and verify its immutable receipt and deployment normally.
