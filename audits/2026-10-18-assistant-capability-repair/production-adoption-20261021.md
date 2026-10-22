@@ -1,6 +1,6 @@
 # Assistant capability production adoption
 
-Owner approved the conditional production release and exact FACES correction, then confirmed all three repair PRs merged. This is an in-progress execution record, not a full-live claim.
+Owner approved the conditional production release and exact FACES correction, then confirmed all three repair PRs merged. The image deployment and configured backend authority are now verified; authenticated owner chat acceptance remains pending. The dated sections retain prior observations and holds, and are superseded by the latest checkpoint below.
 
 ## Source and Hub
 
@@ -253,3 +253,16 @@ A separate owner runtime-env rollout completed before this promotion. Fresh read
 ## Immutable image built; normal production controller running
 
 Docker Release `39711310152`, attempt1, succeeded for exact main source `97ccd699eac4dcc75194714d2a9c8a92053e535a`. Both native architecture builds and combined manifest passed. The exact triggering schema1 receipt identifies repository `NikolasP98/minion-ai`, channel `prd`, source and digest `sha256:cd1e6dfe94c4fd04d26f80080973815c63c1b1da92d1281dcad02cca70a8c942`; root validated all seven receipt fields. Receipt: `gateway-credit-release-receipt.json`. Main installer smoke `39711309985` also passed; npm remains correctly skipped for this release with original variable state restored. Production deployment `39712151297` passed registry loading and compatibility admission and is executing the normal immutable Swarm controller. Image convergence and callback repair remain pending. No duplicate dispatch, manual npm publication, full stack deployment or secret migration was performed.
+
+
+## Production deployed and FACES callback corrected; owner chat pending
+
+Normal deployment `39712151297`, attempt1, succeeded. Its downloaded controller artifact and independent fresh host inspection agree on source `97ccd699`, digest `sha256:cd1e6dfe94c4fd04d26f80080973815c63c1b1da92d1281dcad02cca70a8c942`, both canonical services healthy1/1 and inactive slots0/0. All four services retain their pre-release secret-reference fingerprints. Final Hub alias remains READY at `b7990051`. No full stack/env migration or manual publication occurred. Both temporary repository variables are restored to absent.
+
+Fresh membership, canonical lease/assignment, actual-process config path, configured callback, and exact persisted runtime roster passed. Assignment was already canonical and received zero writes. Under the canonical controller lock, the reviewed helper atomically changed only `/gateway/hubMetrics/serverId`, from the old hint to `a64274a8-5803-418c-b92e-527e23f4a005`, with one private same-volume backup and mode0600. A final semantic comparison still proves exactly that one-field difference.
+
+Ordered callback detection/restart-request/SIGUSR1 markers were observed. The initial observer stopped with unverified convergence when the old container exited; that evidence is retained. Old container `d58410ad1536` exited cleanly with code0. Read-only observation reacquired the same controller lock, without replaying the mutation or forcing another restart. Swarm replacement `379ba635a423` is healthy on the exact new source/digest, started at02:44:10Z, emitted fresh listening at02:45:00Z and retains the canonical config. The default runtime stayed unchanged during this FACES correction.
+
+Using the actual configured callback credentials and hint, tool-catalog and tool-permissions both returned200 with matching expected FACES scope, one active typed `catalog_query` and `pos:view`. The bounded typed service catalog query returned200 and valid source-linked data. Business names/prices remain private; committed authority evidence is sanitized.
+
+The optional operator Gateway probe safely rejected `SESSION_CONTEXT_AMBIGUOUS` before tool invocation because multiple existing sessions matched. It did not choose/create a session, change context/policy or make a model turn. Its private temporary instrumentation was removed. This does not establish actual browser-user tool execution. The owner was notified that production is ready and asked to refresh FACES in Hub and run the original question. Authenticated answer quality/navigation/DSML acceptance remains pending. Receipt: `credit-efficient-production-adoption.json`; immutable release/controller and final service/authority receipts accompany it.
