@@ -1,0 +1,30 @@
+--- a/scripts/jev-shadow-report.mjs
++++ b/scripts/jev-shadow-report.mjs
+@@ -52,6 +52,7 @@
+  *     success file has `.answers` and no `.error`; a failure file has
+  *     `.error` (+ optionally `.http_status`); `{"error":"unavailable"}` means
+  *     factory_jev_decide never even ran (shadow-logged with an empty file). */
++// TODO(handoff): Preserve model and unknown-cost provenance; deduplicate proxy/local decisions before calibration. See minion-meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md#factory-evidence-and-bounds.
+ export function normalizeJev(jev) {
+ 	if (jev === null || typeof jev !== 'object') {
+ 		return { ok: false, reason: 'malformed', ms: null, costUsd: null, answers: null };
+--- a/agent/lib/jev.sh
++++ b/agent/lib/jev.sh
+@@ -210,6 +210,7 @@
+ factory_jev_decide_proxy() { # $1=site $2=tag $3=state-file $4=questions-file $5=today-json
+ 	local site=$1 tag=$2 state_file=$3 questions_file=$4 today_json=$5
+ 	local out=${FACTORY_OUT_DIR:-/out}
++	# TODO(handoff): Honor the guard deadline in proxy transport; 25s exceeds the 6s hook budget. See minion-meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md#factory-evidence-and-bounds.
+ 	local timeout=${FACTORY_JEV_PROXY_TIMEOUT_S:-25}
+ 	local start_ms end_ms ms body_file resp status body
+ 
+--- a/runner/src/jev-proxy.ts
++++ b/runner/src/jev-proxy.ts
+@@ -206,6 +206,7 @@
+ 		return { status: 429, body: { ok: false, reason: 'run_budget' } };
+ 	}
+ 
++	// TODO(handoff): Reserve run call/spend capacity before awaiting inference; concurrent requests currently pass the same cap. See minion-meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md#factory-evidence-and-bounds.
+ 	const site = rawBody.site;
+ 	const jev = await jevDecide({ site, state: rawBody.state, questions });
+ 	entry.calls += 1;

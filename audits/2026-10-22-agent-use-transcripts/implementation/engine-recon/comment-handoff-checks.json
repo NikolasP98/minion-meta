@@ -1,0 +1,44 @@
+{
+  "baseline": "7fac6744ea9f15fb64b0423bd4f3c39592b3e6a7",
+  "commit": "aed7f172704247b1fe993c204c9da4c7b609f370",
+  "scope": [
+    "src/agents/pi-embedded-runner/run.ts",
+    "src/auto-reply/reply/get-reply-run.ts",
+    "src/auto-reply/reply/queue/types.ts"
+  ],
+  "delta": {
+    "files": 3,
+    "insertions": 9,
+    "deletions": 0,
+    "commentsOnly": true
+  },
+  "checks": [
+    {
+      "command": "pnpm exec oxfmt --check <exact three paths>",
+      "exitCode": 0,
+      "output": "Checking formatting...\n\nAll matched files use the correct format.\nFinished in 97ms on 3 files using 4 threads.\n"
+    },
+    {
+      "command": "pnpm exec oxlint --type-aware <exact three paths>",
+      "exitCode": 0,
+      "output": "Found 0 warnings and 0 errors.\nFinished in 8.6s on 3 files with 134 rules using 4 threads.\n"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    {
+      "command": "MINION_ENGINE_SOURCE=<gateway> node verify-comment-only.cjs",
+      "exitCode": 0,
+      "proof": "comment-only-proof.json"
+    },
+    {
+      "command": "scripts/committer docs(agents): record shared engine handoff boundaries <exact three paths>",
+      "exitCode": 0,
+      "preCommit": "0 warnings/0 errors; format pass; exact three files"
+    }
+  ],
+  "notRerun": "Runtime tests/typecheck were not repeated for comment-only syntax-identical changes.",
+  "remoteMutation": "No push or merge by this agent.",
+  "unrelatedWip": "20 tracked extensions/*/ui/node_modules/.bin install-wrapper modifications remain unstaged and uncommitted."
+}

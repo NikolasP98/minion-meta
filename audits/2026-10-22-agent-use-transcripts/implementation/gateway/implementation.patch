@@ -1,0 +1,760 @@
+diff --git a/src/auto-reply/reply/dispatch-from-config.ts b/src/auto-reply/reply/dispatch-from-config.ts
+index 8b9475e9c53..716a83861f2 100644
+--- a/src/auto-reply/reply/dispatch-from-config.ts
++++ b/src/auto-reply/reply/dispatch-from-config.ts
+@@ -246,8 +246,12 @@ export async function dispatchReplyFromConfig(params: {
+   // Extract message context for hooks (plugin and internal)
+   const timestamp =
+     typeof ctx.Timestamp === "number" && Number.isFinite(ctx.Timestamp) ? ctx.Timestamp : undefined;
++  // A certified batch has no single provider ID. Keep legacy routing/dedupe fields
++  // separate from the ordered originals exposed to hook consumers.
+   const messageIdForHook =
+-    ctx.MessageSidFull ?? ctx.MessageSid ?? ctx.MessageSidFirst ?? ctx.MessageSidLast;
++    ctx.SourceProvenance && ctx.SourceProvenance.sources.length > 1
++      ? undefined
++      : (ctx.MessageSidFull ?? ctx.MessageSid ?? ctx.MessageSidFirst ?? ctx.MessageSidLast);
+   const content =
+     typeof ctx.BodyForCommands === "string"
+       ? ctx.BodyForCommands
+@@ -275,6 +279,9 @@ export async function dispatchReplyFromConfig(params: {
+             originatingChannel: ctx.OriginatingChannel,
+             originatingTo: ctx.OriginatingTo,
+             messageId: messageIdForHook,
++            // TODO(handoff): Slice11 must consume these original units before watcher matching;
++            // see proposals/2026-10-22-agent-decision-and-proactivity-experiments.md in minion-meta.
++            sourceProvenance: ctx.SourceProvenance,
+             senderId: ctx.SenderId,
+             senderName: ctx.SenderName,
+             senderUsername: ctx.SenderUsername,
+diff --git a/src/auto-reply/templating.ts b/src/auto-reply/templating.ts
+index a83eda6593b..d758e2b3543 100644
+--- a/src/auto-reply/templating.ts
++++ b/src/auto-reply/templating.ts
+@@ -4,6 +4,7 @@ import type {
+   MediaUnderstandingDecision,
+   MediaUnderstandingOutput,
+ } from "../media-understanding/types.js";
++import type { TransportSourceProvenance } from "../plugins/types/hooks.js";
+ import type { InternalMessageChannel } from "../shared/message-channel.js";
+ import type { CommandArgs } from "./commands-registry.types.js";
+ 
+@@ -47,6 +48,8 @@ export type MsgContext = {
+   /** Provider account id (multi-account). */
+   AccountId?: string;
+   ParentSessionKey?: string;
++  /** Authenticated adapter originals; never deserialize this from a client envelope. */
++  SourceProvenance?: TransportSourceProvenance;
+   MessageSid?: string;
+   /** Provider-specific full message id when MessageSid is a shortened alias. */
+   MessageSidFull?: string;
+diff --git a/src/channels/fire-message-inbound.ts b/src/channels/fire-message-inbound.ts
+index e7c015dffc3..e02c0e5816b 100644
+--- a/src/channels/fire-message-inbound.ts
++++ b/src/channels/fire-message-inbound.ts
+@@ -48,6 +48,8 @@ export function fireMessageInbound(event: PluginHookMessageInboundEvent): void {
+     // Resolve the orgs that own this (channel, account) so the hook runner can
+     // skip reactive plugins disabled for those orgs (per-org enforcement).
+     const orgIds = resolveAccountOrgIds(loadConfig(), event.channel, event.accountId);
++    // TODO(handoff): Slice11 must evaluate certified sourceProvenance units individually;
++    // see proposals/2026-10-22-agent-decision-and-proactivity-experiments.md in minion-meta.
+     void runner.runMessageInbound(event, {
+       channelId: event.channel,
+       accountId: event.accountId,
+diff --git a/src/channels/impl/telegram/bot-handlers.ts b/src/channels/impl/telegram/bot-handlers.ts
+index b7b4a8ad5a2..04e0f9126cc 100644
+--- a/src/channels/impl/telegram/bot-handlers.ts
++++ b/src/channels/impl/telegram/bot-handlers.ts
+@@ -51,6 +51,7 @@ import {
+ } from "./bot/helpers.js";
+ import type { TelegramContext } from "./bot/types.js";
+ import { migrateTelegramGroupConfig } from "./group-migration.js";
++import { buildTelegramSourceProvenance } from "./inbound-provenance.js";
+ import {
+   deletePendingMessage,
+   getActiveVariant,
+@@ -88,6 +89,36 @@ export const registerTelegramHandlers = ({
+   const loadStoreAllowFrom = async () =>
+     readChannelAllowFromStore("telegram", process.env, accountId).catch(() => []);
+ 
++  // Channel posts acquire synthetic routing senders below. Keep their provider
++  // originals across every coalescer without certifying that synthetic identity.
++  const originalChannelPosts = new WeakMap<Message, Message>();
++  const originalSource = (message: Message) => originalChannelPosts.get(message) ?? message;
++  const captureSources = (messages: readonly Message[]) => {
++    for (const msg of messages) {
++      fireMessageInbound({
++        channel: "telegram",
++        accountId: accountId ?? "default",
++        chatId: String(msg.chat.id),
++        senderId: msg.from?.id != null ? String(msg.from.id) : undefined,
++        senderName:
++          [msg.from?.first_name, msg.from?.last_name].filter(Boolean).join(" ") || undefined,
++        senderUsername: msg.from?.username,
++        isBot: msg.from?.is_bot,
++        isGroup: msg.chat.type === "group" || msg.chat.type === "supergroup",
++        content: msg.text ?? msg.caption ?? "",
++        messageId: String(msg.message_id),
++        timestamp: msg.date ? msg.date * 1000 : undefined,
++        metadata: {
++          sourceProvenance: buildTelegramSourceProvenance(
++            [originalSource(msg)],
++            accountId ?? "default",
++          ),
++        },
++      });
++    }
++    return buildTelegramSourceProvenance(messages.map(originalSource), accountId ?? "default");
++  };
++
+   const mediaGroupBuffer = createMediaGroupBuffer({
+     mediaMaxBytes,
+     token: opts.token,
+@@ -95,6 +126,7 @@ export const registerTelegramHandlers = ({
+     timeoutMs: mediaGroupTimeoutMs,
+     loadStoreAllowFrom,
+     processMessage,
++    captureSources,
+     runtime,
+   });
+ 
+@@ -102,6 +134,7 @@ export const registerTelegramHandlers = ({
+     gapMs: textFragmentGapMs,
+     loadStoreAllowFrom,
+     processMessage,
++    captureSources,
+     runtime,
+   });
+ 
+@@ -133,25 +166,9 @@ export const registerTelegramHandlers = ({
+         return;
+       }
+ 
+-      // Fire message_inbound hook for each raw entry before any filtering
++      // Raw hooks and received hooks share original provider units across all coalescers.
++      const sourceProvenance = captureSources(entries.map((entry) => entry.msg));
+       const hookRunner = getGlobalHookRunner();
+-      for (const entry of entries) {
+-        const msg = entry.msg;
+-        fireMessageInbound({
+-          channel: "telegram",
+-          accountId: accountId ?? "default",
+-          chatId: String(msg.chat.id),
+-          senderId: msg.from?.id != null ? String(msg.from.id) : undefined,
+-          senderName:
+-            [msg.from?.first_name, msg.from?.last_name].filter(Boolean).join(" ") || undefined,
+-          senderUsername: msg.from?.username,
+-          isBot: msg.from?.is_bot,
+-          isGroup: msg.chat.type === "group" || msg.chat.type === "supergroup",
+-          content: msg.text ?? msg.caption ?? "",
+-          messageId: String(msg.message_id),
+-          timestamp: msg.date ? msg.date * 1000 : undefined,
+-        });
+-      }
+ 
+       // message_intercept: let a plugin consume this inbound (e.g. a flows-relay
+       // owner "claim"/reply, or a client message during an active relay) so the
+@@ -214,7 +231,7 @@ export const registerTelegramHandlers = ({
+       }
+ 
+       if (entries.length === 1) {
+-        await processMessage(last.ctx, last.allMedia, last.storeAllowFrom);
++        await processMessage(last.ctx, last.allMedia, last.storeAllowFrom, { sourceProvenance });
+         return;
+       }
+       const combinedText = entries
+@@ -236,7 +253,7 @@ export const registerTelegramHandlers = ({
+         buildSyntheticContext(baseCtx, syntheticMessage),
+         [],
+         first.storeAllowFrom,
+-        messageIdOverride ? { messageIdOverride } : undefined,
++        { messageIdOverride, sourceProvenance },
+       );
+     },
+     onError: (err) => {
+@@ -1054,6 +1071,7 @@ export const registerTelegramHandlers = ({
+         type: "supergroup" as const,
+       },
+     } as Message;
++    originalChannelPosts.set(syntheticMsg, post);
+ 
+     await handleInboundMessageLike({
+       ctxForDedupe: ctx,
+diff --git a/src/channels/impl/telegram/bot-handlers/media-group-buffer.ts b/src/channels/impl/telegram/bot-handlers/media-group-buffer.ts
+index 82dac3f60b9..bf44f1ee6f2 100644
+--- a/src/channels/impl/telegram/bot-handlers/media-group-buffer.ts
++++ b/src/channels/impl/telegram/bot-handlers/media-group-buffer.ts
+@@ -1,5 +1,7 @@
+ import type { Message } from "@grammyjs/types";
+ import { danger } from "../../../../globals.js";
++import type { TransportSourceProvenance } from "../../../../plugins/types/hooks.js";
++import type { TelegramMessageContextOptions } from "../bot-message-context.js";
+ import type { TelegramMediaRef } from "../bot-message-context.js";
+ import { type MediaGroupEntry } from "../bot-updates.js";
+ import { resolveMedia } from "../bot/delivery.js";
+@@ -9,7 +11,7 @@ type ProcessMessageFn = (
+   ctx: TelegramContext,
+   allMedia: TelegramMediaRef[],
+   storeAllowFrom: string[],
+-  opts?: { messageIdOverride?: string; forceWasMentioned?: boolean },
++  opts?: TelegramMessageContextOptions,
+ ) => Promise<void>;
+ 
+ type Runtime = { error?: (msg: string) => void; log?: (msg: string) => void };
+@@ -21,6 +23,7 @@ export type MediaGroupBufferDeps = {
+   timeoutMs: number;
+   loadStoreAllowFrom: () => Promise<string[]>;
+   processMessage: ProcessMessageFn;
++  captureSources: (messages: readonly Message[]) => TransportSourceProvenance;
+   runtime: Runtime;
+ };
+ 
+@@ -34,11 +37,13 @@ export type MediaGroupBuffer = {
+  * (sequence of photo/video messages sharing the same `media_group_id`) and flushes
+  * them as a single inbound message after a debounce window.
+  *
+- * Behavior preserved byte-for-byte from the original inline implementation:
++ * Coalescing and media behavior remain unchanged:
+  * - First arrival starts a timer; subsequent arrivals reset it.
+  * - Flush sorts by message_id, resolves media for every member, and dispatches to
+  *   the caption-bearing message (or the first one).
+  * - Flushes are serialized through a single chained promise to prevent overlap.
++ * Each successful flush also captures the ordered original provider units for
++ * raw hooks and carries them through the received-message hook metadata.
+  */
+ export const createMediaGroupBuffer = (deps: MediaGroupBufferDeps): MediaGroupBuffer => {
+   const {
+@@ -74,7 +79,9 @@ export const createMediaGroupBuffer = (deps: MediaGroupBufferDeps): MediaGroupBu
+       }
+ 
+       const storeAllowFrom = await loadStoreAllowFrom();
+-      await processMessage(primaryEntry.ctx, allMedia, storeAllowFrom);
++      await processMessage(primaryEntry.ctx, allMedia, storeAllowFrom, {
++        sourceProvenance: deps.captureSources(entry.messages.map(({ msg }) => msg)),
++      });
+     } catch (err) {
+       runtime.error?.(danger(`media group handler failed: ${String(err)}`));
+     }
+diff --git a/src/channels/impl/telegram/bot-handlers/text-fragment-buffer.ts b/src/channels/impl/telegram/bot-handlers/text-fragment-buffer.ts
+index 806e6da5b50..cbc52cac466 100644
+--- a/src/channels/impl/telegram/bot-handlers/text-fragment-buffer.ts
++++ b/src/channels/impl/telegram/bot-handlers/text-fragment-buffer.ts
+@@ -1,5 +1,7 @@
+ import type { Message } from "@grammyjs/types";
+ import { danger } from "../../../../globals.js";
++import type { TransportSourceProvenance } from "../../../../plugins/types/hooks.js";
++import type { TelegramMessageContextOptions } from "../bot-message-context.js";
+ import type { TelegramContext } from "../bot/types.js";
+ import {
+   TELEGRAM_TEXT_FRAGMENT_MAX_ID_GAP,
+@@ -13,7 +15,7 @@ type ProcessMessageFn = (
+   ctx: TelegramContext,
+   allMedia: never[],
+   storeAllowFrom: string[],
+-  opts?: { messageIdOverride?: string; forceWasMentioned?: boolean },
++  opts?: TelegramMessageContextOptions,
+ ) => Promise<void>;
+ 
+ type Runtime = { error?: (msg: string) => void };
+@@ -28,6 +30,7 @@ export type TextFragmentBufferDeps = {
+   gapMs: number;
+   loadStoreAllowFrom: () => Promise<string[]>;
+   processMessage: ProcessMessageFn;
++  captureSources: (messages: readonly Message[]) => TransportSourceProvenance;
+   runtime: Runtime;
+ };
+ 
+@@ -82,6 +85,7 @@ export const createTextFragmentBuffer = (deps: TextFragmentBufferDeps): TextFrag
+ 
+       await processMessage(buildSyntheticContext(baseCtx, syntheticMessage), [], storeAllowFrom, {
+         messageIdOverride: String(last.msg.message_id),
++        sourceProvenance: deps.captureSources(entry.messages.map(({ msg }) => msg)),
+       });
+     } catch (err) {
+       runtime.error?.(danger(`text fragment handler failed: ${String(err)}`));
+diff --git a/src/channels/impl/telegram/bot-message-context.ts b/src/channels/impl/telegram/bot-message-context.ts
+index a1155b5bc81..a65fdf9a246 100644
+--- a/src/channels/impl/telegram/bot-message-context.ts
++++ b/src/channels/impl/telegram/bot-message-context.ts
+@@ -44,6 +44,7 @@ import { logVerbose, shouldLogVerbose } from "../../../globals.js";
+ import { recordChannelActivity } from "../../../infra/channel-activity.js";
+ import { buildPairingReply } from "../../../pairing/pairing-messages.js";
+ import { upsertChannelPairingRequest } from "../../../pairing/pairing-store.js";
++import type { TransportSourceProvenance } from "../../../plugins/types/hooks.js";
+ import { resolveAgentRoute } from "../../../routing/resolve-route.js";
+ import { resolveThreadSessionKeys } from "../../../routing/session-key.js";
+ import { withTelegramApiErrorLogging } from "./api-logging.js";
+@@ -78,7 +79,8 @@ export type TelegramMediaRef = {
+   stickerMetadata?: StickerMetadata;
+ };
+ 
+-type TelegramMessageContextOptions = {
++export type TelegramMessageContextOptions = {
++  sourceProvenance?: TransportSourceProvenance;
+   forceWasMentioned?: boolean;
+   messageIdOverride?: string;
+ };
+@@ -667,6 +669,7 @@ export const buildTelegramMessageContext = async ({
+     BodyForAgent: bodyText,
+     InboundHistory: inboundHistory,
+     RawBody: rawBody,
++    SourceProvenance: options?.sourceProvenance,
+     CommandBody: commandBody,
+     From: isGroup ? buildTelegramGroupFrom(chatId, resolvedThreadId) : `telegram:${chatId}`,
+     To: `telegram:${chatId}`,
+diff --git a/src/channels/impl/telegram/bot-message.ts b/src/channels/impl/telegram/bot-message.ts
+index 0298a4d6589..a6a17b093eb 100644
+--- a/src/channels/impl/telegram/bot-message.ts
++++ b/src/channels/impl/telegram/bot-message.ts
+@@ -7,6 +7,7 @@ import {
+   buildTelegramMessageContext,
+   type BuildTelegramMessageContextParams,
+   type TelegramMediaRef,
++  type TelegramMessageContextOptions,
+ } from "./bot-message-context.js";
+ import { dispatchTelegramMessage } from "./bot-message-dispatch.js";
+ import type { TelegramBotOptions } from "./bot.js";
+@@ -60,7 +61,7 @@ export const createTelegramMessageProcessor = (deps: TelegramMessageProcessorDep
+     primaryCtx: TelegramContext,
+     allMedia: TelegramMediaRef[],
+     storeAllowFrom: string[],
+-    options?: { messageIdOverride?: string; forceWasMentioned?: boolean },
++    options?: TelegramMessageContextOptions,
+   ) => {
+     const context = await buildTelegramMessageContext({
+       primaryCtx,
+diff --git a/src/channels/impl/telegram/bot-native-commands.ts b/src/channels/impl/telegram/bot-native-commands.ts
+index 0798757790a..57bbd3e947b 100644
+--- a/src/channels/impl/telegram/bot-native-commands.ts
++++ b/src/channels/impl/telegram/bot-native-commands.ts
+@@ -42,6 +42,7 @@ import { resolveThreadSessionKeys } from "../../../routing/session-key.js";
+ import type { RuntimeEnv } from "../../../runtime.js";
+ import { withTelegramApiErrorLogging } from "./api-logging.js";
+ import { firstDefined, isSenderAllowed, normalizeAllowFromWithStore } from "./bot-access.js";
++import type { TelegramMessageContextOptions } from "./bot-message-context.js";
+ import {
+   buildCappedTelegramMenuCommands,
+   buildPluginTelegramMenuCommands,
+@@ -102,10 +103,7 @@ export type RegisterTelegramHandlerParams = {
+     ctx: TelegramContext,
+     allMedia: Array<{ path: string; contentType?: string }>,
+     storeAllowFrom: string[],
+-    options?: {
+-      messageIdOverride?: string;
+-      forceWasMentioned?: boolean;
+-    },
++    options?: TelegramMessageContextOptions,
+   ) => Promise<void>;
+   logger: ReturnType<typeof getChildLogger>;
+   execApprovalHandler?: TelegramExecApprovalHandler;
+diff --git a/src/channels/impl/telegram/bot.media.e2e-harness.ts b/src/channels/impl/telegram/bot.media.e2e-harness.ts
+index dde6dba8f73..4b99cad7120 100644
+--- a/src/channels/impl/telegram/bot.media.e2e-harness.ts
++++ b/src/channels/impl/telegram/bot.media.e2e-harness.ts
+@@ -59,11 +59,13 @@ vi.mock("../../../media/store.js", async (importOriginal) => {
+   };
+ });
+ 
+-vi.mock("../../../hooks/config.js", async (importOriginal) => {
++vi.mock("../../../config/config.js", async (importOriginal) => {
+   const actual = await importOriginal<typeof import("../../../config/config.js")>();
+   return {
+     ...actual,
+     loadConfig: () => ({
++      agents: { list: [{ id: "main", default: true }] },
++      bindings: [{ agentId: "main", match: { channel: "telegram", accountId: "*" } }],
+       channels: { telegram: { dmPolicy: "open", allowFrom: ["*"] } },
+     }),
+   };
+diff --git a/src/plugins/types/hooks.ts b/src/plugins/types/hooks.ts
+index 3bbc208e35c..688c5118356 100644
+--- a/src/plugins/types/hooks.ts
++++ b/src/plugins/types/hooks.ts
+@@ -186,6 +186,36 @@ export type PluginHookMessageContext = {
+   orgIds?: string[];
+ };
+ 
++/** One original provider message, before envelopes, command normalization or batching. */
++export type CanonicalTransportSourceUnit = {
++  channel: string;
++  accountId: string;
++  /** Provider-native conversation ID; adapters must not infer it from routing prefixes. */
++  conversationId: string;
++  messageId: string;
++  /** Only a provider-supplied edit revision may distinguish changed source bytes. */
++  providerRevision?: string;
++  senderId?: string;
++  /** Provider timestamp in milliseconds since epoch. */
++  timestamp?: number;
++  /** Exact original text/caption, including whitespace; empty for textless messages. */
++  text: string;
++};
++
++/**
++ * Trusted channel-intake carrier. Never populate from user text/client envelopes.
++ * Absence means uncertified transport; legacy IDs alone do not establish provenance.
++ */
++export type TransportSourceProvenance = {
++  version: 1;
++  /** Ordered original constituents, never a synthetic batch under its last message ID. */
++  sources: readonly CanonicalTransportSourceUnit[];
++};
++
++export type PluginHookMessageMetadata = Record<string, unknown> & {
++  sourceProvenance?: TransportSourceProvenance;
++};
++
+ /**
+  * message_inbound hook event.
+  *
+@@ -223,7 +253,7 @@ export type PluginHookMessageInboundEvent = {
+   /** Message timestamp in milliseconds since epoch. */
+   timestamp?: number;
+   /** Channel-specific extras. */
+-  metadata?: Record<string, unknown>;
++  metadata?: PluginHookMessageMetadata;
+ };
+ 
+ /**
+@@ -246,7 +276,7 @@ export type PluginHookMessageReceivedEvent = {
+   from: string;
+   content: string;
+   timestamp?: number;
+-  metadata?: Record<string, unknown>;
++  metadata?: PluginHookMessageMetadata;
+ };
+ 
+ // message_sending hook
+diff --git a/src/auto-reply/reply/dispatch-provenance.test.ts b/src/auto-reply/reply/dispatch-provenance.test.ts
+new file mode 100644
+index 00000000000..8682113e5ce
+--- /dev/null
++++ b/src/auto-reply/reply/dispatch-provenance.test.ts
+@@ -0,0 +1,98 @@
++import { beforeEach, describe, expect, it, vi } from "vitest";
++import type { MinionConfig } from "../../config/config.js";
++import type { ReplyDispatcher } from "./reply-dispatcher.js";
++import { buildTestCtx } from "./test-ctx.js";
++
++const hooks = vi.hoisted(() => ({
++  hasHooks: vi.fn((name: string) => name === "message_received"),
++  runMessageReceived: vi.fn(async (_event: unknown, _ctx: unknown) => {}),
++}));
++vi.mock("../../plugins/hook-runner-global.js", () => ({ getGlobalHookRunner: () => hooks }));
++vi.mock("./abort.js", () => ({
++  tryFastAbortFromMessage: vi.fn(async () => ({ handled: false, aborted: false })),
++  formatAbortReplyText: vi.fn(() => "aborted"),
++}));
++import { dispatchReplyFromConfig } from "./dispatch-from-config.js";
++import { resetInboundDedupe } from "./inbound-dedupe.js";
++
++function dispatcher(): ReplyDispatcher {
++  return {
++    sendToolResult: vi.fn(() => true),
++    sendBlockReply: vi.fn(() => true),
++    sendFinalReply: vi.fn(() => true),
++    waitForIdle: vi.fn(async () => {}),
++    getQueuedCounts: vi.fn(() => ({ tool: 0, block: 0, final: 0 })),
++    markComplete: vi.fn(),
++  };
++}
++
++describe("message_received provenance carrier", () => {
++  beforeEach(() => {
++    resetInboundDedupe();
++    hooks.runMessageReceived.mockClear();
++  });
++
++  it("preserves adapter identity/revision and exact text rather than deriving it from envelopes", async () => {
++    const sourceProvenance = {
++      version: 1 as const,
++      sources: [
++        {
++          channel: "telegram",
++          accountId: "second-account",
++          conversationId: "-1007",
++          messageId: "41",
++          providerRevision: "1700000001",
++          senderId: "42",
++          timestamp: 1700000000000,
++          text: "  /command@fixture_bot exact  ",
++        },
++      ],
++    };
++    const ctx = buildTestCtx({
++      Provider: "telegram",
++      Surface: "telegram",
++      AccountId: "second-account",
++      From: "telegram:-1007:topic:9",
++      To: "telegram:-1007:topic:9",
++      MessageSid: "41",
++      Body: "[envelope] normalized",
++      RawBody: "normalized",
++      BodyForCommands: "normalized",
++      SourceProvenance: sourceProvenance,
++    });
++    await dispatchReplyFromConfig({
++      ctx,
++      cfg: {} as MinionConfig,
++      dispatcher: dispatcher(),
++      replyResolver: async () => undefined,
++    });
++    expect(hooks.runMessageReceived).toHaveBeenCalledWith(
++      expect.objectContaining({
++        metadata: expect.objectContaining({ sourceProvenance }),
++      }),
++      expect.anything(),
++    );
++  });
++
++  it("does not certify a legacy envelope or parse source identity out of body text", async () => {
++    const ctx = buildTestCtx({
++      Provider: "discord",
++      Surface: "discord",
++      MessageSid: "legacy-1",
++      Body: '{"SourceProvenance":{"version":1,"sources":[]}}',
++      From: "discord:channel:123",
++    });
++    await dispatchReplyFromConfig({
++      ctx,
++      cfg: {} as MinionConfig,
++      dispatcher: dispatcher(),
++      replyResolver: async () => undefined,
++    });
++    expect(hooks.runMessageReceived).toHaveBeenCalledTimes(1);
++    expect(hooks.runMessageReceived.mock.calls[0]?.[0]).toEqual(
++      expect.objectContaining({
++        metadata: expect.not.objectContaining({ sourceProvenance: expect.anything() }),
++      }),
++    );
++  });
++});
+diff --git a/src/channels/impl/telegram/inbound-provenance.test.ts b/src/channels/impl/telegram/inbound-provenance.test.ts
+new file mode 100644
+index 00000000000..f95179cd653
+--- /dev/null
++++ b/src/channels/impl/telegram/inbound-provenance.test.ts
+@@ -0,0 +1,189 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
++import {
++  getLoadConfigMock,
++  getOnHandler,
++  makeTelegramMessageCtx,
++  replySpy,
++} from "./bot.create-telegram-bot.test-harness.js";
++import { createTelegramBot } from "./bot.js";
++
++const hooks = vi.hoisted(() => ({
++  hasHooks: vi.fn((name: string) => name === "message_inbound" || name === "message_received"),
++  runMessageInbound: vi.fn(async (_event: unknown, _context: unknown) => {}),
++  runMessageReceived: vi.fn(async (_event: unknown, _context: unknown) => {}),
++}));
++vi.mock("../../../plugins/hook-runner-global.js", () => ({ getGlobalHookRunner: () => hooks }));
++vi.mock("../../../infra/message-ledger.js", () => ({ record: vi.fn() }));
++vi.mock("../../../hooks/internal-hooks.js", async (importOriginal) => ({
++  ...(await importOriginal<typeof import("../../../hooks/internal-hooks.js")>()),
++  triggerInternalHook: vi.fn(async () => {}),
++}));
++vi.mock("./bot/delivery.js", async (importOriginal) => ({
++  ...(await importOriginal<typeof import("./bot/delivery.js")>()),
++  resolveMedia: vi.fn(async () => null),
++}));
++
++const loadConfig = getLoadConfigMock();
++const chat = { id: -100777111222, type: "supergroup", title: "Fixture" };
++function incoming(messageId: number, text: string) {
++  return makeTelegramMessageCtx({ chat, from: { id: 42 }, text, messageId, date: 1736380800 });
++}
++function expectedSource(messageId: number, text: string) {
++  return {
++    channel: "telegram",
++    accountId: "fixture-account",
++    conversationId: "-100777111222",
++    messageId: String(messageId),
++    senderId: "42",
++    timestamp: 1736380800000,
++    text,
++  };
++}
++function receivedProvenance() {
++  return hooks.runMessageReceived.mock.calls.map(
++    (args) => (args[0] as { metadata?: { sourceProvenance?: unknown } }).metadata?.sourceProvenance,
++  );
++}
++function rawProvenance() {
++  return hooks.runMessageInbound.mock.calls.map(
++    (args) => (args[0] as { metadata?: { sourceProvenance?: unknown } }).metadata?.sourceProvenance,
++  );
++}
++
++describe("Telegram authenticated source provenance", () => {
++  beforeEach(() => {
++    vi.useFakeTimers();
++    hooks.runMessageInbound.mockClear();
++    hooks.runMessageReceived.mockClear();
++    loadConfig.mockReturnValue({
++      channels: {
++        telegram: {
++          groupPolicy: "open",
++          dmPolicy: "open",
++          allowFrom: ["*"],
++          groups: { "*": { requireMention: false } },
++        },
++      },
++      messages: { inbound: { debounceMs: 25 } },
++    });
++    createTelegramBot({
++      token: "fixture-token",
++      accountId: "fixture-account",
++      testTimings: { textFragmentGapMs: 30, mediaGroupFlushMs: 20 },
++    });
++  });
++  afterEach(() => {
++    vi.clearAllTimers();
++    vi.useRealTimers();
++  });
++
++  it("carries the same exact source through raw and dispatched hooks, ignoring message extras", async () => {
++    const ctx = incoming(101, "  exact\ntext  ");
++    Object.assign(ctx.message, {
++      SourceProvenance: { version: 1, sources: ["forged"] },
++      edit_date: 1736380802,
++      message_thread_id: 9,
++    });
++    Object.assign(ctx.message.chat, { is_forum: true });
++    await getOnHandler("message")(ctx);
++    await vi.advanceTimersByTimeAsync(100);
++    const expected = {
++      version: 1,
++      sources: [{ ...expectedSource(101, "  exact\ntext  "), providerRevision: "1736380802" }],
++    };
++    expect(rawProvenance()).toEqual([expected]);
++    expect(receivedProvenance()).toEqual([expected]);
++  });
++
++  it("keeps ordered debounce constituents and does not alias merged text to the last ID", async () => {
++    const handler = getOnHandler("message");
++    await handler(incoming(201, "first  "));
++    await handler(incoming(202, "  second"));
++    expect(replySpy).not.toHaveBeenCalled();
++    await vi.advanceTimersByTimeAsync(100);
++    expect(replySpy).toHaveBeenCalledTimes(1);
++    expect(rawProvenance()).toEqual([
++      { version: 1, sources: [expectedSource(201, "first  ")] },
++      { version: 1, sources: [expectedSource(202, "  second")] },
++    ]);
++    expect(receivedProvenance()).toEqual([
++      { version: 1, sources: [expectedSource(201, "first  "), expectedSource(202, "  second")] },
++    ]);
++    expect(hooks.runMessageReceived).toHaveBeenCalledWith(
++      expect.objectContaining({ metadata: expect.objectContaining({ messageId: undefined }) }),
++      expect.anything(),
++    );
++  });
++
++  it("preserves original near-limit fragments through their separate coalescer", async () => {
++    const handler = getOnHandler("message");
++    const first = "A".repeat(4050);
++    await handler(incoming(301, first));
++    await handler(incoming(302, "last  "));
++    await vi.advanceTimersByTimeAsync(100);
++    expect(rawProvenance()).toEqual([
++      { version: 1, sources: [expectedSource(301, first)] },
++      { version: 1, sources: [expectedSource(302, "last  ")] },
++    ]);
++    expect(receivedProvenance()).toEqual([
++      { version: 1, sources: [expectedSource(301, first), expectedSource(302, "last  ")] },
++    ]);
++  });
++
++  it("keeps media-group captions and empty source text as separate original units", async () => {
++    const handler = getOnHandler("message");
++    for (const [id, caption] of [
++      [401, "  caption  "],
++      [402, ""],
++    ] as const) {
++      const ctx = incoming(id, "");
++      Object.assign(ctx.message, { text: undefined, caption, media_group_id: "fixture-album" });
++      await handler(ctx);
++    }
++    await vi.advanceTimersByTimeAsync(100);
++    expect(rawProvenance()).toEqual([
++      { version: 1, sources: [expectedSource(401, "  caption  ")] },
++      { version: 1, sources: [expectedSource(402, "")] },
++    ]);
++    expect(receivedProvenance()).toEqual([
++      { version: 1, sources: [expectedSource(401, "  caption  "), expectedSource(402, "")] },
++    ]);
++  });
++
++  it("certifies channel-post captions without inventing a sender", async () => {
++    await getOnHandler("channel_post")({
++      channelPost: {
++        ...incoming(450, "").message,
++        chat: { ...chat, type: "channel" },
++        from: undefined,
++        text: undefined,
++        caption: "  channel caption  ",
++      },
++      me: { username: "minion_bot" },
++      getFile: async () => ({}),
++    });
++    await vi.advanceTimersByTimeAsync(100);
++    const expected = {
++      version: 1,
++      sources: [{ ...expectedSource(450, "  channel caption  "), senderId: undefined }],
++    };
++    expect(rawProvenance()).toEqual([expected]);
++    expect(receivedProvenance()).toEqual([expected]);
++  });
++
++  it("leaves synthesized callback commands uncertified", async () => {
++    await getOnHandler("callback_query")({
++      callbackQuery: {
++        id: "fixture-callback",
++        data: "cmd:option_a",
++        from: { id: 42, first_name: "Fixture" },
++        message: incoming(501, "button").message,
++      },
++      me: { username: "minion_bot" },
++      getFile: async () => ({}),
++    });
++    expect(replySpy).toHaveBeenCalledTimes(1);
++    expect(receivedProvenance()).toEqual([undefined]);
++    expect(rawProvenance()).toEqual([]);
++  });
++});
+diff --git a/src/channels/impl/telegram/inbound-provenance.ts b/src/channels/impl/telegram/inbound-provenance.ts
+new file mode 100644
+index 00000000000..3222f06e014
+--- /dev/null
++++ b/src/channels/impl/telegram/inbound-provenance.ts
+@@ -0,0 +1,29 @@
++import type { Message } from "@grammyjs/types";
++import type { TransportSourceProvenance } from "../../../plugins/types/hooks.js";
++
++/** Called only with original Telegram messages from the authenticated bot intake. */
++export function buildTelegramSourceProvenance(
++  messages: readonly Message[],
++  accountId: string,
++): TransportSourceProvenance {
++  return {
++    version: 1,
++    sources: messages.map((message) => ({
++      channel: "telegram",
++      accountId,
++      conversationId: String(message.chat.id),
++      messageId: String(message.message_id),
++      ...(typeof message.edit_date === "number"
++        ? { providerRevision: String(message.edit_date) }
++        : {}),
++      senderId:
++        message.from?.id != null
++          ? String(message.from.id)
++          : message.sender_chat?.id != null
++            ? String(message.sender_chat.id)
++            : undefined,
++      timestamp: typeof message.date === "number" ? message.date * 1000 : undefined,
++      text: message.text ?? message.caption ?? "",
++    })),
++  };
++}

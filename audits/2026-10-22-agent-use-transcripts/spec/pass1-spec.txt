@@ -1,0 +1,502 @@
+---
+id: 2026-10-22-agent-harness-reliability-and-proactivity-spec
+title: Agent harness reliability, qualified decisions and bounded Pulse proactivity
+stage: spec
+status: review
+pass: 1
+created: 2026-10-22
+updated: 2026-10-22
+repos: [minion_hub, minion, minion-factory, minion-meta]
+proposal: 2026-10-22-agent-decision-and-proactivity-experiments
+relationship: extends
+related: [2026-10-12-hub-assistant-jev-context-router, 2026-10-17-agent-experience-lifecycle, 2026-09-29-factory-jev-decision-layer, 2026-07-17-pulse-slice1-plan]
+tags: [logic, data, security, test, infra, ui]
+type: feature
+verdict: pending
+next_slice: 1
+---
+
+# Agent harness reliability, qualified decisions and bounded Pulse proactivity
+
+## 0. Product
+
+A Minion user must be able to submit a request, change their mind, and trust that the request stays in the intended conversation. Operators need decision records that show which policy actually ran and what the whole task cost. Proactive work should produce useful review cards without losing progress or silently repeating an uncertain external action.
+
+The owner requested this full SDD/Ponytail specification after the [source revalidation](../audits/2026-10-22-agent-use-transcripts/README.md). That instruction authorizes specification and review. It does not authorize implementation, paid evaluation, deployment or autonomous approval of security/data changes. The source proposal moves to `in-spec`; this document remains `status: review` until the owner approves its completed contract. A technical review verdict is distinct from that human approval.
+
+This is one implementation contract with bounded slices, not a new agent framework. Ponytail means reuse the current transport, identifiers, SQLite alert store, Hub job ownership and Pulse cards. The spec is complete about the repairs and conditional experiments; an experiment may legitimately finish with “do not activate.”
+
+## 1. AS-IS and evidence boundary
+
+### 1.1 Verified source
+
+| Repository / branch | Audited commit | Source evidence |
+|---|---|---|
+| Hub / master | `b677a5d91a2b653211a1655465b2b5fd398efc2a` | [Router report](../audits/2026-10-22-agent-use-transcripts/revalidation/router/report.md), [durability report](../audits/2026-10-22-agent-use-transcripts/revalidation/durability/report.md) |
+| Gateway / DEV | `6d1cd8836ff7b82d21668c50cc20b9b6d1e79c18` | [Alert report](../audits/2026-10-22-agent-use-transcripts/revalidation/filter/report.md), durability report |
+| Factory / dev | `43a174b2e87c4d572ffd2ba030269db22a0b7bd2` | [Factory report](../audits/2026-10-22-agent-use-transcripts/revalidation/factory/report.md) |
+
+[Selected immutable source snapshots](../audits/2026-10-22-agent-use-transcripts/revalidation/source-manifest.json) and probes preserve the evidence. These pins establish source behavior, not deployed identity. Before each implementation slice, inspect the current target branch for fixes/collisions; retain the same observable acceptance contract if code has moved. Record new anchors rather than applying old patches blindly.
+
+### 1.2 Findings and current mitigations
+
+| IDs | Current behavior / anchors | Consequence |
+|---|---|---|
+| R1/R2 | Hub Home `+page.svelte:675+`, Floating `send:306–331`, `stopReply:435–438` read mutable context after awaits; Stop aborts only gateway work | Wrong-destination submission or send after pre-send cancellation |
+| R3/R4 | Router endpoint emits `p_sandbox`; observability allowlist omits it. Route starts before run ID allocation. Failed/unknown cost becomes zero | Incomplete task joins and misleading evaluation inputs |
+| R5/R6 hypotheses | Composed envelopes persist in gateway history and reach JIT/memory retrieval. Current UI schemas, page/tool discovery and callback full-context bypass already exist | New continuation state is not yet justified; task cost/retrieval impact needs experiments |
+| F1/F2 | Factory proxy logs centrally; shell rank logs locally; report concatenates them and discards model/cost provenance | Duplicate inference/cost counts and unqualified calibration cohorts |
+| F3/F4 | Guard asks for 4s under a 6s hook; proxy defaults to 25s. Run budget checks precede await and increments follow | Deadline mismatch and concurrent call-cap overshoot |
+| F-01/F-02 | Watcher dedup uses raw ID; received adapter reads wrong fields. Telegram raw chat IDs differ from formatted `To`; debounce combines constituent messages | Unrelated messages dropped, one source processed twice, or a batch aliased to its last message |
+| F-03/F-04 | Seen mark precedes classifier; failure cannot retry. Shared host infers model from last key resolution | Lost retry opportunity and wrong model/cost attribution under overlap/fallback |
+| DUR-01 | Pulse route reads pending, calls `cron.add`, then marks approved | Concurrent/retried approval can create two jobs |
+| DUR-02–06 | Hub `bg-runtime` has lease-generation ownership; `job_effects` rows enforce embedding/vector descriptors. Default jobs tick skips jobs; Pulse has cards, not an integrated digest scheduler | Reuse components, but add domain receipts and qualified worker wiring rather than assume a durable pipeline |
+
+The probes establish controlled interleavings, not production frequency. Existing focused tests passed as recorded in the audit; some gateway integration tests could not collect against installed dependencies. A clean frozen-lockfile install and actual mounted/runtime proof are implementation gates, not waived by those passes.
+
+### 1.3 Collision disposition
+
+| Existing artifact | Relationship and ownership |
+|---|---|
+| `2026-10-12-hub-assistant-jev-context-router` | Extend its remaining submission/evaluation ledger. Preserve shipped mode fallback and callback behavior. Do not reimplement those fixes. |
+| `2026-10-17-agent-experience-lifecycle` and dynamic-tools spec | Reuse discovery and scope validation. This spec adds pending-turn/receipt qualification, not another catalog. |
+| `2026-09-29-factory-jev-decision-layer` | Repair the existing integration and reports. That proposal remains owner of unrelated future Jev sites. |
+| `2026-07-17-pulse-slice1-plan` | Extend current approval/presentation. Preserve informational kinds; replace the documented async-execution receipt shortcut only at the specified boundary. |
+| CRM Jev pilot / WhatsApp delegated-work proposals | No activation, data-source reuse or shipping assumption. Their authority, expiry and operational evidence remain separate. |
+
+No older artifact is marked superseded by this spec. Changes touching the same files serialize as described in §8; later source reconciliation must identify any already-satisfied slice with tests and exact source evidence.
+
+## 2. TO-BE: invariants and exclusions
+
+### 2.1 Invariants
+
+1. **Intent:** one submission has immutable actor/org/agent/session ownership and at most one local send transition. Cancellation or invalidation before that transition produces zero sends. An A→B→A scope change does not revive an old submission.
+2. **Authority:** correlation IDs, source provenance, classifier scores and feedback never grant permissions. Server checks use current authority. Background work has an explicit owner and target gateway; missing authority fails closed.
+3. **Evidence:** classify-attempt, client-applied decision, transport submission, accepted run and completed task are distinct facts. Unknown cost remains unknown. Model/schema/rubric changes create separate evaluation cohorts.
+4. **Identity:** only stable authoritative event identity can suppress another event. Text equality, sender alone or a batch's last ID cannot establish identity.
+5. **Effects:** persist admission before external dispatch. An ambiguous accepted call is `indeterminate`, not failed-before-send and not safe to repeat. Known successful recipient effects never replay automatically.
+6. **Publication:** a logical digest input produces at most one card; card, consumed cursor and terminal job progress commit together under current ownership.
+7. **Human control:** repairs do not enable Jev acting modes, automatic Pulse approval or new global queues. Paid/production experiments require a versioned approved budget and scope.
+8. **Compatibility:** existing callsites without optional correlation/provenance still operate with explicitly weaker guarantees. Unsupported input cannot masquerade as a qualified experiment case.
+
+### 2.2 Out-of-scope
+
+No replacement agent runtime, generic workflow DSL, Redis/queue platform, model-training loop, automatic learned weights, new newsfeed UI, arbitrary scraping/research agent, model replacement, continuation-state server, billing judge, automatic CRM labels, blanket activation of jobs, or broad channel rewrite. No promise of exactly-once provider billing or execution-time revocation after a generic gateway job is accepted.
+
+Full delivery recovery is specified for the bounded watcher path in Slice 11; other channel delivery pipelines are not rewritten. Legacy inputs without authoritative provenance retain baseline behavior and are excluded from cross-source dedup guarantees and classifier promotion. Each supported transport is explicitly certified before claiming those guarantees.
+
+## 3. DELTA and acceptance mapping
+
+| Delta | Behavior transition | Slices | Proof family |
+|---|---|---|---|
+| D1 | Mutable pending send → owned, cancelable, single-commit submission | 1–3 | A01–A03 |
+| D2 | Probability-only/disconnected metrics → attempt/applied/task joins with provenance | 4–5 | A04–A05 |
+| D3 | Duplicate/unknown Factory accounting → identified, reconcilable records and bounded admission | 6–8 | A06–A08 |
+| D4 | Raw-ID/batch ambiguity and volatile seen flags → canonical inputs and durable classification/delivery receipts | 9–11 | A09–A11 |
+| D5 | Shared guessed model usage → per-run resolved-model or explicit unknown usage | 12 | A12 |
+| D6 | Post-effect approval status → atomic admission and fenced unknown remote outcome | 13–15 | A13–A15 |
+| D7 | Unconnected durable components → one bounded informational digest workflow | 16–19 | A16–A19 |
+| D8 | Assumed savings/quality → reproducible task/trace/filter qualification | 20–22 | A20–A22 |
+
+Each slice below names its exact DoD and test command. Planned test filenames denote files to create, not existing passing evidence. Every defect in the proposal maps above; hypotheses are experiments, not pre-authorized architecture changes.
+
+## 4. Hub submission and decision contracts
+
+### 4.1 Pending submission
+
+Add one small client module under `src/lib/assistant/` used by Home and Floating. It owns preparation lifetime only; gateway chat state continues to own accepted runs. Capture before any attachment/context/router await:
+
+```ts
+type PendingSubmission = {
+  submissionId: string; // UUID; existing chat.send idempotencyKey when submitted
+  actorId: string; orgId: string; agentId: string; sessionKey: string;
+  scopeEpoch: number; composerRevision: number; pageContextRevision: number;
+  phase: 'preparing' | 'submitted' | 'canceled' | 'invalidated' | 'rejected';
+  signal: AbortSignal;
+};
+```
+
+Keep text and attachment references in the existing composer, captured by revision; do not duplicate long-lived content in a global store. `scopeEpoch` increments on actor/org/agent/thread changes, including return to the same values. Page/tool context changes increment `pageContextRevision` using existing context/tool registration notifications, not pointer identity or a DOM hash. Component teardown invalidates its pending generation.
+
+Every await is followed by an ownership/generation check. Immediately before sending, atomically transition `preparing→submitted` only if current scope/context still matches. `sendAssistantTurn` accepts an optional caller ID and returns an explicit submitted/rejected result with the ID; old callers still get internally generated IDs. Synchronous submitted means the transport dispatch started, not server acknowledgement or task completion. Keep gateway acknowledgement/failure/unknown outcome separate. Existing wire `idempotencyKey` is reused; no new permission field is added.
+
+Stop first marks the pending generation canceled and aborts fetch/enrichment, then aborts any submitted run using its captured agent/session/run identity. Cancellation cannot retract an already accepted remote effect. AbortSignal is an optimization; generation checks are authoritative. A stale completion/finally must not reset a newer pending submission. Preserve the captured draft on cancel/rejection; clear only the matching composer revision after local submission. Never restore an old owner's text into a new owner's composer. Uploaded files remain governed by existing attachment lifecycle; cancellation must not delete a committed upload.
+
+User choice/artifact callbacks retain the full-envelope classifier bypass but pass through the same ownership check. Automatic UI tool follow-ups capture the originating run before chat state is cleared, validate page/owner before tool execution and again before sending results, and preserve the existing five-follow-up cap. A free-form reply is not silently assigned to an earlier task by classifier inference.
+
+### 4.2 Correlation and applied decisions
+
+Use `submissionId` as the existing `x-minion-run-id` header during route calls and as the subsequent chat idempotency key. The header remains untrusted correlation, validated as a bounded UUID and hashed by current telemetry identity handling. Server actor/org context remains authoritative. Old clients may omit it; mark their join coverage incomplete.
+
+Extend existing event contracts/allowlists rather than bypassing sanitization:
+
+| Record | Required fields and semantics |
+|---|---|
+| Route attempt | submission identity, server request ID, requested/resolved classifier model, schema/question revision, actual elapsed ms, result `ok|timeout|error|invalid|disabled`, tokens if supplied, known/unknown cost |
+| Applied/discarded decision | same submission, attempt ID if any, mode `off|shadow|active`, actual selected manifest IDs, gate revision, context revision/byte count, `routed|full_fallback|bypass|canceled|invalidated`, bounded reason |
+| Run relation | submission/run ID, task root ID, optional parent run ID and explicit origin `user|ui_choice|artifact|ui_followup`, transport acknowledgement/result |
+| Task receipt | evaluation case/task root, authorized expected action/artifact, observed tool/domain receipts, terminal `success|incorrect|blocked|canceled|indeterminate`, independent rubric/label revision |
+
+Add `p_sandbox` to both probability validation and `assistant_route` allowed fields. Retain all current valid probability fields. Use canonical serialization/hashes of question/gate artifacts to generate revisions. Never hash raw customer text into general analytics as a substitute for privacy. Context size and public manifest revision are enough; restricted fixture/trace storage holds input snapshots only when authorized.
+
+Costs use `{status:'known',usd:number}` or `{status:'unknown',usd:null}`; zero is legitimate only when explicitly reported. Measured elapsed failure time is not zeroed. Attempt success can coexist with client discard; only applied records count as used routing. Server and client deadlines are separate fields. Explicit callback/follow-up parent relations may join runs into a task; evaluator-defined multi-turn episodes join natural-language continuations without requiring new production task-state storage.
+
+## 5. Factory decision records and bounds
+
+### 5.1 Record identity and migration
+
+Extend existing Jev request/result/log envelopes additively with version 2 fields: `decisionId`, `attemptId`, origin, site, runId, requested/resolved model, input hash, question/schema revision, timestamps/elapsed, result disposition, tokens, `costStatus` and nullable cost. The proxy issues its authoritative attempt identity; shell callers preserve it when adding baseline comparison fields. Direct shell calls create their own UUID through the existing available runtime/utility and retain `origin: direct-container|host`; no fixed tag is used as identity. A retry is another attempt linked to the same logical decision, never a second row pretending to be the same bill.
+
+Central proxy records establish attempt/cost facts. Local rows enrich the baseline, not overwrite proxy facts. Merge by versioned `(runId,attemptId)` plus matching site/model/input/question bindings. Conflicts are quarantined and counted; never last-write-wins. Origin is explicit; absent legacy origin becomes `unknown`, not runner. Legacy rows without stable identity remain raw/unjoined counts, excluded from deduplicated cost and promotion denominators unless an independent provider receipt establishes identity. Do not infer identity from matching timestamps/text.
+
+Report separate raw records, unique attempts, logical decisions, paired baseline comparisons, independent labels, failures, unresolved/conflicting records and known/unknown bills. Group metrics by resolved model/question/schema/gate cohort. Do not average incompatible score scales or confuse baseline agreement with correctness. Rank continues to use the generative model for readiness/recommendation/rationale/evidence. The ten-criterion vs ledger 0–10 mapping must be explicitly verified before absolute score-error comparisons are used; keep raw values meanwhile.
+
+### 5.2 Minimal admission bound
+
+Keep the current single-runner capability model; do not introduce a distributed limiter. Reserve call count synchronously before the first await, including the existing malformed-request accounting semantics. Permit at most one upstream request in flight per run capability; concurrent calls return a typed `run_busy` denial and preserve the existing caller fallback. One in-flight slot conservatively reserves the remaining locally accounted dollar allowance. On known completion settle actual reported spend; on possible dispatch with missing/ambiguous cost fence further calls for that run as `cost_unknown` until reconciled. A definitely unsubmitted request can release the spend reservation, but not erase an already consumed attempt count.
+
+This bounds admitted attempts and outstanding ambiguity. It does not claim to cap a provider invoice below a known final charge: one request can exceed an estimate. Report overshoot and stop further admission. Reminting a capability for the same live run must not reset its local budget; revoking a token invalidates authority but keeps the run ledger until its bounded expiry. A runner restart invalidates all capabilities as today; no replay/remint resume is introduced here. Document the single-runner ceiling with `shortcut:` and upgrade only if multiple active runners share a run.
+
+### 5.3 Deadline
+
+The hook retains its 6s outer budget and immediate deterministic-floor denial. Its semantic path uses a maximum 4s total preparation/request budget with explicit remaining milliseconds propagated through shell proxy and runner fetch; the proxy's general timeout cannot override a shorter caller deadline. Reject expired/invalid budgets before inference; clamp to the runner's existing maximum and account for request processing time. Avoid trusting client wall-clock timestamps: propagate remaining duration at each controlled hop and use monotonic elapsed time locally. Client disconnect/timeout aborts where supported; it is not proof the provider was never billed. General shadow calls retain their existing upper limit. Legacy three-argument shell call compatibility remains tested.
+
+## 6. Gateway alert classification and delivery
+
+### 6.1 Canonical source and policy identity
+
+Introduce a versioned optional transport provenance value carried from channel intake through `MsgContext` to `message_received` metadata. A source unit contains channel, account, raw conversation ID, provider message ID, optional provider revision, sender/time and the exact source text. Channel adapters—not generic prefix stripping—define raw IDs. Both hook adapters use this same source unit. Telegram debounce carries the ordered constituent units; the matcher evaluates each original source message once, preserving its trigger-only contract. A merged batch cannot reuse its last constituent ID for the whole text.
+
+Internal provenance is produced by the authenticated channel/dispatch path, never accepted as authoritative from user text or a client envelope. Missing identity takes a fresh invocation path marked non-deduplicable; it cannot suppress another message and is excluded from the Jev experiment. Slice 9 produces a tested transport support matrix; unqualified transports keep baseline functionality without cross-hook exactly-once claims.
+
+Keep two identities:
+
+- Computation: authority scope + logical watcher/flow policy + canonical source unit + actual input hash + effective classifier policy revision. Channel and agent subscriptions of the same watcher share this identity. Independent flows remain independent policies.
+- Delivery: computation/result revision + delivery policy + normalized authorized recipient. The same classification may have several distinct recipient receipts.
+
+Flow handlers derive provenance from trusted server flow/run/node context, not arbitrary tool arguments. A manual legacy classify RPC is a fresh invocation. An optional receipt ID in the v1-compatible envelope is only a reference: every consumer loads it under current owner scope and verifies input/policy/result binding. It is not a bearer capability.
+
+First admission pins the effective rubric/model/schema/input and intended recipients. Redelivery resumes that snapshot. A config change cannot silently redirect old work; explicit reevaluation creates a new linked revision. Before resumption or delivery, recheck enablement, owning authority and recipient permission; revoked work is canceled/fenced.
+
+### 6.2 Existing SQLite store, two narrow receipt tables
+
+Reuse the watcher's `alerts.db`, migrations and startup lifecycle. Add `classification_work` and `alert_delivery_receipts`; do not add Hub jobs or a new queue runtime to this plugin.
+
+`classification_work` stores UUID, authority/policy/source key and hash, immutable bounded input/config snapshot, state, lease owner/generation/expiry, attempt sequence, admitted timestamp, result/schema, usage/cost status, safe error code and timestamps. Unique computation identity is enforced by SQLite. Small bounded attempt history may use an existing log or capped JSON; do not build another general trace store. Claims and generation transitions are atomic transactions; the in-memory dedup cache may cache completed identities only.
+
+States: `queued → admitted → received → completed`; `queued → canceled`; a definitely unsubmitted transient failure may return to queued under the retry cap; expired admitted work becomes `indeterminate`. Validation failure or lost response after provider dispatch is not a fabricated negative. Persist validated negative results too. `received` resumes local result/delivery materialization without another model call. Default safe retry cap is three admitted attempts for outcomes proven unsubmitted, with bounded backoff; unknown provider acceptance needs explicit reconciliation/authorized reevaluation. Admission must check current policy authority before claim and immediately before dispatch.
+
+`alert_delivery_receipts` is unique per computation/result/recipient policy and records `queued|admitted|sent|indeterminate|canceled|failed`, ownership/generation, provider/queue receipt and safe failure code. Materialize positive results plus intended recipient rows in one SQLite transaction. Use the existing outbound queue and stable effect identity where supported. If its enqueue API cannot accept a stable identity, extend that narrow API or fence ambiguous enqueue; do not blindly repeat direct sends. Confirmed recipients never resend when another fails. Cooldown advances on a recorded logical notification according to the existing user contract, and repeat inspection of a receipt must not advance it again.
+
+Existing alert rows lacking per-recipient history migrate as `legacy_unreconciled`. They remain visible but do not automatically fan out on cutover. Drain/reconcile the old boot retry path before enabling the new dispatcher. Never describe `Promise.all(send...)` plus global boot retry as a durable receipt protocol.
+
+### 6.3 Usage attribution
+
+Do not price completion from a shared “last resolved API key” variable. Give each alert classifier invocation its own host state and finalize usage from the actual `DroneRunResult.resolvedModel`. Suppress the host's inferred usage event for this explicit finalization path so one call produces one priced event. If the SDK supplies no resolved result (including failure/fallback ambiguity), preserve usage with unknown model/cost rather than guess. Test overlapping different models and fallback within one run. Keep all other host callers compatible; caller search determines whether the fix belongs in the existing SDK terminal contract or the narrow watcher adapter. No package upgrade solely to avoid a small compatible adapter; any actual SDK contract change includes package release/consumer pin qualification before rollout.
+
+## 7. Pulse admission and one informational digest
+
+### 7.1 Executable approval
+
+Retain existing proposal status semantics and add `revision`/`decidedAt`. PATCH and POST require `expectedRevision` from current clients. Old executable requests without revision receive a refresh-required conflict; old informational requests may retain existing behavior only if their state transition is atomic. Edits are permitted only while pending and increment revision. Preserve the UI's existing design primitives and render decision status separately from dispatch status.
+
+Add `pulse_dispatches`: UUID, orgId, proposalId/revision, actor profile, exact gateway assignment, immutable typed action payload/hash, state, bg job ID, admission generation/time, remote job ID, safe error and timestamps. Unique `(org_id,proposal_id,proposal_revision)`; checks enforce state-dependent receipt fields. Validation uses the action's real tool contract; never insert arbitrary user-authored instructions into a privileged prompt.
+
+Approval transaction locks the pending proposal, checks revision/current capability, freezes payload/actor/target, inserts one dispatch and its job, and marks the decision approved. Duplicate identical approve returns the existing receipt; conflicting edit/dismiss/revision returns 409. Informational `digest|fyi|draft_reply` never creates remote dispatch. Decision approval is not effect completion.
+
+Worker states:
+
+| State | Transition and recovery |
+|---|---|
+| queued | Revalidate membership, capability, proposal revision and exact gateway assignment. Under job ownership atomically admit once. Definite pre-dispatch failure may retry within cap. |
+| admitted | Exactly one `cron.add` attempt after committed admission. Reclaimed admitted work is indeterminate and is never automatically reissued. |
+| scheduled | Persist validated remote job ID. This means scheduled, not executed; no `executedAt` from RPC acceptance. |
+| indeterminate | Show explicit unknown outcome with receipt ID and reconciliation guidance. A manual action must reconcile/cancel before creating a new logical request. |
+| rejected/canceled | No automatic further dispatch. Revoke queued work and its job lease generation together. |
+
+Use a strict current org/profile/gateway credential path. Existing `gatewayCallAsUser` fallback to system/environment credentials is not acceptable for this worker; add a strict resolution option/helper shared with the route, with no ambient fallback. Recheck immediately before admission. Authorization linearizes there; once a generic gateway job is accepted, cancellation is best effort and this slice does not claim execution-time revocation of downstream tools. Requiring that stronger guarantee would require a separately reviewed typed gateway execution contract. Neither classifier confidence nor this spec bypasses existing tool permissions.
+
+### 7.2 Digest input and policy
+
+Start with one owner/org and a repository-managed allowlist of at most five official release feeds/API endpoints for dependencies already present in Minion's package/lockfile snapshot. No search engine, arbitrary URL tool, private transcript source or autonomous source expansion. Owner supplies target org/profile and non-secret source selection at activation; missing configuration means disabled.
+
+A typed `DigestPolicyV1` contains policy revision, allowed HTTPS origins/endpoints, package identifiers, repository/lockfile commit, locale, maximum source items (20), maximum normalized evidence bytes (48 KiB), one reasoning call, deadline (30s), maximum calls per day (5) and approved maximum spend. These are deliberately small pilot limits, not provider performance claims. Spend defaults to zero; without an approved per-call upper exposure/reservation the model step does not run. Source fetch timeout is 10s, maximum response 1 MiB and maximum redirects zero unless a specifically allowlisted redirect is configured. Reject private/link-local destinations, resolve/revalidate destinations at connection, and use conditional requests. Fetch failure is not “no change”; cursor stays put. Reuse an existing safe fetch utility where available and test SSRF/redirect boundaries if one must be extended.
+
+Store immutable normalized public evidence with source URL/time/content hash and the matching Minion dependency/file anchor. Canonical snapshot identity excludes fetch timestamps so unchanged content remains unchanged. Deterministic package/version/hash checks decide whether anything needs reasoning. Unknown dependency relation is excluded with a reason, not invented by a model. Do not update source cursors before publication/no-signal settlement.
+
+### 7.3 Narrow durable records and worker
+
+Reuse `bg-runtime` and `JobExecution.withOwnership`; do not put arbitrary LLM JSON into embedding-constrained `job_effects` rows. Add domain tables:
+
+| Table | Identity and fields |
+|---|---|
+| `pulse_digest_runs` | UUID, org/owner, policy revision, source snapshot hash, immutable bounded evidence/request hash, model descriptor, job ID, phase/result/cost, admission time/generation, published card ID, safe error/timestamps; unique `(org,owner,policy_revision,source_snapshot_hash)` |
+| `pulse_digest_sources` | `(org,owner,policy_revision,source_id)` unique; accepted ETag/version/hash, revision, last committed run and timestamps |
+| `pulse_feedback` | ID, org/owner, proposal ID/content revision, digest run/policy/source revision, actor, reason, optional bounded comment, client action ID and timestamps; idempotent `(org,actor,client_action_id)` |
+
+Do logical run deduplication in the same transaction before enqueue. Existing `createJobRequest` rotates revisions and enqueues, so it is not the dedup primitive. Add a transaction-taking enqueue/publication helper only where necessary; avoid a generic orchestration abstraction. A run consumes a frozen set of source checkpoint revisions. Commit uses compare-and-swap on those revisions and current policy; a newer run/cursor cannot be regressed by an older worker.
+
+Phases: `queued → reasoning_admitted → reasoning_received → published|no_signal`; deterministic no-change may finish without a call. Safe pre-dispatch failure can retry within the cap. Expired admitted reasoning becomes `indeterminate`; the same unique input cannot trigger another automatic paid call. A received result resumes publication without another provider call. Lease loss aborts cooperatively and blocks all local publication; cancellation does not prove remote inference stopped. Record provider request ID/cost when supplied; unknown outcome/spend freezes further pilot admission until reviewed.
+
+Validate one bounded structured result: `disposition: actionable|no_signal`, source IDs, affected dependency/file anchors from the frozen allowlist, supported claim, relevance/actionability explanations and suggested next step. A textual claim must cite retained evidence; unsupported references fail validation. Classification confidence cannot establish factual support. The model has no tools and cannot mutate code, publish externally or approve work.
+
+Publication transaction, under current job ownership and owner authority: validate source revisions; insert/upsert the informational Pulse card using a stable logical key; commit all consumed source cursors, run terminal state and job progress together. Add a transaction-taking internal Pulse helper; the current helper's separate transaction is insufficient. On `no_signal`, commit a bounded reason/result and cursors without creating a card. If content is invalid or provider outcome unknown, do neither. If the cursor CAS fails because newer work won, terminalize as superseded without publishing stale content.
+
+### 7.4 Worker activation, feedback and retention
+
+Add type/org selection inside job candidate SQL **before** limit/claim. A dedicated authenticated tick entrypoint selects only this pilot's configured job families/org and imports handlers explicitly. Pending executable Pulse dispatches use their own selected family. Do not turn on general `?jobs=1`, select first 20 unrelated rows then filter, or count skipped rows as advanced. Define retries for these handlers explicitly; current booking-specific retry behavior is not inherited by name alone. Default one concurrent job per owner/policy, one external call per run, safe retries capped at three with bounded exponential backoff. No overlap for the same logical input.
+
+Feedback reasons: `useful`, `irrelevant`, `duplicate`, `fact_error`, `already_handled`, `too_late`; approve/dismiss remains the user's card decision, not an inferred reason. Optional comment ≤500 characters. Store the exact content/policy/source revision and actor. Correcting feedback appends/supersedes a revision with the original retained for audit; it does not silently change model weights. Export labeled cases for offline evaluation. Private preferences do not automatically become org-wide policy.
+
+Use existing Pulse feed/accessibility/status primitives; no new dashboard. Show queued/scheduled/unknown/rejected separately from approved and use localized copy. Owner feedback controls are keyboard accessible, error-recoverable and preserve selection on failed save. A committed write with failed refresh is reported without replaying the write.
+
+Deleting/revoking an owner/policy cancels queued work and bumps job lease generation in the same tenant transaction. Late output cannot publish. Keep bounded raw public evidence and comments for 30 days by default in the pilot; retain only identifiers/hashes and minimal dispatch/admission tombstones as long as an input could otherwise be replayed. To erase a tombstone, first retire the policy/source replay namespace so old triggers cannot recreate it. Do not retain private payloads in general analytics. Export/deletion behavior follows existing org retention obligations; the pilot may shorten payload retention without erasing admission history prematurely.
+
+## 8. Implementation slices and collision control
+
+Each slice targets 4–8 focused engineering hours plus its stated verification. If updated source makes a slice larger, split it before coding while preserving dependency and acceptance IDs. No slice may be called done with only a source-comment TODO. Product implementation follows the owning repository's instructions, package manager, feature branch and reviewed PR; do not switch or modify unrelated worktrees.
+
+### Slice 1 — Shared pending-submission primitive and tests
+
+**Topics:** `logic`, `test`
+
+Owner: Hub `src/lib/assistant/pending-submission.ts` (new) and `pending-submission.test.ts`. Dependencies: none. Implement §4.1 scope epoch/generation, single-commit and cancellation with no UI redesign. A01: A→B→A, stale finally, duplicate Enter, abort vs resolve, composer revision mismatch and teardown pass against the shared primitive. Command: `bun run test -- src/lib/assistant/pending-submission.test.ts`. No transport or provider call is required.
+
+### Slice 2 — Integrate Home and Floating preparation
+
+**Topics:** `logic`, `ui`, `test`
+
+Owner: Home, Floating, `chat-rpc.ts` optional ID/result contract; dependencies: 1. Wire router/attachment awaits, scoped draft clearing and pending Stop visibility. A02: extend mounted critical-journeys fixture to defer route/upload, switch thread/actor/org/agent/page, cancel, disconnect and reject transport; zero wrong-scope/canceled sends, one accepted dispatch, correct draft retention. Add `pending-submission-journey.test.ts` at the existing fixture seam. Run that suite plus existing context/envelope suites and UI lints. Do not change gateway wire schema.
+
+### Slice 3 — Callback and automatic-follow-up ownership
+
+**Topics:** `logic`, `permissions`, `test`
+
+Owner: `src/lib/assistant/dispatch.ts`, gateway state event handler and callback callers. Dependencies: 2; serialize edits to Home/Floating/chat-rpc after Slice 2. A03: full-context bypass remains; stale choice cannot run tools in a new page/session; awaited UI result cannot send to a changed scope; explicit parent run captured before clearing state; cap remains five. Add/run `src/lib/assistant/dispatch.ownership.test.ts` and mounted callback case. Preserve existing permission gates.
+
+### Slice 4 — Router attempt provenance and sanitization
+
+**Topics:** `logic`, `data`, `test`
+
+Owner: route endpoint/service, turn-router request helper and observability allowlist. Dependencies: 1; avoid Home/Floating edits before 2 completes. A04: success, timeout, invalid response, missing cost, disabled mode and `p_sandbox` survive the real sanitizer with correct types and elapsed time. Add/run `assistant-router.provenance.test.ts` beside existing service tests; run existing observability tests. Event fields and retention changes require data review.
+
+### Slice 5 — Applied decision and explicit task lineage
+
+**Topics:** `logic`, `data`, `test`
+
+Owner: submission integration, gateway event/dispatch relation and scoped telemetry schemas. Dependencies: 2–4. A05: one early UUID joins router to existing idempotencyKey; late server success discarded by client is not counted as applied; explicit UI follow-up parent chains join; arbitrary free text does not inherit a task. Add/run `src/lib/assistant/decision-lineage.test.ts`; repeat producer-through-sanitizer tests. No new authoritative task service or raw-text analytics.
+
+### Slice 6 — Factory versioned decision records
+
+**Topics:** `logic`, `data`, `test`
+
+Owner: Factory `runner/src/jev.ts`, `jev-proxy.ts`, `agent/lib/jev.sh`, `agent/rank.sh`. Dependencies: none. A06: central/local rows share attempt identity; direct legacy call shapes retain behavior; retries have distinct attempts; immutable fact conflicts are visible. Extend runner/proxy and shell contract suites. Preserve old reader tolerance during rolling upgrade; old writers remain explicitly unjoined.
+
+### Slice 7 — Factory report reconciliation
+
+**Topics:** `logic`, `data`, `test`
+
+Owner: `scripts/jev-shadow-report.mjs` and tests. Dependencies: 6. A07: one $0.01 inference in central/local formats counts once with one bill and one comparison; conflicts quarantine; unknown costs remain null; legacy origins remain unknown; separate model/rubric cohorts; score-scale incompatibility blocks numeric comparison. Command: `node --test scripts/jev-shadow-report.test.mjs`. Golden output includes both raw and independent denominators.
+
+### Slice 8 — Factory reservations and deadline propagation
+
+**Topics:** `logic`, `security`, `test`
+
+Owner: runner proxy/client, shell transport and guard; serialize shared files after 6. Dependencies: 6. A08: max_calls=1 admits one of two concurrent requests; remint does not reset run budget; one inflight slot returns typed busy; missing bill fences; deadline ≤remaining guard budget across proxy; deterministic floor still denies immediately; actual harness honors bounded hook response. Extend `jev-proxy.test.ts`, `jev.test.ts`, shell and guard suites using isolated temp outputs. Record real harness version and injected delayed proxy; no paid inference needed.
+
+### Slice 9 — Canonical watcher provenance
+
+**Topics:** `logic`, `data`, `test`
+
+Owner: Gateway channel/MsgContext hook metadata, dispatch producer, Telegram debounce and alert adapters; dependencies: none. A09: equal IDs in different chat/account each classify; channel+agent same logical source classifies once; prefixed vs raw chat normalizes through the adapter; two-message debounce evaluates both originals once; unsupported/idless source cannot suppress another. Add/run `extensions/alert-watcher/src/provenance.test.ts` plus Telegram/dispatch fixture tests. Produce a source support matrix; snapshot shared plugin type consumers before changing optional metadata.
+
+### Slice 10 — Durable classification claims and results
+
+**Topics:** `logic`, `data`, `migrations`, `test`
+
+Owner: watcher SQLite store/migrations, classifier admission and hook/flow adapters. Dependencies: 9. A10: concurrent claim has one dispatch, negative result persists, definite pre-send failure retries within cap, admitted crash becomes indeterminate, received restart resumes locally, lease loser cannot commit, policy/owner change fences old work. Add/run `extensions/alert-watcher/src/classification-work.test.ts` with real temporary SQLite. Flow legacy callers still return the existing envelope; receipt references are scope/input/policy checked.
+
+### Slice 11 — Recipient delivery receipts and migration cutover
+
+**Topics:** `logic`, `data`, `migrations`, `test`
+
+Owner: watcher positive-result materialization, recipient sender/recovery, narrow outbound queue idempotency seam if needed. Dependencies: 10. A11: one recipient success plus another failure never resends the successful one; crash after admission becomes unknown; replay after durable enqueue returns same receipt; old pending rows stay legacy-unreconciled; cooldown not duplicated. Add/run `delivery-receipts.test.ts` with SQLite plus outbound queue fixture; verify restart with external adapter stub. One-visible-alert claims are blocked until this slice passes.
+
+### Slice 12 — Resolved-model usage accounting
+
+**Topics:** `logic`, `test`
+
+Owner: Gateway DroneHost and watcher classifier wrapper; dependencies: 10 before merging shared watcher edits. A12: overlapping A/B completions attributed correctly; fallback A→B charged to actual B; missing result retains unknown; each invocation emits one usage event. Extend host/adapter tests, run all discovered host callers' focused suites. SDK publish/consumer pin changes are required only if an existing compatible result seam cannot satisfy the contract; do not silently depend on local unpublished code.
+
+### Slice 13 — Pulse revision and dispatch schema
+
+**Topics:** `data`, `migrations`, `security`, `test`
+
+Owner: Hub Pulse schema/service, migrations/seed/test fixtures. Dependencies: none. A13: same proposal revision creates one dispatch under concurrent real PG transactions; cross-org access denied; edit conflicts with admitted revision; additive migration preserves old informational rows. Add/run `src/server/services/pulse-dispatch.store.test.ts` with local Postgres; RLS/service scope and retention review required.
+
+### Slice 14 — Atomic approval API and UI receipt status
+
+**Topics:** `logic`, `permissions`, `ui`, `test`
+
+Owner: Pulse POST/PATCH, existing cards/services. Dependencies: 13. A14: duplicate approve returns same receipt, approve/edit/dismiss races return one winner, missing/stale executable revision requests refresh, informational kinds create no jobs; UI says approved/queued rather than executed. Add/run route tests and mounted card test; keyboard/localization/save-refresh cases pass with UI lints. Keep typed tool arguments and existing permission checks.
+
+### Slice 15 — Strict Pulse dispatch worker
+
+**Topics:** `security`, `logic`, `infra`, `test`
+
+Owner: strict gateway credential resolution, Pulse job handler, scoped worker registration. Dependencies: 14 and selected-worker helper in 17, or extract that helper as an independently merged prerequisite from 17. A15: lost RPC response or post-RPC DB failure produces indeterminate without second `cron.add`; recorded remote ID is scheduled; no system fallback; revoked owner cancels before admission; lease loss cannot mark result. Add/run `pulse-dispatch.worker.test.ts` with RPC failures and real PG claim tests. Document post-admission revocation limit in UI/runbook.
+
+### Slice 16 — Bounded digest policy and source snapshots
+
+**Topics:** `logic`, `security`, `data`, `test`
+
+Owner: new narrow Hub digest policy/source module and fixtures. Dependencies: none; no model call. A16: unchanged canonical content exits before inference, dependency match cites actual pinned file, byte/item/deadline/origin limits enforced, conditional fetch failure does not advance cursor, redirects/private IP blocked. Add/run `pulse-digest.sources.test.ts` using fixture responses. Configuration defaults disabled/zero spend.
+
+### Slice 17 — Digest admission schema and selected worker
+
+**Topics:** `data`, `migrations`, `infra`, `test`
+
+Owner: digest run/source tables, transaction-taking enqueue helper and bg-runtime candidate selection. Dependencies: 13 and 16; serialize bg-runtime edits with Pulse worker. A17: repeated trigger inserts one run/job, source revision frozen; selection filters types/org before limit; unrelated older backlog remains untouched; handlers explicitly imported; skipped rows not counted advanced; safe retries capped. Add/run `pulse-digest.admission.test.ts` and extend bg-runtime tests with real PG claims. No change to default `/api/jobs/tick` behavior.
+
+### Slice 18 — One-call reasoning receipt
+
+**Topics:** `logic`, `data`, `security`, `test`
+
+Owner: digest reasoning handler and structured result validation. Dependencies: 17. A18: one call maximum, spend reservation prior to call, dispatch ambiguity fences, received result survives restart without recall, invalid citations fail, lease/authority loss blocks settlement/publication. Add/run `pulse-digest.reasoning.test.ts` with stubbed provider and restart phases; live inference remains disabled absent separately approved budget. No model tools.
+
+### Slice 19 — Atomic Pulse publication and reasoned feedback
+
+**Topics:** `data`, `ui`, `logic`, `test`
+
+Owner: transaction-taking Pulse publication helper, digest finalization, feedback table/API and existing card controls. Dependencies: 14 and 18. A19: crash at each transaction boundary yields one card/cursor outcome; old snapshot cannot regress cursor; no-signal consumes snapshot without card; duplicate feedback action records once; stale content/revision or cross-owner write denied; failed refresh never replays committed write. Add/run `pulse-digest.publication.test.ts`, `pulse-feedback.test.ts` plus mounted accessibility cases. If UI/feedback exceeds 8h, split after the independently complete atomic-publication contract; neither part may be silently omitted.
+
+### Slice 20 — Reproducible router trajectory evaluation
+
+**Topics:** `test`, `logic`, `data`
+
+Owner: meta audit/evaluation fixtures and existing Hub/Gateway test harness adapters. Dependencies: 3, 5, 7, 8 and qualified dependency installs. A20: replay fixture mode has no network; three arms execute identical seeded state/model/tool versions; all attempt costs and domain receipts joined; holdout inaccessible to threshold tuning; report includes unknowns/corrective calls/critical failures. Contract in §9. This slice builds a runnable evaluation and offline fixture proof; executing a paid holdout is a separately approved run, not an implicit completion claim.
+
+### Slice 21 — Trace screening and feedback export experiment
+
+**Topics:** `test`, `data`, `logic`
+
+Owner: existing trace/evaluation export boundary plus Pulse feedback export. Dependencies: 5, 19, 20. A21: deterministic failures detected before semantic judge; random sample from apparently-good traces retained; reviewer labels independent; factual and preference labels kept separate; correct actor/policy/artifact revisions exported. Replay seeded faults without network and generate a held-out protocol/report template. Live screening cannot decide billing, release or approval.
+
+### Slice 22 — Conditional complaint shadow experiment
+
+**Topics:** `test`, `logic`, `data`
+
+Owner: watcher default-policy experiment seam and evaluation fixtures. Dependencies: 9–12 and 20's accounting/report pattern; no dependency on digest runtime. A22: census proves enabled eligible traffic or stops; custom rules/idless/unqualified model bypass; shadow always runs baseline; unknown/timeout is fallback, never negative; total gate+forwarded costs and severity labels reported. Offline fixture proof required; real shadow/active operation separately approved per §9. No gate threshold ships as active solely from this spec.
+
+### 8.1 Parallel execution and impact zones
+
+Independent starting lanes: Hub 1→2→3; telemetry 4 joins 5; Factory 6→7/8 (serialize shared files); Gateway 9→10→11/12; Pulse 13→14; digest source 16. Then 17 enables 15 and 18; 18→19. Evaluate only after prerequisite behavior/accounting is qualified. Slice 19 may split as explicitly stated; update manifest/DoD before implementation.
+
+One owner at a time for `chat-rpc.ts`, Floating/Home, watcher `index.ts`, Factory `jev-proxy.ts`/`jev.sh`, Hub `bg-runtime.ts` and `pulse.service.ts`. Protocol schema changes affect shared package/Hub/Site/Paperclip consumers only if an actual shared signature changes; optional local correlation reusing idempotencyKey needs no fleet-wide wire rewrite. Canonical hook metadata requires a caller/type consumer scan and optional-field compatibility tests. Database changes target Hub's actual PostgreSQL schema and gateway's actual SQLite store, not the stale high-level LibSQL overview.
+
+## 9. Experiment protocols and promotion gates
+
+### 9.1 Common run manifest
+
+Before any non-fixture inference, write an immutable run manifest containing source/dependency lock hashes, model requested/resolved identity, tool/catalog/data fixture revision, classifier questions and threshold revision, random seed, development/holdout split, task/scoring rubric, per-call/run/day spend limits, actor/org/data scope, permitted side effects, retention and stop conditions. Missing approval reference or a zero/unknown budget means no network admission. Use existing provider/accounting adapters; the evaluation must not discover credentials and run automatically during ordinary tests.
+
+The evaluator exposes explicit `fixture` and `live` modes; fixture is default and denies network. A live command requires `--live`, a validated manifest and its approval reference. No publication/send/mutation tools outside disposable test data are available. The first live smoke is at most one case per arm within the approved cap; continue only after receipts and cost coverage are verified. A failure to prove receipt/budget integrity stops the run.
+
+Report wall time, all attempts/retries/discovery calls, requested/resolved model, token/cache usage where provided, known bill coverage and unresolved exposure. Cost per successful task includes the costs of failed/canceled/indeterminate attempts in the cohort numerator; separately report per-attempt and per-started-task cost. Do not compare a candidate's cheap successes while discarding its failures. If unknown exposure lacks a defensible bound, cost superiority is inconclusive.
+
+### 9.2 Router trajectories
+
+Use twelve task families spanning informational questions, lookup, authorized form fill, multi-intent navigation, off-page tool discovery, UI choices, artifact callback, short continuations, changed pages, compacted/history-limited sessions, tool/provider failure and cancel/scope transitions. Freeze at least 60 development and 240 held-out episodes, with both Spanish and English in each applicable family and at least 40 consequential-action episodes. These are proposed evaluation sizes, not observed evidence. Larger samples may be required to resolve uncertainty; freeze expansion rules before inspecting results.
+
+Each episode specifies initial tenant/role/state, all user turns, allowed/forbidden tools, expected domain receipts/artifacts, source truth, terminal criterion and maximum effort. Run three arms: current full context; current Jev routing; deterministic core plus existing discovery. Pin the same main model/tools/data; reset disposable state per arm and randomize order to reduce provider/time effects. Preserve callback bypasses in every arm. Do not optimize a candidate on holdout results and then reuse that holdout as validation.
+
+Proposed promotion tolerances: zero additional unauthorized/wrong-scope/duplicate/canceled actions in deterministic regression and held-out cases; paired 95% lower confidence bound for task success difference no worse than −2 percentage points; paired 95% upper bound on total cost ratio below 1; p95 latency ratio no greater than 1.10 under the prespecified bootstrap procedure. These are acceptance choices for review, not claims about model quality. Critical failures veto promotion regardless of averages. Insufficient power, incomplete bills or drift means keep the baseline and report inconclusive. No continuation-state or model-routing implementation follows automatically from an unsuccessful arm.
+
+### 9.3 Trace screening
+
+Begin with deterministic fixture receipts: unauthorized tool, missing action receipt, hidden tool failure, duplicate external action, post-cancel send and unsupported cited ID. Semantic checks cover only requirements those receipts cannot settle, such as answering the requested question or support for a prose claim. Rubric returns independent typed outcomes with abstention; no averaged score can erase an authority violation.
+
+Create a separately labeled, frozen trace set with successful, failed and uncertain cases. A stronger reviewer/human labels without seeing the screening result. At a fixed review budget compare random sampling versus screen-prioritized review plus a seeded random control sample from apparently good traces. Pre-register control sample size, severity-specific maximum miss bounds and budget in the manifest; absence blocks promotion. Report confirmed failure yield and weighted missed-failure estimates with uncertainty. Screening failure never changes customer output or billing. This slice can conclude with no value demonstrated.
+
+### 9.4 Complaint census and default-rubric pilot
+
+Census first: enabled plugin, matched subscriptions, authoritative source unit, default-policy hash, logical messages, positive/negative/failed/unknown results and baseline usage. No eligible traffic is a valid “do not pilot” result. Configured custom prompt/rubric/category policies, missing provenance or unqualified model revision bypass Jev. The classification unit remains the single trigger message.
+
+Shadow runs both gate and baseline without changing delivery. Gate result includes abstain/unavailable and policy/model version. Select a threshold only on development data; freeze it and severity criteria before revealing holdout. Required promotion conditions are no confirmed additional urgent/critical miss in tested cases, a pre-registered upper miss bound per severity stratum supported by sample size/confidence intervals, and lower total cost per successfully handled logical event after gate, forwarded work, retries and unknown exposure. Default active status is disabled; unspecified tolerated miss bounds mean no active promotion. Zero misses on a tiny sample is not sufficient.
+
+During any later approved active pilot, uncertain/model-drift/timeout/malformed results retain the original classifier path within its total deadline. If the gate consumed the remaining deadline, record unavailable/retry policy rather than invent a negative. Negatives produce the exact public no-op envelope and a receipt; they must not suppress unrelated policies/flows. Disable the gate instantly on authority/identity error, an additional critical miss, budget ambiguity or model drift. Existing summaries/evidence remain generated for forwarded cases.
+
+### 9.5 Feedback qualification
+
+Export factual-error reasons separately from relevance/preference reasons and preserve actor/content/source/policy revisions. An offline report may propose a bounded policy edit, but this spec does not apply it automatically. Evaluate proposed weights on a held-out set and show which cases change. No new “learning service” or general preference database is needed.
+
+## 10. Migration, rollout and rollback
+
+1. **Preflight:** reconcile source pins/collisions, install exact declared dependencies in isolation, run red regression cases, inventory actual active workers/flags without copying credentials into artifacts. Verify the registry branch roles at execution time.
+2. **Expand:** additive nullable metadata and receipt tables, unique constraints and service/RLS checks; new readers tolerate legacy records. Validate migrations/seeds twice on disposable databases. Never backfill invented success, origin, costs or remote receipts.
+3. **Ship repairs with feature behavior unchanged:** pending ownership/cancel, telemetry, Factory logs/report/bounds and alert identity. Correlation rollout is client/server backward compatible; unknown legacy coverage stays visible.
+4. **Cut over receipt consumers:** pause the affected watcher dispatcher, reconcile old pending delivery rows, enable new claim/receipt path, then resume. Pulse executable path requires schema, API, strict worker and UI receipt handling together; until ready it remains disabled or uses the current path only under an explicitly documented existing operational posture—never dual-dispatch the same proposal.
+5. **Pilot targeted informational jobs:** choose one owner/org/source policy and explicit approved spend; prove selected worker isolation and crash/lease behavior with stubs first. No notification blast, external WhatsApp send or automatic action is part of the digest pilot; publication is an in-app informational card.
+6. **Observe:** retain exact source/build/deployment identity, owner-approved flags, data migration receipt, run IDs, counts/unknown outcomes, resource load and rollback decision. A useful digest must show evidence-backed affected dependency and an actionable next step; useless/no-signal outcomes remain visible in run records.
+7. **Evaluate/promotion:** paid runs and active classifier changes require their own manifest/evidence decision. This spec's approval does not substitute for those receipts.
+
+Rollback is behavior-first and data-preserving. Disable new pilot admission/gate, cancel queued scoped jobs and keep receipt readers/tombstones. Preserve admitted/indeterminate entries; never reset them to pending or drop a unique key to “unstick” work. A canceled/fenced submission fix is not rolled back to wrong-scope sending; revert to full-context routing if classifier integration fails. Unknown Factory bills stop new shadow calls but do not block deterministic floor denial or baseline task execution. Legacy binaries that ignore new receipts must not resume old auto-retry paths; drain or disable the affected worker before rollback. Schema removal is a separate migration after retention/reconciliation.
+
+## 11. Verification and release evidence
+
+### 11.1 Commands and environment
+
+Follow each pinned/current repository's instructions. The following are existing entrypoints; new focused test names in §8 must be created by their slices.
+
+| Area | Required checks |
+|---|---|
+| Meta artifacts | `node scripts/spec-index.mjs` then `node scripts/spec-index.mjs --check`; corresponding proposal generator/check; link and acceptance-matrix validation |
+| Hub | targeted `bun run test -- <test-files>`; `bun run check`; `bun run test`; `bun run build`; for UI changes `bun run lint:design && bun run lint:tokens` |
+| Gateway | targeted `pnpm exec vitest run --config vitest.extensions.config.ts <alert-tests>` or the owning suite's declared config; `pnpm check`; `pnpm tsgo`; affected regression suites |
+| Factory | `node --test scripts/jev-shadow-report.test.mjs`; runner's declared TS test command for `jev`/proxy; `bash agent/lib/jev.test.sh`; isolated guard tests; declared runner build/typecheck gates |
+
+Use the existing local Hub test stack (Supabase loopback 54421/Postgres 54422/app 5199 where applicable). Create/reset only disposable fixture tenants/databases. Exact port/environment conflicts are resolved before running; never point migration or chaos tests at production. Do not symlink an old dependency install and call it exact-SDK qualification. Record actual lockfile and package versions.
+
+### 11.2 End-to-end acceptance scenarios
+
+- **E1 submission:** mounted Home and Floating, delayed classifier/enrichment, A→B→A, Stop before dispatch, Stop after acknowledgement, unmount and stale callback; assert actual WS calls and retained drafts. Browser evidence is required for Stop/receipt UI using the project browser-harness skill, not extracted-function probes alone.
+- **E2 decision accounting:** one routed user request, a UI-tool follow-up and provider retry produce distinct attempts joined to one explicit episode; client-discarded route is excluded; unknown bills are visible; sanitizer retains every allowlisted contract field.
+- **E3 alerts:** two chats with same ID, dual hooks, Telegram batch, custom flow, provider pre-send failure, accepted-response loss and split-recipient success; restart process between each receipt boundary and verify exact classification/delivery counts.
+- **E4 Pulse dispatch:** concurrent approve/edit, RPC success/local failure, worker death after admission, revoked principal, removed gateway assignment; zero automatic replay from unknown, no ambient credential fallback, status never claims execution from scheduling.
+- **E5 digest:** close clients; submit duplicate trigger; restart before/after inference receipt and during publication; lose lease; advance competing source cursor; revoke owner; reconnect. Exactly one visible card for a qualified logical run, no duplicate paid attempt after unknown admission, authoritative status survives reconnect, unrelated queues stay untouched.
+- **E6 migration/rollback:** legacy rows with absent receipts remain explicit; upgrade twice is safe; rollback preserves tombstones and blocks old fan-out; source retention/deletion cannot recreate a paid attempt.
+
+Unit/property tests prove parsing/state-machine rules. Database integration tests prove actual uniqueness/locking/transactions; mocked repositories cannot substitute. Provider stubs prove ordering/ambiguity handling. Installed harness/browser tests prove cancellation/status UX. A separately approved live smoke establishes provider/runtime integration but not accuracy. Held-out experiments establish only their measured task distribution, not universal agent reliability.
+
+### 11.3 Security and privacy review
+
+| Threat | Required mitigation / proving case |
+|---|---|
+| Stale or forged client identity | Server authority plus local generation fence; forged correlation/provenance cannot cross org or choose a gateway |
+| External text as instruction | Immutable untrusted evidence, structured outputs, no model tools in digest; malicious release text cannot expand source list or execute a tool |
+| Retry duplicate or budget evasion | Atomic admission/unique effects; unknown outcomes fenced; token remint keeps live run spend; cross-worker tests |
+| Credential fallback | Strict org/profile/assignment resolution; absent scoped credential rejects; explicit test with ambient credential configured |
+| Unauthorized data retention | Bounded approved fixture/public source storage, scoped feedback access, deletion/retirement protocol and no raw customer analytics |
+| SSRF and source growth | Allowlisted destinations, private-address/redirect/byte/time limits, no arbitrary fetch tool |
+| Misleading success/cost | Separate approved/scheduled/executed; known/unknown spend and observed/applied/terminal records |
+
+### 11.4 Completion and review gates
+
+Each slice must map to its acceptance ID, checked source SHA, red-before/green-after regression where meaningful, full relevant repo checks, independent code review and required runtime evidence. Preserve the proposal ledger until product fixes are verified; source comments alone do not close defects. No open edge case may disappear into chat: use the repository's `TODO(handoff)` plus proposal rule if implementation leaves one.
+
+Technical pass 1 reviews contracts, traceability and all impacted callers. Technical pass 2 independently challenges correctness, safety, concurrency, slice size, collision handling and unnecessary abstractions. The sidecar records findings/dispositions and hashes of the reviewed spec; later substantive edits require review again. G2 scoring follows the six canonical axes. Human approval/merge remain required for security/data changes. Published indices project state but do not confer approval.
+
+## 12. Ponytail decisions
+
+| Reuse / cut | Why sufficient now | Upgrade trigger |
+|---|---|---|
+| Existing submission/run idempotency key | Joins routing without new gateway identity protocol | Only if measured callbacks cannot carry explicit lineage |
+| One client preparation helper | Both surfaces share the same asynchronous ownership rule | No general state-machine framework planned |
+| Factory single inflight per run | Bounds admission with small local bookkeeping; callers already fall back | Proven throughput loss and a reviewed multi-inflight reservation design |
+| Existing watcher SQLite + two receipt tables | Plugin owns its work and restart lifecycle | Actual multi-host shared watcher ownership requirement |
+| Domain Pulse dispatch/digest rows | Existing effect table is embedding-specific | A second concrete domain proves a shared receipt API would delete duplication |
+| One tool-free model call and ≤5 official sources | Produces dependency-impact cards with bounded exposure | Repeated evidence that missing source/research capability blocks useful outcomes |
+| Existing Pulse cards and reasoned feedback | Review surface already exists | Validated need that cannot be represented by current card/API |
+| No automatic weight learning or new continuation state | Current evidence does not justify them | Held-out failures or utility evidence after simpler changes |
+
+Limits here are deliberate, testable and visible. None permits weaker authority, silent data loss or false claims of completion. This specification completes design work; implementation and live qualification remain future lifecycle stages.

@@ -1,0 +1,36 @@
+--- a/src/agents/pi-embedded-runner/run.ts
++++ b/src/agents/pi-embedded-runner/run.ts
+@@ -623,6 +623,9 @@
+             }
+           }
+ 
++          // TODO(handoff): Preserve server-derived resolved-user/sender context in the
++          // explicit attempt carrier; tools currently receive undefined identity. See
++          // meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md, Shared web and WhatsApp engine follow-up.
+           const attempt = await runEmbeddedAttempt({
+             toolProgressState,
+             sessionId: params.sessionId,
+--- a/src/auto-reply/reply/get-reply-run.ts
++++ b/src/auto-reply/reply/get-reply-run.ts
+@@ -200,6 +200,9 @@
+   const inboundMetaPrompt = buildInboundMetaSystemPrompt(
+     isNewSession ? sessionCtx : { ...sessionCtx, ThreadStarterBody: undefined },
+   );
++  // TODO(handoff): Reconcile nominal no-tool routing with the actual embedded
++  // disableTools parameter; this flag currently changes prompt text only. See
++  // meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md, Shared web and WhatsApp engine follow-up.
+   const smartRoutingPrompt = smartRouted && smartRouteDisableTools ? FAST_CHAT_SYSTEM_PROMPT : "";
+   const memorySnapshot =
+     smartRouted && smartRouteDisableTools ? await readMemorySnapshot(workspaceDir) : undefined;
+--- a/src/auto-reply/reply/queue/types.ts
++++ b/src/auto-reply/reply/queue/types.ts
+@@ -19,6 +19,9 @@
+ 
+ export type QueueDedupeMode = "message-id" | "prompt" | "none";
+ 
++// TODO(handoff): Define per-item accepted-request/execution lineage and lifetime;
++// queued work has no exact-request cancel carrier. Do not inherit the drainer
++// signal. See meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md, Shared web and WhatsApp engine follow-up.
+ export type FollowupRun = {
+   prompt: string;
+   /** Provider message ID, when available (for deduplication). */

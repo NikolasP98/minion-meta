@@ -1,0 +1,76 @@
+{
+  "source_pins": {
+    "minion": "6d1cd8836ff7b82d21668c50cc20b9b6d1e79c18",
+    "minion_hub": "b677a5d91a2b653211a1655465b2b5fd398efc2a"
+  },
+  "findings": [
+    {
+      "id": "DUR-01",
+      "status": "confirmed_mocked_route_reproduction",
+      "severity": "high",
+      "title": "Pulse approval admits duplicate remote jobs under concurrency or post-RPC persistence failure",
+      "anchors": [
+        "src/routes/api/pulse/proposals/[id]/+server.ts:29-32",
+        "src/routes/api/pulse/proposals/[id]/+server.ts:43-70",
+        "src/server/services/pulse.service.ts:63-69"
+      ],
+      "proposal_delta": "Prioritize durable admission and effect receipts on existing Pulse approval; digest/fyi is read-only and unaffected by remote-job duplication.",
+      "proof": "pulse-admission-probe.test.ts: two adversarial tests pass by observing two cron.add calls. Database and gateway mocked; no external effects."
+    },
+    {
+      "id": "DUR-02",
+      "status": "source_verified_and_focused_tests",
+      "title": "Hub already contains generation-fenced background runtime and provider-effect protocol",
+      "anchors": [
+        "src/server/services/bg-runtime.ts:129-189",
+        "src/server/services/bg-runtime.ts:245-352",
+        "src/server/services/job-effects.service.ts:702-792",
+        "src/server/services/groupchat.service.ts:253-389"
+      ],
+      "proposal_delta": "Reuse bg-runtime; adapt its existing receipt protocol for a narrow LLM classifier/research step rather than add Pi Durable. Existing embedding helper is not a generic LLM helper."
+    },
+    {
+      "id": "DUR-03",
+      "status": "source_verified_runtime_unverified",
+      "title": "Default scheduled tick intentionally skips the job queue",
+      "anchors": [
+        "src/routes/api/jobs/tick/+server.ts:32-42"
+      ],
+      "proposal_delta": "Qualify an explicitly targeted worker/handler and scheduler ownership; do not blindly enable global ?jobs=1 because it revives unrelated dormant jobs."
+    },
+    {
+      "id": "DUR-04",
+      "status": "source_verified_test_execution_blocked_dependency",
+      "title": "Gateway cron persistence does not resume interrupted workflow steps",
+      "anchors": [
+        "src/platform/cron/service/ops.ts:27-52",
+        "src/platform/cron/service/timer.ts:247-274",
+        "src/platform/cron/service/timer.ts:464-527",
+        "src/infra/system-events.ts:1-17"
+      ],
+      "proposal_delta": "Use cron as wakeup only for authoritative durable jobs. Treat timeout as uncertain, not cancellation; keep workflow completion separate from scheduled fire success."
+    },
+    {
+      "id": "DUR-05",
+      "status": "source_verified",
+      "title": "Existing Pulse is the near-loop card/decision substrate; feedback adaptation remains absent from inspected path",
+      "anchors": [
+        "src/server/db/pg-schema/pulse.ts:1-44",
+        "src/server/services/pulse.service.ts:20-39",
+        "src/server/services/pulse.service.ts:63-78",
+        "src/routes/api/pulse/settings/+server.ts:9-16",
+        "extensions/gmail-calendar/src/pulse-tools.ts:31-62"
+      ],
+      "proposal_delta": "Extend Pulse decisions with reason and source/policy revision; preference feedback does not imply automatic weight-learning. Start informational dependency-impact cards."
+    },
+    {
+      "id": "DUR-06",
+      "status": "bounded_negative_search",
+      "title": "Personal assistant jobs and pipeline workflow executor are not integrated on inspected branch tips",
+      "anchors": [
+        "src/pipeline/workflow-runner.ts:53-95"
+      ],
+      "proposal_delta": "Do not count prior assistant-jobs proposal code or uncalled workflow functions as shipped infrastructure; choose the active Hub bg-runtime and existing gateway RPC boundary."
+    }
+  ]
+}

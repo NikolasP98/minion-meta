@@ -1,0 +1,1 @@
+export default {test:{include:['/tmp/minion-agent-validation-20261022-blbb_5vg/minion/src/platform/cron/service.restart-catchup.test.ts','/tmp/minion-agent-validation-20261022-blbb_5vg/minion/src/platform/cron/service.tenant-scope.test.ts'],environment:'node'}};

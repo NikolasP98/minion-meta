@@ -1,0 +1,1818 @@
+diff --git a/agent/lib/cost.sh b/agent/lib/cost.sh
+index ed49704..73e2d48 100644
+--- a/agent/lib/cost.sh
++++ b/agent/lib/cost.sh
+@@ -18,11 +18,15 @@
+ # one is admitted here and its jev-<tag>-result.json's total_cost_usd (from the
+ # response's usage.cost) folds into sum_cost_usd like any other worker call.
+ 
++# Numeric compatibility API: known billed subtotal only, never proof of complete spend.
++# TODO(handoff): Carry unknown-exposure coverage and failed *-error.json receipts
++# into durable run accounting before total-spend enforcement (Slice 8); see
++# proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
+ sum_cost_usd() {
+ 	local total=0 f c
+ 	for f in "${FACTORY_OUT_DIR:-/out}"/*-result.json; do
+ 		[ -f "${f}" ] || continue
+-		c=$(jq -r '.total_cost_usd // empty' "${f}" 2>/dev/null)
++		c=$(jq -r '.total_cost_usd // .known_cost_usd // empty' "${f}" 2>/dev/null)
+ 		[ -n "${c}" ] && total=$(awk -v a="${total}" -v b="${c}" 'BEGIN{printf "%.6f", a+b}')
+ 	done
+ 	echo "${total}"
+diff --git a/agent/lib/cost.test.sh b/agent/lib/cost.test.sh
+index 536127c..68898a1 100755
+--- a/agent/lib/cost.test.sh
++++ b/agent/lib/cost.test.sh
+@@ -51,6 +51,14 @@ eq "claude sonnet estimate keeps its flat \$1 base (turns=1)" \
+ eq "codex sol estimate keeps its flat \$1 base (turns=1)" \
+ 	"$(estimate_for codex sol 1)" "1.200000"
+ 
++# Nullable incomplete totals retain their explicitly known subtotal without
++# treating the missing exposure as a known free bill.
++subtotal_out="${root}/subtotal"
++mkdir -p "$subtotal_out"
++printf '%s\n' '{"total_cost_usd":null,"known_cost_usd":0.01,"cost_source":"unknown"}' > "$subtotal_out/incomplete-result.json"
++printf '%s\n' '{"total_cost_usd":0.02,"cost_source":"provider-reported"}' > "$subtotal_out/known-result.json"
++eq "known subtotal survives nullable total" "$(FACTORY_OUT_DIR="$subtotal_out" sum_cost_usd)" "0.030000"
++
+ if [ "${fails}" -eq 0 ]; then
+ 	echo "cost.test.sh: all checks passed"
+ else
+diff --git a/agent/lib/jev.sh b/agent/lib/jev.sh
+index 0636dd3..c151d6b 100644
+--- a/agent/lib/jev.sh
++++ b/agent/lib/jev.sh
+@@ -105,6 +105,29 @@ factory_jev_validate_answers() { # $1 = response file, $2 = questions file
+ 	' "$resp" >/dev/null 2>&1
+ }
+ 
++# Extract bounded provider facts independently from answer validation. Never copy a
++# malformed response wholesale into an error artifact.
++factory_jev_provider_receipt() {
++ jq '
++  . as $r
++  | (if type == "object" and (.usage | type) == "object" then .usage else {} end) as $u
++  | ($u.cost | type == "number" and isfinite and . >= 0) as $known
++  | {total_cost_usd:(if $known then $u.cost else null end),cost_source:(if $known then "provider-reported" else "unknown" end)}
++  + (if ($r | type) == "object" and ($r.model | type) == "string" and ($r.model | length) > 0 and ($r.model | length) <= 256 then {model:$r.model} else {} end)
++  + (if ($u.input_tokens | type == "number" and . >= 0 and . <= 30000 and floor == .)
++       and ($u.output_tokens | type == "number" and . >= 0 and . <= 30000 and floor == .)
++     then {usage:{input_tokens:$u.input_tokens,output_tokens:$u.output_tokens}} else {} end)
++ ' "$1" 2>/dev/null || printf '%s\n' '{"total_cost_usd":null,"cost_source":"unknown"}'
++}
++
++# TODO(handoff): Legacy sum_cost_usd scans only *-result.json and lacks unknown
++# coverage; fold known failed receipts and incomplete exposure into run accounting
++# in Slice 8. See proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
++factory_jev_direct_error() { # response-file, tag, status, reason, elapsed-ms
++ factory_jev_provider_receipt "$1" | jq --arg tag "$2" --arg http_status "$3" --arg error "$4" --argjson ms "$5" \
++  '. + {tag:$tag,http_status:$http_status,error:$error,ms:$ms}'
++}
++
+ # Dispatcher: picks the proxy transport when configured, else the direct one.
+ # `site` is the calibration-report grouping key (e.g. "rank", "unstick",
+ # "run-selftest") — distinct from `tag`, which stays the per-call local
+@@ -126,11 +149,34 @@ factory_jev_decide() { # $1=site $2=tag $3=state-file $4=questions-file $5=today
+ 	[ -f "$state_file" ] && [ -f "$questions_file" ] || return 3
+ 	[ "$(wc -c < "$state_file")" -le "$max_bytes" ] || return 4
+ 
++	# A caller may pass a sixth argument (or FACTORY_JEV_DECISION_ID) to link explicit retries.
++	local decision_id=${6:-${FACTORY_JEV_DECISION_ID:-}} attempt_id identity origin requested_model input_hash question_hash question_revision started_at result rc=0
++	[ -n "$decision_id" ] || decision_id=$(cat /proc/sys/kernel/random/uuid) || return 3
++	attempt_id=$(cat /proc/sys/kernel/random/uuid) || return 3
++	origin=host
++	[ -z "${FACTORY_RUN_ID:-}" ] || origin=direct-container
++	requested_model=${FACTORY_JEV_MODEL:-~typesafe/jev-latest}
++	input_hash=$(jq -cS . "$state_file" | tr -d '\n' | sha256sum | cut -d' ' -f1)
++	question_hash=$(jq -cS . "$questions_file" | tr -d '\n' | sha256sum | cut -d' ' -f1)
++	question_revision=${FACTORY_JEV_QUESTION_REVISION:-$question_hash}
++	started_at=$(date -u +%FT%TZ)
++	identity=$(jq -nc --arg decisionId "$decision_id" --arg attemptId "$attempt_id" --arg origin "$origin" --arg site "$site" --arg runId "${FACTORY_RUN_ID:-}" --arg requestedModel "$requested_model" --arg inputHash "$input_hash" --arg questionHash "$question_hash" --arg questionRevision "$question_revision" --arg startedAt "$started_at" '{version:2,decisionId:$decisionId,attemptId:$attemptId,origin:$origin,site:$site,runId:$runId,requestedModel:$requestedModel,inputHash:$inputHash,questionHash:$questionHash,questionRevision:$questionRevision,schemaRevision:"2",gateRevision:"shadow",startedAt:$startedAt}')
+ 	if [ -n "${FACTORY_JEV_PROXY_URL:-}" ] && [ -n "${FACTORY_JEV_CAPABILITY:-}" ]; then
+-		factory_jev_decide_proxy "$site" "$tag" "$state_file" "$questions_file" "$today_json"
+-		return $?
++	 origin=proxy
++	 result=$(factory_jev_decide_proxy "$site" "$tag" "$state_file" "$questions_file" "$today_json") || rc=$?
++	else
++	 result=$(factory_jev_decide_direct "$tag" "$state_file" "$questions_file") || rc=$?
++	fi
++	local file=${result:-${FACTORY_OUT_DIR:-/out}/jev-${tag}-error.json} tmp_identity
++	if [ -f "$file" ]; then
++	 tmp_identity=$(mktemp)
++	 if [ "$origin" != proxy ]; then
++	  jq --argjson identity "$identity" --arg completedAt "$(date -u +%FT%TZ)" '$identity + . + {completedAt:$completedAt,resolvedModel:(.model // null),disposition:(if .error then .error else "success" end),costStatus:(.cost_source // "unknown")}' "$file" > "$tmp_identity" && mv "$tmp_identity" "$file"
++	 fi
++	 rm -f "$tmp_identity"
+ 	fi
+-	factory_jev_decide_direct "$tag" "$state_file" "$questions_file"
++	[ "$rc" -ne 0 ] || printf '%s\n' "$result"
++	return "$rc"
+ }
+ 
+ # Direct-to-OpenRouter transport (host cron only — see jev.sh's header).
+@@ -167,18 +213,17 @@ factory_jev_decide_direct() { # $1 = tag, $2 = state-json-file, $3 = questions-j
+ 	status=${resp##*$'\n'}
+ 	body=${resp%$'\n'*}
+ 
+-	if [ "$status" != 200 ] || ! jq -e . >/dev/null 2>&1 <<<"$body"; then
+-		jq -n --arg tag "$tag" --arg http_status "$status" --arg error "http_or_parse_failure" --argjson ms "$ms" \
+-			'{tag:$tag,http_status:$http_status,error:$error,ms:$ms}' > "${out}/jev-${tag}-error.json" 2>/dev/null
++	body_file=$(mktemp)
++	printf '%s' "$body" > "$body_file"
++	if [ "$status" != 200 ] || ! jq -e . "$body_file" >/dev/null 2>&1; then
++		factory_jev_direct_error "$body_file" "$tag" "$status" http_or_parse_failure "$ms" > "${out}/jev-${tag}-error.json" 2>/dev/null
++		rm -f "$body_file"
+ 		return 2
+ 	fi
+ 
+-	body_file=$(mktemp)
+-	printf '%s' "$body" > "$body_file"
+ 	if ! factory_jev_validate_answers "$body_file" "$questions_file"; then
++		factory_jev_direct_error "$body_file" "$tag" "$status" invalid_response "$ms" > "${out}/jev-${tag}-error.json" 2>/dev/null
+ 		rm -f "$body_file"
+-		jq -n --arg tag "$tag" --arg http_status "$status" --arg error "invalid_response" --argjson ms "$ms" \
+-			'{tag:$tag,http_status:$http_status,error:$error,ms:$ms}' > "${out}/jev-${tag}-error.json" 2>/dev/null
+ 		return 2
+ 	fi
+ 
+@@ -186,7 +231,7 @@ factory_jev_decide_direct() { # $1 = tag, $2 = state-json-file, $3 = questions-j
+ 	if [ -n "$cost" ] && [ "$cost" != null ]; then
+ 		cost_source=provider-reported
+ 	else
+-		cost=0
++		cost=null
+ 		cost_source=unknown
+ 	fi
+ 
+@@ -216,11 +261,11 @@ factory_jev_decide_proxy() { # $1=site $2=tag $3=state-file $4=questions-file $5
+ 	start_ms=$(date +%s%3N)
+ 	body_file=$(mktemp)
+ 	if [ -n "$today_json" ] && jq -e . >/dev/null 2>&1 <<<"$today_json"; then
+-		jq -n --arg site "$site" --slurpfile state "$state_file" --slurpfile questions "$questions_file" --argjson today "$today_json" \
+-			'{site:$site,state:$state[0],questions:$questions[0],today:$today}' > "$body_file" || { rm -f "$body_file"; return 2; }
++		jq -n --arg decisionId "$decision_id" --arg questionRevision "$question_revision" --arg site "$site" --slurpfile state "$state_file" --slurpfile questions "$questions_file" --argjson today "$today_json" \
++			'{site:$site,state:$state[0],questions:$questions[0],today:$today,decisionId:$decisionId,questionRevision:$questionRevision}' > "$body_file" || { rm -f "$body_file"; return 2; }
+ 	else
+-		jq -n --arg site "$site" --slurpfile state "$state_file" --slurpfile questions "$questions_file" \
+-			'{site:$site,state:$state[0],questions:$questions[0]}' > "$body_file" || { rm -f "$body_file"; return 2; }
++		jq -n --arg decisionId "$decision_id" --arg questionRevision "$question_revision" --arg site "$site" --slurpfile state "$state_file" --slurpfile questions "$questions_file" \
++			'{site:$site,state:$state[0],questions:$questions[0],decisionId:$decisionId,questionRevision:$questionRevision}' > "$body_file" || { rm -f "$body_file"; return 2; }
+ 	fi
+ 
+ 	resp=$(curl -sS -m "$timeout" \
+@@ -252,9 +297,12 @@ factory_jev_decide_proxy() { # $1=site $2=tag $3=state-file $4=questions-file $5
+ 	# and a 200 body with ok:false are ALL transport failures from this
+ 	# caller's point of view — the proxy always answers 200 for an upstream
+ 	# Jev failure, so only auth/validation/budget ever produce a non-200.
++	# TODO(handoff): This error receipt must join run accounting before total-spend
++	# enforcement; legacy sum_cost_usd ignores error files. See Slice 8 in
++	# proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
+ 	if [ "$status" != 200 ] || [ "$(jq -r '.ok // false' <<<"$body" 2>/dev/null)" != true ]; then
+-		jq -n --arg tag "$tag" --arg http_status "$status" --arg error "$(jq -r '.reason // "proxy_not_ok"' <<<"$body" 2>/dev/null)" --argjson ms "$ms" \
+-			'{tag:$tag,http_status:$http_status,error:$error,ms:$ms}' > "${out}/jev-${tag}-error.json" 2>/dev/null
++		jq -n --argjson response "$body" --arg tag "$tag" --arg http_status "$status" --arg error "$(jq -r '.reason // "proxy_not_ok"' <<<"$body" 2>/dev/null)" --argjson ms "$ms" \
++			'$response + {tag:$tag,http_status:$http_status,error:$error,ms:($response.ms // $ms)}' > "${out}/jev-${tag}-error.json" 2>/dev/null
+ 		return 2
+ 	fi
+ 
+@@ -268,9 +316,9 @@ factory_jev_decide_proxy() { # $1=site $2=tag $3=state-file $4=questions-file $5
+ 	fi
+ 
+ 	jq -n --arg tag "$tag" --slurpfile resp "$body_file" --argjson ms "$ms" \
+-		'{tag:$tag,model:$resp[0].model,answers:$resp[0].answers,
++		'$resp[0] + {tag:$tag,model:$resp[0].model,answers:$resp[0].answers,
+ 		  usage:{input_tokens:$resp[0].usage.inputTokens,output_tokens:$resp[0].usage.outputTokens},
+-		  total_cost_usd:($resp[0].costUsd // 0),cost_source:($resp[0].costSource // "unknown"),ms:$ms}' \
++		  total_cost_usd:($resp[0].costUsd // null),cost_source:($resp[0].costSource // "unknown")}' \
+ 		> "${out}/jev-${tag}-result.json"
+ 	rm -f "$body_file"
+ 	echo "${out}/jev-${tag}-result.json"
+@@ -304,7 +352,7 @@ factory_jev_shadow_log() { # $1 = site, $2 = today-json-string, $3 = jev-file-or
+ 		fi
+ 		line="$(jq -nc --arg ts "$(date -u +%FT%TZ)" --arg site "$site" --arg runId "$run_id" \
+ 			--slurpfile today "$today_file" --slurpfile jev "$jev_src" \
+-			'{ts:$ts,site:$site} + (if $runId != "" then {runId:$runId} else {} end) + {today:$today[0],jev:$jev[0]}')"
++			'($jev[0] | {version,decisionId,attemptId,origin,requestedModel,resolvedModel,inputHash,questionHash,questionRevision,schemaRevision,gateRevision,startedAt,completedAt,disposition,costStatus,runId}) + {ts:$ts,site:$site} + (if $runId != "" then {runId:$runId} else {} end) + {recordSource:(if $jev[0].origin == "proxy" then "comparison" else "authoritative" end),today:$today[0],jev:$jev[0]}')"
+ 		rm -f "$today_file"
+ 		[ "$jev_src" = "$jev_file" ] || rm -f "$jev_src"
+ 		( flock -w 5 9 || exit 0
+diff --git a/agent/lib/jev.test.sh b/agent/lib/jev.test.sh
+index a4ab154..b19c0ff 100644
+--- a/agent/lib/jev.test.sh
++++ b/agent/lib/jev.test.sh
+@@ -14,6 +14,7 @@ call_log="$tmp/calls.log"
+ mode=ok
+ # Stubs the network boundary only: real jq still validates the parsed answer.
+ # shellcheck disable=SC2317,SC2329  # stub invoked indirectly by the sourced lib
++# shellcheck disable=SC2317,SC2329  # network boundary stub invoked through the sourced library
+ curl() {
+ 	printf 'call\n' >> "$call_log"
+ 	case "$mode" in
+@@ -126,6 +127,7 @@ unset OPENROUTER_API_KEY
+ export FACTORY_JEV_PROXY_URL="http://proxy.test:3210"
+ export FACTORY_JEV_CAPABILITY="fjc_test-capability-should-never-leak"
+ proxy_mode=ok
++# shellcheck disable=SC2317,SC2329  # network boundary stub invoked through the sourced library
+ curl() {
+ 	printf 'call\n' >> "$call_log"
+ 	local saw_url=0 saw_auth=0 arg
+@@ -137,7 +139,7 @@ curl() {
+ 	[ "$saw_auth" -eq 1 ] || { echo 'FAIL: bearer capability not sent' >&2; exit 1; }
+ 	case "$proxy_mode" in
+ 		ok)
+-			printf '{"ok":true,"model":"typesafe/jev-1.13","answers":{"axis":{"type":"score","score":5}},"usage":{"inputTokens":10,"outputTokens":2},"costUsd":0.001,"costSource":"provider-reported","ms":42}\n200' ;;
++			printf '{"ok":true,"model":"typesafe/jev-1.13","answers":{"axis":{"type":"score","score":5}},"usage":{"inputTokens":10,"outputTokens":2},"costUsd":0.001,"costSource":"provider-reported","ms":42,"version":2,"decisionId":"logical-proxy","attemptId":"authoritative-proxy","origin":"proxy","runId":"run-proxy","requestedModel":"alias","resolvedModel":"typesafe/jev-1.13","inputHash":"hash","questionRevision":"q1","schemaRevision":"2","gateRevision":"shadow"}\n200' ;;
+ 		not-ok)
+ 			printf '{"ok":false,"reason":"unconfigured","ms":1}\n200' ;;
+ 		unauthorized)
+@@ -222,3 +224,58 @@ done < "$concurrency_out/jev-shadow.jsonl"
+ rm -rf "$concurrency_out"
+ 
+ echo 'jev: shadow decide/validate/log contract checks passed'
++
++# Version 2 identity is shared verbatim between the authoritative proxy response and local enrichment.
++[ "$(jq -r '.attemptId' "$proxy_result_path")" = authoritative-proxy ]
++[ "$(jq -r '.decisionId' "$proxy_result_path")" = logical-proxy ]
++[ "$(jq -r '.origin' "$proxy_result_path")" = proxy ]
++[ "$(jq -r '.ms' "$proxy_result_path")" = 42 ]
++factory_jev_shadow_log rank '{"axis":5}' "$proxy_result_path" run-proxy
++[ "$(tail -1 "$FACTORY_OUT_DIR/jev-shadow.jsonl" | jq -r '.attemptId')" = authoritative-proxy ]
++[ "$(tail -1 "$FACTORY_OUT_DIR/jev-shadow.jsonl" | jq -r '.recordSource')" = comparison ]
++[ "$(jq -r '.version' "$result_path")" = 2 ]
++[ "$(jq -r '.origin' "$result_path")" = host ]
++[ "$(jq -r '.attemptId' "$result_path")" != "$(jq -r '.attemptId' "$compat_result_path")" ]
++echo 'jev: v2 authoritative identity preserved locally'
++
++# Explicit direct retries share the caller's logical ID, retain unique attempts,
++# distinguish a direct container from the host and preserve missing bills as null.
++unset FACTORY_JEV_PROXY_URL FACTORY_JEV_CAPABILITY
++export OPENROUTER_API_KEY=fixture-direct-only FACTORY_RUN_ID=direct-run
++# shellcheck disable=SC2317,SC2329  # network boundary stub invoked through the sourced library
++curl() {
++ printf '{"model":"resolved-direct","answers":{"axis":{"type":"score","score":5}},"usage":{"input_tokens":7,"output_tokens":3}}\n200'
++}
++first=$(factory_jev_decide rank direct-one "$state_file" "$score_questions" '' logical-direct)
++second=$(factory_jev_decide rank direct-two "$state_file" "$score_questions" '' logical-direct)
++[ "$(jq -r '.decisionId' "$first")" = logical-direct ]
++[ "$(jq -r '.decisionId' "$second")" = logical-direct ]
++[ "$(jq -r '.attemptId' "$first")" != "$(jq -r '.attemptId' "$second")" ]
++[ "$(jq -r '.origin' "$first")" = direct-container ]
++[ "$(jq -r '.total_cost_usd' "$first")" = null ]
++factory_jev_shadow_log rank '{"axis":5}' "$first"
++[ "$(tail -1 "$FACTORY_OUT_DIR/jev-shadow.jsonl" | jq -r '.runId')" = direct-run ]
++echo 'jev: direct retry identity, container origin and nullable bills passed'
++
++# Direct semantic failures and HTTP failures retain the provider receipt too.
++direct_status=200
++# shellcheck disable=SC2317,SC2329  # network boundary stub invoked through the sourced library
++curl() {
++ printf '{"model":"resolved-direct","answers":{"axis":{"type":"score","score":"invalid"}},"usage":{"input_tokens":7,"output_tokens":3,"cost":0.01}}\n%s' "$direct_status"
++}
++for direct_status in 200 422; do
++ rc=0
++ factory_jev_decide rank "direct-failed-${direct_status}" "$state_file" "$score_questions" || rc=$?
++ [ "$rc" -eq 2 ]
++ failure="$FACTORY_OUT_DIR/jev-direct-failed-${direct_status}-error.json"
++ [ "$(jq -r '.total_cost_usd' "$failure")" = 0.01 ]
++ [ "$(jq -r '.resolvedModel' "$failure")" = resolved-direct ]
++ [ "$(jq -r '.usage.input_tokens' "$failure")" = 7 ]
++ factory_jev_shadow_log rank '{"axis":5}' "$failure"
++ tail -1 "$FACTORY_OUT_DIR/jev-shadow.jsonl" > "$tmp/direct-failure.jsonl"
++ node "$SCRIPT_DIR/../../scripts/jev-shadow-report.mjs" "$tmp/direct-failure.jsonl" --json > "$tmp/direct-report.json"
++ [ "$(jq -r '.rank.totalCostUsd' "$tmp/direct-report.json")" = 0.01 ]
++ [ "$(jq -r '.rank.knownBills' "$tmp/direct-report.json")" = 1 ]
++ [ "$(jq -r '.rank.failures' "$tmp/direct-report.json")" = 1 ]
++done
++echo 'jev: direct failed provider bills preserved through the actual report'
+diff --git a/agent/rank.sh b/agent/rank.sh
+index f7fd739..ce308ad 100644
+--- a/agent/rank.sh
++++ b/agent/rank.sh
+@@ -31,6 +31,9 @@ fi
+ jev_shadow_enabled=0
+ type factory_jev_decide >/dev/null 2>&1 && jev_shadow_enabled=1
+ 
++# TODO(handoff): Verify the ten-criterion to ledger 0–10 mapping before enabling
++# absolute score errors; see proposals/2026-10-22-agent-decision-and-proactivity-experiments.md
++# and agent-harness spec §5.1 / Slice 7. Raw scores remain evidence meanwhile.
+ # One shared question set for every batch: the three ranking axes as Jev
+ # `score` questions. Instructions are copied by value from the PROMPT heredoc
+ # below (criticality/importance/impact definitions) plus the untrusted-data
+@@ -84,7 +87,7 @@ jev_shadow_batch() { # $1 = batch number, $2 = batch-json-file, $3 = scores-json
+ 		state_file="/tmp/jev-${tag}-state.json"
+ 		printf '%s\n' "$candidate" > "$state_file"
+ 		error_file="${out}/jev-${tag}-error.json"
+-		if result=$(factory_jev_decide rank "$tag" "$state_file" "$JEV_RANK_QUESTIONS"); then
++		if result=$(FACTORY_JEV_QUESTION_REVISION=rank-ten-criteria-v1 factory_jev_decide rank "$tag" "$state_file" "$JEV_RANK_QUESTIONS"); then
+ 			ok=$((ok + 1))
+ 		else
+ 			failed=$((failed + 1))
+diff --git a/runner/src/jev-proxy.test.ts b/runner/src/jev-proxy.test.ts
+index b505fff..202a721 100644
+--- a/runner/src/jev-proxy.test.ts
++++ b/runner/src/jev-proxy.test.ts
+@@ -1,8 +1,11 @@
+ import { test, beforeEach, after } from 'node:test';
+ import assert from 'node:assert/strict';
+-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
++import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+ import { tmpdir } from 'node:os';
+ import path from 'node:path';
++import { createServer } from 'node:http';
++import { execFile } from 'node:child_process';
++import { promisify } from 'node:util';
+ import {
+ 	handleJevDecideRequest,
+ 	jevCapabilityForRun,
+@@ -86,7 +89,7 @@ test('ok path (unconfigured runner) still returns 200 with ok:false, logs shadow
+ 	assert.equal(outcome.body.ok, false);
+ 	const lines = readFileSync(path.join(shadowDataDir, 'jev-shadow.jsonl'), 'utf8').trim().split('\n');
+ 	const last = JSON.parse(lines[lines.length - 1]);
+-	assert.equal(last.origin, 'container');
++	assert.equal(last.origin, 'proxy');
+ });
+ 
+ test('MEDIUM-2: a container cannot claim a runner-owned site', async () => {
+@@ -112,7 +115,7 @@ test('LOW: __proto__/constructor/prototype question keys are rejected, never mer
+ 		const outcome = await handleJevDecideRequest(token, { site: 'rank', state: {}, questions: { [key]: Q.q } });
+ 		assert.equal(outcome.status, 400);
+ 	}
+-	assert.equal((({}) as Record<string, unknown>).polluted, undefined, 'Object.prototype must never have been touched');
++	assert.equal(({} as Record<string, unknown>).polluted, undefined, 'Object.prototype must never have been touched');
+ });
+ 
+ test('LOW: a 400 (malformed request) counts against the same per-run call budget a successful call does', async () => {
+@@ -147,11 +150,15 @@ test('MEDIUM-3: a cost-unreported (unknown-costSource) response still counts tow
+ 	// No `usage.cost` field -> jev.ts's validateResponse yields costSource:'unknown'
+ 	// and costUsd:0 — without MEDIUM-3's per-input-token charge this response
+ 	// would be free against the budget no matter how many tokens it burned.
+-	globalThis.fetch = (async () => new Response(JSON.stringify({
+-		model: 'typesafe/jev-1.13',
+-		answers: { q: { type: 'noul', noul: 0.5 } },
+-		usage: { input_tokens: 25000, output_tokens: 10 }
+-	}), { status: 200, headers: { 'content-type': 'application/json' } })) as unknown as typeof fetch;
++	globalThis.fetch = (async () =>
++		new Response(
++			JSON.stringify({
++				model: 'typesafe/jev-1.13',
++				answers: { q: { type: 'noul', noul: 0.5 } },
++				usage: { input_tokens: 25000, output_tokens: 10 }
++			}),
++			{ status: 200, headers: { 'content-type': 'application/json' } }
++		)) as unknown as typeof fetch;
+ 	try {
+ 		const token = mintJevCapability('run-1');
+ 		const first = await handleJevDecideRequest(token, { site: 'rank', state: {}, questions: Q });
+@@ -184,3 +191,126 @@ test('sweep drops only capabilities older than FACTORY_RUN_TIMEOUT + 30 minutes'
+ 	assert.equal(sweepExpiredJevCapabilities(almostNow + 106 * 60_000), 1);
+ 	assert.equal(resolveJevCapability(token), null);
+ });
++
++test('v2 proxy owns attempt identity, retains logical retries and logs matching bindings', async () => {
++	const token = mintJevCapability('identified-run');
++	const request = {
++		site: 'rank',
++		state: { a: 1 },
++		questions: Q,
++		decisionId: 'logical-1',
++		attemptId: 'forged',
++		questionRevision: 'rubric-1'
++	};
++	const first = await handleJevDecideRequest(token, request);
++	const second = await handleJevDecideRequest(token, request);
++	const a = first.body as Record<string, unknown>,
++		b = second.body as Record<string, unknown>;
++	assert.equal(a.decisionId, 'logical-1');
++	assert.equal(b.decisionId, a.decisionId);
++	assert.notEqual(a.attemptId, 'forged');
++	assert.notEqual(a.attemptId, b.attemptId);
++	assert.equal(a.origin, 'proxy');
++	const rows = readFileSync(path.join(shadowDataDir, 'jev-shadow.jsonl'), 'utf8')
++		.trim()
++		.split('\n')
++		.map((line) => JSON.parse(line));
++	assert.equal(rows.at(-2).attemptId, a.attemptId);
++	assert.equal(rows.at(-2).recordSource, 'authoritative');
++	assert.equal(rows.at(-2).questionRevision, 'rubric-1');
++});
++
++for (const invalidAnswers of [false, true]) {
++	test(`v2 real shell -> proxy -> provider receipt -> report bills once (invalid=${invalidAnswers})`, async () => {
++		const previousKey = process.env.FACTORY_OPENROUTER_API_KEY,
++			previousFetch = globalThis.fetch;
++		const dir = mkdtempSync(path.join(tmpdir(), 'jev-runtime-')),
++			out = path.join(dir, 'runs', 'joined-run');
++		mkdirSync(out, { recursive: true });
++		const state = path.join(dir, 'state.json'),
++			questions = path.join(dir, 'questions.json');
++		writeFileSync(state, JSON.stringify({ candidate: 'fixture' }));
++		writeFileSync(questions, JSON.stringify(Q));
++		process.env.FACTORY_OPENROUTER_API_KEY = 'fixture-only';
++		let calls = 0;
++		globalThis.fetch = (async () => {
++			calls++;
++			return new Response(
++				JSON.stringify({
++					model: 'resolved-fixture',
++					answers: { q: { type: 'noul', noul: invalidAnswers ? 2 : 0.8 } },
++					usage: { input_tokens: 7, output_tokens: 3, cost: 0.01 }
++				})
++			);
++		}) as typeof fetch;
++		const token = mintJevCapability('joined-run');
++		const server = createServer(async (req, res) => {
++			let body = '';
++			for await (const chunk of req) body += chunk;
++			const outcome = await handleJevDecideRequest((req.headers.authorization ?? '').replace('Bearer ', ''), JSON.parse(body));
++			res.writeHead(outcome.status, { 'content-type': 'application/json' });
++			res.end(JSON.stringify(outcome.body));
++		});
++		try {
++			await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
++			const address = server.address();
++			assert.ok(address && typeof address === 'object');
++			const exec = promisify(execFile);
++			await exec(
++				'bash',
++				[
++					'-c',
++					`. "$1"; if result=$(factory_jev_decide rank fixture "$2" "$3" "" logical-runtime); then :; else result="$FACTORY_OUT_DIR/jev-fixture-error.json"; fi; factory_jev_shadow_log rank '{"criticality":8}' "$result" joined-run`,
++					'bash',
++					path.resolve('../agent/lib/jev.sh'),
++					state,
++					questions
++				],
++				{
++					env: {
++						...process.env,
++						FACTORY_OUT_DIR: out,
++						FACTORY_RUN_ID: 'joined-run',
++						FACTORY_JEV_PROXY_URL: `http://127.0.0.1:${address.port}`,
++						FACTORY_JEV_CAPABILITY: token,
++						OPENROUTER_API_KEY: ''
++					}
++				}
++			);
++			assert.equal(calls, 1);
++			const central = JSON.parse(readFileSync(path.join(shadowDataDir, 'jev-shadow.jsonl'), 'utf8').trim().split('\n').at(-1)!);
++			const local = JSON.parse(readFileSync(path.join(out, 'jev-shadow.jsonl'), 'utf8').trim());
++			assert.equal(local.attemptId, central.attemptId);
++			assert.equal(local.decisionId, 'logical-runtime');
++			assert.equal(local.jev.ms, central.jev.ms);
++			assert.equal(local.recordSource, 'comparison');
++			assert.equal(local.questionHash, central.questionHash);
++			const centralPath = path.join(dir, 'central.jsonl');
++			writeFileSync(centralPath, JSON.stringify(central) + '\n');
++			const { stdout } = await exec('node', [
++				path.resolve('../scripts/jev-shadow-report.mjs'),
++				centralPath,
++				'--runs-dir',
++				path.join(dir, 'runs'),
++				'--json'
++			]);
++			const report = JSON.parse(stdout).rank;
++			assert.equal(report.rawRecords, 2);
++			assert.equal(report.uniqueAttempts, 1);
++			assert.equal(report.pairedComparisons, invalidAnswers ? 0 : 1);
++			assert.equal(report.failures, invalidAnswers ? 1 : 0);
++			assert.equal(report.knownBills, 1);
++			assert.equal(central.jev.usage.inputTokens, 7);
++			assert.equal(central.jev.usage.outputTokens, 3);
++			assert.equal(central.resolvedModel, 'resolved-fixture');
++			assert.equal(report.totalCostUsd, 0.01);
++			assert.equal(report.conflictingRecords, 0);
++		} finally {
++			await new Promise<void>((resolve) => server.close(() => resolve()));
++			globalThis.fetch = previousFetch;
++			if (previousKey === undefined) delete process.env.FACTORY_OPENROUTER_API_KEY;
++			else process.env.FACTORY_OPENROUTER_API_KEY = previousKey;
++			rmSync(dir, { recursive: true, force: true });
++		}
++	});
++}
+diff --git a/runner/src/jev-proxy.ts b/runner/src/jev-proxy.ts
+index 0f1aa5f..28038ad 100644
+--- a/runner/src/jev-proxy.ts
++++ b/runner/src/jev-proxy.ts
+@@ -32,7 +32,15 @@ const MAX_TODAY_JSON_BYTES = 4096;
+ // calibration report's per-site stats with data that never went through the
+ // runner's own decision path. Only a container can reach POST /jev/decide
+ // with a `site`, so this list is exactly "sites no container may claim".
+-const RUNNER_OWNED_SITES = new Set(['retry-policy', 'unstick', 'spec-grounding', 'task-size', 'provider-health', 'auto-approve', 'discovery-zone']);
++const RUNNER_OWNED_SITES = new Set([
++	'retry-policy',
++	'unstick',
++	'spec-grounding',
++	'task-size',
++	'provider-health',
++	'auto-approve',
++	'discovery-zone'
++]);
+ // MEDIUM-3: OpenRouter not reporting `usage.cost` (costSource:'unknown') must
+ // still count toward the per-run spend cap — otherwise a run can make
+ // unlimited "free" calls just by getting cost-unreported responses. $0.042
+@@ -124,8 +132,10 @@ function isValidQuestion(value: unknown): value is JevQuestion {
+ 	if (value.type === 'noul') {
+ 		if (value.criteria === undefined) return true;
+ 		if (!isRecord(value.criteria)) return false;
+-		return (value.criteria.true === undefined || typeof value.criteria.true === 'string')
+-			&& (value.criteria.false === undefined || typeof value.criteria.false === 'string');
++		return (
++			(value.criteria.true === undefined || typeof value.criteria.true === 'string') &&
++			(value.criteria.false === undefined || typeof value.criteria.false === 'string')
++		);
+ 	}
+ 	if (value.type === 'choice') {
+ 		return isRecord(value.criteria) && Object.values(value.criteria).every((v) => typeof v === 'string');
+@@ -194,6 +204,10 @@ export async function handleJevDecideRequest(token: string, rawBody: unknown): P
+ 	if (RUNNER_OWNED_SITES.has(rawBody.site)) return reject400('forbidden_site');
+ 	const questions = validateQuestions(rawBody.questions);
+ 	if (!questions) return reject400('invalid_questions');
++	if (rawBody.decisionId !== undefined && (typeof rawBody.decisionId !== 'string' || !/^[A-Za-z0-9_.:-]{1,128}$/.test(rawBody.decisionId)))
++		return reject400('invalid_decision_id');
++	if (rawBody.questionRevision !== undefined && (typeof rawBody.questionRevision !== 'string' || rawBody.questionRevision.length > 128))
++		return reject400('invalid_question_revision');
+ 	if (!('state' in rawBody)) return reject400('invalid_state');
+ 	// MEDIUM-1: `today` is opaque container-supplied JSON with no schema —
+ 	// cap its serialized size so a container cannot grow the central shadow
+@@ -207,23 +221,30 @@ export async function handleJevDecideRequest(token: string, rawBody: unknown): P
+ 	}
+ 
+ 	const site = rawBody.site;
+-	const jev = await jevDecide({ site, state: rawBody.state, questions });
++	const jev = await jevDecide({
++		site,
++		state: rawBody.state,
++		questions,
++		origin: 'proxy',
++		runId: entry.runId,
++		decisionId: typeof rawBody.decisionId === 'string' ? rawBody.decisionId : undefined,
++		questionRevision: typeof rawBody.questionRevision === 'string' ? rawBody.questionRevision : undefined
++	});
+ 	entry.calls += 1;
+-	if (jev.ok) {
++	if ((jev.costUsd !== null && jev.costUsd !== undefined) || jev.usage) {
+ 		// MEDIUM-3: a cost-unreported (costSource:'unknown') response still
+-		// used real upstream tokens — jev.ts already zeroes costUsd for it,
++		// used real upstream tokens — jev.ts preserves a null unknown bill,
+ 		// so without this the per-run $ cap is trivially bypassable by any
+ 		// response OpenRouter doesn't attach billing to. Charge a
+ 		// conservative per-input-token estimate instead of nothing.
+-		const chargeUsd = jev.costSource === 'provider-reported'
+-			? jev.costUsd
+-			: jev.usage.inputTokens * UNKNOWN_COST_USD_PER_INPUT_TOKEN;
++		const chargeUsd =
++			jev.costSource === 'provider-reported' ? (jev.costUsd ?? 0) : (jev.usage?.inputTokens ?? 0) * UNKNOWN_COST_USD_PER_INPUT_TOKEN;
+ 		entry.spentMicroUsd += Math.round(chargeUsd * 1_000_000);
+ 	}
+ 	// MEDIUM-2: tag the shadow entry with its origin so the calibration
+ 	// report (and any human reading the raw log) can tell a container's own
+ 	// decision request apart from one the runner made on its own behalf.
+-	jevShadowLog({ site, runId: entry.runId, today: rawBody.today ?? null, jev, origin: 'container' });
++	jevShadowLog({ site, runId: entry.runId, today: rawBody.today ?? null, jev, origin: 'proxy' });
+ 	console.log(`[jev] run=${entry.runId} site=${site} ok=${jev.ok} ms=${jev.ms}`);
+ 	return { status: 200, body: jev };
+ }
+diff --git a/runner/src/jev.test.ts b/runner/src/jev.test.ts
+index 7cda2dd..b871b47 100644
+--- a/runner/src/jev.test.ts
++++ b/runner/src/jev.test.ts
+@@ -44,7 +44,9 @@ test('unconfigured (no key) fails open without ever calling fetch', async () =>
+ 		env: {},
+ 		fetchImpl: (async () => { called = true; return jsonResponse(200, {}); }) as unknown as typeof fetch
+ 	});
+-	assert.deepEqual(result, { ok: false, reason: 'unconfigured', ms: result.ms });
++	assert.equal(result.ok, false);
++	assert.equal(!result.ok && result.reason, 'unconfigured');
++	assert.equal(result.version, 2);
+ 	assert.equal(called, false);
+ });
+ 
+@@ -116,7 +118,7 @@ test('a valid response parses answers, usage, and provider-reported cost', async
+ 	assert.equal(result.costSource, 'provider-reported');
+ });
+ 
+-test('missing usage.cost is treated as zero spend with an unknown source', async () => {
++test('missing usage.cost stays null with an unknown source', async () => {
+ 	const result = await jevDecide({
+ 		site: 'test',
+ 		state: { a: 1 },
+@@ -130,7 +132,7 @@ test('missing usage.cost is treated as zero spend with an unknown source', async
+ 	});
+ 	assert.equal(result.ok, true);
+ 	if (!result.ok) return;
+-	assert.equal(result.costUsd, 0);
++	assert.equal(result.costUsd, null);
+ 	assert.equal(result.costSource, 'unknown');
+ });
+ 
+@@ -288,3 +290,30 @@ test('failureClassQuestions criteria keys are exactly the FailureClass union', (
+ 	assert.deepEqual(Object.keys(failureClassQuestion.criteria).sort(), [...FAILURE_CLASSES].sort());
+ 	assert.equal(questions.human_needed.type, 'noul');
+ });
++
++test('v2 bindings and requested alias are pinned before the provider await', async () => {
++ const state = { value: 1 };
++ const questions: Record<string, JevQuestion> = { q: { type: 'noul', instructions: 'original' } };
++ const env = { FACTORY_OPENROUTER_API_KEY: 'fixture', FACTORY_JEV_MODEL: 'original-alias' };
++ const result = await jevDecide({ site: 'test', state, questions, env, decisionId: 'logical-pinned', fetchImpl: (async () => {
++  state.value = 2; env.FACTORY_JEV_MODEL = 'changed-alias';
++  return jsonResponse(200, { model: 'resolved', answers: { q: { type: 'noul', noul: 0.5 } }, usage: { input_tokens: 1, output_tokens: 1 } });
++ }) as typeof fetch });
++ assert.equal(result.decisionId, 'logical-pinned');
++ assert.equal(result.requestedModel, 'original-alias');
++ // SHA-256 of the original serialized {"value":1}; mutation cannot relabel the inference.
++ assert.equal(result.inputHash, '48208f9428d64634bd8e28ff345bf0eab60d53c18fa2fbdb0b9bc1e84df2b5f6');
++ assert.equal(result.resolvedModel, 'resolved');
++ assert.equal(result.ok && result.costUsd, null);
++});
++
++test('invalid semantic answers retain bounded provider receipts independently from success', async () => {
++ for (const status of [200, 422]) {
++  const result = await jevDecide({site:'test',state:{},questions:NOUL_Q,env:{FACTORY_OPENROUTER_API_KEY:'fixture'},fetchImpl:(async()=>jsonResponse(status,{model:'resolved-paid',answers:{q:{type:'noul',noul:2}},usage:{input_tokens:7,output_tokens:3,cost:0.01}})) as typeof fetch});
++  assert.equal(result.ok,false);
++  assert.equal(result.costUsd,0.01);
++  assert.equal(result.resolvedModel,'resolved-paid');
++  assert.deepEqual(result.usage,{inputTokens:7,outputTokens:3});
++  assert.equal(result.costSource,'provider-reported');
++ }
++});
+diff --git a/runner/src/jev.ts b/runner/src/jev.ts
+index 8d845de..8d1af46 100644
+--- a/runner/src/jev.ts
++++ b/runner/src/jev.ts
+@@ -9,6 +9,7 @@
+ // DATA, never instructions, which is why every question's `instructions` text
+ // says so explicitly.
+ import { appendFileSync } from 'node:fs';
++import { createHash, randomUUID } from 'node:crypto';
+ import type { FailureClass } from './retry-policy.js';
+ import { FAILURE_CLASSES } from './retry-policy.js';
+ 
+@@ -34,28 +35,64 @@ export type JevAnswer =
+ 
+ export type JevCostSource = 'provider-reported' | 'unknown';
+ 
+-export type JevResult =
+-	| {
+-		ok: true;
+-		model: string;
+-		answers: Record<string, JevAnswer>;
+-		usage: { inputTokens: number; outputTokens: number };
+-		costUsd: number;
+-		costSource: JevCostSource;
+-		ms: number;
+-	}
+-	| {
+-		ok: false;
+-		reason:
+-			| 'unconfigured'
+-			| 'state_bytes'
+-			| `http_${number}`
+-			| 'timeout'
+-			| 'network'
+-			| 'invalid_response'
+-			| 'runner_rate_cap';
+-		ms: number;
+-	};
++export type JevRecordIdentity = {
++	version: 2;
++	decisionId: string;
++	attemptId: string;
++	origin: 'runner' | 'proxy' | 'direct-container' | 'host';
++	site: string;
++	runId: string;
++	requestedModel: string;
++	resolvedModel: string | null;
++	inputHash: string;
++	questionHash: string;
++	questionRevision: string;
++	schemaRevision: string;
++	gateRevision: string;
++	startedAt: string;
++	completedAt: string;
++	disposition: string;
++	costStatus: JevCostSource;
++};
++
++// Canonical JSON binds semantic input, independent of object key insertion order.
++export function jevBindingHash(value: unknown): string {
++	const canonical = (v: unknown): unknown =>
++		Array.isArray(v)
++			? v.map(canonical)
++			: isRecord(v)
++				? Object.fromEntries(
++						Object.keys(v)
++							.sort()
++							.map((k) => [k, canonical(v[k])])
++					)
++				: v;
++	return createHash('sha256')
++		.update(JSON.stringify(canonical(value)) ?? 'null')
++		.digest('hex');
++}
++
++export type JevResult = Partial<JevRecordIdentity> &
++	(
++		| {
++				ok: true;
++				model: string;
++				answers: Record<string, JevAnswer>;
++				usage: { inputTokens: number; outputTokens: number };
++				costUsd: number | null;
++				costSource: JevCostSource;
++				ms: number;
++		  }
++		| {
++				ok: false;
++				costUsd?: number | null;
++				model?: string;
++				usage?: { inputTokens: number; outputTokens: number };
++				costSource?: JevCostSource;
++				reason: 'unconfigured' | 'state_bytes' | `http_${number}` | 'timeout' | 'network' | 'invalid_response' | 'runner_rate_cap';
++				ms: number;
++		  }
++	);
+ 
+ // Key presence alone, with no FACTORY_JEV_SHADOW opinion — the spec pass-1
+ // grounding pass (spec-grounding.ts) is its own feature gated only by its own
+@@ -124,9 +161,7 @@ function validatedConfidence(value: unknown): number | undefined | typeof MISSIN
+ function validateAnswer(question: JevQuestion, answer: unknown): JevAnswer | null {
+ 	if (!isRecord(answer) || answer.type !== question.type) return null;
+ 	if (question.type === 'noul') {
+-		return typeof answer.noul === 'number' && answer.noul >= 0 && answer.noul <= 1
+-			? { type: 'noul', noul: answer.noul }
+-			: null;
++		return typeof answer.noul === 'number' && answer.noul >= 0 && answer.noul <= 1 ? { type: 'noul', noul: answer.noul } : null;
+ 	}
+ 	// probabilities/confidence are optional on the wire but, when present, are
+ 	// carried through validated — HIGH-2: silently dropping them left
+@@ -139,11 +174,16 @@ function validateAnswer(question: JevQuestion, answer: unknown): JevAnswer | nul
+ 	if (question.type === 'choice') {
+ 		if (typeof answer.choice !== 'string' || !Object.hasOwn(question.criteria, answer.choice)) return null;
+ 		if (probabilities && !Object.hasOwn(probabilities, answer.choice)) return null;
+-		return { type: 'choice', choice: answer.choice, ...(probabilities && { probabilities }), ...(confidence !== undefined && { confidence }) };
++		return {
++			type: 'choice',
++			choice: answer.choice,
++			...(probabilities && { probabilities }),
++			...(confidence !== undefined && { confidence })
++		};
+ 	}
+ 	if (typeof answer.score !== 'number') return null;
+-	const legendOk = answer.legend === undefined
+-		|| (isRecord(answer.legend) && Object.values(answer.legend).every((v) => typeof v === 'string'));
++	const legendOk =
++		answer.legend === undefined || (isRecord(answer.legend) && Object.values(answer.legend).every((v) => typeof v === 'string'));
+ 	if (!legendOk) return null;
+ 	const legend = answer.legend as Record<string, string> | undefined;
+ 	return {
+@@ -155,9 +195,41 @@ function validateAnswer(question: JevQuestion, answer: unknown): JevAnswer | nul
+ 	};
+ }
+ 
+-function validateResponse(body: unknown, questions: Record<string, JevQuestion>): {
+-	model: string; answers: Record<string, JevAnswer>; inputTokens: number; outputTokens: number;
+-	costUsd: number; costSource: JevCostSource;
++// Provider receipts are independent of answer/schema validity. Retain only bounded,
++// typed fields; never log the raw malformed response or fabricate a free failure.
++function providerReceipt(body: unknown): {
++	model?: string;
++	usage?: { inputTokens: number; outputTokens: number };
++	costUsd: number | null;
++	costSource: JevCostSource;
++} {
++	const usage = isRecord(body) && isRecord(body.usage) ? body.usage : {};
++	const costKnown = typeof usage.cost === 'number' && Number.isFinite(usage.cost) && usage.cost >= 0;
++	const model =
++		isRecord(body) && typeof body.model === 'string' && body.model.length > 0 && body.model.length <= 256 ? body.model : undefined;
++	const tokensKnown =
++		isNonNegativeInt(usage.input_tokens) &&
++		usage.input_tokens <= MAX_INPUT_TOKENS &&
++		isNonNegativeInt(usage.output_tokens) &&
++		usage.output_tokens <= MAX_INPUT_TOKENS;
++	return {
++		...(model === undefined ? {} : { model }),
++		...(tokensKnown ? { usage: { inputTokens: usage.input_tokens as number, outputTokens: usage.output_tokens as number } } : {}),
++		costUsd: costKnown ? (usage.cost as number) : null,
++		costSource: costKnown ? 'provider-reported' : 'unknown'
++	};
++}
++
++function validateResponse(
++	body: unknown,
++	questions: Record<string, JevQuestion>
++): {
++	model: string;
++	answers: Record<string, JevAnswer>;
++	inputTokens: number;
++	outputTokens: number;
++	costUsd: number | null;
++	costSource: JevCostSource;
+ } | null {
+ 	if (!isRecord(body) || typeof body.model !== 'string' || !body.model) return null;
+ 	if (!isRecord(body.answers)) return null;
+@@ -173,13 +245,13 @@ function validateResponse(body: unknown, questions: Record<string, JevQuestion>)
+ 	const usage = isRecord(body.usage) ? body.usage : {};
+ 	if (!isNonNegativeInt(usage.input_tokens) || !isNonNegativeInt(usage.output_tokens)) return null;
+ 	if (usage.input_tokens > MAX_INPUT_TOKENS) return null;
+-	const hasCost = typeof usage.cost === 'number' && usage.cost >= 0;
++	const hasCost = typeof usage.cost === 'number' && Number.isFinite(usage.cost) && usage.cost >= 0;
+ 	return {
+ 		model: body.model,
+ 		answers,
+ 		inputTokens: usage.input_tokens,
+ 		outputTokens: usage.output_tokens,
+-		costUsd: hasCost ? (usage.cost as number) : 0,
++		costUsd: hasCost ? (usage.cost as number) : null,
+ 		costSource: hasCost ? 'provider-reported' : 'unknown'
+ 	};
+ }
+@@ -190,9 +262,44 @@ export type JevDecideInput = {
+ 	questions: Record<string, JevQuestion>;
+ 	env?: NodeJS.ProcessEnv;
+ 	fetchImpl?: typeof fetch;
++	decisionId?: string;
++	runId?: string;
++	origin?: JevRecordIdentity['origin'];
++	questionRevision?: string;
++	schemaRevision?: string;
++	gateRevision?: string;
+ };
+ 
+ export async function jevDecide(input: JevDecideInput): Promise<JevResult> {
++	// Pin bindings before the asynchronous provider boundary; caller-owned state may mutate while awaiting it.
++	const base = {
++		version: 2,
++		decisionId: input.decisionId ?? randomUUID(),
++		attemptId: randomUUID(),
++		origin: input.origin ?? 'runner',
++		site: input.site,
++		runId: input.runId ?? '',
++		requestedModel: (input.env ?? process.env).FACTORY_JEV_MODEL || DEFAULT_MODEL,
++		inputHash: jevBindingHash(input.state),
++		questionHash: jevBindingHash(input.questions),
++		questionRevision: input.questionRevision ?? jevBindingHash(input.questions),
++		schemaRevision: input.schemaRevision ?? '2',
++		gateRevision: input.gateRevision ?? 'shadow',
++		startedAt: new Date().toISOString()
++	};
++	const result = await jevDecideAttempt(input);
++	const identity: JevRecordIdentity = {
++		...base,
++		version: 2,
++		resolvedModel: result.model ?? null,
++		completedAt: new Date().toISOString(),
++		disposition: result.ok ? 'success' : result.reason,
++		costStatus: result.costSource ?? 'unknown'
++	};
++	return result.ok ? { ...result, ...identity } : { ...result, ...identity, costUsd: result.costUsd ?? null };
++}
++
++async function jevDecideAttempt(input: JevDecideInput): Promise<JevResult> {
+ 	const start = Date.now();
+ 	const env = input.env ?? process.env;
+ 	const ms = () => Date.now() - start;
+@@ -224,15 +331,16 @@ export async function jevDecide(input: JevDecideInput): Promise<JevResult> {
+ 		const timedOut = err instanceof Error && err.name === 'TimeoutError';
+ 		return { ok: false, reason: timedOut ? 'timeout' : 'network', ms: ms() };
+ 	}
+-	if (!res.ok) return { ok: false, reason: `http_${res.status}`, ms: ms() };
+ 	let body: unknown;
+ 	try {
+ 		body = await res.json();
+ 	} catch {
+-		return { ok: false, reason: 'invalid_response', ms: ms() };
++		return { ok: false, reason: res.ok ? 'invalid_response' : `http_${res.status}`, ms: ms() };
+ 	}
++	const receipt = providerReceipt(body);
++	if (!res.ok) return { ok: false, reason: `http_${res.status}`, ...receipt, ms: ms() };
+ 	const validated = validateResponse(body, input.questions);
+-	if (!validated) return { ok: false, reason: 'invalid_response', ms: ms() };
++	if (!validated) return { ok: false, reason: 'invalid_response', ...receipt, ms: ms() };
+ 	return {
+ 		ok: true,
+ 		model: validated.model,
+@@ -250,7 +358,8 @@ export async function jevDecide(input: JevDecideInput): Promise<JevResult> {
+ export type JevShadowSummary = {
+ 	ok: boolean;
+ 	batches: number;
+-	costUsd: number;
++	costUsd: number | null;
++ knownCostUsd?: number;
+ 	costSource: JevCostSource;
+ 	ms: number;
+ 	deadlineHit: boolean;
+@@ -258,12 +367,20 @@ export type JevShadowSummary = {
+ 
+ /** Never throws — a shadow log write must not affect the caller's decision path. */
+ export function jevShadowLog(
+-	entry: { site: string; runId?: string; today: unknown; acted?: boolean; origin?: 'container' | 'runner' } & (
++	entry: { site: string; runId?: string; today: unknown; acted?: boolean; origin?: JevRecordIdentity['origin'] | 'container' } & (
+ 		{ jev: JevResult } | { summary: JevShadowSummary }
+ 	)
+ ): void {
+ 	try {
+-		const line = JSON.stringify({ ts: new Date().toISOString(), ...entry });
++		const identity = 'jev' in entry && entry.jev.version === 2 ? entry.jev : {};
++		const line = JSON.stringify({
++			...identity,
++			ts: new Date().toISOString(),
++			...entry,
++			...('jev' in entry && entry.jev.version === 2
++				? { origin: entry.jev.origin, runId: entry.runId ?? entry.jev.runId, recordSource: 'authoritative' }
++				: {})
++		});
+ 		appendFileSync(`${process.env.FACTORY_DATA ?? '/data'}/jev-shadow.jsonl`, line + '\n');
+ 	} catch {
+ 		// shadow logging is best-effort; never let it surface to the caller
+diff --git a/runner/src/spec-grounding.test.ts b/runner/src/spec-grounding.test.ts
+index 285ac74..905c2ab 100644
+--- a/runner/src/spec-grounding.test.ts
++++ b/runner/src/spec-grounding.test.ts
+@@ -429,3 +429,24 @@ test('writeSpecCandidates never throws even when a dependency throws', async ()
+ });
+ 
+ after(() => rmSync(tmp, { recursive: true, force: true }));
++
++test('failed grounding calls preserve known bills and fence missing-receipt coverage as unknown', async () => {
++ const previous=process.env.FACTORY_DATA;
++ for (const known of [false,true]) {
++  const shadowDir=mkdtempSync(path.join(tmp,'failed-receipt-log-'));
++  process.env.FACTORY_DATA=shadowDir;
++  const outDir=mkdtempSync(path.join(tmp,'failed-receipt-out-'));
++  const failed=async ():Promise<JevResult>=>known ? {ok:false,reason:'invalid_response',model:'paid',usage:{inputTokens:7,outputTokens:3},costUsd:0.01,costSource:'provider-reported',ms:1} : {ok:false,reason:'network',ms:1};
++  try {
++   const result=await writeSpecCandidates(outDir,runRow(),baseDeps({gh:fakeGh([{path:'src/a.ts'}]) as Deps['gh'],jevDecide:failed}));
++   assert.equal(result.costUsd,known?0.01:0);
++   const cost=JSON.parse(readFileSync(`${outDir}/jev-spec-grounding-result.json`,'utf8'));
++   assert.equal(cost.cost_source,known?'provider-reported':'unknown');
++   assert.equal(cost.total_cost_usd,known?0.01:null);
++   const line=readFileSync(`${shadowDir}/jev-shadow.jsonl`,'utf8').trim().split('\n').pop();
++   const summary=JSON.parse(line??'{}').summary;
++   assert.equal(summary.costSource,known?'provider-reported':'unknown');
++   assert.equal(summary.costUsd,known?0.01:null);
++  } finally { process.env.FACTORY_DATA=previous; }
++ }
++});
+diff --git a/runner/src/spec-grounding.ts b/runner/src/spec-grounding.ts
+index 9ad89ef..d386a73 100644
+--- a/runner/src/spec-grounding.ts
++++ b/runner/src/spec-grounding.ts
+@@ -199,9 +199,9 @@ async function scoreRepo(
+ 			state: { repo: def.slug, proposal, paths: batch },
+ 			questions
+ 		});
++		costUsd += result.costUsd ?? 0;
++		if (result.costSource !== 'provider-reported') anyUnknownCost = true;
+ 		if (!result.ok) continue;
+-		costUsd += result.costUsd;
+-		if (result.costSource === 'unknown') anyUnknownCost = true;
+ 		for (const path of batch) {
+ 			const answer = result.answers[path];
+ 			if (answer?.type === 'noul') candidates.push({ path, p: answer.noul });
+@@ -298,7 +298,11 @@ async function scoreAndWrite(deps: Deps, outDir: string, run: Run, onRepoScored:
+ 
+ 	// Cost file first: it is what the container's sum_cost_usd() folds into its
+ 	// own budget checks, so it matters most that it lands even if a later write fails.
+-	atomicWrite(`${outDir}/jev-spec-grounding-result.json`, JSON.stringify({ total_cost_usd: totalCostUsd }));
++	atomicWrite(`${outDir}/jev-spec-grounding-result.json`, JSON.stringify({
++		total_cost_usd: costSource === 'provider-reported' ? totalCostUsd : null,
++		known_cost_usd: totalCostUsd,
++		cost_source: costSource
++	}));
+ 	chownAsAgent(`${outDir}/jev-spec-grounding-result.json`);
+ 	atomicWrite(`${outDir}/spec-candidates.md`, renderMarkdown(results));
+ 	chownAsAgent(`${outDir}/spec-candidates.md`);
+@@ -313,7 +317,8 @@ async function scoreAndWrite(deps: Deps, outDir: string, run: Run, onRepoScored:
+ 		summary: {
+ 			ok: true,
+ 			batches: totalBatches,
+-			costUsd: totalCostUsd,
++			costUsd: costSource === 'provider-reported' ? totalCostUsd : null,
++			knownCostUsd: totalCostUsd,
+ 			costSource,
+ 			ms: Math.max(0, deps.now() - (deadlineAt - deps.deadlineMs)),
+ 			deadlineHit
+@@ -327,7 +332,7 @@ async function scoreAndWrite(deps: Deps, outDir: string, run: Run, onRepoScored:
+  * so spec.sh's `spec_candidates_section` finds no file and the pass-1 prompt
+  * stays byte-identical to today. Never throws.
+  *
+- * Returns the cost actually spent so the caller can persist it onto the run
++ * Returns the known billed subtotal so the caller can persist it onto the run
+  * row directly (H1) — this must happen even when the deadline race abandons
+  * the write, and even when a requeue reuses the same outDir (in which case
+  * spec-candidates.json already existing means this call spends nothing at all).
+@@ -355,5 +360,8 @@ export async function writeSpecCandidates(outDir: string, run: Run, overrides: P
+ 	} finally {
+ 		if (timer) clearTimeout(timer);
+ 	}
++	// TODO(handoff): The run DB/caller accepts only a numeric known subtotal; preserve
++	// unknown exposure in run accounting before enforcing total-spend bounds (Slice 8).
++	// See proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
+ 	return { costUsd: totalCostUsd };
+ }
+diff --git a/scripts/jev-shadow-report.mjs b/scripts/jev-shadow-report.mjs
+index ea580be..5e5833d 100644
+--- a/scripts/jev-shadow-report.mjs
++++ b/scripts/jev-shadow-report.mjs
+@@ -10,6 +10,7 @@
+ //   path defaults to /data/jev-shadow.jsonl, falling back to
+ //   /opt/factory/data/jev-shadow.jsonl if the first does not exist.
+ 
++import { isDeepStrictEqual } from 'node:util';
+ import { createReadStream, existsSync, readdirSync } from 'node:fs';
+ import { createInterface } from 'node:readline';
+ import path from 'node:path';
+@@ -37,7 +38,7 @@ async function readRunsDirShadowLogs(runsDir, opts) {
+ 		if (!entry.isDirectory()) continue;
+ 		const logPath = path.join(runsDir, entry.name, 'jev-shadow.jsonl');
+ 		if (!existsSync(logPath)) continue;
+-		const found = await readShadowLog(logPath, opts);
++		const found = await readShadowLog(logPath, { ...opts, logSource: 'local' });
+ 		entries = entries.concat(found.entries);
+ 		malformed += found.malformed;
+ 	}
+@@ -59,9 +60,9 @@ export function normalizeJev(jev) {
+ 	if (typeof jev.ok === 'boolean') {
+ 		return {
+ 			ok: jev.ok,
+-			reason: jev.ok ? null : (typeof jev.reason === 'string' ? jev.reason : 'unknown'),
++			reason: jev.ok ? null : typeof jev.reason === 'string' ? jev.reason : 'unknown',
+ 			ms: typeof jev.ms === 'number' ? jev.ms : null,
+-			costUsd: jev.ok ? (typeof jev.costUsd === 'number' ? jev.costUsd : 0) : null,
++			costUsd: jev.costSource === 'provider-reported' && Number.isFinite(jev.costUsd) && jev.costUsd >= 0 ? jev.costUsd : null,
+ 			answers: jev.ok && typeof jev.answers === 'object' ? jev.answers : null
+ 		};
+ 	}
+@@ -70,7 +71,10 @@ export function normalizeJev(jev) {
+ 			ok: true,
+ 			reason: null,
+ 			ms: typeof jev.ms === 'number' ? jev.ms : null,
+-			costUsd: typeof jev.total_cost_usd === 'number' ? jev.total_cost_usd : 0,
++			costUsd:
++				jev.cost_source === 'provider-reported' && Number.isFinite(jev.total_cost_usd) && jev.total_cost_usd >= 0
++					? jev.total_cost_usd
++					: null,
+ 			answers: jev.answers
+ 		};
+ 	}
+@@ -78,7 +82,7 @@ export function normalizeJev(jev) {
+ 		ok: false,
+ 		reason: typeof jev.error === 'string' ? jev.error : 'unknown',
+ 		ms: typeof jev.ms === 'number' ? jev.ms : null,
+-		costUsd: null,
++		costUsd: jev.cost_source === 'provider-reported' && Number.isFinite(jev.total_cost_usd) && jev.total_cost_usd >= 0 ? jev.total_cost_usd : null,
+ 		answers: null
+ 	};
+ }
+@@ -87,7 +91,7 @@ export function normalizeJev(jev) {
+  * is counted, never thrown. LOW: streamed line-by-line (this log can grow
+  * without bound on a long-lived box) instead of reading the whole file into
+  * memory at once. */
+-export async function readShadowLog(path, { since } = {}) {
++export async function readShadowLog(path, { since, logSource } = {}) {
+ 	const entries = [];
+ 	let malformed = 0;
+ 	const sinceMs = since ? Date.parse(since) : null;
+@@ -110,7 +114,7 @@ export async function readShadowLog(path, { since } = {}) {
+ 			const ts = Date.parse(parsed.ts);
+ 			if (Number.isNaN(ts) || ts < sinceMs) continue;
+ 		}
+-		entries.push(parsed);
++		entries.push(logSource ? { ...parsed, logSource } : parsed);
+ 	}
+ 	return { entries, malformed };
+ }
+@@ -155,37 +159,44 @@ export function spearman(pairs) {
+ 	const rx = rankOf(pairs.map((p) => p[0]));
+ 	const ry = rankOf(pairs.map((p) => p[1]));
+ 	const m = (n + 1) / 2;
+-	let num = 0, denx = 0, deny = 0;
++	let num = 0,
++		denx = 0,
++		deny = 0;
+ 	for (let i = 0; i < n; i++) {
+-		const dx = rx[i] - m, dy = ry[i] - m;
+-		num += dx * dy; denx += dx * dx; deny += dy * dy;
++		const dx = rx[i] - m,
++			dy = ry[i] - m;
++		num += dx * dy;
++		denx += dx * dx;
++		deny += dy * dy;
+ 	}
+ 	if (denx === 0 || deny === 0) return null;
+ 	return num / Math.sqrt(denx * deny);
+ }
+ 
+-// MEDIUM-2: entries carry an `origin` ('container' | 'runner') since PR-2's
+-// jev-proxy.ts started tagging them; anything from before that (or the local
+-// bash copy, which never sets it) is treated as 'runner' — every pre-PR-2
+-// call site was runner/host-authored.
++// Preserve explicit origin; historical omissions carry no origin evidence.
+ function originOf(e) {
+-	return e.origin === 'container' ? 'container' : 'runner';
++	return ['runner', 'container', 'proxy', 'host', 'direct-container'].includes(e.origin) ? e.origin : 'unknown';
+ }
+ 
+ function genericStats(entries) {
+ 	const normalized = entries.map((e) => normalizeJev(e.jev));
+ 	const ok = normalized.filter((n) => n.ok);
+ 	const failed = normalized.filter((n) => !n.ok);
+-	const byOrigin = { runner: 0, container: 0 };
+-	for (const e of entries) byOrigin[originOf(e)]++;
++	const byOrigin = {};
++	for (const e of entries) byOrigin[originOf(e)] = (byOrigin[originOf(e)] ?? 0) + 1;
+ 	return {
+ 		n: entries.length,
+ 		byOrigin,
+ 		okRate: entries.length ? ok.length / entries.length : null,
+ 		errorReasons: histogram(failed.map((n) => n.reason ?? 'unknown')),
+ 		meanMs: mean(normalized.map((n) => n.ms).filter((v) => typeof v === 'number')),
+-		p95Ms: percentile(normalized.map((n) => n.ms).filter((v) => typeof v === 'number'), 0.95),
+-		totalCostUsd: ok.reduce((sum, n) => sum + (n.costUsd ?? 0), 0)
++		p95Ms: percentile(
++			normalized.map((n) => n.ms).filter((v) => typeof v === 'number'),
++			0.95
++		),
++		knownBills: normalized.filter((n) => n.costUsd !== null).length,
++		unknownBills: normalized.filter((n) => n.costUsd === null).length,
++		totalCostUsd: normalized.some((n) => n.costUsd !== null) ? normalized.reduce((sum, n) => sum + (n.costUsd ?? 0), 0) : null
+ 	};
+ }
+ 
+@@ -195,7 +206,8 @@ function retryPolicyStats(entries) {
+ 	// "__proto__" (historical/malformed data, not just this PR's own writes).
+ 	const confusion = Object.create(null);
+ 	const probabilities = [];
+-	let upsideEligible = 0, upsideHit = 0;
++	let upsideEligible = 0,
++		upsideHit = 0;
+ 	for (const e of entries) {
+ 		const jev = normalizeJev(e.jev);
+ 		const todayClass = e.today?.failureClass ?? 'unknown';
+@@ -256,11 +268,18 @@ function rankStats(entries) {
+ 			const jevScore = jev.answers?.[axis]?.score;
+ 			const todayScore = e.today?.[axis];
+ 			if (typeof jevScore === 'number' && typeof todayScore === 'number') {
+-				diffs.push(Math.abs(jevScore - todayScore));
++				if (e.scoreScale?.verified === true && e.scoreScale?.revision && e.scoreScale?.baseline === e.scoreScale?.jev)
++					diffs.push(Math.abs(jevScore - todayScore));
+ 				pairs.push([jevScore, todayScore]);
+ 			}
+ 		}
+-		perAxis[axis] = { meanAbsDiff: mean(diffs), n: diffs.length, spearman: spearman(pairs) };
++		perAxis[axis] = {
++			meanAbsDiff: mean(diffs),
++			n: pairs.length,
++			compatibleScalePairs: diffs.length,
++			spearman: spearman(pairs),
++			rawPairs: pairs
++		};
+ 	}
+ 	return perAxis;
+ }
+@@ -298,20 +317,143 @@ const SITE_STATS = {
+ 	mergescan: mergescanStats
+ };
+ 
+-export function buildReport(entries) {
+-	// LOW: `site` traces back to log-file content (a container's own request
+-	// body, pre-MEDIUM-2 history, or hand-edited data) — a plain object here
+-	// is a prototype-pollution trap if it is ever "__proto__". A Map for the
+-	// accumulator and a null-prototype object for the result sidestep it.
+-	const bySite = new Map();
++// No timestamp/text heuristics. Incomplete historical identity remains raw evidence.
++function stableIdentity(e) {
++	return (
++		e.version === 2 &&
++		typeof e.runId === 'string' &&
++		['decisionId', 'attemptId', 'requestedModel', 'inputHash', 'questionHash', 'questionRevision', 'schemaRevision', 'gateRevision'].every(
++			(k) => typeof e[k] === 'string' && e[k].length > 0
++		) &&
++		(typeof e.resolvedModel === 'string' || e.resolvedModel === null) &&
++		originOf(e) !== 'unknown'
++	);
++}
++const BINDINGS = [
++	'decisionId',
++	'site',
++	'origin',
++	'requestedModel',
++	'resolvedModel',
++	'inputHash',
++	'questionHash',
++	'questionRevision',
++	'schemaRevision',
++	'gateRevision'
++];
++function providerFacts(e) {
++	const n = normalizeJev(e.jev);
++	return {
++		...n,
++		usage: e.jev?.usage
++			? {
++					inputTokens: e.jev.usage.inputTokens ?? e.jev.usage.input_tokens,
++					outputTokens: e.jev.usage.outputTokens ?? e.jev.usage.output_tokens
++				}
++			: null,
++		model: e.jev?.model ?? null,
++		costStatus: e.jev?.costSource ?? e.jev?.cost_source ?? 'unknown'
++	};
++}
++function reconcile(entries) {
++	const groups = new Map(),
++		attempts = [],
++		conflicts = new Set(),
++		unjoined = new Set();
+ 	for (const e of entries) {
+-		if (!bySite.has(e.site)) bySite.set(e.site, []);
+-		bySite.get(e.site).push(e);
++		if (!stableIdentity(e)) {
++			unjoined.add(e);
++			continue;
++		}
++		const key = JSON.stringify([e.version, e.runId, e.attemptId]);
++		if (!groups.has(key)) groups.set(key, []);
++		groups.get(key).push(e);
++	}
++	for (const rows of groups.values()) {
++		const authority = rows.filter((e) => e.recordSource === 'authoritative' && !(e.logSource === 'local' && e.origin === 'proxy'));
++		if (!authority.length) {
++			rows.forEach((e) => unjoined.add(e));
++			continue;
++		}
++		const primary = authority[0];
++		const baselines = rows.filter((e) => e.today !== null && e.today !== undefined);
++		const labels = rows.filter((e) => e.independentLabel !== undefined && e.independentLabel !== null);
++		const conflict =
++			rows.some(
++				(e) => BINDINGS.some((k) => !isDeepStrictEqual(e[k], primary[k])) || !isDeepStrictEqual(providerFacts(e), providerFacts(primary))
++			) ||
++			baselines.some((e) => !isDeepStrictEqual(e.today, baselines[0].today) || !isDeepStrictEqual(e.scoreScale, baselines[0].scoreScale)) ||
++			labels.some((e) => !isDeepStrictEqual(e.independentLabel, labels[0].independentLabel));
++		if (conflict) {
++			rows.forEach((e) => conflicts.add(e));
++			continue;
++		}
++		attempts.push({
++			...primary,
++			today: baselines[0]?.today ?? null,
++			independentLabel: labels[0]?.independentLabel,
++			scoreScale: baselines[0]?.scoreScale ?? primary.scoreScale
++		});
+ 	}
++	return { attempts, conflicts, unjoined };
++}
++function cohortStats(site, rows) {
++	const generic = genericStats(rows),
++		paired = rows.filter((e) => e.today !== null && e.today !== undefined);
++	return {
++		...generic,
++		pairedComparisons: paired.filter((e) => normalizeJev(e.jev).ok).length,
++		independentLabels: rows.filter((e) => e.independentLabel !== undefined && e.independentLabel !== null).length,
++		failures: rows.filter((e) => !normalizeJev(e.jev).ok).length,
++		...(Object.hasOwn(SITE_STATS, site) ? SITE_STATS[site](paired) : {})
++	};
++}
++export function buildReport(entries) {
++	const { attempts, conflicts, unjoined } = reconcile(entries);
+ 	const sites = Object.create(null);
+-	for (const [site, siteEntries] of bySite) {
+-		const extra = SITE_STATS[site] ? SITE_STATS[site](siteEntries) : {};
+-		sites[site] = { ...genericStats(siteEntries), ...extra };
++	for (const site of new Set(entries.map((e) => e.site))) {
++		const raw = entries.filter((e) => e.site === site),
++			rows = attempts.filter((e) => e.site === site),
++			cohorts = new Map();
++		for (const e of rows) {
++			const key = JSON.stringify([
++				e.resolvedModel,
++				e.questionHash,
++				e.questionRevision,
++				e.schemaRevision,
++				e.gateRevision,
++				e.scoreScale ?? null
++			]);
++			if (!cohorts.has(key)) cohorts.set(key, []);
++			cohorts.get(key).push(e);
++		}
++		const groups = [...cohorts.values()].map((group) => ({
++			resolvedModel: group[0].resolvedModel,
++			questionHash: group[0].questionHash,
++			scoreScale: group[0].scoreScale ?? null,
++			questionRevision: group[0].questionRevision,
++			schemaRevision: group[0].schemaRevision,
++			gateRevision: group[0].gateRevision,
++			...cohortStats(site, group)
++		}));
++		// Site totals count attempts and bills; incompatible cohorts never share calibration metrics.
++		const metrics = groups.length === 1 ? cohortStats(site, rows) : cohortStats(site, []);
++		sites[site] = {
++			...metrics,
++			...genericStats(rows),
++			n: raw.length,
++			byOrigin: genericStats(raw).byOrigin,
++			rawRecords: raw.length,
++			uniqueAttempts: rows.length,
++			logicalDecisions: new Set(rows.map((e) => JSON.stringify([e.runId, e.decisionId]))).size,
++			pairedComparisons: rows.filter((e) => normalizeJev(e.jev).ok && e.today !== null && e.today !== undefined).length,
++			independentLabels: rows.filter((e) => e.independentLabel !== undefined && e.independentLabel !== null).length,
++			failures: rows.filter((e) => !normalizeJev(e.jev).ok).length,
++			conflictingRecords: raw.filter((e) => conflicts.has(e)).length,
++			unjoinedRecords: raw.filter((e) => unjoined.has(e)).length,
++			unresolvedRecords: raw.filter((e) => conflicts.has(e) || unjoined.has(e)).length,
++			cohorts: groups
++		};
+ 	}
+ 	return sites;
+ }
+@@ -326,25 +468,31 @@ function fmtNum(v, digits = 0) {
+ 
+ function renderMarkdown(report) {
+ 	const lines = [];
+-	// MEDIUM-2: origin (runner vs container) breaks out per site — the count
+-	// alone is the tell for "a container is writing to a site that used to be
+-	// runner-only" without needing --json.
+-	lines.push('| site | n | runner | container | ok% | mean ms | p95 ms | cost usd | top error |');
+-	lines.push('|---|---|---|---|---|---|---|---|---|');
++	lines.push(
++		'Counts are reconciled attempts; costs include known bills only. Baseline agreement is not correctness. Legacy and conflicting records are excluded.'
++	);
++	lines.push('| site | raw | attempts | logical | paired | unjoined | conflicts | known bills | unknown bills | known cost usd |');
++	lines.push('|---|---|---|---|---|---|---|---|---|---|');
+ 	for (const [site, s] of Object.entries(report).sort()) {
+-		const topError = Object.entries(s.errorReasons ?? {}).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '—';
+-		lines.push(`| ${site} | ${s.n} | ${s.byOrigin?.runner ?? 0} | ${s.byOrigin?.container ?? 0} | ${fmtPct(s.okRate)} | ${fmtNum(s.meanMs)} | ${fmtNum(s.p95Ms)} | ${fmtNum(s.totalCostUsd, 4)} | ${topError} |`);
++		lines.push(
++			`| ${site} | ${s.rawRecords} | ${s.uniqueAttempts} | ${s.logicalDecisions} | ${s.pairedComparisons} | ${s.unjoinedRecords} | ${s.conflictingRecords} | ${s.knownBills} | ${s.unknownBills} | ${fmtNum(s.totalCostUsd, 4)} |`
++		);
+ 	}
+ 	lines.push('');
+ 	for (const [site, s] of Object.entries(report).sort()) {
++		for (const cohort of s.cohorts) lines.push(`Cohort ${JSON.stringify(cohort)}`);
+ 		if (site === 'retry-policy') {
+ 			lines.push(`### retry-policy`);
+-			lines.push(`mean choice probability: ${fmtNum(s.meanChoiceProbability, 3)}; upside rate (today unknown/no-progress -> jev retryable p>=0.85): ${fmtPct(s.upsideRate)} (${s.upsideHit}/${s.upsideEligible})`);
++			lines.push(
++				`mean choice probability: ${fmtNum(s.meanChoiceProbability, 3)}; upside rate (today unknown/no-progress -> jev retryable p>=0.85): ${fmtPct(s.upsideRate)} (${s.upsideHit}/${s.upsideEligible})`
++			);
+ 			lines.push(`confusion matrix (today.failureClass x jev.choice): ${JSON.stringify(s.confusionMatrix)}`);
+ 			lines.push('');
+ 		} else if (site === 'unstick') {
+ 			lines.push(`### unstick`);
+-			lines.push(`signature distribution: ${JSON.stringify(s.signatureCounts)}; mean probability: ${fmtNum(s.meanSignatureProbability, 3)}`);
++			lines.push(
++				`signature distribution: ${JSON.stringify(s.signatureCounts)}; mean probability: ${fmtNum(s.meanSignatureProbability, 3)}`
++			);
+ 			lines.push(`human_needed decile histogram (0.0-1.0): ${JSON.stringify(s.humanNeededBuckets)}`);
+ 			lines.push('');
+ 		} else if (site === 'rank') {
+@@ -377,8 +525,14 @@ async function main() {
+ 	const runsDirIdx = args.indexOf('--runs-dir');
+ 	const runsDirArg = runsDirIdx !== -1 ? args[runsDirIdx + 1] : undefined;
+ 	const skipIdx = new Set();
+-	if (sinceIdx !== -1) { skipIdx.add(sinceIdx); skipIdx.add(sinceIdx + 1); }
+-	if (runsDirIdx !== -1) { skipIdx.add(runsDirIdx); skipIdx.add(runsDirIdx + 1); }
++	if (sinceIdx !== -1) {
++		skipIdx.add(sinceIdx);
++		skipIdx.add(sinceIdx + 1);
++	}
++	if (runsDirIdx !== -1) {
++		skipIdx.add(runsDirIdx);
++		skipIdx.add(runsDirIdx + 1);
++	}
+ 	const positional = args.filter((a, i) => a !== '--json' && !skipIdx.has(i) && !a.startsWith('--'));
+ 	const logPath = resolvePath(positional[0]);
+ 
+@@ -387,7 +541,7 @@ async function main() {
+ 		process.exitCode = 1;
+ 		return;
+ 	}
+-	const central = await readShadowLog(logPath, { since });
++	const central = await readShadowLog(logPath, { since, logSource: 'central' });
+ 	// LOW: also fold in every run's own local shadow-log copy (agent/lib/jev.sh's
+ 	// direct-transport calls never reach the central proxy log) whenever a runs
+ 	// dir is available — explicit --runs-dir, else the box's default if present.
+diff --git a/scripts/jev-shadow-report.test.mjs b/scripts/jev-shadow-report.test.mjs
+index f856bfc..25c4ce5 100644
+--- a/scripts/jev-shadow-report.test.mjs
++++ b/scripts/jev-shadow-report.test.mjs
+@@ -18,57 +18,166 @@ const tmp = mkdtempSync(path.join(tmpdir(), 'jev-shadow-report-'));
+ const FIXTURE_LINES = [
+ 	// retry-policy: jev agrees with today, high-confidence retryable upside
+ 	JSON.stringify({
+-		ts: '2026-09-29T00:00:00Z', site: 'retry-policy', runId: 'r1',
++		ts: '2026-09-29T00:00:00Z',
++		site: 'retry-policy',
++		runId: 'r1',
+ 		today: { action: 'stop', reasonCode: 'non-retryable', failureClass: 'unknown' },
+-		jev: { ok: true, model: 'm', answers: { failure_class: { type: 'choice', choice: 'provider-outage', probabilities: { 'provider-outage': 0.9 } }, human_needed: { type: 'noul', noul: 0.1 } }, usage: { inputTokens: 10, outputTokens: 2 }, costUsd: 0.001, costSource: 'provider-reported', ms: 120 }
++		jev: {
++			ok: true,
++			model: 'm',
++			answers: {
++				failure_class: { type: 'choice', choice: 'provider-outage', probabilities: { 'provider-outage': 0.9 } },
++				human_needed: { type: 'noul', noul: 0.1 }
++			},
++			usage: { inputTokens: 10, outputTokens: 2 },
++			costUsd: 0.001,
++			costSource: 'provider-reported',
++			ms: 120
++		}
+ 	}),
+ 	// retry-policy: jev picks a different (non-retryable) class — no upside hit
+ 	JSON.stringify({
+-		ts: '2026-09-29T00:01:00Z', site: 'retry-policy', runId: 'r2',
++		ts: '2026-09-29T00:01:00Z',
++		site: 'retry-policy',
++		runId: 'r2',
+ 		today: { action: 'stop', reasonCode: 'non-retryable', failureClass: 'no-progress' },
+-		jev: { ok: true, model: 'm', answers: { failure_class: { type: 'choice', choice: 'policy-refusal', probabilities: { 'policy-refusal': 0.6 } }, human_needed: { type: 'noul', noul: 0.7 } }, usage: { inputTokens: 10, outputTokens: 2 }, costUsd: 0.001, costSource: 'provider-reported', ms: 200 }
++		jev: {
++			ok: true,
++			model: 'm',
++			answers: {
++				failure_class: { type: 'choice', choice: 'policy-refusal', probabilities: { 'policy-refusal': 0.6 } },
++				human_needed: { type: 'noul', noul: 0.7 }
++			},
++			usage: { inputTokens: 10, outputTokens: 2 },
++			costUsd: 0.001,
++			costSource: 'provider-reported',
++			ms: 200
++		}
+ 	}),
+ 	// retry-policy: upstream failure (ok:false)
+ 	JSON.stringify({
+-		ts: '2026-09-29T00:02:00Z', site: 'retry-policy', runId: 'r3',
++		ts: '2026-09-29T00:02:00Z',
++		site: 'retry-policy',
++		runId: 'r3',
+ 		today: { action: 'stop', reasonCode: 'non-retryable', failureClass: 'unknown' },
+ 		jev: { ok: false, reason: 'timeout', ms: 20000 }
+ 	}),
+ 	// unstick: bash-shape success (signature + human_needed)
+ 	JSON.stringify({
+-		ts: '2026-09-29T00:03:00Z', site: 'unstick', runId: 'u1',
++		ts: '2026-09-29T00:03:00Z',
++		site: 'unstick',
++		runId: 'u1',
+ 		today: { signature: 'unmatched' },
+-		jev: { tag: 'unstick-u1', model: 'm', answers: { signature: { type: 'choice', choice: 'transient', probabilities: { transient: 0.92 } }, human_needed: { type: 'noul', noul: 0.2 } }, usage: { input_tokens: 10, output_tokens: 2 }, total_cost_usd: 0.001, cost_source: 'provider-reported', ms: 90 }
++		jev: {
++			tag: 'unstick-u1',
++			model: 'm',
++			answers: {
++				signature: { type: 'choice', choice: 'transient', probabilities: { transient: 0.92 } },
++				human_needed: { type: 'noul', noul: 0.2 }
++			},
++			usage: { input_tokens: 10, output_tokens: 2 },
++			total_cost_usd: 0.001,
++			cost_source: 'provider-reported',
++			ms: 90
++		}
+ 	}),
+ 	// unstick: bash-shape "never called" placeholder
+-	JSON.stringify({ ts: '2026-09-29T00:04:00Z', site: 'unstick', runId: 'u2', today: { signature: 'unmatched' }, jev: { error: 'unavailable' } }),
++	JSON.stringify({
++		ts: '2026-09-29T00:04:00Z',
++		site: 'unstick',
++		runId: 'u2',
++		today: { signature: 'unmatched' },
++		jev: { error: 'unavailable' }
++	}),
+ 	// rank: two candidates for a meaningful (n=2) spearman + mean|diff|
+ 	JSON.stringify({
+-		ts: '2026-09-29T00:05:00Z', site: 'rank',
++		ts: '2026-09-29T00:05:00Z',
++		site: 'rank',
+ 		today: { criticality: 3, importance: 4, impact: 5 },
+-		jev: { tag: 'rank-b1-1', model: 'm', answers: { criticality: { type: 'score', score: 4 }, importance: { type: 'score', score: 4 }, impact: { type: 'score', score: 6 } }, usage: { input_tokens: 10, output_tokens: 2 }, total_cost_usd: 0.001, cost_source: 'provider-reported', ms: 300 }
++		jev: {
++			tag: 'rank-b1-1',
++			model: 'm',
++			answers: { criticality: { type: 'score', score: 4 }, importance: { type: 'score', score: 4 }, impact: { type: 'score', score: 6 } },
++			usage: { input_tokens: 10, output_tokens: 2 },
++			total_cost_usd: 0.001,
++			cost_source: 'provider-reported',
++			ms: 300
++		}
+ 	}),
+ 	JSON.stringify({
+-		ts: '2026-09-29T00:06:00Z', site: 'rank',
++		ts: '2026-09-29T00:06:00Z',
++		site: 'rank',
+ 		today: { criticality: 7, importance: 8, impact: 2 },
+-		jev: { tag: 'rank-b1-2', model: 'm', answers: { criticality: { type: 'score', score: 8 }, importance: { type: 'score', score: 7 }, impact: { type: 'score', score: 3 } }, usage: { input_tokens: 10, output_tokens: 2 }, total_cost_usd: 0.001, cost_source: 'provider-reported', ms: 310 }
++		jev: {
++			tag: 'rank-b1-2',
++			model: 'm',
++			answers: { criticality: { type: 'score', score: 8 }, importance: { type: 'score', score: 7 }, impact: { type: 'score', score: 3 } },
++			usage: { input_tokens: 10, output_tokens: 2 },
++			total_cost_usd: 0.001,
++			cost_source: 'provider-reported',
++			ms: 310
++		}
+ 	}),
+ 	// mergescan: future entry shape
+ 	JSON.stringify({
+-		ts: '2026-09-29T00:07:00Z', site: 'mergescan',
++		ts: '2026-09-29T00:07:00Z',
++		site: 'mergescan',
+ 		today: { haikuFindings: 2, categories: ['security'] },
+-		jev: { ok: true, model: 'm', answers: { would_skip: { type: 'noul', noul: 0.1 } }, costUsd: 0.001, costSource: 'provider-reported', ms: 150 }
++		jev: {
++			ok: true,
++			model: 'm',
++			answers: { would_skip: { type: 'noul', noul: 0.1 } },
++			costUsd: 0.001,
++			costSource: 'provider-reported',
++			ms: 150
++		}
+ 	}),
+ 	// a generic/unknown site falls back to n/ok/ms/cost only
+-	JSON.stringify({ ts: '2026-09-29T00:08:00Z', site: 'other-site', today: {}, jev: { ok: true, model: 'm', answers: {}, costUsd: 0.002, costSource: 'unknown', ms: 50 } }),
++	JSON.stringify({
++		ts: '2026-09-29T00:08:00Z',
++		site: 'other-site',
++		today: {},
++		jev: { ok: true, model: 'm', answers: {}, costUsd: 0.002, costSource: 'unknown', ms: 50 }
++	}),
+ 	// MEDIUM-2: origin split — one runner-authored (no origin field, the
+ 	// pre-PR-2/bash-local shape), one container-authored (jev-proxy.ts's tag)
+-	JSON.stringify({ ts: '2026-09-29T00:09:00Z', site: 'origin-check', today: {}, jev: { ok: true, model: 'm', answers: {}, costUsd: 0, costSource: 'unknown', ms: 10 } }),
+-	JSON.stringify({ ts: '2026-09-29T00:09:01Z', site: 'origin-check', origin: 'container', today: {}, jev: { ok: true, model: 'm', answers: {}, costUsd: 0, costSource: 'unknown', ms: 10 } }),
++	JSON.stringify({
++		ts: '2026-09-29T00:09:00Z',
++		site: 'origin-check',
++		today: {},
++		jev: { ok: true, model: 'm', answers: {}, costUsd: 0, costSource: 'unknown', ms: 10 }
++	}),
++	JSON.stringify({
++		ts: '2026-09-29T00:09:01Z',
++		site: 'origin-check',
++		origin: 'container',
++		today: {},
++		jev: { ok: true, model: 'm', answers: {}, costUsd: 0, costSource: 'unknown', ms: 10 }
++	}),
+ 	// malformed line — must be counted, never thrown
+-	'{not json',
++	'{not json'
+ ];
+ 
++function v2Fixture(entries) {
++	return entries.map((e, i) => ({
++		...e,
++		version: 2,
++		runId: e.runId ?? '',
++		decisionId: `fixture-d-${i}`,
++		attemptId: `fixture-a-${i}`,
++		origin: e.origin ?? 'runner',
++		recordSource: 'authoritative',
++		requestedModel: 'alias',
++		resolvedModel: 'm',
++		inputHash: `hash-${i}`,
++		questionHash: 'question-hash',
++		questionRevision: 'fixture-rubric',
++		schemaRevision: '2',
++		gateRevision: 'shadow',
++		scoreScale: { verified: true, revision: 'fixture-identity-map', baseline: '0-10', jev: '0-10' }
++	}));
++}
++
+ const fixturePath = path.join(tmp, 'jev-shadow.jsonl');
+ writeFileSync(fixturePath, FIXTURE_LINES.join('\n') + '\n');
+ 
+@@ -79,8 +188,21 @@ test('readShadowLog counts malformed lines and skips them', async () => {
+ });
+ 
+ test('normalizeJev handles both the TS (camelCase) and bash (snake_case) shapes, plus the never-called placeholder', () => {
+-	assert.deepEqual(normalizeJev({ ok: false, reason: 'timeout', ms: 5 }), { ok: false, reason: 'timeout', ms: 5, costUsd: null, answers: null });
+-	const bashOk = normalizeJev({ tag: 't', model: 'm', answers: { q: { type: 'noul', noul: 1 } }, total_cost_usd: 0.5, ms: 9 });
++	assert.deepEqual(normalizeJev({ ok: false, reason: 'timeout', ms: 5 }), {
++		ok: false,
++		reason: 'timeout',
++		ms: 5,
++		costUsd: null,
++		answers: null
++	});
++	const bashOk = normalizeJev({
++		tag: 't',
++		model: 'm',
++		answers: { q: { type: 'noul', noul: 1 } },
++		total_cost_usd: 0.5,
++		cost_source: 'provider-reported',
++		ms: 9
++	});
+ 	assert.equal(bashOk.ok, true);
+ 	assert.equal(bashOk.costUsd, 0.5);
+ 	const bashUnavailable = normalizeJev({ error: 'unavailable' });
+@@ -89,14 +211,28 @@ test('normalizeJev handles both the TS (camelCase) and bash (snake_case) shapes,
+ });
+ 
+ test('spearman: perfect agreement is 1, perfect disagreement is -1, one pair is null', () => {
+-	assert.equal(spearman([[1, 1], [2, 2], [3, 3]]), 1);
+-	assert.equal(spearman([[1, 3], [2, 2], [3, 1]]), -1);
++	assert.equal(
++		spearman([
++			[1, 1],
++			[2, 2],
++			[3, 3]
++		]),
++		1
++	);
++	assert.equal(
++		spearman([
++			[1, 3],
++			[2, 2],
++			[3, 1]
++		]),
++		-1
++	);
+ 	assert.equal(spearman([[1, 1]]), null);
+ });
+ 
+ test('buildReport: retry-policy computes the confusion matrix and the S2 upside rate', async () => {
+ 	const { entries } = await readShadowLog(fixturePath);
+-	const report = buildReport(entries);
++	const report = buildReport(v2Fixture(entries));
+ 	const rp = report['retry-policy'];
+ 	assert.equal(rp.n, 3);
+ 	assert.equal(rp.confusionMatrix.unknown['provider-outage'], 1);
+@@ -111,7 +247,7 @@ test('buildReport: retry-policy computes the confusion matrix and the S2 upside
+ 
+ test('buildReport: unstick tallies signature distribution and the never-called placeholder does not count as ok', async () => {
+ 	const { entries } = await readShadowLog(fixturePath);
+-	const report = buildReport(entries);
++	const report = buildReport(v2Fixture(entries));
+ 	const us = report.unstick;
+ 	assert.equal(us.n, 2);
+ 	assert.equal(us.signatureCounts.transient, 1);
+@@ -120,7 +256,7 @@ test('buildReport: unstick tallies signature distribution and the never-called p
+ 
+ test('buildReport: rank computes per-axis mean absolute difference and a well-defined spearman', async () => {
+ 	const { entries } = await readShadowLog(fixturePath);
+-	const report = buildReport(entries);
++	const report = buildReport(v2Fixture(entries));
+ 	const rank = report.rank;
+ 	assert.equal(rank.criticality.n, 2);
+ 	assert.equal(rank.criticality.meanAbsDiff, 1);
+@@ -130,7 +266,7 @@ test('buildReport: rank computes per-axis mean absolute difference and a well-de
+ 
+ test('buildReport: mergescan and a generic/unknown site both degrade gracefully', async () => {
+ 	const { entries } = await readShadowLog(fixturePath);
+-	const report = buildReport(entries);
++	const report = buildReport(v2Fixture(entries));
+ 	assert.equal(report.mergescan.n, 1);
+ 	assert.equal(report.mergescan.wouldSkipRate, 0);
+ 	assert.equal(report.mergescan.recall, 1);
+@@ -138,12 +274,12 @@ test('buildReport: mergescan and a generic/unknown site both degrade gracefully'
+ 	assert.equal(report['other-site'].okRate, 1);
+ });
+ 
+-test('MEDIUM-2: buildReport splits each site\'s n by origin (runner vs container)', async () => {
++test("MEDIUM-2: buildReport splits each site's n by origin (runner vs container)", async () => {
+ 	const { entries } = await readShadowLog(fixturePath);
+ 	const report = buildReport(entries);
+-	assert.deepEqual(report['origin-check'].byOrigin, { runner: 1, container: 1 });
+-	// every other fixture line omits `origin` entirely — all of it is 'runner'.
+-	assert.deepEqual(report['retry-policy'].byOrigin, { runner: 3, container: 0 });
++	assert.deepEqual(report['origin-check'].byOrigin, { unknown: 1, container: 1 });
++	// Absent historical origin stays unknown.
++	assert.deepEqual(report['retry-policy'].byOrigin, { unknown: 3 });
+ });
+ 
+ test('readShadowLog --since filters out entries strictly before the cutoff', async () => {
+@@ -152,13 +288,18 @@ test('readShadowLog --since filters out entries strictly before the cutoff', asy
+ 	assert.ok(entries.length < FIXTURE_LINES.length - 1);
+ });
+ 
+-test('LOW: --runs-dir folds in every run\'s own local jev-shadow.jsonl alongside the central log', () => {
++test("LOW: --runs-dir folds in every run's own local jev-shadow.jsonl alongside the central log", () => {
+ 	const runsDir = mkdtempSync(path.join(tmpdir(), 'jev-shadow-runs-'));
+ 	mkdirSync(path.join(runsDir, 'run-a'), { recursive: true });
+ 	mkdirSync(path.join(runsDir, 'run-b'), { recursive: true });
+ 	writeFileSync(
+ 		path.join(runsDir, 'run-a', 'jev-shadow.jsonl'),
+-		JSON.stringify({ ts: '2026-09-29T01:00:00Z', site: 'run-local', today: {}, jev: { ok: true, model: 'm', answers: {}, costUsd: 0, costSource: 'unknown', ms: 5 } }) + '\n'
++		JSON.stringify({
++			ts: '2026-09-29T01:00:00Z',
++			site: 'run-local',
++			today: {},
++			jev: { ok: true, model: 'm', answers: {}, costUsd: 0, costSource: 'unknown', ms: 5 }
++		}) + '\n'
+ 	);
+ 	// run-b has no jev-shadow.jsonl at all — must be skipped, not thrown on.
+ 	const out = execFileSync('node', [SCRIPT_PATH, fixturePath, '--runs-dir', runsDir, '--json'], { encoding: 'utf8' });
+@@ -167,3 +308,111 @@ test('LOW: --runs-dir folds in every run\'s own local jev-shadow.jsonl alongside
+ 	// the central fixture's own sites are still present alongside it.
+ 	assert.ok(report['retry-policy']);
+ });
++
++function identified(overrides = {}) {
++	return {
++		version: 2,
++		runId: 'r1',
++		decisionId: 'd1',
++		attemptId: 'a1',
++		site: 'rank',
++		origin: 'proxy',
++		recordSource: 'authoritative',
++		requestedModel: 'alias',
++		resolvedModel: 'model-1',
++		inputHash: 'hash',
++		questionHash: 'question-hash',
++		questionRevision: 'q1',
++		schemaRevision: '2',
++		gateRevision: 'shadow',
++		today: null,
++		jev: {
++			ok: true,
++			model: 'model-1',
++			answers: { criticality: { type: 'score', score: 7 } },
++			usage: { inputTokens: 1, outputTokens: 1 },
++			costUsd: 0.01,
++			costSource: 'provider-reported',
++			ms: 1
++		},
++		...overrides
++	};
++}
++test('v2 reconciliation counts one inference/bill/comparison, preserves cohorts and quarantines conflicts', () => {
++	const central = identified(),
++		local = identified({ recordSource: 'comparison', today: { criticality: 8 } });
++	const report = buildReport([central, local, local]);
++	assert.equal(report.rank.rawRecords, 3);
++	assert.equal(report.rank.uniqueAttempts, 1);
++	assert.equal(report.rank.logicalDecisions, 1);
++	assert.equal(report.rank.pairedComparisons, 1);
++	assert.equal(report.rank.totalCostUsd, 0.01);
++	assert.equal(report.rank.criticality.meanAbsDiff, null);
++	assert.equal(report.rank.cohorts.length, 1);
++	const bad = buildReport([central, identified({ recordSource: 'comparison', inputHash: 'wrong', today: { criticality: 8 } })]);
++	assert.equal(bad.rank.conflictingRecords, 2);
++	assert.equal(bad.rank.uniqueAttempts, 0);
++	assert.equal(bad.rank.totalCostUsd, null);
++});
++test('v2 unknown bills stay null, legacy stays raw unknown and model/rubric cohorts stay separate', () => {
++	const report = buildReport([
++		identified({ jev: { ok: true, model: 'model-1', answers: {}, costUsd: 0, costSource: 'unknown' } }),
++		identified({ attemptId: 'a2', decisionId: 'd2', resolvedModel: 'model-2', questionRevision: 'q2' }),
++		{ site: 'rank', jev: { ok: true, answers: {}, costUsd: 9 } }
++	]);
++	assert.equal(report.rank.unknownBills, 1);
++	assert.equal(report.rank.knownBills, 1);
++	assert.equal(report.rank.unjoinedRecords, 1);
++	assert.equal(report.rank.cohorts.length, 2);
++	assert.equal(report.rank.byOrigin.unknown, 1);
++	assert.equal(report.rank.cohorts.find((c) => c.resolvedModel === 'model-1').totalCostUsd, null);
++});
++
++test('v2 disagreements in bill, question content, baseline or cohort quarantine the entire attempt', () => {
++	const central = identified();
++	for (const delta of [
++		{ jev: { ...central.jev, costUsd: 99 } },
++		{ questionHash: 'changed' },
++		{ resolvedModel: 'changed' },
++		{ questionRevision: 'changed' },
++		{ site: 'other' },
++		{ decisionId: 'other' }
++	]) {
++		const report = buildReport([central, identified({ ...delta, recordSource: 'comparison', today: { criticality: 8 } })]);
++		assert.equal(report.rank.uniqueAttempts, 0);
++		assert.equal(report.rank.totalCostUsd, null);
++		assert.ok(report.rank.conflictingRecords > 0);
++	}
++	const baseline = identified({ recordSource: 'comparison', today: { criticality: 8 } });
++	const conflict = buildReport([central, baseline, { ...baseline, today: { criticality: 9 } }]);
++	assert.equal(conflict.rank.conflictingRecords, 3);
++});
++test('local proxy copies never establish authority and explicit retries remain separate bills', () => {
++	const local = identified({ recordSource: 'authoritative', logSource: 'local', today: { criticality: 8 } });
++	assert.equal(buildReport([local]).rank.uniqueAttempts, 0);
++	const report = buildReport([identified(), identified({ attemptId: 'retry' })]);
++	assert.equal(report.rank.uniqueAttempts, 2);
++	assert.equal(report.rank.logicalDecisions, 1);
++	assert.equal(report.rank.totalCostUsd, 0.02);
++});
++test('legacy matching text/timestamps never supplies identity or cost denominators', () => {
++	const row = {
++		site: 'rank',
++		ts: '2026-10-22T00:00:00Z',
++		today: { criticality: 7 },
++		jev: { ok: true, answers: { criticality: { score: 7 } }, costUsd: 0.01, costSource: 'provider-reported' }
++	};
++	const report = buildReport([row, { ...row }]).rank;
++	assert.equal(report.rawRecords, 2);
++	assert.equal(report.uniqueAttempts, 0);
++	assert.equal(report.pairedComparisons, 0);
++	assert.equal(report.totalCostUsd, null);
++	assert.equal(report.unjoinedRecords, 2);
++	assert.deepEqual(report.byOrigin, { unknown: 2 });
++});
++
++test('failed inference with an explicit provider receipt is one failed attempt and one known bill', () => {
++ const row=identified({jev:{ok:false,reason:'invalid_response',model:'model-1',usage:{inputTokens:7,outputTokens:3},costUsd:0.01,costSource:'provider-reported',ms:1}});
++ const report=buildReport([row]).rank;
++ assert.equal(report.failures,1);assert.equal(report.knownBills,1);assert.equal(report.unknownBills,0);assert.equal(report.totalCostUsd,0.01);assert.equal(report.pairedComparisons,0);
++});
