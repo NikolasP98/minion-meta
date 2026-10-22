@@ -1,0 +1,2015 @@
+<script lang="ts">
+  import { appLocale } from '$lib/utils/format';
+  import * as m from '$lib/paraglide/messages';
+  import AgentGreeting from '$lib/components/my-agent/AgentGreeting.svelte';
+  import FeedSection from '$lib/components/my-agent/FeedSection.svelte';
+  import FeedCard from '$lib/components/my-agent/FeedCard.svelte';
+  import EventCard from '$lib/components/my-agent/EventCard.svelte';
+  import EmailCard from '$lib/components/my-agent/EmailCard.svelte';
+  import EventModal from '$lib/components/my-agent/EventModal.svelte';
+  import EmailModal from '$lib/components/my-agent/EmailModal.svelte';
+  import ChatInput from '$lib/components/my-agent/ChatInput.svelte';
+  import ChatHistoryPopover from '$lib/components/my-agent/ChatHistoryPopover.svelte';
+  import CallControls from '$lib/components/my-agent/CallControls.svelte';
+  import NotesPanel from '$lib/components/my-agent/NotesPanel.svelte';
+  import OmnichatDock from '$lib/components/my-agent/OmnichatDock.svelte';
+  import ChatTurn from '$lib/components/my-agent/ChatTurn.svelte';
+  import { AiConversation, AiOrbFace, chatFaceState, voiceFaceState } from '$lib/components/ai';
+  import MessageActions, {
+    type MessageAction,
+  } from '$lib/components/my-agent/MessageActions.svelte';
+  import MarkdownMessage from '$lib/components/chat/MarkdownMessage.svelte';
+  import ThinkingShader from '$lib/components/assistant/ThinkingShader.svelte';
+  import type { ChatMessage } from '$lib/types/chat';
+  import {
+    activityVerb,
+    contentBlocks,
+    isToolResultOnly,
+    assistantHasContent,
+    foldToolTurns,
+    toolResultsById as computeToolResultsById,
+    type ToolResult,
+  } from '$lib/chat/blocks';
+  import { notesState, loadNotes } from '$lib/state/features/agent-notes.svelte';
+  import { conn } from '$lib/state/gateway';
+  import { agentChat } from '$lib/state/chat/chat.svelte';
+  import { assistant } from '$lib/state/features/assistant.svelte';
+  import {
+    sendAssistantTurn,
+    abortChat,
+    resetChat,
+    loadChatHistory,
+    stripVoiceTurnPrefix,
+    cleanInboundForDisplay,
+    parseUserContext,
+    type UserContextChip,
+  } from '$lib/services/gateway.svelte';
+  import { buildAssistantContext } from '$lib/state/features/assistant-context';
+  import { requestRouteDecision, gateManifests, routerMode } from '$lib/assistant/turn-router';
+  import { languageTag } from '$lib/paraglide/runtime';
+  import {
+    voiceCall,
+    mouth,
+    startCall,
+    endCall,
+    toggleMute,
+  } from '$lib/state/features/voice-call.svelte';
+  import { extractText, stripTtsTags } from '$lib/utils/text';
+  import {
+    normalizeTurnBranches,
+    projectTurnBranches,
+    type TurnBranch,
+  } from '$lib/chat/response-tree';
+  import {
+    getFeedToday,
+    type ObservationRow,
+    type CalendarItem,
+    type EmailItem,
+  } from '$lib/services/my-agent-rpc';
+  import { createConnectedFetch } from '$lib/state/async.svelte';
+  import { distinctProviders } from '$lib/components/my-agent/provider';
+  import { dragContextIcon, type DragContextKind } from '$lib/utils/drag-context';
+  import {
+    Check,
+    ChevronDown,
+    ChevronLeft,
+    ChevronRight,
+    MessageSquarePlus,
+    Copy,
+    CornerUpLeft,
+    Pencil,
+    RotateCcw,
+  } from 'lucide-svelte';
+  import { tick } from 'svelte';
+  import type { PageData } from './$types';
+  import { Button, iconSizes } from '$lib/components/ui';
+  import { PageShell } from '$lib/components/ui/foundations';
+
+  import { floatingLayer } from '$lib/components/ui/floating-layer.svelte';
+  const { data }: { data: PageData } = $props();
+
+  let observations = $state<ObservationRow[]>([]);
+  let calendarItems = $state<CalendarItem[]>([]);
+  let emailItems = $state<EmailItem[]>([]);
+  let loading = $state(false);
+  let errorMsg = $state<string | null>(null);
+  let lastFetchedAt = $state<number | null>(null);
+
+  // Shared "now" for the feed cards — one ticking value so every event/email card
+  // re-derives its relative time + proximity tier together (cheap, 30s cadence).
+  let nowMs = $state(Date.now());
+  $effect(() => {
+    const id = setInterval(() => (nowMs = Date.now()), 30_000);
+    return () => clearInterval(id);
+  });
+
+  // "New since last view" highlight for emails. We persist the newest receivedAt
+  // the user has already seen in localStorage; anything newer renders with the
+  // fresh accent until the next visit re-baselines it.
+  // Right-dock section visibility (notes/todos vs omnichat), toggled via the
+  // dock's context menu and persisted locally. At least one section stays on —
+  // an empty dock would leave no surface to right-click it back.
+  const DOCK_SECTIONS_KEY = 'minion-home-dock-sections';
+  const dockSections = $state({ notes: true, omni: true });
+  $effect(() => {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      const raw = localStorage.getItem(DOCK_SECTIONS_KEY);
+      if (raw) {
+        const saved = JSON.parse(raw) as Partial<typeof dockSections>;
+        dockSections.notes = saved.notes !== false;
+        dockSections.omni = saved.omni !== false;
+      }
+    } catch {
+      /* corrupted pref — keep defaults */
+    }
+  });
+  function toggleDockSection(key: 'notes' | 'omni') {
+    const other = key === 'notes' ? 'omni' : 'notes';
+    if (dockSections[key] && !dockSections[other]) return; // keep one section on
+    dockSections[key] = !dockSections[key];
+    localStorage.setItem(
+      DOCK_SECTIONS_KEY,
+      JSON.stringify({ notes: dockSections.notes, omni: dockSections.omni }),
+    );
+  }
+
+  // Dock context menu (right-click). Text-editing surfaces keep the native menu.
+  let dockMenu = $state<{ x: number; y: number } | null>(null);
+  function onDockContextMenu(e: MouseEvent) {
+    const t = e.target as HTMLElement | null;
+    if (t?.closest('input, textarea, [contenteditable="true"]')) return;
+    e.preventDefault();
+    dockMenu = { x: Math.min(e.clientX, window.innerWidth - 220), y: e.clientY };
+  }
+
+  const LAST_SEEN_KEY = 'minion:my-agent:emails-last-seen';
+  let emailsLastSeen = $state(0);
+  $effect(() => {
+    if (typeof localStorage === 'undefined') return;
+    const raw = localStorage.getItem(LAST_SEEN_KEY);
+    emailsLastSeen = raw ? Number(raw) || 0 : 0;
+  });
+  function emailReceivedMs(item: EmailItem): number {
+    if (!item.receivedAt) return 0;
+    const ts = Date.parse(item.receivedAt);
+    return Number.isNaN(ts) ? 0 : ts;
+  }
+  const isEmailNew = (item: EmailItem) => {
+    const ms = emailReceivedMs(item);
+    return ms > 0 && ms > emailsLastSeen;
+  };
+  // Re-baseline the "seen" marker shortly after emails render, so the green
+  // accents persist for the current view but clear on the next visit.
+  $effect(() => {
+    if (emailItems.length === 0 || typeof localStorage === 'undefined') return;
+    const newest = emailItems.reduce((max, m) => Math.max(max, emailReceivedMs(m)), 0);
+    if (newest <= emailsLastSeen) return;
+    const id = setTimeout(() => {
+      localStorage.setItem(LAST_SEEN_KEY, String(newest));
+    }, 4000);
+    return () => clearTimeout(id);
+  });
+
+  // Hub-only "opened" state, separate from Gmail's read/unread: the set of
+  // message ids the user has opened HERE. Synced across devices via the server
+  // (data.openedIds from the load + POST /api/email-opens); localStorage is a
+  // local cache that covers this session and offline opens. Drives the
+  // gray/open-envelope treatment.
+  const OPENED_KEY = 'minion:my-agent:emails-opened';
+  let openedEmails = $state<Set<string>>(new Set());
+  $effect(() => {
+    // Union the server set (cross-device truth) with the local cache.
+    const server = (data.openedIds ?? []) as string[];
+    let local: string[] = [];
+    if (typeof localStorage !== 'undefined') {
+      try {
+        local = JSON.parse(localStorage.getItem(OPENED_KEY) ?? '[]') as string[];
+      } catch {
+        local = [];
+      }
+    }
+    openedEmails = new Set([...server, ...local]);
+  });
+  const isEmailOpened = (item: EmailItem) => openedEmails.has(item.id);
+  function markEmailOpened(id: string) {
+    if (openedEmails.has(id)) return;
+    const next = new Set(openedEmails);
+    next.add(id);
+    openedEmails = next; // reassign so derived reads re-run
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(OPENED_KEY, JSON.stringify([...next].slice(-500)));
+    }
+    // Persist server-side so the open follows the user to other devices.
+    fetch('/api/email-opens', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ gmailMessageId: id }),
+    }).catch(() => {});
+  }
+
+  // ─── Feed item modals (open in-place instead of navigating to Google) ───
+  let selectedEvent = $state<CalendarItem | null>(null);
+  let eventModalOpen = $state(false);
+  let selectedEmail = $state<EmailItem | null>(null);
+  let emailModalOpen = $state(false);
+
+  function openEvent(ev: CalendarItem) {
+    selectedEvent = ev;
+    eventModalOpen = true;
+  }
+  function openEmail(mail: EmailItem) {
+    markEmailOpened(mail.id);
+    selectedEmail = mail;
+    emailModalOpen = true;
+  }
+  // Route a modal action through the personal-agent chat (it holds gws tools).
+  function askAgent(prompt: string) {
+    handleSubmit(prompt, 'ask');
+  }
+
+  // True when there's nothing at all to show — drives the empty-state copy.
+  const feedEmpty = $derived(
+    observations.length === 0 && calendarItems.length === 0 && emailItems.length === 0,
+  );
+
+  // Channel → human label for grouped sections. Unknown channels surface under "Other".
+  const CHANNEL_LABEL: Record<string, string> = {
+    whatsapp: 'WhatsApp',
+    telegram: 'Telegram',
+    discord: 'Discord',
+    signal: 'Signal',
+    slack: 'Slack',
+    web: 'Web',
+    webchat: 'Web',
+  };
+  const channelLabel = (c: string) => CHANNEL_LABEL[c] ?? c.charAt(0).toUpperCase() + c.slice(1);
+
+  function formatRelative(ts: number): string {
+    const diffSec = Math.round((Date.now() - ts) / 1000);
+    if (diffSec < 60) return 'just now';
+    if (diffSec < 3600) return `${Math.round(diffSec / 60)}m ago`;
+    if (diffSec < 86400) return `${Math.round(diffSec / 3600)}h ago`;
+    return `${Math.round(diffSec / 86400)}d ago`;
+  }
+
+  // Group observations by channel, preserve newest-first ordering within each group.
+  type ChannelGroup = { channel: string; label: string; items: ObservationRow[] };
+  const grouped = $derived.by<ChannelGroup[]>(() => {
+    const map = new Map<string, ChannelGroup>();
+    for (const obs of observations) {
+      const key = obs.channel || 'other';
+      if (!map.has(key)) map.set(key, { channel: key, label: channelLabel(key), items: [] });
+      map.get(key)!.items.push(obs);
+    }
+    return Array.from(map.values());
+  });
+
+  // Group upcoming events by calendar day so the list carries sleek day dividers
+  // instead of repeating "Today" on every card.
+  type EventDay = { key: string; label: string; items: CalendarItem[] };
+  const eventGroups = $derived.by<EventDay[]>(() => {
+    const now = new Date(nowMs);
+    const todayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+    const tomorrow = new Date(now);
+    tomorrow.setDate(now.getDate() + 1);
+    const tomorrowKey = `${tomorrow.getFullYear()}-${tomorrow.getMonth()}-${tomorrow.getDate()}`;
+
+    const groups: EventDay[] = [];
+    for (const ev of calendarItems) {
+      const d = new Date(ev.startsAt);
+      const valid = !Number.isNaN(d.getTime());
+      const key = valid ? `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}` : 'tba';
+      let g = groups.find((x) => x.key === key);
+      if (!g) {
+        let label = 'Scheduled';
+        if (valid) {
+          if (key === todayKey) label = 'Today';
+          else if (key === tomorrowKey) label = 'Tomorrow';
+          else
+            label = d.toLocaleDateString(appLocale(), {
+              weekday: 'long',
+              month: 'short',
+              day: 'numeric',
+            });
+        }
+        g = { key, label, items: [] };
+        groups.push(g);
+      }
+      g.items.push(ev);
+    }
+    return groups;
+  });
+
+  // Group emails by calendar day (Today / Yesterday / date) so the inbox carries
+  // the same sleek day dividers the events column has. Emails arrive newest-first.
+  type EmailDay = { key: string; label: string; items: EmailItem[] };
+  const emailGroups = $derived.by<EmailDay[]>(() => {
+    const now = new Date(nowMs);
+    const dayKey = (d: Date) => `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+    const todayKey = dayKey(now);
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const yesterdayKey = dayKey(yesterday);
+
+    const groups: EmailDay[] = [];
+    for (const mail of emailItems) {
+      const ms = mail.receivedAt ? Date.parse(mail.receivedAt) : NaN;
+      const valid = !Number.isNaN(ms);
+      const d = valid ? new Date(ms) : now;
+      const key = valid ? dayKey(d) : 'unknown';
+      let g = groups.find((x) => x.key === key);
+      if (!g) {
+        let label = 'Earlier';
+        if (valid) {
+          if (key === todayKey) label = 'Today';
+          else if (key === yesterdayKey) label = 'Yesterday';
+          else
+            label = d.toLocaleDateString(appLocale(), {
+              weekday: 'long',
+              month: 'short',
+              day: 'numeric',
+            });
+        }
+        g = { key, label, items: [] };
+        groups.push(g);
+      }
+      g.items.push(mail);
+    }
+    return groups;
+  });
+
+  // Provider badges per section (derived from the linked-identity source emails).
+  const eventProviders = $derived(distinctProviders(calendarItems.map((e) => e.sourceEmail)));
+  const emailProviders = $derived(distinctProviders(emailItems.map((m) => m.sourceEmail)));
+
+  // Next upcoming event + newest email power the collapsed-section summaries.
+  const nextEvent = $derived(calendarItems[0] ?? null);
+  const latestEmail = $derived(emailItems[0] ?? null);
+
+  // One shared collapse state drives BOTH feed columns together (a single toggle),
+  // persisted so the layout the user prefers sticks across visits.
+  const COLLAPSE_KEY = 'minion:my-agent:feed-collapsed';
+  let feedCollapsed = $state(false);
+  $effect(() => {
+    if (typeof localStorage === 'undefined') return;
+    feedCollapsed = localStorage.getItem(COLLAPSE_KEY) === '1';
+  });
+  $effect(() => {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(COLLAPSE_KEY, feedCollapsed ? '1' : '0');
+  });
+  // A single bottom-center handle (below both columns) drives the shared state.
+  const hasFeed = $derived(calendarItems.length > 0 || emailItems.length > 0);
+
+  // Last-known feed snapshot, persisted so a revisit paints instantly instead
+  // of "Loading…" while the WS connects and the gateway (cold) shells out to
+  // gws. Stale-while-refresh: cached cards render at once, then the fresh RPC
+  // result silently replaces them.
+  const FEED_CACHE_KEY = 'minion:my-agent:feed-snapshot';
+  const FEED_CACHE_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+  $effect(() => {
+    if (typeof localStorage === 'undefined' || lastFetchedAt !== null) return;
+    try {
+      const raw = localStorage.getItem(FEED_CACHE_KEY);
+      if (!raw) return;
+      const snap = JSON.parse(raw) as {
+        observations?: ObservationRow[];
+        calendarItems?: CalendarItem[];
+        emailItems?: EmailItem[];
+        at?: number;
+      };
+      if (!snap.at || Date.now() - snap.at > FEED_CACHE_MAX_AGE_MS) return;
+      // Only seed while we still have nothing — never clobber fresh data.
+      if (lastFetchedAt === null) {
+        observations = snap.observations ?? [];
+        calendarItems = snap.calendarItems ?? [];
+        emailItems = snap.emailItems ?? [];
+      }
+    } catch {
+      /* corrupt cache — ignore, the live fetch repopulates it */
+    }
+  });
+
+  async function loadFeed() {
+    loading = true;
+    errorMsg = null;
+    try {
+      const res = await getFeedToday();
+      observations = res.observations;
+      calendarItems = res.calendarItems;
+      emailItems = res.emailItems;
+      lastFetchedAt = Date.now();
+      try {
+        localStorage.setItem(
+          FEED_CACHE_KEY,
+          JSON.stringify({
+            observations: res.observations,
+            calendarItems: res.calendarItems,
+            emailItems: res.emailItems,
+            at: lastFetchedAt,
+          }),
+        );
+      } catch {
+        /* quota/unavailable — instant-paint cache is best-effort */
+      }
+    } catch (err) {
+      errorMsg = err instanceof Error ? err.message : String(err);
+    } finally {
+      loading = false;
+    }
+  }
+
+  // Fetch once the WS connection is up. Re-fetch if the connection drops + recovers.
+  const feedFetch = createConnectedFetch(
+    () => conn.connected,
+    () => void loadFeed(),
+  );
+  $effect(() => feedFetch.sync());
+
+  // Hydrate the notes/todos panel from localStorage (idempotent).
+  $effect(() => {
+    loadNotes();
+  });
+
+  // ─── Personal-agent chat (same agent + thread as the floating assistant) ───
+  const agentId = $derived(assistant.personalAgentId);
+  const chat = $derived(agentId ? agentChat[agentId] : undefined);
+  const messages = $derived(chat?.messages ?? []);
+  const stream = $derived(chat?.stream ?? null);
+  const streamMessage = $derived(chat?.streamMessage ?? null);
+  const streamDisplay = $derived(chat?.streamDisplay ?? '');
+  const sending = $derived(chat?.sending ?? false);
+
+  // ─── Rich content-block helpers (thinking + tools, claude-desktop style) ───
+  // Hoisted to $lib/chat/blocks.ts — shared across all 5 chat surfaces.
+
+  // Live per-run tool calls + context-aware activity verb (gateway tool events).
+  const liveTools = $derived(chat?.liveTools ?? []);
+  const liveActivity = $derived(chat?.liveActivity ?? null);
+
+  // tool_use_id → result, collected across the whole thread (results live in the
+  // following user-role turn) so each tool card can show its outcome. Live tool
+  // results (streaming run) are merged on top so in-flight cards resolve ✓/⚠.
+  const toolResultsById = $derived.by<Record<string, ToolResult>>(() => {
+    const map = computeToolResultsById(streamMessage ? [...messages, streamMessage] : messages);
+    for (const t of liveTools) {
+      if (t.done && !map[t.id]) map[t.id] = { content: t.result ?? '', isError: !!t.isError };
+    }
+    return map;
+  });
+
+  // The streaming turn's message: live tool blocks (which chat deltas don't
+  // carry — they're text-only) merged ahead of the delta message's own blocks.
+  const streamTurnMessage = $derived.by<ChatMessage | null>(() => {
+    if (liveTools.length === 0) return streamMessage;
+    const baseBlocks = streamMessage ? contentBlocks(streamMessage.content) : [];
+    const have = new Set(
+      baseBlocks
+        .filter((b) => b?.type === 'tool_use' || b?.type === 'toolCall')
+        .map((b) => b.id as string),
+    );
+    return {
+      role: 'assistant',
+      content: [
+        ...liveTools
+          .filter((t) => !have.has(t.id))
+          .map((t) => ({ type: 'tool_use', id: t.id, name: t.name, input: t.input })),
+        ...baseBlocks,
+      ],
+    } as ChatMessage;
+  });
+
+  // Stable per-row key derived from content (NOT array index) — so reconciling
+  // server history into the optimistic thread reuses DOM instead of re-mounting
+  // every row (the old `${ts}_${i}` key was the "history flash" culprit).
+  function rowKey(m: ChatMessage): string {
+    const t =
+      msgRole(m) === 'user'
+        ? cleanInboundForDisplay(extractText(m) ?? '')
+        : stripVoiceTurnPrefix(extractText(m) ?? '');
+    const toolNames = contentBlocks(m.content)
+      .filter((b) => b?.type === 'tool_use' || b?.type === 'toolCall')
+      .map((b) => b.name)
+      .join(',');
+    return `${msgRole(m)}|${t.length}|${t.slice(0, 32)}|${t.slice(-24)}|${toolNames}`;
+  }
+
+  interface RenderedRow {
+    key: string;
+    msg: ChatMessage;
+    role: 'user' | 'assistant';
+    ts?: number;
+    text: string;
+    /** Dragged-context blocks parsed out of a user message — render as chips. */
+    chips: UserContextChip[];
+  }
+  let turnBranches = $state<Record<string, TurnBranch>>({});
+  let branchOwner = $state<string | null>(null);
+  let editingTurn = $state<string | null>(null);
+  let editText = $state('');
+  const renderedMessages = $derived.by<RenderedRow[]>(() => {
+    const seen = new Map<string, number>();
+    const rows: RenderedRow[] = [];
+    // One row per reply: meta-only tool/reasoning turns fold into the answer that
+    // follows (same as the floating assistant), so its sources sit under it.
+    for (const raw of foldToolTurns(messages)) {
+      const m = raw as ChatMessage;
+      if (isToolResultOnly(m)) continue;
+      const role = msgRole(m);
+      let text =
+        role === 'user'
+          ? cleanInboundForDisplay(extractText(m) ?? '')
+          : stripVoiceTurnPrefix(extractText(m) ?? '');
+      let chips: UserContextChip[] = [];
+      if (role === 'user') {
+        ({ chips, text } = parseUserContext(text));
+      }
+      if (
+        role === 'user' ? text.trim().length === 0 && chips.length === 0 : !assistantHasContent(m)
+      )
+        continue;
+      const base = rowKey(m);
+      const n = seen.get(base) ?? 0;
+      seen.set(base, n + 1);
+      rows.push({ key: `${base}#${n}`, msg: m, role, ts: msgTs(m), text, chips });
+    }
+    return rows;
+  });
+
+  /**
+   * Render alternate attempts at the original prompt's position. The gateway
+   * stores retries as ordinary appended turns and exposes no parent message id,
+   * so branch membership is recorded when the user explicitly retries/edits.
+   */
+  const visibleMessages = $derived(projectTurnBranches(renderedMessages, turnBranches));
+
+  // Retry/edit lineage is a UI read-model over the append-only gateway
+  // transcript. Persist it per agent so final-history reconciliation and a page
+  // refresh do not erase attempt navigation. The transcript remains the source
+  // of truth; invalid/stale keys are ignored by projectTurnBranches.
+  const branchStorageKey = (id: string, sessionKey: string) =>
+    `minion:chat-branches:v1:${id}:${sessionKey}`;
+  $effect(() => {
+    if (!agentId || typeof localStorage === 'undefined') return;
+    const sessionKey = chat?.sessionKey ?? `agent:${agentId}:main`;
+    const owner = `${agentId}:${sessionKey}`;
+    if (branchOwner === owner) return;
+    branchOwner = owner;
+    try {
+      turnBranches = normalizeTurnBranches(
+        JSON.parse(localStorage.getItem(branchStorageKey(agentId, sessionKey)) ?? '{}'),
+      );
+    } catch {
+      turnBranches = {};
+    }
+  });
+  $effect(() => {
+    if (!agentId || typeof localStorage === 'undefined') return;
+    const sessionKey = chat?.sessionKey ?? `agent:${agentId}:main`;
+    if (branchOwner !== `${agentId}:${sessionKey}`) return;
+    localStorage.setItem(branchStorageKey(agentId, sessionKey), JSON.stringify(turnBranches));
+  });
+
+  async function startNewChat() {
+    if (!agentId) return;
+    await resetChat(agentId);
+    turnBranches = {};
+  }
+
+  async function selectConversation(sessionKey: string) {
+    if (!agentId || sessionKey === chat?.sessionKey) return;
+    await loadChatHistory(agentId, sessionKey);
+  }
+
+  // Live status while a run streams: the context-aware verb from live tool
+  // events ("Reading…", "Remembering…") wins; falls back to block inspection,
+  // then "Thinking…". Null while answer text is streaming (it shows itself).
+  const streamActivity = $derived.by<string | null>(() => {
+    if (liveActivity) return liveActivity;
+    if (!streamMessage) return null;
+    const blocks = contentBlocks(streamMessage.content);
+    const thinking = `${m.ai_thinking()}…`;
+    if (blocks.length === 0) return thinking;
+    const last = [...blocks].reverse().find((b) => b?.type);
+    if (!last) return thinking;
+    if (last.type === 'tool_use') return activityVerb((last.name as string) ?? 'tool');
+    if (last.type === 'thinking' || last.type === 'redacted_thinking') return thinking;
+    return null; // text block streaming — the partial answer shows itself
+  });
+  // The turn's step line (AiSteps) already says "Working for N s" with the
+  // spinner once reasoning or a tool call exists — no second status row then.
+  const streamHasSteps = $derived(
+    !!streamTurnMessage &&
+      contentBlocks(streamTurnMessage.content).some((b) =>
+        ['thinking', 'redacted_thinking', 'tool_use', 'toolCall'].includes(String(b?.type)),
+      ),
+  );
+
+  // Whether the live streaming turn has any visible content yet (reasoning/tool
+  // meta, live tool rows, or smoothed answer text being revealed).
+  const streamHasContent = $derived(
+    (!!streamMessage && assistantHasContent(streamMessage)) ||
+      liveTools.length > 0 ||
+      streamDisplay.length > 0,
+  );
+
+  // Lazy-load the conversation history once connected + agent known.
+  let historyLoadedFor: string | null = null;
+  $effect(() => {
+    if (conn.connected && agentId && historyLoadedFor !== agentId) {
+      historyLoadedFor = agentId;
+      const existing = agentChat[agentId];
+      if (!existing || existing.messages.length === 0) loadChatHistory(agentId);
+    }
+    if (!conn.connected) historyLoadedFor = null;
+  });
+
+  function msgRole(msg: unknown): 'user' | 'assistant' {
+    return (msg as { role?: string }).role === 'user' ? 'user' : 'assistant';
+  }
+  function msgTs(msg: unknown): number | undefined {
+    return (msg as { timestamp?: number }).timestamp;
+  }
+  // Compact relative label for a sent message (hover shows the exact time).
+  function relTime(ts: number): string {
+    const d = Math.round((Date.now() - ts) / 1000);
+    if (d < 60) return 'just now';
+    if (d < 3600) return `${Math.round(d / 60)}m ago`;
+    if (d < 86400) return `${Math.round(d / 3600)}h ago`;
+    if (d < 604800) return `${Math.round(d / 86400)}d ago`;
+    return new Date(ts).toLocaleDateString(appLocale(), { month: 'short', day: 'numeric' });
+  }
+  // Exact time for the hover tooltip: standard "D MMM HH:MM" (e.g. "9 Jul 20:43").
+  function exactTime(ts: number): string {
+    const dt = new Date(ts);
+    const time = dt.toLocaleTimeString(appLocale(), {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+    return `${dt.getDate()} ${dt.toLocaleDateString(appLocale(), { month: 'short' })} ${time}`;
+  }
+
+  let routing = $state(false);
+  // `routed = false` for ui.choice / artifact-callback replies (see :1039/:1143):
+  // those are not free-form text, so they skip the classifier and always get
+  // the full envelope, same as FloatingAssistant.svelte does at :992/:996 (D1).
+  function handleSubmit(text: string, mode: 'ask' | 'capture', routed = true) {
+    if (mode === 'capture') {
+      // Memory capture lands in a later phase.
+      console.info('[my-agent] capture', text);
+      return;
+    }
+    if (!agentId || !conn.connected || routing) return;
+    if (!routed) {
+      sendAssistantTurn(
+        agentId,
+        text,
+        buildAssistantContext(),
+        chat?.sessionKey ?? `agent:${agentId}:main`,
+      );
+      return;
+    }
+    // Same JEV turn routing as the floating assistant: ask which context
+    // manifests this turn needs, fail open to the full envelope. `routing`
+    // holds the send guard across the await (chat.sending only flips once
+    // sendAssistantTurn runs), so a second Enter can't send the turn twice.
+    routing = true;
+    void (async () => {
+      let loaded;
+      try {
+        const decision = await requestRouteDecision(text, languageTag(), '/home');
+        loaded = gateManifests(decision, routerMode());
+      } finally {
+        routing = false;
+      }
+      sendAssistantTurn(
+        agentId,
+        text,
+        buildAssistantContext(loaded),
+        chat?.sessionKey ?? `agent:${agentId}:main`,
+      );
+    })();
+  }
+
+  // ─── Per-message actions (copy / reply / retry) ──────────────────────────────
+  // The composer draft is lifted here so Reply can inject a quote into ChatInput.
+  let draft = $state('');
+
+  function rowText(row: RenderedRow): string {
+    // Recompose the visible text plus any context chips (their full bodies).
+    const chipText = row.chips.map((c) => c.text).join('\n\n');
+    return [chipText, row.text].filter((s) => s.trim().length > 0).join('\n\n');
+  }
+
+  function copyRow(row: RenderedRow) {
+    const text = row.role === 'assistant' ? (extractText(row.msg) ?? '') : rowText(row);
+    void navigator.clipboard?.writeText(stripTtsTags(text));
+  }
+
+  function replyToRow(row: RenderedRow) {
+    const text = (row.role === 'assistant' ? (extractText(row.msg) ?? '') : rowText(row)).trim();
+    const quote = text
+      .split('\n')
+      .map((l) => `> ${l}`)
+      .join('\n');
+    draft = `${quote}\n\n`;
+  }
+
+  // Retry re-asks the user turn that produced this row: for an assistant reply,
+  // re-send the nearest preceding user message; for a user message, re-send it.
+  async function registerAttempt(rootKey: string, text: string) {
+    if (sending || !agentId || !conn.connected) return;
+    const branch = turnBranches[rootKey] ?? { attempts: [rootKey], active: 0 };
+    const before = new Set(renderedMessages.map((row) => row.key));
+    handleSubmit(text, 'ask');
+    await tick();
+    // Resolve the optimistic row from the actual post-send projection instead
+    // of guessing its occurrence suffix. This remains correct if row-key
+    // generation changes or an identical prompt already exists elsewhere.
+    const attemptKey = [...renderedMessages]
+      .reverse()
+      .find(
+        (row) => row.role === 'user' && !before.has(row.key) && rowText(row).trim() === text,
+      )?.key;
+    if (!attemptKey) return;
+    branch.attempts.push(attemptKey);
+    branch.active = branch.attempts.length - 1;
+    turnBranches[rootKey] = branch;
+  }
+
+  function rootFor(key: string): string {
+    return (
+      Object.entries(turnBranches).find(([, branch]) => branch.attempts.includes(key))?.[0] ?? key
+    );
+  }
+
+  function retryRow(ri: number) {
+    let ui = ri;
+    if (visibleMessages[ri]?.role === 'assistant') {
+      while (ui >= 0 && visibleMessages[ui].role !== 'user') ui--;
+    }
+    const src = visibleMessages[ui];
+    if (!src || src.role !== 'user') return;
+    const text = rowText(src).trim();
+    if (text) void registerAttempt(rootFor(src.key), text);
+  }
+
+  function beginEdit(row: RenderedRow) {
+    editingTurn = rootFor(row.key);
+    editText = rowText(row);
+  }
+
+  function saveEdit() {
+    const text = editText.trim();
+    if (!editingTurn || !text || sending) return;
+    void registerAttempt(editingTurn, text);
+    editingTurn = null;
+    editText = '';
+  }
+
+  function selectAttempt(rootKey: string, delta: number) {
+    const branch = turnBranches[rootKey];
+    if (!branch) return;
+    branch.active = Math.max(0, Math.min(branch.attempts.length - 1, branch.active + delta));
+  }
+
+  function actionsFor(row: RenderedRow, ri: number): MessageAction[] {
+    return [
+      { icon: Copy, label: m.chat_copy(), confirm: true, onclick: () => copyRow(row) },
+      { icon: CornerUpLeft, label: m.chat_reply(), onclick: () => replyToRow(row) },
+      ...(row.role === 'user'
+        ? [{ icon: Pencil, label: m.chat_edit(), onclick: () => beginEdit(row) }]
+        : []),
+      { icon: RotateCcw, label: m.chat_retry(), onclick: () => retryRow(ri) },
+    ];
+  }
+
+  // ─── Call wiring ───────────────────────────────────────────────────────────
+  // The call engine is a module-level singleton — it dispatches utterances and
+  // speaks replies on its own, so it survives navigating away from this page.
+  const canCall = $derived(!!agentId && conn.connected);
+
+  function handleStartCall() {
+    if (agentId) startCall(agentId);
+  }
+
+  // The thread follows the newest content only while the reader is at the
+  // bottom (AiConversation); this key changes whenever it grows.
+  const threadKey = $derived(
+    `${messages.length}:${stream?.length ?? -1}:${streamDisplay.length}:${streamActivity ?? ''}:${liveTools.length}:${!!streamMessage}`,
+  );
+
+  const STATUS_CAPTION: Record<string, string> = {
+    idle: m.page_micMuted(),
+    listening: m.page_listening(),
+    thinking: m.call_thinking(),
+    speaking: m.call_speaking(),
+  };
+</script>
+
+<svelte:head>
+  <title>My Agent · Minion</title>
+</svelte:head>
+
+<PageShell
+  archetype="dashboard"
+  scroll="none"
+  direction="row"
+  labelledBy="my-agent-greeting"
+  class="layout home-shell"
+>
+  <div class="column">
+    <div class="inner">
+      <h1 id="my-agent-greeting" class="sr-only">{data.greeting}</h1>
+      <header class="greeting-row">
+        <div class="identity">
+          {#if !voiceCall.active}
+            <div class="mini-avatar">
+              <AiOrbFace
+                diameter={40}
+                status={chatFaceState(chat)}
+                aria-label={m.a11y1_agentAvatar()}
+              />
+            </div>
+          {/if}
+          <div class="greeting-text">
+            <AgentGreeting greeting={data.greeting} userName={data.userName} />
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          {#if agentId}
+            <ChatHistoryPopover
+              {agentId}
+              activeSessionKey={chat?.sessionKey ?? `agent:${agentId}:main`}
+              disabled={!conn.connected || sending}
+              onselect={selectConversation}
+            />
+          {/if}
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            class="new-chat"
+            disabled={!agentId || !conn.connected || sending}
+            title={m.chat_newChat()}
+            onclick={startNewChat}
+          >
+            <MessageSquarePlus size={iconSizes.sm} />
+            <span>{m.chat_newChat()}</span>
+          </Button>
+        </div>
+      </header>
+
+      {#if voiceCall.error}
+        <p class="state-note error">{voiceCall.error}</p>
+      {/if}
+
+      <!-- Stage: avatar sits ABOVE the agenda normally; during a call it moves
+			     SIDE-BY-SIDE, taking the majority of the width and the agenda's full height. -->
+      <div class="stage" class:in-call={voiceCall.active}>
+        {#if voiceCall.active}
+          <section class="avatar-stage" aria-label={m.a11y1_agentAvatar()}>
+            <div class="avatar-big">
+              <AiOrbFace
+                diameter="100%"
+                status={voiceFaceState(voiceCall.status)}
+                amplitude={() => mouth.open}
+              />
+            </div>
+            <p class="avatar-caption">
+              {STATUS_CAPTION[voiceCall.status] ?? ''}
+              {#if voiceCall.interim}<span class="interim">“{voiceCall.interim}”</span>{/if}
+            </p>
+          </section>
+        {/if}
+
+        <section class="agenda" aria-label={m.common_today()}>
+          <!-- Cached snapshot (if any) always paints; the notes below only cover
+					     the truly-empty states so a revisit never blanks back to "Loading…". -->
+          {#if feedEmpty && !conn.connected}
+            <p class="state-note">{m.feed_connectGateway()}</p>
+          {:else if feedEmpty && loading}
+            <p class="state-note">{m.common_loading()}</p>
+          {:else if feedEmpty && errorMsg}
+            <p class="state-note error">{m.feed_failed({ error: errorMsg })}</p>
+            <Button variant="outline" size="sm" type="button" class="retry" onclick={loadFeed}
+              >{m.common_retry()}</Button
+            >
+          {:else if feedEmpty}
+            <p class="state-note">
+              {m.feed_quiet()}
+            </p>
+          {:else}
+            <!-- Calendar events + emails sit side-by-side (events | emails) while the
+						     agenda runs as a band at the top, and stack vertically when the
+						     agenda becomes a narrow column during a call. A lone section (only
+						     events OR only emails) spans the full width via :only-child. -->
+            <div class="feed-group">
+              <div class="feed-grid">
+                <!-- Upcoming calendar events (next 24h across linked Google calendars). -->
+                {#if calendarItems.length > 0}
+                  <FeedSection
+                    label={m.feed_eventsLabel()}
+                    count={calendarItems.length}
+                    providers={eventProviders}
+                    bind:collapsed={feedCollapsed}
+                    scrollable
+                  >
+                    {#each eventGroups as day (day.key)}
+                      <div class="day-divider">
+                        <span class="day-label">{day.label}</span>
+                        <span class="day-rule"></span>
+                        <span class="day-count">{day.items.length}</span>
+                      </div>
+                      {#each day.items as ev (ev.sourceEmail + ':' + ev.id)}
+                        <EventCard item={ev} {nowMs} onopen={() => openEvent(ev)} />
+                      {/each}
+                    {/each}
+
+                    {#snippet summary()}
+                      {#if nextEvent}
+                        {@const ev = nextEvent}
+                        <EventCard item={ev} {nowMs} onopen={() => openEvent(ev)} />
+                        {#if calendarItems.length > 1}
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            class="more-row"
+                            onclick={() => (feedCollapsed = false)}
+                          >
+                            {m.feed_more({ count: calendarItems.length - 1 })}
+                          </Button>
+                        {/if}
+                      {/if}
+                    {/snippet}
+                  </FeedSection>
+                {/if}
+
+                <!-- Inbox emails across linked Google identities. -->
+                {#if emailItems.length > 0}
+                  <FeedSection
+                    label={m.feed_emailsLabel()}
+                    count={emailItems.length}
+                    providers={emailProviders}
+                    bind:collapsed={feedCollapsed}
+                    scrollable
+                  >
+                    {#each emailGroups as day (day.key)}
+                      <div class="day-divider">
+                        <span class="day-label">{day.label}</span>
+                        <span class="day-rule"></span>
+                        <span class="day-count">{day.items.length}</span>
+                      </div>
+                      {#each day.items as mail (mail.sourceEmail + ':' + mail.id)}
+                        <EmailCard
+                          item={mail}
+                          {nowMs}
+                          isNew={isEmailNew(mail)}
+                          opened={isEmailOpened(mail)}
+                          onopen={() => openEmail(mail)}
+                        />
+                      {/each}
+                    {/each}
+
+                    {#snippet summary()}
+                      {#if latestEmail}
+                        {@const mail = latestEmail}
+                        <EmailCard
+                          item={mail}
+                          {nowMs}
+                          isNew={isEmailNew(mail)}
+                          opened={isEmailOpened(mail)}
+                          onopen={() => openEmail(mail)}
+                        />
+                        {#if emailItems.length > 1}
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            class="more-row"
+                            onclick={() => (feedCollapsed = false)}
+                          >
+                            {m.feed_more({ count: emailItems.length - 1 })}
+                          </Button>
+                        {/if}
+                      {/if}
+                    {/snippet}
+                  </FeedSection>
+                {/if}
+              </div>
+
+              {#if hasFeed}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  class="feed-toggle {!feedCollapsed ? 'open' : ''}"
+                  aria-expanded={!feedCollapsed}
+                  title={feedCollapsed ? m.feed_expand() : m.feed_collapse()}
+                  onclick={() => (feedCollapsed = !feedCollapsed)}
+                >
+                  <ChevronDown size={iconSizes.sm} />
+                </Button>
+              {/if}
+            </div>
+
+            <!-- Recent cross-channel agent activity, grouped by channel. -->
+            {#each grouped as group (group.channel)}
+              <FeedSection label={group.label} count={group.items.length}>
+                {#each group.items as obs (obs.id)}
+                  {@const title = obs.contentPreview ?? '(no content)'}
+                  {@const subtitle = `${obs.direction === 'inbound' ? '←' : '→'} ${obs.agentId ?? '?'} · ${formatRelative(obs.observedAt)}`}
+                  <FeedCard
+                    {title}
+                    {subtitle}
+                    onreply={() => handleSubmit(`About: ${title}`, 'ask')}
+                  />
+                {/each}
+              </FeedSection>
+            {/each}
+          {/if}
+        </section>
+      </div>
+
+      <!-- Chat section: typed messages AND the live call transcript land here.
+			     Grows to fill the space between the agenda and the input. -->
+      <section class="chat-section" aria-label={m.feed_conversationAria()}>
+        {#if visibleMessages.length > 0 || streamMessage || stream || sending}
+          <div class="thread">
+            <AiConversation
+              class="thread-conv"
+              viewportClass="thread-viewport"
+              contentKey={threadKey}
+            >
+              <div class="thread-inner">
+                {#each visibleMessages as row, ri (row.key)}
+                  <!-- One timestamp per MESSAGE BLOCK: a run of same-role rows (an
+								     agent turn spans several tool/reasoning messages) stamps only
+								     its last row, not every intermediate action. -->
+                  {@const blockEnd =
+                    ri === visibleMessages.length - 1 || visibleMessages[ri + 1].role !== row.role}
+                  {#if row.role === 'assistant'}
+                    <!-- Assistant turn: ChatTurn owns its layout — quiet reasoning/tool
+									     rows OUTSIDE the bubble, the reply inside its own bubble.
+									     Actions sit under the answer only (never on reasoning/tool-only
+									     rows, which carry no answer text). -->
+                    <div class="bubble-row assistant ai-message">
+                      <ChatTurn
+                        message={row.msg}
+                        toolResults={toolResultsById}
+                        onArtifactCallback={(cb) => handleSubmit(cb, 'ask', false)}
+                        onChoice={(text) => handleSubmit(text, 'ask', false)}
+                      />
+                      {#if row.text.trim().length > 0}
+                        <MessageActions actions={actionsFor(row, ri)} reveal />
+                      {/if}
+                    </div>
+                  {:else}
+                    {@const branchRoot = rootFor(row.key)}
+                    {@const branch = turnBranches[branchRoot]}
+                    <div class="bubble-row user ai-message">
+                      {#if row.chips.length > 0}
+                        <div class="sent-chips">
+                          {#each row.chips as chip, ci (ci)}
+                            <span class="sent-chip" title={chip.text}>
+                              <span aria-hidden="true"
+                                >{dragContextIcon(chip.kind as DragContextKind)}</span
+                              >
+                              <span class="sent-chip-label">{chip.label}</span>
+                            </span>
+                          {/each}
+                        </div>
+                      {/if}
+                      {#if row.text.trim().length > 0}
+                        {#if editingTurn === branchRoot}
+                          <div class="edit-turn">
+                            <textarea bind:value={editText} aria-label={m.chat_edit()} rows="3"
+                            ></textarea>
+                            <div class="edit-actions">
+                              <Button
+                                variant="secondary"
+                                size="sm"
+                                type="button"
+                                onclick={() => (editingTurn = null)}>{m.chat_cancelEdit()}</Button
+                              >
+                              <Button
+                                variant="primary"
+                                size="sm"
+                                type="button"
+                                class="primary"
+                                disabled={!editText.trim() || sending}
+                                onclick={saveEdit}>{m.chat_saveEdit()}</Button
+                              >
+                            </div>
+                          </div>
+                        {:else}
+                          <div class="bubble user">{row.text}</div>
+                        {/if}
+                        <div class="msg-foot">
+                          {#if row.ts}
+                            <time class="bubble-time" title={exactTime(row.ts)}
+                              >{relTime(row.ts)}</time
+                            >
+                          {/if}
+                          <MessageActions actions={actionsFor(row, ri)} reveal side="end" />
+                          {#if branch && branch.attempts.length > 1}
+                            <div
+                              class="attempt-nav"
+                              aria-label={m.chat_attemptLabel({
+                                current: branch.active + 1,
+                                total: branch.attempts.length,
+                              })}
+                            >
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                class="h-5 w-5"
+                                type="button"
+                                disabled={branch.active === 0}
+                                title={m.chat_previousAttempt()}
+                                aria-label={m.chat_previousAttempt()}
+                                onclick={() => selectAttempt(branchRoot, -1)}
+                                ><ChevronLeft size={iconSizes.sm} /></Button
+                              >
+                              <span>{branch.active + 1}/{branch.attempts.length}</span>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                class="h-5 w-5"
+                                type="button"
+                                disabled={branch.active === branch.attempts.length - 1}
+                                title={m.chat_nextAttempt()}
+                                aria-label={m.chat_nextAttempt()}
+                                onclick={() => selectAttempt(branchRoot, 1)}
+                                ><ChevronRight size={iconSizes.sm} /></Button
+                              >
+                            </div>
+                          {/if}
+                        </div>
+                      {/if}
+                    </div>
+                  {/if}
+                {/each}
+
+                <!-- Live streaming turn: reasoning/tool rows surface above the reply;
+							     the answer text is the smoothed (typewriter) reveal via textOverride. -->
+                {#if streamHasContent && streamTurnMessage}
+                  <div class="bubble-row assistant">
+                    <ChatTurn
+                      message={streamTurnMessage}
+                      toolResults={toolResultsById}
+                      streaming
+                      textOverride={streamDisplay}
+                      onArtifactCallback={(cb) => handleSubmit(cb, 'ask', false)}
+                      onChoice={(text) => handleSubmit(text, 'ask', false)}
+                    />
+                    {#if streamDisplay.length === 0 && !streamHasSteps}
+                      <!-- Tools running, no answer text yet — live activity verb. -->
+                      <div class="thinking-row">
+                        <ThinkingShader size={iconSizes.md} />
+                        {streamActivity ?? `${m.ai_thinking()}…`}
+                      </div>
+                    {/if}
+                  </div>
+                {:else if streamDisplay.length > 0}
+                  <!-- Fallback: smoothed text with no structured message. -->
+                  <div class="bubble-row assistant">
+                    <div class="bubble assistant streaming">
+                      <MarkdownMessage value={stripTtsTags(streamDisplay)} tone="assistant" />
+                    </div>
+                  </div>
+                {:else if sending || streamMessage}
+                  <div class="thinking-row">
+                    <ThinkingShader size={iconSizes.md} />
+                    {streamActivity ?? `${m.ai_thinking()}…`}
+                  </div>
+                {/if}
+
+                {#if chat?.lastError}
+                  <p class="state-note error">{chat.lastError}</p>
+                {/if}
+              </div>
+            </AiConversation>
+          </div>
+        {/if}
+      </section>
+
+      <div class="composer">
+        <div class="composer-input">
+          <ChatInput
+            bind:value={draft}
+            {agentId}
+            onsubmit={handleSubmit}
+            running={sending || stream !== null || !!streamMessage}
+            onstop={() => {
+              if (agentId) void abortChat(agentId, chat?.sessionKey ?? `agent:${agentId}:main`);
+            }}
+          />
+        </div>
+        <div class="composer-call">
+          <CallControls
+            active={voiceCall.active}
+            muted={voiceCall.muted}
+            status={voiceCall.status}
+            disabled={!canCall}
+            onstart={handleStartCall}
+            onend={endCall}
+            ontoggleMute={toggleMute}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div
+    class="notes-dock"
+    class:collapsed={!notesState.open}
+    class:has-omni={dockSections.notes && dockSections.omni}
+    oncontextmenu={onDockContextMenu}
+  >
+    {#if dockSections.notes}
+      <NotesPanel />
+    {/if}
+    {#if dockSections.omni}
+      <OmnichatDock rail={!notesState.open} />
+    {/if}
+  </div>
+</PageShell>
+
+{#if dockMenu}
+  <div
+    use:floatingLayer
+    class="dock-menu"
+    role="menu"
+    aria-label={m.omni_dockMenuLabel()}
+    style="left: {dockMenu.x}px; top: {dockMenu.y}px"
+  >
+    <Button
+      type="button"
+      class="dock-menu-item"
+      role="menuitemcheckbox"
+      aria-checked={dockSections.notes}
+      onclick={() => toggleDockSection('notes')}
+    >
+      <span class="dm-check"
+        >{#if dockSections.notes}<Check size={iconSizes.sm} />{/if}</span
+      >
+      <span>{m.note_panelLabel()}</span>
+    </Button>
+    <Button
+      type="button"
+      class="dock-menu-item"
+      role="menuitemcheckbox"
+      aria-checked={dockSections.omni}
+      onclick={() => toggleDockSection('omni')}
+    >
+      <span class="dm-check"
+        >{#if dockSections.omni}<Check size={iconSizes.sm} />{/if}</span
+      >
+      <span>{m.omni_panelTitle()}</span>
+    </Button>
+  </div>
+{/if}
+
+<svelte:document
+  onpointerdown={(e) => {
+    if (dockMenu && e.target instanceof Element && !e.target.closest('.dock-menu')) dockMenu = null;
+  }}
+  onkeydown={(e) => {
+    if (e.key === 'Escape' && dockMenu) dockMenu = null;
+  }}
+/>
+
+<EventModal
+  bind:open={eventModalOpen}
+  item={selectedEvent}
+  onask={askAgent}
+  onclose={() => (selectedEvent = null)}
+/>
+<EmailModal
+  bind:open={emailModalOpen}
+  item={selectedEmail}
+  onask={askAgent}
+  onclose={() => (selectedEmail = null)}
+/>
+
+<style>
+  :global(.layout) {
+    display: flex;
+    /* Fill the height-constrained (app) scroll wrapper. The parent .h-full is a
+		   plain block, so `flex: 1` here is ignored — an explicit height is what
+		   pins the column to the viewport so only the chat thread scrolls (header
+		   + agenda stay fixed at top, ChatInput fixed at bottom). */
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+    background: var(--color-bg);
+  }
+
+  .column {
+    order: 1;
+    flex: 1;
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Notes are a trailing workspace rail, never a second left navigation. Keep
+     the dock explicit because PageShell's default composition axis is vertical. */
+  .notes-dock {
+    order: 2;
+    height: 100%;
+    min-height: 0;
+    margin-left: auto;
+    display: flex;
+    /* Sections (notes, omnichat) stack vertically inside the dock. */
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  /* Split mode: notes + omnichat share the dock height; NotesPanel's own
+	   100%-height and bottom collapse footer yield to the stacked layout (the
+	   bottom-most section — omnichat — renders the collapse control instead). */
+  .notes-dock.has-omni :global(.notes-panel) {
+    height: auto;
+    flex: 1;
+    min-height: 0;
+  }
+  .notes-dock.has-omni :global(.notes-panel .panel-foot) {
+    display: none;
+  }
+  .notes-dock.has-omni :global(.omni-panel) {
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* Dock section toggle menu (right-click). Dismissal: outside pointerdown +
+	   Escape via svelte:document — never a fixed backdrop element. */
+  .dock-menu {
+    position: fixed;
+    z-index: var(--layer-popover);
+    min-width: 190px;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    padding: var(--space-1);
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    border-radius: var(--radius-xl);
+    background: var(--color-bg2);
+    box-shadow: var(--shadow-overlay);
+  }
+  .dock-menu :global(.dock-menu-item) {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    padding: var(--space-1) var(--space-2);
+    border: none;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: color-mix(in srgb, var(--color-foreground) 85%, transparent);
+    font-size: var(--font-size-caption);
+    font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+  }
+  .dock-menu :global(.dock-menu-item):hover {
+    background: color-mix(in srgb, var(--color-foreground) 6%, transparent);
+    color: var(--color-foreground);
+  }
+  /* Button's inner row span centers by default — pin menu rows to the left. */
+  .dock-menu :global(.dock-menu-item > span) {
+    justify-content: flex-start;
+    width: 100%;
+    gap: var(--space-2);
+  }
+  .dock-menu :global(.dm-check) {
+    display: inline-flex;
+    width: 14px;
+    flex-shrink: 0;
+    color: var(--color-accent);
+  }
+
+  @media (max-width: 768px) {
+    :global(.home-shell) {
+      position: relative;
+    }
+
+    /* On compact screens the OPEN inspector becomes a right drawer, so it no
+       longer consumes the chat column's width. The collapsed rail stays a real
+       flex item: it is permanently visible, so overlaying it clipped the
+       composer's call control underneath it (QC 2026-09-08, Home at 390px). */
+    .notes-dock:not(.collapsed) {
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: min(320px, calc(100% - var(--space-12)));
+      max-width: 100%;
+      z-index: var(--layer-popover);
+      box-shadow: var(--shadow-overlay);
+    }
+
+    .notes-dock :global(.notes-panel),
+    .notes-dock :global(.omni-panel) {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .notes-dock :global(.notes-panel.collapsed) {
+      width: 46px;
+      margin-left: auto;
+    }
+
+    .notes-dock.collapsed {
+      width: 46px;
+      box-shadow: none;
+    }
+
+    /* Compact gutters: the collapsed rail now takes real width, so the column
+       gives its horizontal padding back to the composer row. */
+    .inner {
+      padding-inline: var(--space-4);
+    }
+  }
+
+  .inner {
+    width: 100%;
+    /* No max-width cap — the greeting, feed, thread and composer all fill the
+		   full column width (between the sidebar and the notes panel). */
+    padding: 0 var(--space-6);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    /* Drives the responsive collapse of the header actions (CallControls label,
+		   greeting clamp) off the COLUMN width — so it reacts to the notes panel
+		   opening, not just the viewport. */
+    container-type: inline-size;
+    container-name: agentcol;
+  }
+
+  /* Header: identity grows to fill, action cluster sits at its natural size on
+	   the right. The identity is the only growing item, so the greeting always
+	   gets the leftover width — it never gets starved into a smooshed column. */
+  .greeting-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-1);
+  }
+
+  .identity {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .greeting-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Composer: a compact row of two self-framing terminal boxes — the input grows,
+	   the call button is a square to its right. Their own borders are the framing;
+	   the composer adds no top border or separator, just a small gap + bottom inset. */
+  .composer {
+    display: flex;
+    /* Bottom-align: when the input box grows (attached chips), it extends upward
+		   while its bottom row stays level with the square call button. */
+    align-items: flex-end;
+    gap: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+  .composer-input {
+    flex: 1;
+    min-width: 0;
+  }
+  .composer-call {
+    max-width: 100%;
+    flex-shrink: 0;
+    display: flex;
+  }
+
+  @container agentcol (max-width: 460px) {
+    .composer {
+      flex-wrap: wrap;
+    }
+    .composer-input {
+      flex-basis: 100%;
+    }
+    .composer-call {
+      margin-inline-start: auto;
+    }
+  }
+
+  .mini-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  /* Stage: avatar above agenda by default. */
+  .stage {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    flex-shrink: 0;
+  }
+
+  /* The events/emails columns own their own 28vh scroll (FeedSection.scrollable),
+	   so the agenda itself must NOT also scroll — an outer overflow here produced a
+	   second scrollbar over the columns AND clipped the overflowing toggle handle.
+	   It grows with its (self-bounded) content instead; the chat thread takes the
+	   rest of the column height. */
+
+  /* During a call: avatar beside the agenda, majority width, full height. */
+  .stage.in-call {
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 320px;
+    margin-bottom: var(--space-2);
+  }
+
+  .stage.in-call .avatar-stage {
+    /* Square tile — the agenda gets all the leftover width. */
+    flex: 0 0 auto;
+    width: clamp(220px, 34cqw, 320px);
+    aspect-ratio: 1 / 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border-radius: var(--radius-xl);
+    background: radial-gradient(
+      circle at 50% 35%,
+      color-mix(in srgb, var(--color-accent) 8%, transparent),
+      transparent 70%
+    );
+    border: 1px solid var(--color-border);
+  }
+
+  .stage.in-call .avatar-big {
+    width: 100%;
+    max-width: 340px;
+    aspect-ratio: 1 / 1;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+
+  .avatar-caption {
+    margin: 0;
+    font-size: var(--font-size-body, 14px);
+    color: var(--color-muted);
+    text-align: center;
+    min-height: 18px;
+  }
+  .interim {
+    display: block;
+    color: var(--color-muted-foreground);
+    font-style: italic;
+    font-size: var(--font-size-caption, 12px);
+    margin-top: var(--space-1);
+  }
+
+  .stage.in-call .agenda {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    /* The feed-grid's -24px bleed margin (scrollbar alignment for the band
+		   layout) overflows this narrower column — reset it and clip any
+		   remainder so the agenda never grows a horizontal scrollbar. */
+    overflow-x: hidden;
+    max-height: 100%;
+    padding-right: var(--space-1);
+  }
+  .stage.in-call .feed-grid {
+    margin-right: 0;
+  }
+
+  /* Feed grid: events + emails as two columns while the agenda is a band at
+	   the top. align-items:start so a short column doesn't stretch to match a
+	   tall one. */
+  /* Sleek day separators inside the Upcoming column. */
+  .day-divider {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-1) var(--space-1) var(--space-3);
+  }
+  .day-divider:first-child {
+    padding-top: var(--space-0-5);
+  }
+  .day-label {
+    font-size: var(--font-size-caption, 12px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-foreground) 60%, transparent);
+    white-space: nowrap;
+  }
+  .day-rule {
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-foreground) 8%, transparent);
+  }
+  .day-count {
+    font-size: var(--font-size-caption, 12px);
+    font-weight: 600;
+    color: color-mix(in srgb, var(--color-foreground) 32%, transparent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .feed-grid {
+    display: grid;
+    /* minmax(0, 1fr) — NOT 1fr — so the columns stay equal and the card
+		   titles (white-space:nowrap) ellipsis-truncate instead of forcing the
+		   email column wide on their min-content. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 0 var(--space-4);
+    align-items: start;
+    /* Breathing room above the section titles so they don't crowd the greeting. */
+    padding-top: var(--space-3);
+    /* Push the right edge out to the content-area edge (past the inner's 24px
+		   padding) so the emails column's scrollbar lines up flush with the chat
+		   thread's scrollbar below it. */
+    margin-right: calc(-1 * var(--space-6));
+  }
+
+  /* A single present section (only events OR only emails) spans full width
+	   rather than hugging the left half. */
+  .feed-grid > :global(.feed-section:only-child) {
+    grid-column: 1 / -1;
+  }
+
+  /* Vertical agenda (during a call): stack events over emails. minmax(0,1fr)
+	   — NOT 1fr — so the single track can't grow to the min-content width of a
+	   nowrap email subject and overflow the column into the notes panel. */
+  .stage.in-call .feed-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Narrow column (notes panel open / small viewport): stack as well — two
+	   columns get too cramped under ~520px of column width. Same minmax(0,1fr)
+	   clamp so the stacked column truncates instead of bleeding right. */
+  @container agentcol (max-width: 520px) {
+    .feed-grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Chat section grows to fill the space between the agenda and the input. */
+  /* Butts directly against the feed group's bottom border (no margin/padding) so
+	   the messages start right under it; the thread's top padding leaves exactly
+	   the hanging toggle's lower half worth of clearance — no dead space. */
+  .chat-section {
+    flex: 1;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .thread {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    /* Break out of the inner's 24px side padding so the scrollbar sits flush at
+		   the content-area edge; the viewport's 24px padding keeps the messages
+		   inset from the scrollbar. */
+    margin: 0 calc(-1 * var(--space-6));
+  }
+  .thread :global(.thread-conv) {
+    flex: 1;
+  }
+  .thread :global(.thread-viewport) {
+    padding: var(--space-4) var(--space-6) var(--space-1);
+  }
+
+  /* Pin messages to the bottom when short, but stay fully scrollable when the
+	   history overflows (justify-content:flex-end on the scroller would make the
+	   top unreachable — margin-top: auto on an inner block does not). */
+  .thread-inner {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .bubble-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-0-5);
+  }
+  .bubble-row.user {
+    align-items: flex-end;
+  }
+  .bubble-row.assistant {
+    align-items: flex-start;
+  }
+
+  .bubble {
+    max-width: 85%;
+    border-radius: var(--radius-xl);
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--font-size-body, 14px);
+    line-height: 1.5;
+    word-break: break-word;
+  }
+  .bubble.user {
+    background: color-mix(in srgb, var(--color-accent) 14%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 24%, transparent);
+    color: var(--color-foreground);
+    white-space: pre-wrap;
+  }
+  .bubble.assistant {
+    background: color-mix(in srgb, var(--color-foreground) 4%, transparent);
+    border: 1px solid var(--color-border);
+    color: var(--color-foreground);
+  }
+  .bubble.assistant.streaming {
+    border-style: dashed;
+    opacity: 0.9;
+  }
+
+  /* Dragged-context chips echoed above a sent user bubble — visually separate
+	   from the typed text (the raw context block itself is never shown). */
+  .sent-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-1);
+    max-width: 85%;
+    margin-bottom: var(--space-0-5);
+  }
+  .sent-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    max-width: 240px;
+    padding: var(--space-0-5) var(--space-2);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-caption, 12px);
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 26%, transparent);
+    color: color-mix(in srgb, var(--color-foreground) 75%, transparent);
+  }
+  .sent-chip-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  /* "New chat" reset — quiet pill in the greeting row's top-right. */
+  :global(.new-chat) {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-lg);
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    background: transparent;
+    color: color-mix(in srgb, var(--color-foreground) 55%, transparent);
+    font-size: var(--font-size-caption, 12px);
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      background var(--duration-fast) var(--ease-standard);
+  }
+  .chat-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  :global(.new-chat:hover:not(:disabled)) {
+    color: var(--color-foreground);
+    border-color: color-mix(in srgb, var(--color-foreground) 24%, transparent);
+    background: color-mix(in srgb, var(--color-foreground) 4%, transparent);
+  }
+  :global(.new-chat:disabled) {
+    opacity: 0.45;
+    cursor: default;
+  }
+  @container agentcol (max-width: 460px) {
+    /* Button wraps its children in one layout span, so `.new-chat span` also
+       hid the icon and left an 18x28 invisible-but-focusable control
+       (QC 2026-09-08). Hide only the label and keep a full touch target. */
+    :global(.new-chat > span > span) {
+      display: none;
+    }
+  }
+
+  /* Touch/compact target floor for the header cluster. Mirrors AppViewport's own
+     `--active-control-min-height` contract, which these two controls (a popover
+     trigger and an icon-only Button) do not pick up on their own. */
+  @media (max-width: 768px), (pointer: coarse) {
+    .chat-header-actions :global(button),
+    .composer :global(button) {
+      min-width: var(--control-height-touch, 44px);
+      min-height: var(--control-height-touch, 44px);
+    }
+  }
+
+  /* Sent-message footer: relative time to the LEFT of the action row. */
+  .msg-foot {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+  .bubble-time {
+    font-size: var(--font-size-caption, 12px);
+    color: var(--color-muted-foreground);
+    padding: 0 var(--space-0-5);
+    font-variant-numeric: tabular-nums;
+    cursor: default;
+  }
+  .attempt-nav {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-0-5);
+    margin-left: var(--space-0-5);
+    font-size: var(--font-size-caption, 12px);
+    color: var(--color-muted-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+  :global(.attempt-nav button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  :global(.attempt-nav button:hover:not(:disabled)) {
+    background: color-mix(in srgb, var(--color-foreground) 8%, transparent);
+    color: var(--color-foreground);
+  }
+  :global(.attempt-nav button:disabled) {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .edit-turn {
+    width: min(100%, 520px);
+    padding: var(--space-2);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 42%, transparent);
+    border-radius: var(--radius-xl);
+    background: color-mix(in srgb, var(--color-accent) 7%, var(--color-bg));
+  }
+  .edit-turn textarea {
+    display: block;
+    width: 100%;
+    min-height: 72px;
+    resize: vertical;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--color-foreground);
+    font: inherit;
+  }
+  .edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+  :global(.edit-actions button) {
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--color-foreground);
+    font-size: var(--font-size-caption, 12px);
+    cursor: pointer;
+  }
+  :global(.edit-actions .primary) {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-accent-foreground, white);
+  }
+
+  .thinking-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--font-size-caption, 12px);
+    color: var(--color-muted);
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .state-note {
+    font-size: var(--font-size-body, 14px);
+    color: var(--color-muted);
+    padding: var(--space-2) var(--space-1);
+  }
+  .state-note.error {
+    color: var(--color-accent);
+  }
+
+  :global(.retry) {
+    align-self: flex-start;
+    background: transparent;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+    color: var(--color-accent);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-caption, 12px);
+  }
+
+  /* The events/emails columns live inside this group; its bottom border IS the
+	   divider, and the collapse handle hangs halfway out of it. */
+  .feed-group {
+    position: relative;
+    /* Clear space below the columns (and the "+N more" row when collapsed) so the
+		   hanging toggle doesn't crowd the content above the border. */
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 13%, transparent);
+  }
+
+  /* Single feed collapse/expand handle — a small subtle pill pinned to the
+	   group's bottom border, hanging half out (below) and half in (above). */
+  :global(.feed-toggle) {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translate(-50%, 50%);
+    z-index: var(--layer-base);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 18px;
+    padding: 0;
+    border-radius: var(--radius-full);
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 13%, transparent);
+    background: var(--color-bg);
+    color: color-mix(in srgb, var(--color-foreground) 38%, transparent);
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      background var(--duration-fast) var(--ease-standard);
+  }
+  :global(.feed-toggle:hover) {
+    color: color-mix(in srgb, var(--color-foreground) 75%, transparent);
+    border-color: color-mix(in srgb, var(--color-foreground) 22%, transparent);
+    background: color-mix(in srgb, var(--color-foreground) 4%, var(--color-bg));
+  }
+  :global(.feed-toggle svg) {
+    transition: transform var(--duration-fast) var(--ease-standard);
+  }
+  :global(.feed-toggle.open svg) {
+    transform: rotate(180deg);
+  }
+
+  /* "+N more" affordance shown under a collapsed section's single preview card —
+	   right-aligned, small and subtle. */
+  :global(.more-row) {
+    align-self: flex-end;
+    margin: var(--space-0-5) var(--space-1) 0 0;
+    padding: var(--space-0-5) var(--space-1);
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-caption, 12px);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: color-mix(in srgb, var(--color-foreground) 38%, transparent);
+    cursor: pointer;
+    transition: color var(--duration-fast) var(--ease-standard);
+  }
+  :global(.more-row:hover) {
+    color: color-mix(in srgb, var(--color-foreground) 70%, transparent);
+  }
+
+  @media (max-width: 640px) {
+    .stage.in-call {
+      flex-direction: column;
+    }
+    .stage.in-call .avatar-stage {
+      width: 100%;
+      aspect-ratio: auto;
+    }
+  }
+</style>

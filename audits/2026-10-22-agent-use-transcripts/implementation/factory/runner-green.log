@@ -1,0 +1,491 @@
+TAP version 13
+# [jev] run=run-1 site=rank ok=false ms=0
+# [jev] run=run-1 site=rank ok=false ms=0
+# [jev] run=run-1 site=rank ok=false ms=0
+# [jev] run=run-1 site=rank ok=true ms=7
+# [jev] run=identified-run site=rank ok=false ms=0
+# [jev] run=identified-run site=rank ok=false ms=0
+# Subtest: mint/lookup/revoke round-trip
+ok 1 - mint/lookup/revoke round-trip
+  ---
+  duration_ms: 4.017253
+  type: 'test'
+  ...
+# Subtest: minting twice for the same run revokes the first token
+ok 2 - minting twice for the same run revokes the first token
+  ---
+  duration_ms: 0.6518
+  type: 'test'
+  ...
+# Subtest: bad bearer 401s
+ok 3 - bad bearer 401s
+  ---
+  duration_ms: 0.661861
+  type: 'test'
+  ...
+# Subtest: oversize/malformed questions 400
+ok 4 - oversize/malformed questions 400
+  ---
+  duration_ms: 1.156474
+  type: 'test'
+  ...
+# Subtest: invalid site is rejected
+ok 5 - invalid site is rejected
+  ---
+  duration_ms: 0.849326
+  type: 'test'
+  ...
+# Subtest: ok path (unconfigured runner) still returns 200 with ok:false, logs shadow, and counts against budget
+ok 6 - ok path (unconfigured runner) still returns 200 with ok:false, logs shadow, and counts against budget
+  ---
+  duration_ms: 3.553902
+  type: 'test'
+  ...
+# Subtest: MEDIUM-2: a container cannot claim a runner-owned site
+ok 7 - MEDIUM-2: a container cannot claim a runner-owned site
+  ---
+  duration_ms: 0.763095
+  type: 'test'
+  ...
+# Subtest: MEDIUM-1: an oversize `today` is rejected before it can grow the central log unbounded
+ok 8 - MEDIUM-1: an oversize `today` is rejected before it can grow the central log unbounded
+  ---
+  duration_ms: 0.453848
+  type: 'test'
+  ...
+# Subtest: LOW: __proto__/constructor/prototype question keys are rejected, never merged onto the questions object
+ok 9 - LOW: __proto__/constructor/prototype question keys are rejected, never merged onto the questions object
+  ---
+  duration_ms: 0.660722
+  type: 'test'
+  ...
+# Subtest: LOW: a 400 (malformed request) counts against the same per-run call budget a successful call does
+ok 10 - LOW: a 400 (malformed request) counts against the same per-run call budget a successful call does
+  ---
+  duration_ms: 0.85047
+  type: 'test'
+  ...
+# Subtest: run budget: max calls exhausts to 429
+ok 11 - run budget: max calls exhausts to 429
+  ---
+  duration_ms: 1.425821
+  type: 'test'
+  ...
+# Subtest: MEDIUM-3: a cost-unreported (unknown-costSource) response still counts toward the per-run $ budget
+ok 12 - MEDIUM-3: a cost-unreported (unknown-costSource) response still counts toward the per-run $ budget
+  ---
+  duration_ms: 7.719717
+  type: 'test'
+  ...
+# Subtest: revoked capability 401s on the next request
+ok 13 - revoked capability 401s on the next request
+  ---
+  duration_ms: 0.51878
+  type: 'test'
+  ...
+# Subtest: sweep drops only capabilities older than FACTORY_RUN_TIMEOUT + 30 minutes
+ok 14 - sweep drops only capabilities older than FACTORY_RUN_TIMEOUT + 30 minutes
+  ---
+  duration_ms: 0.57308
+  type: 'test'
+  ...
+# Subtest: v2 proxy owns attempt identity, retains logical retries and logs matching bindings
+ok 15 - v2 proxy owns attempt identity, retains logical retries and logs matching bindings
+  ---
+  duration_ms: 1.855976
+  type: 'test'
+  ...
+# [jev] run=joined-run site=rank ok=true ms=0
+# Subtest: v2 real shell -> proxy -> provider receipt -> report bills once (invalid=false)
+ok 16 - v2 real shell -> proxy -> provider receipt -> report bills once (invalid=false)
+  ---
+  duration_ms: 238.476626
+  type: 'test'
+  ...
+# [jev] run=joined-run site=rank ok=false ms=1
+# Subtest: v2 real shell -> proxy -> provider receipt -> report bills once (invalid=true)
+ok 17 - v2 real shell -> proxy -> provider receipt -> report bills once (invalid=true)
+  ---
+  duration_ms: 170.538676
+  type: 'test'
+  ...
+# Subtest: autoApproveState truncates body to 12 KB and passes fields through
+ok 18 - autoApproveState truncates body to 12 KB and passes fields through
+  ---
+  duration_ms: 1.985592
+  type: 'test'
+  ...
+# Subtest: autoApproveQuestions covers tags_cover_body, touches_sensitive, actionable as nouls with the untrusted-data note
+ok 19 - autoApproveQuestions covers tags_cover_body, touches_sensitive, actionable as nouls with the untrusted-data note
+  ---
+  duration_ms: 0.334474
+  type: 'test'
+  ...
+# Subtest: discoveryZoneState keeps files that fit and drops the rest to respect the byte ceiling
+ok 20 - discoveryZoneState keeps files that fit and drops the rest to respect the byte ceiling
+  ---
+  duration_ms: 0.85681
+  type: 'test'
+  ...
+# Subtest: discoveryZoneState keeps every file when it already fits
+ok 21 - discoveryZoneState keeps every file when it already fits
+  ---
+  duration_ms: 0.154334
+  type: 'test'
+  ...
+# Subtest: discoveryZoneQuestions covers only the two zones SENSITIVE_ZONES can actually match (M12)
+ok 22 - discoveryZoneQuestions covers only the two zones SENSITIVE_ZONES can actually match (M12)
+  ---
+  duration_ms: 0.233824
+  type: 'test'
+  ...
+# Subtest: discoveryZoneToday echoes scanCompare's own matched zone names
+ok 23 - discoveryZoneToday echoes scanCompare's own matched zone names
+  ---
+  duration_ms: 0.181524
+  type: 'test'
+  ...
+# Subtest: taskSizeState truncates task to 4 KB and spec to 12 KB, and passes null through
+ok 24 - taskSizeState truncates task to 4 KB and spec to 12 KB, and passes null through
+  ---
+  duration_ms: 1.776779
+  type: 'test'
+  ...
+# Subtest: taskSizeQuestions has an S/M/L choice and a should_split noul
+ok 25 - taskSizeQuestions has an S/M/L choice and a should_split noul
+  ---
+  duration_ms: 0.233096
+  type: 'test'
+  ...
+# Subtest: taskSizeToday mirrors the resolved tier policy
+ok 26 - taskSizeToday mirrors the resolved tier policy
+  ---
+  duration_ms: 0.368991
+  type: 'test'
+  ...
+# Subtest: providerHealthState bounds evidence to 4096 bytes
+ok 27 - providerHealthState bounds evidence to 4096 bytes
+  ---
+  duration_ms: 0.787948
+  type: 'test'
+  ...
+# Subtest: providerHealthQuestions has exactly the provider_outage noul
+ok 28 - providerHealthQuestions has exactly the provider_outage noul
+  ---
+  duration_ms: 0.342729
+  type: 'test'
+  ...
+# Subtest: providerHealthToday mirrors whether providerFailureEvidence returned non-null
+ok 29 - providerHealthToday mirrors whether providerFailureEvidence returned non-null
+  ---
+  duration_ms: 0.20793
+  type: 'test'
+  ...
+# Subtest: shadowTaskSize never throws and writes nothing when unconfigured (no key)
+ok 30 - shadowTaskSize never throws and writes nothing when unconfigured (no key)
+  ---
+  duration_ms: 1.73796
+  type: 'test'
+  ...
+# Subtest: shadowTaskSize never throws when the provider call itself throws (network error)
+ok 31 - shadowTaskSize never throws when the provider call itself throws (network error)
+  ---
+  duration_ms: 3.18756
+  type: 'test'
+  ...
+# Subtest: shadowTaskSize logs a real answer end to end with a stubbed fetch
+ok 32 - shadowTaskSize logs a real answer end to end with a stubbed fetch
+  ---
+  duration_ms: 22.931951
+  type: 'test'
+  ...
+# Subtest: runner-side hourly rate cap fails closed once exceeded
+ok 33 - runner-side hourly rate cap fails closed once exceeded
+  ---
+  duration_ms: 40.36027
+  type: 'test'
+  ...
+# Subtest: unconfigured (no key) fails open without ever calling fetch
+ok 34 - unconfigured (no key) fails open without ever calling fetch
+  ---
+  duration_ms: 0.302512
+  type: 'test'
+  ...
+# Subtest: oversize state fails closed with state_bytes and never calls fetch
+ok 35 - oversize state fails closed with state_bytes and never calls fetch
+  ---
+  duration_ms: 0.764174
+  type: 'test'
+  ...
+# Subtest: an oversized state never consumes an hourly-cap slot
+ok 36 - an oversized state never consumes an hourly-cap slot
+  ---
+  duration_ms: 6.629832
+  type: 'test'
+  ...
+# Subtest: a valid response parses answers, usage, and provider-reported cost
+ok 37 - a valid response parses answers, usage, and provider-reported cost
+  ---
+  duration_ms: 1.734584
+  type: 'test'
+  ...
+# Subtest: missing usage.cost stays null with an unknown source
+ok 38 - missing usage.cost stays null with an unknown source
+  ---
+  duration_ms: 0.796912
+  type: 'test'
+  ...
+# Subtest: a choice answer outside the question criteria is invalid_response
+ok 39 - a choice answer outside the question criteria is invalid_response
+  ---
+  duration_ms: 0.921818
+  type: 'test'
+  ...
+# Subtest: HIGH-2: probabilities/confidence survive validation for a choice answer, and score carries legend too
+ok 40 - HIGH-2: probabilities/confidence survive validation for a choice answer, and score carries legend too
+  ---
+  duration_ms: 1.613278
+  type: 'test'
+  ...
+# Subtest: HIGH-2: a malformed probabilities object (out of 0..1 range) invalidates the whole answer
+ok 41 - HIGH-2: a malformed probabilities object (out of 0..1 range) invalidates the whole answer
+  ---
+  duration_ms: 2.321111
+  type: 'test'
+  ...
+# Subtest: an HTTP error status is reported as its own reason, never thrown
+ok 42 - an HTTP error status is reported as its own reason, never thrown
+  ---
+  duration_ms: 0.957103
+  type: 'test'
+  ...
+# Subtest: an aborted/timed-out fetch is reported as timeout, not thrown
+ok 43 - an aborted/timed-out fetch is reported as timeout, not thrown
+  ---
+  duration_ms: 0.388485
+  type: 'test'
+  ...
+# Subtest: a network failure (non-timeout) is reported as network
+ok 44 - a network failure (non-timeout) is reported as network
+  ---
+  duration_ms: 0.398829
+  type: 'test'
+  ...
+# Subtest: jevShadowLog writes one parseable JSON line and never throws
+ok 45 - jevShadowLog writes one parseable JSON line and never throws
+  ---
+  duration_ms: 1.130619
+  type: 'test'
+  ...
+# Subtest: failureClassQuestions criteria keys are exactly the FailureClass union
+ok 46 - failureClassQuestions criteria keys are exactly the FailureClass union
+  ---
+  duration_ms: 0.313829
+  type: 'test'
+  ...
+# Subtest: v2 bindings and requested alias are pinned before the provider await
+ok 47 - v2 bindings and requested alias are pinned before the provider await
+  ---
+  duration_ms: 0.751314
+  type: 'test'
+  ...
+# Subtest: invalid semantic answers retain bounded provider receipts independently from success
+ok 48 - invalid semantic answers retain bounded provider receipts independently from success
+  ---
+  duration_ms: 0.828188
+  type: 'test'
+  ...
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/batch-JkXZ7T/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/batch-JkXZ7T/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/batch-JkXZ7T/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/nonblob-spxuC1/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/nonblob-spxuC1/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/nonblob-spxuC1/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/longkey-pgEqMd/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/longkey-pgEqMd/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/longkey-pgEqMd/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/alias-geiHLX/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/alias-geiHLX/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/alias-geiHLX/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/realalias-yWJTF2/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/realalias-yWJTF2/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/realalias-yWJTF2/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/scalar-vskB7S/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/scalar-vskB7S/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/scalar-vskB7S/spec-candidates.json (dev env?)
+# Subtest: no proposal_id: writes nothing
+ok 49 - no proposal_id: writes nothing
+  ---
+  duration_ms: 2.412754
+  type: 'test'
+  ...
+# Subtest: proposal not found on meta: writes nothing
+ok 50 - proposal not found on meta: writes nothing
+  ---
+  duration_ms: 0.491156
+  type: 'test'
+  ...
+# Subtest: no mapped repos in frontmatter: writes nothing
+ok 51 - no mapped repos in frontmatter: writes nothing
+  ---
+  duration_ms: 0.853588
+  type: 'test'
+  ...
+# Subtest: noise filter drops build/vendor/lockfile/media/deep/long/unsafe-charset paths
+ok 52 - noise filter drops build/vendor/lockfile/media/deep/long/unsafe-charset paths
+  ---
+  duration_ms: 1.024282
+  type: 'test'
+  ...
+# Subtest: path-charset rejection: a committed path outside the safe charset is noise
+ok 53 - path-charset rejection: a committed path outside the safe charset is noise
+  ---
+  duration_ms: 0.245053
+  type: 'test'
+  ...
+# Subtest: batches at 60 paths per Jev call, skips a failed batch, caps candidates by probability and top 25
+ok 54 - batches at 60 paths per Jev call, skips a failed batch, caps candidates by probability and top 25
+  ---
+  duration_ms: 3.767098
+  type: 'test'
+  ...
+# Subtest: non-blob tree entries (directories) are filtered before scoring
+ok 55 - non-blob tree entries (directories) are filtered before scoring
+  ---
+  duration_ms: 1.819753
+  type: 'test'
+  ...
+# Subtest: key length > 120 chars is never sent to Jev
+ok 56 - key length > 120 chars is never sent to Jev
+  ---
+  duration_ms: 1.066448
+  type: 'test'
+  ...
+# Subtest: truncated tree logs a warning but still scores what came back
+ok 57 - truncated tree logs a warning but still scores what came back
+  ---
+  duration_ms: 1.032471
+  type: 'test'
+  ...
+# Subtest: real REPO_ALIASES table maps the _/- spelling (minion_hub -> minion-hub)
+ok 58 - real REPO_ALIASES table maps the _/- spelling (minion_hub -> minion-hub)
+  ---
+  duration_ms: 1.259373
+  type: 'test'
+  ...
+# Subtest: real REPO_ALIASES table maps "minion" (gateway alias) to minion-ai — the old default fallback could not
+ok 59 - real REPO_ALIASES table maps "minion" (gateway alias) to minion-ai — the old default fallback could not
+  ---
+  duration_ms: 1.016159
+  type: 'test'
+  ...
+# Subtest: scalar repos: (not an array) is tolerated, matching queue.ts's frontmatter tolerance
+ok 60 - scalar repos: (not an array) is tolerated, matching queue.ts's frontmatter tolerance
+  ---
+  duration_ms: 0.905217
+  type: 'test'
+  ...
+# Subtest: a blown deadline before scoring starts writes no files
+ok 61 - a blown deadline before scoring starts writes no files
+  ---
+  duration_ms: 0.396723
+  type: 'test'
+  ...
+# [runner] spec-grounding: 50ms deadline exceeded for sgrun0001 — writing nothing
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/perrepo-CaN32L/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/perrepo-CaN32L/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/perrepo-CaN32L/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/costsource-BFqEQA/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/costsource-BFqEQA/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/costsource-BFqEQA/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/atomic-8d0EqS/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/atomic-8d0EqS/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/atomic-8d0EqS/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/cap2-RF4uOa/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/cap2-RF4uOa/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/cap2-RF4uOa/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/cost-f6WWAs/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/cost-f6WWAs/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/cost-f6WWAs/spec-candidates.json (dev env?)
+# [runner] spec-grounding failed for sgrun0001: boom
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/failed-receipt-out-0D9dD1/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/failed-receipt-out-0D9dD1/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/failed-receipt-out-0D9dD1/spec-candidates.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/failed-receipt-out-asGgyn/jev-spec-grounding-result.json (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/failed-receipt-out-asGgyn/spec-candidates.md (dev env?)
+# [runner] chown 1100 failed for /tmp/spec-grounding-test-iVxUHC/failed-receipt-out-asGgyn/spec-candidates.json (dev env?)
+# Subtest: mid-loop real-time deadline yields no files even with a batch still in flight
+ok 62 - mid-loop real-time deadline yields no files even with a batch still in flight
+  ---
+  duration_ms: 50.213109
+  type: 'test'
+  ...
+# Subtest: per-repo batch budget is a fixed share, not first-come: two repos split the cap evenly
+ok 63 - per-repo batch budget is a fixed share, not first-come: two repos split the cap evenly
+  ---
+  duration_ms: 2.722726
+  type: 'test'
+  ...
+# Subtest: costSource propagates "unknown" if any batch reported it, even when others were provider-reported
+ok 64 - costSource propagates "unknown" if any batch reported it, even when others were provider-reported
+  ---
+  duration_ms: 2.43892
+  type: 'test'
+  ...
+# Subtest: atomic write: the cost file, md, and json all exist together with no leftover tmp files
+ok 65 - atomic write: the cost file, md, and json all exist together with no leftover tmp files
+  ---
+  duration_ms: 0.887652
+  type: 'test'
+  ...
+# Subtest: caps at 2 repos even when more are declared
+ok 66 - caps at 2 repos even when more are declared
+  ---
+  duration_ms: 0.739424
+  type: 'test'
+  ...
+# Subtest: writes the runner-side cost result file that sum_cost_usd folds in, and returns the same cost
+ok 67 - writes the runner-side cost result file that sum_cost_usd folds in, and returns the same cost
+  ---
+  duration_ms: 0.595616
+  type: 'test'
+  ...
+# Subtest: resolveBranchHead returning null (branch resolution failure) fails that repo open, writing nothing when it is the only one
+ok 68 - resolveBranchHead returning null (branch resolution failure) fails that repo open, writing nothing when it is the only one
+  ---
+  duration_ms: 0.3414
+  type: 'test'
+  ...
+# Subtest: gh returning null (tree fetch 404/403/network failure) fails that repo open, writing nothing when it is the only one
+ok 69 - gh returning null (tree fetch 404/403/network failure) fails that repo open, writing nothing when it is the only one
+  ---
+  duration_ms: 0.30146
+  type: 'test'
+  ...
+# Subtest: requeue guard: an existing spec-candidates.json in outDir skips the step entirely (no double-spend)
+ok 70 - requeue guard: an existing spec-candidates.json in outDir skips the step entirely (no double-spend)
+  ---
+  duration_ms: 0.24379
+  type: 'test'
+  ...
+# Subtest: writeSpecCandidates never throws even when a dependency throws
+ok 71 - writeSpecCandidates never throws even when a dependency throws
+  ---
+  duration_ms: 0.346315
+  type: 'test'
+  ...
+# Subtest: failed grounding calls preserve known bills and fence missing-receipt coverage as unknown
+ok 72 - failed grounding calls preserve known bills and fence missing-receipt coverage as unknown
+  ---
+  duration_ms: 1.191793
+  type: 'test'
+  ...
+1..72
+# tests 72
+# suites 0
+# pass 72
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 753.875242
