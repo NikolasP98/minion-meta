@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-22T23:41:18.028Z",
+	"generatedAt": "2026-10-22T23:56:18.452Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13044,6 +13044,38 @@
 			"scoredAt": "2026-10-22T02:30:07.495Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-cc150b5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ cc150b5",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-cc150b5.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "3ac2bf2defffa59ba45a85638ba85c89a8523813b50f074f425731e1907e8d3d",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 6,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A high-severity merge-scan finding pinpoints an exact crash-risk line with a trivial, well-specified optional-chaining fix.",
+			"evidence": [
+				"high unchecked-access: member?.agentId?.startsWith() needed or it will crash if member is undefined",
+				"file src/web/auto-reply/monitor/on-message.ts:88"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-249dc0b349bf",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23722,20 +23754,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 7,
 				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Approved, well-scoped tech-debt fix to deduplicate DNI lookup logic between ruc-registry.ts and the CRM SDK.",
+			"rationale": "Already approved with a clear fix direction to consume the shared CRM SDK lookup instead of the local duplicate, removing a maintenance-burden divergence.",
 			"evidence": [
 				"status: approved",
-				"TODO(handoff) marker at src/server/services/ruc-registry.ts names @minion-stack/crm-sdk::lookupDni as the canonical twin"
+				"Fix direction: Remove the local implementation from ruc-registry.ts and import lookupDni from @minion-stack/crm-sdk instead"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T23:21:46.658Z"
+			"scoredAt": "2026-10-22T23:56:18.312Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e2abba73de07",
@@ -29104,6 +29136,72 @@
 			"scoredAt": "2026-10-22T02:26:52.612Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-2691848448",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/auto-reply/reply/dispatch-from-config.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2691848448.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "f7ccf1bdadf98fde733cbffaca04c2ce3ae023318ba4ab0ebfecff640122a7bb",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-951373254"
+			],
+			"rationale": "Both markers name the same unimplemented Slice11 prerequisite for certified sourceProvenance handling and should be scoped as one goal.",
+			"evidence": [
+				"marker text: Slice11 must consume these original units before watcher matching"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3056368971",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/web/inbound/monitor.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3056368971.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "d03bd7f13656f4c411c68a33ecf709515cdda784c2394178f6288b7cfa998b63",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-632575475"
+			],
+			"rationale": "Shares the same spec 032 FR-007 requirement with the deliver.ts marker, covering the inbound import half of a single feature.",
+			"evidence": [
+				"marker text: spec 032 FR-007 — the account-level contact import and history"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-3159127524",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29209,14 +29307,14 @@
 			"scoredAt": "2026-10-22T02:29:07.341Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-648930682",
+			"key": "proposal:handoff-minion-ai-632575475",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-ai",
-			"title": "Handoff marker — src/agents/pi-embedded-runner/run.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-648930682.md",
+			"title": "Handoff marker — src/infra/outbound/deliver.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-632575475.md",
 			"sourceUpdatedAt": "2026-10-22",
-			"sourceFingerprint": "97adbb0428faba3051e0b94149124e34beea43063caecf6350b1e2175f478e5c",
+			"sourceFingerprint": "a5d44b059fcb208d207506a5d244b6546f7a2551c5943a7afb8f0e64064e00ec",
 			"score": 33,
 			"band": "low",
 			"axes": {
@@ -29226,20 +29324,85 @@
 			},
 			"readiness": {
 				"specification": 5,
-				"implementation": 4
+				"implementation": 3
 			},
 			"confidence": 4,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:handoff-minion-ai-3908790574"
+				"proposal:handoff-minion-ai-3056368971"
 			],
-			"rationale": "Request-wide token budget sharing across provider fallback is scoped under the same agent-dynamic-tools spec as the Hub recovery marker.",
+			"rationale": "Shares the same spec 032 FR-007 requirement as the monitor.ts marker, covering the outbound delivery half of member-assistant sending.",
 			"evidence": [
-				"Share this budget across outer provider fallback invocations for a request-wide cap. See meta proposals/2026-10-17-agent-dynamic-tools.md"
+				"marker text: spec 032 FR-007 — a member's own assistant sending via the generic"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T02:29:07.341Z"
+			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-648930682",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/agents/pi-embedded-runner/run.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-648930682.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "993af78b69f0ba3d8f3cc99ce4ff1e98f943c5cd098f39fbf5ca457abee97907",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already at review status with two concrete markers tied to an existing meta proposal, making it closer to actionable than the other handoff items.",
+			"evidence": [
+				"status: review",
+				"marker references meta proposals/2026-10-17-agent-dynamic-tools.md for request-wide budget cap"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-951373254",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/channels/fire-message-inbound.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-951373254.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "37c6fa1cd7aeeed2ffe246418cd571070a15c89b38e8ef23e38056200c8829a4",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-2691848448"
+			],
+			"rationale": "Shares the Slice11 sourceProvenance prerequisite with the dispatch-from-config marker and should be scoped together.",
+			"evidence": [
+				"marker text: Slice11 must evaluate certified sourceProvenance units individually"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
@@ -30113,109 +30276,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T00:40:38.379Z"
-		},
-		{
-			"key": "run:minion (gateway)#39867396439",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39867396439",
-			"sourceUpdatedAt": "2026-10-22T22:53:44Z",
-			"sourceFingerprint": "58cb5db68fc944513ab676cb4f6cae6dbacbf3c4fbc870732667d9b4e39100dd",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion (gateway)#39867396940"
-			],
-			"rationale": "In-progress CI run on DEV with no indication of failure or urgency yet.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV",
-				"tags: ci"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T23:41:17.889Z"
-		},
-		{
-			"key": "run:minion (gateway)#39867396940",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Docker Release",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39867396940",
-			"sourceUpdatedAt": "2026-10-22T22:55:02Z",
-			"sourceFingerprint": "d6f6740dfaa989e9fe3c94b6398db22d96c897df66d158998fb3e4deda0d5f7b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion (gateway)#39867396439"
-			],
-			"rationale": "Docker release run still in progress, no outcome signal to act on yet.",
-			"evidence": [
-				"status: in_progress",
-				"push on DEV",
-				"title: Docker Release"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T23:41:17.889Z"
-		},
-		{
-			"key": "run:minion_hub#39867358718",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39867358718",
-			"sourceUpdatedAt": "2026-10-22T22:48:45Z",
-			"sourceFingerprint": "a0d6b5552c6454a3bac72282d032bf393f3237c38c5aebfb337f35d89c01d5fc",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Routine CI run on master still in progress with no failure evidence.",
-			"evidence": [
-				"status: in_progress",
-				"push on master",
-				"repo: minion_hub"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T23:41:17.889Z"
 		},
 		{
 			"key": "spec:2026-08-19-gateway-client-error-hook-consumer-adoption-spec",
@@ -33458,6 +33518,38 @@
 			"scoredAt": "2026-10-22T23:36:15.141Z"
 		},
 		{
+			"key": "issue:minion-meta#878",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#878 [monitor:unstick] rank board goals — run 20acf9ec: no failure evidence in log despite error exit",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/878",
+			"sourceUpdatedAt": "2026-10-22T23:18:46Z",
+			"sourceFingerprint": "1c9c5650f76f144234999a9429a7ed44d082fb6160212fc85c505d9fd028c40b",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Diagnosis is inconclusive and recommends a human check host-level logs rather than offering an actionable fix.",
+			"evidence": [
+				"log shows only 3 successful batches then stops with no error lines despite exit_code=1",
+				"does not match the dual-provider-outage pattern seen in sibling runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
 			"key": "pr:minion-meta#838",
 			"kind": "pr",
 			"stage": "development",
@@ -34022,6 +34114,38 @@
 			"scoredAt": "2026-10-22T23:39:36.979Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/cc150b56b2b0d4396d44b9ef6f14b5d772c52db8",
+			"sourceUpdatedAt": "2026-10-22T22:46:49Z",
+			"sourceFingerprint": "6910474feb88386096b10bd4118e8df4fe8bb783e6df8fcca03baea7f01005d2",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Feature already merged and deployed with a safe default-off toggle, leaving no further action to rank.",
+			"evidence": [
+				"feat(whatsapp) merged with memberAgents toggle, inert until on",
+				"replies:none, dmPolicy disabled and group chats never call the hub"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
 			"key": "issue:minion-meta#461",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34092,6 +34216,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:35:11.870Z"
+		},
+		{
+			"key": "issue:minion-meta#879",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#879 [monitor:unstick] rank board goals — run bcad22e3: dual-provider outage at batch 31, shadow scorer degraded batches 21-30",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/879",
+			"sourceUpdatedAt": "2026-10-22T23:18:47Z",
+			"sourceFingerprint": "5504926bdb0593f1ed2a53f26c788a25c54536d558dce1fc1e83d4c2a4b1ad8f",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The transient provider outage only needs a retry, but the real actionable finding is the jev-shadow scorer's silent 10-batch degradation that never halted the job.",
+			"evidence": [
+				"jev-shadow scoring degrades batches 21-30 with 0/12 scored but job keeps going",
+				"recommendation: retry once provider health confirmed restored — this looks transient, not a spec defect"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
 		},
 		{
 			"key": "pr:minion-meta#815",
@@ -36243,6 +36399,68 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T02:28:04.593Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-1778568796",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/auto-reply/reply/queue/types.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-1778568796.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "a235ffdee3c67824dee99928ea5bc284f5ec37bd70d5caa39d62e1946c357d9b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The marker only vaguely names per-item lineage and lifetime without describing current behavior or a verifiable outcome, so scope must be clarified before execution.",
+			"evidence": [
+				"marker text: Define per-item accepted-request/execution lineage and lifetime"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-2591946925",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/auto-reply/reply/get-reply-run.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2591946925.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "a599b0d75ad8be3ecc151b66a0aab59f51d0482802944f2308151f5cd8f1b844",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The truncated marker text gives no concrete scope for reconciling routing behavior, making it unready to execute as stated.",
+			"evidence": [
+				"marker text: Reconcile nominal no-tool routing with the actual embedded"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T23:56:18.312Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-492754540",
