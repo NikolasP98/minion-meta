@@ -1,0 +1,80 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-answer-history-polish-20261021
+
+ ❯ src/lib/chat/history-notice.mounted.test.ts (8 tests | 4 failed) 153ms
+     × localizes structured assistant history in both shared surfaces: en 59ms
+     × localizes structured assistant history in both shared surfaces: es 9ms
+     × localizes user history and plain-text legacy cached history without changing stored content 38ms
+     × does not let a streaming text override restore a raw history marker 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/chat/history-notice.mounted.test.ts > oversized history display across actual chat consumers > localizes structured assistant history in both shared surfaces: en
+AssertionError: expected '  [chat.history omitted: message too …' to contain 'This earlier message is too large to …'
+
+Expected: "This earlier message is too large to display here."
+Received: "  [chat.history omitted: message too large]     "
+
+ ❯ src/lib/chat/history-notice.mounted.test.ts:33:42
+     31|     for (const component of [ChatTurn, ChatMessage]) {
+     32|       const view = render(component, { message });
+     33|       expect(view.container.textContent).toContain(notice[lang]);
+       |                                          ^
+     34|       expect(view.container.textContent).not.toContain(marker);
+     35|       view.unmount();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/lib/chat/history-notice.mounted.test.ts > oversized history display across actual chat consumers > localizes structured assistant history in both shared surfaces: es
+AssertionError: expected '  [chat.history omitted: message too …' to contain 'Este mensaje anterior es demasiado gr…'
+
+Expected: "Este mensaje anterior es demasiado grande para mostrarlo aquí."
+Received: "  [chat.history omitted: message too large]     "
+
+ ❯ src/lib/chat/history-notice.mounted.test.ts:33:42
+     31|     for (const component of [ChatTurn, ChatMessage]) {
+     32|       const view = render(component, { message });
+     33|       expect(view.container.textContent).toContain(notice[lang]);
+       |                                          ^
+     34|       expect(view.container.textContent).not.toContain(marker);
+     35|       view.unmount();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/lib/chat/history-notice.mounted.test.ts > oversized history display across actual chat consumers > localizes user history and plain-text legacy cached history without changing stored content
+AssertionError: expected '[chat.history omitted: message too la…' to contain 'This earlier message is too large to …'
+
+Expected: "This earlier message is too large to display here."
+Received: "[chat.history omitted: message too large] 05:17 AM   "
+
+ ❯ src/lib/chat/history-notice.mounted.test.ts:42:40
+     40|     const message = { role: 'user', content: marker, timestamp: 123456…
+     41|     const view = render(ChatMessage, { message });
+     42|     expect(view.container.textContent).toContain(notice.en);
+       |                                        ^
+     43|     expect(extractText(message)).toBe(notice.en);
+     44|     expect(message.content).toBe(marker);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/lib/chat/history-notice.mounted.test.ts > oversized history display across actual chat consumers > does not let a streaming text override restore a raw history marker
+AssertionError: expected '  [chat.history omitted: message too …' to contain 'This earlier message is too large to …'
+
+Expected: "This earlier message is too large to display here."
+Received: "  [chat.history omitted: message too large]     "
+
+ ❯ src/lib/chat/history-notice.mounted.test.ts:48:40
+     46|   it('does not let a streaming text override restore a raw history mar…
+     47|     const view = render(ChatTurn, { message: { role: 'assistant', cont…
+     48|     expect(view.container.textContent).toContain(notice.en);
+       |                                        ^
+     49|     expect(view.container.textContent).not.toContain(marker);
+     50|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  23:16:16
+   Duration  43.92s (transform 36.03s, setup 51ms, import 43.10s, tests 153ms, environment 397ms)

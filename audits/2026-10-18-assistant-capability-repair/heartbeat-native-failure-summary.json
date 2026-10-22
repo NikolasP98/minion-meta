@@ -1,0 +1,98 @@
+{
+  "sourceSha": "71e8b2dcb748bce3970c78c5b3f6cbb4f71937ea",
+  "workflowRunId": 39669098214,
+  "nativeUnitReportSha256": "e529837c05f16387e83e8071d36a04a4c2b655df14272f6f674ebc300c1f25c1",
+  "assertions": [
+    {
+      "title": "respects ackMaxChars for heartbeat acks",
+      "status": "failed",
+      "durationMs": 15388.616299999998,
+      "failureMessages": [
+        "Error: STACK_TRACE_ERROR"
+      ]
+    },
+    {
+      "title": "sends HEARTBEAT_OK when visibility.showOk is true",
+      "status": "failed",
+      "durationMs": 1730.403099999996,
+      "failureMessages": [
+        "AssertionError: expected \"vi.fn()\" to be called 1 times, but got 0 times"
+      ]
+    },
+    {
+      "title": "does not deliver HEARTBEAT_OK to telegram when showOk is false",
+      "status": "passed",
+      "durationMs": 1672.511599999998,
+      "failureMessages": []
+    },
+    {
+      "title": "strips responsePrefix before HEARTBEAT_OK detection and suppresses short ack text",
+      "status": "passed",
+      "durationMs": 1347.6405000000013,
+      "failureMessages": []
+    },
+    {
+      "title": "does not strip alphanumeric responsePrefix from larger words",
+      "status": "failed",
+      "durationMs": 15016.6083,
+      "failureMessages": [
+        "Error: STACK_TRACE_ERROR"
+      ]
+    },
+    {
+      "title": "skips heartbeat LLM calls when visibility disables all output",
+      "status": "failed",
+      "durationMs": 2467.4230000000025,
+      "failureMessages": [
+        "AssertionError: expected \"getReplyFromConfig\" to not be called at all, but actually been called 1 times\u001b[90m"
+      ]
+    },
+    {
+      "title": "skips delivery for markup-wrapped HEARTBEAT_OK",
+      "status": "passed",
+      "durationMs": 1352.8948999999993,
+      "failureMessages": []
+    },
+    {
+      "title": "does not regress updatedAt when restoring heartbeat sessions",
+      "status": "passed",
+      "durationMs": 2023.4482999999964,
+      "failureMessages": []
+    },
+    {
+      "title": "skips WhatsApp delivery when not linked or running",
+      "status": "passed",
+      "durationMs": 1374.082399999992,
+      "failureMessages": []
+    },
+    {
+      "title": "'passes through accountId for telegram\u2026'",
+      "status": "failed",
+      "durationMs": 15044.638499999986,
+      "failureMessages": [
+        "Error: STACK_TRACE_ERROR"
+      ]
+    },
+    {
+      "title": "'does not pre-resolve telegram account\u2026'",
+      "status": "failed",
+      "durationMs": 1301.0620000000054,
+      "failureMessages": [
+        "AssertionError: expected \"vi.fn()\" to be called 1 times, but got 0 times"
+      ]
+    },
+    {
+      "title": "'uses explicit heartbeat accountId for\u2026'",
+      "status": "failed",
+      "durationMs": 2879.735499999995,
+      "failureMessages": [
+        "AssertionError: expected \"vi.fn()\" to be called 1 times, but got 0 times"
+      ]
+    }
+  ],
+  "interpretation": {
+    "observed": "Three 15000ms test timeouts, four subsequent assertion failures; earlier responsePrefix Hi appears in later suppression case replySpy.",
+    "inferred": "Slow durable delivery I/O exhausted the unit case budget; timeout did not cancel original run and contaminated following fixtures. Native per-operation filesystem latency was not captured.",
+    "runtimeBugEstablished": false
+  }
+}

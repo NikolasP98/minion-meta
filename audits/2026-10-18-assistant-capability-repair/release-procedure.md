@@ -75,6 +75,15 @@ Record the exact command, backup identity, before/after non-secret field values
 and health receipt in the execution record. No restart has been performed by
 this prepared procedure.
 
+Follow [runtime reload verification](runtime-reload-verification.md) for the
+effective config path, source-pinned restart markers, canonical controller lock
+and conditional FACES-only restart fallback. `tools.reload` alone does not
+replace the in-memory Hub REST client. Select an existing persisted personal
+agent session through the supported `sessions.list` RPC or the independently
+verified existing store via the supported CLI before any bounded Gateway
+`/tools/invoke` check; never construct a session key. Successful operator
+execution is separate from the owner's authenticated Hub chat acceptance.
+
 ## Assignment and runtime proof
 
 Use the authenticated FACES owner's normal hosted ensure/completion path. The
@@ -87,11 +96,26 @@ If automatic ensure already completed after the Hub deployment, verify the
 result rather than replaying it. Preserve the existing agent ID, personality,
 workspace and profile pointer. Record the verified canonical assignment.
 
-Using the runtime's configured callback credentials and server hint, verify
-that `query/tool-catalog` and `query/tool-permissions` return an authorized
-catalog including `catalog_query`. Do not substitute a corrected request
-header for the runtime's configured hint when claiming the configuration is
-fixed. Existing Gateway permission snapshots have a 60-second cache lifetime,
+Using the runtime's configured callback credentials and server hint, require
+HTTP 200 from both `query/tool-catalog` and `query/tool-permissions`. The catalog
+must advertise one active `catalog_query` with a nonempty `contractRevision`
+and permission `pos:view`; the permissions response must grant `view` in
+`modules.pos`. These endpoints have different response shapes: only the catalog
+has a tools array. Require the same nonempty `principalId` and the expected
+FACES `orgId` in both responses. Missing or malformed fields fail verification.
+Do not substitute a corrected request header for the runtime's configured hint
+when claiming the configuration is fixed.
+
+A bounded backend execution check may read
+`GET /api/gateway/query/catalog` with `agentId` set to the persisted runtime
+agent, the expected FACES `orgId`, `kind=service`, `limit=3`, and the discovered
+tool's `contractRevision`. The top-level catalog `revision` is not the tool
+contract revision. Preserve missing-price counts, maximum-price ties and
+truncation when interpreting the current active sale-price ranking. A successful
+backend read proves typed execution through the configured callback authority;
+it does not prove Gateway activation or the user-facing answer.
+
+Existing Gateway permission snapshots have a 60-second cache lifetime,
 including failed snapshots. After verifying the callback and assignment, allow
 that lifetime to expire before starting a fresh acceptance run if the runtime
 still holds an earlier denied snapshot. Do not replay the assignment or widen
@@ -124,3 +148,7 @@ The current schema binds one personal agent per profile to one gateway. This
 repair does not provide concurrent multi-organization delegation. Full Windows
 qualification failures from the preceding release remain separately tracked;
 focused repair tests and Linux checks do not close those failures.
+
+## Owner lane-policy amendment, 2026-10-21
+
+The owner explicitly selected the new credit-efficient CI rules from specs029/030. Windows/macOS are intentionally disabled under their off defaults for this Linux Gateway release; an earlier mandatory platform requirement is superseded for this selected mode, not satisfied by skipped jobs. Require successful overall CI and applicable Linux/build/security validation on the exact integrated source. Do not infer success from Linux required alone if another applicable job failed. Preserve historical failed evidence and the independent future platform qualification ledger. Temporarily suppress intermediate Docker builds and unnecessary npm publication; restore original repository-variable state after the intended workflow has observed each selection. Enable the normal Docker release for the exact final production promotion and verify its immutable receipt and deployment normally.

@@ -6,7 +6,7 @@ pass: 1
 status: implementing
 verdict: approved
 created: 2026-10-18
-updated: 2026-10-20
+updated: 2026-10-21
 repos: [minion, minion_hub]
 proposal: 2026-10-18-assistant-capability-failure-recovery
 ---
@@ -86,3 +86,13 @@ The release procedure is tracked at
 `audits/2026-10-18-assistant-capability-repair/release-procedure.md`. These
 corrections do not authorize a production merge, configuration change or
 assignment mutation.
+
+
+## Production checkpoint, 2026-10-21
+
+The owner-selected credit-efficient release is deployed: Gateway source `97ccd699eac4dcc75194714d2a9c8a92053e535a`, successful exact DEV qualification, immutable Docker receipt and successful production controller convergence. Both canonical services are healthy. The approved FACES callback correction is applied with exactly one persistent field changed; assignment was already canonical and was not rewritten. Configured catalog/permission authority and bounded typed service reads now pass. No model turn was used for operator verification. Authenticated Hub chat acceptance remains pending, so this artifact is not marked complete. See [production adoption receipt](../audits/2026-10-18-assistant-capability-repair/credit-efficient-production-adoption.json) for exact source/run/operation evidence and retained limits.
+
+
+## Owner smoke checkpoint, 2026-10-21
+
+The owner has now supplied the production product and service answers. Both include named prices and catalog references; the service response explicitly discloses its maximum-price tie. No DSML or navigation command appears in the excerpt. This records a successful owner-reported core answering smoke. Copied text does not establish rendered source hrefs, actual browser navigation or per-run tool count, so full UX acceptance is not claimed. See [owner smoke receipt](../audits/2026-10-18-assistant-capability-repair/owner-hub-acceptance-20261021.json) and [separate polish candidate](../proposals/2026-10-21-assistant-catalog-answer-and-history-polish.md). No new runtime release or model turn was performed for this record.

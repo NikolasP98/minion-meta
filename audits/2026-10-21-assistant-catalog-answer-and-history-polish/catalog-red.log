@@ -1,0 +1,136 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-answer-history-polish-20261021
+
+ ❯ src/routes/api/gateway/query/catalog/server.test.ts (20 tests | 3 failed) 56ms
+     × rechecks pos.view and uses authorized context plus schema defaults 33ms
+     × accepts explicit valid kind and limit 4ms
+     × preserves explicit ranked-list semantics and the current dynamic contract 3ms
+ ❯ src/server/services/pos/catalog-query.test.ts (9 tests | 2 failed) 2448ms
+     × returns all three maximum winners in one bounded maximum-mode read 15ms
+     × keeps maximum winners capped while retaining the full overflow count 15ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/pos/catalog-query.test.ts > bounded catalog price SQL > returns all three maximum winners in one bounded maximum-mode read
+AssertionError: expected [ 'b' ] to deeply equal [ 'b', 'c', 'd' ]
+
+- Expected
++ Received
+
+  [
+    "b",
+-   "c",
+-   "d",
+  ]
+
+ ❯ src/server/services/pos/catalog-query.test.ts:84:56
+     82|     await db.exec("insert into fin_products values ('d','org-a','D','P…
+     83|     const result = await queryCatalogPrices(ctx, 'product', 1, 'maximu…
+     84|     expect(result.items.map((item) => item.productId)).toEqual(['b', '…
+       |                                                        ^
+     85|     expect(result).toMatchObject({
+     86|       mode: 'maximum', appliedLimit: 20, maxPrice: 25, tiedAtMaximum: …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/server/services/pos/catalog-query.test.ts > bounded catalog price SQL > keeps maximum winners capped while retaining the full overflow count
+AssertionError: expected [ { code: 'T1', …(5) } ] to have a length of 20 but got 1
+
+- Expected
++ Received
+
+- 20
++ 1
+
+ ❯ src/server/services/pos/catalog-query.test.ts:94:26
+     92|     await db.exec("insert into fin_products select 't'||n,'org-a','T'|…
+     93|     const result = await queryCatalogPrices(ctx, 'product', 1, 'maximu…
+     94|     expect(result.items).toHaveLength(20);
+       |                          ^
+     95|     expect(result.items.every((item) => item.unitPrice === 500)).toBe(…
+     96|     expect(result).toMatchObject({ mode: 'maximum', appliedLimit: 20, …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/routes/api/gateway/query/catalog/server.test.ts > catalog query authority and contract admission > rechecks pos.view and uses authorized context plus schema defaults
+AssertionError: expected "vi.fn()" to be called with arguments: [ { tenantId: 'org-a', …(1) }, …(3) ]
+
+Received:
+
+  1st vi.fn() call:
+
+@@ -3,7 +3,6 @@
+      "profileId": "profile-a",
+      "tenantId": "org-a",
+    },
+    "product",
+    5,
+-   "maximum",
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/routes/api/gateway/query/catalog/server.test.ts:26:25
+     24|     const response = await call(`contractRevision=${revision}`);
+     25|     expect(mocks.auth).toHaveBeenCalledWith({}, expect.any(URL), 'pos'…
+     26|     expect(mocks.query).toHaveBeenCalledWith(ctx, 'product', 5, 'maxim…
+       |                         ^
+     27|     expect(response.headers.get('cache-control')).toBe('private, no-st…
+     28|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/routes/api/gateway/query/catalog/server.test.ts > catalog query authority and contract admission > accepts explicit valid kind and limit
+AssertionError: expected "vi.fn()" to be called with arguments: [ { tenantId: 'org-a', …(1) }, …(3) ]
+
+Received:
+
+  1st vi.fn() call:
+
+@@ -3,7 +3,6 @@
+      "profileId": "profile-a",
+      "tenantId": "org-a",
+    },
+    "all",
+    20,
+-   "maximum",
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/routes/api/gateway/query/catalog/server.test.ts:83:25
+     81|   it('accepts explicit valid kind and limit', async () => {
+     82|     expect((await call(`contractRevision=${revision}&kind=all&limit=20…
+     83|     expect(mocks.query).toHaveBeenCalledWith(ctx, 'all', 20, 'maximum'…
+       |                         ^
+     84|   });
+     85|   it('preserves explicit ranked-list semantics and the current dynamic…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/routes/api/gateway/query/catalog/server.test.ts > catalog query authority and contract admission > preserves explicit ranked-list semantics and the current dynamic contract
+AssertionError: expected 400 to be 200 // Object.is equality
+
+- Expected
++ Received
+
+- 200
++ 400
+
+ ❯ src/routes/api/gateway/query/catalog/server.test.ts:86:85
+     84|   });
+     85|   it('preserves explicit ranked-list semantics and the current dynamic…
+     86|     expect((await call(`contractRevision=${revision}&mode=ranked&limit…
+       |                                                                                     ^
+     87|     expect(mocks.query).toHaveBeenCalledWith(ctx, 'product', 1, 'ranke…
+     88|     expect(ASSISTANT_TOOL_DECLARATIONS[0]).toMatchObject({
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  5 failed | 24 passed (29)
+   Start at  23:15:34
+   Duration  3.23s (transform 231ms, setup 91ms, import 651ms, tests 2.50s, environment 0ms)
