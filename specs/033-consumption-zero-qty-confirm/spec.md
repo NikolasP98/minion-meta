@@ -100,7 +100,7 @@ Why the dialog unions defaults instead of relying on a 0 accrual row: `loadRows`
 - **SC-003** A confirmed-0 completion leaves the accrual `released` and no entry (query the booking's `stk_accruals.status` + `stk_entries` by `metadata->>'sourceId'`).
 
 ## Out of scope / open ends
-- Server-side enforcement that a `completed` status write carries a confirmation (would break the gateway agent action and every API client). Logged as a follow-up in the slice-3 PR body; not a defect of this spec.
+- ~~Server-side enforcement~~ — moved in scope by Amendment A (S4) below; the premise that it breaks the gateway agent action was wrong (that action completes through `setBookingStatus` + `realizeAccruals`, never `applyBookingStatus`).
 - The recipe-explosion gap in the dialog's defaults fallback (`ConsumptionConfirmDialog.svelte:117-122`) stays as ledgered.
 - `BookingDetailDrawer` is already correct and is not touched.
 
@@ -110,3 +110,29 @@ The 21-Oct visit (`f4fecc5e-a0e2-4d99-af40-e45c95e48317`) used 15 UN of toxina t
 ## Assumptions
 - "Control Botox" has a single ingredient (Dysport). If the owner maps more, I5 covers it.
 - FACES uses the status cell/board chip as its normal completion gesture (the evidence shows it did); the explicit Completar button and the drawer were already correct and remain the fast path.
+
+## Amendment A (2026-10-22) — the server refuses an unconfirmed `completed` (S4)
+
+### AS-IS
+- `PATCH /api/scheduling/bookings/[id] {status:'completed'}` and `POST …/[id]/group {status:'completed'}` both reach `applyBookingStatus` (`src/routes/api/scheduling/bookings/_handlers.ts:292`), which patches the status and then realizes open accruals as-is (`:337-357`). No confirmation is required.
+- After S3 the hub UI no longer sends these for a booking that needs confirmation (status cell/board → dialog; the drawer sends its visit-wide `completed` only after the dialog confirmed every live member, `BookingDetailDrawer.svelte:1746-1753`). Any other client (an old tab, a script, a future surface) still can.
+- Confirming paths that stay untouched: `POST …/[id]/complete` and `POST /api/gateway/actions/booking-complete` call `setBookingStatus` directly (`complete/+server.ts:43`, `booking-complete/+server.ts:56`).
+
+### TO-BE
+- A booking **needs confirmation** when it is not already `completed` and either (a) its `productId` has at least one `stk_consumption` row, **any quantity including 0**, or (b) it has an `open` `stk_accruals` row (`source='booking'`).
+- `applyBookingStatus` with `status:'completed'` on a booking that needs confirmation throws `ConsumptionConfirmationRequiredError`; the per-row PATCH answers **409** `{ error: 'consumption_confirmation_required', bookingIds: [id], message }` and nothing is written.
+- The visit-wide walk pre-checks **every** eligible target before applying any; if one or more need confirmation it answers the same 409 with all their ids, `applied: []`, and writes nothing.
+- A `completed` write for a booking that does not need confirmation (no product, no mapping, no open accrual, or already completed) behaves exactly as today.
+- Client: `booking-mover.ts` `commitStatus` shows `sched_status_needs_consumption` (new es/en key) instead of the generic `sched_status_failed` on that 409.
+
+### Requirements
+- **FR-010** `bookingsNeedingConfirmation(ctx, ids)` (in `_handlers.ts`, not exported from a frozen inventory) returns the subset per the rule above.
+- **FR-011** `applyBookingStatus` pre-check before any write; `statusFailureResponse` maps the error to the 409 shape; `visitStatusResponse` pre-checks all targets first.
+- **FR-012** Tests: per-row 409 for a 0-mapped product; 409 for open-accrual-only; 200 for unmapped product and for already-completed; visit walk 409 with `applied: []` when one member needs confirmation; `/complete` still completes a mapped booking.
+- **FR-013** i18n: one new key `sched_status_needs_consumption` (es: "Confirma el consumo con «Completar» antes de cerrar esta cita.", en: "Confirm consumption with “Complete” before closing this booking."). Route contract and `pos.service` exports untouched.
+
+### Success criteria
+- **SC-004** `curl -X PATCH …/bookings/<CB booking> -d '{"status":"completed"}'` on prod returns 409 once Control Botox has a mapping; the status cell path still opens the dialog.
+
+### Breaking change, named
+External API clients that complete mapped bookings with a plain status PATCH now get 409. They complete through `POST …/[id]/complete` (omit `lines` to keep today's realize-as-is behaviour).
