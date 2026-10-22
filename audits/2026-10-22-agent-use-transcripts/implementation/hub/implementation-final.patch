@@ -1,0 +1,3133 @@
+diff --git a/bun.lock b/bun.lock
+index 8f0fbfeb..ee27a811 100644
+--- a/bun.lock
++++ b/bun.lock
+@@ -25,7 +25,7 @@
+         "@minion-stack/crm-sdk": "file:deps/minion-stack-crm-sdk-0.1.0-776d8c49.tgz",
+         "@minion-stack/db": "file:deps/minion-stack-db-0.9.4-ui-coherence-7942d0d8.tgz",
+         "@minion-stack/design-tokens": "file:deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz",
+-        "@minion-stack/shared": "file:deps/minion-stack-shared-0.9.1-readiness.2.tgz",
++        "@minion-stack/shared": "file:deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz",
+         "@minion-stack/ui": "file:deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz",
+         "@minion-stack/workforce-client": "file:deps/minion-stack-workforce-client-0.4.0-readiness.1.tgz",
+         "@nikolasp98/plugin-ui-bridge": "^0.4.0",
+@@ -436,7 +436,7 @@
+ 
+     "@minion-stack/lint-config": ["@minion-stack/lint-config@0.1.2", "", { "peerDependencies": { "@eslint/js": ">=9.0.0", "eslint": ">=9.0.0", "oxlint": ">=0.15.0", "prettier": ">=3.0.0", "typescript-eslint": ">=8.0.0" }, "optionalPeers": ["@eslint/js", "eslint", "oxlint", "prettier", "typescript-eslint"] }, "sha512-68UnBGAn0xbrsL50CX2JQApmFiELDbRfz5RZKTvy52I12TrnZzvqJ+U1jjSG6un4RvWEu0hBcIm5ymCz2FFrKg=="],
+ 
+-    "@minion-stack/shared": ["@minion-stack/shared@deps/minion-stack-shared-0.9.1-readiness.2.tgz", { "peerDependencies": { "ws": "^8.0.0" }, "optionalPeers": ["ws"] }],
++    "@minion-stack/shared": ["@minion-stack/shared@deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz", { "peerDependencies": { "ws": "^8.0.0" }, "optionalPeers": ["ws"] }],
+ 
+     "@minion-stack/tsconfig": ["@minion-stack/tsconfig@0.1.0", "", {}, "sha512-Luq2w1k9b7WuJkrAiowFMLcUnNhqo2kct4u+eYXqq8nmjMIs2P9FRtz/XLD+UWkJgx16tQUUWBR+DZjD3TVgfw=="],
+ 
+diff --git a/deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz b/deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz
+new file mode 100644
+index 0000000000000000000000000000000000000000..8cab2fd368b193a159912a57011d1dd869171387
+GIT binary patch
+literal 41667
+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
+
+literal 0
+HcmV?d00001
+
+diff --git a/deps/shared-agent-harness-provenance.json b/deps/shared-agent-harness-provenance.json
+new file mode 100644
+index 00000000..72ab7556
+--- /dev/null
++++ b/deps/shared-agent-harness-provenance.json
+@@ -0,0 +1,119 @@
++{
++  "schemaVersion": 1,
++  "artifact": "minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz",
++  "version": "0.9.0",
++  "sha256": "e6e69bb92fd1200a5fb67816e5d800398d3d7c0784a4d11cd98df7c62eb7a8bd",
++  "baselineArtifact": "minion-stack-shared-0.9.1-readiness.2.tgz",
++  "baselineSha256": "994ac7f5d0b655e8b4eba7c89c86354e7f4c399ba5ed46987f71ab853dd74ef2",
++  "sourceRepository": "NikolasP98/minion-meta",
++  "sourceCommit": "71d2f8ebdf1b2668e80f55bc246a5d5ba6cee616",
++  "sourceBase": "ce62073904c0a725ebb9e2591473e57873e79c4f",
++  "files": {
++    "README.md": "44ce329da13d261dd0cc9c8eb265d77cec2aa1b49034a5ca7d55eadfd825af9d",
++    "dist/brain-vector/contract.d.ts": "a989e49bc7510b6a75ff9a53f34c0b7432bdfbfa31ecb7f39c4193a4a062ee19",
++    "dist/brain-vector/contract.js": "375accb69ac97c229ce4bbb189fa06cc9691ae9971644441f1f41087d9dcd792",
++    "dist/brain-vector/crypto.d.ts": "e4527b6a0e96a5e23c91248c0f7a311afc874781edfd5591ce28e11a0a280b8b",
++    "dist/brain-vector/crypto.js": "e6b745afb3230387a12ff209ee0ddeb07bc8caad24a314668d3e6060fc9d69c1",
++    "dist/brain-vector/index.d.ts": "f8c5d1380db8e3b899497942911dc1a1fc26113eee765234492c8e907d757007",
++    "dist/brain-vector/index.js": "f8c5d1380db8e3b899497942911dc1a1fc26113eee765234492c8e907d757007",
++    "dist/gateway/cache-events.d.ts": "e152a847f3f034522b0e46b7ada0e3759a73db8f97aeb9006350e20b80752537",
++    "dist/gateway/cache-events.js": "853fb4daa26f9369a4a91d70ef6c7ef2306824ec8daaab142bff2a6169adbc58",
++    "dist/gateway/client.d.ts": "6de8f659efb405327f5ab29d13b7a43d0c7609805984f5614f988f0f3c899dd1",
++    "dist/gateway/client.js": "5a422c062105db8f59572685ecfd804dd80127ae1c303936a5b28b3b45bfa8f8",
++    "dist/gateway/connect-params.d.ts": "95a4d6068cd766d3b689f14e61b8e99a395a2b4f87756a45135b5f55d5436270",
++    "dist/gateway/connect-params.js": "2faaf7f2151b6a5683aa1d6123308dd7e0cdb29da0c6195311030f58bc08d3ae",
++    "dist/gateway/connection.d.ts": "1ba0f5383797c0347800a0ed69f736af75b6512b8fb178ffbbdafd60dc5cb6f4",
++    "dist/gateway/connection.js": "7705ffd9a9455e23eb02763908ceba217254a2076dbd40d0393b0e3e900d2c56",
++    "dist/gateway/envelope-contract.d.ts": "e4bcb2be9459eb26c7e036395d33ecdc033eb57274bc5e52c4edf12148470a34",
++    "dist/gateway/envelope-contract.js": "844dad5158ed506bb08092cc72b0d9eead91dadeafe54c7094ae411655678ae4",
++    "dist/gateway/errors.d.ts": "f25cca187907c858bc4a7b25204a2c4c9c41ee27f06dbc59c9ebd122b006d5f4",
++    "dist/gateway/errors.js": "813944c270159f52dca289830b7b842fdb269263fad5fdae7b0c30b6805fb5a9",
++    "dist/gateway/index.d.ts": "fa25985bfd98b8707d881a0ab7833da7c647cf9f3f8953f677302008894c6d0b",
++    "dist/gateway/index.js": "fa25985bfd98b8707d881a0ab7833da7c647cf9f3f8953f677302008894c6d0b",
++    "dist/gateway/protocol.d.ts": "3124e06fd54f0b61b35d12ae15d04ff10275224445b77d8911a035669437bc57",
++    "dist/gateway/protocol.js": "d09462eaf02f7d4018cebffe7bffa530a002aa362f2a7d20e011e87a2f709af1",
++    "dist/gateway/secrets.d.ts": "eec17387df0244fed8b7655b823fc3f4de7e59554ce52844ab451cb00b692e71",
++    "dist/gateway/secrets.js": "46ff1a3d61d3285541cda6a6e3be4441636be32b6980bd468e7d4cf77c989fd7",
++    "dist/gateway/shells.d.ts": "a43eeb64807c8f43c3beb74a4bafb630d6d00eec458824a6f4589ddb923dca73",
++    "dist/gateway/shells.js": "bd8ef47b6cc98b548b542fc144d04205bc19500c989bc2507a4acf9316cd671a",
++    "dist/gateway/traceparent.d.ts": "d07d413958b7451d19b71a3b2e8ac34d48724e4b405264b4ac2141a104f23554",
++    "dist/gateway/traceparent.js": "99717999436543de87236f4f0403abbf8f2bd7e314146fdec9b8baf43de76978",
++    "dist/gateway/types.d.ts": "f13d348d6163ed1c433251db10a535600708f31db8a257c898444af1ae7d8f54",
++    "dist/gateway/types.js": "c78d6b698e0a98bf6454fe02f8e6d7451c3cd18ede5b50cf72b2d077358d1d7d",
++    "dist/gateway/version.d.ts": "8c0494aa51c975b824c9a16910f229959d57d57e3e939ee165a87ec8f182c8b7",
++    "dist/gateway/version.js": "fb17217bd4e3569f1e79936eebe60c498c839a32a45493ef1e69ccabdf85b4c2",
++    "dist/index.d.ts": "7d63b3a0f7d6665ba6798134c83cf4c592b238d7d9cdd46a72087a70c8589748",
++    "dist/index.js": "7d63b3a0f7d6665ba6798134c83cf4c592b238d7d9cdd46a72087a70c8589748",
++    "dist/node/index.d.ts": "ee4db682d182742d61d8ed321027054ee10d85cc30584fe24bc2fe1f82b145b5",
++    "dist/node/index.js": "829ba718eed94363ff15a6d283ac6167ea61c13a159cbdf9096741346ab8aef8",
++    "dist/prompt-sections.d.ts": "2a653d07a98494d985becfc5982722facfe9fe0aa627cf1c88e67344122f9648",
++    "dist/prompt-sections.js": "e5cca9292c53967afb880d47740a05e35f03f9b3d7039aebe1fe0e164ababb5b",
++    "dist/utils/index.d.ts": "68ccfbe48076d56e6bfc88538be2d84b7670991215595914cfc4a6e820ad2797",
++    "dist/utils/index.js": "68ccfbe48076d56e6bfc88538be2d84b7670991215595914cfc4a6e820ad2797",
++    "dist/utils/session-key.d.ts": "818033715ea90e6db62d00dc7865c02038b40b165dec6388998636dabdf4054a",
++    "dist/utils/session-key.js": "4d52648e531286b5f81ddc4c67f9d0817319ac51acf88f6c9c6a484c61263a25",
++    "dist/utils/text.d.ts": "2b497a3fc6eda91bc041a2fc9c381dcf1c3d7b8168f40d27c2e573d70a6bebd7",
++    "dist/utils/text.js": "7b4add5e756e7cc0ed7ff706933d3584019143715fbe99316fbb3affc8671938",
++    "dist/utils/uuid.d.ts": "b08e4c59d99950308dd33188ee6665f96434829e79c8d7dd07bf2c4480ddcc54",
++    "dist/utils/uuid.js": "d72db4536c5ba528a1f8103a0eb8a1d357ae821651975652dd6078a8fbbb8778",
++    "package.json": "140e47aa84d8c240f083fc03a531467f7234e10a8ec78bbb0a586ca54fdf5909"
++  },
++  "removedFiles": [
++    "dist/gateway/cache-events.d.ts.map",
++    "dist/gateway/cache-events.js.map",
++    "dist/gateway/connect-params.d.ts.map",
++    "dist/gateway/connect-params.js.map",
++    "dist/gateway/connection.d.ts.map",
++    "dist/gateway/connection.js.map",
++    "dist/gateway/secrets.d.ts.map",
++    "dist/gateway/secrets.js.map",
++    "dist/gateway/shells.d.ts.map",
++    "dist/gateway/shells.js.map",
++    "dist/gateway/traceparent.d.ts.map",
++    "dist/gateway/traceparent.js.map",
++    "dist/gateway/types.d.ts.map",
++    "dist/gateway/types.js.map",
++    "dist/index.d.ts.map",
++    "dist/index.js.map",
++    "dist/node/index.d.ts.map",
++    "dist/node/index.js.map",
++    "dist/prompt-sections.d.ts.map",
++    "dist/prompt-sections.js.map",
++    "dist/utils/index.d.ts.map",
++    "dist/utils/index.js.map",
++    "dist/utils/session-key.d.ts.map",
++    "dist/utils/session-key.js.map",
++    "dist/utils/text.d.ts.map",
++    "dist/utils/text.js.map",
++    "dist/utils/uuid.d.ts.map",
++    "dist/utils/uuid.js.map"
++  ],
++  "capability": "GatewayClient.beginRequest synchronously rejects definite pre-send failures; existing request API and public error recovery remain compatible.",
++  "releaseBoundary": "Source-built archive adopted through the existing repository-relative file:deps convention; not npm-published or deployed.",
++  "forbiddenHistoricTestFiles": [
++    "dist/gateway/cache-events.test.d.ts",
++    "dist/gateway/cache-events.test.d.ts.map",
++    "dist/gateway/cache-events.test.js",
++    "dist/gateway/cache-events.test.js.map",
++    "dist/gateway/client.test.d.ts",
++    "dist/gateway/client.test.d.ts.map",
++    "dist/gateway/client.test.js",
++    "dist/gateway/client.test.js.map",
++    "dist/gateway/connect-params.test.d.ts",
++    "dist/gateway/connect-params.test.d.ts.map",
++    "dist/gateway/connect-params.test.js",
++    "dist/gateway/connect-params.test.js.map",
++    "dist/gateway/traceparent.test.d.ts",
++    "dist/gateway/traceparent.test.d.ts.map",
++    "dist/gateway/traceparent.test.js",
++    "dist/gateway/traceparent.test.js.map",
++    "dist/node/index.test.d.ts",
++    "dist/node/index.test.d.ts.map",
++    "dist/node/index.test.js",
++    "dist/node/index.test.js.map",
++    "dist/utils/text.test.d.ts",
++    "dist/utils/text.test.d.ts.map",
++    "dist/utils/text.test.js",
++    "dist/utils/text.test.js.map"
++  ]
++}
+diff --git a/package.json b/package.json
+index 0cc1265e..23f9f267 100644
+--- a/package.json
++++ b/package.json
+@@ -22,7 +22,7 @@
+     "@minion-stack/crm-sdk": "file:deps/minion-stack-crm-sdk-0.1.0-776d8c49.tgz",
+     "@minion-stack/db": "file:deps/minion-stack-db-0.9.4-ui-coherence-7942d0d8.tgz",
+     "@minion-stack/design-tokens": "file:deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz",
+-    "@minion-stack/shared": "file:deps/minion-stack-shared-0.9.1-readiness.2.tgz",
++    "@minion-stack/shared": "file:deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz",
+     "@minion-stack/ui": "file:deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz",
+     "@minion-stack/workforce-client": "file:deps/minion-stack-workforce-client-0.4.0-readiness.1.tgz",
+     "@nikolasp98/plugin-ui-bridge": "^0.4.0",
+diff --git a/src/lib/assistant/page-context.test.ts b/src/lib/assistant/page-context.test.ts
+new file mode 100644
+index 00000000..7f8ec110
+--- /dev/null
++++ b/src/lib/assistant/page-context.test.ts
+@@ -0,0 +1,39 @@
++import { describe, expect, it } from 'vitest';
++import {
++  getPageContext,
++  getPageContextRevision,
++  onPageContextChange,
++  setPageContext,
++  setPageContextLocation,
++} from './page-context';
++import { registerTool } from './model-context';
++describe('page context registration ownership', () => {
++  it('old equal-text disposal cannot clear the new owner', () => {
++    const old = setPageContext('same');
++    const current = setPageContext('same');
++    const revision = getPageContextRevision();
++    old();
++    expect(getPageContext()).toBe('same');
++    expect(getPageContextRevision()).toBe(revision);
++    current();
++    expect(getPageContext()).toBe('');
++    expect(getPageContextRevision()).toBeGreaterThan(revision);
++  });
++  it('notifies monotonically on route/focus A → B → A and tool changes', () => {
++    const seen: number[] = [];
++    const off = onPageContextChange(() => seen.push(getPageContextRevision()));
++    setPageContextLocation('/a');
++    setPageContextLocation('/b');
++    setPageContextLocation('/a');
++    const dispose = registerTool({
++      name: 'context-test',
++      description: '',
++      inputSchema: {},
++      execute() {},
++    });
++    dispose();
++    off();
++    expect(seen).toHaveLength(5);
++    expect(new Set(seen).size).toBe(5);
++  });
++});
+diff --git a/src/lib/assistant/page-context.ts b/src/lib/assistant/page-context.ts
+index cb3483c3..86f027db 100644
+--- a/src/lib/assistant/page-context.ts
++++ b/src/lib/assistant/page-context.ts
+@@ -1,21 +1,45 @@
+-/**
+- * Page-provided context for the floating assistant (spec 013 D3).
+- *
+- * Tools are page-scoped already (`model-context.ts`); this is the text
+- * counterpart: a page describes what is on screen in model-only prose and
+- * `buildAssistantContext` appends it to the envelope at send time. One slot:
+- * the page that is mounted owns it, and its disposer clears it on unmount.
+- */
++import { onToolChange } from './model-context';
++
+ let text = '';
++let owner: symbol | null = null;
++let revision = 0;
++let location = '';
++const listeners = new Set<() => void>();
++function changed() {
++  revision++;
++  for (const listener of listeners) listener();
++}
++// Tools are part of the page envelope even when its prose remains equal.
++onToolChange(changed);
+ 
+-/** Set the page's context text; returns a disposer that clears it (only if still ours). */
++/** Each registration owns an opaque token, including registrations with equal prose. */
+ export function setPageContext(value: string): () => void {
++  const token = Symbol('page-context');
++  owner = token;
+   text = value;
++  changed();
+   return () => {
+-    if (text === value) text = '';
++    if (owner !== token) return;
++    owner = null;
++    text = '';
++    changed();
+   };
+ }
+-
++/** Pass route plus focus/query state from the mounted surface. */
++export function setPageContextLocation(value: string): void {
++  if (value === location) return;
++  location = value;
++  changed();
++}
+ export function getPageContext(): string {
+   return text;
+ }
++export function getPageContextRevision(): number {
++  return revision;
++}
++export function onPageContextChange(listener: () => void): () => void {
++  listeners.add(listener);
++  return () => {
++    listeners.delete(listener);
++  };
++}
+diff --git a/src/lib/assistant/pending-submission.integration.test.ts b/src/lib/assistant/pending-submission.integration.test.ts
+new file mode 100644
+index 00000000..772ff39e
+--- /dev/null
++++ b/src/lib/assistant/pending-submission.integration.test.ts
+@@ -0,0 +1,245 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++import { GatewayClient } from '@minion-stack/shared';
++import { createPendingSubmissions } from './pending-submission';
++import { sendAssistantTurn, abortChat } from '$lib/services/gateway/chat-rpc';
++import { agentChat, ensureAgentChat } from '$lib/state/chat/chat.svelte';
++import { conn } from '$lib/state/gateway/connection.svelte';
++import { getClient, sendRequest } from '$lib/services/gateway-rpc';
++vi.mock('$lib/services/gateway-rpc', () => ({
++  getClient: vi.fn(() => ({
++    beginRequest: (...args: Parameters<typeof sendRequest>) => sendRequest(...args),
++  })),
++  sendRequest: vi.fn(() => new Promise(() => {})),
++  gwTrace: vi.fn(),
++}));
++const scope = { actorId: 'actor', orgId: 'org', agentId: 'agent', sessionKey: 'agent:agent:main' };
++beforeEach(() => {
++  vi.useFakeTimers();
++  conn.connected = true;
++  const chat = ensureAgentChat('agent');
++  chat.sending = false;
++  chat.runId = null;
++  chat.sessionKey = scope.sessionKey;
++  chat.messages.splice(0);
++  vi.mocked(getClient).mockReturnValue({
++    beginRequest: (...args: Parameters<typeof sendRequest>) => sendRequest(...args),
++  } as unknown as ReturnType<typeof getClient>);
++});
++afterEach(() => {
++  vi.clearAllTimers();
++  vi.useRealTimers();
++  vi.clearAllMocks();
++});
++describe('pending submission transport integration', () => {
++  it.each(['cancel', 'scope', 'context'] as const)(
++    'fences deferred preparation on %s',
++    async (change) => {
++      const manager = createPendingSubmissions();
++      manager.setScope(scope);
++      const turn = manager.begin(1, 1);
++      let release!: () => void;
++      const wait = new Promise<void>((done) => {
++        release = done;
++      });
++      const flow = (async () => {
++        await wait;
++        return manager.commit(turn, change === 'context' ? 2 : 1, () =>
++          sendAssistantTurn(turn.agentId, 'hello', '', turn.sessionKey, {
++            runId: turn.submissionId,
++          }),
++        );
++      })();
++      if (change === 'cancel') manager.cancel();
++      if (change === 'scope') {
++        manager.setScope({ ...scope, sessionKey: 'B' });
++        manager.setScope(scope);
++      }
++      release();
++      expect(await flow).toBe(false);
++      expect(sendRequest).not.toHaveBeenCalled();
++    },
++  );
++  it.each(['busy', 'disconnected', 'missing-client'] as const)(
++    'returns explicit rejection on %s before touching the draft or transcript',
++    (reason) => {
++      const chat = ensureAgentChat('agent');
++      chat.inputText = 'retained';
++      if (reason === 'busy') chat.sending = true;
++      if (reason === 'disconnected') conn.connected = false;
++      if (reason === 'missing-client') vi.mocked(getClient).mockReturnValue(null);
++      expect(
++        sendAssistantTurn('agent', 'hello', '', scope.sessionKey, { runId: 'frozen' }),
++      ).toEqual({ status: 'rejected', runId: 'frozen' });
++      expect(chat.inputText).toBe('retained');
++      expect(chat.messages).toHaveLength(0);
++      expect(sendRequest).not.toHaveBeenCalled();
++    },
++  );
++  it('a real closed SDK client rejects synchronously despite stale connected UI state', () => {
++    const client = new GatewayClient({
++      url: 'ws://fixture.invalid',
++      onChallenge: async () => ({}),
++    });
++    vi.mocked(getClient).mockReturnValue(client);
++    const chat = ensureAgentChat('agent');
++    chat.inputText = 'retained';
++    expect(sendAssistantTurn('agent', 'hello', '', scope.sessionKey, { runId: 'closed' })).toEqual({
++      status: 'rejected',
++      runId: 'closed',
++    });
++    expect(chat.messages).toHaveLength(0);
++    expect(chat.inputText).toBe('retained');
++    expect(chat.runId).toBeNull();
++  });
++  it('rejects unsupported SDK capability without a transport fallback', () => {
++    vi.mocked(getClient).mockReturnValue({ request: vi.fn() } as unknown as GatewayClient);
++    expect(
++      sendAssistantTurn('agent', 'hello', '', scope.sessionKey, { runId: 'unsupported' }).status,
++    ).toBe('rejected');
++    expect(sendRequest).not.toHaveBeenCalled();
++  });
++  it.each(['ack', 'guard'] as const)(
++    'late %s recovery history cannot overwrite a newer run in the same session',
++    async (source) => {
++      let rejectSend!: (error: Error) => void;
++      let resolveHistory!: (value: unknown) => void;
++      vi.mocked(sendRequest).mockImplementation((method) => {
++        if (method === 'chat.history')
++          return new Promise((done) => {
++            resolveHistory = done;
++          });
++        return new Promise((_done, reject) => {
++          rejectSend = reject;
++        });
++      });
++      sendAssistantTurn('agent', 'turn A', '', scope.sessionKey, { runId: 'A' });
++      if (source === 'ack') {
++        rejectSend(new Error('ack lost'));
++        await Promise.resolve();
++      } else await vi.advanceTimersByTimeAsync(120_000);
++      expect(resolveHistory).toBeTypeOf('function');
++      expect(
++        sendAssistantTurn('agent', 'turn B', '', scope.sessionKey, { runId: 'B' }).status,
++      ).toBe('submitted');
++      resolveHistory({ messages: [{ role: 'assistant', content: 'old history A' }] });
++      await Promise.resolve();
++      await Promise.resolve();
++      const chat = ensureAgentChat('agent');
++      expect(chat.runId).toBe('B');
++      expect(JSON.stringify(chat.messages)).toContain('turn B');
++      expect(JSON.stringify(chat.messages)).not.toContain('old history A');
++    },
++  );
++  it.each(['before-recovery', 'during-history'] as const)(
++    'replacing chat state %s fences old recovery without recreating or overwriting it',
++    async (point) => {
++      let rejectSend!: (error: Error) => void;
++      let resolveHistory!: (value: unknown) => void;
++      vi.mocked(sendRequest).mockImplementation((method) =>
++        method === 'chat.history'
++          ? new Promise((done) => {
++              resolveHistory = done;
++            })
++          : new Promise((_done, reject) => {
++              rejectSend = reject;
++            }),
++      );
++      sendAssistantTurn('agent', 'old A', '', scope.sessionKey, { runId: 'A' });
++      if (point === 'before-recovery') {
++        delete agentChat.agent;
++        rejectSend(new Error('old connection closed'));
++        await Promise.resolve();
++        expect(agentChat.agent).toBeUndefined();
++        expect(
++          vi.mocked(sendRequest).mock.calls.filter(([method]) => method === 'chat.history'),
++        ).toHaveLength(0);
++      } else {
++        rejectSend(new Error('ack lost'));
++        await Promise.resolve();
++        delete agentChat.agent;
++        const replacement = ensureAgentChat('agent');
++        replacement.runId = 'replacement';
++        resolveHistory({ messages: [{ role: 'assistant', content: 'detached old history' }] });
++        await Promise.resolve();
++        await Promise.resolve();
++        expect(agentChat.agent).toBe(replacement);
++        expect(replacement.messages).toHaveLength(0);
++      }
++    },
++  );
++  it('a replaced client cannot start recovery even when chat state was retained', async () => {
++    let reject!: (error: Error) => void;
++    vi.mocked(sendRequest).mockImplementationOnce(
++      () =>
++        new Promise((_done, fail) => {
++          reject = fail;
++        }),
++    );
++    sendAssistantTurn('agent', 'retained transcript', '', scope.sessionKey, { runId: 'A' });
++    vi.mocked(getClient).mockReturnValue(null);
++    reject(new Error('old socket closed'));
++    await Promise.resolve();
++    expect(
++      vi.mocked(sendRequest).mock.calls.filter(([method]) => method === 'chat.history'),
++    ).toHaveLength(0);
++    expect(ensureAgentChat('agent').runId).toBe('A');
++  });
++  it('late history cannot cross owner A → B → A after preparation has finished', async () => {
++    const manager = createPendingSubmissions();
++    manager.setScope(scope);
++    const turn = manager.begin(1, 1);
++    let rejectSend!: (error: Error) => void;
++    let resolveHistory!: (value: unknown) => void;
++    vi.mocked(sendRequest).mockImplementation((method) =>
++      method === 'chat.history'
++        ? new Promise((done) => {
++            resolveHistory = done;
++          })
++        : new Promise((_done, reject) => {
++            rejectSend = reject;
++          }),
++    );
++    manager.commit(turn, 1, () =>
++      sendAssistantTurn('agent', 'retained A', '', scope.sessionKey, {
++        runId: turn.submissionId,
++        current: () => manager.ownsScope(turn),
++      }),
++    );
++    manager.finish(turn);
++    rejectSend(new Error('ack lost'));
++    await Promise.resolve();
++    manager.setScope({ ...scope, actorId: 'other' });
++    manager.setScope(scope);
++    resolveHistory({ messages: [{ role: 'assistant', content: 'stale owner result' }] });
++    await Promise.resolve();
++    await Promise.resolve();
++    expect(JSON.stringify(ensureAgentChat('agent').messages)).toContain('retained A');
++    expect(JSON.stringify(ensureAgentChat('agent').messages)).not.toContain('stale owner result');
++  });
++  it('retains submitted identity on lost acknowledgement and fences stale errors from newer runs', async () => {
++    let reject!: (error: Error) => void;
++    vi.mocked(sendRequest).mockImplementationOnce(
++      () =>
++        new Promise((_, fail) => {
++          reject = fail;
++        }),
++    );
++    expect(
++      sendAssistantTurn('agent', 'hello', '', scope.sessionKey, { runId: 'captured' }),
++    ).toEqual({ status: 'submitted', runId: 'captured' });
++    reject(new Error('ack lost'));
++    await Promise.resolve();
++    expect(ensureAgentChat('agent').runId).toBe('captured');
++    expect(
++      vi.mocked(sendRequest).mock.calls.filter(([method]) => method === 'chat.send'),
++    ).toHaveLength(1);
++    ensureAgentChat('agent').runId = 'newer';
++    vi.mocked(sendRequest).mockResolvedValueOnce({});
++    await abortChat('agent', scope.sessionKey, 'captured');
++    expect(sendRequest).toHaveBeenLastCalledWith('chat.abort', {
++      sessionKey: scope.sessionKey,
++      runId: 'captured',
++    });
++    expect(ensureAgentChat('agent').runId).toBe('newer');
++  });
++});
+diff --git a/src/lib/assistant/pending-submission.mounted.test.ts b/src/lib/assistant/pending-submission.mounted.test.ts
+new file mode 100644
+index 00000000..83082bd1
+--- /dev/null
++++ b/src/lib/assistant/pending-submission.mounted.test.ts
+@@ -0,0 +1,215 @@
++// @vitest-environment happy-dom
++import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++import { cleanup, fireEvent, render, waitFor } from '@testing-library/svelte';
++import { flushSync, tick, type ComponentProps } from 'svelte';
++import { page } from '../../../tests/fixtures/pending-submission/page.svelte';
++import Home from '../../routes/(app)/home/+page.svelte';
++import Floating from '$lib/components/layout/FloatingAssistant.svelte';
++import { assistant } from '$lib/state/features/assistant.svelte';
++import { conn } from '$lib/state/gateway/connection.svelte';
++import { ensureAgentChat } from '$lib/state/chat/chat.svelte';
++import { requestRouteDecision } from './turn-router';
++import { getClient, sendRequest } from '$lib/services/gateway-rpc';
++vi.mock('@sentry/sveltekit', () => ({ captureException: vi.fn(), captureMessage: vi.fn() }));
++vi.mock('$app/state', async () => import('../../../tests/fixtures/pending-submission/page.svelte'));
++vi.mock('$lib/assistant/turn-router', async (original) => ({
++  ...(await original<typeof import('./turn-router')>()),
++  requestRouteDecision: vi.fn(),
++}));
++vi.mock('$lib/services/gateway.svelte', async () => ({
++  ...(await import('$lib/services/gateway/chat-rpc')),
++  sendRequest: (await import('$lib/services/gateway-rpc')).sendRequest,
++}));
++vi.mock('$lib/services/gateway-rpc', () => ({
++  getClient: vi.fn(() => ({
++    beginRequest: (...args: Parameters<typeof sendRequest>) => sendRequest(...args),
++  })),
++  sendRequest: vi.fn(async (method: string) => (method === 'chat.history' ? { messages: [] } : {})),
++  gwTrace: vi.fn(),
++}));
++vi.mock('$lib/state/features/voice-call.svelte', () => ({
++  voiceCall: { active: false },
++  mouth: {},
++  startCall: vi.fn(),
++  endCall: vi.fn(),
++  toggleMute: vi.fn(),
++}));
++let release!: (value: null) => void;
++beforeEach(() => {
++  flushSync(() => {
++    page.data.user.id = 'actor-a';
++    page.data.activeOrgId = 'org-a';
++    page.data.personalAgent.agent.agentId = 'agent-a';
++    page.url = new URL('http://localhost/home');
++    conn.connected = true;
++    assistant.open = true;
++  });
++  for (const id of ['agent-a', 'agent-b']) {
++    const chat = ensureAgentChat(id);
++    chat.sending = false;
++    chat.stream = null;
++    chat.runId = null;
++    chat.sessionKey = `agent:${id}:main`;
++    chat.messages.splice(0);
++  }
++  vi.stubGlobal(
++    'fetch',
++    vi.fn(async () => Response.json({ aliases: {}, notes: [] })),
++  );
++  vi.mocked(requestRouteDecision).mockClear();
++  vi.mocked(requestRouteDecision).mockImplementation(
++    () =>
++      new Promise((done) => {
++        release = done;
++      }),
++  );
++  vi.mocked(getClient).mockReturnValue({
++    beginRequest: (...args: Parameters<typeof sendRequest>) => sendRequest(...args),
++  } as unknown as ReturnType<typeof getClient>);
++  vi.mocked(sendRequest).mockClear();
++  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
++  if (!Element.prototype.animate)
++    Element.prototype.animate = (() => ({
++      cancel() {},
++      finished: Promise.resolve(),
++    })) as unknown as typeof Element.prototype.animate;
++});
++afterEach(() => {
++  cleanup();
++  vi.unstubAllGlobals();
++  vi.restoreAllMocks();
++});
++async function mount(surface: 'Home' | 'Floating') {
++  if (surface === 'Floating')
++    flushSync(() => {
++      page.url = new URL('http://localhost/crm');
++    });
++  const view =
++    surface === 'Home'
++      ? render(Home, {
++          data: { userName: 'Fixture', greeting: 'Hello', openedIds: [] } as ComponentProps<
++            typeof Home
++          >['data'],
++        })
++      : render(Floating);
++  const input = await waitFor(() => view.getByRole('textbox') as HTMLTextAreaElement);
++  await fireEvent.input(input, { target: { value: 'keep my draft' } });
++  await fireEvent.keyDown(input, { key: 'Enter' });
++  await waitFor(() => expect(requestRouteDecision).toHaveBeenCalled());
++  return { view, input };
++}
++describe.each(['Home', 'Floating'] as const)('%s actual submission surface', (surface) => {
++  it('Stop during deferred routing sends zero and preserves the draft', async () => {
++    const { view, input } = await mount(surface);
++    await fireEvent.click(view.getByRole('button', { name: /Stop|Detener/i }));
++    release(null);
++    await tick();
++    await tick();
++    expect(input.value).toBe('keep my draft');
++    expect(
++      vi.mocked(sendRequest).mock.calls.filter(([method]) => method === 'chat.send'),
++    ).toHaveLength(0);
++  });
++  it.each(['actor', 'org', 'agent', 'page'] as const)(
++    '%s A → B → A invalidates deferred routing',
++    async (field) => {
++      const { input } = await mount(surface);
++      const change = (other: boolean) =>
++        flushSync(() => {
++          if (field === 'actor') page.data.user.id = other ? 'actor-b' : 'actor-a';
++          if (field === 'org') page.data.activeOrgId = other ? 'org-b' : 'org-a';
++          if (field === 'agent')
++            page.data.personalAgent.agent.agentId = other ? 'agent-b' : 'agent-a';
++          if (field === 'page')
++            page.url = new URL(
++              other
++                ? 'http://localhost/other'
++                : surface === 'Home'
++                  ? 'http://localhost/home'
++                  : 'http://localhost/crm',
++            );
++        });
++      change(true);
++      change(false);
++      release(null);
++      await tick();
++      await tick();
++      expect(
++        vi.mocked(sendRequest).mock.calls.filter(([method]) => method === 'chat.send'),
++      ).toHaveLength(0);
++      if (field === 'actor' || field === 'org') expect(input.value).toBe('');
++      else expect(input.value).toBe('keep my draft');
++    },
++  );
++  it('preparation Stop cannot abort a replacement run', async () => {
++    const { view } = await mount(surface);
++    flushSync(() => {
++      const chat = ensureAgentChat('agent-a');
++      chat.runId = 'replacement';
++      chat.sending = true;
++    });
++    await fireEvent.click(view.getByRole('button', { name: /Stop|Detener/i }));
++    release(null);
++    await tick();
++    await tick();
++    expect(
++      vi
++        .mocked(sendRequest)
++        .mock.calls.filter(([method]) => method === 'chat.abort' || method === 'chat.send'),
++    ).toHaveLength(0);
++  });
++  it.each(['thread', 'owner'] as const)(
++    'Stop after submitted A targets the displayed %s B with its exact run',
++    async (field) => {
++      const { view, input } = await mount(surface);
++      release(null);
++      await waitFor(() => expect(input.value).toBe(''));
++      const sent = vi.mocked(sendRequest).mock.calls.find(([method]) => method === 'chat.send');
++      expect(sent).toBeDefined();
++      flushSync(() => {
++        if (field === 'owner') {
++          page.data.user.id = 'actor-b';
++          page.data.activeOrgId = 'org-b';
++        }
++        const chat = ensureAgentChat('agent-a');
++        chat.sessionKey = 'agent:agent-a:thread-b';
++        chat.runId = 'run-b';
++        chat.sending = true;
++      });
++      await fireEvent.click(view.getByRole('button', { name: /Stop|Detener/i }));
++      expect(sendRequest).toHaveBeenLastCalledWith('chat.abort', {
++        sessionKey: 'agent:agent-a:thread-b',
++        runId: 'run-b',
++      });
++    },
++  );
++  it('synchronous busy rejection preserves draft after routing', async () => {
++    const { input } = await mount(surface);
++    flushSync(() => {
++      ensureAgentChat('agent-a').sending = true;
++    });
++    release(null);
++    await tick();
++    await tick();
++    expect(input.value).toBe('keep my draft');
++    expect(
++      vi.mocked(sendRequest).mock.calls.filter(([method]) => method === 'chat.send'),
++    ).toHaveLength(0);
++  });
++  it('thread A → B → A during deferred routing never revives the turn', async () => {
++    const { input } = await mount(surface);
++    flushSync(() => {
++      ensureAgentChat('agent-a').sessionKey = 'agent:agent-a:other';
++    });
++    flushSync(() => {
++      ensureAgentChat('agent-a').sessionKey = 'agent:agent-a:main';
++    });
++    release(null);
++    await tick();
++    await tick();
++    expect(input.value).toBe('keep my draft');
++    expect(
++      vi.mocked(sendRequest).mock.calls.filter(([method]) => method === 'chat.send'),
++    ).toHaveLength(0);
++  });
++});
+diff --git a/src/lib/assistant/pending-submission.test.ts b/src/lib/assistant/pending-submission.test.ts
+new file mode 100644
+index 00000000..4fdbf6ba
+--- /dev/null
++++ b/src/lib/assistant/pending-submission.test.ts
+@@ -0,0 +1,42 @@
++import { describe, expect, it, vi } from 'vitest';
++import { createPendingSubmissions } from './pending-submission';
++const scope = { actorId: 'actor', orgId: 'org', agentId: 'agent', sessionKey: 'session' };
++describe('pending submission ownership', () => {
++  it('invalidates A → B → A and aborts preparation', () => {
++    const manager = createPendingSubmissions();
++    manager.setScope(scope);
++    const pending = manager.begin(1, 1);
++    manager.setScope({ ...scope, sessionKey: 'other' });
++    manager.setScope(scope);
++    expect(pending.signal.aborted).toBe(true);
++    expect(manager.isCurrent(pending, 1)).toBe(false);
++    expect(pending.phase).toBe('invalidated');
++  });
++  it('commits once only on a real submitted result; rejection retains ownership evidence', () => {
++    const manager = createPendingSubmissions();
++    manager.setScope(scope);
++    const first = manager.begin(3, 4);
++    const dispatch = vi.fn(() => ({ status: 'submitted' as const, runId: first.submissionId }));
++    expect(manager.commit(first, 4, dispatch)).toBe(true);
++    expect(manager.commit(first, 4, dispatch)).toBe(false);
++    expect(dispatch).toHaveBeenCalledTimes(1);
++    const second = manager.begin(3, 4);
++    expect(
++      manager.commit(second, 4, () => ({ status: 'rejected', runId: second.submissionId })),
++    ).toBe(false);
++    expect(second.phase).toBe('rejected');
++  });
++  it('cancellation and context change fence dispatch; stale finish cannot clear newer work', () => {
++    const manager = createPendingSubmissions();
++    manager.setScope(scope);
++    const old = manager.begin(1, 2);
++    manager.cancel();
++    const current = manager.begin(1, 2);
++    manager.finish(old);
++    expect(manager.current).toBe(current);
++    const send = vi.fn();
++    expect(manager.commit(current, 3, send)).toBe(false);
++    expect(current.phase).toBe('invalidated');
++    expect(send).not.toHaveBeenCalled();
++  });
++});
+diff --git a/src/lib/assistant/pending-submission.ts b/src/lib/assistant/pending-submission.ts
+new file mode 100644
+index 00000000..20d6f9c8
+--- /dev/null
++++ b/src/lib/assistant/pending-submission.ts
+@@ -0,0 +1,101 @@
++/** Preparation ownership only. Accepted gateway runs remain in chat state. */
++export interface SubmissionScope {
++  actorId: string;
++  orgId: string;
++  agentId: string;
++  sessionKey: string;
++}
++export interface PendingSubmission extends SubmissionScope {
++  readonly submissionId: string;
++  readonly scopeEpoch: number;
++  readonly composerRevision: number;
++  readonly pageContextRevision: number;
++  phase: 'preparing' | 'submitted' | 'canceled' | 'invalidated' | 'rejected';
++  readonly signal: AbortSignal;
++}
++export type SubmissionResult = { status: 'submitted' | 'rejected'; runId: string };
++export function createPendingSubmissions() {
++  let scope: SubmissionScope | null = null;
++  let epoch = 0;
++  let pending: PendingSubmission | null = null;
++  let controller: AbortController | null = null;
++  const invalidate = (phase: 'canceled' | 'invalidated') => {
++    if (pending?.phase === 'preparing') pending.phase = phase;
++    controller?.abort();
++  };
++  const isCurrent = (turn: PendingSubmission, contextRevision: number) => {
++    const current =
++      pending === turn &&
++      turn.phase === 'preparing' &&
++      turn.scopeEpoch === epoch &&
++      turn.pageContextRevision === contextRevision;
++    if (!current && pending === turn && turn.phase === 'preparing') invalidate('invalidated');
++    return current;
++  };
++  return {
++    get current() {
++      return pending;
++    },
++    setScope(next: SubmissionScope) {
++      if (
++        scope &&
++        Object.keys(next).every(
++          (key) => next[key as keyof SubmissionScope] === scope![key as keyof SubmissionScope],
++        )
++      )
++        return;
++      invalidate('invalidated');
++      epoch++;
++      scope = { ...next };
++    },
++    begin(composerRevision: number, pageContextRevision: number): PendingSubmission {
++      if (!scope) throw new Error('Submission scope is required');
++      invalidate('invalidated');
++      controller = new AbortController();
++      pending = {
++        ...scope,
++        submissionId: crypto.randomUUID(),
++        scopeEpoch: epoch,
++        composerRevision,
++        pageContextRevision,
++        phase: 'preparing',
++        signal: controller.signal,
++      };
++      return pending;
++    },
++    isCurrent,
++    ownsScope(turn: PendingSubmission): boolean {
++      return turn.scopeEpoch === epoch;
++    },
++    commit(
++      turn: PendingSubmission,
++      contextRevision: number,
++      dispatch: () => SubmissionResult,
++    ): boolean {
++      if (!isCurrent(turn, contextRevision)) return false;
++      // No await between ownership check and transport dispatch.
++      try {
++        const result = dispatch();
++        turn.phase = result.status === 'submitted' ? 'submitted' : 'rejected';
++      } catch {
++        turn.phase = 'rejected';
++      }
++      return turn.phase === 'submitted';
++    },
++    cancel() {
++      invalidate('canceled');
++    },
++    invalidate() {
++      invalidate('invalidated');
++      epoch++;
++    },
++    finish(turn: PendingSubmission) {
++      if (pending === turn) {
++        if (turn.phase === 'preparing') turn.phase = 'rejected';
++        controller?.abort();
++        pending = null;
++        controller = null;
++      }
++    },
++  };
++}
+diff --git a/src/lib/assistant/turn-router.ts b/src/lib/assistant/turn-router.ts
+index 345eb9c9..efe6c12d 100644
+--- a/src/lib/assistant/turn-router.ts
++++ b/src/lib/assistant/turn-router.ts
+@@ -247,6 +247,7 @@ export async function requestRouteDecision(
+   /** The canonical route the user is on — the classifier reads it as state so
+    * a page-scoped manifest (`sandbox`) can win on an otherwise ambiguous turn. */
+   page?: string,
++  opts: { signal?: AbortSignal } = {},
+ ): Promise<RouteDecision | null> {
+   if (routerMode() === 'off') return null;
+   try {
+@@ -254,7 +255,9 @@ export async function requestRouteDecision(
+       method: 'POST',
+       headers: { 'content-type': 'application/json' },
+       body: JSON.stringify({ text, locale, page }),
+-      signal: AbortSignal.timeout(TIMEOUT_MS),
++      signal: opts.signal
++        ? AbortSignal.any([opts.signal, AbortSignal.timeout(TIMEOUT_MS)])
++        : AbortSignal.timeout(TIMEOUT_MS),
+     });
+     if (!res.ok) return null;
+     const body: unknown = await res.json();
+diff --git a/src/lib/attachments/draft.test.ts b/src/lib/attachments/draft.test.ts
+index 6408c51c..16de46fe 100644
+--- a/src/lib/attachments/draft.test.ts
++++ b/src/lib/attachments/draft.test.ts
+@@ -12,6 +12,35 @@ describe('assistant attachment draft', () => {
+     );
+     expect(fetchJson).toHaveBeenCalledWith('/api/files/file-id');
+   });
++  it('forwards cancellation without deleting the uploaded file', async () => {
++    const controller = new AbortController();
++    vi.mocked(fetchJson).mockResolvedValue({ file: { url: 'https://storage.test/file' } });
++    await fileDraftContext([{ id: 'saved', name: 'x', size: 1 }], { signal: controller.signal });
++    expect(fetchJson).toHaveBeenLastCalledWith('/api/files/saved', { signal: controller.signal });
++    controller.abort();
++    await expect(fileDraftContext([], { signal: controller.signal })).rejects.toThrow();
++  });
++  it('aborts in-flight signing and leaves the durable upload untouched', async () => {
++    const controller = new AbortController();
++    vi.mocked(fetchJson).mockImplementationOnce(
++      (_input, init) =>
++        new Promise((_resolve, reject) => {
++          init?.signal?.addEventListener(
++            'abort',
++            () => reject(new DOMException('canceled', 'AbortError')),
++            { once: true },
++          );
++        }),
++    );
++    const pending = fileDraftContext([{ id: 'already-uploaded', name: 'x', size: 1 }], {
++      signal: controller.signal,
++    });
++    controller.abort();
++    await expect(pending).rejects.toThrow('canceled');
++    expect(fetchJson).toHaveBeenLastCalledWith('/api/files/already-uploaded', {
++      signal: controller.signal,
++    });
++  });
+   it('rejects unsafe download schemes and supports the isolated QA transport', async () => {
+     vi.mocked(fetchJson).mockResolvedValue({ file: { url: 'javascript:alert(1)' } });
+     await expect(fileDraftContext([{ id: 'one', name: 'x', size: 1 }])).rejects.toThrow(
+diff --git a/src/lib/attachments/draft.ts b/src/lib/attachments/draft.ts
+index 103cac0f..3772eb70 100644
+--- a/src/lib/attachments/draft.ts
++++ b/src/lib/attachments/draft.ts
+@@ -6,12 +6,18 @@ export interface DraftFile {
+ }
+ /** Resolve short-lived downloads only when the user sends. The draft stores
+  * durable file ids, never expired URLs; signing is read-only and repeatable. */
+-export async function fileDraftContext(files: readonly DraftFile[]): Promise<string> {
++export async function fileDraftContext(
++  files: readonly DraftFile[],
++  opts: { signal?: AbortSignal } = {},
++): Promise<string> {
++  opts.signal?.throwIfAborted();
+   const refs = await Promise.all(
+     files.map(async (file) => {
+       const result = await fetchJson<{ file: { url: string } }>(
+         `/api/files/${encodeURIComponent(file.id)}`,
++        ...(opts.signal ? [{ signal: opts.signal }] : []),
+       );
++      opts.signal?.throwIfAborted();
+       const url = new URL(result.file.url);
+       const loopback = ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname);
+       if (url.protocol !== 'https:' && !(loopback && url.protocol === 'http:'))
+diff --git a/src/lib/components/ai/AiOrb.lifecycle.mounted.test.ts b/src/lib/components/ai/AiOrb.lifecycle.mounted.test.ts
+new file mode 100644
+index 00000000..e9a55558
+--- /dev/null
++++ b/src/lib/components/ai/AiOrb.lifecycle.mounted.test.ts
+@@ -0,0 +1,140 @@
++// @vitest-environment happy-dom
++import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++import { cleanup, render } from '@testing-library/svelte';
++import { tick } from 'svelte';
++import AiOrb from './AiOrb.svelte';
++
++let resize!: ResizeObserverCallback;
++let intersect!: IntersectionObserverCallback;
++let frame!: FrameRequestCallback;
++const schedule = vi.fn((callback: FrameRequestCallback) => {
++  frame = callback;
++  return 1;
++});
++const draw = vi.fn();
++const uniform = vi.fn();
++const loseContext = vi.fn();
++const gl = {
++  createShader: () => ({}),
++  shaderSource() {},
++  compileShader() {},
++  createProgram: () => ({}),
++  attachShader() {},
++  linkProgram() {},
++  getProgramParameter: () => true,
++  useProgram() {},
++  disable() {},
++  getUniformLocation: () => ({}),
++  uniform3fv() {},
++  uniform1f: uniform,
++  uniform3f() {},
++  uniform2f() {},
++  viewport() {},
++  clearColor() {},
++  clear() {},
++  drawArrays: draw,
++  deleteProgram: vi.fn(),
++  getExtension: () => ({ loseContext }),
++} as unknown as WebGL2RenderingContext;
++
++beforeEach(() => {
++  vi.clearAllMocks();
++  // This fixture implements the WebGL overload used by AiOrb; getContext's
++  // final DOM overload is WebGPU, which mockReturnValue otherwise selects.
++  const getContext = (() => gl) as unknown as HTMLCanvasElement['getContext'];
++  vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(getContext);
++  vi.stubGlobal('requestAnimationFrame', schedule);
++  vi.stubGlobal('cancelAnimationFrame', vi.fn());
++  vi.stubGlobal(
++    'ResizeObserver',
++    class {
++      constructor(callback: ResizeObserverCallback) {
++        resize = callback;
++      }
++      observe() {}
++      disconnect() {}
++      unobserve() {}
++    },
++  );
++  vi.stubGlobal(
++    'IntersectionObserver',
++    class {
++      constructor(callback: IntersectionObserverCallback) {
++        intersect = callback;
++      }
++      observe() {}
++      disconnect() {}
++      unobserve() {}
++    },
++  );
++  vi.stubGlobal('matchMedia', () => ({
++    matches: false,
++    addEventListener() {},
++    removeEventListener() {},
++  }));
++});
++afterEach(() => {
++  cleanup();
++  vi.restoreAllMocks();
++  vi.unstubAllGlobals();
++});
++const mount = () =>
++  render(AiOrb, {
++    stops: [
++      [0.5, 0, 0],
++      [0.7, 0, 0],
++    ],
++    body: '#888',
++    edge: '#aaa',
++  });
++const notifyResize = () => resize([], {} as ResizeObserver);
++const notifyIntersect = () => intersect([], {} as IntersectionObserver);
++
++describe('AiOrb asynchronous canvas lifetime', () => {
++  it('ignores a queued resize after the mounted canvas is removed', async () => {
++    const view = mount();
++    await tick();
++    const pendingResize = notifyResize;
++    await view.unmount();
++    draw.mockClear();
++    uniform.mockClear();
++    expect(pendingResize).not.toThrow();
++    expect(draw).not.toHaveBeenCalled();
++    expect(uniform).not.toHaveBeenCalled();
++    expect(gl.deleteProgram).toHaveBeenCalledOnce();
++    expect(loseContext).toHaveBeenCalledOnce();
++  });
++  it('queued animation/intersection callbacks cannot restart GPU work after teardown', async () => {
++    const view = mount();
++    await tick();
++    const pendingFrame = frame;
++    await view.unmount();
++    schedule.mockClear();
++    draw.mockClear();
++    uniform.mockClear();
++    pendingFrame(16);
++    notifyIntersect();
++    expect(schedule).not.toHaveBeenCalled();
++    expect(draw).not.toHaveBeenCalled();
++    expect(uniform).not.toHaveBeenCalled();
++  });
++  it('ignores observers and frames after context loss replaces the canvas with fallback', async () => {
++    const view = mount();
++    await tick();
++    const pendingFrame = frame;
++    view.container
++      .querySelector('canvas')!
++      .dispatchEvent(new Event('webglcontextlost', { cancelable: true }));
++    await tick();
++    expect(view.container.querySelector('canvas')).toBeNull();
++    schedule.mockClear();
++    draw.mockClear();
++    uniform.mockClear();
++    expect(notifyResize).not.toThrow();
++    pendingFrame(16);
++    notifyIntersect();
++    expect(schedule).not.toHaveBeenCalled();
++    expect(draw).not.toHaveBeenCalled();
++    expect(uniform).not.toHaveBeenCalled();
++  });
++});
+diff --git a/src/lib/components/ai/AiOrb.svelte b/src/lib/components/ai/AiOrb.svelte
+index 3c620dfd..aaeac43f 100644
+--- a/src/lib/components/ai/AiOrb.svelte
++++ b/src/lib/components/ai/AiOrb.svelte
+@@ -46,7 +46,8 @@
+   });
+ 
+   onMount(() => {
+-    const gl = canvas?.getContext('webgl2', {
++    const mountedCanvas = canvas;
++    const gl = mountedCanvas?.getContext('webgl2', {
+       alpha: true,
+       antialias: false,
+       depth: false,
+@@ -54,10 +55,13 @@
+       premultipliedAlpha: true,
+       stencil: false,
+     });
+-    if (!canvas || !gl) {
++    if (!mountedCanvas || !gl) {
+       failed = true;
+       return;
+     }
++    let disposed = false;
++    const active = () => !disposed && !failed && canvas === mountedCanvas;
++
+     const compile = (type: number, src: string) => {
+       const s = gl.createShader(type)!;
+       gl.shaderSource(s, src);
+@@ -108,17 +112,19 @@
+     const uRes = at('uRes');
+     const uPhase = at('uPhase');
+     const resize = () => {
++      if (!active()) return;
+       const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+-      const r = canvas!.getBoundingClientRect();
++      const r = mountedCanvas.getBoundingClientRect();
+       const w = Math.max(1, Math.round(r.width * dpr));
+       const h = Math.max(1, Math.round(r.height * dpr));
+-      if (canvas!.width === w && canvas!.height === h) return;
+-      canvas!.width = w;
+-      canvas!.height = h;
++      if (mountedCanvas.width === w && mountedCanvas.height === h) return;
++      mountedCanvas.width = w;
++      mountedCanvas.height = h;
+       gl.viewport(0, 0, w, h);
+       gl.uniform2f(uRes, w, h);
+     };
+     const draw = () => {
++      if (!active()) return;
+       gl.clearColor(0, 0, 0, 0);
+       gl.clear(gl.COLOR_BUFFER_BIT);
+       gl.drawArrays(gl.TRIANGLES, 0, 3);
+@@ -131,6 +137,10 @@
+     let onScreen = true;
+     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+     const tick = (now: number) => {
++      if (!active()) {
++        raf = 0;
++        return;
++      }
+       raf = requestAnimationFrame(tick);
+       const dt = last ? Math.min(now - last, 100) : FRAME_MS;
+       last = now;
+@@ -146,12 +156,13 @@
+       raf = 0;
+     };
+     const start = () => {
+-      if (raf || reduce.matches || !onScreen) return;
++      if (!active() || raf || reduce.matches || !onScreen) return;
+       last = 0;
+       pending = 0;
+       raf = requestAnimationFrame(tick);
+     };
+     const applyMotion = () => {
++      if (!active()) return;
+       if (reduce.matches) {
+         stop();
+         gl.uniform1f(uPhase, 0);
+@@ -164,42 +175,47 @@
+     gl.uniform1f(uPhase, 0);
+     draw();
+     sync = () => {
++      if (!active()) return;
+       push();
+       if (!raf) draw();
+     };
+ 
+     const ro = new ResizeObserver(() => {
++      if (!active()) return;
+       resize();
+       if (!raf) draw();
+     });
+-    ro.observe(canvas);
++    ro.observe(mountedCanvas);
+     // Nothing is gained by burning GPU on an orb nobody can see.
+     const io = new IntersectionObserver(
+       (entries) => {
++        if (!active()) return;
+         onScreen = entries.at(-1)?.isIntersecting ?? true;
+         if (onScreen) start();
+         else stop();
+       },
+       { rootMargin: '120px' },
+     );
+-    io.observe(canvas);
++    io.observe(mountedCanvas);
+     reduce.addEventListener('change', applyMotion);
+     // A reclaimed context leaves a blank canvas; paint the stand-in instead.
+     const lost = (e: Event) => {
++      if (!active()) return;
+       e.preventDefault();
+       stop();
+       failed = true;
+     };
+-    canvas.addEventListener('webglcontextlost', lost);
++    mountedCanvas.addEventListener('webglcontextlost', lost);
+     applyMotion();
+ 
+     return () => {
++      disposed = true;
+       sync = null;
+       stop();
+       ro.disconnect();
+       io.disconnect();
+       reduce.removeEventListener('change', applyMotion);
+-      canvas?.removeEventListener('webglcontextlost', lost);
++      mountedCanvas.removeEventListener('webglcontextlost', lost);
+       gl.deleteProgram(prog);
+       // Chromium caps live WebGL contexts per page; give ours back now.
+       gl.getExtension('WEBGL_lose_context')?.loseContext();
+diff --git a/src/lib/components/layout/FloatingAssistant.svelte b/src/lib/components/layout/FloatingAssistant.svelte
+index 7d91c6a1..a31c4a22 100644
+--- a/src/lib/components/layout/FloatingAssistant.svelte
++++ b/src/lib/components/layout/FloatingAssistant.svelte
+@@ -10,6 +10,12 @@
+   import { preferenceOwner } from '$lib/state/ui/scoped-preference.svelte';
+   import { fetchJson } from '$lib/api/fetch-json';
+   import { fileDraftContext, type DraftFile } from '$lib/attachments/draft';
++  import { createPendingSubmissions } from '$lib/assistant/pending-submission';
++  import {
++    getPageContextRevision,
++    onPageContextChange,
++    setPageContextLocation,
++  } from '$lib/assistant/page-context';
+   import { toastError } from '$lib/state/ui/toast.svelte';
+   import { AttachmentUploadError } from '$lib/attachments/upload';
+   import { ATTACHMENT_LIMITS } from '$lib/attachments/limits';
+@@ -280,6 +286,34 @@
+   // behaviour is visible without opening PostHog.
+   let lastMode = $state<RouteMode | null>(null);
+ 
++  const pendingSubmissions = createPendingSubmissions();
++  let composerRevision = 0;
++  $effect(() => {
++    void draft;
++    void stagedFiles;
++    composerRevision++;
++  });
++  function updateSubmissionScope() {
++    const id = assistant.personalAgentId ?? '';
++    pendingSubmissions.setScope({
++      actorId: page.data.user?.id ?? '',
++      orgId: page.data.activeOrgId ?? '',
++      agentId: id,
++      sessionKey: sessionKeyFor(id),
++    });
++  }
++  $effect(() => {
++    updateSubmissionScope();
++  });
++  $effect(() => {
++    setPageContextLocation(page.url.href);
++  });
++  const offContextChange = onPageContextChange(() => pendingSubmissions.invalidate());
++  onDestroy(() => {
++    offContextChange();
++    pendingSubmissions.invalidate();
++  });
++
+   async function send() {
+     if (composerMode === 'factory') {
+       void submitFactoryIntake();
+@@ -289,47 +323,78 @@
+     const id = assistant.personalAgentId;
+     if (!id) return;
+     const text = draft.trim();
++    const originalDraft = draft;
+     const files = [...stagedFiles];
+-    const owner = preferenceOwner();
+     if (!text && !files.length) return;
+-    let message = text;
+-    // Cleared before the await so the composer empties on Enter as it always
+-    // has; `routing` is what stops a second Enter from sending the same turn
+-    // twice while the classifier call is in flight.
+-    draft = '';
++    updateSubmissionScope();
++    const pending = pendingSubmissions.begin(composerRevision, getPageContextRevision());
++    const path = canonicalPath(page.url.pathname);
++    const current = () => {
++      updateSubmissionScope();
++      return pendingSubmissions.isCurrent(pending, getPageContextRevision());
++    };
+     routing = true;
+-    let loaded: ReadonlySet<ManifestId> | undefined;
+     try {
+-      const fileContext = await fileDraftContext(files);
+-      message = [text, fileContext].filter(Boolean).join('\n\n');
+-      if (preferenceOwner() !== owner || assistant.personalAgentId !== id) return;
+-      const path = canonicalPath(page.url.pathname);
++      const fileContext = await fileDraftContext(files, { signal: pending.signal });
++      if (!current()) return;
+       const decision = await requestRouteDecision(
+         text || m.shell_drop_assistant(),
+         languageTag(),
+         path,
++        { signal: pending.signal },
+       );
++      if (!current()) return;
+       lastMode = decision?.mode ?? null;
+-      loaded = gateManifests(decision, routerMode(), path);
+-    } catch {
+-      if (preferenceOwner() === owner) {
+-        draft = text;
+-        toastError(m.shell_drop_failed());
++      const loaded = gateManifests(decision, routerMode(), path);
++      const message = [text, fileContext].filter(Boolean).join('\n\n');
++      const submitted = pendingSubmissions.commit(pending, getPageContextRevision(), () =>
++        sendAssistantTurn(
++          pending.agentId,
++          message,
++          buildAssistantContext(loaded),
++          pending.sessionKey,
++          {
++            runId: pending.submissionId,
++            current: () => {
++              updateSubmissionScope();
++              return pendingSubmissions.ownsScope(pending);
++            },
++          },
++        ),
++      );
++      if (submitted) {
++        if (composerRevision === pending.composerRevision && draft === originalDraft) {
++          draft = '';
++          stagedFiles = stagedFiles.filter((file) => !files.some((sent) => sent.id === file.id));
++        }
+       }
+-      return;
++    } catch {
++      if (current()) toastError(m.shell_drop_failed());
+     } finally {
+-      routing = false;
++      if (pendingSubmissions.current === pending) {
++        routing = false;
++        pendingSubmissions.finish(pending);
++      }
+     }
+-    // Prepend page-context envelope (route + focus + nav instructions) for the
+-    // model; the clean text is what shows in the transcript. The envelope
+-    // carries only the manifests this turn needs (null decision => all of them).
+-    if (preferenceOwner() !== owner || assistant.personalAgentId !== id) return;
+-    if (!canSend) {
+-      draft = text;
+-      return;
++  }
++
++  function sendCallback(text: string) {
++    if (!canSend || routing) return;
++    updateSubmissionScope();
++    const pending = pendingSubmissions.begin(composerRevision, getPageContextRevision());
++    try {
++      pendingSubmissions.commit(pending, getPageContextRevision(), () =>
++        sendAssistantTurn(pending.agentId, text, buildAssistantContext(), pending.sessionKey, {
++          runId: pending.submissionId,
++          current: () => {
++            updateSubmissionScope();
++            return pendingSubmissions.ownsScope(pending);
++          },
++        }),
++      );
++    } finally {
++      pendingSubmissions.finish(pending);
+     }
+-    sendAssistantTurn(id, message, buildAssistantContext(loaded), sessionKeyFor(id));
+-    stagedFiles = stagedFiles.filter((file) => !files.some((sent) => sent.id === file.id));
+   }
+ 
+   function stopFactoryPolling() {
+@@ -411,6 +476,7 @@
+       requestAnimationFrame(() => inputEl?.focus());
+       return;
+     }
++    pendingSubmissions.invalidate();
+     const id = assistant.personalAgentId;
+     if (!id) return;
+     void resetChat(id);
+@@ -433,9 +499,18 @@
+   // Chat mode only: the factory desk has no run to stop.
+   const replyRunning = $derived(composerMode === 'chat' && (sending || stream !== null || routing));
+   function stopReply() {
++    const preparing = routing;
++    // Capture the displayed run synchronously; later session changes cannot retarget abort.
+     const id = assistant.personalAgentId;
+-    if (id) void abortChat(id, sessionKeyFor(id));
++    const displayed = id ? agentChat[id] : undefined;
++    const sessionKey = displayed?.sessionKey ?? `agent:${id}:main`;
++    const runId = displayed?.runId;
++    pendingSubmissions.cancel();
++    routing = false;
++    // Stop during preparation never aborts a different run that appeared meanwhile.
++    if (!preparing && id && runId) void abortChat(id, sessionKey, runId);
+   }
++
+   function copyAction(text: string): MessageAction[] {
+     if (!text.trim()) return [];
+     return [
+@@ -1075,15 +1150,8 @@
+                     message={msg}
+                     toolResults={toolResultsById}
+                     compact
+-                    onArtifactCallback={(cb) => {
+-                      const id = assistant.personalAgentId;
+-                      if (id) sendAssistantTurn(id, cb, buildAssistantContext(), sessionKeyFor(id));
+-                    }}
+-                    onChoice={(text) => {
+-                      const id = assistant.personalAgentId;
+-                      if (id)
+-                        sendAssistantTurn(id, text, buildAssistantContext(), sessionKeyFor(id));
+-                    }}
++                    onArtifactCallback={sendCallback}
++                    onChoice={sendCallback}
+                   />
+                 </AiMessage>
+               {/if}
+diff --git a/src/lib/components/my-agent/ChatInput.svelte b/src/lib/components/my-agent/ChatInput.svelte
+index 2df94814..9c945e6b 100644
+--- a/src/lib/components/my-agent/ChatInput.svelte
++++ b/src/lib/components/my-agent/ChatInput.svelte
+@@ -20,7 +20,8 @@
+ 
+   import { floatingLayer } from '$lib/components/ui/floating-layer.svelte';
+   interface Props {
+-    onsubmit?: (text: string, mode: 'ask' | 'capture') => void;
++    onsubmit?: (text: string, mode: 'ask' | 'capture') => void | boolean | Promise<void | boolean>;
++    ownerKey?: string | null;
+     placeholder?: string;
+     /** Bindable draft text — lets the parent inject a quote (Reply action). */
+     value?: string;
+@@ -33,6 +34,7 @@
+ 
+   let {
+     onsubmit,
++    ownerKey = null,
+     placeholder = m.chat_askYourAgent(),
+     value = $bindable(''),
+     agentId = null,
+@@ -75,15 +77,43 @@
+     return body ? `${ctx}\n\n${body}` : ctx;
+   }
+ 
+-  function send(effectiveMode: 'ask' | 'capture') {
++  let revision = 0;
++  let submitting = false;
++  let previousOwner: string | null | undefined;
++  $effect(() => {
++    if (previousOwner !== undefined && previousOwner !== ownerKey) {
++      value = '';
++      chips = [];
++      refs = [];
++      revision++;
++    }
++    previousOwner = ownerKey;
++  });
++  $effect(() => {
++    void value;
++    void chips;
++    void refs;
++    revision++;
++  });
++
++  async function send(effectiveMode: 'ask' | 'capture') {
++    if (submitting) return;
+     const text = value.trim();
+     // Allow sending with only dragged context or reference chips (no typed text).
+     if (!text && chips.length === 0 && refs.length === 0) return;
+-    onsubmit?.(composed(text), effectiveMode);
+-    value = '';
+-    chips = [];
+-    refs = [];
+-    closeMenu();
++    const captured = revision;
++    const owner = ownerKey;
++    submitting = true;
++    try {
++      const result = await onsubmit?.(composed(text), effectiveMode);
++      if (result === false || owner !== ownerKey || captured !== revision) return;
++      value = '';
++      chips = [];
++      refs = [];
++      closeMenu();
++    } finally {
++      submitting = false;
++    }
+   }
+ 
+   // ─── Smart-input popover (/ commands, @ mentions with dot notation) ──────────
+diff --git a/src/lib/services/gateway.svelte.ts b/src/lib/services/gateway.svelte.ts
+index f9d57c68..114a692a 100644
+--- a/src/lib/services/gateway.svelte.ts
++++ b/src/lib/services/gateway.svelte.ts
+@@ -1342,6 +1342,10 @@ function onChatEvent(payload: ChatEvent) {
+       }
+       // Live reply only (never history): execute the UI tool calls the model
+       // emitted, and hand the results back as a silent turn when it needs them.
++      // TODO(handoff): Slice 3 must bind automatic UI calls/follow-ups to a bounded
++      // accepted-run lineage, deduplicate finals, and recheck owner/page before each
++      // awaited action. Submission ownership alone does not grant callback authority.
++      // See meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
+       void runAssistantUiCalls(agentId, extractText(finalMsg) ?? '', sk);
+     });
+     setSessionIdle(sk);
+diff --git a/src/lib/services/gateway/chat-rpc.ts b/src/lib/services/gateway/chat-rpc.ts
+index 01df2888..210760a8 100644
+--- a/src/lib/services/gateway/chat-rpc.ts
++++ b/src/lib/services/gateway/chat-rpc.ts
+@@ -3,15 +3,18 @@
+ // dispatch through `sendRequest`. Imported through the gateway facade so
+ // existing `$lib/services/gateway.svelte` import paths keep working.
+ 
+-import { ensureAgentChat, pushChatMessage } from '$lib/state/chat/chat.svelte';
++import { agentChat, ensureAgentChat, pushChatMessage } from '$lib/state/chat/chat.svelte';
+ import * as m from '$lib/paraglide/messages';
+ import { conn } from '$lib/state/gateway/connection.svelte';
+ import { uuid } from '@minion-stack/shared';
+-import { sendRequest, gwTrace } from '../gateway-rpc';
++import { sendRequest, gwTrace, getClient } from '../gateway-rpc';
+ 
+ export function loadChatHistory(
+   agentId: string,
+   sessionKey?: string,
++  // TODO(handoff): legacy initial/manual callers still need owner and request-
++  // generation fencing; assistant recovery supplies an explicit current guard.
++  // See meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
+   current: () => boolean = () => true,
+ ): Promise<void> {
+   const chat = ensureAgentChat(agentId);
+@@ -60,15 +63,16 @@ export async function resetChat(agentId: string): Promise<void> {
+ }
+ 
+ /**
+- * Stop the reply running in a conversation (spec 019 FR-003). Aborts every run
+- * on the session key; the gateway answers with an `aborted` chat event, which
++ * Stop the captured reply in a conversation (spec 019 FR-003). A supplied
++ * runId aborts only that run; legacy callers omit it to abort the session.
++ * The gateway answers with an `aborted` chat event, which
+  * `onChatEvent` already turns into the partial reply + cleared stream state.
+  * Harmless when nothing is running (`aborted: false`).
+  */
+-export function abortChat(agentId: string, sessionKey?: string): Promise<unknown> {
++export function abortChat(agentId: string, sessionKey?: string, runId?: string): Promise<unknown> {
+   const chat = ensureAgentChat(agentId);
+   const key = sessionKey ?? chat.sessionKey ?? `agent:${agentId}:main`;
+-  return sendRequest('chat.abort', { sessionKey: key }).catch((e) => {
++  return sendRequest('chat.abort', { sessionKey: key, ...(runId ? { runId } : {}) }).catch((e) => {
+     gwTrace('chat.abort_failed', { sessionKey: key, error: String(e) });
+   });
+ }
+@@ -271,21 +275,47 @@ export function cleanInboundForDisplay(text: string): string {
+  * buildAssistantContext() at the callsite (it needs `$app/state` page, which
+  * only resolves in the component tree).
+  */
++interface SubmissionClient {
++  beginRequest(method: string, params?: unknown): Promise<unknown>;
++}
++function supportsSubmission(client: unknown): client is SubmissionClient {
++  return (
++    typeof client === 'object' &&
++    client !== null &&
++    'beginRequest' in client &&
++    typeof client.beginRequest === 'function'
++  );
++}
++
+ export function sendAssistantTurn(
+   agentId: string,
+   text: string,
+   context: string,
+   sessionKey = `agent:${agentId}:main`,
+-  opts: { silent?: boolean } = {},
+-) {
++  opts: { silent?: boolean; runId?: string; current?: () => boolean } = {},
++): { status: 'submitted' | 'rejected'; runId: string } {
++  const runId = opts.runId ?? uuid();
++  const rejected = { status: 'rejected' as const, runId };
+   const chat = ensureAgentChat(agentId);
+   const clean = text.trim();
+   // Silent turns carry only a context envelope (UI tool results): nothing is
+   // shown in the transcript and the envelope regex hides it on history reload.
+-  if (opts.silent ? !context.trim() : !clean) return;
+-  if (chat.sending || !conn.connected) return;
++  if (opts.silent ? !context.trim() : !clean) return rejected;
++  const client = getClient();
++  // Older SDKs fail closed before touching the composer or transcript.
++  if (chat.sending || !conn.connected || !supportsSubmission(client)) return rejected;
+ 
+-  const runId = uuid();
++  let request: Promise<unknown>;
++  try {
++    request = client.beginRequest('chat.send', {
++      sessionKey,
++      message: opts.silent ? context : `${clean}\n\n${context.trim()}`,
++      deliver: false,
++      idempotencyKey: runId,
++    });
++  } catch {
++    return rejected;
++  }
+ 
+   if (!opts.silent) {
+     pushChatMessage(chat, {
+@@ -303,31 +333,36 @@ export function sendAssistantTurn(
+   chat.liveTools = [];
+   chat.liveActivity = null;
+ 
++  const current = () =>
++    agentChat[agentId] === chat &&
++    getClient() === client &&
++    chat.runId === runId &&
++    (!chat.sessionKey || chat.sessionKey === sessionKey) &&
++    (opts.current?.() ?? true);
++
+   // See sendChatMsg's guard: same safety net, same reason to reload history.
+   const guard = setTimeout(() => {
+-    if (chat.runId !== runId) return;
++    if (!current()) return;
+     chat.sending = false;
+     gwTrace('chat.guard_timeout', { runId, sessionKey });
+-    void loadChatHistory(agentId, sessionKey);
++    void loadChatHistory(agentId, sessionKey, current);
+   }, 120_000);
+ 
+   // Text first, envelope after: the gateway records the whole prompt and
+   // truncates long ones from the END, so the envelope must be the part that
+   // gets cut, never the user's words.
+-  sendRequest('chat.send', {
+-    sessionKey,
+-    message: opts.silent ? context : `${clean}\n\n${context.trim()}`,
+-    deliver: false,
+-    idempotencyKey: runId,
+-  }).catch((e) => {
++  request.catch((e) => {
++    if (!current()) return;
+     clearTimeout(guard);
+-    chat.runId = null;
++    // Dispatch happened; an acknowledgement failure is an unknown outcome.
++    // Retain the run identity for exact abort/reconciliation; never replay it.
+     chat.stream = null;
+     chat.streamMessage = null;
+     chat.sending = false;
+     chat.lastError = String(e);
+-    loadChatHistory(agentId);
++    void loadChatHistory(agentId, sessionKey, current);
+   });
++  return { status: 'submitted', runId };
+ }
+ 
+ export function sendVoiceTurn(agentId: string, transcript: string) {
+diff --git a/src/lib/services/shared-session-artifact.test.ts b/src/lib/services/shared-session-artifact.test.ts
+index f22e52f7..bda376ea 100644
+--- a/src/lib/services/shared-session-artifact.test.ts
++++ b/src/lib/services/shared-session-artifact.test.ts
+@@ -7,14 +7,30 @@ import { GatewayClient, GatewayError, canRetry } from '@minion-stack/shared/gate
+ // Bun's file lock records a path, not content integrity. Check the vendored bytes
+ // and consumed runtime/declarations so CI cannot qualify a stale local install.
+ describe('reviewed shared Gateway artifact', () => {
+-  const receipt = JSON.parse(readFileSync('deps/shared-error-provenance.json', 'utf8'));
++  const receipt = JSON.parse(readFileSync('deps/shared-agent-harness-provenance.json', 'utf8'));
+   const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
+   const artifact = 'deps/' + receipt.artifact;
+   it('pins the reviewed content and package path', () => {
+     expect(createHash('sha256').update(readFileSync(artifact)).digest('hex')).toBe(receipt.sha256);
+-    expect(receipt.sha256).toBe('994ac7f5d0b655e8b4eba7c89c86354e7f4c399ba5ed46987f71ab853dd74ef2');
++    expect(receipt.sha256).toBe('e6e69bb92fd1200a5fb67816e5d800398d3d7c0784a4d11cd98df7c62eb7a8bd');
+     expect(manifest.dependencies['@minion-stack/shared']).toBe('file:' + artifact);
+   });
++  it('exposes a synchronous definite pre-send rejection without changing request recovery', () => {
++    const client = new GatewayClient({
++      url: 'ws://fixture.invalid',
++      onChallenge: async () => ({}),
++    });
++    expect(() => client.beginRequest('write')).toThrowError(GatewayError);
++    try {
++      client.beginRequest('write');
++    } catch (error) {
++      expect(error).toMatchObject({
++        source: 'client',
++        code: 'NOT_CONNECTED',
++        dispatch: 'not-sent',
++      });
++    }
++  });
+   it('uses the installed public error model for request recovery', async () => {
+     const client = new GatewayClient({
+       url: 'ws://fixture.invalid',
+diff --git a/src/routes/(app)/home/+page.svelte b/src/routes/(app)/home/+page.svelte
+index e82af7da..9e8fdddc 100644
+--- a/src/routes/(app)/home/+page.svelte
++++ b/src/routes/(app)/home/+page.svelte
+@@ -45,7 +45,12 @@
+     type UserContextChip,
+   } from '$lib/services/gateway.svelte';
+   import { buildAssistantContext } from '$lib/state/features/assistant-context';
+-  import { requestRouteDecision, gateManifests, routerMode } from '$lib/assistant/turn-router';
++  import {
++    requestRouteDecision,
++    gateManifests,
++    routerMode,
++    type ManifestId,
++  } from '$lib/assistant/turn-router';
+   import { languageTag } from '$lib/paraglide/runtime';
+   import {
+     voiceCall,
+@@ -80,7 +85,15 @@
+     Pencil,
+     RotateCcw,
+   } from 'lucide-svelte';
+-  import { tick } from 'svelte';
++  import { tick, onDestroy } from 'svelte';
++  import { page } from '$app/state';
++  import { preferenceOwner } from '$lib/state/ui/scoped-preference.svelte';
++  import { createPendingSubmissions } from '$lib/assistant/pending-submission';
++  import {
++    getPageContextRevision,
++    onPageContextChange,
++    setPageContextLocation,
++  } from '$lib/assistant/page-context';
+   import type { PageData } from './$types';
+   import { Button, iconSizes } from '$lib/components/ui';
+   import { PageShell } from '$lib/components/ui/foundations';
+@@ -572,6 +585,7 @@
+   });
+ 
+   async function startNewChat() {
++    pendingSubmissions.invalidate();
+     if (!agentId) return;
+     await resetChat(agentId);
+     turnBranches = {};
+@@ -579,6 +593,7 @@
+ 
+   async function selectConversation(sessionKey: string) {
+     if (!agentId || sessionKey === chat?.sessionKey) return;
++    pendingSubmissions.invalidate();
+     await loadChatHistory(agentId, sessionKey);
+   }
+ 
+@@ -652,45 +667,91 @@
+   }
+ 
+   let routing = $state(false);
+-  // `routed = false` for ui.choice / artifact-callback replies (see :1039/:1143):
+-  // those are not free-form text, so they skip the classifier and always get
+-  // the full envelope, same as FloatingAssistant.svelte does at :992/:996 (D1).
+-  function handleSubmit(text: string, mode: 'ask' | 'capture', routed = true) {
++  const pendingSubmissions = createPendingSubmissions();
++  let composerRevision = 0;
++  $effect(() => {
++    void draft;
++    composerRevision++;
++  });
++  function updateSubmissionScope() {
++    const id = agentId ?? '';
++    pendingSubmissions.setScope({
++      actorId: page.data.user?.id ?? '',
++      orgId: page.data.activeOrgId ?? '',
++      agentId: id,
++      sessionKey: chat?.sessionKey ?? `agent:${id}:main`,
++    });
++  }
++  $effect(() => {
++    updateSubmissionScope();
++  });
++  $effect(() => {
++    setPageContextLocation(page.url.href);
++  });
++  const offContextChange = onPageContextChange(() => pendingSubmissions.invalidate());
++  onDestroy(() => {
++    offContextChange();
++    pendingSubmissions.invalidate();
++  });
++  function stopReply() {
++    const preparing = routing;
++    // Capture the displayed run synchronously; later session changes cannot retarget abort.
++    const id = agentId;
++    const displayed = chat;
++    const sessionKey = displayed?.sessionKey ?? `agent:${id}:main`;
++    const runId = displayed?.runId;
++    pendingSubmissions.cancel();
++    routing = false;
++    // Stop during preparation never aborts a different run that appeared meanwhile.
++    if (!preparing && id && runId) void abortChat(id, sessionKey, runId);
++  }
++
++  // UI choice/artifact callbacks retain their full-envelope classifier bypass.
++  async function handleSubmit(
++    text: string,
++    mode: 'ask' | 'capture',
++    routed = true,
++  ): Promise<boolean> {
+     if (mode === 'capture') {
+-      // Memory capture lands in a later phase.
+       console.info('[my-agent] capture', text);
+-      return;
+-    }
+-    if (!agentId || !conn.connected || routing) return;
+-    if (!routed) {
+-      sendAssistantTurn(
+-        agentId,
+-        text,
+-        buildAssistantContext(),
+-        chat?.sessionKey ?? `agent:${agentId}:main`,
+-      );
+-      return;
++      return false;
+     }
+-    // Same JEV turn routing as the floating assistant: ask which context
+-    // manifests this turn needs, fail open to the full envelope. `routing`
+-    // holds the send guard across the await (chat.sending only flips once
+-    // sendAssistantTurn runs), so a second Enter can't send the turn twice.
++    if (!agentId || !conn.connected || routing) return false;
++    updateSubmissionScope();
++    const pending = pendingSubmissions.begin(composerRevision, getPageContextRevision());
+     routing = true;
+-    void (async () => {
+-      let loaded;
+-      try {
+-        const decision = await requestRouteDecision(text, languageTag(), '/home');
++    try {
++      let loaded: ReadonlySet<ManifestId> | undefined;
++      if (routed) {
++        const decision = await requestRouteDecision(text, languageTag(), '/home', {
++          signal: pending.signal,
++        });
++        updateSubmissionScope();
++        if (!pendingSubmissions.isCurrent(pending, getPageContextRevision())) return false;
+         loaded = gateManifests(decision, routerMode());
+-      } finally {
+-        routing = false;
+       }
+-      sendAssistantTurn(
+-        agentId,
+-        text,
+-        buildAssistantContext(loaded),
+-        chat?.sessionKey ?? `agent:${agentId}:main`,
++      const submitted = pendingSubmissions.commit(pending, getPageContextRevision(), () =>
++        sendAssistantTurn(
++          pending.agentId,
++          text,
++          buildAssistantContext(loaded),
++          pending.sessionKey,
++          {
++            runId: pending.submissionId,
++            current: () => {
++              updateSubmissionScope();
++              return pendingSubmissions.ownsScope(pending);
++            },
++          },
++        ),
+       );
+-    })();
++      return submitted;
++    } finally {
++      if (pendingSubmissions.current === pending) {
++        routing = false;
++        pendingSubmissions.finish(pending);
++      }
++    }
+   }
+ 
+   // ─── Per-message actions (copy / reply / retry) ──────────────────────────────
+@@ -723,7 +784,7 @@
+     if (sending || !agentId || !conn.connected) return;
+     const branch = turnBranches[rootKey] ?? { attempts: [rootKey], active: 0 };
+     const before = new Set(renderedMessages.map((row) => row.key));
+-    handleSubmit(text, 'ask');
++    if (!(await handleSubmit(text, 'ask'))) return;
+     await tick();
+     // Resolve the optimistic row from the actual post-send projection instead
+     // of guessing its occurrence suffix. This remains correct if row-key
+@@ -1203,10 +1264,9 @@
+             bind:value={draft}
+             {agentId}
+             onsubmit={handleSubmit}
+-            running={sending || stream !== null || !!streamMessage}
+-            onstop={() => {
+-              if (agentId) void abortChat(agentId, chat?.sessionKey ?? `agent:${agentId}:main`);
+-            }}
++            ownerKey={preferenceOwner()}
++            running={routing || sending || stream !== null || !!streamMessage}
++            onstop={stopReply}
+           />
+         </div>
+         <div class="composer-call">
+diff --git a/src/server/coding/aci-backend.test.ts b/src/server/coding/aci-backend.test.ts
+index a7d17821..f335285a 100644
+--- a/src/server/coding/aci-backend.test.ts
++++ b/src/server/coding/aci-backend.test.ts
+@@ -80,18 +80,25 @@ describe('ACIBackend', () => {
+   });
+ 
+   describe('edit', () => {
+-    it('replaces a line range with new content', async () => {
+-      await createTestFile('edit.ts', 'line 1\nline 2\nline 3\nline 4');
+-      await backend.open('edit.ts');
+-
+-      const result = await backend.edit(2, 3, 'replaced A\nreplaced B');
+-
+-      expect(result.exitCode).toBe(0);
+-      expect(result.output).toContain('2 line(s) replaced with 2 line(s)');
+-
+-      const content = await readFile(join(workDir, 'edit.ts'), 'utf-8');
+-      expect(content).toBe('line 1\nreplaced A\nreplaced B\nline 4');
+-    });
++    // These integration cases create a real TypeScript program with its default
++    // library graph. Measured cold startup exceeds the default 5-second budget.
++    const realTypeScriptTimeout = 30_000;
++    it(
++      'replaces a line range with new content',
++      async () => {
++        await createTestFile('edit.ts', 'line 1\nline 2\nline 3\nline 4');
++        await backend.open('edit.ts');
++
++        const result = await backend.edit(2, 3, 'replaced A\nreplaced B');
++
++        expect(result.exitCode).toBe(0);
++        expect(result.output).toContain('2 line(s) replaced with 2 line(s)');
++
++        const content = await readFile(join(workDir, 'edit.ts'), 'utf-8');
++        expect(content).toBe('line 1\nreplaced A\nreplaced B\nline 4');
++      },
++      realTypeScriptTimeout,
++    );
+ 
+     it('returns error when no file is open', async () => {
+       const result = await backend.edit(1, 1, 'test');
+@@ -117,27 +124,35 @@ describe('ACIBackend', () => {
+       expect(result.output).toContain('Invalid line range');
+     });
+ 
+-    it('returns lint errors for TypeScript syntax issues', async () => {
+-      await createTestFile('bad.ts', 'const a = 1;');
+-      await backend.open('bad.ts');
+-
+-      const result = await backend.edit(1, 1, 'const a = {;');
+-
+-      expect(result.exitCode).toBe(0);
+-      expect(result.lintErrors).toBeDefined();
+-      expect(result.lintErrors!.length).toBeGreaterThan(0);
+-      expect(result.lintErrors![0].severity).toBe('error');
+-    });
+-
+-    it('does not return lint errors for valid TypeScript', async () => {
+-      await createTestFile('good.ts', 'const a = 1;');
+-      await backend.open('good.ts');
+-
+-      const result = await backend.edit(1, 1, 'const b = 2;');
+-
+-      expect(result.exitCode).toBe(0);
+-      expect(result.lintErrors).toBeUndefined();
+-    });
++    it(
++      'returns lint errors for TypeScript syntax issues',
++      async () => {
++        await createTestFile('bad.ts', 'const a = 1;');
++        await backend.open('bad.ts');
++
++        const result = await backend.edit(1, 1, 'const a = {;');
++
++        expect(result.exitCode).toBe(0);
++        expect(result.lintErrors).toBeDefined();
++        expect(result.lintErrors!.length).toBeGreaterThan(0);
++        expect(result.lintErrors![0].severity).toBe('error');
++      },
++      realTypeScriptTimeout,
++    );
++
++    it(
++      'does not return lint errors for valid TypeScript',
++      async () => {
++        await createTestFile('good.ts', 'const a = 1;');
++        await backend.open('good.ts');
++
++        const result = await backend.edit(1, 1, 'const b = 2;');
++
++        expect(result.exitCode).toBe(0);
++        expect(result.lintErrors).toBeUndefined();
++      },
++      realTypeScriptTimeout,
++    );
+   });
+ 
+   describe('searchFile', () => {
+diff --git a/tests/dependencies/shared-session-artifact.test.ts b/tests/dependencies/shared-session-artifact.test.ts
+index 6e5bc346..68e1995d 100644
+--- a/tests/dependencies/shared-session-artifact.test.ts
++++ b/tests/dependencies/shared-session-artifact.test.ts
+@@ -6,8 +6,10 @@ import { describe, expect, it } from 'vitest';
+ // Bun's file lock records a path, not content integrity. Check the vendored bytes
+ // and consumed runtime/declarations so CI cannot qualify a stale local install.
+ describe('reviewed shared-session artifact', () => {
+-  const baselineReceipt = JSON.parse(readFileSync('deps/shared-session-provenance.json', 'utf8'));
+-  const receiptBytes = readFileSync('deps/shared-error-provenance.json');
++  const sessionReceipt = JSON.parse(readFileSync('deps/shared-session-provenance.json', 'utf8'));
++  const baselineBytes = readFileSync('deps/shared-error-provenance.json');
++  const baselineReceipt = JSON.parse(baselineBytes.toString('utf8'));
++  const receiptBytes = readFileSync('deps/shared-agent-harness-provenance.json');
+   const receipt = JSON.parse(receiptBytes.toString('utf8'));
+   const manifest = JSON.parse(readFileSync('package.json', 'utf8'));
+   const lock = readFileSync('bun.lock', 'utf8');
+@@ -29,16 +31,28 @@ describe('reviewed shared-session artifact', () => {
+ 
+   it('pins the reviewed content and package path', () => {
+     expect(createHash('sha256').update(receiptBytes).digest('hex')).toBe(
++      '8ae5d2664207a7f18ee477731802326da34b04559894baddca524fc542091069',
++    );
++    expect(createHash('sha256').update(baselineBytes).digest('hex')).toBe(
+       '7c7e8117068786af51e3e39cae4c9ea99a89d40748b0661bb90c7ff531b623de',
+     );
+     expect(createHash('sha256').update(readFileSync(artifact)).digest('hex')).toBe(receipt.sha256);
+-    expect(receipt.sha256).toBe('994ac7f5d0b655e8b4eba7c89c86354e7f4c399ba5ed46987f71ab853dd74ef2');
++    expect(receipt.sha256).toBe('e6e69bb92fd1200a5fb67816e5d800398d3d7c0784a4d11cd98df7c62eb7a8bd');
+     expect(receipt.baselineSha256).toBe(baselineReceipt.sha256);
++    expect(baselineReceipt.sha256).toBe(
++      '994ac7f5d0b655e8b4eba7c89c86354e7f4c399ba5ed46987f71ab853dd74ef2',
++    );
+     expect(
+       createHash('sha256')
+         .update(readFileSync('deps/' + baselineReceipt.artifact))
+         .digest('hex'),
+     ).toBe(receipt.baselineSha256);
++    expect(baselineReceipt.baselineSha256).toBe(sessionReceipt.sha256);
++    expect(
++      createHash('sha256')
++        .update(readFileSync('deps/' + sessionReceipt.artifact))
++        .digest('hex'),
++    ).toBe(baselineReceipt.baselineSha256);
+     expect(manifest.dependencies['@minion-stack/shared']).toBe('file:' + artifact);
+     expect(lock).toContain(`"@minion-stack/shared": "file:${artifact}"`);
+     expect(lock).toContain(`"@minion-stack/shared@${artifact}"`);
+@@ -48,10 +62,31 @@ describe('reviewed shared-session artifact', () => {
+   });
+ 
+   it('consumes the exact verified runtime and declaration bytes', () => {
+-    for (const name of receipt.overlayFiles as string[]) {
++    const files = receipt.files as Record<string, string>;
++    const baselineEntries = execFileSync('tar', ['-tzf', 'deps/' + baselineReceipt.artifact], {
++      encoding: 'utf8',
++    })
++      .trim()
++      .split('\n');
++    expect(receipt.removedFiles).toEqual(
++      baselineEntries
++        .filter((name) => !archiveEntries.has(name))
++        .map((name) => name.replace(/^package\//, ''))
++        .sort(),
++    );
++    expect([...archiveEntries].sort()).toEqual(
++      Object.keys(files)
++        .map((name) => 'package/' + name)
++        .sort(),
++    );
++    for (const [name, hash] of Object.entries(files)) {
++      expect(createHash('sha256').update(packedBytes(name)).digest('hex'), name).toBe(hash);
+       expect(installedMatches(name), name).toBe(true);
+     }
+-    for (const name of receipt.removedFiles as string[]) {
++    for (const name of [
++      ...receipt.removedFiles,
++      ...receipt.forbiddenHistoricTestFiles,
++    ] as string[]) {
+       expect(archiveEntries.has('package/' + name), name).toBe(false);
+       expect(() => readFileSync('node_modules/@minion-stack/shared/' + name), name).toThrow();
+     }
+diff --git a/tests/e2e/ui-audit/critical-journeys.spec.ts b/tests/e2e/ui-audit/critical-journeys.spec.ts
+index 464738b0..07333be5 100644
+--- a/tests/e2e/ui-audit/critical-journeys.spec.ts
++++ b/tests/e2e/ui-audit/critical-journeys.spec.ts
+@@ -4,7 +4,10 @@ import path from 'node:path';
+ 
+ type Snapshot = {
+   connected: boolean;
+-  requests: { method: string; params?: { message?: string } }[];
++  requests: {
++    method: string;
++    params?: { message?: string; sessionKey?: string; idempotencyKey?: string; runId?: string };
++  }[];
+   unexpected: string[];
+ };
+ type FixtureWindow = Window & {
+@@ -93,6 +96,41 @@ test('CJ2 Home sends once and renders the synthetic gateway response', async ({
+   expect((await snapshot(page)).requests.filter((r) => r.method === 'chat.send')).toHaveLength(1);
+   await page.evaluate(() => (window as FixtureWindow).__critical!.finishTurn());
+   await expect(page.getByText('Synthetic response received.', { exact: true })).toBeVisible();
++  // A fresh accepted turn is stopped through the actual exact-run RPC path.
++  await input.fill('Stop this accepted fixture turn');
++  await input.press('Enter');
++  await expect
++    .poll(
++      async () => (await snapshot(page)).requests.filter((r) => r.method === 'chat.send').length,
++    )
++    .toBe(2);
++  const accepted = (await snapshot(page)).requests.filter((r) => r.method === 'chat.send').at(-1)!;
++  await page.getByRole('button', { name: /Stop/i }).click();
++  await expect
++    .poll(
++      async () => (await snapshot(page)).requests.filter((r) => r.method === 'chat.abort').length,
++    )
++    .toBe(1);
++  const stopped = await snapshot(page);
++  expect(stopped.requests.find((r) => r.method === 'chat.abort')?.params).toEqual({
++    sessionKey: accepted.params?.sessionKey,
++    runId: accepted.params?.idempotencyKey,
++  });
++  await expect(page.getByText('Synthetic response stopped.', { exact: true })).toBeVisible();
++  expect((await snapshot(page)).requests.filter((r) => r.method === 'chat.send')).toHaveLength(2);
++  // A new explicit request proves the composer recovered; it gets a fresh ID.
++  await input.fill('Fresh request after Stop');
++  await input.press('Enter');
++  await expect
++    .poll(
++      async () => (await snapshot(page)).requests.filter((r) => r.method === 'chat.send').length,
++    )
++    .toBe(3);
++  const sends = (await snapshot(page)).requests.filter((r) => r.method === 'chat.send');
++  expect(new Set(sends.map((r) => r.params?.idempotencyKey)).size).toBe(3);
++  expect((await snapshot(page)).requests.filter((r) => r.method === 'chat.abort')).toHaveLength(1);
++  await page.evaluate(() => (window as FixtureWindow).__critical!.finishTurn());
++  await expect(page.getByText('Synthetic response received.', { exact: true })).toHaveCount(2);
+ });
+ 
+ test('CJ3 Calendar staff lanes stay reachable', async ({ page }) => {
+diff --git a/tests/fixtures/critical-journeys/gateway-transport.ts b/tests/fixtures/critical-journeys/gateway-transport.ts
+index 67af8437..96e1f4d9 100644
+--- a/tests/fixtures/critical-journeys/gateway-transport.ts
++++ b/tests/fixtures/critical-journeys/gateway-transport.ts
+@@ -47,6 +47,7 @@ class FixtureSocket extends EventTarget {
+   readyState = 0;
+   bufferedAmount = 0;
+   binaryType = 'blob';
++  activeTurn: { runId: string; sessionKey: string; message: string } | null = null;
+   constructor(url: string | URL) {
+     super();
+     this.url = String(url);
+@@ -79,7 +80,7 @@ class FixtureSocket extends EventTarget {
+           type: 'hello-ok',
+           protocol: 3,
+           server: { version: 'fixture', connId: 'fixture' },
+-          features: { methods: ['chat.send', 'chat.history'], events: ['chat'] },
++          features: { methods: ['chat.send', 'chat.history', 'chat.abort'], events: ['chat'] },
+           snapshot: { presence: [], health: {}, stateVersion: {}, uptimeMs: 0 },
+           policy: { tickIntervalMs: 30000 },
+         });
+@@ -88,8 +89,18 @@ class FixtureSocket extends EventTarget {
+       return;
+     }
+     if (frame.method === 'chat.send') {
+-      reply({ runId: frame.params?.idempotencyKey, status: 'accepted' });
++      const runId = frame.params?.idempotencyKey;
++      const sessionKey = frame.params?.sessionKey;
++      const text = frame.params?.message;
++      if (typeof runId !== 'string' || typeof sessionKey !== 'string' || typeof text !== 'string') {
++        unexpected.push('invalid chat.send binding');
++        return;
++      }
++      this.activeTurn = { runId, sessionKey, message: text };
++      reply({ runId, status: 'accepted' });
+       heldTurn = () => {
++        if (this.activeTurn?.runId !== runId || this.activeTurn.sessionKey !== sessionKey) return;
++        this.activeTurn = null;
+         const message = {
+           role: 'assistant',
+           content: [{ type: 'text', text: 'Synthetic response received.' }],
+@@ -116,6 +127,37 @@ class FixtureSocket extends EventTarget {
+       };
+       return;
+     }
++    if (frame.method === 'chat.abort') {
++      const turn = this.activeTurn;
++      const matches =
++        !!turn &&
++        frame.params?.runId === turn.runId &&
++        frame.params?.sessionKey === turn.sessionKey;
++      reply({ ok: true, aborted: matches, runIds: matches ? [turn.runId] : [] });
++      if (!matches) {
++        unexpected.push('chat.abort binding mismatch');
++        return;
++      }
++      this.activeTurn = null;
++      heldTurn = undefined;
++      const message = {
++        role: 'assistant',
++        content: [{ type: 'text', text: 'Synthetic response stopped.' }],
++        timestamp: 1789084800001,
++      };
++      history.push(
++        { role: 'user', content: [{ type: 'text', text: turn.message }], timestamp: 1789084800000 },
++        message,
++      );
++      queueMicrotask(() =>
++        this.receive({
++          type: 'event',
++          event: 'chat',
++          payload: { sessionKey: turn.sessionKey, runId: turn.runId, state: 'aborted', message },
++        }),
++      );
++      return;
++    }
+     const responses: Record<string, unknown> = {
+       'agents.list': { agents: [{ id: 'fixture-agent', name: 'Fixture agent' }] },
+       'sessions.list': { sessions: [] },
+diff --git a/tests/fixtures/critical-journeys/serve.mjs b/tests/fixtures/critical-journeys/serve.mjs
+index f1a4221c..a4745173 100644
+--- a/tests/fixtures/critical-journeys/serve.mjs
++++ b/tests/fixtures/critical-journeys/serve.mjs
+@@ -50,7 +50,9 @@ const server = http.createServer((req, res) => {
+     'x-content-type-options': 'nosniff',
+     'x-minion-fixture-run': runId,
+     'content-security-policy':
+-      "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'",
++      // The actual Carta/Shiki renderer instantiates its bundled Oniguruma Wasm.
++      // Permit that fixture dependency while keeping JavaScript eval forbidden.
++      "default-src 'none'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'",
+   });
+   res.end(req.method === 'HEAD' ? undefined : body);
+ });
+diff --git a/tests/fixtures/pending-submission/page.svelte.ts b/tests/fixtures/pending-submission/page.svelte.ts
+new file mode 100644
+index 00000000..77b0477f
+--- /dev/null
++++ b/tests/fixtures/pending-submission/page.svelte.ts
+@@ -0,0 +1,12 @@
++export const page = $state({
++  url: new URL('http://localhost/home'),
++  params: {},
++  route: { id: '/(app)/home' },
++  state: {},
++  data: {
++    user: { id: 'actor-a', role: 'admin', email: 'fixture@example.test' },
++    activeOrgId: 'org-a',
++    personalAgent: { agent: { agentId: 'agent-a' } },
++    permissions: { permissions: [] },
++  },
++});

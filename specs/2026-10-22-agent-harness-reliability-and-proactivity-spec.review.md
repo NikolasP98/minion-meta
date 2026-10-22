@@ -20,8 +20,8 @@ Technical design approved after two independent review passes. The owner subsequ
 
 - Pass 1: `941c42fd4006a1021e0a63d131d66d1611e47c25d1e2d9f3a745684d9171c621`; all reviewers requested changes.
 - Final reviewed pass 2: `1f3ef8329b698570eeebdfde6d1df96611d700565706a71d0963b0bba88cd70e`; all three reviewers approved their assigned source-validated domains.
-- Published spec: `02a8418cf5fd8f11007744d918c9efce3d33d18b78a7fcfd1961b3808e5570e6`. The only change after the reviewed hash is frontmatter `verdict: pending` → `verdict: approved`. The body is byte-identical. Both reviewed snapshots are retained in the [evidence directory](../audits/2026-10-22-agent-use-transcripts/spec/).
-- No committed source identity is asserted for this uncommitted documentation artifact. Product source pins remain those in specification §1.
+- Initial approved snapshot: `02a8418cf5fd8f11007744d918c9efce3d33d18b78a7fcfd1961b3808e5570e6`. At that point the only change after the reviewed hash was frontmatter `verdict: pending` → `verdict: approved`; the body was byte-identical. Both reviewed snapshots are retained in the [evidence directory](../audits/2026-10-22-agent-use-transcripts/spec/).
+- These hashes preserve the pre-implementation design review. The owner-authorized lifecycle/specification is now committed on the isolated meta feature branch in [draft PR875](https://github.com/NikolasP98/minion-meta/pull/875). Product source baseline pins remain those in specification §1; implementation commit identities are recorded separately.
 
 ## Review coverage and scores
 
@@ -72,4 +72,4 @@ Scoped canonical metadata/index checks and the acceptance graph are recorded in 
 
 ## Implementation authorization
 
-The lifecycle and authorization paragraph were updated after the reviewed spec hash in response to the owner’s explicit implementation instruction. Requirements in §§1–12 are unchanged. The earlier hashes identify the reviewed design snapshot, not the current lifecycle metadata. [Implementation ledger](../audits/2026-10-22-agent-use-transcripts/implementation/README.md) records source pins, slice status, validation and remaining work.
+The lifecycle and authorization paragraph were updated after the reviewed spec hash in response to the owner’s explicit implementation instruction. Normative requirements in §§1–12 are unchanged; lifecycle prose and slice progress are maintained separately. The earlier hashes identify the reviewed design snapshot, not the current lifecycle metadata. [Implementation ledger](../audits/2026-10-22-agent-use-transcripts/implementation/README.md) records source pins, slice status, validation and remaining work.

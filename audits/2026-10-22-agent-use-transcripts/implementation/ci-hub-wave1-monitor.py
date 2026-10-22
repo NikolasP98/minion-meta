@@ -44,9 +44,14 @@ with LOG.open('a') as out:
     out.write(line)
     for c in checks:
         out.write(f"  {c['name']}: {c['status']}/{c['conclusion']} {c['html_url']}\n")
+    for entry in statuses:
+        out.write(f"  status {entry['context']}: {entry['state']} {entry['target_url']}\n")
     for r in runs:
         out.write(f"  workflow {r['name']}: {r['status']}/{r['conclusion']} {r['html_url']}\n")
 print(line, end='')
 for c in checks:
     if c['status']!='completed' or c['conclusion'] not in ['success','skipped','neutral']:
         print(c['name'],c['status'],c['conclusion'],c['html_url'])
+
+for entry in statuses:
+    if entry["state"] != "success": print("status", entry["context"], entry["state"], entry["target_url"])

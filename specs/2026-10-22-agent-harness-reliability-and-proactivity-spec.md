@@ -13,7 +13,7 @@ related: [2026-10-12-hub-assistant-jev-context-router, 2026-10-17-agent-experien
 tags: [logic, data, security, test, infra, ui]
 type: feature
 verdict: approved
-next_slice: 1
+next_slice: 3
 ---
 
 # Agent harness reliability, qualified decisions and bounded Pulse proactivity

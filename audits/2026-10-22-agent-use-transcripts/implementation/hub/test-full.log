@@ -74,3 +74,140 @@ DOMException [AbortError]: The operation was aborted.
  ❯ src/lib/services/shared-session-artifact.test.ts (3 tests | 2 failed) 31ms
      × pins the reviewed content and package path 13ms
      × consumes the exact verified runtime and declaration bytes 14ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/dependencies/shared-session-artifact.test.ts > reviewed shared-session artifact > pins the reviewed content and package path
+AssertionError: expected 'file:deps/minion-stack-shared-0.9.0-a…' to be 'file:deps/minion-stack-shared-0.9.1-r…' // Object.is equality
+
+Expected: "file:deps/minion-stack-shared-0.9.1-readiness.2.tgz"
+Received: "file:deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz"
+
+ ❯ tests/dependencies/shared-session-artifact.test.ts:42:59
+     41|     expect(receipt.baselineSha256).toBe(baselineReceipt.sha256);
+     42|     expect(baselineReceipt.sha256).toBe(
+     43|       '994ac7f5d0b655e8b4eba7c89c86354e7f4c399ba5ed46987f71ab853dd74ef…
+       |                  ^
+     44|     );
+     45|     expect(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/dependencies/shared-session-artifact.test.ts > reviewed shared-session artifact > consumes the exact verified runtime and declaration bytes
+AssertionError: dist/gateway/client.js: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/dependencies/shared-session-artifact.test.ts:52:44
+     51|     expect(
+     52|       createHash('sha256')
+     53|         .update(readFileSync('deps/' + sessionReceipt.artifact))
+       |                 ^
+     54|         .digest('hex'),
+     55|     ).toBe(baselineReceipt.baselineSha256);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/dependencies/shared-session-artifact.test.ts > reviewed shared-session artifact > detects a one-byte mutation of an installed reviewed file
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/dependencies/shared-session-artifact.test.ts:64:36
+     62|   });
+     63|
+     64|   it('consumes the exact verified runtime and declaration bytes', () =…
+       |                                    ^
+     65|     const files = receipt.files as Record<string, string>;
+     66|     const baselineEntries = execFileSync('tar', ['-tzf', 'deps/' + bas…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  src/lib/services/shared-session-artifact.test.ts > reviewed shared Gateway artifact > pins the reviewed content and package path
+AssertionError: expected 'file:deps/minion-stack-shared-0.9.0-a…' to be 'file:deps/minion-stack-shared-0.9.1-r…' // Object.is equality
+
+Expected: "file:deps/minion-stack-shared-0.9.1-readiness.2.tgz"
+Received: "file:deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz"
+
+ ❯ src/lib/services/shared-session-artifact.test.ts:16:59
+     14|     expect(createHash('sha256').update(readFileSync(artifact)).digest(…
+     15|     expect(receipt.sha256).toBe('e6e69bb92fd1200a5fb67816e5d800398d3d7…
+     16|     expect(manifest.dependencies['@minion-stack/shared']).toBe('file:'…
+       |                                                           ^
+     17|   });
+     18|   it('exposes a synchronous definite pre-send rejection without changi…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  src/lib/services/shared-session-artifact.test.ts > reviewed shared Gateway artifact > consumes the exact verified runtime and declaration bytes
+AssertionError: package.json: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/lib/services/shared-session-artifact.test.ts:47:46
+     45|     expect(
+     46|       GatewayError.fromServer({ code: 'CONFLICT', message: 'opaque ser…
+     47|     ).toMatchObject({ source: 'server', code: 'CONFLICT', dispatch: 'r…
+       |                                              ^
+     48|   });
+     49|   it('consumes the exact verified runtime and declaration bytes', () =…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  src/server/coding/aci-backend.test.ts > ACIBackend > edit > replaces a line range with new content
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/server/coding/aci-backend.test.ts:83:5
+     81|
+     82|   describe('edit', () => {
+     83|     it('replaces a line range with new content', async () => {
+       |     ^
+     84|       await createTestFile('edit.ts', 'line 1\nline 2\nline 3\nline 4'…
+     85|       await backend.open('edit.ts');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  src/server/coding/aci-backend.test.ts > ACIBackend > edit > returns lint errors for TypeScript syntax issues
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/server/coding/aci-backend.test.ts:120:5
+    118|     });
+    119|
+    120|     it('returns lint errors for TypeScript syntax issues', async () =>…
+       |     ^
+    121|       await createTestFile('bad.ts', 'const a = 1;');
+    122|       await backend.open('bad.ts');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  src/lib/components/scheduling/calendar-toolbar.mounted.test.ts > calendar toolbar compact layout contract (UI-002) > the compact rule sizes buttons and selects, keeps the switch track and wraps the tools
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ src/lib/components/scheduling/calendar-toolbar.mounted.test.ts:171:3
+    169|   });
+    170|
+    171|   it('the compact rule sizes buttons and selects, keeps the switch tra…
+       |   ^
+    172|     const sheet = css('./BookingCalendar.svelte');
+    173|     const compact = sheet.slice(sheet.indexOf('@media(max-width:767.98…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  4 failed | 899 passed | 4 skipped (907)
+      Tests  8 failed | 7939 passed | 240 skipped (8187)
+   Start at  16:50:33
+   Duration  1366.68s (transform 336.44s, setup 21.77s, import 1733.75s, tests 566.28s, environment 76.71s)
+
