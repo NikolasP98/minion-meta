@@ -47,3 +47,8 @@ Hub anchors @ `origin/master c4ded7f7`. Each slice = one worktree (`~/.cache/cla
 
 ## MVP
 S1 + S2 alone make the 0 mapping storable and the dialog correct for the two surfaces that already open it (Completar button, drawer). S3 is what fixes the reported gesture (status chip); ship all three.
+
+## Phase 6 — Amendment A (S4): server refuses an unconfirmed `completed`
+- [ ] T029 [S4] `_handlers.ts`: `ConsumptionConfirmationRequiredError`, `bookingsNeedingConfirmation`, pre-check in `applyBookingStatus` and `visitStatusResponse`, 409 mapping in `statusFailureResponse`; drop the TODO(handoff) at `pos/appointments/+page.svelte:606`.
+- [ ] T030 [S4] `booking-mover.ts` `commitStatus`: on 409 `consumption_confirmation_required` toast `m.sched_status_needs_consumption()`; add the key to `messages/es.json` + `messages/en.json` (append-only).
+- [ ] T031 [S4] Tests per FR-012; gates `unset SUPABASE_DB_URL; bunx vitest run <touched tests>`, `bun run check`, Prettier on changed files. PR `fix(scheduling): the server refuses to complete a booking whose consumption was not confirmed`.
