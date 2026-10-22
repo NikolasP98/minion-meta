@@ -3,9 +3,10 @@ id: handoff-minion-hub-952756494
 title: Handoff marker — src/lib/components/stock/entry-document.ts (minion_hub)
 status: closed
 created: 2026-09-29
-updated: 2026-09-29
+updated: 2026-10-22
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-0522762cb6ea
 ---
 
 # Handoff marker — src/lib/components/stock/entry-document.ts

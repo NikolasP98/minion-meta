@@ -3,9 +3,10 @@ id: handoff-minion-hub-3544465093
 title: Handoff marker — src/routes/(app)/stock/entries/+page.svelte (minion_hub)
 status: closed
 created: 2026-09-29
-updated: 2026-09-29
+updated: 2026-10-22
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-cae1ae464bc3
 ---
 
 # Handoff marker — src/routes/(app)/stock/entries/+page.svelte

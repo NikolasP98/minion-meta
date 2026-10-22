@@ -3,9 +3,10 @@ id: handoff-minion-hub-868827312
 title: Handoff marker — src/lib/records/RecordPeek.svelte (minion_hub)
 status: closed
 created: 2026-09-29
-updated: 2026-09-29
+updated: 2026-10-22
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-5aa484db61c2
 ---
 
 # Handoff marker — src/lib/records/RecordPeek.svelte
