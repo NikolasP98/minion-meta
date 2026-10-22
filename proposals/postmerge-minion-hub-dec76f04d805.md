@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-dec76f04d805
 title: "Post-merge finding — todo-handoff in src/lib/services/gateway/chat-rpc.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-22
 updated: 2026-10-22
 repos: [minion-hub]
