@@ -3,7 +3,7 @@ id: 2026-10-21-ci-lane-auto-followups
 title: Bound auto-lane request state and attest resolver success in the named gate
 status: draft
 created: 2026-10-21
-updated: 2026-10-21
+updated: 2026-10-22
 repos: [minion]
 tags: [infra, test]
 source: owner-credit-efficient-redeployment-review
@@ -24,3 +24,10 @@ Every outbound auto request fits its actual UTF-8 encoded byte limit. If mandato
 ## DELTA
 
 A separate implementation should test long/many/unicode/escaped file names, overflow fallback before any request, absent/failed/cancelled resolver outputs and valid off/on/promotion/docs cases. It must preserve source identity and Linux validation gates. Exact-site TODO(handoff) comments retain this ledger pointer. This follow-up is not a new release gate for the already reviewed off/on defaults; full auto compliance remains unqualified until fixed.
+
+## Merged content
+
+From `handoff-minion-ai-20271324` (factory handoff-ledger sweep, 2026-10-22): the open end is
+anchored at `NikolasP98/minion-ai@DEV scripts/ci/lane-flags.mjs:15` — "Bound actual UTF-8 state
+bytes including filenames, or fall back."
+https://github.com/NikolasP98/minion-ai/blob/DEV/scripts/ci/lane-flags.mjs#L15

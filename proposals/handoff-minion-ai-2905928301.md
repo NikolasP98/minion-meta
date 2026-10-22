@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-ai-2905928301
 title: Handoff marker — src/infra/heartbeat-runner.respects-ackmaxchars-heartbeat-acks.test.ts (minion-ai)
-status: draft
+status: merged
 created: 2026-10-22
 updated: 2026-10-22
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-21-windows-heartbeat-qualification-timing
+merged_into: 2026-10-21-windows-heartbeat-qualification-timing
 ---
 
 # Handoff marker — src/infra/heartbeat-runner.respects-ackmaxchars-heartbeat-acks.test.ts

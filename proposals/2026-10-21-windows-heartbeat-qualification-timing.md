@@ -3,7 +3,7 @@ id: 2026-10-21-windows-heartbeat-qualification-timing
 title: Drain heartbeat delivery fixtures and scope their measured Windows budget
 status: draft
 created: 2026-10-21
-updated: 2026-10-21
+updated: 2026-10-22
 repos: [minion]
 tags: [test]
 source: windows-342-full-shard-one-heartbeat-failures
@@ -36,3 +36,10 @@ This is a bounded extension of #342's observed test timing/cleanup hotfix, track
 ## Current qualification block
 
 Fresh corrected-source CI `39682653940`, attempt 1, passed earlier applicable checks, but GitHub refused both full Windows runners before allocation due failed payments or spending-limit admission. This is not a test result and grants no qualification. Source `5d72bb8a404bd2bf82487a07279464f87585544e` remains pushed and held pending owner billing resolution and a complete fresh attempt. Receipt: `audits/2026-10-18-assistant-capability-repair/windows-5d72-runner-admission-block.json`. No production mutation occurred.
+
+## Merged content
+
+From `handoff-minion-ai-2905928301` (factory handoff-ledger sweep, 2026-10-22): the open end is
+anchored at `NikolasP98/minion-ai@DEV src/infra/heartbeat-runner.respects-ackmaxchars-heartbeat-acks.test.ts:50`
+— "Verify the bounded delivery cases in full Windows shards."
+https://github.com/NikolasP98/minion-ai/blob/DEV/src/infra/heartbeat-runner.respects-ackmaxchars-heartbeat-acks.test.ts#L50

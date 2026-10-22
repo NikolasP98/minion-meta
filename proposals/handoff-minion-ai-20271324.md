@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-ai-20271324
 title: Handoff marker — scripts/ci/lane-flags.mjs (minion-ai)
-status: draft
+status: merged
 created: 2026-10-22
 updated: 2026-10-22
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-21-ci-lane-auto-followups
+merged_into: 2026-10-21-ci-lane-auto-followups
 ---
 
 # Handoff marker — scripts/ci/lane-flags.mjs
