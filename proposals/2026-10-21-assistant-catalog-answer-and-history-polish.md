@@ -1,10 +1,11 @@
 ---
 id: 2026-10-21-assistant-catalog-answer-and-history-polish
 title: Show useful maximum-price ties and friendly oversized-history state
-status: draft
+status: in-spec
 created: 2026-10-21
 updated: 2026-10-21
 repos: [minion, minion_hub]
+spawned_spec: 2026-10-21-assistant-catalog-answer-and-history-polish-spec
 ---
 
 # Show useful maximum-price ties and friendly oversized-history state
@@ -31,3 +32,8 @@ Render an oversized historical message as a clear, localized history state rathe
 ## Evidence
 
 [Owner smoke receipt](../audits/2026-10-18-assistant-capability-repair/owner-hub-acceptance-20261021.json). Existing release and configured authority receipts remain unchanged.
+
+
+## Owner implementation authorization
+
+The owner requested implementation of both improvements. The scoped [implementation spec](../specs/2026-10-21-assistant-catalog-answer-and-history-polish-spec.md) defines explicit bounded maximum/ranked modes and Hub-only localized history display, preserving Gateway transport budgets. No Gateway source change is needed.
