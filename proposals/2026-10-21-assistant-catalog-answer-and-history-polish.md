@@ -3,7 +3,7 @@ id: 2026-10-21-assistant-catalog-answer-and-history-polish
 title: Show useful maximum-price ties and friendly oversized-history state
 status: in-spec
 created: 2026-10-21
-updated: 2026-10-21
+updated: 2026-10-22
 repos: [minion, minion_hub]
 spawned_spec: 2026-10-21-assistant-catalog-answer-and-history-polish-spec
 ---
@@ -24,7 +24,7 @@ Render an oversized historical message as a clear, localized history state rathe
 
 ## DELTA
 
-1. Inspect the actual first catalog call arguments and returned item count, without claiming that the copied answer alone proves limit1. Select explicit bounded maximum-tie semantics or precise tool guidance in a reviewed spec; cover a unique maximum, three ties, caller limits, more than20 ties, missing prices and organization isolation.
+1. Inspect the actual first catalog call arguments and returned item count, without claiming that the copied answer alone proves limit1. Select explicit bounded maximum-tie semantics or precise tool guidance in a reviewed spec; cover a unique maximum, three ties, caller limits, more than 20 ties, missing prices and organization isolation.
 2. Trace structured oversized-history metadata through all chat consumers before editing UI. Specify a friendly state and legacy-peer behavior; retain current Gateway transport tests and add consumer coverage proving no raw protocol marker and no loss of actual chat content. Follow UI governance and local browser QA.
 3. Verify catalog links are real clickable sources using rendered evidence; the pasted transcript cannot establish hrefs. Measure actual per-run tool counts rather than inferring that loops stopped from answer prose.
 4. Qualify source and normal releases using the owner-selected credit-efficient flags. Keep these improvements separate from the already successful deployment and owner-reported core answering smoke. No implementation or new deployment is claimed by this proposal.
@@ -37,3 +37,13 @@ Render an oversized historical message as a clear, localized history state rathe
 ## Owner implementation authorization
 
 The owner requested implementation of both improvements. The scoped [implementation spec](../specs/2026-10-21-assistant-catalog-answer-and-history-polish-spec.md) defines explicit bounded maximum/ranked modes and Hub-only localized history display, preserving Gateway transport budgets. No Gateway source change is needed.
+
+## Implementation qualification
+
+[Hub PR578](https://github.com/NikolasP98/minion_hub/pull/578) implements both changes at `b7b2c7e876ecc3df6d7592b52f8052551aac090b` (tree `66884050f9dc26ec84b873aeb2cc1a8674f9e87b`). [Qualification receipts](../audits/2026-10-21-assistant-catalog-answer-and-history-polish/qualification.json) retain exact CI identities, local test results and evidence boundaries. The independent review found and resolved a metadata-losing Session Viewer cache round trip and an unsupported fixture token; final Standards and Spec verdicts pass.
+
+After a Session Viewer cache miss, raw WS messages now supply the read-only display directly, preserving string/block content and omission metadata verbatim. The existing cache POST is unchanged; the unnecessary re-fetch is removed. Legacy cache hits still recognize exact standalone markers without inventing lost provenance. Actual mounted loading tests cover both roles, mixed and contradictory content, malformed metadata, cache failure, cache-hit behavior and immutability.
+
+The local fixture uses real chat rendering with synthetic answer data. EN/ES notices, preserved original message data and click-only catalog navigation pass; this is not authenticated production or model-tool-count proof. Human merge and deployment remain required. No Gateway source, deployment flag, production configuration or transport budget is changed by this follow-up.
+
+Final-source qualification: CI39725717702 and desktop qualification39725717858 both passed at `b7b2c7e876ecc3df6d7592b52f8052551aac090b`; all 18 PR checks are green. The complete unit run passes 7,871 tests (existing 263 skips), with zero uncaught errors. PR578 is ready for human review/merge. [Final receipts](../audits/2026-10-21-assistant-catalog-answer-and-history-polish/qualification.json) keep the failed prior attempt and its resolved teardown cause. No production deployment is claimed.
