@@ -29,3 +29,5 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-ai@DEV src/agents/pi-embedded-runner/run.ts:151` — Share this budget across outer provider fallback invocations for a request-wide cap. See meta proposals/2026-10-17-agent-dynamic-tools.md.
   https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded-runner/run.ts#L151
+- `NikolasP98/minion-ai@DEV src/agents/pi-embedded-runner/run.ts:626` — Preserve server-derived resolved-user/sender context in the
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded-runner/run.ts#L626
