@@ -129,7 +129,7 @@ The 21-Oct visit (`f4fecc5e-a0e2-4d99-af40-e45c95e48317`) used 15 UN of toxina t
 - **FR-010** `bookingsNeedingConfirmation(ctx, ids)` (in `_handlers.ts`, not exported from a frozen inventory) returns the subset per the rule above.
 - **FR-011** `applyBookingStatus` pre-check before any write; `statusFailureResponse` maps the error to the 409 shape; `visitStatusResponse` pre-checks all targets first.
 - **FR-012** Tests: per-row 409 for a 0-mapped product; 409 for open-accrual-only; 200 for unmapped product and for already-completed; visit walk 409 with `applied: []` when one member needs confirmation; `/complete` still completes a mapped booking.
-- **FR-013** i18n: one new key `sched_status_needs_consumption` (es: "Confirma el consumo con «Completar» antes de cerrar esta cita.", en: "Confirm consumption with “Complete” before closing this booking."). Route contract and `pos.service` exports untouched.
+- **FR-013** i18n: one new key `sched_status_needs_consumption` (es: "Confirma el consumo con «Completar cita» antes de cerrarla.", en: "Confirm consumption with “Complete appointment” before closing it."). Route contract and `pos.service` exports untouched.
 
 ### Success criteria
 - **SC-004** `curl -X PATCH …/bookings/<CB booking> -d '{"status":"completed"}'` on prod returns 409 once Control Botox has a mapping; the status cell path still opens the dialog.
