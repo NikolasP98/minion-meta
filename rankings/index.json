@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-22T06:09:25.200Z",
+	"generatedAt": "2026-10-22T07:09:17.323Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3365,8 +3365,8 @@
 			"repo": "minion (gateway)",
 			"title": "#353 feat(whatsapp): verified org members reach their own assistant",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/353",
-			"sourceUpdatedAt": "2026-10-22T05:51:26Z",
-			"sourceFingerprint": "5d7bb38c8ccc1b0cd60aa2760a9606207ed80ca71adb8b4bd0cf3654b880ae66",
+			"sourceUpdatedAt": "2026-10-22T06:09:38Z",
+			"sourceFingerprint": "febfe26ec17b4ce5380a19b5712523500bbd9f117f1744dd355b01fc1c76e7fd",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -3375,23 +3375,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 8
 			},
 			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#579",
-				"pr:minion-meta#860"
-			],
-			"rationale": "This gateway slice of the security-tagged WhatsApp member-agents feature is well specified and test-backed but is one of three interdependent slices that should be tracked as a single goal.",
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Security-tagged slice S2 of an owner-approved spec with a detailed contract, tests, and a real ledger-misattribution fix, ready to merge once hub slice S1 deploys.",
 			"evidence": [
-				"slice S2 depends on hub slice S1 deploying first",
-				"new tests cover contract, backoff, caching and logging per FR-004/FR-009"
+				"spec 032 slice S2, owner-approved and security-tagged",
+				"new tests: whatsapp-member.test.ts and access-control.member-mode.test.ts",
+				"fixes message_received backfill cross-contaminating member/customer rows"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T06:09:25.041Z"
+			"scoredAt": "2026-10-22T07:09:17.159Z"
 		},
 		{
 			"key": "pr:minion_hub#544",
@@ -3436,8 +3434,8 @@
 			"repo": "minion_hub",
 			"title": "#579 feat(channels): members reach their own assistant over WhatsApp",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/579",
-			"sourceUpdatedAt": "2026-10-22T05:59:07Z",
-			"sourceFingerprint": "ab94aa437d5a682242fc5d532709637d09135e4caf5b47d734df4457854ba438",
+			"sourceUpdatedAt": "2026-10-22T06:17:17Z",
+			"sourceFingerprint": "665653c694b13cfa4a6e76358f45d2970523b24a869ffdceb0eea9dba5b4a4a7",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -3446,23 +3444,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 8
 			},
 			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#353",
-				"pr:minion-meta#860"
-			],
-			"rationale": "The hub-side S1 slice of the same owner-approved WhatsApp feature has strong test evidence (149 tests passing) but is only coherent as a goal alongside its gateway counterpart and governing spec.",
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Prerequisite hub slice S1 for the WhatsApp member-agent feature, security-tagged with extensive passing tests and a clear API contract that gateway slice S2 depends on.",
 			"evidence": [
-				"149 tests passed across 8 files including new member-route and provisioner tests",
-				"note states owner merges; not deployed"
+				"149 tests passed across 8 files including PGlite-backed endpoint tests",
+				"defines the /api/gateway/whatsapp/member contract consumed by PR #353",
+				"owner merges; not yet deployed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T06:09:25.041Z"
+			"scoredAt": "2026-10-22T07:09:17.159Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -8348,38 +8344,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:04:24.614Z"
-		},
-		{
-			"key": "issue:minion-meta#467",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#467 [monitor:unstick] reconcile run 31abd571 (minion-meta): exit-126/turns=0 after apparently clean shell steps",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/467",
-			"sourceUpdatedAt": "2026-09-17T04:17:37Z",
-			"sourceFingerprint": "f7dfa263d2515a337d2528c2238781e84185608ec0435b752f9ca18faf6f0008",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Recurring exit-126/turns=0 launcher fault across 3 reconcile runs points to an infra/runner issue needing human inspection before it can be scoped as actionable work.",
-			"evidence": [
-				"identical signature seen on 3 runs within ~2 hours",
-				"exit_code 1 with exit-126/turns=0 consistent with exec/permission/PATH fault, not task-logic failure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-15T06:11:48.041Z"
 		},
 		{
 			"key": "issue:minion-meta#559",
@@ -18215,6 +18179,38 @@
 			"scoredAt": "2026-10-17T11:39:52.610Z"
 		},
 		{
+			"key": "issue:minion-meta#467",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#467 [monitor:unstick] reconcile run 31abd571 (minion-meta): exit-126/turns=0 after apparently clean shell steps",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/467",
+			"sourceUpdatedAt": "2026-09-17T04:17:37Z",
+			"sourceFingerprint": "f7dfa263d2515a337d2528c2238781e84185608ec0435b752f9ca18faf6f0008",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring agent-launcher infra fault on the reconcile runner needs human runner-environment inspection before it can become an actionable task.",
+			"evidence": [
+				"exit-126/turns=0 signature seen on 3 runs within ~2 hours",
+				"recommendation says a human should inspect the runner environment, not a code fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T07:09:17.159Z"
+		},
+		{
 			"key": "issue:minion-meta#514",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26598,38 +26594,6 @@
 			"scoredAt": "2026-10-20T21:56:29.644Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/6d1cd8836ff7b82d21668c50cc20b9b6d1e79c18",
-			"sourceUpdatedAt": "2026-10-22T04:06:39Z",
-			"sourceFingerprint": "eaf80885a951cbda2fed44728afdeb064dc4a63b72f5db3a1f5e72e672011daa",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a routine deployment-health pointer to a merged Docker fix with no stated problem, scope, or outcome to pursue as a goal.",
-			"evidence": [
-				"summary is just a merge commit message about building plugin UIs into the gateway image",
-				"status is 'unknown' with no failure or follow-up described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T06:09:25.041Z"
-		},
-		{
 			"key": "issue:minion-meta#435",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29862,38 +29826,6 @@
 			"scoredAt": "2026-10-16T18:40:05.461Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-22",
-			"sourceFingerprint": "57b710754f8f3c5cd969f9e707f2808d75a6eaf697bba021abc5aeb84b54ecc1",
-			"score": 27,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "An auto-generated aggregate marker sweep bundling dozens of unrelated TODOs across many files/lines lacks a single verifiable outcome and should be split into individually scoped proposals rather than executed as one item.",
-			"evidence": [
-				"Marker list spans 15+ unrelated file:line locations across db schema, UI, security, and infra topics",
-				"Definition of done only requires removing TODO comments, not resolving a coherent problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T05:39:59.381Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -31991,6 +31923,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:57:54.316Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 103939 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-22T06:12:44Z",
+			"sourceFingerprint": "719d3b51e006bfaa906697b0c21b8f2c5135ac460f444ede6fcc2d1acda4369a",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "An automated upstream-sync tracker listing 103939 commits has no bounded, verifiable scope to execute as a single goal.",
+			"evidence": [
+				"title states 103939 new commits available",
+				"body is an unstructured list of upstream commit subjects with no selected scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T07:09:17.159Z"
 		},
 		{
 			"key": "issue:minion-meta#386",
@@ -35673,6 +35637,38 @@
 			"scoredAt": "2026-10-22T02:33:23.049Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "613779145a5ed92a1ece66f5f6e29c4145acd7db82a296febd55e7a6a7fccc80",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This automated sweep bundles many unrelated TODO markers scattered across rankings/index.json into one goal with no single coherent problem statement.",
+			"evidence": [
+				"lists 16+ disjoint marker quotes spanning unrelated topics (RBAC, DB schema drops, UI drag behavior)",
+				"definition of done is just 'remove the TODO(handoff) markers', not a scoped outcome"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T07:09:17.159Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36160,39 +36156,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T15:40:35.099Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 103744 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-22T00:38:21Z",
-			"sourceFingerprint": "a39bac6509bd2bccf3fefa75655cfc5a70fdaee0c07d1a08bdebefcb35205a64",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated upstream-sync notice listing thousands of unrelated commits with no scoped, verifiable outcome for this repo.",
-			"evidence": [
-				"title: '#264 Upstream sync: 103744 new commit(s) available'",
-				"tags: upstream-sync",
-				"summary is a raw commit log, not a defined task"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T00:55:45.356Z"
 		},
 		{
 			"key": "issue:minion-meta#516",
@@ -37612,6 +37575,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:26:46.079Z"
+		},
+		{
+			"key": "issue:minion-meta#862",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#862 [monitor:unstick] rank board goals run d628179d failed: both bounded providers rejected batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/862",
+			"sourceUpdatedAt": "2026-10-22T06:17:28Z",
+			"sourceFingerprint": "19b374ea4805d1a65e83501dcbb2f18e771ed84a982f89432c96a31ddec0b6f7",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Monitor intake explicitly characterizes this as a transient provider-side failure on one batch, safe to retry with no spec or code fix indicated.",
+			"evidence": [
+				"note confirms 'safe to retry the run as-is; no spec or code fix indicated'",
+				"only 3 of 1133 pending goals affected"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-22T07:09:17.159Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1962723814",
