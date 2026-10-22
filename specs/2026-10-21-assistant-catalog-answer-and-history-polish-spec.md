@@ -13,6 +13,10 @@ proposal: 2026-10-21-assistant-catalog-answer-and-history-polish
 
 # Bound maximum-price winners and localize oversized history
 
+## 0. Product
+
+Hub assistant users receive the full bounded set of maximum-price winners and readable history notices, without extra model calls.
+
 ## AS-IS
 
 Production owner smoke successfully answers prices, but shows one of three maximum-price services. The approved v1 typed catalog contract ranks a caller-limited list and reports maximum ties separately by count. Hub query SQL and route defaults currently cannot express a maximum-only result set. The live model call arguments are not available from the copied transcript and are not assumed to be limit1.
@@ -39,3 +43,12 @@ Gateway history shaping replaces an oversized message with a literal text marker
 Behavior pass: explicit modes resolve ambiguity without silently expanding ranked-list limits; maximum mode has one20-row bound and a truthful overflow count. Structured and exact legacy history notices are display-only. Approved by the owner's explicit request to implement both; these concrete invariants were source-reviewed by the implementing agent.
 
 Authority pass: the existing CoreCtx query transaction, active-kind filtering, permission/module admission and computed contract revision remain the authority chain. No new identity claim, SQL tool, arbitrary route, model call or production mutation is introduced. Separate independent repository PR review remains required before merge; no independent human review is claimed here.
+
+
+## Out of scope
+
+No Gateway transport-budget change, historical message recovery endpoint, model replacement, global prompt overhaul, permission change or production deployment. Source-link behavior is exercised as a preservation check, not redesigned.
+
+## Verification
+
+Focused query/route/display tests must fail on the old behavior and pass on the new implementation. Then run Hub check with zero errors/warnings, full tests, production build, design/token gates and local rendered history/source-link checks. CI and independent PR review qualify the exact candidate; local fixtures are not production acceptance.
