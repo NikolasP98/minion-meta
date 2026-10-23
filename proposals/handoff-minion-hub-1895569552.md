@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-23)
 
-- `NikolasP98/minion_hub@master src/lib/assistant/global-tools.ts:85` — Independent native guides need request-bound intent; navigation batches alone are fenced. See meta proposals/2026-10-18-assistant-navigation-confirmation.md.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/global-tools.ts#L85
+- `NikolasP98/minion_hub@master src/lib/assistant/global-tools.ts:86` — Independent native guides need request-bound intent; navigation batches alone are fenced. See meta proposals/2026-10-18-assistant-navigation-confirmation.md.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/global-tools.ts#L86

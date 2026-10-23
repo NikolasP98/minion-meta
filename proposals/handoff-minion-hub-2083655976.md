@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-10-23)
 
-- `NikolasP98/minion_hub@master src/lib/assistant/forms.ts:96` — Independent native fills lack request-bound intent; legacy navigation batches are fenced, but native effect grants need meta proposals/2026-10-18-assistant-navigation-confirmation.md.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/forms.ts#L96
+- `NikolasP98/minion_hub@master src/lib/assistant/forms.ts:98` — Independent native fills lack request-bound intent; legacy navigation batches are fenced, but native effect grants need meta proposals/2026-10-18-assistant-navigation-confirmation.md.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/forms.ts#L98

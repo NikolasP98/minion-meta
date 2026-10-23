@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-4221605246
 title: Handoff marker — src/lib/assistant/dispatch.ts (minion_hub)
-status: review
+status: closed
 duplicate_candidate: postmerge-minion-hub-98cf2e865d44
 created: 2026-09-02
 updated: 2026-10-23
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/assistant/dispatch.ts:12` — silent follow-up turns are persisted in the gateway transcript
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/assistant/dispatch.ts#L12
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-23; the sweep closed this proposal.
