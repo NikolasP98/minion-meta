@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-23T21:47:27.719Z",
+	"generatedAt": "2026-10-23T22:17:20.526Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18257,38 +18257,6 @@
 			"scoredAt": "2026-10-19T13:04:24.614Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/93141a2cda7ff4b65db8e31cd285ad60d9050785",
-			"sourceUpdatedAt": "2026-10-23T18:29:46Z",
-			"sourceFingerprint": "72a92b2dacfe0ae5b10ee9344cc9d8ff70139e3a77ac3cf754aede6204a3cc21",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The referenced commit already fixes the hub_disconnected bug by anchoring the config on globalThis, so no further action is needed on this goal.",
-			"evidence": [
-				"commit message states the fix anchors the value on globalThis, as channel-mirror.ts already does",
-				"deploy entry is a single already-merged commit, not an open issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T21:47:27.575Z"
-		},
-		{
 			"key": "issue:minion-meta#389",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34762,19 +34730,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Two precisely-located unchecked non-null assertions on .find() results in a single test file form a small, bounded, low-risk fix.",
+			"rationale": "A test file uses non-null assertions on .find() results without validation, risking silent breakage if expected keys are missing.",
 			"evidence": [
-				"src/lib/ui-button-artifact.test.ts:78 and :81 assert .find() results non-null without validation"
+				"src/lib/ui-button-artifact.test.ts:78 unchecked-access on .find()! result",
+				"src/lib/ui-button-artifact.test.ts:81 same pattern for declaration lookup"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T21:59:56.865Z"
+			"scoredAt": "2026-10-23T22:17:20.316Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-0cbe5486fa58",
