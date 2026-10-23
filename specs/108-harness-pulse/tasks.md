@@ -48,8 +48,8 @@
 
 ## Phase 6: Verification and handoff
 
-- [ ] T024 Run all commands in `contracts/validation.md`: full check/test/build, i18n, design/token lint, route contract and critical-journeys; record current source/lock evidence in `docs/pulse-dispatch.md`. Fix all errors/warnings/failures (SC-001–005).
-- [ ] T025 Use browser-harness on the current source-built local fixture/QA app; retain EN/ES keyboard, popup/Pulse page/notifications-page Pulse section, rendered-vs-current revision conflict, owner denial, reconnect and failed-refresh screenshots/call counts in the root D audit. Follow `tests/fixtures/critical-journeys/README.md` (SC-004).
+- [x] T024 Run all commands in `contracts/validation.md`: full check/test/build, i18n, design/token lint, route contract and critical-journeys; record current source/lock evidence in `docs/pulse-dispatch.md`. Fix all errors/warnings/failures (SC-001–005).
+- [x] T025 Use browser-harness on the current source-built local fixture/QA app; retain EN/ES keyboard, popup/Pulse page/notifications-page Pulse section, rendered-vs-current revision conflict, owner denial, reconnect and failed-refresh screenshots/call counts in the root D audit. Follow `tests/fixtures/critical-journeys/README.md` (SC-004).
 - [ ] T026 Obtain independent Standards and Spec code reviews, map every A17–A20 case to actual evidence, and freeze D commit/shared contract for E; parent creates the single D PR. Record any true open end at its code site and meta proposal; do not claim C deployment qualification from stubs (SC-001–005).
 
 ## Dependencies and execution order
@@ -77,7 +77,7 @@ Current-source assessment follows independent review `audits/2026-10-23-agent-ha
 - [x] T031 Reject malformed wildcard/numeric cron ranges in `src/server/services/pulse-action-contract.ts` before approval or dispatch, preserve documented valid bounded expressions, and record actual parser versus installed Gateway Croner regressions. Trace D-04; FR-008 (partial).
 - [x] T032 Return 409 refresh-required when an executable PATCH omits expectedRevision, retain 400 for malformed supplied revisions, and prove the actual route changes no proposal/dispatch/job. Trace D-05; FR-003 (contradicts).
 - [x] T033 Record actual selected-query EXPLAIN evidence on the guarded fixture queue with more than 20 unrelated rows; inspect the planned due-selection index without forcing planner choices or inventing latency claims. Trace D-08; plan/data-model selected-index evidence (missing).
-- [ ] T034 Qualify the exact frozen corrected tree with declared i18n/design/token/route gates, full check/test/build, actual mandatory default combined browser inventory/reporter/caps, fresh browser-harness proof and independent Standards/Spec convergence. Preserve failed/intermediate receipts and separate local source proof from Supabase, deployed Gateway and release operations. Trace D-07; T024–T026 and SC-001–005 (partial).
+- [x] T034 Qualify the exact frozen corrected tree with declared i18n/design/token/route gates, full check/test/build, actual mandatory default combined browser inventory/reporter/caps, fresh browser-harness proof and independent Standards/Spec convergence. Preserve failed/intermediate receipts and separate local source proof from Supabase, deployed Gateway and release operations. Trace D-07; T024–T026 and SC-001–005 (partial).
 
 ## Qualification checkpoint
 

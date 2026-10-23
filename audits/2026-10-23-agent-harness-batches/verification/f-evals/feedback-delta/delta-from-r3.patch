@@ -1,0 +1,56 @@
+--- R3/scripts/agent-evals/VALIDATION.md
++++ current/scripts/agent-evals/VALIDATION.md
+@@ -54,7 +54,7 @@
+ 
+ The untouched C-owned schema is copied under `fixtures/c-gateway/complaint-evaluation.schema.json` with SHA-256 `08897441bc823a5c6cb265065ba6a3cfb102b7fb7751a4e2f6aaf283f041c6ff`. C's real SQLite/provider-stub emitted fixture is copied unchanged at `fixtures/c-gateway/complaint-evaluation-v1.json`, SHA-256 `90e2509a53ad5bc8ee9bb79d1b641cd8382a3e46b013e84b009fb3aef52ea565`.
+ 
+-The importer consumes the actual schema and producer eligibility output; it has no second eligibility algorithm. A frozen artifact binds independently supplied manifest pins for actual source commit, lock, schema, exporter and producer fixture. Its self-declared metadata alone grants no qualification. Revision 3 binds `fixtures/c-gateway/artifact.json` to reviewed local C commit `9da5b35a6e26ac0154b1f9aa215b218a064afe5d`; the schema, exporter, original sample and retry sample match its committed files byte-for-byte. The actual complaint CLI and report bridge run against that checkout, and a fresh SQLite export checks authority evolution with positive and zero bills. Both CLI entrypoints bind the imported input bytes to the manifest fixture hash; schema-valid caller claims cannot substitute another producer snapshot.
++The importer consumes the actual schema and producer eligibility output; it has no second eligibility algorithm. A frozen artifact binds independently supplied manifest pins for actual source commit, lock, schema, exporter and producer fixture. Its self-declared metadata alone grants no qualification. Revision 3 first qualified C implementation `9da5b35a6e26ac0154b1f9aa215b218a064afe5d`. The final artifact now binds reviewed C commit `2289b2fea3bc33eea8a069513815eae0587b44f9`: its source fixtures use narrowly annotated JSONC, while the production schema/exporter and strict emitted or frozen JSON remain unchanged. Independent reconstruction verifies the original sample, retry history and Pulse wire hashes; F continues to accept strict JSON. The actual complaint CLI and report bridge run against that checkout, and a fresh SQLite export checks authority evolution with positive and zero bills. Both CLI entrypoints bind the imported input bytes to the manifest fixture hash; schema-valid caller claims cannot substitute another producer snapshot.
+ 
+ ## Corpus and operational limits
+ 
+--- R3/scripts/agent-evals/fixtures/c-gateway/artifact.json
++++ current/scripts/agent-evals/fixtures/c-gateway/artifact.json
+@@ -1,6 +1,6 @@
+ {
+   "version": 1,
+-  "sourceCommit": "9da5b35a6e26ac0154b1f9aa215b218a064afe5d",
++  "sourceCommit": "2289b2fea3bc33eea8a069513815eae0587b44f9",
+   "lockSha256": "2fbb2f37e8c7c0cc8c0297eb9e800ff35c39606b9fffaf8c439e6aeb9d968649",
+   "schemaSha256": "08897441bc823a5c6cb265065ba6a3cfb102b7fb7751a4e2f6aaf283f041c6ff",
+   "exporterSha256": "957644df067c92ac1337129bcfd903b18c13baa09e5058f327dc762bbd16951c",
+--- R3/scripts/agent-evals/screen.mjs
++++ current/scripts/agent-evals/screen.mjs
+@@ -15,6 +15,8 @@
+ } from './lib/common.mjs';
+ import { reconcileRunEvidence } from './lib/run-evidence.mjs';
+ import { percentile } from './lib/statistics.mjs';
++import { readPulseFeedbackExport } from './lib/pulse-feedback.mjs';
++export { importFeedback } from './lib/pulse-feedback.mjs';
+ export function deterministicScreen(trace) {
+   const checks = [];
+   const add = (name, fail, severity = 'major', evidence = []) =>
+@@ -329,15 +331,6 @@
+     ),
+   };
+ }
+-export function importFeedback(v) {
+-  object(v, ['version', 'revision', 'records']);
+-  assert(v.version === 1, 'feedback version');
+-  return v.records.map((r) => {
+-    object(r, ['ownerId', 'contentRevision', 'sourceRevision', 'policyRevision', 'reason']);
+-    assert(['factual_error', 'relevance', 'preference'].includes(r.reason), 'feedback reason');
+-    return r;
+-  });
+-}
+ export function screenInputFromRun(root) {
+   const { manifest, result, receipts, events, analysis } = reconcileRunEvidence(root);
+   assert(manifest.gates.screen, 'missing frozen screen preregistration');
+@@ -418,6 +411,6 @@
+         ]),
+       ),
+     };
+-    if (a.feedback) result.feedback = importFeedback(readJSON(a.feedback));
++    if (a.feedback) result.feedback = readPulseFeedbackExport(a.feedback);
+     console.log(canonical(result));
+   });

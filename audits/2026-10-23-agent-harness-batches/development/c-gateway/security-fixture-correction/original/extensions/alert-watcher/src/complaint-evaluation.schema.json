@@ -1,0 +1,539 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://minion.ai/schemas/complaint-evaluation-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "schemaRevision",
+    "recordId",
+    "receiptRevision",
+    "logicalSourceId",
+    "authorityNamespaceHash",
+    "admissionId",
+    "resultId",
+    "inputHash",
+    "sourceCertification",
+    "sourceCertificationRevision",
+    "policyId",
+    "policyHash",
+    "defaultPolicyHash",
+    "policyRevision",
+    "policyMode",
+    "classifierSchemaRevision",
+    "enabled",
+    "matched",
+    "mode",
+    "eligibility",
+    "requestedClassifierModel",
+    "resolvedClassifierModel",
+    "baseline",
+    "gate",
+    "forwardedBaselineAttemptIds",
+    "suggestionAttemptIds",
+    "attempts",
+    "deadlineStatus",
+    "costCoverage",
+    "elapsedMs",
+    "severityLabelRevision"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "schemaRevision": {
+      "const": "complaint-evaluation-v1"
+    },
+    "recordId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "receiptRevision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "logicalSourceId": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "authorityNamespaceHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "admissionId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "resultId": {
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "uuid"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "inputHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "sourceCertification": {
+      "enum": ["certified", "idless", "uncertified"]
+    },
+    "sourceCertificationRevision": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "policyId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "policyHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "defaultPolicyHash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "policyRevision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "policyMode": {
+      "enum": ["default", "custom"]
+    },
+    "classifierSchemaRevision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "matched": {
+      "type": "boolean"
+    },
+    "mode": {
+      "enum": ["off", "census", "shadow"]
+    },
+    "eligibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason"],
+      "properties": {
+        "status": {
+          "enum": ["eligible", "bypass", "disabled"]
+        },
+        "reason": {
+          "enum": [
+            "eligible",
+            "mode_off",
+            "plugin_disabled",
+            "unmatched",
+            "uncertified_source",
+            "custom_policy",
+            "model_drift",
+            "invalid_binding"
+          ]
+        }
+      }
+    },
+    "requestedClassifierModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "revision"],
+      "properties": {
+        "provider": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "resolvedClassifierModel": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provider", "model", "revision"],
+          "properties": {
+            "provider": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "model": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "baseline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "severity", "attemptIds"],
+      "properties": {
+        "disposition": {
+          "enum": ["positive", "negative", "failed", "unknown"]
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "enum": ["low", "med", "high"]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "attemptIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "uniqueItems": true,
+          "maxItems": 3
+        }
+      }
+    },
+    "gate": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["revision", "requestedModel", "resolvedModel", "disposition", "attemptIds"],
+          "properties": {
+            "revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "requestedModel": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["provider", "model", "revision"],
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "model": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                "revision": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                }
+              }
+            },
+            "resolvedModel": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["provider", "model", "revision"],
+                  "properties": {
+                    "provider": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "model": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    },
+                    "revision": {
+                      "type": "string",
+                      "minLength": 1,
+                      "maxLength": 128
+                    }
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "disposition": {
+              "enum": ["forward", "negative", "abstain", "unavailable"]
+            },
+            "attemptIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "uniqueItems": true,
+              "maxItems": 1
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "forwardedBaselineAttemptIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "uniqueItems": true,
+      "maxItems": 3
+    },
+    "suggestionAttemptIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "uniqueItems": true,
+      "maxItems": 1
+    },
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attemptId",
+          "purpose",
+          "disposition",
+          "requestedModel",
+          "resolvedModel",
+          "costStatus",
+          "costUsd",
+          "costCoverage",
+          "usage",
+          "elapsedMs"
+        ],
+        "properties": {
+          "attemptId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "purpose": {
+            "enum": ["baseline", "gate", "suggestion"]
+          },
+          "disposition": {
+            "enum": ["admitted", "received", "failed", "indeterminate"]
+          },
+          "requestedModel": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["provider", "model", "revision"],
+            "properties": {
+              "provider": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "model": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              },
+              "revision": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128
+              }
+            }
+          },
+          "resolvedModel": {
+            "anyOf": [
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["provider", "model", "revision"],
+                "properties": {
+                  "provider": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "model": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  },
+                  "revision": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 128
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "costStatus": {
+            "enum": ["known", "unknown"]
+          },
+          "costUsd": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "costCoverage": {
+            "enum": ["complete", "incomplete"]
+          },
+          "usage": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["inputTokens", "outputTokens", "cacheReadTokens", "cacheCreationTokens"],
+            "properties": {
+              "inputTokens": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "outputTokens": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "cacheReadTokens": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "cacheCreationTokens": {
+                "anyOf": [
+                  {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          },
+          "elapsedMs": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "costStatus": {
+                  "const": "known"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "costUsd": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "costUsd": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "maxItems": 5
+    },
+    "deadlineStatus": {
+      "enum": ["within", "timeout", "unknown"]
+    },
+    "costCoverage": {
+      "enum": ["complete", "incomplete"]
+    },
+    "elapsedMs": {
+      "type": "number",
+      "minimum": 0
+    },
+    "severityLabelRevision": {
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

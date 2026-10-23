@@ -174,10 +174,11 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-17",
       "acceptance": "**Topics:** `data`, `migrations`, `security`, `test`\n\n**Dependencies:** none. **Owner/files:** Hub: Pulse schema/service/migrations/seed and new dispatch store.\n\n**DoD A17:** Real PG concurrent transaction yields one dispatch per proposal revision; payload frozen; org/owner constraints; edit/version conflict; state-dependent fields/FKs; legacy informational data preserved. Deletion cannot cascade away admission tombstones.\n\n**Verification:** `bunx vitest run src/server/services/pulse-dispatch.store.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/d-pulse/correction-03/review-03.md",
-        "development/d-pulse/source-baseline-commit.json"
+        "verification/d-pulse/final/REVIEW.md",
+        "development/d-pulse/final-root-gates/final-summary.json",
+        "development/d-pulse/upstream-wa-integration/merge-receipt.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -188,10 +189,11 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-18",
       "acceptance": "**Topics:** `logic`, `permissions`, `ui`, `test`\n\n**Dependencies:** 17. **Owner/files:** Hub: POST/PATCH, receipt GET, recent-decision service/query and existing Pulse cards.\n\n**DoD A18:** Concurrent approve/edit/dismiss has one winner; executable stale/missing revision refreshes; duplicate approve returns receipt; informational kind no dispatch. Approve\u2192refresh/reconnect still shows queued/unknown state under owner-only receipt access; business pilot rejected. Keyboard/save-refresh proof and UI lints.\n\n**Verification:** `bunx vitest run src/routes/api/pulse/proposals/pulse-approval.test.ts; bun run test:critical-journeys`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/d-pulse/correction-03/review-03.md",
-        "development/d-pulse/source-baseline-commit.json"
+        "verification/d-pulse/final/REVIEW.md",
+        "development/d-pulse/final-root-gates/final-summary.json",
+        "development/d-pulse/upstream-wa-integration/merge-receipt.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -202,10 +204,11 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-19",
       "acceptance": "**Topics:** `infra`, `logic`, `test`\n\n**Dependencies:** none. **Owner/files:** Hub: bg-runtime candidate query, narrow postponeUntil result, authenticated scoped tick handler and handler registration.\n\n**DoD A19:** Filter type/org/dueAt before LIMIT and repeat due-time predicate in atomic claim; stale snapshot/direct advance after another worker postpones is rejected and not counted; unrelated oldest backlog never claimed; skipped rows not advanced; future bounded postpone releases current lease; only registered Pulse families use new retry contract; default jobs tick unchanged.\n\n**Verification:** `bunx vitest run src/server/services/bg-runtime.test.ts src/server/services/bg-runtime.selection.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/d-pulse/correction-03/review-03.md",
-        "development/d-pulse/source-baseline-commit.json"
+        "verification/d-pulse/final/REVIEW.md",
+        "development/d-pulse/final-root-gates/final-summary.json",
+        "development/d-pulse/upstream-wa-integration/merge-receipt.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -216,10 +219,11 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-20",
       "acceptance": "**Topics:** `security`, `logic`, `infra`, `test`\n\n**Dependencies:** 18, 19. **Owner/files:** Hub: strict credentials/personal-agent/session resolver and dispatch handler. Gateway: cron explicit-agent/session admission and execution validation in server-cron and cron handlers.\n\n**DoD A20:** Two profiles on one gateway target exact agent/session; omitted general-cron ID still defaults, explicit unknown/deleted ID never does; no ambient credentials/external announcement. Lost RPC/post-RPC failure stays indeterminate with no retry; valid remote ID scheduled only. Qualification gates Hub activation on compatible gateway.\n\n**Verification:** Hub: `bunx vitest run src/server/services/pulse-dispatch.worker.test.ts`. Gateway: `pnpm exec vitest run src/gateway/server-core/server-cron.binding.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/d-pulse/correction-03/review-03.md",
-        "development/d-pulse/source-baseline-commit.json"
+        "verification/d-pulse/final/REVIEW.md",
+        "development/d-pulse/final-root-gates/final-summary.json",
+        "development/d-pulse/upstream-wa-integration/merge-receipt.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
