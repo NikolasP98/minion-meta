@@ -1,0 +1,71 @@
+--- a/extensions/alert-watcher/test-support/retention-process.ts
++++ b/extensions/alert-watcher/test-support/retention-process.ts
+@@ -10,7 +10,7 @@
+   channels: [],
+   providers: [],
+   gatewayHandlers: {},
+-  httpHandlers: {},
++  httpHandlers: [],
+   httpRoutes: [],
+   cliRegistrars: [],
+   services: [],
+--- a/extensions/alert-watcher/test-support/suggestion-process.ts
++++ b/extensions/alert-watcher/test-support/suggestion-process.ts
+@@ -1,6 +1,7 @@
+ import fs from "node:fs";
+ import { registerHooks } from "node:module";
+ import path from "node:path";
++import type { SQLInputValue, StatementResultingChanges } from "node:sqlite";
+ import { setActivePluginRegistry } from "../../../src/plugins/runtime.js";
+ import type { MinionPluginApi } from "../../../src/plugins/types.js";
+ import type { ResolvedConfig } from "../index.js";
+@@ -151,17 +152,35 @@
+ };
+ // Per-instance write observation pauses only AFTER SQLite's actual commit. No
+ // persisted state is fabricated to simulate a crash.
++function isNamedParameters(
++  value: SQLInputValue | Record<string, SQLInputValue>,
++): value is Record<string, SQLInputValue> {
++  return value !== null && typeof value === "object" && !ArrayBuffer.isView(value);
++}
+ const prepare = db.prepare.bind(db);
+ db.prepare = (sql) => {
+   const statement = prepare(sql),
+     run = statement.run.bind(statement);
+-  statement.run = (...args) => {
+-    const result = run(...args);
++  function observedRun(...parameters: SQLInputValue[]): StatementResultingChanges;
++  function observedRun(
++    named: Record<string, SQLInputValue>,
++    ...parameters: SQLInputValue[]
++  ): StatementResultingChanges;
++  function observedRun(
++    first?: SQLInputValue | Record<string, SQLInputValue>,
++    ...parameters: SQLInputValue[]
++  ): StatementResultingChanges {
++    const result =
++      first === undefined
++        ? run()
++        : isNamedParameters(first)
++          ? run(first, ...parameters)
++          : run(first, ...parameters);
+     if (sql.startsWith("UPDATE classification_work SET suggestion_json=")) {
+-      if (typeof args[0] !== "string") {
++      if (typeof first !== "string") {
+         throw Error("expected serialized suggestion");
+       }
+-      const value = JSON.parse(args[0]) as { state: string };
++      const value = JSON.parse(first) as { state: string };
+       if (stage === "admitted" && value.state === "admitted") {
+         pause(stage);
+       }
+@@ -170,7 +189,8 @@
+       }
+     }
+     return result;
+-  };
++  }
++  statement.run = observedRun;
+   return statement;
+ };
+ const exec = db.exec.bind(db);

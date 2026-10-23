@@ -1,0 +1,53 @@
+const fs = require("node:fs");
+const path = require("node:path");
+const crypto = require("node:crypto");
+const cp = require("node:child_process");
+const {createRequire} = require("node:module");
+const requireRepo = createRequire(path.join(process.cwd(), "package.json"));
+const JSON5 = requireRepo("json5");
+const ts = requireRepo("typescript");
+const audit = __dirname;
+const manifest = JSON.parse(fs.readFileSync(path.join(audit,"original-manifest.json")));
+const hash = data => crypto.createHash("sha256").update(data).digest("hex");
+const assert = require("node:assert/strict");
+const fixtures = manifest.filter(row=>row.path.endsWith("v1.json"));
+const rows = fixtures.map(row=>{
+ const original = fs.readFileSync(path.join(audit,"original",row.path),"utf8");
+ const sourcePath = row.path.replace(/\.json$/, ".jsonc");
+ const source = fs.readFileSync(sourcePath,"utf8");
+ const decoded = JSON5.parse(source);
+ assert.deepEqual(decoded,JSON.parse(original));
+ const reconstructed = sourcePath.includes("pulse-cron-wire") ? JSON.stringify(decoded,null,2)+"\n" : cp.execFileSync("pnpm",["exec","oxfmt","--stdin-filepath",row.path],{input:JSON.stringify(decoded,null,2)+"\n",encoding:"utf8"});
+ assert.equal(reconstructed,original);
+ assert.equal(hash(reconstructed),row.sha256);
+ return {sourcePath, originalSha256:row.sha256, sourceSha256:hash(source), decodedEqual:true, strictJsonReconstructionByteEqual:true, records:Array.isArray(decoded)?decoded.length:undefined, annotations:(source.match(/pragma: allowlist nextline secret/g)||[]).length};
+});
+const protectedRows=manifest.slice(-4).map(row=>{
+ const data=fs.readFileSync(row.path);assert.equal(hash(data),row.sha256);
+ return {...row,byteEqual:true};
+});
+function tokens(source){const sf=ts.createSourceFile("fixture.ts",source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);const result=[];function visit(node){const children=node.getChildren(sf);if(!children.length&&node.kind!==ts.SyntaxKind.EndOfFileToken)result.push([node.kind,node.getText(sf)]);for(const child of children)visit(child);}visit(sf);return result;}
+const commentPaths=manifest.slice(3,8).filter(row=>!row.path.includes("receipt-export-revisions")).map(row=>row.path);
+const comments=commentPaths.map(file=>{assert.deepEqual(tokens(fs.readFileSync(file,"utf8")),tokens(fs.readFileSync(path.join(audit,"original",file),"utf8")));return {path:file,astLeafTokensEqual:true};});
+const printer=ts.createPrinter({removeComments:true});
+const parse=file=>ts.createSourceFile(file,fs.readFileSync(file,"utf8"),ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);
+const astRows=["extensions/alert-watcher/src/receipt-export-revisions.test.ts","src/gateway/server-core/server-cron.binding.test.ts"].map(file=>{
+ const before=parse(path.join(audit,"original",file)), after=parse(file);
+ const isJson5Import=node=>ts.isImportDeclaration(node)&&node.moduleSpecifier.text==="json5";
+ const target=file.includes("receipt-export")?"emits schema-valid golden incremental receipts":"accepts the pinned actual two-profile Pulse wire";
+ const isTarget=node=>ts.isExpressionStatement(node)&&ts.isCallExpression(node.expression)&&ts.isStringLiteral(node.expression.arguments[0])&&node.expression.arguments[0].text.startsWith(target);
+ const render=(node,sf)=>printer.printNode(ts.EmitHint.Unspecified,node,sf);
+ const outside=sf=>sf.statements.filter(node=>!isJson5Import(node)&&!isTarget(node)).map(node=>render(node,sf));
+ assert.deepEqual(outside(after),outside(before));
+ const body=sf=>{const call=sf.statements.find(isTarget).expression;return call.arguments.at(-1).body;};
+ const fixtureOnly=node=>ts.isVariableStatement(node)&&node.declarationList.declarations.some(d=>["file","annotated","source","capture","bytes"].includes(d.name.getText())) || ts.isIfStatement(node)&&node.expression.getText().includes("UPDATE_C_RETRY_FIXTURES") || ts.isExpressionStatement(node)&&node.getText().includes("expect(records).toEqual");
+ const stableBody=sf=>body(sf).statements.filter(node=>!fixtureOnly(node)).map(node=>render(node,sf));
+ assert.deepEqual(stableBody(after),stableBody(before));
+ return {path:file,outsideFixtureTestAstEqual:true,fixtureTestRemainingStatementsAstEqual:true,unchangedOutsideTopLevelStatements:outside(after).length,unchangedFixtureTestStatements:stableBody(after).length};
+});
+const featurePaths=JSON.parse(fs.readFileSync(path.join(audit,"original-feature-paths.json")));
+const touched=new Set([...manifest.slice(0,9).map(row=>row.path)]);
+const untouched=featurePaths.filter(file=>!touched.has(file)).map(file=>{assert.deepEqual(fs.readFileSync(file),cp.execFileSync("git",["show","HEAD:"+file]));return {path:file,byteEqualToOriginalCandidate:true};});
+const result={version:1,fixtures:rows,protected:protectedRows,credentialAnnotations:comments,loaderAstBoundaries:astRows,otherCandidatePaths:untouched,loaderChanges:["extensions/alert-watcher/src/receipt-export-revisions.test.ts","src/gateway/server-core/server-cron.binding.test.ts"],testOnlyJson5DependencyAlreadyDeclared:JSON.parse(fs.readFileSync("package.json")).dependencies.json5,productionBehaviorFilesChanged:0};
+fs.writeFileSync(path.join(audit,"equivalence-proof.json"),JSON.stringify(result,null,2)+"\n");
+console.log(JSON.stringify({fixtures:rows,protected:protectedRows,commentOnlyAstLeafTokenMatches:comments.length,loaderAstBoundaries:astRows,otherCandidatePathsByteEqual:untouched.length,productionBehaviorFilesChanged:0},null,2));

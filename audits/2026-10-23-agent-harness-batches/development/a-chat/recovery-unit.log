@@ -1,0 +1,36 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat
+
+ ❯ src/lib/assistant/dispatch.ownership.test.ts (13 tests | 6 failed) 64ms
+     × real sandbox tool/host/lease handoff: valid 7ms
+     × real sandbox tool/host/lease handoff: user_navigation 2ms
+     × real sandbox tool/host/lease handoff: registry 2ms
+     × real sandbox tool/host/lease handoff: forged 1ms
+     × real sandbox tool/host/lease handoff: failed_refresh 1ms
+     × real sandbox tool/host/lease handoff: expired 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: valid
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: user_navigation
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: registry
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: forged
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: failed_refresh
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: expired
+AssertionError: expected undefined to be defined
+ ❯ src/lib/assistant/dispatch.ownership.test.ts:74:21
+     72|     const binding = s.submit(); const running = runAssistantUiCalls('a…
+     73|     for(let i=0;i<10 && !release;i++) await Promise.resolve();
+     74|     expect(release).toBeDefined();
+       |                     ^
+     75|     if(variant==='user_navigation') { setPageContextLocation('/other')…
+     76|     if(variant==='registry') disposers.push(registerTool({name:'unrela…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  6 failed | 20 passed (26)
+   Start at  00:57:28
+   Duration  1.73s (transform 854ms, setup 64ms, import 957ms, tests 232ms, environment 0ms)
+

@@ -1,0 +1,1060 @@
+diff --git a/messages/en.json b/messages/en.json
+index a426de9a..519e8f80 100644
+--- a/messages/en.json
++++ b/messages/en.json
+@@ -7032,5 +7032,24 @@
+   "pulse_reasonPreAdmission": "The gateway was unavailable before admission.",
+   "pulse_reasonUnknown": "No verified remote acceptance receipt is available.",
+   "pulse_reasonCanceled": "Work was canceled after its authority or worker configuration changed.",
+-  "pulse_reasonUnavailable": "Status details are unavailable."
++  "pulse_reasonUnavailable": "Status details are unavailable.",
++  "pulse_feedbackTitle": "Feedback",
++  "pulse_feedbackExplanation": "Explain usefulness or a factual error. Feedback does not change policy automatically.",
++  "pulse_feedbackReason": "Reason",
++  "pulse_feedbackComment": "Comment (optional)",
++  "pulse_feedbackLimit": "{count}/500 characters",
++  "pulse_feedbackUseful": "Useful",
++  "pulse_feedbackIrrelevant": "Irrelevant",
++  "pulse_feedbackDuplicate": "Duplicate",
++  "pulse_feedbackFactError": "Factual error",
++  "pulse_feedbackHandled": "Already handled",
++  "pulse_feedbackLate": "Too late",
++  "pulse_feedbackSave": "Save feedback",
++  "pulse_feedbackCorrect": "Save correction",
++  "pulse_feedbackFailed": "Feedback could not be saved. Your input is still here.",
++  "pulse_feedbackSaved": "Feedback saved.",
++  "pulse_feedbackRecorded": "Recorded: {reason}",
++  "pulse_feedbackExport": "Export my feedback",
++  "pulse_digestNextStep": "Suggested next step:",
++  "pulse_digestEvidence": "Public source evidence"
+ }
+diff --git a/messages/es.json b/messages/es.json
+index 377ea6c7..e1efc651 100644
+--- a/messages/es.json
++++ b/messages/es.json
+@@ -7032,5 +7032,24 @@
+   "pulse_reasonPreAdmission": "El gateway no estaba disponible antes de la admisión.",
+   "pulse_reasonUnknown": "No hay una constancia verificada de aceptación remota.",
+   "pulse_reasonCanceled": "El trabajo se canceló tras cambiar su autoridad o configuración.",
+-  "pulse_reasonUnavailable": "Los detalles del estado no están disponibles."
++  "pulse_reasonUnavailable": "Los detalles del estado no están disponibles.",
++  "pulse_feedbackTitle": "Comentarios",
++  "pulse_feedbackExplanation": "Indica si fue útil o si contiene un error factual. Los comentarios no cambian la política automáticamente.",
++  "pulse_feedbackReason": "Motivo",
++  "pulse_feedbackComment": "Comentario (opcional)",
++  "pulse_feedbackLimit": "{count}/500 caracteres",
++  "pulse_feedbackUseful": "Útil",
++  "pulse_feedbackIrrelevant": "Irrelevante",
++  "pulse_feedbackDuplicate": "Duplicado",
++  "pulse_feedbackFactError": "Error factual",
++  "pulse_feedbackHandled": "Ya atendido",
++  "pulse_feedbackLate": "Demasiado tarde",
++  "pulse_feedbackSave": "Guardar comentario",
++  "pulse_feedbackCorrect": "Guardar corrección",
++  "pulse_feedbackFailed": "No se pudo guardar el comentario. Tu texto sigue aquí.",
++  "pulse_feedbackSaved": "Comentario guardado.",
++  "pulse_feedbackRecorded": "Registrado: {reason}",
++  "pulse_feedbackExport": "Exportar mis comentarios",
++  "pulse_digestNextStep": "Siguiente paso sugerido:",
++  "pulse_digestEvidence": "Evidencia pública de las fuentes"
+ }
+diff --git a/scripts/qa/seed/ids.ts b/scripts/qa/seed/ids.ts
+index 5e96f975..069db2a7 100644
+--- a/scripts/qa/seed/ids.ts
++++ b/scripts/qa/seed/ids.ts
+@@ -68,3 +68,5 @@ export const QA_PASSWORD = process.env.QA_SEED_PASSWORD ?? 'QaStack!2026';
+ /** Stable replay namespace for Pulse decision/dispatch fixture rows. */
+ export const pulseFixtureId = (scenario: string, kind = 'proposal') =>
+   matrixUuid(`pulse.${scenario}`, kind);
++export const digestFixtureId = (scenario: string, kind = 'run') =>
++  matrixUuid(`pulse.digest.${scenario}`, kind);
+diff --git a/scripts/qa/seed/index.ts b/scripts/qa/seed/index.ts
+index 9fade943..81b754a1 100644
+--- a/scripts/qa/seed/index.ts
++++ b/scripts/qa/seed/index.ts
+@@ -65,7 +65,7 @@ const MODULES: ReadonlyArray<{
+   { domain: 'gateway', label: 'gateway-libsql', seed: gatewayLibsql.seed },
+   { domain: 'inbox', label: 'inbox', seed: inbox.seed },
+   { domain: 'release', label: 'release', seed: release.seed },
+-  { domain: 'pulse', label: 'pulse', seed: pulse.seed },
++  { domain: 'pulse', label: 'pulse decisions and disabled digest', seed: pulse.seed },
+   // Not a matrix domain — keeps the ui-audit-seed.ts personas alive on the same stack.
+   { domain: 'ui-audit', label: 'ui-audit-compat', seed: uiAuditCompat.seed },
+ ];
+diff --git a/scripts/qa/seed/matrix.ts b/scripts/qa/seed/matrix.ts
+index e1039d5b..bbbab944 100644
+--- a/scripts/qa/seed/matrix.ts
++++ b/scripts/qa/seed/matrix.ts
+@@ -43,6 +43,11 @@ export interface MatrixEntry {
+ export const MATRIX_VERSION = 'qa-seed-v1';
+ 
+ export const MATRIX: readonly MatrixEntry[] = [
++  ...['zero-budget', 'unknown', 'duplicate', 'revoked', 'stale-cursor'].map((scenario) => ({
++    id: `pulse.digest.${scenario}`,
++    domain: 'pulse' as const,
++    why: 'Disabled digest: zero spend, persistent unknown fence, logical duplicate, revoked owner and newer accepted cursor',
++  })),
+   ...['legacy', 'owner', 'other-owner', 'conflict', 'indeterminate'].map((scenario) => ({
+     id: `pulse.${scenario}`,
+     domain: 'pulse' as const,
+diff --git a/scripts/qa/seed/pulse.ts b/scripts/qa/seed/pulse.ts
+index 6ca1948d..ea680125 100644
+--- a/scripts/qa/seed/pulse.ts
++++ b/scripts/qa/seed/pulse.ts
+@@ -1,4 +1,4 @@
+-import { pulseFixtureId } from './ids';
++import { pulseFixtureId, digestFixtureId } from './ids';
+ import { ORG_PERSONAL, userId } from './tenancy';
+ import type { SeedContext } from './db';
+ export async function seed({
+@@ -23,4 +23,27 @@ export async function seed({
+     }
+     register(`pulse.${scenario}`, { table: 'pulse_proposals', where: { id } });
+   }
++  for (const scenario of [
++    'zero-budget',
++    'unknown',
++    'duplicate',
++    'revoked',
++    'stale-cursor',
++  ] as const) {
++    const actor = scenario === 'revoked' ? other : owner;
++    const namespace = 'qa-digest-disabled';
++    await sql`insert into pulse_digest_admission(org_id,owner_profile_id,budget_namespace,policy_revision,policy_hash,approval_revision,approval_expires_at,max_calls,upper_micro_usd,daily_micro_usd,unknown_exposure_fence)
++      values(${ORG_PERSONAL},${actor},${namespace},'qa-digest-v1','qa-disabled','unapproved','2026-01-01',0,0,0,${scenario === 'unknown'}) on conflict do nothing`;
++    const id = digestFixtureId(scenario),
++      job = digestFixtureId(scenario, 'job');
++    await sql`insert into bg_jobs(id,tenant_id,user_id,type,ref_id,status,created_at,updated_at,lease_generation) values(${job},${ORG_PERSONAL},${actor},'pulse_digest',${id},'done',1,1,1) on conflict do nothing`;
++    const unknown = scenario === 'unknown';
++    await sql`insert into pulse_digest_runs(id,org_id,owner_profile_id,budget_namespace,policy_revision,policy_hash,source_snapshot_hash,request_hash,snapshot,evidence,requested_model,bg_job_id,state,attempt_id,admitted_generation,admitted_day,admitted_at,upper_micro_usd,safe_reason)
++      values(${id},${ORG_PERSONAL},${actor},${namespace},'qa-digest-v1','qa-disabled',${`qa-${scenario}`},'qa-request','{}'::jsonb,'[]','unapproved/model',${job},${unknown ? 'indeterminate' : 'canceled'},${unknown ? digestFixtureId(scenario, 'attempt') : null}::uuid,${unknown ? 1 : null},${unknown ? '2026-10-23' : null}::date,${unknown ? '2026-10-23' : null}::timestamptz,${unknown ? 0 : null},'qa-disabled') on conflict do nothing`;
++    if (unknown)
++      await sql`update pulse_digest_admission set unknown_exposure_fence=true,active_run_id=${id},active_attempt_id=${digestFixtureId(scenario, 'attempt')} where org_id=${ORG_PERSONAL} and owner_profile_id=${actor} and budget_namespace=${namespace}`;
++    if (scenario === 'stale-cursor')
++      await sql`insert into pulse_digest_sources(org_id,owner_profile_id,policy_revision,source_id,revision,content_hash)values(${ORG_PERSONAL},${actor},'qa-digest-v1','ai',2,'qa-newer') on conflict do nothing`;
++    register(`pulse.digest.${scenario}`, { table: 'pulse_digest_runs', where: { id } });
++  }
+ }
+diff --git a/scripts/qc/native-postgres-manifest.test.ts b/scripts/qc/native-postgres-manifest.test.ts
+index 19264146..c245eee2 100644
+--- a/scripts/qc/native-postgres-manifest.test.ts
++++ b/scripts/qc/native-postgres-manifest.test.ts
+@@ -67,7 +67,7 @@ describe('native PostgreSQL ownership manifest', () => {
+       .map((file) => path.relative(process.cwd(), file).replaceAll('\\', '/'))
+       .filter(isOrdinaryVitestNativeExclusion);
+     validateNativePostgresOwnership(discovered, NATIVE_POSTGRES_MANIFEST, existsSync);
+-    expect(discovered).toHaveLength(42);
++    expect(discovered).toHaveLength(46);
+     expect(NATIVE_POSTGRES_LANES).toHaveLength(9);
+     const crmBulk = NATIVE_POSTGRES_MANIFEST['qa-native'].find(
+       ({ file }) => file === 'src/server/services/crm-contact-tags-bulk.sql.integration.test.ts',
+diff --git a/scripts/qc/native-postgres-manifest.ts b/scripts/qc/native-postgres-manifest.ts
+index e52aee44..681d311d 100644
+--- a/scripts/qc/native-postgres-manifest.ts
++++ b/scripts/qc/native-postgres-manifest.ts
+@@ -1,4 +1,8 @@
+ export const NATIVE_POSTGRES_EXCLUDES = [
++  'src/server/services/pulse-digest.admission.test.ts',
++  'src/server/services/pulse-digest.publication.test.ts',
++  'src/server/services/pulse-feedback.test.ts',
++  'src/server/services/pulse-digest.collection.test.ts',
+   '**/*.sql.integration.test.ts',
+   'src/server/services/pulse-dispatch.store.test.ts',
+   'src/server/services/bg-runtime.selection.test.ts',
+@@ -627,6 +631,67 @@ export const NATIVE_POSTGRES_MANIFEST = {
+     },
+   ],
+   'qa-native': [
++    {
++      file: 'src/server/services/pulse-digest.admission.test.ts',
++      minimumAssertions: 9,
++      requiredBehaviors: [
++        'native digest accounting and schema requires a stored bounded raw response and usage envelope before received state',
++        'native digest accounting and schema retains replay hashes and bills while bounded cleanup cancels and redacts expired raw evidence',
++        'native digest accounting and schema applies real D and E migration runners twice and paired seed twice',
++        'native digest accounting and schema deduplicates on independent connections before enqueue and permits only one competing snapshot',
++        'native digest accounting and schema locks the last daily allowance and admits one immutable attempt',
++        'native digest accounting and schema denies zero spend unsupported policy amounts and current business or revoked owner',
++        'native digest accounting and schema preserves admitted exposure across policy and day changes and stale late receipt',
++        'native digest accounting and schema enforces effective nonbypass org plus owner RLS and restricts deletion',
++        'native digest accounting and schema rejects mismatched foreign job owner and namespace changes instead of resetting accounting',
++      ],
++    },
++    {
++      file: 'src/server/services/pulse-digest.publication.test.ts',
++      minimumAssertions: 10,
++      requiredBehaviors: [
++        'native actual digest worker and atomic publication rejects direct SQL publication binding a received run to another owners card',
++        'native actual digest worker and atomic publication rejects a stale checkpoint before admission with zero provider calls and superseded bookkeeping',
++        'native actual digest worker and atomic publication publishes one card with accepted cursors run and job in the actual selected worker',
++        'native actual digest worker and atomic publication settles deterministic unchanged no-signal without provider traffic',
++        'native actual digest worker and atomic publication retains billed invalid output without cursor advance and fences unknown billing',
++        'native actual digest worker and atomic publication rolls back card cursor run and job together on a cursor fault then recovers locally',
++        'native actual digest worker and atomic publication supersedes a stale source revision without any card or checkpoint overwrite',
++        'native actual digest worker and atomic publication requires full immutable binding and returns the existing decided card only for identical content',
++        'native actual digest worker and atomic publication rejects malformed received SDK index annotations usage and custom output locally preserving raw known bills',
++        'native actual digest worker and atomic publication crashes actual worker children at admission received card cursor and commit boundaries without recall',
++      ],
++    },
++    {
++      file: 'src/server/services/pulse-feedback.test.ts',
++      minimumAssertions: 6,
++      requiredBehaviors: [
++        'native owner feedback immutable correction and export uses actual feedback routes and idempotent actions without changing policy',
++        'native owner feedback immutable correction and export enforces strict action UUID content revision and 500 Unicode character boundary',
++        'native owner feedback immutable correction and export permits only one successor under independent concurrent correction transactions',
++        'native owner feedback immutable correction and export denies another current owner cross-org missing member and stale card reads',
++        'native owner feedback immutable correction and export exports bounded owner-only keyset JSONL partitioning factual from preference',
++        'native owner feedback immutable correction and export redacts expired comments using actual bounded cleanup and retains hashes history and billing',
++      ],
++    },
++    {
++      file: 'src/server/services/pulse-digest.collection.test.ts',
++      minimumAssertions: 12,
++      requiredBehaviors: [
++        'native cold-start collection and authenticated selected tick redacts expired raw runs through actual tick with missing-policy',
++        'native cold-start collection and authenticated selected tick redacts expired raw runs through actual tick with expired-policy',
++        'native cold-start collection and authenticated selected tick redacts expired raw runs through actual tick with module-disabled',
++        'native cold-start collection and authenticated selected tick keeps expired late bills without rehydrating response bodies or releasing unknown exposure',
++        'native cold-start collection and authenticated selected tick performs no retained maintenance for absent malformed or mismatching scope',
++        'native cold-start collection and authenticated selected tick caps combined dispatch run source and feedback housekeeping at one hundred raw records per tick',
++        'native cold-start collection and authenticated selected tick starts with an empty queue and one durable immediate poll under duplicate authenticated ticks',
++        'native cold-start collection and authenticated selected tick leaves more than twenty unrelated older jobs untouched',
++        'native cold-start collection and authenticated selected tick records a failed poll at five minutes without a mixed snapshot queue or cursor advance',
++        'native cold-start collection and authenticated selected tick reclaims an expired generation lease and denies a stale collectors successor cadence write',
++        'native cold-start collection and authenticated selected tick fences actual membership deletion during collection and cancels queued digest via the shared caller',
++        'native cold-start collection and authenticated selected tick defers inference without admission when collection leaves fewer than thirty two seconds',
++      ],
++    },
+     {
+       file: 'src/server/services/pulse-dispatch.store.test.ts',
+       minimumAssertions: 9,
+@@ -815,6 +880,10 @@ export function isOrdinaryVitestNativeExclusion(file: string) {
+   const normalized = file.replaceAll('\\', '/');
+   return (
+     [
++      'src/server/services/pulse-digest.admission.test.ts',
++      'src/server/services/pulse-digest.publication.test.ts',
++      'src/server/services/pulse-feedback.test.ts',
++      'src/server/services/pulse-digest.collection.test.ts',
+       'src/server/services/pulse-dispatch.store.test.ts',
+       'src/server/services/bg-runtime.selection.test.ts',
+       'src/server/services/pulse-dispatch.worker.test.ts',
+diff --git a/src/lib/components/pulse/PulseReceipt.svelte b/src/lib/components/pulse/PulseReceipt.svelte
+index 667feedf..e84848e6 100644
+--- a/src/lib/components/pulse/PulseReceipt.svelte
++++ b/src/lib/components/pulse/PulseReceipt.svelte
+@@ -2,6 +2,8 @@
+   import { Badge } from '$lib/components/ui';
+   import type { PulseReceipt } from '$server/services/pulse-dispatch.store';
+   import * as m from '$lib/paraglide/messages';
++  import PulseFeedback from './PulseFeedback.svelte';
++  import PulseDigestEvidence from './PulseDigestEvidence.svelte';
+   let { receipt }: { receipt: PulseReceipt } = $props();
+   const label = $derived(
+     receipt.dispatch?.state === 'scheduled'
+@@ -54,6 +56,9 @@
+       >{m.pulse_remoteJob({ id: receipt.dispatch.remoteJobId })}</span
+     >{/if}
+ </div>
++{#if receipt.digest}{#if receipt.digestPayload}<PulseDigestEvidence
++      payload={receipt.digestPayload}
++    />{/if}<PulseFeedback proposalId={receipt.proposalId} revision={receipt.revision} />{/if}
+ 
+ <style>
+   .receipt {
+diff --git a/src/routes/(app)/pulse/+page.svelte b/src/routes/(app)/pulse/+page.svelte
+index 1de7b992..0158eb8b 100644
+--- a/src/routes/(app)/pulse/+page.svelte
++++ b/src/routes/(app)/pulse/+page.svelte
+@@ -10,6 +10,9 @@
+   import type { PulseProposalView } from '$server/services/pulse.service';
+   import type { PulseReceipt as Receipt } from '$server/services/pulse-dispatch.store';
+   import PulseReceipt from '$lib/components/pulse/PulseReceipt.svelte';
++  import PulseFeedback from '$lib/components/pulse/PulseFeedback.svelte';
++  import PulseDigestEvidence from '$lib/components/pulse/PulseDigestEvidence.svelte';
++  import { canAct } from '$lib/access/can.svelte';
+   import { tryUseActions } from '$lib/services/actions/context';
+   import { checkedRefresh } from '$lib/services/actions/refresh';
+   import {
+@@ -271,6 +274,11 @@
+         {m.asyncAction_reload()}
+       </Button>
+     {/if}
++    {#if canAct('pulse', 'export')}
++      <Button href="/api/pulse/feedback/export" variant="secondary" size="touch"
++        >{m.pulse_feedbackExport()}</Button
++      >
++    {/if}
+     <AsyncBoundary state={pageState}>
+       <div class="cards">
+         {#each data.proposals as p (p.id)}
+@@ -288,7 +296,13 @@
+ 
+             <div class="card-body">
+               {#if p.summary}
+-                <MarkdownMessage value={p.summary} tone="assistant" />
++                {#if p.source === 'dependency-digest'}<p class="t-body">
++                    {p.summary}
++                  </p>{:else}<MarkdownMessage value={p.summary} tone="assistant" />{/if}
++              {/if}
++              {#if p.source === 'dependency-digest' && p.ownerProfileId}
++                <PulseDigestEvidence payload={p.payload} />
++                <PulseFeedback proposalId={p.id} revision={p.revision} />
+               {/if}
+ 
+               {#if EXECUTE_KINDS.has(p.kind)}
+diff --git a/src/routes/api/gateway/pulse/proposals/server.test.ts b/src/routes/api/gateway/pulse/proposals/server.test.ts
+index 80525ecc..cbe09e30 100644
+--- a/src/routes/api/gateway/pulse/proposals/server.test.ts
++++ b/src/routes/api/gateway/pulse/proposals/server.test.ts
+@@ -39,6 +39,55 @@ describe('POST /api/gateway/pulse/proposals', () => {
+   beforeEach(() => {
+     mocks.upsert.mockReset().mockResolvedValue({ inserted: 1, skipped: 0 });
+   });
++  it.each([
++    ['reserved logical key', { dedupKey: 'internal:dependency-digest:v1:untrusted-run' }],
++    ['reserved internal source', { source: 'dependency-digest' }],
++    ...[
++      'ownerProfileId',
++      'owner_profile_id',
++      'internalRunId',
++      'internal_run_id',
++      'internalPolicyRevision',
++      'internal_policy_revision',
++      'internalInputHash',
++      'internal_input_hash',
++      'internalResultHash',
++      'internal_result_hash',
++    ].flatMap((key) => [
++      [`top-level ${key}`, { [key]: 'untrusted-binding' }],
++      [
++        `nested ${key}`,
++        { payload: { references: [{ metadata: { [key]: 'untrusted-binding' } }] } },
++      ],
++    ]),
++  ])('refuses reserved internal authority before any write: %s', async (_name, override) => {
++    const result = await response(
++      { serverId: 'server-a', tenantCtx: { tenantId: 'org-a', db: mocks.tenantDb } },
++      {
++        orgId: 'org-a',
++        proposals: [validCard, { ...validCard, ...(override as Record<string, unknown>) }],
++      },
++    );
++    expect(result.status).toBe(400);
++    await expect(result.json()).resolves.toEqual({ ok: false, error: 'invalid_proposals' });
++    expect(mocks.upsert).not.toHaveBeenCalled();
++  });
++  it('preserves identity and legacy tenant checks ahead of reserved-field validation', async () => {
++    const body = {
++      orgId: 'org-b',
++      proposals: [{ ...validCard, dedupKey: 'internal:dependency-digest:v1:attack' }],
++    };
++    expect((await response({}, body)).status).toBe(401);
++    expect(
++      (
++        await response(
++          { serverId: 'server-a', tenantCtx: { tenantId: 'org-a', db: mocks.tenantDb } },
++          body,
++        )
++      ).status,
++    ).toBe(403);
++    expect(mocks.upsert).not.toHaveBeenCalled();
++  });
+ 
+   it.each([
+     {},
+diff --git a/src/server/llm.ts b/src/server/llm.ts
+index ab4acf8f..f49411d1 100644
+--- a/src/server/llm.ts
++++ b/src/server/llm.ts
+@@ -119,10 +119,95 @@ const usageMiddleware: LanguageModelMiddleware = {
+  *
+  * Every model returned is metered — see `usageMiddleware`.
+  */
+-export function getOpenRouterModel(modelId: string) {
++export function getOpenRouterModel(
++  modelId: string,
++  bounded?: { mode: 'pulse-digest-v1'; fetch: typeof fetch },
++) {
++  if (bounded) {
++    if (!env.OPENROUTER_API_KEY) throw new Error('digest_transport_unconfigured');
++    // The digest owns one bounded terminal-envelope transport; metering stays shared.
++    const digestProvider = createOpenAI({
++      apiKey: env.OPENROUTER_API_KEY,
++      baseURL: OPENROUTER_BASE_URL,
++      fetch: bounded.fetch,
++    });
++    return wrapLanguageModel({ model: digestProvider.chat(modelId), middleware: usageMiddleware });
++  }
+   return wrapLanguageModel({ model: openrouter()(modelId), middleware: usageMiddleware });
+ }
+ 
++/** Parse an already received terminal envelope with the installed adapter. This
++ * closed transport cannot make a network request or create another inference bill. */
++export async function validateOpenRouterDigestReceipt(
++  modelId: string,
++  rawResponse: string,
++  status: number,
++): Promise<void> {
++  if (status !== 200 || Buffer.byteLength(rawResponse) > 65536)
++    throw new Error('digest_sdk_receipt');
++  const local = createOpenAI({
++    apiKey: 'local-receipt-validation',
++    baseURL: 'https://receipt.invalid',
++    fetch: async () =>
++      new Response(rawResponse, { status, headers: { 'content-type': 'application/json' } }),
++  });
++  await local.chat(modelId).doGenerate({
++    prompt: [
++      {
++        role: 'user',
++        content: [{ type: 'text', text: 'Validate the retained envelope locally.' }],
++      },
++    ],
++    maxOutputTokens: 1024,
++    abortSignal: AbortSignal.timeout(2000),
++  });
++}
++
++/** Prove this installed adapter/model can serialize the approved wire cap before
++ * reserving an attempt. The module-private transport returns only local bytes. */
++export async function assertOpenRouterDigestWireSupport(
++  modelId: string,
++  prompt: string,
++): Promise<void> {
++  let observed = false;
++  const local = createOpenAI({
++    apiKey: 'local-wire-validation',
++    baseURL: 'https://receipt.invalid',
++    fetch: async (input, init) => {
++      const body: unknown = typeof init?.body === 'string' ? JSON.parse(init.body) : null;
++      const value = body && typeof body === 'object' ? (body as Record<string, unknown>) : {};
++      if (
++        !String(input).endsWith('/chat/completions') ||
++        value.model !== modelId ||
++        value.max_tokens !== 1024 ||
++        value.max_completion_tokens !== undefined ||
++        value.tools !== undefined ||
++        value.models !== undefined ||
++        value.stream === true ||
++        Buffer.byteLength(String(init?.body)) > 65536
++      )
++        throw new Error('digest_unsupported_wire');
++      observed = true;
++      return new Response(
++        JSON.stringify({
++          id: 'local-wire',
++          model: modelId,
++          choices: [
++            { index: 0, message: { role: 'assistant', content: '{}' }, finish_reason: 'stop' },
++          ],
++        }),
++        { headers: { 'content-type': 'application/json' } },
++      );
++    },
++  });
++  await local.chat(modelId).doGenerate({
++    prompt: [{ role: 'user', content: [{ type: 'text', text: prompt }] }],
++    maxOutputTokens: 1024,
++    abortSignal: AbortSignal.timeout(2000),
++  });
++  if (!observed) throw new Error('digest_unsupported_wire');
++}
++
+ /**
+  * Cost estimate for the builder AI endpoints.
+  *
+diff --git a/src/server/services/pulse-dispatch.store.test.ts b/src/server/services/pulse-dispatch.store.test.ts
+index de4c3e4a..b762ba4f 100644
+--- a/src/server/services/pulse-dispatch.store.test.ts
++++ b/src/server/services/pulse-dispatch.store.test.ts
+@@ -76,7 +76,7 @@ describe('actual Pulse migration and restricted owner storage', () => {
+     };
+     await seedPulse(context);
+     await seedPulse(context);
+-    expect(registrations).toHaveLength(10);
++    expect(registrations).toHaveLength(20);
+     const [counts] =
+       await fixture.pg`select (select count(*)::int from pulse_proposals where source='qa') as proposals,(select count(*)::int from pulse_dispatches where gateway_qualification_revision='qa-disabled') as dispatches`;
+     expect(counts).toEqual({ proposals: 5, dispatches: 1 });
+diff --git a/src/server/services/pulse-dispatch.store.ts b/src/server/services/pulse-dispatch.store.ts
+index aeb2b571..2fb4b49f 100644
+--- a/src/server/services/pulse-dispatch.store.ts
++++ b/src/server/services/pulse-dispatch.store.ts
+@@ -16,6 +16,7 @@ import {
+   PULSE_TOOL_SCHEMA_REVISION,
+ } from './pulse-action-contract';
+ import { preparePulseAuthority, resolvePulseAuthorityTx } from './pulse-dispatch.authority';
++import { cancelDigestForOwnerTx } from './pulse-digest.store';
+ 
+ export async function assertPulsePersonalOrg(ctx: CoreCtx): Promise<void> {
+   const [org] = await ctx.db.execute<{ kind: string; status: string }>(
+@@ -31,6 +32,8 @@ function actionArgs(kind: string, args: unknown) {
+   }
+ }
+ export type PulseReceipt = {
++  digest?: boolean;
++  digestPayload?: Record<string, unknown>;
+   proposalId: string;
+   revision: number;
+   decision: string;
+@@ -48,6 +51,7 @@ export function proposalReceipt(
+   dispatch?: PulseDispatchRow,
+ ): PulseReceipt {
+   return {
++    ...(proposal.internalRunId ? { digest: true, digestPayload: proposal.payload } : {}),
+     proposalId: proposal.id,
+     revision: proposal.revision,
+     decision: proposal.status,
+@@ -342,6 +346,7 @@ export async function cancelPulseForOwnerTx(
+   scope: { tenantId: string; profileId: string },
+   reason = 'authority_revoked',
+ ): Promise<void> {
++  await cancelDigestForOwnerTx(tx, scope, reason);
+   const jobs = await tx
+     .select()
+     .from(bgJobs)
+diff --git a/src/server/services/pulse-ingest-contract.test.ts b/src/server/services/pulse-ingest-contract.test.ts
+index 3356c924..298e82a3 100644
+--- a/src/server/services/pulse-ingest-contract.test.ts
++++ b/src/server/services/pulse-ingest-contract.test.ts
+@@ -27,6 +27,44 @@ function request(body: BodyInit, headers?: HeadersInit): Request {
+ }
+ 
+ describe('Pulse ingest request contract', () => {
++  it.each([
++    ['reserved logical key', { dedupKey: 'internal:dependency-digest:v1:untrusted-run' }],
++    ['reserved internal source', { source: 'dependency-digest' }],
++    ...[
++      'ownerProfileId',
++      'owner_profile_id',
++      'internalRunId',
++      'internal_run_id',
++      'internalPolicyRevision',
++      'internal_policy_revision',
++      'internalInputHash',
++      'internal_input_hash',
++      'internalResultHash',
++      'internal_result_hash',
++    ].flatMap((key) => [
++      [`top-level ${key}`, { [key]: 'untrusted-binding' }],
++      [
++        `nested ${key}`,
++        { payload: { references: [{ metadata: { [key]: 'untrusted-binding' } }] } },
++      ],
++    ]),
++  ])('rejects external authority impersonation atomically: %s', (_name, override) => {
++    expect(() =>
++      validatePulseProposals({ proposals: [card(), card(override as Record<string, unknown>)] }),
++    ).toThrowError(expect.objectContaining({ code: 'invalid_proposals' }));
++  });
++  it('keeps ordinary external informational digests and same-org legacy metadata valid', () => {
++    const external = card({
++      source: 'daily_briefing',
++      kind: 'digest',
++      payload: {
++        note: 'Review public release notes',
++        references: ['internal:dependency-digest:v1:quoted-as-data'],
++      },
++    });
++    expect(validatePulseProposals({ orgId: 'org-a', proposals: [external] })).toEqual([external]);
++    expect(legacyOrgId({ orgId: 'org-a' })).toBe('org-a');
++  });
+   it('counts Unicode scalars and accepts the exact bounded card shape', () => {
+     const proposals = validatePulseProposals({
+       proposals: [
+diff --git a/src/server/services/pulse-ingest-contract.ts b/src/server/services/pulse-ingest-contract.ts
+index 5c473e1a..40469123 100644
+--- a/src/server/services/pulse-ingest-contract.ts
++++ b/src/server/services/pulse-ingest-contract.ts
+@@ -113,6 +113,32 @@ export function validatePulseProposals(body: Record<string, unknown>): ProposalI
+ 
+   return body.proposals.map((value) => {
+     if (!isRecord(value)) throw new PulseIngestError('invalid_proposals');
++    const reserved = new Set([
++      'ownerProfileId',
++      'internalRunId',
++      'internalPolicyRevision',
++      'internalInputHash',
++      'internalResultHash',
++      'internal_run_id',
++      'owner_profile_id',
++      'internal_policy_revision',
++      'internal_input_hash',
++      'internal_result_hash',
++    ]);
++    const hasAuthority = (item: unknown): boolean => {
++      if (Array.isArray(item)) return item.some(hasAuthority);
++      return (
++        isRecord(item) &&
++        Object.entries(item).some(([key, child]) => reserved.has(key) || hasAuthority(child))
++      );
++    };
++    if (
++      value.source === 'dependency-digest' ||
++      (typeof value.dedupKey === 'string' &&
++        value.dedupKey.startsWith('internal:dependency-digest:v1:')) ||
++      hasAuthority(value)
++    )
++      throw new PulseIngestError('invalid_proposals');
+     if (
+       !boundedString(value.source, 1, 100) ||
+       !boundedString(value.kind, 1, 100) ||
+diff --git a/src/server/services/pulse-tick.budget.test.ts b/src/server/services/pulse-tick.budget.test.ts
+index cffbb371..92f56fc3 100644
+--- a/src/server/services/pulse-tick.budget.test.ts
++++ b/src/server/services/pulse-tick.budget.test.ts
+@@ -6,9 +6,17 @@ const boundary = vi.hoisted(() => ({
+   wall: 1_800_000_000_000,
+   authorityMs: 1234,
+   retentionMs: 4321,
++  digestRedact: vi.fn(async () => {}),
++  feedbackRedact: vi.fn(async () => {}),
+   selected: vi.fn(async () => ({ advanced: 1 })),
+ }));
+ vi.mock('./pulse-dispatch.worker', () => ({}));
++vi.mock('./pulse-digest.worker', () => ({}));
++vi.mock('./pulse-digest.store', () => ({
++  redactDigestTx: boundary.digestRedact,
++  cancelDigestForOwnerTx: async () => {},
++}));
++vi.mock('./pulse-feedback.service', () => ({ redactPulseFeedbackTx: boundary.feedbackRedact }));
+ vi.mock('./bg-runtime', () => ({ runSelectedTick: boundary.selected }));
+ vi.mock('./pulse-worker-config', () => ({
+   readPulseWorkerConfig: () => ({ tenantId: 'org-budget', ownerProfileId: 'owner-budget' }),
+@@ -42,10 +50,15 @@ beforeEach(() => {
+   boundary.authorityMs = 1234;
+   boundary.retentionMs = 4321;
+   boundary.selected.mockClear();
++  boundary.digestRedact.mockClear();
++  boundary.feedbackRedact.mockClear();
+   vi.spyOn(performance, 'now').mockImplementation(() => boundary.monotonic);
+   vi.spyOn(Date, 'now').mockImplementation(() => boundary.wall);
+ });
+-afterEach(() => vi.restoreAllMocks());
++afterEach(() => {
++  delete process.env.MINION_PULSE_DIGEST_SCOPE;
++  vi.restoreAllMocks();
++});
+ 
+ describe('Pulse tick total monotonic budget', () => {
+   it('subtracts authority and retention time despite backward wall-clock changes', async () => {
+@@ -64,4 +77,15 @@ describe('Pulse tick total monotonic budget', () => {
+     expect(await runPulseTick()).toEqual({ advanced: 0 });
+     expect(boundary.selected).not.toHaveBeenCalled();
+   });
++  it('stops retained maintenance at the monotonic deadline before another family or admission', async () => {
++    process.env.MINION_PULSE_DIGEST_SCOPE = JSON.stringify({
++      tenantId: '00000000-0000-4000-8000-000000000001',
++      ownerProfileId: '00000000-0000-4000-8000-000000000002',
++    });
++    boundary.retentionMs = 50_001;
++    expect(await runPulseTick()).toEqual({ advanced: 0 });
++    expect(boundary.digestRedact).not.toHaveBeenCalled();
++    expect(boundary.feedbackRedact).not.toHaveBeenCalled();
++    expect(boundary.selected).not.toHaveBeenCalled();
++  });
+ });
+diff --git a/src/server/services/pulse-tick.ts b/src/server/services/pulse-tick.ts
+index b27e1259..01f02289 100644
+--- a/src/server/services/pulse-tick.ts
++++ b/src/server/services/pulse-tick.ts
+@@ -1,4 +1,10 @@
+ import './pulse-dispatch.worker';
++import './pulse-digest.worker';
++import { readDigestPolicy, readDigestScope } from './pulse-digest.policy';
++import { collectDueDigest } from './pulse-digest.collection';
++import { assertDigestAuthorityTx } from './pulse-digest.authority';
++import { cancelDigestForOwnerTx, redactDigestTx } from './pulse-digest.store';
++import { redactPulseFeedbackTx } from './pulse-feedback.service';
+ import { runSelectedTick } from './bg-runtime';
+ import {
+   readPulseWorkerConfig,
+@@ -11,7 +17,39 @@ import { resolvePulseAuthorityTx } from './pulse-dispatch.authority';
+ export async function runPulseTick() {
+   const deadline = performance.now() + 50_000;
+   const config = readPulseWorkerConfig();
+-  if (!config) {
++  const digest = readDigestPolicy();
++  const digestScope = readDigestScope();
++  const rawDigest = readDigestPolicy(true);
++  if (!digestScope && (process.env.MINION_PULSE_DIGEST_SCOPE !== undefined || rawDigest?.enabled))
++    return { advanced: 0, skipped: 'digest_scope_unavailable' as const };
++  if (
++    rawDigest &&
++    digestScope &&
++    (rawDigest.tenantId !== digestScope.tenantId ||
++      rawDigest.ownerProfileId !== digestScope.ownerProfileId)
++  )
++    return { advanced: 0, skipped: 'digest_scope_mismatch' as const };
++  // Cleanup uses only the validated retained deployment target, without spend/view admission.
++  // Run each family once: dispatch20 + runs50/sources10 + feedback20 <=100 raw records.
++  if (digestScope) {
++    const retained = { tenantId: digestScope.tenantId, profileId: digestScope.ownerProfileId };
++    for (const redact of [redactExpiredPulsePayloadsTx, redactDigestTx, redactPulseFeedbackTx]) {
++      if (performance.now() >= deadline) return { advanced: 0 };
++      await getOrgTransactionDb(getCoreDb()).transaction((tx) => redact(tx, retained));
++    }
++    if (performance.now() >= deadline) return { advanced: 0 };
++    if (!digest)
++      await getOrgTransactionDb(getCoreDb()).transaction((tx) =>
++        cancelDigestForOwnerTx(tx, retained, 'digest_disabled'),
++      );
++  }
++  if (
++    config &&
++    digest &&
++    (config.tenantId !== digest.tenantId || config.ownerProfileId !== digest.ownerProfileId)
++  )
++    throw new Error('Pulse policy scope mismatch');
++  if (!config && !digest) {
+     const disabledScope = readPulseWorkerScope();
+     if (disabledScope)
+       await getOrgTransactionDb(getCoreDb()).transaction((tx) =>
+@@ -24,21 +62,30 @@ export async function runPulseTick() {
+     return { advanced: 0, skipped: 'disabled' as const };
+   }
+   const db = getCoreDb();
+-  const scope = { tenantId: config.tenantId, profileId: config.ownerProfileId };
++  const selected = config ?? digest!;
++  const scope = { tenantId: selected.tenantId, profileId: selected.ownerProfileId };
+   try {
+-    await getOrgTransactionDb(db).transaction((tx) => resolvePulseAuthorityTx(tx, scope, config));
+-    assertPulseConfigCurrent(config);
++    if (config) {
++      await getOrgTransactionDb(db).transaction((tx) => resolvePulseAuthorityTx(tx, scope, config));
++      assertPulseConfigCurrent(config);
++    }
++    if (digest)
++      await getOrgTransactionDb(db).transaction((tx) => assertDigestAuthorityTx(tx, digest));
+   } catch {
+     await getOrgTransactionDb(db).transaction((tx) => cancelPulseForOwnerTx(tx, scope));
+     return { advanced: 0, skipped: 'authority_unavailable' as const };
+   }
+-  await getOrgTransactionDb(db).transaction((tx) => redactExpiredPulsePayloadsTx(tx, scope));
++  if (!digestScope)
++    await getOrgTransactionDb(db).transaction((tx) => redactExpiredPulsePayloadsTx(tx, scope));
++  if (digest && deadline - performance.now() > 2000) {
++    await collectDueDigest(digest, deadline);
++  }
+   const remaining = deadline - performance.now();
+   if (remaining <= 0) return { advanced: 0 };
+   return runSelectedTick({
+-    tenantId: config.tenantId,
+-    ownerProfileId: config.ownerProfileId,
+-    types: ['pulse_dispatch'],
++    tenantId: selected.tenantId,
++    ownerProfileId: selected.ownerProfileId,
++    types: [...(config ? ['pulse_dispatch'] : []), ...(digest ? ['pulse_digest'] : [])],
+     budgetMs: remaining,
+     maxCandidates: 20,
+   });
+diff --git a/src/server/test-utils/pulse-postgres.ts b/src/server/test-utils/pulse-postgres.ts
+index d98589bd..f402b752 100644
+--- a/src/server/test-utils/pulse-postgres.ts
++++ b/src/server/test-utils/pulse-postgres.ts
+@@ -67,6 +67,17 @@ export async function openPulsePostgres() {
+   const migrate = () =>
+     applyHubMigration(pg, { version: '20261023010000', body: migration, ledgerSchema: schema });
+   await migrate();
++  const digestMigration = readFileSync(
++    new URL('../../../supabase/migrations/20261023020000_pulse_digest.sql', import.meta.url),
++    'utf8',
++  );
++  const migrateDigest = () =>
++    applyHubMigration(pg, {
++      version: '20261023020000',
++      body: digestMigration,
++      ledgerSchema: schema,
++    });
++  await migrateDigest();
+   const close = async () => {
+     await harness.owner.unsafe(`drop schema ${schema} cascade`);
+     await harness.close();
+@@ -80,6 +91,8 @@ export async function openPulsePostgres() {
+     db: drizzle(pg, { schema: pgSchema }),
+     peerDb: drizzle(peer, { schema: pgSchema }),
+     migrate,
++    migrateDigest,
++    rerunDigestSql: () => pg.unsafe(digestMigration),
+     close,
+   };
+ }
+diff --git a/tests/e2e/ui-audit/pulse-critical-contract.ts b/tests/e2e/ui-audit/pulse-critical-contract.ts
+index 73b5299e..dfee2d72 100644
+--- a/tests/e2e/ui-audit/pulse-critical-contract.ts
++++ b/tests/e2e/ui-audit/pulse-critical-contract.ts
+@@ -7,6 +7,11 @@ export const PULSE_CRITICAL_TITLES = ['en', 'es'].flatMap((locale) => [
+   `PULSE4 ${locale} notifications recovers an unknown committed transport using reads only`,
+   `PULSE6 ${locale} notifications hides other-owner content and rejects receipt readback`,
+   `PULSE5 ${locale} page retains the editable draft after known save rejection`,
++  `DIGEST1 ${locale} page preserves keyboard feedback after failed save`,
++  `DIGEST2 ${locale} page reconciles committed feedback refresh with one write`,
++  `DIGEST3 ${locale} page reconciles unknown feedback using reads only`,
++  `DIGEST4 ${locale} page hides other-owner digest and preserves owner freshness`,
++  `DIGEST5 ${locale} page reconnects one actual scheduled SQL card without producing a write`,
+   ...['page', 'popup'].map(
+     (surface) =>
+       `PULSE3 ${locale} ${surface} uses real approval controls and reads scheduled receipt on reconnect`,
+diff --git a/tests/e2e/ui-audit/pulse-critical-journeys.spec.ts b/tests/e2e/ui-audit/pulse-critical-journeys.spec.ts
+index 4d637bb9..cd3946e1 100644
+--- a/tests/e2e/ui-audit/pulse-critical-journeys.spec.ts
++++ b/tests/e2e/ui-audit/pulse-critical-journeys.spec.ts
+@@ -2,6 +2,7 @@ import { test, expect, type Page } from '@playwright/test';
+ import fs from 'node:fs';
+ import path from 'node:path';
+ type Snapshot = {
++  feedbackCount?: number;
+   requests: {
+     method: string;
+     path: string;
+@@ -302,3 +303,108 @@ for (const locale of ['en', 'es']) {
+     expect(writes(await snapshot(page))).toHaveLength(0);
+   });
+ }
++
++for (const locale of ['en', 'es']) {
++  const saveName = locale === 'es' ? 'Guardar comentario' : 'Save feedback';
++  const commentName = locale === 'es' ? 'Comentario (opcional)' : 'Comment (optional)';
++  const reasonName = locale === 'es' ? 'Motivo' : 'Reason';
++  const reloadName = locale === 'es' ? 'Recargar datos' : 'Reload current data';
++  test(`DIGEST1 ${locale} page preserves keyboard feedback after failed save`, async ({ page }) => {
++    await page.goto(
++      `/pulse.html?surface=page&digest&lang=${locale}&feedback-write-fail&digest-malicious-summary`,
++    );
++    await expect(page.locator('img[src*="attacker.invalid"]')).toHaveCount(0);
++    const save = page.getByRole('button', { name: saveName, exact: true });
++    await expect(save).toBeEnabled();
++    await page.getByRole('combobox', { name: reasonName, exact: true }).selectOption('fact_error');
++    await page
++      .getByRole('textbox', { name: commentName, exact: true })
++      .fill('Retain this factual correction.');
++    await save.press('Enter');
++    await expect(page.getByRole('textbox', { name: commentName, exact: true })).toHaveValue(
++      'Retain this factual correction.',
++    );
++    await expect(page.getByRole('combobox', { name: reasonName, exact: true })).toHaveValue(
++      'fact_error',
++    );
++    expect(writes(await snapshot(page))).toHaveLength(1);
++    expect((await snapshot(page)).feedbackCount).toBe(0);
++    await expect(page.getByRole('link', { name: 'ai · 7.0.18', exact: true })).toHaveAttribute(
++      'href',
++      'https://github.com/vercel/ai/releases/tag/ai%407.0.18',
++    );
++  });
++  for (const mode of ['refresh-fail', 'unknown']) {
++    test(`${mode === 'refresh-fail' ? 'DIGEST2' : 'DIGEST3'} ${locale} page reconciles ${mode === 'refresh-fail' ? 'committed feedback refresh with one write' : 'unknown feedback using reads only'}`, async ({
++      page,
++    }) => {
++      await page.goto(`/pulse.html?surface=page&digest&lang=${locale}&feedback-${mode}`);
++      const save = page.getByRole('button', { name: saveName, exact: true });
++      await expect(save).toBeEnabled();
++      await page
++        .getByRole('textbox', { name: commentName, exact: true })
++        .fill('One durable feedback action.');
++      await save.press('Enter');
++      const reload = page.getByRole('button', { name: reloadName, exact: true });
++      await expect(reload).toBeVisible();
++      expect(writes(await snapshot(page))).toHaveLength(1);
++      expect((await snapshot(page)).feedbackCount).toBe(1);
++      await page.evaluate(() => (window as PulseWindow).__pulseFixture!.recover());
++      await reload.press('Enter');
++      await expect(reload).toHaveCount(0);
++      await expect(
++        page.getByRole('button', {
++          name: locale === 'es' ? 'Guardar corrección' : 'Save correction',
++          exact: true,
++        }),
++      ).toBeEnabled();
++      await page.evaluate(() => (window as PulseWindow).__pulseFixture!.reconnect());
++      expect(writes(await snapshot(page))).toHaveLength(1);
++    });
++  }
++  test(`DIGEST4 ${locale} page hides other-owner digest and preserves owner freshness`, async ({
++    page,
++  }) => {
++    await page.goto(`/pulse.html?surface=page&digest&lang=${locale}&other-owner`);
++    await expect(page.locator('[data-pulse-feedback]')).toHaveCount(0);
++    expect(writes(await snapshot(page))).toHaveLength(0);
++    await page.goto(`/pulse.html?surface=page&digest&lang=${locale}`);
++    await expect(page.getByRole('button', { name: saveName, exact: true })).toBeEnabled();
++    await page
++      .getByRole('textbox', { name: commentName, exact: true })
++      .fill('Private unsent owner draft.');
++    await page.evaluate(() => (window as PulseWindow).__pulseFixture!.switchOwner());
++    await expect(page.getByRole('textbox', { name: commentName, exact: true })).toHaveCount(0);
++    expect(writes(await snapshot(page))).toHaveLength(0);
++  });
++}
++
++for (const locale of ['en', 'es']) {
++  test(`DIGEST5 ${locale} page reconnects one actual scheduled SQL card without producing a write`, async ({
++    page,
++  }, info) => {
++    const produced = JSON.parse(
++      fs.readFileSync('tests/fixtures/critical-journeys/scheduled-proposal.json', 'utf8'),
++    );
++    await page.goto(`/pulse.html?surface=page&scheduled&lang=${locale}`);
++    await expect(page.getByRole('heading', { name: produced.title, exact: true })).toHaveCount(1);
++    await expect(page.locator('[data-pulse-feedback]')).toHaveAttribute(
++      'data-pulse-feedback',
++      produced.id,
++    );
++    await page.evaluate(() => (window as PulseWindow).__pulseFixture!.reconnect());
++    await expect(page.getByRole('heading', { name: produced.title, exact: true })).toHaveCount(1);
++    expect(writes(await snapshot(page))).toHaveLength(0);
++    await info.attach('actual-scheduled-card-projection', {
++      body: JSON.stringify({
++        source: 'actual selected scheduler SQL plus owner-scoped listPending read',
++        cardId: produced.id,
++        kind: produced.kind,
++        payload: produced.payload,
++        transport:
++          'immutable actual-service projection rendered in the current production component fixture',
++      }),
++      contentType: 'application/json',
++    });
++  });
++}
+diff --git a/tests/fixtures/critical-journeys/build.mjs b/tests/fixtures/critical-journeys/build.mjs
+index b60a7f95..6ecabea2 100644
+--- a/tests/fixtures/critical-journeys/build.mjs
++++ b/tests/fixtures/critical-journeys/build.mjs
+@@ -30,6 +30,9 @@ const pulseAuthority = [
+   'src/lib/components/layout/NotificationsPopup.svelte',
+   'src/lib/state/features/pulse.svelte.ts',
+   'src/lib/components/pulse/PulseReceipt.svelte',
++  'src/lib/components/pulse/PulseFeedback.svelte',
++  'src/lib/components/pulse/PulseDigestEvidence.svelte',
++  'tests/fixtures/critical-journeys/scheduled-proposal.json',
+ ];
+ const baseAuthority = [
+   'src/routes/(app)/home/+page.svelte',
+diff --git a/tests/fixtures/critical-journeys/pulse-transport.ts b/tests/fixtures/critical-journeys/pulse-transport.ts
+index 036b0c59..aba2bed6 100644
+--- a/tests/fixtures/critical-journeys/pulse-transport.ts
++++ b/tests/fixtures/critical-journeys/pulse-transport.ts
+@@ -1,5 +1,6 @@
+ import type { PulseProposalView } from '$server/services/pulse.service';
+ import type { PulseReceipt } from '$server/services/pulse-dispatch.store';
++import scheduledProposal from './scheduled-proposal.json';
+ export const page = {
+   url: new URL('http://127.0.0.1:18903/pulse.html'),
+   params: {},
+@@ -12,7 +13,7 @@ export const page = {
+     user: { id: 'pulse-owner', role: 'admin' },
+     activeOrgId: 'pulse-org',
+     activeOrgKind: 'personal',
+-    permissions: { permissions: ['pulse:view', 'pulse:edit', 'users:manage'] },
++    permissions: { permissions: ['pulse:view', 'pulse:edit', 'pulse:export', 'users:manage'] },
+   },
+ };
+ export const navigating = null;
+@@ -42,17 +43,43 @@ export function bindScopeSwitch(callback: () => void) {
+ const requests: { method: string; path: string; body: Record<string, unknown> | null }[] = [];
+ const unexpected: string[] = [];
+ export function proposal(revision = serverRevision): PulseProposalView {
++  if (new URLSearchParams(location.search).has('scheduled'))
++    return {
++      ...scheduledProposal,
++      createdAt: new Date(scheduledProposal.createdAt),
++      decidedAt: scheduledProposal.decidedAt ? new Date(scheduledProposal.decidedAt) : null,
++      revision,
++      status: decision,
++    };
++  const digest = new URLSearchParams(location.search).has('digest');
+   return {
+     id: '10000000-0000-4000-8000-000000000001',
+     orgId: 'pulse-org',
+     createdAt: new Date('2026-10-23T00:00:00Z'),
+-    source: 'fixture',
+-    kind: 'create_event',
+-    title: 'Pulse reviewed calendar action',
+-    summary: 'Only this owner can review this action.',
+-    payload: {
+-      args: { title: 'Review', start: '2030-01-01T09:00:00Z', end: '2030-01-01T10:00:00Z' },
+-    },
++    source: digest ? 'dependency-digest' : 'fixture',
++    kind: digest ? 'digest' : 'create_event',
++    title: digest ? 'Review SDK dependency release' : 'Pulse reviewed calendar action',
++    summary: new URLSearchParams(location.search).has('digest-malicious-summary')
++      ? '![untrusted image](https://attacker.invalid/model-image.png)'
++      : 'Only this owner can review this action.',
++    payload: digest
++      ? {
++          digest: {
++            claim: 'The public release affects an installed SDK dependency.',
++            relevance: 'This repository imports ai.',
++            nextStep: 'Review the official release before upgrading.',
++            citations: [
++              {
++                url: 'https://github.com/vercel/ai/releases/tag/ai%407.0.18',
++                package: 'ai',
++                version: '7.0.18',
++              },
++            ],
++          },
++        }
++      : {
++          args: { title: 'Review', start: '2030-01-01T09:00:00Z', end: '2030-01-01T10:00:00Z' },
++        },
+     status: decision,
+     revision,
+     ownerProfileId: 'pulse-owner',
+@@ -85,6 +112,8 @@ export function installPulseTransport() {
+   let heldReceipt = false;
+   let releaseReceipt: (() => void) | undefined;
+   let scopeSwitchAt: number | null = null;
++  const feedbackRows: Record<string, unknown>[] = [];
++  let feedbackReadFailed = false;
+   let heldProjection = 0;
+   const projectionPaths = new Set<string>();
+   const releaseProjection: (() => void)[] = [];
+@@ -101,6 +130,33 @@ export function installPulseTransport() {
+         ? (JSON.parse(options.body) as Record<string, unknown>)
+         : null;
+     requests.push({ method, path, body });
++    if (path.endsWith('/feedback')) {
++      if (denied) return json({ message: 'Not found' }, 404);
++      if (method === 'GET')
++        return feedbackReadFailed
++          ? json({ message: 'Synthetic feedback refresh failure' }, 503)
++          : json({ feedback: feedbackRows });
++      if (method === 'POST') {
++        if (query.has('feedback-write-fail'))
++          return json({ message: 'Synthetic feedback rejection' }, 400);
++        if (body?.expectedContentRevision !== serverRevision)
++          return json({ message: 'refresh_required' }, 409);
++        const existing = feedbackRows.find((row) => row.clientActionId === body?.clientActionId);
++        if (existing) return json({ feedback: existing });
++        const saved = {
++          ...body,
++          id: crypto.randomUUID(),
++          proposalId: proposal().id,
++          contentRevision: serverRevision,
++          supersedesFeedbackId: body?.supersedesFeedbackId ?? null,
++        };
++        feedbackRows.unshift(saved);
++        if (query.has('feedback-refresh-fail')) feedbackReadFailed = true;
++        if (query.has('feedback-unknown'))
++          throw new TypeError('Synthetic lost feedback acknowledgement');
++        return json({ feedback: saved });
++      }
++    }
+     if (method === 'GET' && ['/api/pulse/count', '/api/pulse/proposals'].includes(path)) {
+       const response = json(
+         path.endsWith('/count')
+@@ -235,9 +291,11 @@ export function installPulseTransport() {
+       serverRevision,
+       dispatches: receipt?.receiptId ? 1 : 0,
+       receipt,
++      feedbackCount: feedbackRows.length,
+     }),
+     recover: () => {
+       failInvalidation = false;
++      feedbackReadFailed = false;
+     },
+     project: () => project?.(),
+     reconnect: async () => {

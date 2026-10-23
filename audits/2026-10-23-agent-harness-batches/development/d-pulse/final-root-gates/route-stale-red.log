@@ -1,0 +1,143 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse
+
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts (5 tests | 5 failed) 55ms
+     × approve on create_event fires a one-shot agentTurn 36ms
+     × approve on digest does NOT call the gateway 2ms
+     × dismiss calls dismiss() and never the gateway 1ms
+     × 404s when the proposal does not exist 12ms
+     × 409s on re-approving an already-approved proposal and never re-fires the gateway 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > approve on create_event fires a one-shot agentTurn
+Error: [vitest] No "decidePulseProposal" export is defined on the "$server/services/pulse.service" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+vi.mock(import("$server/services/pulse.service"), async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // your mocked methods
+  }
+})
+
+ ❯ Module.POST src/routes/api/pulse/proposals/[id]/+server.ts:27:21
+     25|   const ctx = await requireCoreCtx(locals);
+     26|   const { action, expectedRevision } = await parseBody(request, postSc…
+     27|   return json(await decidePulseProposal(ctx, params.id, action, expect…
+       |                     ^
+     28| };
+     29| export const PATCH: RequestHandler = async ({ locals, params, request …
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:60:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > approve on digest does NOT call the gateway
+Error: [vitest] No "decidePulseProposal" export is defined on the "$server/services/pulse.service" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+vi.mock(import("$server/services/pulse.service"), async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // your mocked methods
+  }
+})
+
+ ❯ Module.POST src/routes/api/pulse/proposals/[id]/+server.ts:27:21
+     25|   const ctx = await requireCoreCtx(locals);
+     26|   const { action, expectedRevision } = await parseBody(request, postSc…
+     27|   return json(await decidePulseProposal(ctx, params.id, action, expect…
+       |                     ^
+     28| };
+     29| export const PATCH: RequestHandler = async ({ locals, params, request …
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:85:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > dismiss calls dismiss() and never the gateway
+Error: [vitest] No "decidePulseProposal" export is defined on the "$server/services/pulse.service" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+vi.mock(import("$server/services/pulse.service"), async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // your mocked methods
+  }
+})
+
+ ❯ Module.POST src/routes/api/pulse/proposals/[id]/+server.ts:27:21
+     25|   const ctx = await requireCoreCtx(locals);
+     26|   const { action, expectedRevision } = await parseBody(request, postSc…
+     27|   return json(await decidePulseProposal(ctx, params.id, action, expect…
+       |                     ^
+     28| };
+     29| export const PATCH: RequestHandler = async ({ locals, params, request …
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:95:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > 404s when the proposal does not exist
+AssertionError: expected Error: [vitest] No "decidePulseProposal" … { codeFrame: '…' } to match object { status: 404 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 404,
++ Error {
++   "message": "[vitest] No \"decidePulseProposal\" export is defined on the \"$server/services/pulse.service\" mock. Did you forget to return it from \"vi.mock\"?
++ If you need to partially mock a module, you can use \"importOriginal\" helper inside:
++ ",
++   "codeFrame": "vi.mock(import(\"$server/services/pulse.service\"), async (importOriginal) => {
++   const actual = await importOriginal()
++   return {
++     ...actual,
++     // your mocked methods
++   }
++ })",
+  }
+
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:104:57
+    102|   it('404s when the proposal does not exist', async () => {
+    103|     getProposalMock.mockResolvedValue(null);
+    104|     await expect(call('missing', { action: 'approve' })).rejects.toMat…
+       |                                                         ^
+    105|   });
+    106|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > 409s on re-approving an already-approved proposal and never re-fires the gateway
+Error: [vitest] No "decidePulseProposal" export is defined on the "$server/services/pulse.service" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+vi.mock(import("$server/services/pulse.service"), async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // your mocked methods
+  }
+})
+
+ ❯ Module.POST src/routes/api/pulse/proposals/[id]/+server.ts:27:21
+     25|   const ctx = await requireCoreCtx(locals);
+     26|   const { action, expectedRevision } = await parseBody(request, postSc…
+     27|   return json(await decidePulseProposal(ctx, params.id, action, expect…
+       |                     ^
+     28| };
+     29| export const PATCH: RequestHandler = async ({ locals, params, request …
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:115:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  5 failed (5)
+   Start at  05:11:33
+   Duration  403ms (transform 91ms, setup 46ms, import 128ms, tests 55ms, environment 0ms)
+
+JSON report written to /home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/development/d-pulse/final-root-gates/route-stale-red-results.json

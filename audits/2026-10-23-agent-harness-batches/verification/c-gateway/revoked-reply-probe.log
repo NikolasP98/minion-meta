@@ -1,0 +1,44 @@
+(node:2262697) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+{
+  "providerCalls": 1,
+  "receipts": [
+    {
+      "state": "sent",
+      "recipient_json": "{\"channel\":\"telegram\",\"to\":\"still-authorized\"}"
+    },
+    {
+      "state": "canceled",
+      "recipient_json": "{\"channel\":\"telegram\",\"to\":\"revoked-owner\"}"
+    }
+  ],
+  "pending": {
+    "destinations_json": "[\"still-authorized\",\"revoked-owner\"]"
+  },
+  "revokedOwnerReply": {
+    "status": "forwarded",
+    "kind": "freeform",
+    "text": "unapproved reply"
+  },
+  "forwardCalls": 1
+}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: revoked destination must not be given a fresh owner-reply grant by settlement of another recipient
++ actual - expected
+
++ 'forwarded'
+- 'ignored'
+
+    at <anonymous> (/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/c-gateway/revoked-reply-probe.mts:28:9) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'forwarded',
+  expected: 'ignored',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3

@@ -1,0 +1,35 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway
+
+ ❯ |extensions| extensions/alert-watcher/src/authority.test.ts (10 tests | 1 failed) 156ms
+   × reassignment after terminal SDK response fences publication but keeps cost evidence 15ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/authority.test.ts > reassignment after terminal SDK response fences publication but keeps cost evidence
+AssertionError: expected { state: 'queued' } to deeply equal { state: 'canceled' }
+
+- Expected
++ Received
+
+  {
+-   "state": "canceled",
++   "state": "queued",
+  }
+
+ ❯ extensions/alert-watcher/src/authority.test.ts:235:71
+    233|   });
+    234|   await f.hooks.get("message_inbound")!(inbound());
+    235|   expect(f.db.prepare("SELECT state FROM classification_work").get()).…
+       |                                                                       ^
+    236|     state: "canceled",
+    237|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 28 passed (29)
+      Tests  1 failed | 223 passed (224)
+   Start at  03:22:17
+   Duration  139.46s (transform 23.70s, setup 822ms, import 64.59s, tests 68.85s, environment 4ms)
+

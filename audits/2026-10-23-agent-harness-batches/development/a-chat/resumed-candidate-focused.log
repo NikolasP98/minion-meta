@@ -1,0 +1,63 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat
+
+ ❯ src/lib/assistant/pending-submission.mounted.test.ts (50 tests | 2 failed) 3578ms
+     × ui_choice retains the exact live source when rendering synthesizes a merged message 91ms
+     × artifact retains the exact live source when rendering synthesizes a merged message 89ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/assistant/pending-submission.mounted.test.ts > Home merged live-tool streaming callback lineage > ui_choice retains the exact live source when rendering synthesizes a merged message
+AssertionError: expected { kind: 'run_relation', …(8) } to match object { …(3) }
+(6 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "follow_up_count": 1,
++   "follow_up_count": 0,
+    "parentRunId": "c43ba254-2bbf-4cc5-a991-976c20e434e0",
+    "taskRootId": "c43ba254-2bbf-4cc5-a991-976c20e434e0",
+  }
+
+ ❯ src/lib/assistant/pending-submission.mounted.test.ts:582:23
+    580|           (event) => event.kind === 'run_relation' && event.origin ===…
+    581|         );
+    582|         expect(child).toMatchObject({
+       |                       ^
+    583|           parentRunId: binding.runId,
+    584|           taskRootId: binding.taskRootId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/lib/assistant/pending-submission.mounted.test.ts > Home merged live-tool streaming callback lineage > artifact retains the exact live source when rendering synthesizes a merged message
+AssertionError: expected { kind: 'run_relation', …(8) } to match object { …(3) }
+(6 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "follow_up_count": 1,
++   "follow_up_count": 0,
+    "parentRunId": "d7604218-5db0-4c8a-a9e9-365cb9bcbec0",
+    "taskRootId": "d7604218-5db0-4c8a-a9e9-365cb9bcbec0",
+  }
+
+ ❯ src/lib/assistant/pending-submission.mounted.test.ts:582:23
+    580|           (event) => event.kind === 'run_relation' && event.origin ===…
+    581|         );
+    582|         expect(child).toMatchObject({
+       |                       ^
+    583|           parentRunId: binding.runId,
+    584|           taskRootId: binding.taskRootId,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  2 failed | 85 passed (87)
+   Start at  02:15:31
+   Duration  50.09s (transform 35.11s, setup 127ms, import 40.90s, tests 7.05s, environment 1.03s)
+

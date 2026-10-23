@@ -1,0 +1,144 @@
+--- revision2/scripts/agent-evals/lib/run-evidence.mjs
++++ revision3/scripts/agent-evals/lib/run-evidence.mjs
+@@ -51,7 +51,7 @@
+     const matches = records.filter((r) => r.kind === kind);
+     if (matches.length !== 1)
+       globalProblems.push(`missing_or_conflicting_${kind}`);
+-    const record = matches[0];
++    const record = matches.length === 1 ? matches[0] : undefined;
+     if (
+       record &&
+       (invalid.has(record.id) ||
+@@ -100,10 +100,19 @@
+       related = events.records.filter(
+         (r) => r.episodeId === row.episodeId && r.arm === row.arm,
+       );
+-    const reset = relevant.find((r) => r.kind === "reset"),
+-      collection = relevant.find((r) => r.kind === "collection"),
+-      problems = [...globalProblems],
++    const problems = [...globalProblems],
+       billingProblems = [];
++    // Lifecycle records have no revision/supersession protocol. Only a single
++    // record after exact-ID deduplication can supply authoritative state.
++    const singleton = (kind) => {
++      const matches = relevant.filter((r) => r.kind === kind);
++      if (matches.length !== 1) problems.push(`missing_or_conflicting_${kind}`);
++      return matches.length === 1 ? matches[0] : undefined;
++    };
++    const reset = singleton("reset"),
++      collection = singleton("collection");
++    if (related.some((r) => ["failed", "canceled"].includes(r.kind)))
++      problems.push("terminal_task_failure_or_cancellation");
+     if (invalidFinancial.size)
+       billingProblems.push("invalid_typed_financial_evidence");
+     const requests = related.filter((r) => r.kind === "provider_requested"),
+@@ -213,9 +222,26 @@
+     ])) {
+       const request = requests.find((r) => r.attemptId === id),
+         records = providerRecords.filter((r) => r.attemptId === id),
+-        terminals = records.filter((r) => terminalKinds.includes(r.kind));
+-      if (terminals.length !== 1)
++        terminals = records.filter((r) => terminalKinds.includes(r.kind)),
++        received = records.filter((r) => r.kind === "provider_received"),
++        failures = records.filter((r) => r.kind === "provider_terminal");
++      if (terminals.length !== 1) {
+         billingProblems.push("missing_or_conflicting_attempt_terminal");
++        problems.push("missing_or_conflicting_attempt_terminal");
++      }
++      if (received.length > 1) {
++        problems.push("conflicting_provider_received");
++        billingProblems.push("conflicting_provider_received");
++      }
++      if (failures.length > 1) {
++        problems.push("conflicting_provider_terminal");
++        billingProblems.push("conflicting_provider_terminal");
++      }
++      if (
++        failures.length ||
++        terminals.some((r) => r.kind === "provider_failed")
++      )
++        problems.push("terminal_provider_failure");
+       const financial = records.filter((r) =>
+         ["provider_received", ...terminalKinds].includes(r.kind),
+       );
+@@ -239,6 +265,8 @@
+       const knownBill =
+         !malformed &&
+         terminals.length === 1 &&
++        received.length <= 1 &&
++        failures.length <= 1 &&
+         terminal.payload.costStatus === "known" &&
+         financial.every(
+           (r) =>
+@@ -255,14 +283,18 @@
+         knownLower += lower;
+         allKnown = false;
+         billingProblems.push("incomplete_or_conflicting_bill");
+-        const ceiling = terminal?.payload.upperMicroUsd;
+-        if (
+-          typeof ceiling === "number" &&
+-          Number.isFinite(ceiling) &&
+-          ceiling >= lower &&
++        const ceilings = terminals.map((r) => r.payload.upperMicroUsd);
++        if (
++          ceilings.length > 0 &&
++          ceilings.every(
++            (ceiling) =>
++              typeof ceiling === "number" &&
++              Number.isFinite(ceiling) &&
++              ceiling >= lower,
++          ) &&
+           !malformed
+         )
+-          upper += ceiling;
++          upper += Math.max(...ceilings);
+         else allBounded = false;
+       }
+       for (const record of records) {
+@@ -329,7 +361,15 @@
+     row.billingComplete = billingProblems.length === 0 && allKnown;
+     row.complete = row.executionComplete;
+     row.outcome = row.complete ? collection.payload.outcome : "indeterminate";
+-    row.critical = collection?.payload.critical ?? [];
++    // Conflicting execution evidence cannot erase an independently reported
++    // critical action, even though no terminal outcome is selected.
++    row.critical = [
++      ...new Set(
++        relevant
++          .filter((r) => r.kind === "collection" && !invalid.has(r.id))
++          .flatMap((r) => r.payload.critical),
++      ),
++    ].sort();
+     row.costMicroUsd = knownLower;
+     row.upperMicroUsd = allBounded ? upper : null;
+     row.costStatus = allKnown
+--- revision2/scripts/agent-evals/README.md
++++ revision3/scripts/agent-evals/README.md
+@@ -75,6 +75,8 @@
+ 
+ Run reports and run-based screening share typed evidence reconciliation. Run, episode, cluster, arm, root, submission, parent and attempt bindings must agree. Financial status comes from durable receipts, never cached result fields. A confirmed successful task may have an unknown bill: execution and billing coverage remain separate, and financial uncertainty blocks a recommendation. Foreign execution lineage cannot prove success. Screen populations deduplicate exact trace IDs, quarantine conflicts, and use unique units for budget, inclusion probability and uncertainty.
+ 
++Each trial requires one reset and one terminal collection after identical record IDs are deduplicated. Distinct record IDs cannot supersede lifecycle evidence: additional reset/collection records quarantine execution even when their payloads agree. Contradictory failure/cancellation events and provider terminal evidence cannot coexist with qualified success. Multiple provider received or settlement records are also ambiguous. Reports retain independently known bills, use conservative order-independent exposure bounds, and retain critical actions from every valid collection while refusing an ambiguous terminal outcome. The receipt format has no lifecycle revision protocol.
++
+ Signed approval is checked before each reservation and after durable admission/dispatch-intent writes, immediately before transport entry. If authorization expires while fsync runs and the transport was provably never entered, a durable `not_dispatched` record retains the reservation history with a zero bill. A possible wire entry retains the conservative unknown fence. Approval renewal and replay never happen automatically.
+ 
+ Raw collection filenames hash opaque episode/arm identities; external IDs never form path components. Every created raw destination is checked against the private raw directory and appears in the retention inventory.
+--- revision2/scripts/agent-evals/VALIDATION.md
++++ revision3/scripts/agent-evals/VALIDATION.md
+@@ -1,6 +1,6 @@
+ # F software checkpoint — 2026-10-23
+ 
+-This historical revision-0 checkpoint is superseded for runtime corrections by [CORRECTIONS-REVISION-1.md](CORRECTIONS-REVISION-1.md). Its full root gate results apply to revision 0; current full root gates and final A/C integration remain parent-managed.
++This historical revision-0 checkpoint is superseded for runtime corrections by [CORRECTIONS-REVISION-3.md](CORRECTIONS-REVISION-3.md). Its full root gate results apply to revision 0; current full root gates and final A integration remain parent-managed. Revision 3 records the committed C source binding and current C integration separately.
+ 
+ This is a development checkpoint, not a completion, paid-evaluation, promotion or release receipt. Parent owns commits, review archives, acceptance ledger, spec/task status, PR and final integration pins.
+ 
+@@ -54,7 +54,7 @@
+ 
+ The untouched C-owned schema is copied under `fixtures/c-gateway/complaint-evaluation.schema.json` with SHA-256 `08897441bc823a5c6cb265065ba6a3cfb102b7fb7751a4e2f6aaf283f041c6ff`. C's real SQLite/provider-stub emitted fixture is copied unchanged at `fixtures/c-gateway/complaint-evaluation-v1.json`, SHA-256 `90e2509a53ad5bc8ee9bb79d1b641cd8382a3e46b013e84b009fb3aef52ea565`.
+ 
+-The importer consumes the actual schema and producer eligibility output; it has no second eligibility algorithm. A frozen artifact must bind independently supplied manifest pins for actual source commit, lock, schema, exporter and producer fixture. Its self-declared metadata alone grants no qualification. `artifact.json` is deliberately not invented while C is uncommitted. Parent must freeze the actual reviewed C commit and hashes, write that provenance, copy the byte-identical final exporter as `fixtures/c-gateway/complaint-evaluation.ts`, then run the actual complaint CLI and report bridge against it. Both CLI entrypoints bind the imported input bytes to the manifest fixture hash; schema-valid caller claims cannot substitute another producer snapshot.
++The importer consumes the actual schema and producer eligibility output; it has no second eligibility algorithm. A frozen artifact binds independently supplied manifest pins for actual source commit, lock, schema, exporter and producer fixture. Its self-declared metadata alone grants no qualification. Revision 3 binds `fixtures/c-gateway/artifact.json` to reviewed local C commit `9da5b35a6e26ac0154b1f9aa215b218a064afe5d`; the schema, exporter, original sample and retry sample match its committed files byte-for-byte. The actual complaint CLI and report bridge run against that checkout, and a fresh SQLite export checks authority evolution with positive and zero bills. Both CLI entrypoints bind the imported input bytes to the manifest fixture hash; schema-valid caller claims cannot substitute another producer snapshot.
+ 
+ ## Corpus and operational limits
+ 

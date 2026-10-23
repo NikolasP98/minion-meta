@@ -1,0 +1,67 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse
+
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts (13 tests | 4 failed) 50ms
+     ✓ returns the durable decision receipt for the exact rendered revision without a route RPC 34ms
+     ✓ preserves the legacy informational decision without inventing a dispatch receipt 2ms
+     ✓ passes dismissal and the rendered revision to the same atomic decision service 2ms
+     × preserves the same 404 for absent and inaccessible owner-bound proposals 1ms
+     ✓ returns the original receipt for duplicate identical approval without scheduling in the route 3ms
+     × propagates refresh-required conflict for executable revision undefined 0ms
+     × propagates refresh-required conflict for executable revision 1 0ms
+     ✓ rejects malformed revision null before calling the decision service 2ms
+     ✓ rejects malformed revision 2 before calling the decision service 1ms
+     ✓ rejects malformed revision 0 before calling the decision service 1ms
+     ✓ rejects malformed revision 1.5 before calling the decision service 1ms
+     ✓ rejects unauthenticated callers before capability or decision access 1ms
+     × preserves capability denial before acquiring decision context 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] versioned decision boundary > preserves the same 404 for absent and inaccessible owner-bound proposals
+{
+  status: 404,
+  body: { message: 'proposal not found' },
+  constructor: 'Function<HttpError>',
+  toString: 'Function<toString>',
+  stacks: []
+}
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] versioned decision boundary > propagates refresh-required conflict for executable revision undefined
+{
+  status: 409,
+  body: { message: 'refresh_required' },
+  constructor: 'Function<HttpError>',
+  toString: 'Function<toString>',
+  stacks: []
+}
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] versioned decision boundary > propagates refresh-required conflict for executable revision 1
+{
+  status: 409,
+  body: { message: 'refresh_required' },
+  constructor: 'Function<HttpError>',
+  toString: 'Function<toString>',
+  stacks: []
+}
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] versioned decision boundary > preserves capability denial before acquiring decision context
+{
+  status: 403,
+  body: { message: 'Pulse decision not permitted' },
+  constructor: 'Function<HttpError>',
+  toString: 'Function<toString>',
+  stacks: []
+}
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 9 passed (13)
+   Start at  05:13:16
+   Duration  414ms (transform 103ms, setup 53ms, import 136ms, tests 50ms, environment 0ms)
+
+JSON report written to /home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/development/d-pulse/final-root-gates/route-current-green-results.json

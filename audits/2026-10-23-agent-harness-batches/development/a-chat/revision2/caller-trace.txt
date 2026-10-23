@@ -1,0 +1,28 @@
+2:  import { isEffectCurrent, type EffectLease } from '$lib/assistant/effect-lease';
+64:  let providerSelectionVersion = 0;
+175:  async function addItem(item: Item, lease?: EffectLease): Promise<EntryLine | undefined> {
+176:    if (!isEffectCurrent(lease)) return;
+191:    const target = lines[mergedIndex ?? lines.length - 1];
+196:  async function autofillProvider(item: Item, target: EntryLine, lease?: EffectLease) {
+197:    if (!isEffectCurrent(lease)) return;
+198:    const selectionVersion = providerSelectionVersion;
+201:      isEffectCurrent(lease) &&
+202:      selectionVersion === providerSelectionVersion &&
+385:        if (!isEffectCurrent(ctx)) return { rejected: [] };
+394:          if (!isEffectCurrent(ctx)) return { rejected };
+405:          if (!isEffectCurrent(ctx)) return { rejected };
+407:          if (!isEffectCurrent(ctx)) return { rejected };
+424:        let rowChanged = false;
+431:            line = await addItem(match, ctx);
+432:            if (!isEffectCurrent(ctx)) return { rejected };
+433:            rowChanged = !!line && !lines.includes(line);
+434:            if (rowChanged) line = undefined;
+448:              reason: rowChanged
+524:                providerSelectionVersion++;
+33:    onPicked,
+51:    onPicked?: (party: PartyOption) => void;
+153:  export function pick(party: PartyOption) {
+154:    value = party.id;
+155:    q = party.name ?? party.email ?? party.id;
+157:    onPicked?.(party);
+177:  async function lookupDoc() {

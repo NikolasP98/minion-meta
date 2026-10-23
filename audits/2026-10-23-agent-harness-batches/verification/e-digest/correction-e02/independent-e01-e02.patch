@@ -1,0 +1,490 @@
+--- E01/docs/pulse-digest.md
++++ E02/docs/pulse-digest.md
+@@ -34,7 +34,7 @@
+ 
+ Before activation, qualify the exact deployed source/migration/lock/SDK identities, current personal owner, exact approved source policy and output/price exposure. Apply the ordinary guarded Hub migration runner, verify the paired QA seed twice, configure the trusted policy, then obtain separate human approval for owner activation and schedule installation. No command in this document installs cron or calls a paid model.
+ 
+-To disable, set the trusted policy `enabled:false` and invoke the authenticated tick. Queued work is canceled and collection/job generations are fenced; admitted uncertainty remains reserved. Membership deletion uses the existing shared cancellation path. Keep the additive schema and minimal billing/replay evidence when rolling back. Do not deploy an older binary that can retry admitted attempts. Raw evidence, provider bodies and feedback comments are redacted after thirty days by bounded tick housekeeping. A replay namespace must be retired before tombstones can be removed; unresolved accounting cannot be discarded.
++To disable, set the trusted policy `enabled:false` and invoke the authenticated tick. Queued work is canceled and collection/job generations are fenced; admitted uncertainty remains reserved. Membership deletion uses the existing shared cancellation path. Keep the additive schema and minimal billing/replay evidence when rolling back. Do not deploy an older binary that can retry admitted attempts. Raw evidence, provider bodies and feedback comments are redacted after thirty days by bounded tick housekeeping. Housekeeping uses only the validated retained scope, including after policy removal, approval expiry or module disablement; absent, malformed or mismatching scope denies it. Each tick clears at most one hundred raw records across dispatch, digest runs, source evidence and feedback, within the shared monotonic deadline. A late expired response retains its bound billing facts and replay fence without restoring the response body. A replay namespace must be retired before tombstones can be removed; unresolved accounting cannot be discarded.
+ 
+ ## Qualification evidence
+ 
+--- E01/scripts/qc/native-postgres-manifest.ts
++++ E02/scripts/qc/native-postgres-manifest.ts
+@@ -676,8 +676,14 @@
+     },
+     {
+       file: 'src/server/services/pulse-digest.collection.test.ts',
+-      minimumAssertions: 6,
+-      requiredBehaviors: [
++      minimumAssertions: 12,
++      requiredBehaviors: [
++        'native cold-start collection and authenticated selected tick redacts expired raw runs through actual tick with missing-policy',
++        'native cold-start collection and authenticated selected tick redacts expired raw runs through actual tick with expired-policy',
++        'native cold-start collection and authenticated selected tick redacts expired raw runs through actual tick with module-disabled',
++        'native cold-start collection and authenticated selected tick keeps expired late bills without rehydrating response bodies or releasing unknown exposure',
++        'native cold-start collection and authenticated selected tick performs no retained maintenance for absent malformed or mismatching scope',
++        'native cold-start collection and authenticated selected tick caps combined dispatch run source and feedback housekeeping at one hundred raw records per tick',
+         'native cold-start collection and authenticated selected tick starts with an empty queue and one durable immediate poll under duplicate authenticated ticks',
+         'native cold-start collection and authenticated selected tick leaves more than twenty unrelated older jobs untouched',
+         'native cold-start collection and authenticated selected tick records a failed poll at five minutes without a mixed snapshot queue or cursor advance',
+--- E01/src/routes/api/gateway/pulse/proposals/server.test.ts
++++ E02/src/routes/api/gateway/pulse/proposals/server.test.ts
+@@ -38,6 +38,55 @@
+ describe('POST /api/gateway/pulse/proposals', () => {
+   beforeEach(() => {
+     mocks.upsert.mockReset().mockResolvedValue({ inserted: 1, skipped: 0 });
++  });
++  it.each([
++    ['reserved logical key', { dedupKey: 'internal:dependency-digest:v1:untrusted-run' }],
++    ['reserved internal source', { source: 'dependency-digest' }],
++    ...[
++      'ownerProfileId',
++      'owner_profile_id',
++      'internalRunId',
++      'internal_run_id',
++      'internalPolicyRevision',
++      'internal_policy_revision',
++      'internalInputHash',
++      'internal_input_hash',
++      'internalResultHash',
++      'internal_result_hash',
++    ].flatMap((key) => [
++      [`top-level ${key}`, { [key]: 'untrusted-binding' }],
++      [
++        `nested ${key}`,
++        { payload: { references: [{ metadata: { [key]: 'untrusted-binding' } }] } },
++      ],
++    ]),
++  ])('refuses reserved internal authority before any write: %s', async (_name, override) => {
++    const result = await response(
++      { serverId: 'server-a', tenantCtx: { tenantId: 'org-a', db: mocks.tenantDb } },
++      {
++        orgId: 'org-a',
++        proposals: [validCard, { ...validCard, ...(override as Record<string, unknown>) }],
++      },
++    );
++    expect(result.status).toBe(400);
++    await expect(result.json()).resolves.toEqual({ ok: false, error: 'invalid_proposals' });
++    expect(mocks.upsert).not.toHaveBeenCalled();
++  });
++  it('preserves identity and legacy tenant checks ahead of reserved-field validation', async () => {
++    const body = {
++      orgId: 'org-b',
++      proposals: [{ ...validCard, dedupKey: 'internal:dependency-digest:v1:attack' }],
++    };
++    expect((await response({}, body)).status).toBe(401);
++    expect(
++      (
++        await response(
++          { serverId: 'server-a', tenantCtx: { tenantId: 'org-a', db: mocks.tenantDb } },
++          body,
++        )
++      ).status,
++    ).toBe(403);
++    expect(mocks.upsert).not.toHaveBeenCalled();
+   });
+ 
+   it.each([
+--- E01/src/server/services/pulse-digest.collection.test.ts
++++ E02/src/server/services/pulse-digest.collection.test.ts
+@@ -1,5 +1,7 @@
+ import { beforeEach, afterEach, describe, it, expect, vi } from 'vitest';
+ import { createServer, type Server } from 'node:http';
++import { randomUUID } from 'node:crypto';
++import { eq } from 'drizzle-orm';
+ import { openPulsePostgres } from '../test-utils/pulse-postgres';
+ import {
+   seedPulseAuthority,
+@@ -23,6 +25,17 @@
+ import { collectDueDigest } from './pulse-digest.collection';
+ import { GET } from '../../routes/api/pulse/tick/+server';
+ import { updateUserOrganizations } from './user.service';
++import {
++  queueDigestSnapshotTx,
++  admitDigestAttemptTx,
++  retainDigestReceipt,
++  publishDigestTx,
++} from './pulse-digest.store';
++import { pulseDigestRuns } from '../db/pg-schema/pulse-digest';
++import { bgJobs } from '../db/pg-schema/bg-jobs';
++import { parseDigestReceipt, validateDigestResult } from './pulse-digest.reasoning';
++import { savePulseFeedback } from './pulse-feedback.service';
++import { pulseHash } from './pulse-action-contract';
+ let f: Awaited<ReturnType<typeof openPulsePostgres>>,
+   policy: ReturnType<typeof digestFixturePolicy>,
+   server: Server,
+@@ -121,7 +134,189 @@
+     }),
+     url: new URL('http://127.0.0.1/api/pulse/tick'),
+   }) as unknown as Parameters<typeof GET>[0];
++async function resetRetentionFixture() {
++  await f.close();
++  f = await openPulsePostgres();
++  boundary.pool.mockReturnValue(f.pg);
++  await seedPulseAuthority(f, 'wss://fixture.invalid');
++  delete process.env.MINION_PULSE_WORKER_CONFIG;
++  process.env.MINION_PULSE_DIGEST_POLICY = JSON.stringify(policy);
++}
++async function expiredRun(admit = false) {
++  const snapshot = await digestFixtureSnapshot(policy, 'retention');
++  const queued = await f.db.transaction((tx) => queueDigestSnapshotTx(tx, policy, snapshot));
++  if (!queued) throw new Error('fixture queue denied');
++  let admitted: typeof pulseDigestRuns.$inferSelect | null = null;
++  if (admit) {
++    const [row] = await f.db
++      .select()
++      .from(pulseDigestRuns)
++      .where(eq(pulseDigestRuns.id, queued.runId));
++    admitted = await f.db.transaction((tx) => admitDigestAttemptTx(tx, policy, row, 1));
++    if (!admitted) throw new Error('fixture admission denied');
++    await f.pg`update bg_jobs set status='running',lease_generation=1,lease_until=${Date.now() + 60000} where id=${queued.jobId}`;
++  }
++  await f.pg.unsafe('alter table pulse_digest_runs disable trigger pulse_digest_guard');
++  try {
++    await f.pg`update pulse_digest_runs set created_at=now()-interval '31 days' where id=${queued.runId}`;
++  } finally {
++    await f.pg.unsafe('alter table pulse_digest_runs enable trigger pulse_digest_guard');
++  }
++  return { queued, snapshot, admitted };
++}
+ describe('native cold-start collection and authenticated selected tick', () => {
++  it.each(['missing-policy', 'expired-policy', 'module-disabled'])(
++    'redacts expired raw runs through actual tick with %s',
++    async (mode) => {
++      const { queued, snapshot } = await expiredRun();
++      if (mode === 'missing-policy') delete process.env.MINION_PULSE_DIGEST_POLICY;
++      else if (mode === 'expired-policy')
++        process.env.MINION_PULSE_DIGEST_POLICY = JSON.stringify({
++          ...policy,
++          approval: { ...policy.approval, expiresAt: '2000-01-01T00:00:00Z' },
++        });
++      else
++        await f.pg`insert into app_modules(org_id,module_id,enabled)values(${org},'pulse',false)`;
++      await GET(event());
++      const [row] =
++        await f.pg`select state,evidence,snapshot,raw_response,redacted_at,source_snapshot_hash from pulse_digest_runs where id=${queued.runId}`;
++      expect(row.state).toBe('canceled');
++      expect(row.evidence).toBeNull();
++      expect(row.snapshot).toBeNull();
++      expect(row.raw_response).toBeNull();
++      expect(row.redacted_at).toBeTruthy();
++      expect(row.source_snapshot_hash).toBe(snapshot.hash);
++      expect(modelCalls).toBe(0);
++      expect(sourceCalls).toBe(0);
++    },
++  );
++  it('keeps expired late bills without rehydrating response bodies or releasing unknown exposure', async () => {
++    for (const timing of ['before-cleanup', 'after-cleanup']) {
++      if (timing === 'after-cleanup') await resetRetentionFixture();
++      const { queued, admitted, snapshot } = await expiredRun(true);
++      if (!admitted) throw new Error('fixture admission missing');
++      delete process.env.MINION_PULSE_DIGEST_POLICY;
++      if (timing === 'after-cleanup') await GET(event());
++      const receipt = parseDigestReceipt(JSON.stringify(digestFixtureResponse(snapshot)), 200);
++      await retainDigestReceipt(f.db, admitted, receipt);
++      const [late] =
++        await f.pg`select state,raw_response,cost_micro_usd,receipt_hash from pulse_digest_runs where id=${queued.runId}`;
++      expect(late.state).toBe('indeterminate');
++      expect(late.raw_response).toBeNull();
++      expect(Number(late.cost_micro_usd)).toBe(100);
++      expect(late.receipt_hash).toBe(receipt.receiptHash);
++      if (timing === 'before-cleanup') await GET(event());
++      const [row] =
++        await f.pg`select evidence,snapshot,raw_response,cost_micro_usd,redacted_at from pulse_digest_runs where id=${queued.runId}`;
++      expect(row.evidence).toBeNull();
++      expect(row.snapshot).toBeNull();
++      expect(row.raw_response).toBeNull();
++      expect(Number(row.cost_micro_usd)).toBe(100);
++      expect(row.redacted_at).toBeTruthy();
++      const [ns] =
++        await f.pg`select reserved_micro_usd,unknown_exposure_fence,active_attempt_id,attempted_calls from pulse_digest_admission`;
++      expect(Number(ns.reserved_micro_usd)).toBe(1000);
++      expect(ns.unknown_exposure_fence).toBe(true);
++      expect(ns.active_attempt_id).toBe(admitted.attemptId);
++      expect(ns.attempted_calls).toBe(1);
++      expect(modelCalls).toBe(0);
++      expect(sourceCalls).toBe(0);
++      expect(await f.pg`select id from pulse_proposals`).toHaveLength(0);
++    }
++  });
++  it('performs no retained maintenance for absent malformed or mismatching scope', async () => {
++    const { queued } = await expiredRun();
++    for (const mode of ['absent', 'malformed', 'mismatched']) {
++      if (mode === 'absent') delete process.env.MINION_PULSE_DIGEST_SCOPE;
++      else
++        process.env.MINION_PULSE_DIGEST_SCOPE =
++          mode === 'malformed'
++            ? '{'
++            : JSON.stringify({ tenantId: org, ownerProfileId: randomUUID() });
++      boundary.pool.mockClear();
++      await GET(event());
++      expect(boundary.pool).not.toHaveBeenCalled();
++      const [row] =
++        await f.pg`select evidence,snapshot,redacted_at,state from pulse_digest_runs where id=${queued.runId}`;
++      expect(row.evidence).not.toBeNull();
++      expect(row.snapshot).not.toBeNull();
++      expect(row.redacted_at).toBeNull();
++      expect(row.state).toBe('queued');
++      expect(modelCalls).toBe(0);
++      expect(sourceCalls).toBe(0);
++    }
++  });
++  it('caps combined dispatch run source and feedback housekeeping at one hundred raw records per tick', async () => {
++    const snapshot = await digestFixtureSnapshot(policy, 'retention-published');
++    const queued = (await f.db.transaction((tx) => queueDigestSnapshotTx(tx, policy, snapshot)))!;
++    await f.pg`update bg_jobs set status='running',lease_generation=1,lease_until=${Date.now() + 60000} where id=${queued.jobId}`;
++    const [run] = await f.db
++      .select()
++      .from(pulseDigestRuns)
++      .where(eq(pulseDigestRuns.id, queued.runId));
++    const admitted = (await f.db.transaction((tx) => admitDigestAttemptTx(tx, policy, run, 1)))!;
++    const receipt = parseDigestReceipt(JSON.stringify(digestFixtureResponse(snapshot)), 200);
++    await retainDigestReceipt(f.db, admitted, receipt);
++    const [received] = await f.db
++      .select()
++      .from(pulseDigestRuns)
++      .where(eq(pulseDigestRuns.id, run.id));
++    const [job] = await f.db.select().from(bgJobs).where(eq(bgJobs.id, queued.jobId));
++    const card = (await f.db.transaction((tx) =>
++      publishDigestTx(tx, policy, job, received, validateDigestResult(receipt, policy, snapshot)),
++    ))!;
++    for (let i = 0; i < 25; i++) {
++      await savePulseFeedback({ db: f.db, tenantId: org, profileId: profile }, card, {
++        clientActionId: randomUUID(),
++        expectedContentRevision: 1,
++        reason: 'useful',
++        comment: 'Expired fixture comment',
++      });
++      const proposal = randomUUID(),
++        dispatch = randomUUID(),
++        dispatchJob = randomUUID();
++      await f.pg`insert into pulse_proposals(id,org_id,owner_profile_id,source,kind,title,dedup_key,status)values(${proposal},${org},${profile},'fixture','reminder','Archived reminder',${proposal},'approved')`;
++      await f.pg`insert into bg_jobs(id,tenant_id,user_id,type,ref_id,status,created_at,updated_at)values(${dispatchJob},${org},${profile},'pulse_dispatch',${dispatch},'done',1,1)`;
++      await f.pg`insert into pulse_dispatches(id,org_id,proposal_id,proposal_revision,actor_profile_id,gateway_id,channel,agent_id,origin_session_key,action_kind,payload,payload_hash,tool_schema_revision,authority_snapshot_hash,gateway_qualification_revision,bg_job_id,state,admitted_at,admitted_generation,safe_reason,created_at)values(${dispatch},${org},${proposal},1,${profile},${randomUUID()},'prd','fixture-agent','agent:fixture-agent:main','reminder','{}','fixture','fixture','fixture','fixture',${dispatchJob},'indeterminate',now()-interval '31 days',1,'fixture_unknown',now()-interval '31 days')`;
++    }
++    for (let i = 0; i < 65; i++) {
++      const id = randomUUID(),
++        jobId = randomUUID(),
++        old = await digestFixtureSnapshot(policy, `archived-${i}`);
++      await f.pg`insert into bg_jobs(id,tenant_id,user_id,type,ref_id,status,created_at,updated_at)values(${jobId},${org},${profile},'pulse_digest',${id},'done',1,1)`;
++      await f.pg`insert into pulse_digest_runs(id,org_id,owner_profile_id,budget_namespace,policy_revision,policy_hash,source_snapshot_hash,request_hash,snapshot,evidence,requested_model,bg_job_id,state,created_at)values(${id},${org},${profile},${policy.budgetNamespace},${policy.revision},${pulseHash(policy)},${old.hash},${pulseHash(['fixture-request', i])},${JSON.stringify(old)}::jsonb,${JSON.stringify(old.evidence)},${policy.model},${jobId},'canceled',now()-interval '31 days')`;
++    }
++    for (let i = 0; i < 15; i++)
++      await f.pg`insert into pulse_digest_sources(org_id,owner_profile_id,policy_revision,source_id,revision,content_hash,evidence,updated_at)values(${org},${profile},${`archived-policy-${i}`},'ai',1,${pulseHash(snapshot.evidence)},${JSON.stringify(snapshot.evidence)}::jsonb,now()-interval '31 days')`;
++    await f.pg.unsafe(
++      'alter table pulse_digest_runs disable trigger pulse_digest_guard;alter table pulse_feedback disable trigger pulse_feedback_guard',
++    );
++    try {
++      await f.pg`update pulse_digest_runs set created_at=now()-interval '31 days'`;
++      await f.pg`update pulse_feedback set created_at=now()-interval '31 days'`;
++      await f.pg`update pulse_digest_sources set updated_at=now()-interval '31 days'`;
++    } finally {
++      await f.pg.unsafe(
++        'alter table pulse_digest_runs enable trigger pulse_digest_guard;alter table pulse_feedback enable trigger pulse_feedback_guard',
++      );
++    }
++    await f.pg`insert into app_modules(org_id,module_id,enabled)values(${org},'pulse',false)`;
++    const counts = async () => {
++      const [row] =
++        await f.pg`select (select count(*)::int from pulse_dispatches where payload is null) dispatch,(select count(*)::int from pulse_digest_runs where redacted_at is not null) runs,(select count(*)::int from pulse_digest_sources where evidence is null) sources,(select count(*)::int from pulse_feedback where redacted_at is not null) feedback`;
++      return Object.values(row).reduce((sum: number, value) => sum + Number(value), 0);
++    };
++    await GET(event());
++    expect(await counts()).toBe(100);
++    expect(modelCalls).toBe(0);
++    expect(sourceCalls).toBe(0);
++    await GET(event());
++    expect(await counts()).toBe(132);
++    expect(
++      (await f.pg`select cost_micro_usd from pulse_digest_runs where id=${run.id}`)[0]
++        .cost_micro_usd,
++    ).toBe('100');
++  }, 30000);
+   it('starts with an empty queue and one durable immediate poll under duplicate authenticated ticks', async () => {
+     expect(await f.pg`select id from bg_jobs`).toHaveLength(0);
+     await Promise.all([GET(event()), GET(event())]);
+--- E01/src/server/services/pulse-digest.store.ts
++++ E02/src/server/services/pulse-digest.store.ts
+@@ -306,16 +306,19 @@
+       }
+       if (!['reasoning_admitted', 'indeterminate'].includes(row.state))
+         throw new Error('digest_receipt_state');
++      const expired =
++        row.redactedAt !== null || row.createdAt.getTime() < Date.now() - 30 * 86400000;
+       await domain
+         .update(runs)
+         .set({
+           state:
+-            row.state === 'indeterminate'
++            row.state === 'indeterminate' || expired
+               ? 'indeterminate'
+               : receipt.rawResponse === null
+                 ? 'reasoning_admitted'
+                 : 'reasoning_received',
+-          rawResponse: row.redactedAt ? null : receipt.rawResponse,
++          rawResponse: expired ? null : receipt.rawResponse,
++          ...(expired ? { safeReason: row.safeReason ?? 'payload_expired' } : {}),
+           receiptHash: receipt.receiptHash,
+           usageStatus: receipt.usageStatus,
+           costMicroUsd: receipt.costMicroUsd,
+@@ -325,6 +328,7 @@
+         })
+         .where(eq(runs.id, row.id));
+       if (
++        expired ||
+         receipt.usageStatus === 'unknown' ||
+         (receipt.costMicroUsd ?? 0) > (row.upperMicroUsd ?? 0)
+       )
+--- E01/src/server/services/pulse-ingest-contract.test.ts
++++ E02/src/server/services/pulse-ingest-contract.test.ts
+@@ -27,6 +27,44 @@
+ }
+ 
+ describe('Pulse ingest request contract', () => {
++  it.each([
++    ['reserved logical key', { dedupKey: 'internal:dependency-digest:v1:untrusted-run' }],
++    ['reserved internal source', { source: 'dependency-digest' }],
++    ...[
++      'ownerProfileId',
++      'owner_profile_id',
++      'internalRunId',
++      'internal_run_id',
++      'internalPolicyRevision',
++      'internal_policy_revision',
++      'internalInputHash',
++      'internal_input_hash',
++      'internalResultHash',
++      'internal_result_hash',
++    ].flatMap((key) => [
++      [`top-level ${key}`, { [key]: 'untrusted-binding' }],
++      [
++        `nested ${key}`,
++        { payload: { references: [{ metadata: { [key]: 'untrusted-binding' } }] } },
++      ],
++    ]),
++  ])('rejects external authority impersonation atomically: %s', (_name, override) => {
++    expect(() =>
++      validatePulseProposals({ proposals: [card(), card(override as Record<string, unknown>)] }),
++    ).toThrowError(expect.objectContaining({ code: 'invalid_proposals' }));
++  });
++  it('keeps ordinary external informational digests and same-org legacy metadata valid', () => {
++    const external = card({
++      source: 'daily_briefing',
++      kind: 'digest',
++      payload: {
++        note: 'Review public release notes',
++        references: ['internal:dependency-digest:v1:quoted-as-data'],
++      },
++    });
++    expect(validatePulseProposals({ orgId: 'org-a', proposals: [external] })).toEqual([external]);
++    expect(legacyOrgId({ orgId: 'org-a' })).toBe('org-a');
++  });
+   it('counts Unicode scalars and accepts the exact bounded card shape', () => {
+     const proposals = validatePulseProposals({
+       proposals: [
+--- E01/src/server/services/pulse-tick.budget.test.ts
++++ E02/src/server/services/pulse-tick.budget.test.ts
+@@ -6,10 +6,17 @@
+   wall: 1_800_000_000_000,
+   authorityMs: 1234,
+   retentionMs: 4321,
++  digestRedact: vi.fn(async () => {}),
++  feedbackRedact: vi.fn(async () => {}),
+   selected: vi.fn(async () => ({ advanced: 1 })),
+ }));
+ vi.mock('./pulse-dispatch.worker', () => ({}));
+ vi.mock('./pulse-digest.worker', () => ({}));
++vi.mock('./pulse-digest.store', () => ({
++  redactDigestTx: boundary.digestRedact,
++  cancelDigestForOwnerTx: async () => {},
++}));
++vi.mock('./pulse-feedback.service', () => ({ redactPulseFeedbackTx: boundary.feedbackRedact }));
+ vi.mock('./bg-runtime', () => ({ runSelectedTick: boundary.selected }));
+ vi.mock('./pulse-worker-config', () => ({
+   readPulseWorkerConfig: () => ({ tenantId: 'org-budget', ownerProfileId: 'owner-budget' }),
+@@ -43,10 +50,15 @@
+   boundary.authorityMs = 1234;
+   boundary.retentionMs = 4321;
+   boundary.selected.mockClear();
++  boundary.digestRedact.mockClear();
++  boundary.feedbackRedact.mockClear();
+   vi.spyOn(performance, 'now').mockImplementation(() => boundary.monotonic);
+   vi.spyOn(Date, 'now').mockImplementation(() => boundary.wall);
+ });
+-afterEach(() => vi.restoreAllMocks());
++afterEach(() => {
++  delete process.env.MINION_PULSE_DIGEST_SCOPE;
++  vi.restoreAllMocks();
++});
+ 
+ describe('Pulse tick total monotonic budget', () => {
+   it('subtracts authority and retention time despite backward wall-clock changes', async () => {
+@@ -65,4 +77,15 @@
+     expect(await runPulseTick()).toEqual({ advanced: 0 });
+     expect(boundary.selected).not.toHaveBeenCalled();
+   });
++  it('stops retained maintenance at the monotonic deadline before another family or admission', async () => {
++    process.env.MINION_PULSE_DIGEST_SCOPE = JSON.stringify({
++      tenantId: '00000000-0000-4000-8000-000000000001',
++      ownerProfileId: '00000000-0000-4000-8000-000000000002',
++    });
++    boundary.retentionMs = 50_001;
++    expect(await runPulseTick()).toEqual({ advanced: 0 });
++    expect(boundary.digestRedact).not.toHaveBeenCalled();
++    expect(boundary.feedbackRedact).not.toHaveBeenCalled();
++    expect(boundary.selected).not.toHaveBeenCalled();
++  });
+ });
+--- E01/src/server/services/pulse-tick.ts
++++ E02/src/server/services/pulse-tick.ts
+@@ -22,21 +22,27 @@
+   const rawDigest = readDigestPolicy(true);
+   if (!digestScope && (process.env.MINION_PULSE_DIGEST_SCOPE !== undefined || rawDigest?.enabled))
+     return { advanced: 0, skipped: 'digest_scope_unavailable' as const };
+-  if (!digest && digestScope)
+-    await getOrgTransactionDb(getCoreDb()).transaction((tx) =>
+-      cancelDigestForOwnerTx(
+-        tx,
+-        { tenantId: digestScope.tenantId, profileId: digestScope.ownerProfileId },
+-        'digest_disabled',
+-      ),
+-    );
+   if (
+-    rawDigest?.enabled &&
++    rawDigest &&
+     digestScope &&
+     (rawDigest.tenantId !== digestScope.tenantId ||
+       rawDigest.ownerProfileId !== digestScope.ownerProfileId)
+   )
+     return { advanced: 0, skipped: 'digest_scope_mismatch' as const };
++  // Cleanup uses only the validated retained deployment target, without spend/view admission.
++  // Run each family once: dispatch20 + runs50/sources10 + feedback20 <=100 raw records.
++  if (digestScope) {
++    const retained = { tenantId: digestScope.tenantId, profileId: digestScope.ownerProfileId };
++    for (const redact of [redactExpiredPulsePayloadsTx, redactDigestTx, redactPulseFeedbackTx]) {
++      if (performance.now() >= deadline) return { advanced: 0 };
++      await getOrgTransactionDb(getCoreDb()).transaction((tx) => redact(tx, retained));
++    }
++    if (performance.now() >= deadline) return { advanced: 0 };
++    if (!digest)
++      await getOrgTransactionDb(getCoreDb()).transaction((tx) =>
++        cancelDigestForOwnerTx(tx, retained, 'digest_disabled'),
++      );
++  }
+   if (
+     config &&
+     digest &&
+@@ -69,10 +75,9 @@
+     await getOrgTransactionDb(db).transaction((tx) => cancelPulseForOwnerTx(tx, scope));
+     return { advanced: 0, skipped: 'authority_unavailable' as const };
+   }
+-  await getOrgTransactionDb(db).transaction((tx) => redactExpiredPulsePayloadsTx(tx, scope));
++  if (!digestScope)
++    await getOrgTransactionDb(db).transaction((tx) => redactExpiredPulsePayloadsTx(tx, scope));
+   if (digest && deadline - performance.now() > 2000) {
+-    await getOrgTransactionDb(db).transaction((tx) => redactDigestTx(tx, scope));
+-    await getOrgTransactionDb(db).transaction((tx) => redactPulseFeedbackTx(tx, scope));
+     await collectDueDigest(digest, deadline);
+   }
+   const remaining = deadline - performance.now();

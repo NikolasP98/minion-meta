@@ -1,0 +1,26 @@
+src/lib/components/layout/FloatingAssistant.svelte:13:    associateDerivedRunMessage,
+src/lib/components/layout/FloatingAssistant.svelte:317:  const acceptedActivity = acceptedSurface.activity;
+src/lib/components/layout/FloatingAssistant.svelte:423:          silent: origin === 'ui_followup',
+src/lib/components/layout/FloatingAssistant.svelte:547:    composerMode === 'chat' && (sending || stream !== null || routing || !!$acceptedActivity),
+src/lib/components/layout/FloatingAssistant.svelte:593:  const shown = $derived(foldToolTurns(messages, associateDerivedRunMessage));
+src/routes/(app)/home/+page.svelte:6:    associateDerivedRunMessage,
+src/routes/(app)/home/+page.svelte:537:    for (const raw of foldToolTurns(messages, associateDerivedRunMessage)) {
+src/routes/(app)/home/+page.svelte:698:  const acceptedActivity = acceptedSurface.activity;
+src/routes/(app)/home/+page.svelte:765:          silent: relation.origin === 'ui_followup',
+src/routes/(app)/home/+page.svelte:1326:              !!$acceptedActivity}
+src/lib/assistant/accepted-runs.ts:29:  readonly followUpCount: number;
+src/lib/assistant/accepted-runs.ts:56:const activityPublishers = new WeakMap<AcceptedSurface, () => void>();
+src/lib/assistant/accepted-runs.ts:77:  activityPublishers.get(binding.surface)?.();
+src/lib/assistant/accepted-runs.ts:166:      activityPublishers.delete(surface);
+src/lib/assistant/accepted-runs.ts:170:  activityPublishers.set(surface, () =>
+src/lib/assistant/accepted-runs.ts:199:  const parent = origin === 'user' ? undefined : descriptor.parent;
+src/lib/assistant/accepted-runs.ts:200:  const automatic = origin === 'ui_followup';
+src/lib/assistant/accepted-runs.ts:202:  if (parent && (!isRunCurrent(parent) || (automatic && rootFollowUps(parent.taskRootId) >= 5)))
+src/lib/assistant/accepted-runs.ts:219:    followUpCount: parent ? rootFollowUps(parent.taskRootId) + (automatic ? 1 : 0) : 0,
+src/lib/assistant/accepted-runs.ts:233:  activityPublishers.get(surface)?.();
+src/lib/assistant/accepted-runs.ts:236:function rootFollowUps(root: string) {
+src/lib/assistant/accepted-runs.ts:241:      .map((b) => b.followUpCount),
+src/lib/assistant/accepted-runs.ts:293:  activityPublishers.get(binding.surface)?.();
+src/lib/assistant/accepted-runs.ts:299:    activityPublishers.get(binding.surface)?.();
+src/lib/assistant/accepted-runs.ts:316:export function associateDerivedRunMessage(message: object, sources: readonly unknown[]) {
+src/lib/assistant/accepted-runs.ts:408:    follow_up_count: binding.followUpCount,

@@ -1,0 +1,2898 @@
+diff --git a/extensions/alert-watcher/index.test.ts b/extensions/alert-watcher/index.test.ts
+index 60122607633d9d62be0e2d5ed9f701e9c4e49a1e..beece50a97d018d520b5d09fb4d8a62c47f98e81 100644
+--- a/extensions/alert-watcher/index.test.ts
++++ b/extensions/alert-watcher/index.test.ts
+@@ -1,17 +1,21 @@
+-import { describe, it, expect, vi, beforeEach } from "vitest";
++import fs from "node:fs";
++import os from "node:os";
++import path from "node:path";
++import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
++import type { MinionPluginApi } from "../../src/plugins/types.js";
+ 
+ vi.mock("../../src/plugin-sdk/index.js", () => ({ emptyPluginConfigSchema: () => ({}) }));
+ vi.mock("./src/classifier.js", () => ({ classifyMessage: vi.fn() }));
+-vi.mock("./src/store.js", () => ({
+-  initSchema: vi.fn(),
++vi.mock("./src/store.js", async (importOriginal) => ({
++  ...(await importOriginal<typeof import("./src/store.js")>()),
+   insertComplaint: vi.fn(),
+   markNotified: vi.fn(),
+   getPendingNotifications: vi.fn(() => []),
+ }));
+ vi.mock("./src/destinations.js", () => ({ sendAlerts: vi.fn() }));
+ vi.mock("./src/context.js", () => ({ fetchContext: vi.fn(() => []) }));
+-vi.mock("./src/reply-flow/store.js", () => ({
+-  initReplySchema: vi.fn(),
++vi.mock("./src/reply-flow/store.js", async (importOriginal) => ({
++  ...(await importOriginal<typeof import("./src/reply-flow/store.js")>()),
+   insertPending: vi.fn(() => 1),
+   findOpenPendingForSender: vi.fn(() => undefined),
+   claimPending: vi.fn(() => false),
+@@ -32,8 +36,25 @@ import { insertComplaint, markNotified } from "./src/store.js";
+ 
+ const PLUGIN_ID = "alert-watcher";
+ 
+-function makeApi(config: any = {}, manualStart = false) {
+-  let capturedSvc: any = null;
++const cases: Array<{ dir: string; stop: () => Promise<void> }> = [];
++afterEach(async () => {
++  for (const c of cases.splice(0)) {
++    await c.stop();
++    fs.rmSync(c.dir, { recursive: true, force: true });
++  }
++});
++function makeApi(config: Record<string, unknown> = {}, manualStart = false) {
++  delete (globalThis as unknown as Record<string, unknown>).__minion_alert_watcher_state__;
++  const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "watcher-legacy-"));
++  type TestService = {
++    start: (ctx: {
++      stateDir: string;
++      config: Record<string, unknown>;
++      logger: Record<string, unknown>;
++    }) => void | Promise<void>;
++    stop: () => void | Promise<void>;
++  };
++  let capturedSvc: TestService | undefined;
+   const ledger = { all: vi.fn(() => []) };
+   const api = {
+     id: PLUGIN_ID,
+@@ -49,15 +70,23 @@ function makeApi(config: any = {}, manualStart = false) {
+         whatsapp: { sendMessageWhatsApp: vi.fn() },
+         telegram: { sendMessageTelegram: vi.fn() },
+       },
+-      messageLedger: { getDb: () => ledger as any },
++      messageLedger: { getDb: (): typeof ledger | null => ledger },
+     },
+-    registerService: vi.fn((svc) => {
++    registerService: vi.fn((svc: TestService) => {
+       capturedSvc = svc;
+-      if (!manualStart) svc.start({ stateDir: "/tmp", config: {}, logger: {} });
++      cases.push({
++        dir: stateDir,
++        stop: async () => {
++          await svc.stop();
++        },
++      });
++      if (!manualStart) {
++        void svc.start({ stateDir, config: {}, logger: {} });
++      }
+     }),
+     registerGatewayMethod: vi.fn(),
+     on: vi.fn(),
+-    triggerStart: async () => capturedSvc.start({ stateDir: "/tmp", config: {}, logger: {} }),
++    triggerStart: async () => capturedSvc!.start({ stateDir, config: {}, logger: {} }),
+   };
+   return api;
+ }
+@@ -82,23 +111,23 @@ describe("alert-watcher wiring", () => {
+   beforeEach(() => {
+     vi.resetAllMocks();
+     process.env.ANTHROPIC_API_KEY = "k";
+-    (insertComplaint as any).mockReturnValue(42);
+-    (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 1, perDestination: [] });
++    vi.mocked(insertComplaint).mockReturnValue(42);
++    vi.mocked(sendAlerts).mockResolvedValue({ total: 1, successCount: 1, perDestination: [] });
+   });
+ 
+   it("registers both hooks + service", () => {
+-    const api = makeApi() as any;
+-    plugin.register(api);
++    const api = makeApi();
++    plugin.register(api as unknown as MinionPluginApi);
+     expect(api.on).toHaveBeenCalledWith("message_inbound", expect.any(Function));
+     expect(api.on).toHaveBeenCalledWith("message_received", expect.any(Function));
+     expect(api.registerService).toHaveBeenCalled();
+   });
+ 
+   it("channel sub: message_inbound matches and classifies", async () => {
+-    (classifyMessage as any).mockResolvedValue(complaintResult);
+-    const api = makeApi() as any;
+-    plugin.register(api);
+-    const inboundHandler = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
++    vi.mocked(classifyMessage).mockResolvedValue(complaintResult);
++    const api = makeApi();
++    plugin.register(api as unknown as MinionPluginApi);
++    const inboundHandler = api.on.mock.calls.find((c) => c[0] === "message_inbound")![1];
+     await inboundHandler(inboundEvent);
+     expect(classifyMessage).toHaveBeenCalled();
+     expect(insertComplaint).toHaveBeenCalled();
+@@ -106,17 +135,17 @@ describe("alert-watcher wiring", () => {
+     expect(markNotified).toHaveBeenCalledWith(expect.anything(), 42);
+   });
+ 
+-  it("dedup: message_received does not re-process after message_inbound for same messageId", async () => {
+-    (classifyMessage as any).mockResolvedValue(complaintResult);
++  it("uncertified hooks keep fresh baseline invocations without claiming canonical dedup", async () => {
++    vi.mocked(classifyMessage).mockResolvedValue(complaintResult);
+     const api = makeApi({
+       subscriptions: [
+         { kind: "channel", channel: "telegram", accountId: "default" },
+         { kind: "agent", agentId: "panik" },
+       ],
+-    }) as any;
+-    plugin.register(api);
+-    const inboundHandler = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+-    const receivedHandler = api.on.mock.calls.find((c: any) => c[0] === "message_received")[1];
++    });
++    plugin.register(api as unknown as MinionPluginApi);
++    const inboundHandler = api.on.mock.calls.find((c) => c[0] === "message_inbound")![1];
++    const receivedHandler = api.on.mock.calls.find((c) => c[0] === "message_received")![1];
+     // Use a messageId unique to this test — the dedup store persists across tests
+     // (shared stateDir), so reusing inboundEvent's "m1" would already be marked
+     // seen by an earlier test and skip classification before the dedup assertion.
+@@ -126,16 +155,16 @@ describe("alert-watcher wiring", () => {
+       { from: "u1", content: "your product is broken", messageId: dedupId },
+       { channelId: "telegram", accountId: "default", chatId: "c1", agentId: "panik" },
+     );
+-    expect(classifyMessage).toHaveBeenCalledTimes(1);
++    expect(classifyMessage).toHaveBeenCalledTimes(2);
+   });
+ 
+   it("agent sub: message_received matches if no channel sub matched", async () => {
+-    (classifyMessage as any).mockResolvedValue(complaintResult);
++    vi.mocked(classifyMessage).mockResolvedValue(complaintResult);
+     const api = makeApi({
+       subscriptions: [{ kind: "agent", agentId: "panik" }],
+-    }) as any;
+-    plugin.register(api);
+-    const receivedHandler = api.on.mock.calls.find((c: any) => c[0] === "message_received")[1];
++    });
++    plugin.register(api as unknown as MinionPluginApi);
++    const receivedHandler = api.on.mock.calls.find((c) => c[0] === "message_received")![1];
+     await receivedHandler(
+       { from: "u1", content: "this product is broken", messageId: "m9" },
+       { channelId: "telegram", accountId: "default", chatId: "c1", agentId: "panik" },
+@@ -144,44 +173,58 @@ describe("alert-watcher wiring", () => {
+   });
+ 
+   it("non-complaint: no insert, no alert", async () => {
+-    (classifyMessage as any).mockResolvedValue({
++    vi.mocked(classifyMessage).mockResolvedValue({
+       is_complaint: false,
+       severity: "low",
+       category: "other",
+       summary: "",
+     });
+-    const api = makeApi() as any;
+-    plugin.register(api);
+-    const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
++    const api = makeApi();
++    plugin.register(api as unknown as MinionPluginApi);
++    const h = api.on.mock.calls.find((c) => c[0] === "message_inbound")![1];
+     await h(inboundEvent);
+     expect(insertComplaint).not.toHaveBeenCalled();
+     expect(sendAlerts).not.toHaveBeenCalled();
+   });
+ 
+   it("all destinations fail → no markNotified", async () => {
+-    (classifyMessage as any).mockResolvedValue(complaintResult);
+-    (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 0, perDestination: [] });
+-    const api = makeApi() as any;
+-    plugin.register(api);
+-    const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
++    vi.mocked(classifyMessage).mockResolvedValue(complaintResult);
++    vi.mocked(sendAlerts).mockResolvedValue({ total: 1, successCount: 0, perDestination: [] });
++    const api = makeApi();
++    plugin.register(api as unknown as MinionPluginApi);
++    const h = api.on.mock.calls.find((c) => c[0] === "message_inbound")![1];
+     await h(inboundEvent);
+     expect(markNotified).not.toHaveBeenCalled();
+   });
+ 
+-  it("ledger disabled: warns + no-ops", async () => {
+-    const api = makeApi() as any;
++  it("ledger disabled: warns and classifies the synthetic current-message context", async () => {
++    vi.mocked(classifyMessage).mockResolvedValue({
++      is_complaint: false,
++      severity: "low",
++      category: "other",
++      summary: "",
++    });
++    const api = makeApi();
+     api.runtime.messageLedger.getDb = () => null;
+-    plugin.register(api);
+-    const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
++    plugin.register(api as unknown as MinionPluginApi);
++    const h = api.on.mock.calls.find((c) => c[0] === "message_inbound")![1];
+     await h(inboundEvent);
+     expect(api.logger.warn).toHaveBeenCalled();
+-    expect(classifyMessage).not.toHaveBeenCalled();
++    expect(classifyMessage).toHaveBeenCalledWith(
++      expect.arrayContaining([expect.objectContaining({ content: inboundEvent.content })]),
++      expect.anything(),
++      expect.anything(),
++      expect.anything(),
++      expect.anything(),
++      expect.anything(),
++      expect.anything(),
++    );
+   });
+ 
+   it("empty subscriptions: skips all classification", async () => {
+-    const api = makeApi({ subscriptions: [] }) as any;
+-    plugin.register(api);
+-    const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
++    const api = makeApi({ subscriptions: [] });
++    plugin.register(api as unknown as MinionPluginApi);
++    const h = api.on.mock.calls.find((c) => c[0] === "message_inbound")![1];
+     await h(inboundEvent);
+     expect(classifyMessage).not.toHaveBeenCalled();
+   });
+diff --git a/extensions/alert-watcher/index.ts b/extensions/alert-watcher/index.ts
+index f3d39b3b0fc78f16ca061e032fad0f7da9c5ff2f..543745be78d4fff93ce4281a52f5e281b0efc5f4 100644
+--- a/extensions/alert-watcher/index.ts
++++ b/extensions/alert-watcher/index.ts
+@@ -3,6 +3,7 @@ import path from "node:path";
+ import { DatabaseSync } from "node:sqlite";
+ import { createGatewayDroneHost } from "../../src/drones/host.js";
+ import type { MinionPluginApi } from "../../src/plugins/types.js";
++import { createCertifiedWatcher } from "./src/certified-runtime.js";
+ import { classifyMessage } from "./src/classifier.js";
+ import { fetchContext } from "./src/context.js";
+ import { createCooldown, type Cooldown } from "./src/cooldown.js";
+@@ -14,22 +15,17 @@ import {
+   parseEnvelope,
+   serializeEnvelope,
+ } from "./src/envelope.js";
++import { resolveComplaintExperiment } from "./src/jev-shadow-eligibility.js";
+ import { migratePluginState } from "./src/migrate.js";
+ import { appendSuggestionsBlock } from "./src/reply-flow/format.js";
+ import { handleOwnerReply } from "./src/reply-flow/handle-reply.js";
+ import { initReplySchema, insertPending } from "./src/reply-flow/store.js";
+ import { runSuggestionsDrone } from "./src/reply-flow/suggestions-drone.js";
+ import { DEFAULT_REPLY_FLOW_CONFIG, type ReplyFlowConfig } from "./src/reply-flow/types.js";
+-import {
+-  insertComplaint,
+-  markNotified,
+-  initSchema,
+-  getRetryablePendingNotifications,
+-  bumpNotifyAttempt,
+-  MAX_NOTIFY_ATTEMPTS,
+-} from "./src/store.js";
++import { insertComplaint, markNotified, initSchema } from "./src/store.js";
+ import { matchesAgentSub, matchesChannelSub, type Sub } from "./src/subscriptions.js";
+ import type { ComplaintResult } from "./src/types.js";
++import { legacyTerminalObserver } from "./src/usage-finalization.js";
+ 
+ const PLUGIN_ID = "alert-watcher";
+ // Renamed 2026-05-15 from `complaint-listener`. Kept here only as the
+@@ -41,7 +37,8 @@ const LEGACY_PLUGIN_ID = "complaint-listener";
+ const DB_FILENAME = "alerts.db";
+ const LEGACY_DB_FILENAME = "complaints.db";
+ 
+-interface ResolvedConfig {
++export interface ResolvedConfig {
++  complaintExperiment: ReturnType<typeof resolveComplaintExperiment>;
+   subscriptions: Sub[];
+   destinations: Destination[];
+   classifier: {
+@@ -86,13 +83,13 @@ function normalizeChannelAlias(channel: string): string {
+ // reads/writes the SAME db/dedup/cooldown/droneHost. Mirrors message-ledger.ts
+ // and hook-runner-global.ts. See reference_module_state_bundle_dup.md.
+ interface AlertWatcherState {
++  certified?: ReturnType<typeof createCertifiedWatcher>;
+   db: DatabaseSync | null;
+   dedup: Dedup;
+   cooldown: Cooldown;
+-  droneHost: ReturnType<typeof createGatewayDroneHost>;
+ }
+ const STATE_SYMBOL = "__minion_alert_watcher_state__";
+-function getSharedState(api: MinionPluginApi): AlertWatcherState {
++function getSharedState(_api: MinionPluginApi): AlertWatcherState {
+   const g = globalThis as unknown as Record<string, AlertWatcherState | undefined>;
+   let s = g[STATE_SYMBOL];
+   if (!s) {
+@@ -100,21 +97,18 @@ function getSharedState(api: MinionPluginApi): AlertWatcherState {
+       db: null,
+       dedup: createDedup(1000),
+       cooldown: createCooldown(),
+-      // Dedicated drone host: created once for the lifetime of the process,
+-      // shared across all module copies. Avoids per-message host allocation
+-      // and ensures a host is always ready even during qmd-busy boot windows.
+-      droneHost: createGatewayDroneHost({ config: api.config }),
+     };
+     g[STATE_SYMBOL] = s;
+   }
+   return s;
+ }
+ 
+-function resolveConfig(raw: Record<string, unknown>): ResolvedConfig {
++export function resolveConfig(raw: Record<string, unknown>): ResolvedConfig {
+   const c = (raw.classifier as Record<string, unknown> | undefined) ?? {};
+   const cd = (raw.cooldown as Record<string, unknown> | undefined) ?? {};
+   const lang = raw.language === "en" ? "en" : "es";
+   return {
++    complaintExperiment: resolveComplaintExperiment(raw.complaintExperiment),
+     subscriptions: (raw.subscriptions as Sub[]) ?? [],
+     destinations: (raw.destinations as Destination[]) ?? [],
+     classifier: {
+@@ -171,7 +165,7 @@ function resolveConfig(raw: Record<string, unknown>): ResolvedConfig {
+   };
+ }
+ 
+-function formatAlert(
++export function formatAlert(
+   event: {
+     channel: string;
+     accountId: string;
+@@ -194,9 +188,13 @@ function formatAlert(
+     ];
+     if (history.length > 1) {
+       lines.push("", `Contexto (últimos ${history.length}):`);
+-      for (const h of history) lines.push(`  • [${h.role}] ${h.content}`);
++      for (const h of history) {
++        lines.push(`  • [${h.role}] ${h.content}`);
++      }
++    }
++    if (result.summary) {
++      lines.push("", `Resumen: ${result.summary}`);
+     }
+-    if (result.summary) lines.push("", `Resumen: ${result.summary}`);
+     return lines.join("\n");
+   }
+   const lines = [
+@@ -207,9 +205,13 @@ function formatAlert(
+   ];
+   if (history.length > 1) {
+     lines.push("", `Context (last ${history.length}):`);
+-    for (const h of history) lines.push(`  • [${h.role}] ${h.content}`);
++    for (const h of history) {
++      lines.push(`  • [${h.role}] ${h.content}`);
++    }
++  }
++  if (result.summary) {
++    lines.push("", `Summary: ${result.summary}`);
+   }
+-  if (result.summary) lines.push("", `Summary: ${result.summary}`);
+   return lines.join("\n");
+ }
+ 
+@@ -240,8 +242,12 @@ export default {
+           newDir,
+           fileRenames: [{ from: LEGACY_DB_FILENAME, to: DB_FILENAME }],
+         });
+-        for (const step of migration.steps) api.logger.info(`${PLUGIN_ID}: migrate — ${step}`);
+-        for (const err of migration.errors) api.logger.warn(`${PLUGIN_ID}: migrate — ${err}`);
++        for (const step of migration.steps) {
++          api.logger.info(`${PLUGIN_ID}: migrate — ${step}`);
++        }
++        for (const err of migration.errors) {
++          api.logger.warn(`${PLUGIN_ID}: migrate — ${err}`);
++        }
+ 
+         const dbPath = path.join(newDir, DB_FILENAME);
+         fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+@@ -271,53 +277,39 @@ export default {
+           );
+         }
+ 
+-        // Boot catch-up — drain pending rows. C2 fix: cap retry attempts via
+-        // notify_attempts column so a permanently-broken destination doesn't
+-        // get retried forever on every restart. F9 fix: run AFTER start()
+-        // returns (fire-and-forget) so a slow/dead destination never delays
+-        // gateway boot — the awaited fan-out used to block service start.
+-        if (cfg.destinations.length > 0) {
+-          void (async () => {
+-            try {
+-              const pending = getRetryablePendingNotifications(opened, MAX_NOTIFY_ATTEMPTS);
+-              api.logger.info(
+-                `${PLUGIN_ID}: boot catch-up — ${pending.length} pending (attempts<${MAX_NOTIFY_ATTEMPTS})`,
+-              );
+-              for (const row of pending) {
+-                const attempts = bumpNotifyAttempt(opened, row.id);
+-                const text = formatAlert(
+-                  {
+-                    channel: row.channel_id,
+-                    accountId: "default",
+-                    senderId: row.from_sender,
+-                    content: row.content,
+-                  },
+-                  {
+-                    is_complaint: true,
+-                    severity: row.severity,
+-                    category: row.category,
+-                    summary: row.summary,
+-                  },
+-                  [],
+-                  cfg.language,
+-                );
+-                const r = await sendAlerts(api, cfg.destinations, text);
+-                // M6: only mark notified if ALL destinations got it.
+-                if (r.successCount === r.total && r.total > 0) {
+-                  markNotified(opened, row.id);
+-                } else {
+-                  api.logger.warn(
+-                    `${PLUGIN_ID}: boot retry id=${row.id} partial/failed (${r.successCount}/${r.total}, attempt ${attempts}/${MAX_NOTIFY_ATTEMPTS})`,
+-                  );
+-                }
+-              }
+-            } catch (err) {
+-              api.logger.warn(`${PLUGIN_ID}: boot catch-up error: ${String(err)}`);
+-            }
+-          })();
+-        }
++        // Legacy rows have no recipient history; replaying their fan-out can duplicate sends.
++        // The durable worker only dispatches newly admitted, certified receipts.
++        state.certified = createCertifiedWatcher(
++          api,
++          opened,
++          ctx.stateDir,
++          () =>
++            resolveConfig(
++              ((api.runtime.config?.loadConfig?.() ?? api.config).plugins?.entries?.[PLUGIN_ID]
++                ?.config as Record<string, unknown>) ??
++                (api.pluginConfig as Record<string, unknown>),
++            ),
++          (snapshot, result) =>
++            formatAlert(
++              {
++                channel: snapshot.source.channel,
++                accountId: snapshot.source.accountId,
++                senderId: snapshot.source.senderId,
++                content: snapshot.source.text,
++              },
++              result,
++              [],
++              snapshot.language,
++            ),
++        );
++        void state.certified.tick();
+       },
+-      stop() {
++      async stop() {
++        const stopped = await state.certified?.stop();
++        if (stopped !== false) {
++          state.db?.close();
++        }
++        state.certified = undefined;
+         state.db = null;
+         api.logger.info(`${PLUGIN_ID}: stopped`);
+       },
+@@ -387,7 +379,10 @@ export default {
+       try {
+         const classified = await classifyMessage(
+           [{ role: "user", content: input, ts: Date.now() }],
+-          state.droneHost,
++          createGatewayDroneHost({
++            config: api.runtime.config?.loadConfig?.() ?? api.config,
++            usageMode: "result",
++          }),
+           model,
+           ac.signal,
+           language,
+@@ -396,6 +391,7 @@ export default {
+             severityRubric,
+             categories: cfg.classifier.categories,
+           },
++          legacyTerminalObserver(state.db, "classification", model, input),
+         );
+         // Gate by the node's min-severity: below threshold → not a complaint.
+         const result =
+@@ -508,9 +504,13 @@ export default {
+           api.logger.warn(`${PLUGIN_ID}: gate triage-log insert failed: ${String(e)}`);
+         }
+       }
+-      if (!suppressed && cdEnabled) state.cooldown.markAlerted(chatKey, env.severity);
++      if (!suppressed && cdEnabled) {
++        state.cooldown.markAlerted(chatKey, env.severity);
++      }
+       const out = { ...env, suppressed };
+-      if (alertId !== undefined) out.alertId = alertId;
++      if (alertId !== undefined) {
++        out.alertId = alertId;
++      }
+       respond(true, { reply: serializeEnvelope(out) });
+     });
+ 
+@@ -533,16 +533,24 @@ export default {
+       const count = typeof nodeConfig.count === "number" ? nodeConfig.count : 3;
+       const maxChars = typeof nodeConfig.maxChars === "number" ? nodeConfig.maxChars : 140;
+       try {
+-        const suggestions = await runSuggestionsDrone(state.droneHost, model, {
+-          language: cfg.language,
+-          severity: env.severity,
+-          category: env.category,
+-          summary: env.summary,
+-          senderMessage: env.original,
+-          systemPrompt: cfg.classifier.systemPrompt ?? "",
+-          count,
+-          maxChars,
+-        });
++        const suggestions = await runSuggestionsDrone(
++          createGatewayDroneHost({
++            config: api.runtime.config?.loadConfig?.() ?? api.config,
++            usageMode: "result",
++          }),
++          model,
++          {
++            language: cfg.language,
++            severity: env.severity,
++            category: env.category,
++            summary: env.summary,
++            senderMessage: env.original,
++            systemPrompt: cfg.classifier.systemPrompt ?? "",
++            count,
++            maxChars,
++          },
++          legacyTerminalObserver(state.db, "suggestion", model, env.original),
++        );
+         const out = suggestions.length > 0 ? { ...env, suggestions } : env;
+         respond(true, { reply: serializeEnvelope(out) });
+       } catch (err) {
+@@ -631,28 +639,13 @@ export default {
+       agentId: string | undefined,
+     ): Promise<void> {
+       const db = state.db;
+-      if (!db) return;
+-      const { dedup, cooldown, droneHost } = state;
+-      const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
+-      // Dedup: primary path uses messageId. C3 fix: when messageId is missing
+-      // (some channel/event shapes drop it), fall back to a content-hash key
+-      // so the dual-listener registration on message_inbound + message_received
+-      // can't triple-process the same event.
+-      if (event.messageId !== undefined) {
+-        if (dedup.markSeen(event.messageId)) return;
+-      } else {
+-        if (
+-          dedup.markSeenFallback({
+-            channel: event.channel,
+-            accountId: event.accountId,
+-            chatId: event.chatId,
+-            sender: event.senderId ?? "",
+-            content: event.content,
+-          })
+-        ) {
+-          return;
+-        }
++      if (!db) {
++        return;
+       }
++      const { cooldown } = state;
++      const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
++      // Uncertified/manual hooks retain baseline classification with fresh invocation identity.
++      // Only trusted canonical receipts can suppress cross-hook inference.
+ 
+       // H3 fix: include sender in cooldown key so one customer's complaint in
+       // a group chat doesn't suppress alerts from other customers in the same
+@@ -698,18 +691,31 @@ export default {
+       const ac = new AbortController();
+       const timeoutHandle = setTimeout(() => ac.abort(), CLASSIFIER_HARD_TIMEOUT_MS);
+       let result: ComplaintResult;
++      let hardTimeoutHandle: ReturnType<typeof setTimeout> | undefined;
+       try {
+         result = await Promise.race<ComplaintResult>([
+-          classifyMessage(history, droneHost, cfg.classifier.model, ac.signal, cfg.language, {
+-            systemPrompt: cfg.classifier.systemPrompt,
+-            severityRubric: cfg.classifier.severityRubric,
+-            categories: cfg.classifier.categories,
+-          }),
+-          new Promise<never>((_, reject) =>
+-            setTimeout(
+-              () => reject(new Error(`classifier hard-timeout ${CLASSIFIER_HARD_TIMEOUT_MS}ms`)),
+-              CLASSIFIER_HARD_TIMEOUT_MS,
+-            ),
++          classifyMessage(
++            history,
++            createGatewayDroneHost({
++              config: api.runtime.config?.loadConfig?.() ?? api.config,
++              usageMode: "result",
++            }),
++            cfg.classifier.model,
++            ac.signal,
++            cfg.language,
++            {
++              systemPrompt: cfg.classifier.systemPrompt,
++              severityRubric: cfg.classifier.severityRubric,
++              categories: cfg.classifier.categories,
++            },
++            legacyTerminalObserver(state.db, "classification", cfg.classifier.model, event.content),
++          ),
++          new Promise<never>(
++            (_, reject) =>
++              (hardTimeoutHandle = setTimeout(
++                () => reject(new Error(`classifier hard-timeout ${CLASSIFIER_HARD_TIMEOUT_MS}ms`)),
++                CLASSIFIER_HARD_TIMEOUT_MS,
++              )),
+           ),
+         ]);
+       } catch (err) {
+@@ -717,11 +723,14 @@ export default {
+         return;
+       } finally {
+         clearTimeout(timeoutHandle);
++        clearTimeout(hardTimeoutHandle);
+       }
+       api.logger.info(
+         `${PLUGIN_ID}: classified is_complaint=${result.is_complaint} severity=${result.severity} category=${result.category}`,
+       );
+-      if (!result.is_complaint) return;
++      if (!result.is_complaint) {
++        return;
++      }
+       if (SEVERITY_ORDER[result.severity] < SEVERITY_ORDER[cfg.classifier.minSeverity]) {
+         api.logger.info(
+           `${PLUGIN_ID}: skipped — severity ${result.severity} below minSeverity ${cfg.classifier.minSeverity}`,
+@@ -761,16 +770,24 @@ export default {
+ 
+       let suggestions: string[] = [];
+       if (cfg.replyFlow.enabled && cfg.replyFlow.suggestions.enabled) {
+-        suggestions = await runSuggestionsDrone(droneHost, cfg.classifier.model, {
+-          language: cfg.language,
+-          severity: result.severity,
+-          category: result.category,
+-          summary: result.summary,
+-          senderMessage: event.content,
+-          systemPrompt: cfg.classifier.systemPrompt ?? "",
+-          count: cfg.replyFlow.suggestions.count,
+-          maxChars: cfg.replyFlow.suggestions.maxChars,
+-        });
++        suggestions = await runSuggestionsDrone(
++          createGatewayDroneHost({
++            config: api.runtime.config?.loadConfig?.() ?? api.config,
++            usageMode: "result",
++          }),
++          cfg.classifier.model,
++          {
++            language: cfg.language,
++            severity: result.severity,
++            category: result.category,
++            summary: result.summary,
++            senderMessage: event.content,
++            systemPrompt: cfg.classifier.systemPrompt ?? "",
++            count: cfg.replyFlow.suggestions.count,
++            maxChars: cfg.replyFlow.suggestions.maxChars,
++          },
++          legacyTerminalObserver(state.db, "suggestion", cfg.classifier.model, event.content),
++        );
+       }
+ 
+       const baseText = formatAlert(event, result, history, cfg.language);
+@@ -824,14 +841,15 @@ export default {
+     api.on("message_inbound", async (event) => {
+       // Diagnostic 2026-05-22: log every inbound to detect routing issues
+       // between the gateway's channel layer and the plugin event bus.
+-      api.logger.info(
+-        `${PLUGIN_ID}: inbound ${event.channel}:${event.accountId} from ${event.senderId ?? "?"} content="${(event.content ?? "").slice(0, 60).replace(/\s+/g, " ")}"`,
+-      );
++      api.logger.info(`${PLUGIN_ID}: inbound ${event.channel}:${event.accountId}`);
+       const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
+       if (!matchesChannelSub(cfg.subscriptions, event)) {
+         api.logger.info(`${PLUGIN_ID}: skipped — no matching subscription`);
+         return;
+       }
++      if (await state.certified?.admit(event)) {
++        return;
++      }
+       await handle(event, undefined);
+     });
+ 
+@@ -843,11 +861,17 @@ export default {
+     // usual. The findOpenPendingForSender lookup inside handleOwnerReply is a
+     // fast indexed query, so this stays cheap on the inbound hot path.
+     api.on("message_intercept", async (event) => {
+-      if (event.channel !== "whatsapp") return;
++      if (event.channel !== "whatsapp") {
++        return;
++      }
+       const db = state.db;
+-      if (!db) return;
++      if (!db) {
++        return;
++      }
+       const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
+-      if (!cfg.replyFlow.enabled) return;
++      if (!cfg.replyFlow.enabled) {
++        return;
++      }
+       const result = await handleOwnerReply(db, api, cfg.replyFlow, {
+         sender: event.senderId ?? "",
+         message: event.content,
+@@ -860,12 +884,23 @@ export default {
+ 
+     api.on("message_received", async (event, ctx) => {
+       const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
+-      if (!matchesAgentSub(cfg.subscriptions, ctx.agentId)) return;
++      if (!matchesAgentSub(cfg.subscriptions, ctx.agentId)) {
++        return;
++      }
++      const originalEvent = {
++        channel: ctx.channelId,
++        accountId: ctx.accountId ?? "default",
++        chatId: ctx.conversationId ?? "unknown",
++        metadata: event.metadata,
++      };
++      if (await state.certified?.admit(originalEvent, ctx.agentId)) {
++        return;
++      }
+       await handle(
+         {
+           channel: ctx.channelId,
+           accountId: (ctx as { accountId?: string }).accountId ?? "default",
+-          chatId: (ctx as { chatId?: string }).chatId ?? "unknown",
++          chatId: ctx.conversationId ?? "unknown",
+           senderId: event.from,
+           content: event.content,
+           messageId: (event as { messageId?: string }).messageId,
+diff --git a/extensions/alert-watcher/minion.plugin.json b/extensions/alert-watcher/minion.plugin.json
+index 26f82f519b12e2beaed997d97e54e3b6d8b62227..a9db012da6aac20a984f9e7400d7dd06b4912d5d 100644
+--- a/extensions/alert-watcher/minion.plugin.json
++++ b/extensions/alert-watcher/minion.plugin.json
+@@ -15,9 +15,15 @@
+               "type": "object",
+               "additionalProperties": false,
+               "properties": {
+-                "kind": { "const": "channel" },
+-                "channel": { "type": "string" },
+-                "accountId": { "type": "string" }
++                "kind": {
++                  "const": "channel"
++                },
++                "channel": {
++                  "type": "string"
++                },
++                "accountId": {
++                  "type": "string"
++                }
+               },
+               "required": ["kind", "channel"]
+             },
+@@ -25,15 +31,23 @@
+               "type": "object",
+               "additionalProperties": false,
+               "properties": {
+-                "kind": { "const": "agent" },
+-                "agentId": { "type": "string" }
++                "kind": {
++                  "const": "agent"
++                },
++                "agentId": {
++                  "type": "string"
++                }
+               },
+               "required": ["kind", "agentId"]
+             },
+             {
+               "type": "object",
+               "additionalProperties": false,
+-              "properties": { "kind": { "const": "channel-catchall" } },
++              "properties": {
++                "kind": {
++                  "const": "channel-catchall"
++                }
++              },
+               "required": ["kind"]
+             }
+           ]
+@@ -46,10 +60,18 @@
+           "type": "object",
+           "additionalProperties": false,
+           "properties": {
+-            "channel": { "type": "string" },
+-            "accountId": { "type": "string" },
+-            "to": { "type": "string" },
+-            "label": { "type": "string" }
++            "channel": {
++              "type": "string"
++            },
++            "accountId": {
++              "type": "string"
++            },
++            "to": {
++              "type": "string"
++            },
++            "label": {
++              "type": "string"
++            }
+           },
+           "required": ["channel", "to"]
+         }
+@@ -58,9 +80,17 @@
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+-          "model": { "type": "string" },
+-          "contextWindow": { "type": "integer", "minimum": 1, "maximum": 20 },
+-          "minSeverity": { "enum": ["low", "med", "high"] },
++          "model": {
++            "type": "string"
++          },
++          "contextWindow": {
++            "type": "integer",
++            "minimum": 1,
++            "maximum": 20
++          },
++          "minSeverity": {
++            "enum": ["low", "med", "high"]
++          },
+           "systemPrompt": {
+             "type": "string",
+             "description": "Classification rules. Overrides the built-in default. Use empty string to fall back to default."
+@@ -70,14 +100,23 @@
+             "additionalProperties": false,
+             "description": "User-defined definitions of each severity level, appended to the system prompt.",
+             "properties": {
+-              "low": { "type": "string" },
+-              "med": { "type": "string" },
+-              "high": { "type": "string" }
++              "low": {
++                "type": "string"
++              },
++              "med": {
++                "type": "string"
++              },
++              "high": {
++                "type": "string"
++              }
+             }
+           },
+           "categories": {
+             "type": "array",
+-            "items": { "type": "string", "minLength": 1 },
++            "items": {
++              "type": "string",
++              "minLength": 1
++            },
+             "description": "Override the built-in category list. Empty array falls back to defaults."
+           }
+         }
+@@ -86,21 +125,40 @@
+         "type": "object",
+         "additionalProperties": false,
+         "properties": {
+-          "enabled": { "type": "boolean", "default": true },
++          "enabled": {
++            "type": "boolean",
++            "default": true
++          },
+           "windowMs": {
+             "type": "integer",
+             "minimum": 60000,
+             "maximum": 86400000,
+             "default": 3600000
+           },
+-          "notifyLoser": { "type": "boolean", "default": true },
++          "notifyLoser": {
++            "type": "boolean",
++            "default": true
++          },
+           "suggestions": {
+             "type": "object",
+             "additionalProperties": false,
+             "properties": {
+-              "enabled": { "type": "boolean", "default": true },
+-              "count": { "type": "integer", "minimum": 1, "maximum": 5, "default": 3 },
+-              "maxChars": { "type": "integer", "minimum": 40, "maximum": 500, "default": 140 }
++              "enabled": {
++                "type": "boolean",
++                "default": true
++              },
++              "count": {
++                "type": "integer",
++                "minimum": 1,
++                "maximum": 5,
++                "default": 3
++              },
++              "maxChars": {
++                "type": "integer",
++                "minimum": 40,
++                "maximum": 500,
++                "default": 140
++              }
+             }
+           }
+         }
+@@ -120,10 +178,37 @@
+           "allowEscalation": true
+         },
+         "properties": {
+-          "enabled": { "type": "boolean", "default": true },
+-          "maxMessages": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 12 },
+-          "windowMinutes": { "type": "integer", "minimum": 0, "maximum": 1440, "default": 30 },
+-          "allowEscalation": { "type": "boolean", "default": true }
++          "enabled": {
++            "type": "boolean",
++            "default": true
++          },
++          "maxMessages": {
++            "type": "integer",
++            "minimum": 1,
++            "maximum": 1000,
++            "default": 12
++          },
++          "windowMinutes": {
++            "type": "integer",
++            "minimum": 0,
++            "maximum": 1440,
++            "default": 30
++          },
++          "allowEscalation": {
++            "type": "boolean",
++            "default": true
++          }
++        }
++      },
++      "complaintExperiment": {
++        "type": "object",
++        "additionalProperties": false,
++        "properties": {
++          "mode": {
++            "type": "string",
++            "enum": ["off", "census", "shadow"],
++            "default": "off"
++          }
+         }
+       }
+     }
+@@ -161,8 +246,14 @@
+           "default": "claude-haiku-4-5",
+           "description": "LLM used to classify the message.",
+           "options": [
+-            { "value": "claude-haiku-4-5", "label": "Claude Haiku 4.5" },
+-            { "value": "claude-sonnet-4-6", "label": "Claude Sonnet 4.6" }
++            {
++              "value": "claude-haiku-4-5",
++              "label": "Claude Haiku 4.5"
++            },
++            {
++              "value": "claude-sonnet-4-6",
++              "label": "Claude Sonnet 4.6"
++            }
+           ]
+         },
+         {
+@@ -172,9 +263,18 @@
+           "default": "low",
+           "description": "Drop classifications below this severity.",
+           "options": [
+-            { "value": "low", "label": "Low" },
+-            { "value": "med", "label": "Medium" },
+-            { "value": "high", "label": "High" }
++            {
++              "value": "low",
++              "label": "Low"
++            },
++            {
++              "value": "med",
++              "label": "Medium"
++            },
++            {
++              "value": "high",
++              "label": "High"
++            }
+           ]
+         },
+         {
+@@ -184,8 +284,14 @@
+           "default": "es",
+           "description": "Language the classifier reasons and summarizes in.",
+           "options": [
+-            { "value": "es", "label": "Español" },
+-            { "value": "en", "label": "English" }
++            {
++              "value": "es",
++              "label": "Espa\u00f1ol"
++            },
++            {
++              "value": "en",
++              "label": "English"
++            }
+           ]
+         },
+         {
+@@ -197,21 +303,21 @@
+         },
+         {
+           "key": "severityRubricLow",
+-          "label": "Severity — low",
++          "label": "Severity \u2014 low",
+           "type": "textarea",
+           "placeholder": "What counts as a LOW-severity match (blank = default).",
+           "description": "Definition of the low tier, appended to the system prompt."
+         },
+         {
+           "key": "severityRubricMed",
+-          "label": "Severity — medium",
++          "label": "Severity \u2014 medium",
+           "type": "textarea",
+           "placeholder": "What counts as a MEDIUM-severity match (blank = default).",
+           "description": "Definition of the medium tier, appended to the system prompt."
+         },
+         {
+           "key": "severityRubricHigh",
+-          "label": "Severity — high",
++          "label": "Severity \u2014 high",
+           "type": "textarea",
+           "placeholder": "What counts as a HIGH-severity match (blank = default).",
+           "description": "Definition of the high tier, appended to the system prompt."
+@@ -223,7 +329,7 @@
+       "kind": "action",
+       "method": "alertWatcher.gate",
+       "label": "Gate (dedup + cooldown)",
+-      "description": "Hardened middle: dedups, applies per-chat cooldown, and records the message to the triage log. Idempotent — safe to run twice on one message.",
++      "description": "Hardened middle: dedups, applies per-chat cooldown, and records the message to the triage log. Idempotent \u2014 safe to run twice on one message.",
+       "icon": "ShieldCheck",
+       "category": "Logic & Data",
+       "config": [
+@@ -273,8 +379,14 @@
+           "default": "claude-haiku-4-5",
+           "description": "LLM used to draft the suggestions.",
+           "options": [
+-            { "value": "claude-haiku-4-5", "label": "Claude Haiku 4.5" },
+-            { "value": "claude-sonnet-4-6", "label": "Claude Sonnet 4.6" }
++            {
++              "value": "claude-haiku-4-5",
++              "label": "Claude Haiku 4.5"
++            },
++            {
++              "value": "claude-sonnet-4-6",
++              "label": "Claude Sonnet 4.6"
++            }
+           ]
+         },
+         {
+@@ -309,8 +421,14 @@
+           "default": "es",
+           "description": "Language of the formatted alert text.",
+           "options": [
+-            { "value": "es", "label": "Español" },
+-            { "value": "en", "label": "English" }
++            {
++              "value": "es",
++              "label": "Espa\u00f1ol"
++            },
++            {
++              "value": "en",
++              "label": "English"
++            }
+           ]
+         },
+         {
+@@ -337,7 +455,7 @@
+           {
+             "id": "none",
+             "label": "none",
+-            "description": "Not a complaint: greetings, questions, positive feedback, neutral chit-chat — anything not expressing a problem or dissatisfaction."
++            "description": "Not a complaint: greetings, questions, positive feedback, neutral chit-chat \u2014 anything not expressing a problem or dissatisfaction."
+           },
+           {
+             "id": "low",
+@@ -352,7 +470,7 @@
+           {
+             "id": "high",
+             "label": "high",
+-            "description": "Severe or urgent: safety risk, legal threat, billing/payment dispute, major outage, extreme anger, or churn threat — needs immediate human attention."
++            "description": "Severe or urgent: safety risk, legal threat, billing/payment dispute, major outage, extreme anger, or churn threat \u2014 needs immediate human attention."
+           }
+         ]
+       }
+@@ -367,18 +485,28 @@
+         {
+           "id": "trigger",
+           "type": "trigger",
+-          "position": { "x": 0, "y": 160 },
++          "position": {
++            "x": 0,
++            "y": 160
++          },
+           "data": {
+             "event": "message:received",
+             "label": "Channel message",
+             "deliverResponse": false,
+-            "sources": [{ "channel": "whatsapp" }]
++            "sources": [
++              {
++                "channel": "whatsapp"
++              }
++            ]
+           }
+         },
+         {
+           "id": "classify",
+           "type": "pluginAction",
+-          "position": { "x": 300, "y": 160 },
++          "position": {
++            "x": 300,
++            "y": 160
++          },
+           "data": {
+             "pluginId": "alert-watcher",
+             "contributionId": "classify",
+@@ -389,7 +517,10 @@
+         {
+           "id": "route",
+           "type": "router",
+-          "position": { "x": 600, "y": 160 },
++          "position": {
++            "x": 600,
++            "y": 160
++          },
+           "data": {
+             "mode": "rule",
+             "label": "Severity",
+@@ -398,24 +529,33 @@
+                 "id": "high",
+                 "label": "high",
+                 "description": "Severe or urgent complaints.",
+-                "rule": { "op": "contains", "value": "\"severity\":\"high\"" }
++                "rule": {
++                  "op": "contains",
++                  "value": "\"severity\":\"high\""
++                }
+               },
+               {
+                 "id": "med",
+                 "label": "med",
+                 "description": "Real problems needing attention.",
+-                "rule": { "op": "contains", "value": "\"severity\":\"med\"" }
++                "rule": {
++                  "op": "contains",
++                  "value": "\"severity\":\"med\""
++                }
+               },
+               {
+                 "id": "low",
+                 "label": "low",
+                 "description": "Minor issues or mild dissatisfaction.",
+-                "rule": { "op": "contains", "value": "\"severity\":\"low\"" }
++                "rule": {
++                  "op": "contains",
++                  "value": "\"severity\":\"low\""
++                }
+               },
+               {
+                 "id": "none",
+                 "label": "none",
+-                "description": "Not a complaint (or below min severity): no edge → the normal agent loop handles it."
++                "description": "Not a complaint (or below min severity): no edge \u2192 the normal agent loop handles it."
+               }
+             ]
+           }
+@@ -423,7 +563,10 @@
+         {
+           "id": "send-alert",
+           "type": "pluginAction",
+-          "position": { "x": 900, "y": 160 },
++          "position": {
++            "x": 900,
++            "y": 160
++          },
+           "data": {
+             "pluginId": "alert-watcher",
+             "contributionId": "send-alert",
+@@ -477,24 +620,34 @@
+     },
+     {
+       "id": "pipeline-telegram",
+-      "name": "Alert Watcher — Telegram",
++      "name": "Alert Watcher \u2014 Telegram",
+       "description": "Telegram variant of the alert pipeline: every Telegram message is classified into a JSON envelope by the alert-watcher's classifier, then a deterministic rule router fans real complaints out to your configured destinations by severity. Non-complaints take no edge and are left to the normal agent loop.",
+       "nodes": [
+         {
+           "id": "trigger",
+           "type": "trigger",
+-          "position": { "x": 0, "y": 160 },
++          "position": {
++            "x": 0,
++            "y": 160
++          },
+           "data": {
+             "event": "message:received",
+             "label": "Channel message",
+             "deliverResponse": false,
+-            "sources": [{ "channel": "telegram" }]
++            "sources": [
++              {
++                "channel": "telegram"
++              }
++            ]
+           }
+         },
+         {
+           "id": "classify",
+           "type": "pluginAction",
+-          "position": { "x": 300, "y": 160 },
++          "position": {
++            "x": 300,
++            "y": 160
++          },
+           "data": {
+             "pluginId": "alert-watcher",
+             "contributionId": "classify",
+@@ -505,7 +658,10 @@
+         {
+           "id": "route",
+           "type": "router",
+-          "position": { "x": 600, "y": 160 },
++          "position": {
++            "x": 600,
++            "y": 160
++          },
+           "data": {
+             "mode": "rule",
+             "label": "Severity",
+@@ -514,24 +670,33 @@
+                 "id": "high",
+                 "label": "high",
+                 "description": "Severe or urgent complaints.",
+-                "rule": { "op": "contains", "value": "\"severity\":\"high\"" }
++                "rule": {
++                  "op": "contains",
++                  "value": "\"severity\":\"high\""
++                }
+               },
+               {
+                 "id": "med",
+                 "label": "med",
+                 "description": "Real problems needing attention.",
+-                "rule": { "op": "contains", "value": "\"severity\":\"med\"" }
++                "rule": {
++                  "op": "contains",
++                  "value": "\"severity\":\"med\""
++                }
+               },
+               {
+                 "id": "low",
+                 "label": "low",
+                 "description": "Minor issues or mild dissatisfaction.",
+-                "rule": { "op": "contains", "value": "\"severity\":\"low\"" }
++                "rule": {
++                  "op": "contains",
++                  "value": "\"severity\":\"low\""
++                }
+               },
+               {
+                 "id": "none",
+                 "label": "none",
+-                "description": "Not a complaint (or below min severity): no edge → the normal agent loop handles it."
++                "description": "Not a complaint (or below min severity): no edge \u2192 the normal agent loop handles it."
+               }
+             ]
+           }
+@@ -539,7 +704,10 @@
+         {
+           "id": "send-alert",
+           "type": "pluginAction",
+-          "position": { "x": 900, "y": 160 },
++          "position": {
++            "x": 900,
++            "y": 160
++          },
+           "data": {
+             "pluginId": "alert-watcher",
+             "contributionId": "send-alert",
+diff --git a/extensions/alert-watcher/src/classifier.test.ts b/extensions/alert-watcher/src/classifier.test.ts
+index 943a8d71875ec9689dcd12278cbffae3c7332c44..3bc56bbbe3c66a94b3134129c56806fa6d0eb686 100644
+--- a/extensions/alert-watcher/src/classifier.test.ts
++++ b/extensions/alert-watcher/src/classifier.test.ts
+@@ -2,6 +2,8 @@ import type { DroneHost } from "@minion-stack/drone";
+ import { beforeEach, describe, expect, it, vi } from "vitest";
+ import type { ComplaintHistoryEntry } from "./types.js";
+ 
++vi.hoisted(() => vi.resetModules());
++
+ vi.mock("@minion-stack/drone", async (importOriginal) => {
+   const actual = await importOriginal<typeof import("@minion-stack/drone")>();
+   return {
+diff --git a/extensions/alert-watcher/src/classifier.ts b/extensions/alert-watcher/src/classifier.ts
+index cf82b04b20fd7799869d45510d8ce925bc4953d9..3a41a63f77f6cfa3e9df9f11105b9d2159bfc4ae 100644
+--- a/extensions/alert-watcher/src/classifier.ts
++++ b/extensions/alert-watcher/src/classifier.ts
+@@ -1,7 +1,9 @@
+-import { defineDrone, runDrone } from "@minion-stack/drone";
++import { defineDrone } from "@minion-stack/drone";
+ import type { DroneHost } from "@minion-stack/drone";
+ import type { TSchema } from "@sinclair/typebox";
+ import { Type } from "@sinclair/typebox";
++import { runDroneWithUsage, type TerminalObserver } from "../../../src/drones/run-with-usage.js";
++import { classifierInput } from "./provenance.js";
+ import type { ComplaintHistoryEntry, ComplaintResult } from "./types.js";
+ 
+ const DEFAULT_CATEGORIES = ["product_defect", "billing", "delivery", "service", "other"] as const;
+@@ -39,7 +41,7 @@ export interface ClassifierOverrides {
+   categories?: string[];
+ }
+ 
+-function composeSystemPrompt(
++export function composeSystemPrompt(
+   language: "es" | "en",
+   overrides: ClassifierOverrides | undefined,
+ ): string {
+@@ -49,9 +51,15 @@ function composeSystemPrompt(
+       : DEFAULT_SYSTEM_PROMPT;
+   const r = overrides?.severityRubric;
+   const rubricLines: string[] = [];
+-  if (r?.low && r.low.trim()) rubricLines.push(`- low: ${r.low.trim()}`);
+-  if (r?.med && r.med.trim()) rubricLines.push(`- med: ${r.med.trim()}`);
+-  if (r?.high && r.high.trim()) rubricLines.push(`- high: ${r.high.trim()}`);
++  if (r?.low && r.low.trim()) {
++    rubricLines.push(`- low: ${r.low.trim()}`);
++  }
++  if (r?.med && r.med.trim()) {
++    rubricLines.push(`- med: ${r.med.trim()}`);
++  }
++  if (r?.high && r.high.trim()) {
++    rubricLines.push(`- high: ${r.high.trim()}`);
++  }
+   const rubricBlock =
+     rubricLines.length > 0 ? `\n\nSeverity rubric (user-defined):\n${rubricLines.join("\n")}` : "";
+   return `${base}${rubricBlock}\n${LANGUAGE_HINT[language]}`;
+@@ -64,7 +72,7 @@ function renderPrompt(trigger: ComplaintHistoryEntry): string {
+   // to the classifier. Summaries describe the trigger alone — no enrichment
+   // from history. If context-aware summaries are desired later, that should
+   // be a separate post-classify enrichment call.
+-  return `Message to classify:\n"${trigger.content}"`;
++  return classifierInput(trigger.content).prompt;
+ }
+ 
+ /**
+@@ -72,7 +80,7 @@ function renderPrompt(trigger: ComplaintHistoryEntry): string {
+  * per-call because system prompt, schema (category enum), and rubric are all
+  * user-configurable at runtime — model selection alone is not enough to key it.
+  */
+-function buildClassifierDrone(
++export function buildClassifierDrone(
+   model: string,
+   language: "es" | "en",
+   overrides: ClassifierOverrides | undefined,
+@@ -100,13 +108,14 @@ export async function classifyMessage(
+   signal?: AbortSignal,
+   language: "es" | "en" = "es",
+   overrides?: ClassifierOverrides,
++  observer?: TerminalObserver,
+ ): Promise<ComplaintResult> {
+   if (history.length === 0) {
+     throw new Error("alert classifier: history is empty — trigger message required");
+   }
+   const trigger = history[history.length - 1];
+   const drone = buildClassifierDrone(model, language, overrides);
+-  const result = await runDrone(
++  const result = await runDroneWithUsage(
+     drone,
+     {
+       prompt: renderPrompt(trigger),
+@@ -114,9 +123,10 @@ export async function classifyMessage(
+       maxTokens: 256,
+     },
+     host,
++    observer,
+   );
+   if (!result.ok) {
+-    throw new Error(`alert classifier failed: ${result.error.code} ${result.error.message}`);
++    throw new Error(`alert classifier failed: ${result.error.code}`);
+   }
+   const data = result.data as unknown as Record<string, unknown>;
+   return {
+diff --git a/extensions/alert-watcher/src/reply-flow/store.ts b/extensions/alert-watcher/src/reply-flow/store.ts
+index ae5c0b004ffdbe69ba1098449d211f4b5d0145e8..e6134e30711ae1dab7201f83a29a0d6655867db3 100644
+--- a/extensions/alert-watcher/src/reply-flow/store.ts
++++ b/extensions/alert-watcher/src/reply-flow/store.ts
+@@ -22,6 +22,19 @@ export function initReplySchema(db: DatabaseSync): void {
+     );
+     CREATE INDEX IF NOT EXISTS idx_pending_open ON pending_replies(expires_at) WHERE claimed_by IS NULL;
+   `);
++  const columns = db.prepare("PRAGMA table_info(pending_replies)").all() as Array<{ name: string }>;
++  for (const [name, type] of [
++    ["receipt_binding", "TEXT"],
++    ["payload_expires_at", "INTEGER"],
++    ["redacted_at", "INTEGER"],
++  ]) {
++    if (!columns.some((c) => c.name === name)) {
++      db.exec(`ALTER TABLE pending_replies ADD COLUMN ${name} ${type}`);
++    }
++  }
++  db.exec(
++    "CREATE UNIQUE INDEX IF NOT EXISTS idx_pending_receipt ON pending_replies(receipt_binding) WHERE receipt_binding IS NOT NULL",
++  );
+ }
+ 
+ export interface InsertPendingParams {
+@@ -69,13 +82,15 @@ export function findOpenPendingForSender(
+   const rows = db
+     .prepare(
+       `SELECT * FROM pending_replies
+-        WHERE claimed_by IS NULL AND expires_at > ?
++        WHERE claimed_by IS NULL AND expires_at > ? AND redacted_at IS NULL AND (payload_expires_at IS NULL OR payload_expires_at > ?)
+         ORDER BY id DESC`,
+     )
+-    .all(now) as unknown as PendingReplyRow[];
++    .all(now, now) as unknown as PendingReplyRow[];
+   for (const row of rows) {
+     const dests = JSON.parse(row.destinations_json) as string[];
+-    if (dests.includes(sender)) return row;
++    if (dests.includes(sender)) {
++      return row;
++    }
+   }
+   return undefined;
+ }
+@@ -92,9 +107,9 @@ export function claimPending(
+          SET claimed_by = ?, claimed_at = ?
+        WHERE id = ?
+          AND claimed_by IS NULL
+-         AND expires_at > ?`,
++         AND expires_at > ? AND redacted_at IS NULL AND (payload_expires_at IS NULL OR payload_expires_at > ?)`,
+     )
+-    .run(claimedBy, now, id, now);
++    .run(claimedBy, now, id, now, now);
+   return Number(r.changes) === 1;
+ }
+ 
+@@ -115,3 +130,52 @@ export function releasePending(db: DatabaseSync, id: number): void {
+     id,
+   );
+ }
++
++/** Called inside the first-confirmed-send transaction. Never refreshes existing state. */
++export function insertBoundPending(
++  db: DatabaseSync,
++  p: InsertPendingParams & { receiptBinding: string; createdAt: number; payloadExpiresAt: number },
++): number {
++  const old = db
++    .prepare("SELECT * FROM pending_replies WHERE receipt_binding=?")
++    .get(p.receiptBinding) as (PendingReplyRow & { redacted_at: number | null }) | undefined;
++  if (old) {
++    if (old.redacted_at !== null) {
++      return old.id;
++    }
++    if (
++      old.alert_id !== p.alertId ||
++      old.origin_channel !== p.originChannel ||
++      old.origin_account_id !== p.originAccountId ||
++      old.origin_chat_id !== p.originChatId ||
++      old.destinations_json !== JSON.stringify(p.destinations) ||
++      old.suggestions_json !== JSON.stringify(p.suggestions) ||
++      old.language !== p.language ||
++      old.created_at !== p.createdAt ||
++      old.expires_at !== Math.min(p.expiresAt, p.payloadExpiresAt)
++    ) {
++      throw new Error("pending_reply_binding_conflict");
++    }
++    return old.id;
++  }
++  const expired = p.payloadExpiresAt <= Date.now() || p.expiresAt <= Date.now();
++  const r = db
++    .prepare(
++      `INSERT INTO pending_replies(alert_id,origin_channel,origin_account_id,origin_chat_id,destinations_json,suggestions_json,language,expires_at,created_at,receipt_binding,payload_expires_at,redacted_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)`,
++    )
++    .run(
++      p.alertId,
++      expired ? "" : p.originChannel,
++      expired ? null : p.originAccountId,
++      expired ? "" : p.originChatId,
++      JSON.stringify(expired ? [] : p.destinations),
++      JSON.stringify(expired ? [] : p.suggestions),
++      p.language,
++      Math.min(p.expiresAt, p.payloadExpiresAt),
++      p.createdAt,
++      p.receiptBinding,
++      p.payloadExpiresAt,
++      expired ? Date.now() : null,
++    );
++  return Number(r.lastInsertRowid);
++}
+diff --git a/extensions/alert-watcher/src/reply-flow/suggestions-drone.test.ts b/extensions/alert-watcher/src/reply-flow/suggestions-drone.test.ts
+index e4f5ef5ba84729a637a70b9a8a50a6f69b9cdcd6..21d3c1c1dc802772ecd5170dbd2f2e5d14c7c8f1 100644
+--- a/extensions/alert-watcher/src/reply-flow/suggestions-drone.test.ts
++++ b/extensions/alert-watcher/src/reply-flow/suggestions-drone.test.ts
+@@ -1,6 +1,8 @@
+ import type { DroneHost } from "@minion-stack/drone";
+ import { describe, expect, it, vi } from "vitest";
+ 
++vi.hoisted(() => vi.resetModules());
++
+ vi.mock("@minion-stack/drone", async (importOriginal) => {
+   const actual = await importOriginal<typeof import("@minion-stack/drone")>();
+   return {
+diff --git a/extensions/alert-watcher/src/reply-flow/suggestions-drone.ts b/extensions/alert-watcher/src/reply-flow/suggestions-drone.ts
+index ced8638f3291be296d4dba457c8a62bdcf9b9aa6..2c627a1c21d37267eca0bee7245cab9b728cdbfa 100644
+--- a/extensions/alert-watcher/src/reply-flow/suggestions-drone.ts
++++ b/extensions/alert-watcher/src/reply-flow/suggestions-drone.ts
+@@ -1,6 +1,7 @@
+-import { defineDrone, runDrone } from "@minion-stack/drone";
++import { defineDrone } from "@minion-stack/drone";
+ import type { DroneHost } from "@minion-stack/drone";
+ import { Type } from "@sinclair/typebox";
++import { runDroneWithUsage, type TerminalObserver } from "../../../../src/drones/run-with-usage.js";
+ 
+ export interface SuggestionsInput {
+   language: string;
+@@ -56,6 +57,7 @@ export async function runSuggestionsDrone(
+   host: DroneHost,
+   model: string,
+   input: SuggestionsInput,
++  observer?: TerminalObserver,
+ ): Promise<string[]> {
+   try {
+     // Build a per-call drone so the model parameter AND the configured count
+@@ -68,14 +70,16 @@ export async function runSuggestionsDrone(
+       output: buildOutputSchema(input.count),
+       timeoutMs: 15_000,
+     });
+-    const result = await runDrone(
++    const result = await runDroneWithUsage(
+       callDrone,
+       {
+         prompt: buildSuggestionsPrompt(input),
++        abortSignal: observer?.signal,
+         maxTokens: 500,
+         temperature: 0.4,
+       },
+       host,
++      observer,
+     );
+     if (!result.ok) {
+       return [];
+@@ -84,7 +88,10 @@ export async function runSuggestionsDrone(
+       .map((s) => s.trim())
+       .filter((s) => s.length > 0)
+       .slice(0, input.count);
+-  } catch {
++  } catch (err) {
++    if (observer) {
++      throw err;
++    }
+     return [];
+   }
+ }
+diff --git a/extensions/alert-watcher/src/store.ts b/extensions/alert-watcher/src/store.ts
+index 369720928d8469c878c78c1e2337c36a243da7b9..4775be7c670d50f09319d1c6c80832774777f106 100644
+--- a/extensions/alert-watcher/src/store.ts
++++ b/extensions/alert-watcher/src/store.ts
+@@ -1,4 +1,5 @@
+ import type { DatabaseSync } from "node:sqlite";
++import { initWorkSchema } from "./classification-work.js";
+ import type { ComplaintResult, ComplaintRow } from "./types.js";
+ 
+ export function initSchema(db: DatabaseSync): void {
+@@ -19,6 +20,13 @@ export function initSchema(db: DatabaseSync): void {
+     );
+     CREATE INDEX IF NOT EXISTS idx_complaints_chat_id ON complaints(chat_id, created_at);
+   `);
++  const deliveryCols = db.prepare(`PRAGMA table_info(complaints)`).all() as Array<{ name: string }>;
++  if (!deliveryCols.some((c) => c.name === "delivery_disposition")) {
++    db.exec(
++      "ALTER TABLE complaints ADD COLUMN delivery_disposition TEXT NOT NULL DEFAULT 'legacy_unreconciled'",
++    );
++  }
++  initWorkSchema(db);
+   // C2: notify_attempts column added 2026-05-22 to cap boot retries.
+   // Additive migration — column added with default 0 if absent.
+   const cols = db.prepare(`PRAGMA table_info(complaints)`).all() as Array<{ name: string }>;
+@@ -49,6 +57,7 @@ export function getRetryablePendingNotifications(
+         WHERE is_complaint = 1
+           AND notified_at IS NULL
+           AND notify_attempts < ?
++          AND delivery_disposition != 'legacy_unreconciled'
+         ORDER BY created_at ASC`,
+     )
+     .all(maxAttempts) as ComplaintRow[];
+diff --git a/src/drones/host.ts b/src/drones/host.ts
+index 859caf93acab804583c21d779ed04d78a763550d..9a32f7439680de4e90e7466b202dec54784dd8a8 100644
+--- a/src/drones/host.ts
++++ b/src/drones/host.ts
+@@ -11,6 +11,7 @@ import { emitEvent } from "../events/emitter.js";
+ 
+ export type GatewayDroneHostOptions = {
+   config?: MinionConfig;
++  usageMode?: "inferred" | "result";
+   agentDir?: string;
+   /** Workspace dir for skill resolution. */
+   workspaceDir?: string;
+@@ -35,7 +36,15 @@ export function createGatewayDroneHost(opts: GatewayDroneHostOptions = {}): Dron
+ 
+   return {
+     async resolveApiKey(spec: DroneModelSpec) {
+-      const auth = await resolveProvider(spec, config, agentDir);
++      const auth =
++        opts.usageMode === "result"
++          ? await resolveApiKeyForProvider({
++              provider: spec.provider,
++              cfg: config,
++              profileId: spec.authProfileId,
++              agentDir,
++            })
++          : await resolveProvider(spec, config, agentDir);
+       resolvedModel = { provider: spec.provider, model: spec.model };
+       const apiKey = requireApiKey(auth, spec.provider);
+       return { apiKey, source: auth.source };
+@@ -80,7 +89,12 @@ export function createGatewayDroneHost(opts: GatewayDroneHostOptions = {}): Dron
+       // drone-summarize, the drones.run RPC / paperclip pipeline) was invisible to
+       // cost tracking. Emitted only on a successful end with usage + a known model;
+       // channel/source tag them as system-initiated "drone" origin in the breakdown.
+-      if (input.event === "agent.run.end" && input.usage && resolvedModel) {
++      if (
++        opts.usageMode !== "result" &&
++        input.event === "agent.run.end" &&
++        input.usage &&
++        resolvedModel
++      ) {
+         const u = input.usage;
+         const inTok = u.inputTokens ?? 0;
+         const outTok = u.outputTokens ?? 0;
+diff --git a/src/gateway/server-core/server-cron.ts b/src/gateway/server-core/server-cron.ts
+index b5ad33a040d20c0fe64f65d53a305e99b41d5c80..b63deaf3bccb8537ed3100a1f2ff17088495365d 100644
+--- a/src/gateway/server-core/server-cron.ts
++++ b/src/gateway/server-core/server-cron.ts
+@@ -1,11 +1,7 @@
+ import { resolveDefaultAgentId } from "../../agents/agent-scope.js";
+ import type { CliDeps } from "../../cli/deps.js";
+ import { loadConfig } from "../../config/config.js";
+-import {
+-  canonicalizeMainSessionAlias,
+-  resolveAgentIdFromSessionKey,
+-  resolveAgentMainSessionKey,
+-} from "../../config/sessions.js";
++import { resolveAgentIdFromSessionKey, resolveAgentMainSessionKey } from "../../config/sessions.js";
+ import { resolveStorePath } from "../../config/sessions/paths.js";
+ import { runHeartbeatOnce } from "../../infra/heartbeat-runner.js";
+ import { requestHeartbeatNow } from "../../infra/heartbeat-wake.js";
+@@ -13,12 +9,13 @@ import { fetchWithSsrFGuard } from "../../infra/net/fetch-guard.js";
+ import { enqueueSystemEvent } from "../../infra/system-events.js";
+ import { getChildLogger } from "../../logging.js";
+ import { emitReliabilityEvent } from "../../logging/reliability.js";
++import { validateCronBinding } from "../../platform/cron/binding.js";
+ import { runCronIsolatedAgentTurn } from "../../platform/cron/isolated-agent.js";
+ import { appendCronRunLog, resolveCronRunLogPath } from "../../platform/cron/run-log.js";
+ import { CronService } from "../../platform/cron/service.js";
+ import { resolveCronStorePath } from "../../platform/cron/store.js";
+ import { normalizeHttpWebhookUrl } from "../../platform/cron/webhook-url.js";
+-import { normalizeAgentId, toAgentStoreSessionKey } from "../../routing/session-key.js";
++import { normalizeAgentId } from "../../routing/session-key.js";
+ import { defaultRuntime } from "../../runtime.js";
+ 
+ export type GatewayCronState = {
+@@ -75,16 +72,7 @@ export function buildGatewayCronService(params: {
+ 
+   const resolveCronAgent = (requested?: string | null) => {
+     const runtimeConfig = loadConfig();
+-    const normalized =
+-      typeof requested === "string" && requested.trim() ? normalizeAgentId(requested) : undefined;
+-    const hasAgent =
+-      normalized !== undefined &&
+-      Array.isArray(runtimeConfig.agents?.list) &&
+-      runtimeConfig.agents.list.some(
+-        (entry) =>
+-          entry && typeof entry.id === "string" && normalizeAgentId(entry.id) === normalized,
+-      );
+-    const agentId = hasAgent ? normalized : resolveDefaultAgentId(runtimeConfig);
++    const { agentId } = validateCronBinding(runtimeConfig, { agentId: requested });
+     return { agentId, cfg: runtimeConfig };
+   };
+ 
+@@ -93,33 +81,18 @@ export function buildGatewayCronService(params: {
+     agentId: string;
+     requestedSessionKey?: string | null;
+   }) => {
+-    const requested = params.requestedSessionKey?.trim();
+-    if (!requested) {
+-      return resolveAgentMainSessionKey({
+-        cfg: params.runtimeConfig,
+-        agentId: params.agentId,
+-      });
+-    }
+-    const candidate = toAgentStoreSessionKey({
+-      agentId: params.agentId,
+-      requestKey: requested,
+-      mainKey: params.runtimeConfig.session?.mainKey,
+-    });
+-    const canonical = canonicalizeMainSessionAlias({
+-      cfg: params.runtimeConfig,
+-      agentId: params.agentId,
+-      sessionKey: candidate,
++    const binding = validateCronBinding(params.runtimeConfig, {
++      agentId: params.runtimeConfig.agents?.list?.some(
++        (a) => normalizeAgentId(a.id) === params.agentId,
++      )
++        ? params.agentId
++        : undefined,
++      sessionKey: params.requestedSessionKey,
+     });
+-    if (canonical !== "global") {
+-      const sessionAgentId = resolveAgentIdFromSessionKey(canonical);
+-      if (normalizeAgentId(sessionAgentId) !== normalizeAgentId(params.agentId)) {
+-        return resolveAgentMainSessionKey({
+-          cfg: params.runtimeConfig,
+-          agentId: params.agentId,
+-        });
+-      }
+-    }
+-    return canonical;
++    return (
++      binding.sessionKey ??
++      resolveAgentMainSessionKey({ cfg: params.runtimeConfig, agentId: params.agentId })
++    );
+   };
+ 
+   const resolveCronWakeTarget = (opts?: { agentId?: string; sessionKey?: string | null }) => {
+@@ -155,6 +128,7 @@ export function buildGatewayCronService(params: {
+     cronEnabled,
+     cronConfig: params.cfg.cron,
+     defaultAgentId,
++    currentConfig: loadConfig,
+     resolveSessionStorePath,
+     sessionStorePath,
+     enqueueSystemEvent: (text, opts) => {
+diff --git a/src/gateway/server-methods/cron.ts b/src/gateway/server-methods/cron.ts
+index fdb12280a6d16d17d75586ce263fbc93089e0f24..4ba994825f6a7c72e7074c6b9772e614bb5008f5 100644
+--- a/src/gateway/server-methods/cron.ts
++++ b/src/gateway/server-methods/cron.ts
+@@ -68,7 +68,13 @@ export const cronHandlers: GatewayRequestHandlers = {
+     respond(true, status, undefined);
+   },
+   "cron.add": async ({ params, respond, context }) => {
+-    const normalized = normalizeCronJobCreate(params) ?? params;
++    let normalized: unknown;
++    try {
++      normalized = normalizeCronJobCreate(params) ?? params;
++    } catch {
++      respondError(respond, ErrorCodes.INVALID_REQUEST, "invalid cron binding: blank field");
++      return;
++    }
+     if (!validateCronAddParams(normalized)) {
+       respondError(
+         respond,
+@@ -87,7 +93,13 @@ export const cronHandlers: GatewayRequestHandlers = {
+     respond(true, job, undefined);
+   },
+   "cron.update": async ({ params, respond, context }) => {
+-    const normalizedPatch = normalizeCronJobPatch((params as { patch?: unknown } | null)?.patch);
++    let normalizedPatch: ReturnType<typeof normalizeCronJobPatch>;
++    try {
++      normalizedPatch = normalizeCronJobPatch((params as { patch?: unknown } | null)?.patch);
++    } catch {
++      respondError(respond, ErrorCodes.INVALID_REQUEST, "invalid cron binding: blank field");
++      return;
++    }
+     const candidate =
+       normalizedPatch && typeof params === "object" && params !== null
+         ? { ...params, patch: normalizedPatch }
+diff --git a/src/gateway/server.cron.e2e.test.ts b/src/gateway/server.cron.e2e.test.ts
+index 266d8270992f083c8e5f6ca13d7f9925251eb949..f32c42bc0021bc11f9319dcd6202e9f717e66c44 100644
+--- a/src/gateway/server.cron.e2e.test.ts
++++ b/src/gateway/server.cron.e2e.test.ts
+@@ -12,6 +12,35 @@ import {
+   waitForSystemEvent,
+ } from "./test-helpers.js";
+ 
++// The webhook fixture controls DNS while retaining the real guarded fetch path.
++const webhookDns = vi.hoisted(() => ({
++  enabled: false,
++  lookup: vi.fn(async (hostname: string, options: unknown) => {
++    if (!["example.invalid", "legacy.example.invalid"].includes(hostname)) {
++      throw new Error(`Unexpected webhook DNS target: ${hostname}`);
++    }
++    expect(options).toEqual({ all: true });
++    return [{ address: "93.184.216.34", family: 4 }];
++  }),
++}));
++vi.mock("../infra/net/fetch-guard.js", async (importOriginal) => {
++  const actual = await importOriginal<typeof import("../infra/net/fetch-guard.js")>();
++  return {
++    ...actual,
++    fetchWithSsrFGuard: async (params: Parameters<typeof actual.fetchWithSsrFGuard>[0]) => {
++      if (!webhookDns.enabled) {
++        return actual.fetchWithSsrFGuard(params);
++      }
++      const result = await actual.fetchWithSsrFGuard({
++        ...params,
++        lookupFn: webhookDns.lookup as unknown as NonNullable<typeof params.lookupFn>,
++      });
++      await result.release();
++      return result;
++    },
++  };
++});
++
+ installGatewayTestHooks({ scope: "suite" });
+ 
+ async function yieldToEventLoop() {
+@@ -92,6 +121,33 @@ describe("gateway server cron", () => {
+       expect(addRes.ok).toBe(true);
+       expect(typeof (addRes.payload as { id?: unknown } | null)?.id).toBe("string");
+ 
++      // Reject explicit invalid ownership before normalization or any stored mutation.
++      const admittedId = (addRes.payload as { id: string }).id;
++      for (const binding of [
++        { agentId: "" },
++        { agentId: " \n\t" },
++        { sessionKey: "" },
++        { sessionKey: " \n\t" },
++        { agentId: "missing-agent" },
++        { sessionKey: "global" },
++        { sessionKey: "agent:other:origin" },
++      ]) {
++        const invalidAdd = await rpcReq(ws, "cron.add", {
++          job: {
++            name: "invalid binding",
++            enabled: true,
++            schedule: { kind: "every", everyMs: 60000 },
++            sessionTarget: "main",
++            wakeMode: "next-heartbeat",
++            payload: { kind: "systemEvent", text: "must not run" },
++            ...binding,
++          },
++        });
++        expect(invalidAdd.ok).toBe(false);
++        const invalidUpdate = await rpcReq(ws, "cron.update", { id: admittedId, patch: binding });
++        expect(invalidUpdate.ok).toBe(false);
++      }
++
+       const listRes = await rpcReq(ws, "cron.list", {
+         includeDisabled: true,
+       });
+@@ -444,6 +500,8 @@ describe("gateway server cron", () => {
+   }, 45_000);
+ 
+   test("posts webhooks for delivery mode and legacy notify fallback only when summary exists", async () => {
++    webhookDns.enabled = true;
++    webhookDns.lookup.mockClear();
+     const prevSkipCron = process.env.OPENCLAW_SKIP_CRON;
+     process.env.OPENCLAW_SKIP_CRON = "0";
+     const dir = await fs.mkdtemp(path.join(os.tmpdir(), "openclaw-gw-cron-webhook-"));
+@@ -469,7 +527,7 @@ describe("gateway server cron", () => {
+       JSON.stringify({ version: 1, jobs: [legacyNotifyJob] }),
+     );
+ 
+-    const configPath = process.env.OPENCLAW_CONFIG_PATH;
++    const configPath = process.env.MINION_CONFIG_PATH;
+     expect(typeof configPath).toBe("string");
+     await fs.mkdir(path.dirname(configPath as string), { recursive: true });
+     await fs.writeFile(
+@@ -606,7 +664,12 @@ describe("gateway server cron", () => {
+       await yieldToEventLoop();
+       await yieldToEventLoop();
+       expect(fetchMock).toHaveBeenCalledTimes(2);
++      expect(webhookDns.lookup.mock.calls.map(([hostname]) => hostname)).toEqual([
++        "example.invalid",
++        "legacy.example.invalid",
++      ]);
+     } finally {
++      webhookDns.enabled = false;
+       ws.close();
+       await server.close();
+       await rmTempDir(dir);
+diff --git a/src/infra/outbound/deliver.ts b/src/infra/outbound/deliver.ts
+index e6b467904f6638da56db08c1eec1ffd0986b8b57..9dcdf2f6ee4dc7191c622695dee8ff9fa1b53efc 100644
+--- a/src/infra/outbound/deliver.ts
++++ b/src/infra/outbound/deliver.ts
+@@ -34,6 +34,7 @@ import { getGlobalHookRunner } from "../../plugins/hook-runner-global.js";
+ import type { sendMessageWhatsApp } from "../../web/outbound.js";
+ import { record as recordLedgerRow } from "../message-ledger.js";
+ import { throwIfAborted } from "./abort.js";
++import { enforceDeliveryRetention, readQueuedDelivery } from "./delivery-queue-files.js";
+ import {
+   acknowledgeTerminalDelivery,
+   checkpointQueuedPayload,
+@@ -46,6 +47,7 @@ import {
+   type DeliveryQueueLease,
+   type QueuedPayloadState,
+ } from "./delivery-queue.js";
++import type { CallerRetention } from "./delivery-retention.js";
+ import type { OutboundIdentity } from "./identity.js";
+ import type { NormalizedOutboundPayload } from "./payloads.js";
+ import { normalizeReplyPayloadsForDelivery } from "./payloads.js";
+@@ -320,6 +322,9 @@ type DeliverOutboundPayloadsParams = {
+   queueId?: string;
+   /** @internal Retain terminal queue bytes until correlated caller state settles. */
+   completionPolicy?: "caller";
++  callerRetention?: CallerRetention;
++  /** @internal Disposable or gateway-owned state root. */
++  stateDir?: string;
+   /** @internal Skip write-ahead queue (used by crash-recovery to avoid re-enqueueing). */
+   skipQueue?: boolean;
+   /** @internal Existing fenced queue entry used by crash recovery. */
+@@ -338,6 +343,7 @@ type DeliveryObserverError = {
+ };
+ 
+ type DeliverOutboundPayloadsCoreParams = DeliverOutboundPayloadsParams & {
++  beforeProvider?: () => Promise<void>;
+   payloadIds: string[];
+   checkpoint?: (params: {
+     payloadId: string;
+@@ -546,7 +552,7 @@ async function executeDelivery(params: DeliverOutboundPayloadsParams): Promise<D
+   let queueGeneration = 0;
+   let queueLease: DeliveryQueueLease | undefined;
+   let ownsQueueLease = false;
+-  let queueStateDir: string | undefined;
++  let queueStateDir: string | undefined = params.stateDir;
+   let durabilityStatus: OutboundDeliveryDurabilityStatus = "not-requested";
+   let durabilityError: unknown;
+   let requiresCallerAcknowledgement = false;
+@@ -563,20 +569,24 @@ async function executeDelivery(params: DeliverOutboundPayloadsParams): Promise<D
+     durabilityStatus = "checkpointed";
+   } else if (!params.skipQueue) {
+     try {
+-      const queued = await enqueueDeliveryWithLease({
+-        id: params.queueId,
+-        channel: params.channel,
+-        to: params.to,
+-        accountId: params.accountId,
+-        payloads: params.payloads,
+-        threadId: params.threadId,
+-        replyToId: params.replyToId,
+-        bestEffort: params.bestEffort,
+-        gifPlayback: params.gifPlayback,
+-        silent: params.silent,
+-        mirror: params.mirror,
+-        completionPolicy: params.completionPolicy,
+-      });
++      const queued = await enqueueDeliveryWithLease(
++        {
++          id: params.queueId,
++          channel: params.channel,
++          to: params.to,
++          accountId: params.accountId,
++          payloads: params.payloads,
++          threadId: params.threadId,
++          replyToId: params.replyToId,
++          bestEffort: params.bestEffort,
++          gifPlayback: params.gifPlayback,
++          silent: params.silent,
++          mirror: params.mirror,
++          completionPolicy: params.completionPolicy,
++          callerRetention: params.callerRetention,
++        },
++        ...((params.stateDir === undefined ? [] : [params.stateDir]) as [string?]),
++      );
+       queueId = queued.entry.id;
+       payloadIds = queued.entry.payloads.map((payload) => payload.id);
+       queueGeneration = queued.entry.generation;
+@@ -626,7 +636,23 @@ async function executeDelivery(params: DeliverOutboundPayloadsParams): Promise<D
+   let report: CoreDeliveryReport;
+   let setupError: unknown;
+   try {
+-    report = await deliverOutboundPayloadsCore({ ...params, payloadIds, checkpoint });
++    const beforeProvider =
++      queueId &&
++      queueLease &&
++      (params.callerRetention !== undefined || params.queueContext !== undefined)
++        ? async () => {
++            const persisted = await readQueuedDelivery(queueId!, queueStateDir);
++            if (!(await enforceDeliveryRetention(persisted, queueLease!, queueStateDir))) {
++              throw new OutboundDeliveryNoEffectError("Caller payload expired");
++            }
++          }
++        : undefined;
++    report = await deliverOutboundPayloadsCore({
++      ...params,
++      payloadIds,
++      checkpoint,
++      beforeProvider,
++    });
+   } catch (err) {
+     setupError = err;
+     report = {
+@@ -811,6 +837,7 @@ async function deliverOutboundPayloadsCore(
+   ) => {
+     throwIfAborted(abortSignal);
+     if (!handler.chunker || textLimit === undefined) {
++      await params.beforeProvider?.();
+       providerCallStarted = true;
+       results.push(await handler.sendText(text, overrides));
+       return;
+@@ -832,6 +859,7 @@ async function deliverOutboundPayloadsCore(
+         }
+         for (const chunk of chunks) {
+           throwIfAborted(abortSignal);
++          await params.beforeProvider?.();
+           providerCallStarted = true;
+           results.push(await handler.sendText(chunk, overrides));
+         }
+@@ -841,6 +869,7 @@ async function deliverOutboundPayloadsCore(
+     const chunks = handler.chunker(text, textLimit);
+     for (const chunk of chunks) {
+       throwIfAborted(abortSignal);
++      await params.beforeProvider?.();
+       providerCallStarted = true;
+       results.push(await handler.sendText(chunk, overrides));
+     }
+@@ -848,6 +877,7 @@ async function deliverOutboundPayloadsCore(
+ 
+   const sendSignalText = async (text: string, styles: SignalTextStyleRange[]) => {
+     throwIfAborted(abortSignal);
++    await params.beforeProvider?.();
+     providerCallStarted = true;
+     return {
+       channel: "signal" as const,
+@@ -885,6 +915,7 @@ async function deliverOutboundPayloadsCore(
+       text: caption,
+       styles: [],
+     };
++    await params.beforeProvider?.();
+     providerCallStarted = true;
+     return {
+       channel: "signal" as const,
+@@ -1092,6 +1123,7 @@ async function deliverOutboundPayloadsCore(
+     if (params.onPayload) {
+       observe("onPayload", () => params.onPayload!(payloadSummary));
+     }
++    await params.beforeProvider?.();
+     if (!(await checkpoint({ payloadId, nextState: "in-flight" }))) {
+       payloadOutcomes.push({ payloadId, state: "failed", error: checkpointError });
+       fatalError = checkpointError;
+@@ -1105,6 +1137,7 @@ async function deliverOutboundPayloadsCore(
+         threadId: params.threadId ?? undefined,
+       };
+       if (handler.sendPayload && effectivePayload.channelData) {
++        await params.beforeProvider?.();
+         providerCallStarted = true;
+         const delivery = await handler.sendPayload(effectivePayload, sendOverrides);
+         results.push(delivery);
+@@ -1127,6 +1160,7 @@ async function deliverOutboundPayloadsCore(
+           if (isSignalChannel) {
+             results.push(await sendSignalMedia(caption, url));
+           } else {
++            await params.beforeProvider?.();
+             providerCallStarted = true;
+             results.push(await handler.sendMedia(caption, url, sendOverrides));
+           }
+diff --git a/src/infra/outbound/delivery-queue-files.ts b/src/infra/outbound/delivery-queue-files.ts
+index f1dd340ad9bafdd14afa4e25d85e14147a988d1a..824874a820e0a6d2a2064652416caf3418ff38ce 100644
+--- a/src/infra/outbound/delivery-queue-files.ts
++++ b/src/infra/outbound/delivery-queue-files.ts
+@@ -308,6 +308,9 @@ export async function acquireDeliveryRecoveryLease(stateDir?: string): Promise<D
+ }
+ 
+ export async function readQueuedDelivery(id: string, stateDir?: string): Promise<QueuedDelivery> {
++  if (await readDeliveryTombstone(id, stateDir)) {
++    throw new DeliveryQueueHealthError("Delivery has a retained tombstone");
++  }
+   const filePath = resolveEntryPath(id, stateDir);
+   const raw = await readBoundedFile(filePath, MAX_QUEUE_FILE_BYTES);
+   const entry = parseQueuedDelivery(raw, path.basename(filePath));
+@@ -378,3 +381,234 @@ export async function writeEntryAtomic(
+     throw err;
+   }
+ }
++
++export type DeliveryTombstone = {
++  version: 1;
++  id: string;
++  generation: number;
++  namespaceHash: string;
++  payloadHash: string;
++  recipientHash: string;
++  retiredAt: number;
++  reason: "expired" | "settled";
++  payloads: Array<{
++    id: string;
++    state: string;
++    acceptedAt?: number;
++    receipt?: QueuedDelivery["payloads"][number]["receipt"];
++  }>;
++};
++function tombstonePath(id: string, stateDir?: string): string {
++  return path.join(
++    resolveQueueDir(stateDir),
++    ".retained",
++    `${assertSafeId(id, "delivery id")}.json`,
++  );
++}
++export async function readDeliveryTombstone(
++  id: string,
++  stateDir?: string,
++): Promise<DeliveryTombstone | undefined> {
++  try {
++    const value = JSON.parse(
++      await readBoundedFile(tombstonePath(id, stateDir), 65536),
++    ) as DeliveryTombstone;
++    if (
++      value.version !== 1 ||
++      value.id !== id ||
++      !Number.isSafeInteger(value.generation) ||
++      value.generation < 0 ||
++      !Number.isSafeInteger(value.retiredAt) ||
++      value.retiredAt <= 0 ||
++      !["expired", "settled"].includes(value.reason) ||
++      !Array.isArray(value.payloads) ||
++      value.payloads.length > 256 ||
++      [value.namespaceHash, value.payloadHash, value.recipientHash].some(
++        (hash) => typeof hash !== "string" || !/^[a-f0-9]{64}$/.test(hash),
++      )
++    ) {
++      throw new DeliveryQueueHealthError("Malformed delivery tombstone");
++    }
++    for (const payload of value.payloads) {
++      assertSafeId(payload.id, "retained payload id");
++      if (!["pending", "accepted", "suppressed", "uncertain"].includes(payload.state)) {
++        throw new DeliveryQueueHealthError("Malformed retained payload state");
++      }
++      if (
++        (payload.state === "accepted" || payload.state === "suppressed") &&
++        (!Number.isSafeInteger(payload.acceptedAt) ||
++          payload.acceptedAt! <= 0 ||
++          !payload.receipt ||
++          !Number.isSafeInteger(payload.receipt.providerMessageIdCount) ||
++          payload.receipt.providerMessageIdCount < 0 ||
++          !Array.isArray(payload.receipt.providerMessageIds) ||
++          payload.receipt.providerMessageIds.length > 32 ||
++          payload.receipt.providerMessageIds.some(
++            (messageId) => typeof messageId !== "string" || messageId.length > 2048,
++          ))
++      ) {
++        throw new DeliveryQueueHealthError("Malformed retained acceptance");
++      }
++    }
++    return value;
++  } catch (err) {
++    if (errorCode(err) === "ENOENT") {
++      return undefined;
++    }
++    throw err;
++  }
++}
++/** Fence replay durably before removing any private payload. The entry lease remains held. */
++export async function retainDeliveryTombstone(
++  entry: QueuedDelivery,
++  lease: DeliveryQueueLease,
++  reason: "expired" | "settled",
++  stateDir?: string,
++): Promise<void> {
++  await assertEntryLease(entry.id, lease);
++  const guard = entry.callerRetention;
++  if (!guard) {
++    throw new DeliveryQueueHealthError("Retention requires a bound caller");
++  }
++  const finalPath = tombstonePath(entry.id, stateDir);
++  const directory = path.dirname(finalPath);
++  await fs.promises.mkdir(directory, { recursive: true, mode: 0o700 });
++  const value: DeliveryTombstone = {
++    version: 1,
++    id: entry.id,
++    generation: entry.generation,
++    namespaceHash: guard.namespaceHash,
++    payloadHash: guard.payloadHash,
++    recipientHash: guard.recipientHash,
++    retiredAt: Date.now(),
++    reason,
++    payloads: entry.payloads.map(({ id, state, acceptedAt, receipt }) => ({
++      id,
++      state: state === "in-flight" ? "uncertain" : state,
++      acceptedAt,
++      receipt: receipt
++        ? {
++            ...receipt,
++            providerMessageIds: receipt.providerMessageIds.map((id) =>
++              crypto.createHash("sha256").update(id).digest("hex"),
++            ),
++          }
++        : undefined,
++    })),
++  };
++  const temporary = `${finalPath}.tmp-${crypto.randomUUID()}`;
++  const handle = await fs.promises.open(temporary, "wx", 0o600);
++  try {
++    await handle.writeFile(JSON.stringify(value));
++    await handle.sync();
++  } finally {
++    await handle.close();
++  }
++  await fs.promises.rename(temporary, finalPath);
++  await syncDirectory(directory);
++  await fs.promises.unlink(resolveEntryPath(entry.id, stateDir)).catch((err) => {
++    if (errorCode(err) !== "ENOENT") {
++      throw err;
++    }
++  });
++  // A failed cleanup leaves the tombstone authoritative; reads/enqueues still reject.
++  await fs.promises
++    .unlink(path.join(resolveFailedDir(stateDir), `${entry.id}.json`))
++    .catch((err) => {
++      if (errorCode(err) !== "ENOENT") {
++        throw err;
++      }
++    });
++  await syncDirectory(resolveQueueDir(stateDir));
++}
++export async function enforceDeliveryRetention(
++  entry: QueuedDelivery,
++  lease: DeliveryQueueLease,
++  stateDir?: string,
++): Promise<boolean> {
++  await assertEntryLease(entry.id, lease);
++  if (await readDeliveryTombstone(entry.id, stateDir)) {
++    return false;
++  }
++  if (!entry.callerRetention || Date.now() < entry.callerRetention.expiresAt) {
++    return true;
++  }
++  await retainDeliveryTombstone(entry, lease, "expired", stateDir);
++  return false;
++}
++
++/** Retry raw cleanup after tombstone commit even if a previous unlink/fsync failed. */
++export async function cleanupRetainedQueueFiles(stateDir?: string): Promise<void> {
++  const roots = [resolveQueueDir(stateDir), resolveFailedDir(stateDir)];
++  for (const root of roots) {
++    let names: string[];
++    try {
++      names = await fs.promises.readdir(root);
++    } catch (err) {
++      if (errorCode(err) === "ENOENT") {
++        continue;
++      }
++      throw err;
++    }
++    if (names.length > 10000) {
++      throw new DeliveryQueueHealthError("Retention cleanup capacity exceeded");
++    }
++    for (const name of names) {
++      if (!name.endsWith(".json")) {
++        continue;
++      }
++      const id = name.slice(0, -5);
++      const tombstone = await readDeliveryTombstone(id, stateDir);
++      if (!tombstone) {
++        continue;
++      }
++      const lease = await acquireDeliveryEntryLease(id, stateDir);
++      try {
++        await fs.promises.unlink(path.join(root, name)).catch((err) => {
++          if (errorCode(err) !== "ENOENT") {
++            throw err;
++          }
++        });
++        await syncDirectory(root);
++      } finally {
++        await releaseDeliveryQueueLease(lease);
++      }
++    }
++  }
++}
++export async function expireRetainedFailedDeliveries(stateDir?: string): Promise<void> {
++  let names: string[];
++  try {
++    names = await fs.promises.readdir(resolveFailedDir(stateDir));
++  } catch (err) {
++    if (errorCode(err) === "ENOENT") {
++      return;
++    }
++    throw err;
++  }
++  if (names.length > 10000) {
++    throw new DeliveryQueueHealthError("Failed retention capacity exceeded");
++  }
++  for (const name of names) {
++    if (!name.endsWith(".json")) {
++      continue;
++    }
++    const id = name.slice(0, -5);
++    if (await readDeliveryTombstone(id, stateDir)) {
++      continue;
++    }
++    const entry = parseQueuedDelivery(
++      await readBoundedFile(path.join(resolveFailedDir(stateDir), name), MAX_QUEUE_FILE_BYTES),
++      name,
++    );
++    if (!entry.callerRetention || entry.callerRetention.expiresAt > Date.now()) {
++      continue;
++    }
++    const lease = await acquireDeliveryEntryLease(id, stateDir);
++    try {
++      await enforceDeliveryRetention(entry, lease, stateDir);
++    } finally {
++      await releaseDeliveryQueueLease(lease);
++    }
++  }
++}
+diff --git a/src/infra/outbound/delivery-queue-recovery.ts b/src/infra/outbound/delivery-queue-recovery.ts
+index 31619da64a95ccb926c7a1ddbcad5eed58efcbcf..269a8303c0647f0baac177bf3bcb5b52f2b8d786 100644
+--- a/src/infra/outbound/delivery-queue-recovery.ts
++++ b/src/infra/outbound/delivery-queue-recovery.ts
+@@ -1,6 +1,9 @@
+ import type { MinionConfig } from "../../config/config.js";
+ import {
+   acquireDeliveryEntryLease,
++  enforceDeliveryRetention,
++  cleanupRetainedQueueFiles,
++  expireRetainedFailedDeliveries,
+   acquireDeliveryRecoveryLease,
+   readQueuedDelivery,
+   releaseDeliveryQueueLease,
+@@ -72,6 +75,8 @@ export async function recoverPendingDeliveries(opts: {
+   const deadline = Math.min(Number.MAX_SAFE_INTEGER, startedAt + maxRecoveryMs);
+   const recoveryLease = await acquireDeliveryRecoveryLease(opts.stateDir);
+   try {
++    await cleanupRetainedQueueFiles(opts.stateDir);
++    await expireRetainedFailedDeliveries(opts.stateDir);
+     const pending = await loadPendingDeliveries(opts.stateDir, { deadlineAt: deadline });
+     if (pending.length === 0) {
+       return { recovered: 0, failed: 0, skipped: 0, uncertain: 0 };
+@@ -116,6 +121,10 @@ export async function recoverPendingDeliveries(opts: {
+ 
+       try {
+         let entry = await readQueuedDelivery(scanned.id, opts.stateDir);
++        if (!(await enforceDeliveryRetention(entry, entryLease, opts.stateDir))) {
++          skipped += 1;
++          continue;
++        }
+         entry = await markRecoveredInFlightUncertain({
+           entry,
+           lease: entryLease,
+@@ -173,6 +182,10 @@ export async function recoverPendingDeliveries(opts: {
+           await delayFn(backoff);
+         }
+ 
++        if (!(await enforceDeliveryRetention(entry, entryLease, opts.stateDir))) {
++          skipped += 1;
++          continue;
++        }
+         const unfinished = entry.payloads.filter((payload) => payload.state === "pending");
+         const outcome = await opts.deliver({
+           cfg: opts.cfg,
+@@ -187,6 +200,7 @@ export async function recoverPendingDeliveries(opts: {
+           silent: entry.silent,
+           mirror: entry.mirror,
+           completionPolicy: entry.completionPolicy,
++          callerRetention: entry.callerRetention,
+           skipQueue: true,
+           queueContext: {
+             entryId: entry.id,
+diff --git a/src/infra/outbound/delivery-queue-store.ts b/src/infra/outbound/delivery-queue-store.ts
+index cdda881dd3a42ed664882ef4554c9969504ebbeb..3b325c9212ca2881ac459b22ef079e216f4b8298 100644
+--- a/src/infra/outbound/delivery-queue-store.ts
++++ b/src/infra/outbound/delivery-queue-store.ts
+@@ -3,6 +3,8 @@ import fs from "node:fs";
+ import path from "node:path";
+ import {
+   acquireDeliveryEntryLease,
++  readDeliveryTombstone,
++  retainDeliveryTombstone,
+   assertEntryLease,
+   ensureQueueDir,
+   readBoundedFile,
+@@ -35,6 +37,7 @@ import {
+   type QueuedPayloadReceipt,
+   type QueuedPayloadState,
+ } from "./delivery-queue-types.js";
++import { parseCallerRetention } from "./delivery-retention.js";
+ 
+ function createQueuedDelivery(params: QueuedDeliveryParams): QueuedDelivery {
+   if (params.payloads.length > MAX_QUEUE_PAYLOADS) {
+@@ -43,7 +46,7 @@ function createQueuedDelivery(params: QueuedDeliveryParams): QueuedDelivery {
+     );
+   }
+   const id = params.id === undefined ? crypto.randomUUID() : assertSafeId(params.id, "delivery id");
+-  return {
++  const entry: QueuedDelivery = {
+     version: QUEUE_VERSION,
+     id,
+     generation: 0,
+@@ -66,6 +69,8 @@ function createQueuedDelivery(params: QueuedDeliveryParams): QueuedDelivery {
+     retryCount: 0,
+     completionPolicy: params.completionPolicy,
+   };
++  entry.callerRetention = parseCallerRetention(params.callerRetention, entry);
++  return entry;
+ }
+ 
+ /** Persist a delivery and retain its exclusive entry lease for the send attempt. */
+@@ -77,6 +82,9 @@ export async function enqueueDeliveryWithLease(
+   const entry = createQueuedDelivery(params);
+   const lease = await acquireDeliveryEntryLease(entry.id, stateDir);
+   try {
++    if (await readDeliveryTombstone(entry.id, stateDir)) {
++      throw new DeliveryQueueHealthError("Delivery identity is retired");
++    }
+     try {
+       await fs.promises.lstat(resolveEntryPath(entry.id, stateDir));
+       throw new DeliveryQueueError(`Delivery ${entry.id} already exists`);
+@@ -271,6 +279,10 @@ export async function acknowledgeTerminalDelivery(params: {
+       `Delivery ${params.id} cannot be acknowledged with unfinished payloads`,
+     );
+   }
++  if (entry.callerRetention) {
++    await retainDeliveryTombstone(entry, params.lease, "settled", params.stateDir);
++    return;
++  }
+   await fs.promises.unlink(resolveEntryPath(params.id, params.stateDir));
+   await syncDirectory(resolveQueueDir(params.stateDir));
+ }
+@@ -285,6 +297,9 @@ export async function acknowledgeCallerManagedDelivery(
+ ): Promise<void> {
+   const lease = await acquireDeliveryEntryLease(id, stateDir);
+   try {
++    if (await readDeliveryTombstone(id, stateDir)) {
++      return;
++    }
+     let entry: QueuedDelivery;
+     try {
+       entry = await readQueuedDelivery(id, stateDir);
+@@ -440,6 +455,9 @@ export async function loadPendingDeliveries(
+     }
+     assertQueueScanWithinDeadline(options.deadlineAt);
+     const entry = parseQueuedDelivery(raw, filename);
++    if (await readDeliveryTombstone(entry.id, stateDir)) {
++      continue;
++    }
+     if (`${entry.id}.json` !== filename) {
+       throw new DeliveryQueueHealthError(`Queue filename/id mismatch for ${filename}`);
+     }
+diff --git a/src/infra/outbound/delivery-queue-types.ts b/src/infra/outbound/delivery-queue-types.ts
+index 98e87e60d3634e286bf18a87c6d2c3d874f3ba1b..afaeb725bc370c39b04e3171dd848d82561eb228 100644
+--- a/src/infra/outbound/delivery-queue-types.ts
++++ b/src/infra/outbound/delivery-queue-types.ts
+@@ -1,4 +1,5 @@
+ import type { ReplyPayload } from "../../auto-reply/types.js";
++import { parseCallerRetention, type CallerRetention } from "./delivery-retention.js";
+ import type { OutboundChannel } from "./targets.js";
+ 
+ export const QUEUE_VERSION = 2 as const;
+@@ -82,6 +83,7 @@ export interface QueuedDelivery {
+   legacyAtLeastOnce?: boolean;
+   /** Keep a terminal entry until its caller durably settles related local state. */
+   completionPolicy?: "caller";
++  callerRetention?: CallerRetention;
+ }
+ 
+ export type QueuedDeliveryParams = {
+@@ -99,6 +101,7 @@ export type QueuedDeliveryParams = {
+   mirror?: DeliveryMirrorPayload;
+   /** @internal Defer terminal unlink until the caller settles correlated state. */
+   completionPolicy?: "caller";
++  callerRetention?: CallerRetention;
+ };
+ 
+ export type LockOwner = {
+@@ -379,7 +382,7 @@ function parseV2(value: Record<string, unknown>): QueuedDelivery {
+   } else {
+     throw new DeliveryQueueHealthError("Invalid delivery threadId");
+   }
+-  return {
++  const entry: QueuedDelivery = {
+     version: QUEUE_VERSION,
+     id: assertSafeId(value.id, "delivery id"),
+     generation,
+@@ -409,6 +412,8 @@ function parseV2(value: Record<string, unknown>): QueuedDelivery {
+               throw new DeliveryQueueHealthError("Invalid delivery completion policy");
+             })(),
+   };
++  entry.callerRetention = parseCallerRetention(value.callerRetention, entry);
++  return entry;
+ }
+ 
+ function parseV1(value: Record<string, unknown>): QueuedDelivery {
+diff --git a/src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts b/src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts
+index cae9fcc2ce99fbe693df35bb5f4e3da484f030b8..23550126e512caeb494ba6bcd10d2dc9e1592ef1 100644
+--- a/src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts
++++ b/src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts
+@@ -10,7 +10,7 @@ vi.mock("../../agents/pi-embedded.js", () => ({
+   runEmbeddedPiAgent: vi.fn(),
+   resolveEmbeddedSessionLane: (key: string) => `session:${key.trim() || "main"}`,
+ }));
+-vi.mock("../../providers/model-catalog.js", () => ({
++vi.mock("../../agents/models/model-catalog.js", () => ({
+   loadModelCatalog: vi.fn(),
+ }));
+ 
+@@ -461,7 +461,7 @@ describe("runCronIsolatedAgentTurn", () => {
+     });
+   });
+ 
+-  it("starts a fresh session id for each cron run", async () => {
++  it("reuses a fresh stable cron session under its reset policy", async () => {
+     await withTempHome(async (home) => {
+       const storePath = await writeSessionStore(home);
+       const deps = makeDeps();
+@@ -488,10 +488,90 @@ describe("runCronIsolatedAgentTurn", () => {
+ 
+       expect(first.sessionId).toBeDefined();
+       expect(second.sessionId).toBeDefined();
+-      expect(second.sessionId).not.toBe(first.sessionId);
++      expect(second.sessionId).toBe(first.sessionId);
+       expect(first.sessionKey).toMatch(/^agent:main:cron:job-1:run:/);
+       expect(second.sessionKey).toMatch(/^agent:main:cron:job-1:run:/);
+-      expect(second.sessionKey).not.toBe(first.sessionKey);
++      expect(second.sessionKey).toBe(first.sessionKey);
++    });
++  });
++
++  it("creates a different cron session after deterministic configured idle expiry", async () => {
++    await withTempHome(async (home) => {
++      const storePath = await writeSessionStore(home),
++        deps = makeDeps();
++      let clock = Date.parse("2026-01-15T12:00:00Z");
++      const now = vi.spyOn(Date, "now").mockImplementation(() => clock);
++      const options = {
++        deps,
++        storePath,
++        jobPayload: { kind: "agentTurn" as const, message: "ping", deliver: false },
++        message: "ping",
++        mockTexts: ["ok"],
++        cfgOverrides: {
++          session: {
++            store: storePath,
++            mainKey: "main",
++            reset: { mode: "idle" as const, idleMinutes: 1 },
++          },
++        },
++      };
++      try {
++        const first = (await runCronTurn(home, options)).res;
++        clock += 120000;
++        const second = (await runCronTurn(home, options)).res;
++        expect(first.status).toBe("ok");
++        expect(second.status).toBe("ok");
++        expect(first.sessionId).toBeDefined();
++        expect(second.sessionId).toBeDefined();
++        expect(second.sessionId).not.toBe(first.sessionId);
++        expect(first.sessionKey).toMatch(/^agent:main:cron:job-1:run:/);
++        expect(second.sessionKey).toMatch(/^agent:main:cron:job-1:run:/);
++        expect(second.sessionKey).not.toBe(first.sessionKey);
++      } finally {
++        now.mockRestore();
++      }
++    });
++  });
++
++  it("keeps different jobs and configured agents in distinct real execution namespaces", async () => {
++    await withTempHome(async (home) => {
++      const cfg = makeCfg(
++        home,
++        path.join(home, "agents", "{agentId}", "sessions", "sessions.json"),
++        {
++          agents: {
++            list: [{ id: "main", default: true }, { id: "ops" }],
++            defaults: { workspace: path.join(home, "workspace") },
++          },
++        },
++      );
++      const results = [];
++      mockEmbeddedOk();
++      for (const [agentId, jobId] of [
++        ["main", "one"],
++        ["main", "two"],
++        ["ops", "one"],
++      ]) {
++        const res = await runCronIsolatedAgentTurn({
++          cfg,
++          deps: makeDeps(),
++          job: {
++            ...makeJob({ kind: "agentTurn", message: "ping", deliver: false }),
++            id: jobId,
++            agentId,
++          },
++          message: "ping",
++          sessionKey: `cron:${jobId}`,
++          agentId,
++          lane: "cron",
++        });
++        expect(res.status).toBe("ok");
++        expect(res.sessionId).toBeDefined();
++        expect(res.sessionKey).toBe(`agent:${agentId}:cron:${jobId}:run:${res.sessionId}`);
++        results.push(res);
++      }
++      expect(new Set(results.map((result) => result.sessionId)).size).toBe(3);
++      expect(new Set(results.map((result) => result.sessionKey)).size).toBe(3);
+     });
+   });
+ 
+diff --git a/src/platform/cron/isolated-agent/run.skill-filter.test.ts b/src/platform/cron/isolated-agent/run.skill-filter.test.ts
+index c72432b33c82b2633fa43963f0d2cee6efa21ba5..83e7f639c741936f0d18e8104bc00b8862538169 100644
+--- a/src/platform/cron/isolated-agent/run.skill-filter.test.ts
++++ b/src/platform/cron/isolated-agent/run.skill-filter.test.ts
+@@ -13,12 +13,12 @@ const resolveAgentConfigMock = vi.fn();
+ const resolveAgentSkillsFilterMock = vi.fn();
+ const resolveAgentSkillsDenyFilterMock = vi.fn();
+ 
+-vi.mock("../../../agents/agent-scope.js", () => ({
++vi.mock("../../../agents/agent-scope.js", async (importOriginal) => ({
++  ...(await importOriginal<typeof import("../../../agents/agent-scope.js")>()),
+   resolveAgentConfig: resolveAgentConfigMock,
+   resolveAgentDir: vi.fn().mockReturnValue("/tmp/agent-dir"),
+   resolveAgentModelFallbacksOverride: vi.fn().mockReturnValue(undefined),
+   resolveAgentWorkspaceDir: vi.fn().mockReturnValue("/tmp/workspace"),
+-  resolveDefaultAgentId: vi.fn().mockReturnValue("default"),
+   resolveAgentSkillsFilter: resolveAgentSkillsFilterMock,
+   resolveAgentSkillsDenyFilter: resolveAgentSkillsDenyFilterMock,
+ }));
+@@ -36,7 +36,7 @@ vi.mock("../../../agents/identity/workspace.js", async (importOriginal) => ({
+   ensureAgentWorkspace: vi.fn().mockResolvedValue({ dir: "/tmp/workspace" }),
+ }));
+ 
+-vi.mock("../../../providers/model-catalog.js", () => ({
++vi.mock("../../../agents/models/model-catalog.js", () => ({
+   loadModelCatalog: vi.fn().mockResolvedValue({ models: [] }),
+ }));
+ 
+@@ -539,6 +539,7 @@ describe("runCronIsolatedAgentTurn — skill filter", () => {
+         makeParams({
+           cfg: {
+             agents: {
++              list: [{ id: "scout", default: true }],
+               defaults: {
+                 model: { primary: "openai-codex/gpt-5.3-codex", fallbacks: defaultFallbacks },
+               },
+diff --git a/src/platform/cron/isolated-agent/run.ts b/src/platform/cron/isolated-agent/run.ts
+index bc8fa4e3ea2567a6b4cd1ea4b5cd19636ad91c27..81d200a0bd429105ccf5d3bef0d2a89fc4d5426b 100644
+--- a/src/platform/cron/isolated-agent/run.ts
++++ b/src/platform/cron/isolated-agent/run.ts
+@@ -63,6 +63,7 @@ import {
+   getHookType,
+   isExternalHookSession,
+ } from "../../../security/external-content.js";
++import { validateCronBinding } from "../binding.js";
+ import { resolveCronDeliveryPlan } from "../delivery.js";
+ import type { CronJob, CronRunOutcome, CronRunTelemetry } from "../types.js";
+ import { resolveDeliveryTarget } from "./delivery-target.js";
+@@ -170,6 +171,20 @@ export async function runCronIsolatedAgentTurn(params: {
+   agentId?: string;
+   lane?: string;
+ }): Promise<RunCronAgentTurnResult> {
++  try {
++    validateCronBinding(params.cfg, params.job);
++    if (params.agentId !== undefined) {
++      if (!params.agentId.trim()) {
++        throw new Error("invalid cron binding: blank execution owner");
++      }
++      const bound = validateCronBinding(params.cfg, params.job);
++      if (normalizeAgentId(params.agentId) !== bound.agentId) {
++        throw new Error("invalid cron binding: execution owner mismatch");
++      }
++    }
++  } catch {
++    return { status: "error", error: "invalid cron binding" };
++  }
+   const isFastTestEnv = process.env.OPENCLAW_TEST_FAST === "1";
+   const defaultAgentId = resolveDefaultAgentId(params.cfg);
+   const requestedAgentId =
+diff --git a/src/platform/cron/normalize.test.ts b/src/platform/cron/normalize.test.ts
+index 81d1c36663020ad015b7e2a41d2c9154d4921f91..03711bc8852e8ff12a3fe9785e327be628255e44 100644
+--- a/src/platform/cron/normalize.test.ts
++++ b/src/platform/cron/normalize.test.ts
+@@ -80,7 +80,7 @@ describe("normalizeCronJobCreate", () => {
+     expect(cleared.agentId).toBeNull();
+   });
+ 
+-  it("trims sessionKey and drops blanks", () => {
++  it("trims sessionKey and rejects supplied blanks", () => {
+     const normalized = normalizeCronJobCreate({
+       name: "session-key",
+       enabled: true,
+@@ -92,16 +92,17 @@ describe("normalizeCronJobCreate", () => {
+     }) as unknown as Record<string, unknown>;
+     expect(normalized.sessionKey).toBe("agent:main:discord:channel:ops");
+ 
+-    const cleared = normalizeCronJobCreate({
+-      name: "session-key-clear",
+-      enabled: true,
+-      schedule: { kind: "cron", expr: "* * * * *" },
+-      sessionTarget: "main",
+-      wakeMode: "next-heartbeat",
+-      sessionKey: "   ",
+-      payload: { kind: "systemEvent", text: "hi" },
+-    }) as unknown as Record<string, unknown>;
+-    expect("sessionKey" in cleared).toBe(false);
++    expect(() =>
++      normalizeCronJobCreate({
++        name: "session-key-clear",
++        enabled: true,
++        schedule: { kind: "cron", expr: "* * * * *" },
++        sessionTarget: "main",
++        wakeMode: "next-heartbeat",
++        sessionKey: "   ",
++        payload: { kind: "systemEvent", text: "hi" },
++      }),
++    ).toThrow("invalid cron binding");
+   });
+ 
+   it("canonicalizes payload.channel casing", () => {
+diff --git a/src/platform/cron/normalize.ts b/src/platform/cron/normalize.ts
+index bcf60622ee649fe98b590a6b14218fdb7a814a1f..2a13c91b1f055039a952908211dee73f1a0792f7 100644
+--- a/src/platform/cron/normalize.ts
++++ b/src/platform/cron/normalize.ts
+@@ -1,5 +1,6 @@
+ import { sanitizeAgentId } from "../../routing/session-key.js";
+ import { isRecord } from "../../utils.js";
++import { assertRawCronBinding } from "./binding.js";
+ import {
+   buildDeliveryFromLegacyPayload,
+   hasLegacyDeliveryHints,
+@@ -304,6 +305,7 @@ export function normalizeCronJobInput(
+     return null;
+   }
+   const base = unwrapJob(raw);
++  assertRawCronBinding(base);
+   const next: UnknownRecord = { ...base };
+ 
+   if ("agentId" in base) {
+diff --git a/src/platform/cron/service.runs-one-shot-main-job-disables-it.test.ts b/src/platform/cron/service.runs-one-shot-main-job-disables-it.test.ts
+index 62d069e07cff4ec66e828f0d9f1e6cda4d5cf226..5f49427b217795852c521d0f502551047c5761fa 100644
+--- a/src/platform/cron/service.runs-one-shot-main-job-disables-it.test.ts
++++ b/src/platform/cron/service.runs-one-shot-main-job-disables-it.test.ts
+@@ -255,6 +255,7 @@ async function createCronHarness(options: CronHarnessOptions = {}) {
+   const events = options.withEvents === false ? undefined : createCronEventHarness();
+ 
+   const cron = new CronService({
++    currentConfig: () => ({ agents: { list: [{ id: "main", default: true }, { id: "ops" }] } }),
+     storePath: store.storePath,
+     cronEnabled: true,
+     log: noopLogger,
+diff --git a/src/platform/cron/service/jobs.ts b/src/platform/cron/service/jobs.ts
+index 623ee9132da4af34d30aca420182210fdaf86cae..acfb6acb02045d8b85d046690c1f28d98392b40f 100644
+--- a/src/platform/cron/service/jobs.ts
++++ b/src/platform/cron/service/jobs.ts
+@@ -354,6 +354,7 @@ export function createJob(state: CronServiceState, input: CronJobCreate): CronJo
+     updatedAtMs: now,
+     schedule,
+     sessionTarget: input.sessionTarget,
++    scope: input.scope,
+     wakeMode: input.wakeMode,
+     payload: input.payload,
+     delivery: input.delivery,
+@@ -398,6 +399,9 @@ export function applyJobPatch(job: CronJob, patch: CronJobPatch) {
+       job.schedule = patch.schedule;
+     }
+   }
++  if (patch.scope !== undefined) {
++    job.scope = patch.scope;
++  }
+   if (patch.sessionTarget) {
+     job.sessionTarget = patch.sessionTarget;
+   }
+diff --git a/src/platform/cron/service/ops.ts b/src/platform/cron/service/ops.ts
+index 08aa1750199be1821e500113ae24a9b50839a115..a7bad06cf7895341a20096ec024de0d324dd37f8 100644
+--- a/src/platform/cron/service/ops.ts
++++ b/src/platform/cron/service/ops.ts
+@@ -1,3 +1,5 @@
++import { loadConfig } from "../../../config/config.js";
++import { assertRawCronBinding, validateCronBinding } from "../binding.js";
+ import type { CronJobCreate, CronJobPatch } from "../types.js";
+ import {
+   applyJobPatch,
+@@ -105,7 +107,9 @@ export async function add(state: CronServiceState, input: CronJobCreate) {
+   return await locked(state, async () => {
+     warnIfDisabled(state, "add");
+     await ensureLoaded(state);
++    assertRawCronBinding(input);
+     const job = createJob(state, input);
++    validateCronBinding((state.deps.currentConfig ?? loadConfig)(), job);
+     state.store?.jobs.push(job);
+ 
+     // Defensive: recompute all next-run times to ensure consistency
+@@ -139,9 +143,12 @@ export async function update(state: CronServiceState, id: string, patch: CronJob
+   return await locked(state, async () => {
+     warnIfDisabled(state, "update");
+     await ensureLoaded(state, { skipRecompute: true });
+-    const job = findJobOrThrow(state, id);
++    const stored = findJobOrThrow(state, id);
++    assertRawCronBinding(patch);
++    const job = structuredClone(stored);
+     const now = state.deps.nowMs();
+     applyJobPatch(job, patch);
++    validateCronBinding((state.deps.currentConfig ?? loadConfig)(), job);
+     if (job.schedule.kind === "every") {
+       const anchor = job.schedule.anchorMs;
+       if (typeof anchor !== "number" || !Number.isFinite(anchor)) {
+@@ -178,6 +185,7 @@ export async function update(state: CronServiceState, id: string, patch: CronJob
+       }
+     }
+ 
++    state.store!.jobs[state.store!.jobs.indexOf(stored)] = job;
+     await persist(state);
+     armTimer(state);
+     emit(state, {
+diff --git a/src/platform/cron/service/state.ts b/src/platform/cron/service/state.ts
+index 1d85ba247937a7acb08cea97ebed00fb40d737f3..7b8fc7dc92f30e05b06188301aa7ec77a90b8961 100644
+--- a/src/platform/cron/service/state.ts
++++ b/src/platform/cron/service/state.ts
+@@ -1,3 +1,4 @@
++import type { MinionConfig } from "../../../config/config.js";
+ import type { CronConfig } from "../../../config/types.cron.js";
+ import type { HeartbeatRunResult } from "../../../infra/heartbeat-wake.js";
+ import type { OutboundDeliveryRetryDisposition } from "../../../infra/outbound/deliver.js";
+@@ -33,6 +34,8 @@ export type Logger = {
+ 
+ export type CronServiceDeps = {
+   nowMs?: () => number;
++  /** Read again at admission and execution, so deletion cannot fall back. */
++  currentConfig?: () => MinionConfig;
+   log: Logger;
+   storePath: string;
+   cronEnabled: boolean;
+diff --git a/src/platform/cron/service/timer.ts b/src/platform/cron/service/timer.ts
+index 89acfeb83bdf0eafd43583e2d6da25df2a2e6122..4c2aca2e80898b3a9af4b7aed230bff8d16ac45f 100644
+--- a/src/platform/cron/service/timer.ts
++++ b/src/platform/cron/service/timer.ts
+@@ -1,5 +1,7 @@
++import { loadConfig } from "../../../config/config.js";
+ import type { HeartbeatRunResult } from "../../../infra/heartbeat-wake.js";
+ import { DEFAULT_AGENT_ID } from "../../../routing/session-key.js";
++import { validateCronBinding } from "../binding.js";
+ import { resolveCronDeliveryPlan } from "../delivery.js";
+ import { sweepCronRunSessions } from "../session-reaper.js";
+ import type { CronJob, CronRunOutcome, CronRunStatus, CronRunTelemetry } from "../types.js";
+@@ -456,6 +458,7 @@ async function executeJobCore(
+   state: CronServiceState,
+   job: CronJob,
+ ): Promise<CronRunOutcome & CronRunTelemetry> {
++  validateCronBinding((state.deps.currentConfig ?? loadConfig)(), job);
+   // For "universal" scoped jobs, clear sessionKey so events route to the
+   // agent's main session instead of a specific user's session.
+   const effectiveSessionKey = job.scope === "universal" ? undefined : job.sessionKey;
+diff --git a/src/plugins/loader.forks.test.ts b/src/plugins/loader.forks.test.ts
+index 6dc2efca08fcf37761f2df44cde0be4b93e839b5..2a70c099e520e731a2b15123434ae220bdf5bbdb 100644
+--- a/src/plugins/loader.forks.test.ts
++++ b/src/plugins/loader.forks.test.ts
+@@ -488,3 +488,60 @@ describe("loadOpenClawPlugins", () => {
+     expect(overridden?.origin).toBe("bundled");
+   });
+ });
++
++it("validates the real alert-watcher experiment manifest before registration", () => {
++  const manifest = JSON.parse(
++    fs.readFileSync(
++      new URL("../../extensions/alert-watcher/minion.plugin.json", import.meta.url),
++      "utf8",
++    ),
++  );
++  const resolverPath = new URL(
++    "../../extensions/alert-watcher/src/jev-shadow-eligibility.ts",
++    import.meta.url,
++  ).pathname;
++  for (const complaintExperiment of [
++    undefined,
++    {},
++    { mode: "off" },
++    { mode: "census" },
++    { mode: "shadow" },
++    null,
++    { mode: "active" },
++    { mode: "shadow", approved: true },
++  ]) {
++    const dir = makeTempDir();
++    const fixture = writePlugin({
++      id: "alert-watcher",
++      dir,
++      body: `import { resolveComplaintExperiment } from ${JSON.stringify(resolverPath)};
++export default { id: "alert-watcher", register(api) { const value=resolveComplaintExperiment(api.pluginConfig.complaintExperiment); api.registerGatewayMethod("watcherFixture.mode", ({respond})=>respond(true,value)); }};`,
++    });
++    fs.writeFileSync(
++      path.join(dir, "openclaw.plugin.json"),
++      JSON.stringify({ id: manifest.id, configSchema: manifest.configSchema }),
++    );
++    const config = complaintExperiment === undefined ? {} : { complaintExperiment };
++    const registry = loadOpenClawPlugins({
++      cache: false,
++      config: {
++        plugins: {
++          enabled: true,
++          allow: ["alert-watcher"],
++          load: { paths: [fixture.file] },
++          entries: { "alert-watcher": { enabled: true, config } },
++        },
++      },
++    });
++    const plugin = registry.plugins.find((p) => p.id === "alert-watcher");
++    const valid =
++      complaintExperiment === undefined ||
++      (complaintExperiment !== null &&
++        typeof complaintExperiment === "object" &&
++        !Object.hasOwn(complaintExperiment, "approved") &&
++        (!Object.hasOwn(complaintExperiment, "mode") ||
++          ["off", "census", "shadow"].includes(complaintExperiment.mode ?? "")));
++    expect(plugin?.status).toBe(valid ? "loaded" : "error");
++    expect(Boolean(registry.gatewayHandlers["watcherFixture.mode"])).toBe(valid);
++  }
++});

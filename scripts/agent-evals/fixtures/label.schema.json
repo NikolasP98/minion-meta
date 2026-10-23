@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://minion.ai/schemas/eval-label-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "labelId",
+    "revision",
+    "episodeId",
+    "sourceSha256",
+    "actorRef",
+    "reviewerRef",
+    "method",
+    "rubricRevision",
+    "outcome",
+    "findings",
+    "adjudicationRef",
+    "adjudicatedAt",
+    "supersedes",
+    "blindToScreen"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "labelId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "episodeId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "sourceSha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "actorRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "reviewerRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "method": {
+      "enum": ["human_adjudicated", "synthetic_software", "unadjudicated"]
+    },
+    "rubricRevision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "outcome": {
+      "enum": ["success", "incorrect", "blocked", "canceled", "indeterminate"]
+    },
+    "findings": {
+      "type": "array"
+    },
+    "adjudicationRef": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "adjudicatedAt": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "supersedes": {
+      "type": ["string", "null"]
+    },
+    "blindToScreen": {
+      "const": true
+    }
+  }
+}

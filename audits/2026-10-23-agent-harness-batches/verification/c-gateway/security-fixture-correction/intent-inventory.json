@@ -1,0 +1,1128 @@
+{
+  "at": "2026-10-23T15:06:59.872221+00:00",
+  "basis": "Complete prior 84-intent assessment carried forward. All normative spec/plan/contracts/constitution bytes match; task intent text matches all 30 tasks, with checkbox/checkpoint metadata changes only. Reviewed all nine affected source representations and exact unchanged 58 candidate paths.",
+  "counts": {
+    "functional": 9,
+    "success": 6,
+    "acceptance": 18,
+    "parent-acceptance": 8,
+    "task": 30,
+    "plan": 8,
+    "constitution": 5
+  },
+  "groups": {
+    "admission": {
+      "source": [
+        "extensions/alert-watcher/index.ts",
+        "extensions/alert-watcher/src/authority.ts",
+        "extensions/alert-watcher/src/provenance.ts"
+      ],
+      "proof": [
+        "../revision2/REVIEW.md",
+        "../revision2/commands.jsonl",
+        "../final/terminal-gate-verification.json",
+        "identity.json",
+        "independent-equivalence.json",
+        "independent-scanner.json",
+        "terminal-gate-verification.json"
+      ],
+      "assessment": "Canonical original source, strict current authority, frozen policy/input and stable admission identity; actual hooks and producer compatibility are covered."
+    },
+    "durable": {
+      "source": [
+        "extensions/alert-watcher/src/classification-work.ts",
+        "extensions/alert-watcher/src/store.ts",
+        "extensions/alert-watcher/src/migrate.ts"
+      ],
+      "proof": [
+        "../revision2/REVIEW.md",
+        "../revision2/commands.jsonl",
+        "../revision2.1/REVIEW.md",
+        "../final/terminal-gate-verification.json",
+        "identity.json",
+        "independent-equivalence.json",
+        "independent-scanner.json",
+        "terminal-gate-verification.json"
+      ],
+      "assessment": "Actual file SQLite uniqueness, generations and received recovery; bounded lifecycle dispatcher; only proven unsubmitted retry; actual old-schema migration twice and process kills retained."
+    },
+    "delivery": {
+      "source": [
+        "extensions/alert-watcher/src/delivery-bridge.ts",
+        "src/infra/outbound/delivery-queue-store.ts",
+        "src/infra/outbound/delivery-queue-recovery.ts",
+        "src/infra/outbound/deliver.ts"
+      ],
+      "proof": [
+        "../revision2/REVIEW.md",
+        "../revision2/commands.jsonl",
+        "../final/terminal-gate-verification.json",
+        "identity.json",
+        "independent-equivalence.json",
+        "independent-scanner.json",
+        "terminal-gate-verification.json"
+      ],
+      "assessment": "SQLite admission before required durable queue, settlement before acknowledgement, missing evidence never reenqueues; suppressed terminals settle without granting delivery success."
+    },
+    "replyRetention": {
+      "source": [
+        "extensions/alert-watcher/src/reply-flow/store.ts",
+        "extensions/alert-watcher/src/reply-flow/handle-reply.ts",
+        "extensions/alert-watcher/src/classification-work.ts",
+        "src/infra/outbound/delivery-queue-files.ts"
+      ],
+      "proof": [
+        "../revision2/REVIEW.md",
+        "../revision2.1/REVIEW.md",
+        "../final/terminal-gate-verification.json",
+        "identity.json",
+        "independent-equivalence.json",
+        "independent-scanner.json",
+        "terminal-gate-verification.json"
+      ],
+      "assessment": "Current owner reply after awaits, first-confirmed-send transaction, fixed reply window and frozen suggestions; all exact receipt-bound raw/backup/temp/failed copies expire behind durable tombstones, legacy replay fenced."
+    },
+    "usage": {
+      "source": [
+        "src/drones/host.ts",
+        "src/drones/run-with-usage.ts",
+        "extensions/alert-watcher/src/usage-finalization.ts",
+        "extensions/alert-watcher/src/classifier.ts"
+      ],
+      "proof": [
+        "../revision2/REVIEW.md",
+        "../revision2/commands.jsonl",
+        "../final/source-artifact-continuity.json",
+        "../final/terminal-gate-verification.json",
+        "identity.json",
+        "independent-equivalence.json",
+        "independent-scanner.json",
+        "terminal-gate-verification.json"
+      ],
+      "assessment": "Installed Drone 0.6.0 terminal result, fresh opted-in host, current resolved model and honest known/unknown/incomplete attempt accounting; ordinary callers preserved."
+    },
+    "cron": {
+      "source": [
+        "src/gateway/server-core/server-cron.ts",
+        "src/gateway/server-methods/cron.ts",
+        "src/platform/cron/normalize.ts",
+        "src/platform/cron/service/ops.ts",
+        "src/platform/cron/service/jobs.ts",
+        "src/platform/cron/isolated-agent/run.ts"
+      ],
+      "proof": [
+        "../final/cron-binding-v1.json",
+        "../final/terminal-gate-verification.json",
+        "../revision2/REVIEW.md",
+        "identity.json",
+        "independent-equivalence.json",
+        "independent-scanner.json",
+        "terminal-gate-verification.json"
+      ],
+      "assessment": "Raw explicit binding validated, update uses full candidate copy, scope survives disk reload, execution checks before effects, omitted general-cron defaults preserved. Actual two-profile D wire traverses real C handler/store/execution."
+    },
+    "shadow": {
+      "source": [
+        "extensions/alert-watcher/minion.plugin.json",
+        "extensions/alert-watcher/src/jev-shadow-eligibility.ts",
+        "extensions/alert-watcher/src/complaint-evaluation.ts",
+        "extensions/alert-watcher/src/complaint-evaluation.schema.json"
+      ],
+      "proof": [
+        "../revision2/REVIEW.md",
+        "../../f-evals/revision3/REVIEW.md",
+        "../final/c-f-current-pin-continuity.json",
+        "../final/current-c-f-report-1.json",
+        "../final/current-c-f-report-8.json",
+        "../final/terminal-gate-verification.json",
+        "identity.json",
+        "independent-equivalence.json",
+        "independent-scanner.json",
+        "terminal-gate-verification.json"
+      ],
+      "assessment": "Real strict manifest/loader default off, baseline always executes, certified eligibility only, immutable historical paid cohort with separate current authority, exact committed producer schema/export fixtures consumed by real F CLIs."
+    },
+    "gates": {
+      "source": [
+        "AGENTS.md",
+        "package.json",
+        "CHANGELOG.md"
+      ],
+      "proof": [
+        "../final/source-artifact-continuity.json",
+        "../final/terminal-gate-verification.json",
+        "../final/pending-tests.json",
+        "../final/PR-HANDOFF.md",
+        "identity.json",
+        "independent-equivalence.json",
+        "independent-scanner.json",
+        "terminal-gate-verification.json"
+      ],
+      "assessment": "Exact 66-source, lock/SDK and 20 install wrappers preserved; full check incl tsgo passed; main 13570/0/16; build wrapper and explicit DTS/entry passed with original supervisor false-positive retained. Changelog is accurate and only docs commit delta."
+    }
+  },
+  "items": [
+    {
+      "id": "FR-C01",
+      "kind": "functional",
+      "intent": "Stable admission MUST use authoritative canonical identity, watcher policy ID and explicit reevaluation generation; bind exact original bytes and effective policy at first admission. No text equality or mutable rule hash may replace stable admission identity.",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "FR-C02",
+      "kind": "functional",
+      "intent": "SQLite uniqueness, bounded snapshots/attempts and owner/generation predicates MUST survive process restart; negative and failed results, usage and replay tombstones MUST be durable.",
+      "groups": [
+        "durable"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "FR-C03",
+      "kind": "functional",
+      "intent": "The existing plugin lifecycle MUST own a bounded dispatcher (5s poll, 30s lease, 10s renew, one active classifier, at most 10 candidates/tick). Only proven unsubmitted failures retry after 5s/30s, maximum three attempts. Ambiguous admitted work MUST NOT automatically recall providers.",
+      "groups": [
+        "durable",
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "FR-C04",
+      "kind": "functional",
+      "intent": "Every certified recipient MUST commit SQLite admission before queue dispatch and settle SQLite before queue acknowledgement; missing/mismatched admitted evidence MUST NOT enqueue again.",
+      "groups": [
+        "delivery"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "FR-C05",
+      "kind": "functional",
+      "intent": "Positive/suggestion/recipient materialization MUST be durable, recipient-specific and authority checked; legacy retry must be fenced, source-window count and first-sent cooldown applied once, expired payloads cannot dispatch even through generic queue recovery with the watcher absent, and all receipt-bound copies are redacted without clearing replay identity. The first confirmed send MUST preserve one idempotent owner-reply row with frozen suggestions and a window that recovery cannot restart.",
+      "groups": [
+        "replyRetention",
+        "delivery"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "FR-C06",
+      "kind": "functional",
+      "intent": "Both hook and flow classifier/suggestion paths MUST use opt-in per-invocation final usage from the installed terminal result, preserving ordinary callers and honest unknown/incomplete cost.",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "FR-C07",
+      "kind": "functional",
+      "intent": "Explicit cron agent/session binding MUST fail closed at admission and execution, before lossy input normalization and at effective candidate-copy update, preserving stored session scope and leaving rejected memory/disk state unchanged; omitted general-cron agent retains defaults; qualified Pulse execution MUST use its current exact gateway and no automatic announcement.",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "FR-C08",
+      "kind": "functional",
+      "intent": "Eligibility/census/shadow MUST be accepted and resolved through the real strict plugin manifest/loader, default disabled, never bypass baseline, exclude uncertified/custom/model-drift inputs, and export complete logical-source accounting or explicit incomplete coverage. No active classifier change or paid holdout occurs here.",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "FR-C09",
+      "kind": "functional",
+      "intent": "Provenance, receipt IDs and scores MUST NOT grant authority. Current enablement/owner/recipient scope MUST be rechecked before dispatch and local completion through source-qualified authority evidence. Missing/stale DB mirror or missing JSON account mapping MUST NOT inherit fail-open fallback authority. Data migrations/rollback MUST preserve uncertain admissions and tombstones.",
+      "groups": [
+        "admission",
+        "durable",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "SC-C01",
+      "kind": "success",
+      "intent": "Two hooks for one qualified source/policy produce one admission; equal IDs in different chats produce two.",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "SC-C02",
+      "kind": "success",
+      "intent": "Kill/restart tests at every specified effect boundary cause zero automatic repeat of a possibly accepted call or a confirmed recipient delivery.",
+      "groups": [
+        "durable",
+        "delivery",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "SC-C03",
+      "kind": "success",
+      "intent": "Every tested terminal invocation records supplied usage with actual resolved model or explicit unknown; no guessed complete bill passes qualification.",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "SC-C04",
+      "kind": "success",
+      "intent": "Invalid explicit cron binding dispatches zero tools or provider calls; valid isolated jobs preserve agent ownership and origin binding.",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "SC-C05",
+      "kind": "success",
+      "intent": "Disabled census/shadow dispatches zero extra calls; enabled fixture shadow always retains baseline and logical-source accounting.",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "SC-C06",
+      "kind": "success",
+      "intent": "All acceptance cases map to real source, installed lock versions, process/SQLite/queue tests, repository gates and independent review. Source proof is distinguished from deployment/live qualification.",
+      "groups": [
+        "gates",
+        "cron",
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": "Complete C implementation evidence carried by continuity; current correction proof qualified here, actual rewritten-history/CI and final joint identity remain distinct pending gates.",
+      "securityCorrectionReview": "source-pass; final rewritten commit/provenance and actual history gate remain root-owned"
+    },
+    {
+      "id": "US1-1",
+      "kind": "acceptance",
+      "intent": "Given equal provider IDs in different chats, when both arrive, then both are admitted; given two hook representations of one source/policy, only one admission exists.",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US1-2",
+      "kind": "acceptance",
+      "intent": "Given a debounced batch, when received hook fires, then each ordered original unit is matched separately using its exact source text.",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US1-3",
+      "kind": "acceptance",
+      "intent": "Given a redelivery after policy/model change, then it resumes its pinned input/policy; changed bytes under the same immutable source ID conflict. Verified provider edit revision or explicit authorized reevaluation creates a distinct linked admission.",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US1-4",
+      "kind": "acceptance",
+      "intent": "Given missing/unqualified provenance or a manual/flow RPC, then baseline invocation remains available, uses fresh identity and cannot suppress other sources or enter the complaint experiment.",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US2-1",
+      "kind": "acceptance",
+      "intent": "Given one queued source, when two processes claim it, then one lease generation owns dispatch. Expired admitted work becomes indeterminate; received work resumes local processing without another classifier call.",
+      "groups": [
+        "durable",
+        "delivery",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US2-2",
+      "kind": "acceptance",
+      "intent": "Given a valid positive with an uncertain suggestion request, then recovery uses explicit unavailable suggestions and still publishes the positive alert without another suggestion call.",
+      "groups": [
+        "durable",
+        "delivery",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US2-3",
+      "kind": "acceptance",
+      "intent": "Given two recipients and success at one, when the other fails or process restarts, then the confirmed recipient never receives a second send. Cooldown is stamped once at the first confirmed sent receipt.",
+      "groups": [
+        "durable",
+        "delivery",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US2-4",
+      "kind": "acceptance",
+      "intent": "Given SQLite admission but missing/mismatched queue evidence, then the recipient becomes indeterminate rather than recreated. Queue terminal evidence survives until SQLite settlement.",
+      "groups": [
+        "durable",
+        "delivery",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US2-5",
+      "kind": "acceptance",
+      "intent": "Given expired private payloads, then payload copies are erased within the retention policy while minimal replay tombstones remain; old events cannot recreate inference or delivery. Legacy pending alerts stay visible as `legacy_unreconciled` and do not automatically fan out.",
+      "groups": [
+        "durable",
+        "delivery",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US3-1",
+      "kind": "acceptance",
+      "intent": "Given opted-in successful runs, each emits one final usage record from its returned resolved model; host-inferred usage is suppressed only for that run.",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US3-2",
+      "kind": "acceptance",
+      "intent": "Given SDK failure or fallback without earlier-attempt usage, retain supplied usage and unknown/incomplete coverage; do not price all attempts as the final model.",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US3-3",
+      "kind": "acceptance",
+      "intent": "Given an unopted host caller, preserve its existing public signatures and lifecycle/usage behavior.",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US4-1",
+      "kind": "acceptance",
+      "intent": "Explicit nonempty unknown/deleted agent rejects at admission and execution; a cross-agent/global explicit origin session rejects rather than rewriting to main.",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US4-2",
+      "kind": "acceptance",
+      "intent": "Omitted agent ID retains general-cron default behavior. Valid isolated work retains isolated execution session in the same agent namespace and its validated origin binding.",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US4-3",
+      "kind": "acceptance",
+      "intent": "Pulse's `scope:session`, explicit agent/session and `delivery.mode:none` produce no automatic announcement. Hub activation requires exact gateway qualification evidence; scheduling receipt is not execution evidence.",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US5-1",
+      "kind": "acceptance",
+      "intent": "Only certified-source/default-effective-policy/model-revision matches are eligible. No eligible traffic returns a stop decision, not an activation request.",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US5-2",
+      "kind": "acceptance",
+      "intent": "Every shadow case still executes baseline; timeout/abstention never become a negative classification.",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "US5-3",
+      "kind": "acceptance",
+      "intent": "Gate, forwarded baseline, retry and unknown bills use one logical-source denominator and export separate model/policy cohorts. Active promotion remains disabled without the parent experiment protocol and separate paid authorization.",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "A11",
+      "kind": "parent-acceptance",
+      "intent": "Canonical original source, strict current authority, frozen policy/input and stable admission identity; actual hooks and producer compatibility are covered.",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "A12",
+      "kind": "parent-acceptance",
+      "intent": "Actual file SQLite uniqueness, generations and received recovery; bounded lifecycle dispatcher; only proven unsubmitted retry; actual old-schema migration twice and process kills retained.",
+      "groups": [
+        "durable"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "A13",
+      "kind": "parent-acceptance",
+      "intent": "Actual file SQLite uniqueness, generations and received recovery; bounded lifecycle dispatcher; only proven unsubmitted retry; actual old-schema migration twice and process kills retained.",
+      "groups": [
+        "durable"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "A14",
+      "kind": "parent-acceptance",
+      "intent": "SQLite admission before required durable queue, settlement before acknowledgement, missing evidence never reenqueues; suppressed terminals settle without granting delivery success.",
+      "groups": [
+        "delivery"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "A15",
+      "kind": "parent-acceptance",
+      "intent": "Current owner reply after awaits, first-confirmed-send transaction, fixed reply window and frozen suggestions; all exact receipt-bound raw/backup/temp/failed copies expire behind durable tombstones, legacy replay fenced.",
+      "groups": [
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "A16",
+      "kind": "parent-acceptance",
+      "intent": "Installed Drone 0.6.0 terminal result, fresh opted-in host, current resolved model and honest known/unknown/incomplete attempt accounting; ordinary callers preserved.",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "A20gateway",
+      "kind": "parent-acceptance",
+      "intent": "Raw explicit binding validated, update uses full candidate copy, scope survives disk reload, execution checks before effects, omitted general-cron defaults preserved. Actual two-profile D wire traverses real C handler/store/execution.",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": "Gateway portion only; full joint acceptance remains separate.",
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "A30gateway",
+      "kind": "parent-acceptance",
+      "intent": "Real strict manifest/loader default off, baseline always executes, certified eligibility only, immutable historical paid cohort with separate current authority, exact committed producer schema/export fixtures consumed by real F CLIs.",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": "Gateway portion only; full joint acceptance remains separate.",
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T001",
+      "kind": "task",
+      "intent": "Verify `pnpm-lock.yaml` hash, isolated installed Drone0.6.0 `node_modules/@minion-stack/drone/dist/types.d.ts` and `node_modules/@minion-stack/drone/dist/run.js` hashes and registered `DEV` base; record parent frozen-install receipt and source SHA. Obtain two independent approved SDD hash reviews before code.",
+      "groups": [
+        "gates"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T002",
+      "kind": "task",
+      "intent": "Re-run merged slice10 producer tests in `src/auto-reply/reply/dispatch-provenance.test.ts` and `src/channels/impl/telegram/inbound-provenance.test.ts`; preserve WhatsApp member-traffic and legacy/manual flow behavior in `extensions/alert-watcher/index.test.ts` fixtures (FR-C01/C09).",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T003",
+      "kind": "task",
+      "intent": "Create installed-result contract tests in `extensions/alert-watcher/src/usage-finalization.test.ts` and core `src/drones/host.test.ts`, observing actual Drone0.6.0 success/failure/fallback shape with stubbed provider completion; no mocked error may invent resolvedModel (FR-C06).",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T004",
+      "kind": "task",
+      "intent": "[US1] Add red cases in `extensions/alert-watcher/src/provenance.test.ts` and `extensions/alert-watcher/src/authority.test.ts`: same-ID different chat/account, dual hooks, exact whitespace source hash, batches, config/model revision redelivery, identity conflict, provider edit, explicit reevaluation, forged RPC origin/receipt and idless fresh invocation; DB mirror miss plus stale JSON, reassignment, stale/malformed/null mirror ownership, absent JSON mapping/account and configured explicit local-unscoped account. Drive actual hook admission and received settlement, not only helpers (FR-C01/C09).",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T005",
+      "kind": "task",
+      "intent": "[US1] Implement `extensions/alert-watcher/src/authority.ts` using current source-qualified mirror/config/installed-account evidence per receipts contract; do not reuse fail-open [] or DB JSON fallback as authority. Implement `extensions/alert-watcher/src/provenance.ts` stable tuple/hash with frozen authority/policy binding (FR-C01/C09).",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T006",
+      "kind": "task",
+      "intent": "[US1] Wire actual `extensions/alert-watcher/index.ts` inbound/received metadata and subscriptions to original units and strict authority; retain custom policies, legacy flow gate/v1 envelopes and uncertified baseline path; remove pre-provider seen suppression only from certified path in `extensions/alert-watcher/src/dedup.ts` (FR-C01).",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T007",
+      "kind": "task",
+      "intent": "[US2] Add real SQLite concurrency/migration tests in `extensions/alert-watcher/src/classification-work.test.ts`: unique admission, authority changes, generations/due predicates, invocation bound, negative/error persistence, old-schema upgrade twice and nullable legacy versus unique certified pending-reply bindings (FR-C02/C05/C09).",
+      "groups": [
+        "durable"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T008",
+      "kind": "task",
+      "intent": "[US2] Add two receipt tables/checks/indexes/transaction helpers in `extensions/alert-watcher/src/store.ts` and `extensions/alert-watcher/src/migrate.ts`; add bounded keyed-reply fields/partial unique index through existing `extensions/alert-watcher/src/reply-flow/store.ts:initReplySchema`. Enforce receipt/snapshot bounds and no tombstone cascade per contract (FR-C02/C05).",
+      "groups": [
+        "durable"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T009",
+      "kind": "task",
+      "intent": "[US2] Implement `extensions/alert-watcher/src/classification-work.ts` queued/admitted/received/terminal transitions, source-count/first-sent markers, frozen reply-flow binding and immutable suggestion subreceipt, all owner/generation fenced. Preserve usage when authority prevents publication (FR-C02/C05/C09).",
+      "groups": [
+        "durable",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T010",
+      "kind": "task",
+      "intent": "[US2] Add process kill/restart tests in `extensions/alert-watcher/classification-recovery.test.ts`: admission ambiguity, received local replay, negative completion, schema error usage, revoked policy, lease loss and retry5s/30s cap3 (FR-C03/C09).",
+      "groups": [
+        "durable"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T011",
+      "kind": "task",
+      "intent": "[US2] Wire dispatcher in `extensions/alert-watcher/src/classification-work.ts` and `extensions/alert-watcher/index.ts`: poll5s, lease30s, renew10s, one active classifier, <=10 candidates/tick; source-qualified authority before claim/dispatch/received settlement; safe stop/abort/fence/close. Depends on T020\u2013T022 before provider boundary (FR-C03/C09).",
+      "groups": [
+        "durable",
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T012",
+      "kind": "task",
+      "intent": "[US2] Make `extensions/alert-watcher/src/classifier.ts` persist bounded terminal SDK result/usage through observer before local validation; connect actual hook and legacy RPC result paths without treating SDK error as a negative (FR-C02/C03/C06).",
+      "groups": [
+        "durable",
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T013",
+      "kind": "task",
+      "intent": "[US2] Add `extensions/alert-watcher/src/delivery-bridge.test.ts` with real queue files and subprocess kills: SQLite admission, enqueue, durable in-flight checkpoint, stub provider acceptance before accepted checkpoint, accepted checkpoint before SQLite settlement, and settlement before acknowledgement. Confirm existing in-flight\u2192uncertain recovery prevents replay; missing/mismatched entries never reenqueue (FR-C04).",
+      "groups": [
+        "delivery"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T014",
+      "kind": "task",
+      "intent": "[US2] Implement `extensions/alert-watcher/src/delivery-bridge.ts` using actual deliverOutboundPayloadsWithOutcome with required durability, persisted queueId/callerRetention and caller completion; reconcile entry or expiry tombstone under lease and exact bindings/generation; SQLite settlement includes first-sent reply/cooldown before acknowledgement (FR-C04/C05/C09).",
+      "groups": [
+        "delivery"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T015",
+      "kind": "task",
+      "intent": "[US2] Extend `src/infra/outbound/delivery-queue-types.ts`, `src/infra/outbound/delivery-queue-store.ts`, `src/infra/outbound/delivery-queue-files.ts`, `src/infra/outbound/delivery-queue-recovery.ts` and `src/infra/outbound/deliver.ts`: strict opt-in callerRetention type/parser/admission, persisted expiry check under lease before recovery send and each provider/chunk invocation, tombstone-before-redaction and enqueue/read tombstone rejection. Preserve existing in-flight checkpoint and unrelated callers. Add real filesystem cases in `src/infra/outbound/delivery-queue-retention.test.ts` (FR-C04/C05).",
+      "groups": [
+        "delivery",
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T016",
+      "kind": "task",
+      "intent": "[US2] Add `extensions/alert-watcher/src/delivery-recovery.test.ts` and existing `extensions/alert-watcher/src/reply-flow/store.test.ts`/`extensions/alert-watcher/src/reply-flow/handle-reply.test.ts`: two recipients, partial success, kills before/after first-sent transaction, one pending reply with fixed acceptedAt-based expiry, preserved claim/forward state, same owner selection, revoked/expired recipients and suggestion recovery without a second invocation (FR-C05).",
+      "groups": [
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T017",
+      "kind": "task",
+      "intent": "[US2] Wire complaint/suggestion/recipient materialization in `extensions/alert-watcher/index.ts`, `extensions/alert-watcher/src/store.ts`, `extensions/alert-watcher/src/destinations.ts` and `extensions/alert-watcher/src/reply-flow/suggestions-drone.ts`. Add keyed pending-reply helper to `extensions/alert-watcher/src/reply-flow/store.ts`; commit first sent receipt, cooldown and pending row together before queue ack. Repeated settlement never resets window/claim/suggestions; bound expired/redacted rows cannot be claimed (FR-C05/C09).",
+      "groups": [
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T018",
+      "kind": "task",
+      "intent": "[US2] Disable old all-recipient boot fan-out for migrated legacy_unreconciled rows in `extensions/alert-watcher/index.ts`/`extensions/alert-watcher/src/store.ts`; restore count/cooldown from durable markers, preserve visible complaint history and legacy/manual reply compatibility (FR-C05).",
+      "groups": [
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T019",
+      "kind": "task",
+      "intent": "[US2] Add bounded seven-day redaction/namespace retirement in `extensions/alert-watcher/src/classification-work.ts`, existing complaint/reply stores and queue helpers. Inventory complaint content/summary/addresses, pending reply origin/destinations/suggestions/reply/claim copies, new snapshots and queue/usage copies. Run generic queue recovery on expired unredacted files before plugin startup and while disabled, plus expiry after backoff/pre-send/between chunks, cleanup-write failure, unexpired watcher and unrelated caller cases; preserve minimal accepted/uncertain evidence and never reopen expired replies (FR-C05/C09).",
+      "groups": [
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T020",
+      "kind": "task",
+      "intent": "[US3] Add result-mode option in `src/drones/host.ts` and narrow `src/drones/run-with-usage.ts` wrapper if needed; fresh host per invocation, exact candidate credential resolution, lifecycle preserved, inferred price suppressed only when opted in (FR-C06).",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T021",
+      "kind": "task",
+      "intent": "[US3] Wire actual hook and flow calls in `extensions/alert-watcher/index.ts`, `extensions/alert-watcher/src/classifier.ts` and `extensions/alert-watcher/src/reply-flow/suggestions-drone.ts` to terminal observer/finalizer; persist response first, attempt one best-effort analytics emission and never reemit on received recovery (FR-C06).",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T022",
+      "kind": "task",
+      "intent": "[US3] Complete overlap A/B, fallback A\u2192B, failure without resolved model, missing earlier usage, cache tokens, unopted callers and persistence-failure tests in `extensions/alert-watcher/src/usage-finalization.test.ts`/`src/drones/host.test.ts`. Kill after durable receipt before analytics emission: export keeps cost, analytics may be absent, recovery makes no inference/event replay. SDK invocation IDs cannot claim hidden provider-request counts (FR-C06).",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T023",
+      "kind": "task",
+      "intent": "[US4] Add actual RPC/service cases in `src/gateway/server-core/server-cron.binding.test.ts`, `src/gateway/server.cron.e2e.test.ts` and `src/platform/cron/normalize.test.ts`: raw blank/whitespace agent/session on add/update, unknown/deleted agent, wrong/global session, add-null omission/default semantics, update-null clearing, omission/valid aliases, rejected candidate leaves memory/disk unchanged, session scope survives add/update/persist/reload, isolated same-agent execution and no announcement (FR-C07).",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T024",
+      "kind": "task",
+      "intent": "[US4] Preserve/validate raw presence before lossy normalization in `src/platform/cron/normalize.ts` and actual `src/gateway/server-methods/cron.ts`; validate direct service input and candidate-copy update under lock in `src/platform/cron/service/ops.ts`, persist scope in `src/platform/cron/service/jobs.ts`. Wire current binding validation in `src/gateway/server-core/server-cron.ts`, `src/platform/cron/service/timer.ts` and `src/platform/cron/isolated-agent/run.ts` before universal-session discard/workspace/auth/tool/provider setup (FR-C07/C09).",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T025",
+      "kind": "task",
+      "intent": "[US4] Run existing cron handler/service/tenant-scope/delivery suites and produce exact source/build `cron-binding-v1` fixture record per `contracts/cron-binding.md`; hand to group D, retaining separate deployed-gateway qualification gate (FR-C07/SC-C04).",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "source-pass; final rewritten commit/provenance and actual history gate remain root-owned"
+    },
+    {
+      "id": "T026",
+      "kind": "task",
+      "intent": "[US5] Add `extensions/alert-watcher/src/jev-shadow-eligibility.test.ts` plus `extensions/alert-watcher/config.test.ts` and real plugin loader fixture in `src/plugins/loader.forks.test.ts`: default/certified pass, custom/idless/flow/model-drift bypass, strict manifest\u2192registration\u2192resolveConfig omission/off/census/shadow, malformed/extra/active config rejected, missing approved context means gate unavailable, shadow baseline always runs. Deny external network (FR-C08).",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T027",
+      "kind": "task",
+      "intent": "[US5] Add exact strict complaintExperiment object to `extensions/alert-watcher/minion.plugin.json`; wire `extensions/alert-watcher/index.ts:ResolvedConfig/resolveConfig` default off to `extensions/alert-watcher/src/jev-shadow-eligibility.ts` and receipt completion. Census adds no calls; injected shadow adapter requires separately trusted approved bounded context; config alone cannot authorize live calls (FR-C08/C09).",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T028",
+      "kind": "task",
+      "intent": "[US5] Implement exact `ComplaintEvaluationRecordV1` schema/export in `extensions/alert-watcher/src/complaint-evaluation.schema.json` and `extensions/alert-watcher/src/complaint-evaluation.ts`; produce fixtures from durable invocation receipts, test monotonic receiptRevision and duplicate/stale/conflicting records, all known/unknown shadow costs and one logical-source denominator; hand pinned schema/fixtures to F (FR-C08/SC-C05).",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "source-pass; final rewritten commit/provenance and actual history gate remain root-owned"
+    },
+    {
+      "id": "T029",
+      "kind": "task",
+      "intent": "Run `contracts/validation.md` commands, actual process/storage tests, migration twice, existing watcher/outbound/cron regressions and full Gateway `pnpm check`, `pnpm tsgo`, `pnpm test`; record source/installed hashes and exact exits (SC-C01\u2013C06).",
+      "groups": [
+        "gates"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "T030",
+      "kind": "task",
+      "intent": "Obtain independent Standards and Spec code review; close full acceptance trace with group D/F joint evidence, document any genuine remaining implementation gap in exact `TODO(handoff)` plus meta proposal, and prepare one scoped Gateway PR to `DEV`. Keep merge/deployment/paid/active classifier gates (SC-C06).",
+      "groups": [
+        "gates",
+        "cron",
+        "shadow"
+      ],
+      "status": "partial-delivery-joint",
+      "note": "Parent identifies existing owned draft PR356. Current correction passes source review; actual rewritten-history scan, new-head CI and final joint bindings remain mandatory.",
+      "securityCorrectionReview": "source-pass; final rewritten commit/provenance and actual history gate remain root-owned"
+    },
+    {
+      "id": "PLAN-1",
+      "kind": "plan",
+      "intent": "Reuse merged canonical source carrier",
+      "groups": [
+        "admission"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "PLAN-2",
+      "kind": "plan",
+      "intent": "Two narrow receipt tables in existing SQLite",
+      "groups": [
+        "durable"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "PLAN-3",
+      "kind": "plan",
+      "intent": "Existing bounded watcher lifecycle",
+      "groups": [
+        "durable"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "PLAN-4",
+      "kind": "plan",
+      "intent": "Existing required durable outbound queue",
+      "groups": [
+        "delivery"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "PLAN-5",
+      "kind": "plan",
+      "intent": "Keyed owner reply and all-copy retention",
+      "groups": [
+        "replyRetention"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "PLAN-6",
+      "kind": "plan",
+      "intent": "Installed SDK opt-in result adapter",
+      "groups": [
+        "usage"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "PLAN-7",
+      "kind": "plan",
+      "intent": "Current explicit cron binding",
+      "groups": [
+        "cron"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "PLAN-8",
+      "kind": "plan",
+      "intent": "Disabled census/shadow with versioned export",
+      "groups": [
+        "shadow"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "CONSTITUTION-I",
+      "kind": "constitution",
+      "intent": "Approved SDD precedes implementation; two independent technical reviews carried forward.",
+      "groups": [
+        "gates"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "CONSTITUTION-II",
+      "kind": "constitution",
+      "intent": "AS-IS/TO-BE/DELTA and source/test evidence retained.",
+      "groups": [
+        "gates"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "CONSTITUTION-III",
+      "kind": "constitution",
+      "intent": "Isolated feature branch, pnpm, registered DEV base; owner-approved grouped-PR exception, no branch/stash/rebase/merge activity by verifier.",
+      "groups": [
+        "gates"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "CONSTITUTION-IV",
+      "kind": "constitution",
+      "intent": "Applicable backend gates now pass; no new Hub UI or public wire capability introduced.",
+      "groups": [
+        "gates"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    },
+    {
+      "id": "CONSTITUTION-V",
+      "kind": "constitution",
+      "intent": "Owner authorized development; merge, paid operations, migration/deployment/activation remain separate human gates.",
+      "groups": [
+        "gates"
+      ],
+      "status": "pass-c-software",
+      "note": null,
+      "securityCorrectionReview": "pass-by-exact-source-continuity-and-bounded-fixture-equivalence"
+    }
+  ],
+  "remaining": [
+    {
+      "id": "CV-C-HISTORY",
+      "task": "T030",
+      "work": "Parent performs preserved, narrowly controlled owned draft-history rewrite and actual unchanged security scope over every rewritten commit; wait for actual new-head CI."
+    },
+    {
+      "id": "CV-C-BINDINGS",
+      "task": "T030",
+      "work": "Refresh final C commit provenance in F and fixture source-format disposition without changing strict public JSON or adding JSON5 to public readers. Continue separately assigned final D/F joint proof."
+    }
+  ],
+  "deployment": "Excluded from local code qualification; operator-managed exact gateway/source/build qualification still required before D activation.",
+  "newImplementationFindings": []
+}

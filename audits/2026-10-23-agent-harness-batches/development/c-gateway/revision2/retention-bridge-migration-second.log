@@ -1,0 +1,72 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway
+
+ ❯ |extensions| extensions/alert-watcher/src/live-retention.test.ts (6 tests | 5 failed) 386ms
+   × live tick expires indeterminate raw/failed copies without changing external-effect truth 90ms
+   × live tick expires failed raw/failed copies without changing external-effect truth 59ms
+   × live tick expires canceled raw/failed copies without changing external-effect truth 15ms
+   × live tick expires sent raw/failed copies without changing external-effect truth 24ms
+   × actual recovered uncertain bridge outcome is cleaned by later watcher tick without restart 19ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires indeterminate raw/failed copies without changing external-effect truth
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires canceled raw/failed copies without changing external-effect truth
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires sent raw/failed copies without changing external-effect truth
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:39:32
+     37|     vi.spyOn(Date,"now").mockReturnValue(row.payload_expires_at+1);
+     38|     const w=watcher(f);await w.tick();await w.stop();
+     39|     expect(fs.existsSync(raw)).toBe(false);expect(fs.existsSync(failed…
+       |                                ^
+     40|     const tombstone=await readDeliveryTombstone(row.id,f.dir);
+     41|     expect(tombstone?.reason).toBe("expired");expect(tombstone?.payloa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires failed raw/failed copies without changing external-effect truth
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:39:74
+     37|     vi.spyOn(Date,"now").mockReturnValue(row.payload_expires_at+1);
+     38|     const w=watcher(f);await w.tick();await w.stop();
+     39|     expect(fs.existsSync(raw)).toBe(false);expect(fs.existsSync(failed…
+       |                                                                          ^
+     40|     const tombstone=await readDeliveryTombstone(row.id,f.dir);
+     41|     expect(tombstone?.reason).toBe("expired");expect(tombstone?.payloa…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > actual recovered uncertain bridge outcome is cleaned by later watcher tick without restart
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:74:93
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  5 failed | 25 passed (30)
+   Start at  03:14:06
+   Duration  30.54s (transform 24.17s, setup 147ms, import 30.49s, tests 11.66s, environment 1ms)
+

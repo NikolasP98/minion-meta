@@ -1,0 +1,87 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse
+
+stdout | ../../../../Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/d-pulse/correction-02/post-read-budget.probe.ts > does not invoke after the post-claim SQL read exhausts the monotonic budget
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '42701',
+  message: 'column "lease_generation" of relation "bg_jobs" already exists, skipping',
+  file: 'tablecmds.c',
+  line: '7349',
+  routine: 'check_for_column_name_collision'
+}
+
+stdout | ../../../../Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/d-pulse/correction-02/post-read-budget.probe.ts > does not invoke after the post-claim SQL read exhausts the monotonic budget
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'policy "pulse_dispatches_owner_org" for relation "pulse_dispatches" does not exist, skipping',
+  file: 'dropcmds.c',
+  line: '528',
+  routine: 'does_not_exist_skipping'
+}
+
+stdout | ../../../../Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/d-pulse/correction-02/post-read-budget.probe.ts > does not invoke after the post-claim SQL read exhausts the monotonic budget
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'trigger "pulse_proposal_immutable" for relation "pulse_proposals" does not exist, skipping',
+  file: 'dropcmds.c',
+  line: '528',
+  routine: 'does_not_exist_skipping'
+}
+
+stdout | ../../../../Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/d-pulse/correction-02/post-read-budget.probe.ts > does not invoke after the post-claim SQL read exhausts the monotonic budget
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'trigger "pulse_dispatch_guard" for relation "pulse_dispatches" does not exist, skipping',
+  file: 'dropcmds.c',
+  line: '528',
+  routine: 'does_not_exist_skipping'
+}
+
+stdout | ../../../../Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/d-pulse/correction-02/post-read-budget.probe.ts > does not invoke after the post-claim SQL read exhausts the monotonic budget
+{"jobReads":2,"reads":["select \"id\", \"tenant_id\", \"user_id\", \"type\", \"ref_id\", \"status\", \"cursor\", \"error\", \"attempts\", \"lease_generation\", \"next_attempt_at\", \"lease_until\", \"created_at\", \"updated_at\", \"started_at\", \"finished_at\" from \"bg_jobs\" where \"bg_jobs\".\"id\" = $1 limit $2","select \"id\", \"tenant_id\", \"user_id\", \"type\", \"ref_id\", \"status\", \"cursor\", \"error\", \"attempts\", \"lease_generation\", \"next_attempt_at\", \"lease_until\", \"created_at\", \"updated_at\", \"started_at\", \"finished_at\" from \"bg_jobs\" where \"bg_jobs\".\"id\" = $1 limit $2"],"invocations":[],"result":{"advanced":0}}
+
+stdout | ../../../../Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/d-pulse/correction-02/post-read-budget.probe.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'drop cascades to 17 other objects',
+  detail: 'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.organizations\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.organization_members\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.profiles\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.member_roles\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.permission_rules\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.app_modules\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.personal_agents\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.gateway\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.user_gateway\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.gateway_lease\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.bg_jobs\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.pulse_proposals\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.pulse_settings\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.hub_migrations\n' +
+    'drop cascades to table qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.pulse_dispatches\n' +
+    'drop cascades to function qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.pulse_proposal_immutable()\n' +
+    'drop cascades to function qc_job_stock_5208f45c3b684732a54e99c6c8b995ea.pulse_dispatch_guard()',
+  file: 'dependency.c',
+  line: '1221',
+  routine: 'reportDependentObjects'
+}
+
+ ✓ ../../../../Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/d-pulse/correction-02/post-read-budget.probe.ts (1 test) 757ms
+   ✓ does not invoke after the post-claim SQL read exhausts the monotonic budget  722ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  04:28:46
+   Duration  2.34s (transform 276ms, setup 47ms, import 1.28s, tests 757ms, environment 0ms)
+
+JSON report written to /home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/d-pulse/correction-03/independent-budget-results.json
