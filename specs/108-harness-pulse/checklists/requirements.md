@@ -14,6 +14,7 @@
 - [x] Current route/module/write/owner gates, Paraglide, semantic primitives, route contracts and actual browser evidence required.
 - [x] Shared D/E and C Gateway ownership interfaces are explicit and serialize shared files.
 - [x] Every acceptance has tasks and actual-caller tests; helper-only mirrors do not qualify.
-- [ ] Independent technical pass 1 and pass 2 approve frozen artifact hashes.
+- [x] D2-01 author correction names notifications SSR/action ownership and T012–T014/T024/T025 proof for rendered revision, owner-safe projection, committed-refresh failure, reconnect and EN/ES keyboard controls; existing access rules and unrelated sections are preserved.
+- [x] Independent technical pass 1 and pass 2 approve frozen artifact hashes; exact final dispositions are linked in the top-level review sidecar.
 
-Constitution II requires technical source anchors in AS-IS, so the generic no-implementation-details checklist applies to product outcomes rather than deleting required evidence. The unchecked review is a workflow gate, not an implementation defect. All implementation tasks remain unchecked.
+Constitution II requires technical source anchors in AS-IS, so the generic no-implementation-details checklist applies to product outcomes rather than deleting required evidence. Checked review records SDD approval, not executed runtime qualification. Revision 1 received both independent approvals at its new hashes; D2-01 closure is recorded by the reviewers. All implementation tasks remain unchecked.

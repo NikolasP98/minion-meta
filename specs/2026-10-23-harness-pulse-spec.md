@@ -1,9 +1,9 @@
 ---
 id: 2026-10-23-harness-pulse-spec
 title: Pulse approval and dispatch receipts
-stage: spec
-status: review
-pass: 1
+stage: dev
+status: implementing
+pass: 2
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion_hub]
@@ -12,14 +12,14 @@ relationship: extends
 related: [2026-10-22-agent-harness-reliability-and-proactivity-spec]
 tags: [logic, data, security, infra, ui, test]
 type: feature
-verdict: pending
+verdict: approved
 ---
 
 # Pulse approval and dispatch receipts
 
 ## 0. Product
 
-Implement approved parent acceptances A17–A20 in one group pulse PR under the owner's batching directive. See [specification](108-harness-pulse/spec.md), [plan](108-harness-pulse/plan.md) and [tasks](108-harness-pulse/tasks.md). Parent implementation authorization remains valid; independent technical review of this refinement is pending.
+Implement approved parent acceptances A17–A20 in one group pulse PR under the owner's batching directive. See [specification](108-harness-pulse/spec.md), [plan](108-harness-pulse/plan.md) and [tasks](108-harness-pulse/tasks.md). Parent implementation authorization remains valid; both independent technical reviewers approved revision 1 at exact hashes. D2-01 adds the existing notifications-page Pulse consumer and SSR projection to the same scope, with exact rendered-revision propagation and committed-refresh/reconnect proof. Both approvals cover the revised artifact hashes.
 
 ## 1. AS-IS, TO-BE and DELTA
 

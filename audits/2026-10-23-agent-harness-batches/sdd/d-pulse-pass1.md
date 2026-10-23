@@ -66,3 +66,63 @@ Equal-weight mean: **8.5 / 10, pass**. No score is substituted for implementatio
 ## Disposition
 
 **Pass 1 approved at these exact hashes.** No author revision is required by this pass. A second independent approval is still required before runtime work. Parent retains commit/PR sequencing; no merge, deployment, paid execution or operational activation is authorized here.
+
+
+---
+
+## RECOVERY — independent pass 1 rereview of revision 1 (2026-10-23)
+
+Reviewer: `/root/astra_pulse_pass1_recovery` (Astra, replacement independent reviewer after the original pass-one thread was lost). **Standards: APPROVED. Spec: APPROVED. D2-01: CLOSED at the ten hashes below.** No blocking or required SDD-revision finding remains in this bounded rereview.
+
+This reviewer did not author D or its correction, spawned no children and did not read the pass-two rereview disposition. The parent reported that another pass had approved; this assessment rests on the documents and actual source paths inspected independently. The original pass-one report above is preserved byte-for-byte; its pre-append SHA-256 was `b8a15cbd5240dddfd4c9ba93becaaec50a6999b6ecfb8e88952219c9104d2937`. Its old hashes remain historical, not approval of the new seven-document revision.
+
+### Evidence and bounded scope
+
+Read the applicable meta/Hub instructions, MINION engineering review and change-safety guidance, technical-writing guidance, parent A17–A20, revised D specification/plan/tasks/research/checklist/stub/validation and unchanged API/shared contracts. Recomputed all ten artifact hashes and all six revision-report source hashes: every value matched. The API contract, D/E shared contract and data model still match the original independently approved manifest. FR-001–FR-009 match the pre-revision committed specification byte-for-byte. Hub source remains clean at `ef62e8ac2dd8d83d7f38dae8ec04f59c50cf4283`; artifact checkout `git diff --check` passes. Original approved areas outside this correction were not broadly re-audited.
+
+### Standards
+
+Approved. Ownership now includes both existing notifications files, their actual server-load test, the real shared helper and mounted/browser proof. T012 preserves `users:manage` review and org-kind visibility while adding the shared Pulse owner filter, safe projection and read capability. It explicitly preserves the unrelated inbox and join-request access paths. T013/T014 preserve action-runtime outcomes, semantic primitives and localized copy; T024/T025 retain complete Hub, route, design/token, i18n and browser gates. This is a bounded repair of an omitted existing consumer, with no new endpoint, permission expansion, D/E interface change or unrelated UI redesign.
+
+### Spec
+
+Approved. Independent source inspection confirms the causal paths and test viability:
+
+- `src/routes/(app)/notifications/+page.svelte:111–115` currently sends only an ID through the shared helper, then independently invalidates `app:notifications`. Cards render `data.pulseProposals` at line 281 and pass `p.id` at lines 297/306. T013 explicitly carries the exact rendered revision through both decisions. T014's SSR revision 1 versus shared/server revision 2 case would detect a helper that substitutes the newer revision; both actions must conflict with zero dispatches, and a subsequent decision requires displayed revision 2.
+- `src/lib/state/features/pulse.svelte.ts:30–43,52–53` currently returns no authoritative action outcome and refreshes shared state. T013 requires retaining the committed result before page invalidation, fencing stale controls on invalidation failure and read-only recovery. T014/T025 require exactly one write for both committed approve and dismiss, and reconnect/readback of the same decision/receipt. This covers the independent page-invalidation failure as well as shared helper refresh behavior.
+- `src/routes/(app)/notifications/+page.server.ts:15–41` is a separate SSR entry: review capability, org-kind visibility, `listPending(ctx)` and independent inbox/join-request data. `pulse.service.ts:43–60` currently reads/counts org-only pending rows. T012 and validation steps 3/4 name the actual load and real owner-filtered reader against disposable PostgreSQL, including same-org other-owner exclusion, allowed legacy rows, safe projection, denied review access and business visibility. Synthetic page data alone cannot satisfy this requirement.
+- Source-wide `rg` finds current approve/dismiss callers in the Pulse page, popup and notifications page. All three now appear in ownership and T013/T014/T025. The existing critical-journeys builder mounts real route components and aliases application navigation, so extending it with a new `PulseFixture.svelte`, actual notifications page and controllable invalidation boundary is a viable seam. `PulseFixture.svelte` does not yet exist in the source pin; it is correctly an implementation task, not current evidence. Plan ownership includes fixture build/serve and E2E integration. Existing suite network/provenance checks must be retained when adding modes/cases. Both EN/ES keyboard actions and recovery, current-source screenshots and request counts are explicitly required.
+
+No runtime, database, browser, provider, network or production operation was performed for this SDD review. No source/spec/index/branch/commit was changed. All planned mounted, SQL, browser and full-gate outcomes remain unproven until implementation. Approval covers the implementation contract only; it does not authorize merge, deployment or activation.
+
+### Canonical G2 scores
+
+These scores apply to the original bounded slices packaged into D, with the existing notifications consumer restored to A18 scope.
+
+| Axis | Score / 10 | Rationale |
+|---|---:|---|
+| slice_size | 7 | Four original slices remain substantial; the correction extends existing A18 tasks. |
+| dod_verifiability | 9 | Exact displayed revision, response/refresh ordering, readback and write counts are observable. |
+| scope_containment | 9 | Existing notifications Pulse section only; unrelated sections and interfaces remain bounded. |
+| impact_zones | 9 | Independent SSR loader, shared helper and all three decision surfaces are covered. |
+| collisions | 8 | Shared localization/fixtures and D/E files remain explicitly serialized by parent. |
+| testability | 9 | Actual server load with PostgreSQL plus mounted page/helper and browser failure injection are feasible. |
+
+Equal-weight mean: **8.5 / 10, pass**.
+
+### Exact revised artifacts approved by recovery pass 1
+
+| Meta-relative file | SHA-256 |
+|---|---|
+| `specs/108-harness-pulse/checklists/requirements.md` | `fc0eaeeed22ef1125352665cdf059722bc8d5a0050dfef4bc7c7d8110fc8bcea` |
+| `specs/108-harness-pulse/contracts/pulse.md` | `f79b1711226b807a3541f29fe16ab9574431f0fca9f24b6cb3af6d72799a4b52` |
+| `specs/108-harness-pulse/contracts/shared.md` | `cb836393e5545253cfc7b4d15d781188429da1f42a1f787c6fc5764599bfd3ae` |
+| `specs/108-harness-pulse/contracts/validation.md` | `b34624423c44b063a4b3af36dad451bb5cadd759cd1dfb45993e31c6c13bfd62` |
+| `specs/108-harness-pulse/data-model.md` | `d02b11e5ac0354f44c9bd171fc80d13d2c2fa74d3cf9dfcddde5a78a0d1bb0ac` |
+| `specs/108-harness-pulse/plan.md` | `37965f6d85ffbed2e5f41f981abf67850785577e78c67a818eef59b214cf1e2d` |
+| `specs/108-harness-pulse/research.md` | `5af597a077fedd6df921a1388b71a9fa9cba968c2a8f52d48712bc0294996d32` |
+| `specs/108-harness-pulse/spec.md` | `127e3dafe1864eed711618c33c74f948573acf022d76f389e80afe8739e13578` |
+| `specs/108-harness-pulse/tasks.md` | `1556373679bb78beaa15f18e041bb1fadd53df57db25f107bec46df713187537` |
+| `specs/2026-10-23-harness-pulse-spec.md` | `cbcdb67f5f0899455d48909e33eb4905ac2150c5fa2f5ad3882e1546d864c997` |
+
+**Disposition:** Recovery pass 1 approves this exact ten-file revision-1 candidate. Parent must verify both independent reviews refer to these same hashes before code begins. The earlier pass-one omission of `/notifications` is corrected by this appended assessment; the preserved historical text is not reused as proof of that consumer.

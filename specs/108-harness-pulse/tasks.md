@@ -26,11 +26,11 @@
 
 ## Phase 4: US2 — Inspect authoritative status (P1)
 
-**Independent test**: real page and popup with current mutation helpers, failed refresh and reconnect.
+**Independent test**: real Pulse page, popup and notifications-page Pulse consumer with current mutation helpers; notifications SSR load with actual owner-scoped reader; stale rendered revision, failed refresh and reconnect.
 
-- [ ] T012 [US2] Add owner-filtered `listRecentPulseDecisions` (limit `1..50`, keyset cursor) and receipt projection to `pulse.service.ts`, `src/routes/api/pulse/proposals/[id]/receipt/+server.ts`, pending feed/count and `src/routes/(app)/pulse/+page.server.ts`; legacy executedAt projects unverified, not execution (FR-002/004/009).
-- [ ] T013 [US2] Thread `expectedRevision` and receipt responses through `src/lib/state/features/pulse.svelte.ts`, `src/lib/components/layout/NotificationsPopup.svelte`, `src/routes/(app)/pulse/+page.svelte`; add shared `src/lib/components/pulse/PulseReceipt.svelte`, bounded recent section and recovery without write replay (FR-003/004/009).
-- [ ] T014 [US2] Localize all changed Pulse/popup copy in `messages/en.json` and `messages/es.json`, verify existing nav/view/write gates and Pulse route contracts, and add real mounted fixture `tests/fixtures/critical-journeys/PulseFixture.svelte` plus `tests/e2e/ui-audit/critical-journeys.spec.ts` cases for keyboard, reconnect, owner privacy and committed-refresh failure (A18, FR-009).
+- [ ] T012 [US2] Add owner-filtered `listRecentPulseDecisions` (limit `1..50`, keyset cursor) and receipt projection to `pulse.service.ts`, `src/routes/api/pulse/proposals/[id]/receipt/+server.ts`, pending feed/count and `src/routes/(app)/pulse/+page.server.ts`; integrate the same owner filter/safe read projection and revision into `src/routes/(app)/notifications/+page.server.ts` `data.pulseProposals`. Preserve its existing `users:manage` review and org-kind gates together with Pulse read capability requirements. Add `src/routes/(app)/notifications/+page.server.test.ts` invoking the real load/reader against disposable PostgreSQL: same-org other-owner exclusion, allowed legacy informational rows, denied review access, business visibility and safe field projection; verify inbox/join-request access unchanged. Legacy executedAt projects unverified, not execution (FR-002/004/009; D2-01).
+- [ ] T013 [US2] Thread `expectedRevision` and receipt responses through `src/lib/state/features/pulse.svelte.ts`, `src/lib/components/layout/NotificationsPopup.svelte`, `src/routes/(app)/pulse/+page.svelte` and `src/routes/(app)/notifications/+page.svelte`; both notifications actions pass the exact rendered `p.id`/`p.revision` into `decidePulse` and the real helper, never a revision derived from newer shared state or a pre-submit fetch. Add shared `src/lib/components/pulse/PulseReceipt.svelte`, bounded recent section and recovery without write replay. Preserve the committed action outcome before notifications invalidation, fence stale decision controls if invalidation fails, and expose only read recovery; reconnect reads the same authoritative decision/receipt (FR-003/004/009; D2-01).
+- [ ] T014 [US2] Localize all changed Pulse/popup/notifications Pulse copy in `messages/en.json` and `messages/es.json`, verify existing nav/view/write gates and affected route contracts, and add real mounted fixture `tests/fixtures/critical-journeys/PulseFixture.svelte` plus `tests/e2e/ui-audit/critical-journeys.spec.ts` cases for keyboard, reconnect, owner privacy and committed-refresh failure. Retain Pulse page/popup cases and mount the actual notifications page with its real mutation helper: SSR display revision 1 with shared list/server revision 2 must submit 1 for both approve and dismiss, conflict and create zero dispatches; explicit refresh must display 2 before a new decision submits 2. Cover committed approve and dismiss followed by failed `app:notifications` invalidation with exactly one write, read-only recovery, reconnect to the same decision/receipt, owner-scoped SSR/readback, safe projection and EN/ES keyboard controls. Replacement markup or a copied action handler cannot qualify (A18, FR-003/004/009; D2-01).
 
 ## Phase 5: US3 — Advance only authorized work (P1)
 
@@ -49,18 +49,18 @@
 ## Phase 6: Verification and handoff
 
 - [ ] T024 Run all commands in `contracts/validation.md`: full check/test/build, i18n, design/token lint, route contract and critical-journeys; record current source/lock evidence in `docs/pulse-dispatch.md`. Fix all errors/warnings/failures (SC-001–005).
-- [ ] T025 Use browser-harness on the current source-built local fixture/QA app; retain EN/ES keyboard, popup/page, owner denial, reconnect and failed-refresh screenshots/call counts in the root D audit. Follow `tests/fixtures/critical-journeys/README.md` (SC-004).
+- [ ] T025 Use browser-harness on the current source-built local fixture/QA app; retain EN/ES keyboard, popup/Pulse page/notifications-page Pulse section, rendered-vs-current revision conflict, owner denial, reconnect and failed-refresh screenshots/call counts in the root D audit. Follow `tests/fixtures/critical-journeys/README.md` (SC-004).
 - [ ] T026 Obtain independent Standards and Spec code reviews, map every A17–A20 case to actual evidence, and freeze D commit/shared contract for E; parent creates the single D PR. Record any true open end at its code site and meta proposal; do not claim C deployment qualification from stubs (SC-001–005).
 
 ## Dependencies and execution order
 
-T001–T007 precede US1. T008→T009→T010→T011; US2 T012→T013→T014 follows stable decisions. A19 T015–T018 can be developed after foundation without digest; A20 T019–T023 requires decisions and selected runtime. No parallel edit of `pulse.service.ts`, `bg-runtime.ts`, page/state/popup or shared localization. Independent test design may be parallel, but this task does not authorize extra agents. All converge on T024–T026. MVP is atomic decisions/receipts with dispatch disabled; final D PR includes all four acceptances.
+T001–T007 precede US1. T008→T009→T010→T011; US2 T012→T013→T014 follows stable decisions. A19 T015–T018 can be developed after foundation without digest; A20 T019–T023 requires decisions and selected runtime. No parallel edit of `pulse.service.ts`, `bg-runtime.ts`, Pulse page/notifications page/state/popup or shared localization. Independent test design may be parallel, but this task does not authorize extra agents. All converge on T024–T026. MVP is atomic decisions/receipts with dispatch disabled; final D PR includes all four acceptances.
 
 ## Acceptance coverage
 
 | Acceptance | Tasks |
 |---|---|
 | A17 | T003–T007,T010,T011,T023 |
-| A18 | T008–T014,T024,T025 |
+| A18 | T008–T014,T024,T025; D2-01 notifications SSR/action/mounted coverage in T012–T014,T024,T025 |
 | A19 | T015–T018,T024 |
 | A20 Hub | T009,T019–T023,T024,T026; C owns Gateway implementation |

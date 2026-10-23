@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-23
 
-**Status**: Ready for independent technical review; implementation authorization inherited from the approved parent.
+**Status**: Approved for development; both independent Astra technical reviews approved the exact frozen artifacts.
 
 **Input**: Batch D implements parent acceptance A17–A20 Hub work in one PR. Gateway A20 belongs to batch C, not an additional PR. The owner requested one PR per group and Astra SDD/review with Sol development.
 
@@ -37,14 +37,17 @@ A user sees the authoritative status after refresh or reconnection, including un
 
 **Why this priority**: Scheduling acceptance is currently treated as the end of the approval flow.
 
-**Independent Test**: Mount the existing Pulse page and notification popup with real client mutation helpers and a stub gateway. Approve, interrupt response/refresh, reconnect, and inspect the stable receipt through the real route.
+**Independent Test**: Mount the existing `/pulse` page, notification popup and `/notifications` page Pulse section with real client mutation helpers and a stub gateway. Approve or dismiss, interrupt response/refresh, reconnect, and inspect the authoritative decision/receipt through the real route. Exercise the notifications SSR load separately against the real owner-scoped reader.
 
 **Acceptance Scenarios**:
 
 1. Given a committed decision, when refresh fails, then the UI reports a committed write awaiting refresh and never replays it.
 2. Given a remote scheduling response, then the UI says scheduled, not executed. Unknown outcome shows a receipt reference and reconciliation guidance.
 3. Given a receipt owned by the user, when they navigate away and return, then pending count is unchanged in meaning and a bounded recent-decisions section shows the receipt.
-4. Keyboard approval, editing, receipt inspection, and error recovery work in English and Spanish.
+4. Keyboard approval, editing, receipt inspection, and error recovery work in English and Spanish, including approve/dismiss and recovery on the notifications-page Pulse cards.
+5. Given a notifications SSR card rendered at revision 1 while shared state and the server hold revision 2, when either approve or dismiss is selected, then the real helper submits revision 1, receives refresh-required conflict and creates zero dispatches. Only after an explicit refresh displays revision 2 may a new user decision submit revision 2.
+6. Given a committed notifications-page decision followed by failed `app:notifications` invalidation, then its authoritative decision/receipt remains visible, stale decision controls cannot replay the write, read-only recovery issues no second mutation, and reconnect recovers the same decision/receipt.
+7. Given another same-org owner, missing review access, a business org or hidden Pulse fields, then notifications SSR/readback applies the existing access rules and shared Pulse owner filter/safe projection; unrelated inbox and join-request behavior stays unchanged.
 
 ### User Story 3 — Run only authorized, selected work (Priority: P1)
 
@@ -101,6 +104,7 @@ Source pin: Hub `ef62e8ac2dd8d83d7f38dae8ec04f59c50cf4283`, `bun.lock` SHA-256 `
 | `src/routes/api/pulse/proposals/[id]/+server.ts:27–82` reads pending, calls cron, then marks approved; PATCH has no version | One locking decision transaction, no remote call in route | A17/A18; T004–T011 |
 | `src/server/services/pulse.service.ts:63–98` updates by org/id only; `pg-schema/pulse.ts:3–29` lacks revision/owner binding | Versioned pending edits and immutable dispatch snapshot; tombstones | A17; T004–T007 |
 | `pulse.service.ts:43–60` reads/counts pending only; page `+page.svelte:91–103` and `NotificationsPopup.svelte:106–114` decide without revision | Bounded recent receipts and revised actual callers | A18; T010–T014 |
+| `src/routes/(app)/notifications/+page.svelte:111–115,281,297,306` renders `data.pulseProposals` and decides by ID; `+page.server.ts:20,28–36` separately loads pending cards under existing review/org-kind gates | Carry the exact rendered revision through both actions; share owner filtering/safe read projection in SSR; preserve committed decision across failed page invalidation and reconnect | A18; T012–T014,T024,T025 |
 | `bg-runtime.ts:130–156,354–378` selects global oldest 20 and increments even when no claim | Selected query/claim predicates and truthful result count | A19; T015–T018 |
 | `src/routes/api/jobs/tick/+server.ts:42–53` skips bg jobs by default | Preserve this exact default; separate Pulse tick | A19; T017–T018 |
 | `src/lib/server/gateway-rpc.ts:79–130` falls back through system/env credentials | Strict exact-assignment transport path | A20; T019–T022 |

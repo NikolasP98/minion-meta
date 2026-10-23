@@ -1,9 +1,9 @@
 ---
 id: 2026-10-23-harness-digest-spec
 title: Bounded dependency digest in Pulse
-stage: spec
-status: review
-pass: 1
+stage: dev
+status: implementing
+pass: 2
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion_hub]
@@ -12,14 +12,14 @@ relationship: extends
 related: [2026-10-22-agent-harness-reliability-and-proactivity-spec]
 tags: [logic, data, security, infra, ui, test]
 type: feature
-verdict: pending
+verdict: approved
 ---
 
 # Bounded dependency digest in Pulse
 
 ## 0. Product
 
-Implement approved parent acceptances A21–A25 and A32 in one group digest PR under the owner's batching directive. See [specification](109-harness-digest/spec.md), [plan](109-harness-digest/plan.md) and [tasks](109-harness-digest/tasks.md). Parent implementation authorization remains valid; independent technical review of this refinement is pending.
+Implement approved parent acceptances A21–A25 and A32 in one group digest PR under the owner's batching directive. See [specification](109-harness-digest/spec.md), [plan](109-harness-digest/plan.md) and [tasks](109-harness-digest/tasks.md). Parent implementation authorization remains valid; both independent technical reviewers approved this refinement at exact hashes.
 
 ## 1. AS-IS, TO-BE and DELTA
 
