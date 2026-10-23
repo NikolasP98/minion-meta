@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-23T23:17:07.628Z",
+	"generatedAt": "2026-10-23T23:48:05.046Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1015,17 +1015,18 @@
 				"implementation": 5
 			},
 			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Unpersisted gateway-org-brain binding is a privilege-escalation gap in the auth model that a referenced SEC proposal already scopes.",
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ccb2014a7cbb"
+			],
+			"rationale": "An unverified gateway-org-brain binding is a privilege-escalation gap in auth, and it shares the same SEC-06/Phase 15 restoration proposal as the related assistant-query finding, so the two should become one authorization-model goal.",
 			"evidence": [
-				"brain_access alone does not bind a gateway to an org",
-				"privilege-escalation gap in assistant-principal.ts",
-				"references proposal 2026-09-09-assistant-query-delegation-restoration SEC-06"
+				"brain_access alone does not bind a gateway to an org/brain",
+				"references proposals/2026-09-09-assistant-query-delegation-restoration.md (SEC-06/Phase 15)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:32:09.705Z"
+			"scoredAt": "2026-10-23T23:48:04.899Z"
 		},
 		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
@@ -3133,6 +3134,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T17:48:30.210Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-309dbe0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 309dbe0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-309dbe0.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "40596bddf80826aa8d02c92192036144d853bcd5f03904fb0b7126f10018c4bc",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A mock that always returns true defeats a non-brain-module authorization test, creating a real regression-detection gap in auth code.",
+			"evidence": [
+				"high severity weakened-test in assistant-principal.test.ts:316",
+				"mock returns true for all calls while test expects false"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment",
@@ -5829,6 +5862,38 @@
 			"scoredAt": "2026-10-19T03:08:42.508Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/93141a2cda7ff4b65db8e31cd285ad60d9050785",
+			"sourceUpdatedAt": "2026-10-23T18:29:46Z",
+			"sourceFingerprint": "72a92b2dacfe0ae5b10ee9344cc9d8ff70139e3a77ac3cf754aede6204a3cc21",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit already fixes the hub_disconnected prod bug by anchoring hub-rest-registry on globalThis, so the deployment-health goal is satisfied pending normal release confirmation.",
+			"evidence": [
+				"commit #358 fixes WhatsApp extension's hub_disconnected lookup",
+				"fix anchors value on globalThis as channel-mirror.ts already does"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
+		},
+		{
 			"key": "issue:minion-meta#306",
 			"kind": "issue",
 			"stage": "proposal",
@@ -8348,38 +8413,6 @@
 			"scoredAt": "2026-10-23T03:36:38.574Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-309dbe0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 309dbe0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-309dbe0.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "40596bddf80826aa8d02c92192036144d853bcd5f03904fb0b7126f10018c4bc",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A weakened authorization test can hide real regressions in security-critical capability checks.",
-			"evidence": [
-				"mock capabilities return true for all calls, masking expected false cases",
-				"file: src/server/auth/assistant-principal.test.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:32:09.705Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-8b65d2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10651,6 +10684,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T07:57:13.897Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/assistant-query.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ccb2014a7cbb.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "75b337a3ce82a4488d5319c6dce4588d11c30d7209b1c2a903b8df4b7e7662e2",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b8113b095cdf"
+			],
+			"rationale": "Restoring tenant-scoped analytics and retiring gateway crm_query is part of the same SEC-06/Phase 15 restoration effort as the related auth-binding finding, so they should be merged into one goal.",
+			"evidence": [
+				"TODO(handoff) references same proposals/2026-09-09-assistant-query-delegation-restoration.md (SEC-06/Phase 15)",
+				"fix direction requires Drizzle schema changes plus new typed dataset design"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-server-telemetry-lifecycle-spec",
@@ -17470,38 +17537,6 @@
 			"scoredAt": "2026-10-17T04:05:06.282Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/assistant-query.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ccb2014a7cbb.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "75b337a3ce82a4488d5319c6dce4588d11c30d7209b1c2a903b8df4b7e7662e2",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Analytics coupling to gateway crm_query limits reporting/audit flexibility but has no stated production impact or deadline.",
-			"evidence": [
-				"TODO(handoff) in assistant-query.service.ts references SEC-06/Phase 15 proposal",
-				"Diagnosis cites blocked reporting and audit trails, no urgency stated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:32:19.678Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d57706ece661",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18154,39 +18189,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T10:56:32.537Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-96f1290718f8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96f1290718f8.md",
-			"sourceUpdatedAt": "2026-10-02",
-			"sourceFingerprint": "19a4a5bad99ae3d96c9aaafeeb82eed397e86ef27077ea9c93171fd50d059e8f",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "UUID migration is deferred schema debt with real cross-project blast radius but no concrete migration plan yet.",
-			"evidence": [
-				"table uses non-UUID IDs unlike canonical crm.customers pattern",
-				"fix requires schema migration + FK updates across hub and site",
-				"marker says deferred to a later phase"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:32:09.705Z"
 		},
 		{
 			"key": "spec:2026-08-03-crm-icp-score-spec",
@@ -22821,20 +22823,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 5,
 				"implementation": 3
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "User-facing drag-drop reclassification bug is real but the diagnosis is still exploratory and lacks a confirmed fix scope.",
+			"rationale": "The drag-drop reclassification bug is plausible UX/data-integrity debt, but the auto-diagnosis itself is speculative and unverified pending file inspection.",
 			"evidence": [
-				"reclassification only triggers for custom columns, not other column types",
-				"diagnosis ends with \"Would you like me to examine the file and draft the fix?\""
+				"marker: reclassification only triggers for custom columns",
+				"diagnosis text admits 'I need to read the file to see... in context'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:32:09.705Z"
+			"scoredAt": "2026-10-23T23:48:04.899Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e1f5f0efca2a",
@@ -24051,6 +24053,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T03:34:47.327Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-96f1290718f8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96f1290718f8.md",
+			"sourceUpdatedAt": "2026-10-02",
+			"sourceFingerprint": "19a4a5bad99ae3d96c9aaafeeb82eed397e86ef27077ea9c93171fd50d059e8f",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The marker itself defers scope to an undefined 'part 2' migration phase, so the goal needs a concrete table/migration plan before it is actionable.",
+			"evidence": [
+				"TODO(handoff) text: 'numbered in part 2'",
+				"fix direction requires schema migration across @minion-stack/db, hub, and site"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b9ec3f0147a5",
@@ -25482,19 +25516,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 7
+				"implementation": 6
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Two small, well-localized test robustness fixes (unchecked array access, unvalidated env var) are quick and low-risk to apply.",
+			"rationale": "Two test-robustness findings (unchecked array access, unvalidated env var) are real but confined to e2e test fixtures, not production risk.",
 			"evidence": [
-				"intents.at(-1) used without empty check",
-				"process.env.MINION_CRITICAL_OUT used without runtime validation"
+				"medium unchecked-access in calendar-mobile.spec.ts:116",
+				"high unvalidated-input for MINION_CRITICAL_OUT in critical-journeys.spec.ts:16"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:32:09.705Z"
+			"scoredAt": "2026-10-23T23:48:04.899Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-676808e46687",
@@ -25528,38 +25562,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T17:40:12.329Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-cff27fef4e3c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/charts/Chart.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-cff27fef4e3c.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "6b00ff6086ddb9ba45ff736c43fc9e982fa5db9d4b7804b08af2dd4befb33e5a",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear, bounded accessibility fix (keyboard support for chart filters/legend) with concrete WCAG remediation steps and no dependencies.",
-			"evidence": [
-				"TODO(handoff) names exact file and missing keyboard action",
-				"Fix direction specifies keydown handlers, tabindex, aria attributes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:32:19.678Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e73000965c43",
@@ -27534,6 +27536,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T03:26:37.089Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-cff27fef4e3c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/charts/Chart.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-cff27fef4e3c.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "6b00ff6086ddb9ba45ff736c43fc9e982fa5db9d4b7804b08af2dd4befb33e5a",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Missing keyboard handlers on chart filter/legend controls is a concrete WCAG 2.1 AA gap with a clearly bounded fix (keydown handlers, tabindex, aria state).",
+			"evidence": [
+				"marker: 'clickable filter and legend consumers still need keyboard action'",
+				"fix direction specifies Enter/Space activation and arrow-key navigation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e0651859d6e7",
@@ -35867,6 +35901,42 @@
 			"scoredAt": "2026-10-17T22:30:26.814Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c237b00d27fa",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c237b00d27fa.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "41faca0ace91fe25c4459af9d3460d78279e11b57594e8dcd6b6b6d0f8177720",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-eb28a2fabfb9",
+				"proposal:postmerge-minion-site-52385ddaa6f6",
+				"proposal:postmerge-minion-site-ea1bced2f3b0"
+			],
+			"rationale": "This is one of four near-identical committed-tarball scan-gaps already flagged as a duplicate_candidate of an existing packaging remediation item, so the four should be consolidated into one dependency-provenance goal.",
+			"evidence": [
+				"same minion-stack-ui-0.1.0 tgz hash flagged across hub and site",
+				"reconciliation note flags duplicate_candidate of 2026-09-08-platform-qc-remediation UI-06"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-c9369d818ed7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35995,6 +36065,42 @@
 			"scoredAt": "2026-10-17T00:40:38.379Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-eb28a2fabfb9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eb28a2fabfb9.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "cf733bc4406b625e34c3e67277962c1d39a72bd372d1dfcf79256b032fc30a66",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-c237b00d27fa",
+				"proposal:postmerge-minion-site-52385ddaa6f6",
+				"proposal:postmerge-minion-site-ea1bced2f3b0"
+			],
+			"rationale": "Another instance of the same committed-tarball scan-gap class already marked duplicate_candidate of an existing remediation item; should be consolidated with the sibling findings rather than tracked separately.",
+			"evidence": [
+				"same minion-stack-design-tokens-0.1.1 tgz hash as the site-side finding",
+				"explicitly flagged duplicate_candidate, not merged, pending human confirmation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-f173c4e5b58a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36029,6 +36135,42 @@
 			"scoredAt": "2026-10-21T03:26:37.089Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-site-52385ddaa6f6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-52385ddaa6f6.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "c5d56dc90268f776de1a96bc475fb8775c44944a5a2a9f149da5bde9434d0f4e",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-eb28a2fabfb9",
+				"proposal:postmerge-minion-hub-c237b00d27fa",
+				"proposal:postmerge-minion-site-ea1bced2f3b0"
+			],
+			"rationale": "This is the site-side instance of the same design-tokens tarball scan-gap already seen in hub, part of the same duplicate_candidate finding class that should become one goal.",
+			"evidence": [
+				"identical tgz hash to postmerge-minion-hub-eb28a2fabfb9",
+				"note states it is not cross-linked to the sibling hub finding despite being the same artifact"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-site-d5d1a8c9d6a9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36059,6 +36201,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:06:48.004Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-ea1bced2f3b0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ea1bced2f3b0.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "1f3483abded7cf672fa681c110702347de1686e9a42806d10bf7bf3027d6d2cb",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-c237b00d27fa",
+				"proposal:postmerge-minion-hub-eb28a2fabfb9",
+				"proposal:postmerge-minion-site-52385ddaa6f6"
+			],
+			"rationale": "Site-side counterpart of the minion-stack-ui tarball scan-gap, same hash and finding class as the hub instance, both flagged duplicate_candidate pending human disposal.",
+			"evidence": [
+				"same minion-stack-ui-0.1.0 tgz hash as postmerge-minion-hub-c237b00d27fa",
+				"flagged duplicate_candidate of 2026-09-08-platform-qc-remediation UI-06"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:48:04.899Z"
 		},
 		{
 			"key": "spec:2026-08-26-spec-heading-lint-baseline-backfill-spec",
@@ -37914,70 +38092,6 @@
 			"scoredAt": "2026-10-19T02:25:56.492Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-site-52385ddaa6f6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-52385ddaa6f6.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "c5d56dc90268f776de1a96bc475fb8775c44944a5a2a9f149da5bde9434d0f4e",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Minor repo-hygiene finding about a committed dependency tarball already flagged as a likely duplicate of an existing remediation doc pending human confirmation.",
-			"evidence": [
-				"Reconciliation note flags duplicate_candidate against 2026-09-08-platform-qc-remediation's UI-06 item",
-				"Note explicitly says a human should confirm coverage before folding in or closing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:40:32.591Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-site-ea1bced2f3b0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ea1bced2f3b0.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "1f3483abded7cf672fa681c110702347de1686e9a42806d10bf7bf3027d6d2cb",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Same class of minor dependency-tarball hygiene issue, already flagged as a probable duplicate awaiting human confirmation rather than confirmed resolution.",
-			"evidence": [
-				"Reconciliation note flags duplicate_candidate against the same UI-06 remediation item",
-				"Fix is well-specified (git rm, .gitignore, regenerate lockfile) but not yet confirmed covered"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:40:32.591Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -39188,41 +39302,6 @@
 			"scoredAt": "2026-10-18T05:25:50.877Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c237b00d27fa",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.hf35a998e0397229b84f9eb96d43f80c314d36347a4d834135566d182924348fd.tgz (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c237b00d27fa.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "41faca0ace91fe25c4459af9d3460d78279e11b57594e8dcd6b6b6d0f8177720",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-eb28a2fabfb9"
-			],
-			"rationale": "Flagged as a duplicate of already-tracked dependency-provenance remediation work, with no new scope beyond confirming coverage.",
-			"evidence": [
-				"Same class of finding already tracked under 2026-09-08-platform-qc-remediation's Dependency/release provenance (UI-06)",
-				"Flagged duplicate_candidate rather than merged — a human should confirm",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:40:14.863Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39253,41 +39332,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T21:57:09.402Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-eb28a2fabfb9",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eb28a2fabfb9.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "cf733bc4406b625e34c3e67277962c1d39a72bd372d1dfcf79256b032fc30a66",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c237b00d27fa"
-			],
-			"rationale": "Another duplicate-flagged tarball provenance finding, already a repeat of a prior build of the same package, awaiting human confirmation to close rather than act on.",
-			"evidence": [
-				"same deps/minion-stack-design-tokens-*.tgz class already flagged once before",
-				"Flagged duplicate_candidate rather than merged",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:40:14.863Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fbd7c21e9aff",
