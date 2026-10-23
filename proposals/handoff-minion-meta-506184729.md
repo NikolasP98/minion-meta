@@ -1,12 +1,20 @@
 ---
 id: handoff-minion-meta-506184729
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/development/b-factory/factory.patch (minion-meta)
-status: draft
+status: merged
+merged_into: handoff-minion-meta-689343339
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Reconciliation note (2026-10-23): identical markers (same text, same line
+> numbers L132/L234) also appear in
+> `handoff-minion-meta-689343339` (development/b-factory/revision1/factory.patch),
+> which additionally carries a third marker (L320) this file lacks. Same
+> underlying patch at an earlier revision checkpoint — superseded by the
+> richer revision1 copy. Tombstoned, not deleted.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/development/b-factory/factory.patch
 

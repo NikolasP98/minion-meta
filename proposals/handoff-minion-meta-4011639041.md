@@ -1,12 +1,24 @@
 ---
 id: handoff-minion-meta-4011639041
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/candidate.patch (minion-meta)
-status: draft
+status: merged
+merged_into: handoff-minion-meta-3693488587
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Reconciliation note (2026-10-23): identical markers (same descriptions —
+> silent follow-up turns persisted in the gateway transcript; request-bound
+> intent for independent native guides; Slice 3 bounded-automatic-UI-calls)
+> also appear in `handoff-minion-meta-3693488587`
+> (development/a-chat/revision2/candidate.patch), just at shifted line
+> numbers from the file growing between revisions. That revision2 copy is
+> already established as canonical elsewhere in this ledger — its
+> verification-side counterpart (`handoff-minion-meta-3306110172`) merges
+> into it too. Same underlying patch at an earlier revision checkpoint.
+> Tombstoned, not deleted.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/candidate.patch
 
