@@ -136,3 +136,17 @@ The 21-Oct visit (`f4fecc5e-a0e2-4d99-af40-e45c95e48317`) used 15 UN of toxina t
 
 ### Breaking change, named
 External API clients that complete mapped bookings with a plain status PATCH now get 409. They complete through `POST …/[id]/complete` (omit `lines` to keep today's realize-as-is behaviour).
+
+## Amendment B (2026-10-23) — the catalog composition editor (fourth surface)
+
+### AS-IS
+`/pos/catalog` → expanded row → `CompositionEditor.svelte` writes `consumption` through `PATCH /api/pos/sellables/[id]`. `add()` saves a new item at `qtyPerUnit: 1`; `setQty` returned early on `n <= 0` while the `min="0"` input kept showing the typed 0. Prod: Control Botox mapped there 2026-10-23 16:20 to Dysport, INIBO and Otesaly, all stored at 1.
+
+### TO-BE
+- **FR-014** `acceptsQty(kind, n)` (`composition.ts`): stock-usage rows accept `>= 0`, package sessions `> 0`, negatives/NaN never. `setQty` uses it; a refused value resets the input to the saved quantity.
+- New items keep starting at 1.
+- Tests in `composition.test.ts`.
+
+### Tasks
+- [ ] T032 hub PR #592.
+- [ ] T033 Owner sets Control Botox's three toxins to 0 after #592 deploys (or now, via the service wizard, which already accepts 0).
