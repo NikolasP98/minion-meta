@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-factory-617149840
 title: Handoff marker — agent/lib/cost.sh (minion-factory)
-status: review
+status: closed
 created: 2026-10-22
 updated: 2026-10-23
 repos: [minion-factory]
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-factory@dev agent/lib/cost.sh:22` — Carry unknown-exposure coverage and failed *-error.json receipts
   https://github.com/NikolasP98/minion-factory/blob/dev/agent/lib/cost.sh#L22
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-23; the sweep closed this proposal.

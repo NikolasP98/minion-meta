@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-factory-279345180
 title: Handoff marker — agent/lib/jev.sh (minion-factory)
-status: review
+status: closed
 created: 2026-10-22
 updated: 2026-10-23
 repos: [minion-factory]
@@ -31,3 +31,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-factory/blob/dev/agent/lib/jev.sh#L123
 - `NikolasP98/minion-factory@dev agent/lib/jev.sh:300` — This error receipt must join run accounting before total-spend
   https://github.com/NikolasP98/minion-factory/blob/dev/agent/lib/jev.sh#L300
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-23; the sweep closed this proposal.
