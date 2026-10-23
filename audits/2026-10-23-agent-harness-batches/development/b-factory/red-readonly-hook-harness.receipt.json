@@ -1,0 +1,111 @@
+{
+  "hookElapsedMs": 45.42050500458572,
+  "hookTimings": [
+    {
+      "subtype": "hook_started",
+      "hookId": "764e8507-827a-4c4c-acd9-ae584b47637d",
+      "monotonic": 42067.451987249
+    },
+    {
+      "subtype": "hook_response",
+      "hookId": "764e8507-827a-4c4c-acd9-ae584b47637d",
+      "monotonic": 42067.497407754
+    }
+  ],
+  "binarySha256": "55d281096f57d411ebbdd94dbf5e9ff3accb7c05713e37348c2c11d4b83bf9d9",
+  "sourceSettingsSha256": "56f972b9d69f494646dc8c19bb673309237131f583fa90d28968fc1aff32b035",
+  "sourceLibrarySha256": "672b37d3f3f43e732de857593ccb25fc657d93cbf0ec424b454224c7f2864231",
+  "sourceAccountingHelperSha256": "da220cf2bdb4bf836abff3973b14c08734627229f85941bd2daf331474d69ff3",
+  "sourceMode": "0o644",
+  "installedCopyMode": "0o644",
+  "sourceHookSha256": "6e4b18ab873d4b929d0429e502498ea42f0a5908c70ec3c0c202491c9aede0eb",
+  "exitCode": 0,
+  "elapsedMs": 1573.38,
+  "requests": [
+    {
+      "path": "/v1/messages?beta=true",
+      "monotonic": 42067.433074108
+    },
+    {
+      "path": "/v1/messages?beta=true",
+      "monotonic": 42067.626846074
+    }
+  ],
+  "hookEvents": [
+    {
+      "type": "system",
+      "subtype": "hook_started",
+      "hook_id": "764e8507-827a-4c4c-acd9-ae584b47637d",
+      "hook_name": "PreToolUse:Bash",
+      "hook_event": "PreToolUse",
+      "uuid": "eb50bcd4-d0b7-4422-bccc-12d4615c9faa",
+      "session_id": "f8901197-c76a-4884-86b0-9c5a5c7ab908"
+    },
+    {
+      "type": "system",
+      "subtype": "hook_response",
+      "hook_id": "764e8507-827a-4c4c-acd9-ae584b47637d",
+      "hook_name": "PreToolUse:Bash",
+      "hook_event": "PreToolUse",
+      "output": "/bin/sh: line 1: /opt/factory-hooks/jev-guard.sh: Permission denied\n",
+      "stdout": "",
+      "stderr": "/bin/sh: line 1: /opt/factory-hooks/jev-guard.sh: Permission denied\n",
+      "exit_code": 126,
+      "outcome": "error",
+      "uuid": "43aff04d-a822-42d5-be2d-240aae143afd",
+      "session_id": "f8901197-c76a-4884-86b0-9c5a5c7ab908"
+    }
+  ],
+  "providerCalls": 2,
+  "jevCalls": 0,
+  "environment": "Explicit isolated env; no inherited credentials; loopback provider and proxy; outbound telemetry/update disabled; proxy rejects non-loopback traffic",
+  "invocation": [
+    "bwrap",
+    "--ro-bind",
+    "/",
+    "/",
+    "--dev-bind",
+    "/dev",
+    "/dev",
+    "--proc",
+    "/proc",
+    "--tmpfs",
+    "/tmp",
+    "--tmpfs",
+    "/opt",
+    "--ro-bind",
+    "/tmp/factory-pinned-hook-acmadagc/hooks",
+    "/opt/factory-hooks",
+    "--bind",
+    "/tmp/factory-pinned-hook-acmadagc",
+    "/tmp/factory-pinned-hook-acmadagc",
+    "--chdir",
+    "/tmp/factory-pinned-hook-acmadagc/work",
+    "/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/qualification/claude-2.1.233/node_modules/@anthropic-ai/claude-code-linux-x64/claude",
+    "-p",
+    "Run the fixture tool once.",
+    "--output-format",
+    "stream-json",
+    "--verbose",
+    "--include-hook-events",
+    "--max-turns",
+    "2",
+    "--model",
+    "claude-sonnet-4-6",
+    "--tools",
+    "Bash",
+    "--allowedTools",
+    "Bash",
+    "--settings",
+    "/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/b-factory/agent/hooks/claude-settings.json",
+    "--setting-sources",
+    "",
+    "--strict-mcp-config",
+    "--mcp-config",
+    "{\"mcpServers\":{}}",
+    "--no-session-persistence"
+  ],
+  "verified": false,
+  "redFixtureExpected": true,
+  "reason": "Tracked source0644 is not the Docker-installed0555 executable; failed hook is not A09 proof."
+}

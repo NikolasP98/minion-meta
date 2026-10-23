@@ -1,7 +1,7 @@
 {
   "authorization": "Batch remaining implementations in one PR per group; Astra SDD/escalation/verification and Sol development; run autonomously.",
   "createdAt": "2026-10-23T04:46:11.094618+00:00",
-  "updatedAt": "2026-10-23T05:49:20.608155+00:00",
+  "updatedAt": "2026-10-23T05:55:51.351679+00:00",
   "spec": "2026-10-22-agent-harness-reliability-and-proactivity-spec",
   "execution": "autonomous until six grouped PRs implemented and independently verified; human merge, live paid inference and production activation retain separate gates",
   "models": {
@@ -41,7 +41,7 @@
         "path": "sdd/a-chat-pass2.md"
       },
       "sddCommit": "8d0dffc1",
-      "developer": "/root/sol_dev_chat",
+      "developer": "/root/sol_chat_recovery",
       "developerModel": "gpt-6.1-sol"
     },
     {
@@ -56,7 +56,7 @@
         8,
         9
       ],
-      "state": "independent-correction-reverification",
+      "state": "independently-verified-committed-PR-pending",
       "pr": null,
       "reviewPass1": {
         "verdict": "approved",
@@ -75,19 +75,18 @@
       "independentFindings": [
         {
           "id": "B-V1",
-          "status": "confirmed-pending-correction",
+          "status": "resolved-independently-verified",
           "description": "Python/JS numeric canonicalization mismatch for known fractional bill leaves real worker reservations unsettled",
           "evidence": "verification/b-factory/tiny-cost-chain.log"
         }
       ],
       "implementationReview": {
-        "verdict": "changes_requested",
-        "path": "verification/b-factory/review.md",
-        "blockingFindings": [
-          "B-V1"
-        ]
+        "verdict": "approved",
+        "path": "verification/b-factory/revision1/review.md",
+        "blockingFindings": []
       },
-      "correctionManifest": "development/b-factory/revision1/source-manifest.json"
+      "correctionManifest": "development/b-factory/revision1/source-manifest.json",
+      "implementationCommit": "4e2ec83bcc52ef875a6dc17332be7156291f89a6"
     },
     {
       "group": "c-gateway",
@@ -120,7 +119,7 @@
         "path": "sdd/c-gateway-pass2.md"
       },
       "sddCommit": "d2e20c17",
-      "developer": "/root/sol_dev_gateway",
+      "developer": "/root/sol_gateway_recovery",
       "developerModel": "gpt-6.1-sol"
     },
     {
@@ -137,7 +136,7 @@
         19,
         20
       ],
-      "state": "sdd-pass1-approved-pass2-pending",
+      "state": "sdd-independent-pass2-review",
       "pr": null,
       "dependsOn": [
         "c-gateway binding contract"
@@ -163,7 +162,7 @@
         25,
         32
       ],
-      "state": "sdd-pass1-approved-pass2-pending",
+      "state": "sdd-independent-pass2-review",
       "pr": null,
       "dependsOn": [
         "d-pulse schema/selected-worker/receipts"
@@ -247,8 +246,9 @@
     "factoryDeveloper": "/root/sol_dev_factory",
     "gatewayReviewPass1": "/root/astra_sdd_chat_evals",
     "gatewayReviewPass2": "/root/astra_sdd_pulse_digest",
-    "gatewayDeveloper": "/root/sol_dev_gateway",
-    "chatDeveloper": "/root/sol_dev_chat"
+    "gatewayDeveloper": "/root/sol_gateway_recovery",
+    "chatDeveloper": "/root/sol_chat_recovery",
+    "pulseDigestPass2": "/root/astra_pulse_digest_pass2_recovery"
   },
   "frozenInstalls": "setup/installs.json",
   "setupStatus": "all-six-frozen-installs-passed-locks-unchanged",
@@ -256,5 +256,12 @@
     "disposablePostgres": "setup/disposable-postgres.json",
     "pinnedFactoryHarness": "setup/pinned-harness.json"
   },
-  "heavyValidationOwner": null
+  "heavyValidationOwner": "/root/sol_gateway_recovery",
+  "recovery": {
+    "at": "2026-10-23T05:55:51.351714+00:00",
+    "reason": "daemon restart interrupted all subagent threads",
+    "sourcePreserved": true,
+    "orphanProcessesInBatch": 0,
+    "resumed": "A/C Sol development and D/E Astra pass2; B final source rechecked before commit"
+  }
 }
