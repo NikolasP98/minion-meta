@@ -1,7 +1,7 @@
 {
   "authorization": "Batch remaining implementations in one PR per group; Astra SDD/escalation/verification and Sol development; run autonomously.",
   "createdAt": "2026-10-23T04:46:11.094618+00:00",
-  "updatedAt": "2026-10-23T06:11:17.490976+00:00",
+  "updatedAt": "2026-10-23T07:33:42.191738+00:00",
   "spec": "2026-10-22-agent-harness-reliability-and-proactivity-spec",
   "execution": "autonomous until six grouped PRs implemented and independently verified; human merge, live paid inference and production activation retain separate gates",
   "models": {
@@ -27,7 +27,7 @@
         4,
         5
       ],
-      "state": "developing",
+      "state": "focused-tests-green-full-typecheck-retry",
       "pr": null,
       "supportingWork": [
         "Hub browser evaluation adapters for Slice26"
@@ -42,7 +42,12 @@
       },
       "sddCommit": "8d0dffc1",
       "developer": "/root/sol_chat_recovery",
-      "developerModel": "gpt-6.1-sol"
+      "developerModel": "gpt-6.1-sol",
+      "validation": {
+        "focused": "87/87",
+        "matrix": "105 collected, runtime pending",
+        "independentReview": "pending"
+      }
     },
     {
       "group": "b-factory",
@@ -56,7 +61,7 @@
         8,
         9
       ],
-      "state": "PR-open-CI-pending",
+      "state": "PR-ready-for-human-review-CI-green",
       "pr": "https://github.com/NikolasP98/minion-factory/pull/201",
       "reviewPass1": {
         "verdict": "approved",
@@ -88,8 +93,9 @@
       "correctionManifest": "development/b-factory/revision1/source-manifest.json",
       "implementationCommit": "4e2ec83bcc52ef875a6dc17332be7156291f89a6",
       "ci": {
-        "status": "pending",
-        "head": "4e2ec83bcc52ef875a6dc17332be7156291f89a6"
+        "status": "passed",
+        "head": "4e2ec83bcc52ef875a6dc17332be7156291f89a6",
+        "latestChecks": "5 success, 2 workflow skips, 0 pending/failed"
       }
     },
     {
@@ -108,7 +114,7 @@
         15,
         16
       ],
-      "state": "developing",
+      "state": "correcting-three-independent-findings",
       "pr": null,
       "supportingWork": [
         "Gateway Slice20 cron explicit-agent/session binding",
@@ -124,7 +130,23 @@
       },
       "sddCommit": "d2e20c17",
       "developer": "/root/sol_gateway_recovery",
-      "developerModel": "gpt-6.1-sol"
+      "developerModel": "gpt-6.1-sol",
+      "checkpoint": "development/c-gateway/HANDOFF.md",
+      "fullTest": "root-run exit1 after observed new failures; no full pass",
+      "implementationReview": {
+        "verdict": "changes-requested",
+        "path": "verification/c-gateway/REVIEW.md",
+        "findings": [
+          "revoked recipient reply grant",
+          "definite pre-dispatch failure misreported as unknown bill",
+          "retry logical result identity replaced"
+        ]
+      },
+      "revision1": {
+        "unchangedProbes": "3/3 pass",
+        "expandedRegressions": "33/33 focused; actual C/F 18 revisions reconcile",
+        "fullGates": "pending"
+      }
     },
     {
       "group": "d-pulse",
@@ -140,7 +162,7 @@
         19,
         20
       ],
-      "state": "sdd-approved-development-ready",
+      "state": "developing-real-postgres-tests-green-heavy-queue",
       "pr": null,
       "dependsOn": [
         "c-gateway binding contract"
@@ -152,6 +174,14 @@
       "reviewPass2": {
         "verdict": "approved",
         "path": "sdd/d-pulse-pass2.md"
+      },
+      "sddCommit": "f2e949f046bc3865ea56ccf4def8d1ad826d5317",
+      "developer": "/root/sol_dev_pulse",
+      "developerModel": "gpt-6.1-sol",
+      "validation": {
+        "focusedSql": "migration/store7, selected5, worker10, routes7",
+        "fullcheck": "initial29 test errors corrected; retry pending",
+        "matrix": "90 cells pending"
       }
     },
     {
@@ -170,7 +200,7 @@
         25,
         32
       ],
-      "state": "sdd-approved-development-ready",
+      "state": "sdd-approved-awaiting-verified-d-base",
       "pr": null,
       "dependsOn": [
         "d-pulse schema/selected-worker/receipts"
@@ -182,7 +212,8 @@
       "reviewPass2": {
         "verdict": "approved",
         "path": "sdd/e-digest-pass2.md"
-      }
+      },
+      "sddCommit": "f2e949f046bc3865ea56ccf4def8d1ad826d5317"
     },
     {
       "group": "f-evals",
@@ -200,7 +231,7 @@
         30,
         31
       ],
-      "state": "sdd-approved-development-ready",
+      "state": "software-checkpoint-root-gates-green-awaiting-final-A-C-bindings-and-review",
       "pr": null,
       "dependsOn": [
         "a-chat callback/decision-event contract"
@@ -217,7 +248,17 @@
         "verdict": "approved",
         "path": "sdd/f-evals-pass2.md"
       },
-      "sddCommit": "8d0dffc1"
+      "sddCommit": "8d0dffc1",
+      "developer": "/root/sol_dev_evals",
+      "developerModel": "gpt-6.1-sol",
+      "checkpoint": "development/f-evals/root-gates-checkpoint/checkpoint.json",
+      "validation": {
+        "rootGates": "passed",
+        "focused": "41/41",
+        "actualAAdapter": "intermediate12/12 zero paid requests; final source pin pending",
+        "finalCProvenance": "pending",
+        "independentReview": "pending"
+      }
     }
   ],
   "remainingSlices": [
@@ -250,7 +291,7 @@
     32
   ],
   "heavyValidationConcurrency": 1,
-  "status": "development-and-independent-sdd-review",
+  "status": "development-correction-and-independent-implementation-verification",
   "agents": {
     "chatEvalsSdd": "/root/astra_sdd_chat_evals",
     "factoryGatewaySdd": "/root/astra_sdd_factory_gateway",
@@ -260,7 +301,8 @@
     "gatewayReviewPass2": "/root/astra_sdd_pulse_digest",
     "gatewayDeveloper": "/root/sol_gateway_recovery",
     "chatDeveloper": "/root/sol_chat_recovery",
-    "pulseDigestPass2": "/root/astra_pulse_digest_pass2_recovery"
+    "pulseDigestPass2": "/root/astra_pulse_digest_pass2_recovery",
+    "evalDeveloper": "/root/sol_dev_evals"
   },
   "frozenInstalls": "setup/installs.json",
   "setupStatus": "all-six-frozen-installs-passed-locks-unchanged",
@@ -268,12 +310,57 @@
     "disposablePostgres": "setup/disposable-postgres.json",
     "pinnedFactoryHarness": "setup/pinned-harness.json"
   },
-  "heavyValidationOwner": "/root/sol_gateway_recovery",
+  "heavyValidationOwner": "/root/sol_chat_recovery",
   "recovery": {
     "at": "2026-10-23T05:55:51.351714+00:00",
     "reason": "daemon restart interrupted all subagent threads",
     "sourcePreserved": true,
     "orphanProcessesInBatch": 0,
     "resumed": "A/C Sol development and D/E Astra pass2; B final source rechecked before commit"
-  }
+  },
+  "openedPrCount": 1,
+  "completedImplementationSlices": [
+    8,
+    9
+  ],
+  "remainingImplementationSlices": [
+    3,
+    4,
+    5,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32
+  ],
+  "validationHandoff": {
+    "oldWorkerSession": 46134,
+    "rootWatcherSession": 49682,
+    "outcome": "worker final stopped process; watcher correctly reported incomplete without exit receipt",
+    "rootRunSession": 55910,
+    "rootRunOutcome": "stopped after observed failures; durable wrapper exit1",
+    "next": "focused diagnosis/correction then complete required full rerun"
+  },
+  "heavyValidationQueue": [
+    "d-pulse fixture/browser/gates",
+    "c-gateway final root-owned gates",
+    "a-chat matrix/build/gates"
+  ]
 }
