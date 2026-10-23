@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-23T21:17:13.350Z",
+	"generatedAt": "2026-10-23T21:47:27.719Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18255,6 +18255,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:04:24.614Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/93141a2cda7ff4b65db8e31cd285ad60d9050785",
+			"sourceUpdatedAt": "2026-10-23T18:29:46Z",
+			"sourceFingerprint": "72a92b2dacfe0ae5b10ee9344cc9d8ff70139e3a77ac3cf754aede6204a3cc21",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The referenced commit already fixes the hub_disconnected bug by anchoring the config on globalThis, so no further action is needed on this goal.",
+			"evidence": [
+				"commit message states the fix anchors the value on globalThis, as channel-mirror.ts already does",
+				"deploy entry is a single already-merged commit, not an open issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T21:47:27.575Z"
 		},
 		{
 			"key": "issue:minion-meta#389",
@@ -38797,6 +38829,38 @@
 			"scoredAt": "2026-10-23T03:34:47.327Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "f732b80cc3dfef47c973864b3f83f58686ab6f0d0ff6a912350c5188969b5d4c",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The markers are quoted text pulled from the rankings/index.json data file itself rather than real source-code TODO(handoff) comments, so the proposal bundles unrelated noise with no single resolvable outcome.",
+			"evidence": [
+				"all 17 cited markers point to line numbers inside rankings/index.json, the ranking data file, not application source",
+				"markers span unrelated topics (org-scoping, DB migrations, WebGL budgets, RUC party verification) with no coherent scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T21:47:27.575Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3082127154",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -40438,38 +40502,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T03:30:22.758Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "7c405b8833dd36329b922f32775e06b112bfcb3150e796636d99d2890a1f806b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The flagged lines are quoted text inside the ranking tool's own generated data file, not real code TODOs, so there is no code-level open end to resolve.",
-			"evidence": [
-				"file: rankings/index.json",
-				"markers point at lines like 'the result is still platform-wide, not org-scoped' inside a JSON values array"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T20:48:07.640Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
