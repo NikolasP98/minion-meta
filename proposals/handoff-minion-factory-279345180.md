@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-factory-279345180
 title: Handoff marker — agent/lib/jev.sh (minion-factory)
-status: draft
+status: review
 created: 2026-10-22
 updated: 2026-10-23
 repos: [minion-factory]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-22-agent-decision-and-proactivity-experiments
 ---
 
 # Handoff marker — agent/lib/jev.sh

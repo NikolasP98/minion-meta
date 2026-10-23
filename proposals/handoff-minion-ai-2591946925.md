@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-2591946925
 title: Handoff marker — src/auto-reply/reply/get-reply-run.ts (minion-ai)
-status: draft
+status: review
 created: 2026-10-22
 updated: 2026-10-23
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-22-agent-decision-and-proactivity-experiments
 ---
 
 # Handoff marker — src/auto-reply/reply/get-reply-run.ts

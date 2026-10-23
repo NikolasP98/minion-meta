@@ -1,14 +1,19 @@
 ---
 id: handoff-minion-meta-3801572135
 title: Handoff marker — audits/2026-10-22-agent-use-transcripts/implementation/hub/implementation.patch (minion-meta)
-status: draft
+status: merged
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
+merged_into: handoff-minion-meta-3766583193
 ---
 
 # Handoff marker — audits/2026-10-22-agent-use-transcripts/implementation/hub/implementation.patch
+
+**Merged:** same marker text as handoff-minion-meta-3766583193 (`implementation-final.patch`),
+offset by a few lines consistent with the "final" patch being a later revision of the same
+file. No unique content to carry forward.
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it

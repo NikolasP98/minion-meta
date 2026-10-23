@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-3087825886
 title: Handoff marker — audits/2026-10-22-agent-use-transcripts/implementation/factory/changes.patch (minion-meta)
-status: draft
+status: review
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-22-agent-decision-and-proactivity-experiments
 ---
 
 # Handoff marker — audits/2026-10-22-agent-use-transcripts/implementation/factory/changes.patch

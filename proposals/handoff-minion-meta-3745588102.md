@@ -1,14 +1,19 @@
 ---
 id: handoff-minion-meta-3745588102
 title: Handoff marker — audits/2026-10-22-agent-use-transcripts/revalidation/source/minion_hub/src/lib/assistant/turn-router.ts (minion-meta)
-status: draft
+status: merged
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
+merged_into: handoff-minion-meta-1632723622
 ---
 
 # Handoff marker — audits/2026-10-22-agent-use-transcripts/revalidation/source/minion_hub/src/lib/assistant/turn-router.ts
+
+**Merged:** identical marker text/line numbers to handoff-minion-meta-1632723622 (same
+underlying file, copied into two snapshot paths — `source/` and `revalidation/source/` —
+within the same audit tree). No unique content to carry forward.
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a
 `TODO(handoff):` marker (the open-items ledger clause). Approving sends it
