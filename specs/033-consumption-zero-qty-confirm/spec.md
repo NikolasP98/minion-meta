@@ -150,3 +150,16 @@ External API clients that complete mapped bookings with a plain status PATCH now
 ### Tasks
 - [ ] T032 hub PR #592.
 - [ ] T033 Owner sets Control Botox's three toxins to 0 after #592 deploys (or now, via the service wizard, which already accepts 0).
+
+## Amendment C (2026-10-23) — composition editor writes queue instead of blocking
+
+### AS-IS
+`CompositionEditor.svelte` `run()` began with `if (busy) return;` and every input/button carried `disabled={busy}`. After one change, the whole list locked until the PATCH returned, and an edit fired in that window was silently dropped. The owner reproduced the lock on Control Botox.
+
+### TO-BE
+- **FR-015** Writes run through one in-order promise queue; each reads the rows the previous write left. Nothing is dropped.
+- **FR-016** No control is disabled by a pending save; only rows still saving show the trash spinner.
+- Test: a mounted test holds the first PATCH open, edits a second row, asserts it is enabled and that the second PATCH carries both edits (fails on the old editor).
+
+### Tasks
+- [ ] T034 hub PR #593.
