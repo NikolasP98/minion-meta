@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-23T16:59:48.064Z",
+	"generatedAt": "2026-10-23T17:22:21.124Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -832,6 +832,40 @@
 			"scoredAt": "2026-10-19T03:27:16.894Z"
 		},
 		{
+			"key": "pr:minion (gateway)#357",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#357 release: promote DEV to main (watcher recovery, cron owner binding)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/357",
+			"sourceUpdatedAt": "2026-10-23T17:08:37Z",
+			"sourceFingerprint": "65b48bb43cf2b88224a893736f47a56816b7534032d4b7edbc18ab49a55d4432",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "Owner-authorized release PR with fully green CI promoting validated watcher/cron fixes to production.",
+			"evidence": [
+				"CI on #356 fully green including security",
+				"owner authorised merging and deploying to production on 2026-10-23"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
+		},
+		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1127,42 +1161,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T03:41:12.124Z"
-		},
-		{
-			"key": "pr:minion (gateway)#356",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#356 feat(gateway): recover watcher work and bind scheduled jobs to their agent",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/356",
-			"sourceUpdatedAt": "2026-10-23T16:02:39Z",
-			"sourceFingerprint": "b05f6c7e2b0c887fda1fce8d45852f985d665c04981fca34834cf4a446592e3b",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#589",
-				"pr:minion-meta#881"
-			],
-			"rationale": "Core gateway reliability fix with an approved spec and green CI that unblocks three dependent PRs in this batch.",
-			"evidence": [
-				"status: open",
-				"16 successful CI checks ... no failed/pending checks",
-				"Cross-group implementation: Factory201, Pulse589 and evaluation881"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T16:26:21.325Z"
 		},
 		{
 			"key": "pr:minion_hub#340",
@@ -4152,6 +4150,41 @@
 			"scoredAt": "2026-10-22T03:39:15.325Z"
 		},
 		{
+			"key": "spec:2026-10-23-harness-gateway-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Gateway watcher receipts usage and explicit target binding",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-gateway-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "243d724af037f562901da9b0e20cb68c267053cd16e052345411ed2f4aecef4b",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#357",
+				"deploy:minion (gateway)"
+			],
+			"rationale": "This spec's slices 11-16 and A20/A30 seams match the watcher-receipt and cron-binding changes already shipped in the pending release PR.",
+			"evidence": [
+				"parent slices 11-16 plus A20/A30 seams match #357's watcher/cron changes",
+				"existing watcher hooks ignore merged provenance per spec AS-IS"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
+		},
+		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -4975,6 +5008,40 @@
 			"scoredAt": "2026-10-21T08:57:40.666Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/de958807f97cc13c11ac6aaad313a3b8be0cb274",
+			"sourceUpdatedAt": "2026-10-23T17:06:37Z",
+			"sourceFingerprint": "ff49675a0471ca34c6590eaee6a89a93740be5821c9f82873252e18c6c8e9d25",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#357"
+			],
+			"rationale": "Deployment status tracks the same watcher/cron-binding merge already queued in the pending release PR, so it duplicates rather than adds new work.",
+			"evidence": [
+				"title references merge of PR #356 watcher recovery + cron binding",
+				"release still pending in pr:minion (gateway)#357"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
+		},
+		{
 			"key": "issue:minion-meta#476",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5540,39 +5607,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T16:26:21.325Z"
-		},
-		{
-			"key": "pr:minion-factory#201",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#201 fix(harness): retain Jev budgets and bound guard waits",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/201",
-			"sourceUpdatedAt": "2026-10-23T06:04:02Z",
-			"sourceFingerprint": "19eb85b8111529b04f7937c804580c22811ad45866349866cdc557d0a72a40bb",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A spec-approved harness reliability fix for budget race conditions has passed independent review and CI and is ready to merge.",
-			"evidence": [
-				"Approved SDD and independent implementation review",
-				"GitHub CI passed on 4e2ec83...: verify, boundary and label",
-				"1,268 passed, zero failed or skipped"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T06:13:58.415Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -10792,6 +10826,138 @@
 			"scoredAt": "2026-10-21T14:56:51.115Z"
 		},
 		{
+			"key": "spec:2026-10-23-harness-chat-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Owned chat callbacks and decision evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-chat-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "786572a33954a7410db21ad2fa0cef24b7e526f6a86c15376def86a9c9c7ea23",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Approved refinement spec with both reviewer passes complete but no implementation PR yet visible in this batch.",
+			"evidence": [
+				"both independent Astra reviewers approved revision 1",
+				"implementation PR explicitly out of scope of this stub"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
+		},
+		{
+			"key": "spec:2026-10-23-harness-digest-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Bounded dependency digest in Pulse",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-digest-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "77ec809e2a6db9fa593b27251524a523b5a80eabdfb7d570d9da084e27f553c8",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-23-harness-pulse-spec"
+			],
+			"rationale": "Digest work explicitly depends on Pulse's versioned receipts/worker-selection interfaces landing first.",
+			"evidence": [
+				"digest E consumes those interfaces after D",
+				"no automatic merge or deployment in scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
+		},
+		{
+			"key": "spec:2026-10-23-harness-evals-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-meta",
+			"title": "Reproducible agent evaluation and gated inference",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-evals-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "def88e5fb07599721e6838603e99b707ccdbfb04455d68b614103c4184e3a9dd",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Title and scope closely overlap a recently merged evals PR, so remaining scope needs confirming before committing further paid work.",
+			"evidence": [
+				"recent commit 'feat(evals): compare agent outcomes and account for every inference attempt (#881)' already merged to dev",
+				"spec stub lists no acceptance IDs distinguishing it from that merged work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
+		},
+		{
+			"key": "spec:2026-10-23-harness-pulse-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Pulse approval and dispatch receipts",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-pulse-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "76dad4ac42151fee5bfbe310769d568f370d2ef93d818ba057438f3ae3c14d2a",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-23-harness-digest-spec"
+			],
+			"rationale": "Establishes the versioned receipts and worker-selection interfaces that the digest spec depends on.",
+			"evidence": [
+				"Pulse D establishes versioned owner-bound receipts and selected workers",
+				"digest E consumes those interfaces after D"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
+		},
+		{
 			"key": "issue:minion-meta#612",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12111,6 +12277,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:29:42.548Z"
+		},
+		{
+			"key": "pr:minion_hub#593",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#593 fix(pos): catalog composition rows stay editable while a change saves",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/593",
+			"sourceUpdatedAt": "2026-10-23T17:18:41Z",
+			"sourceFingerprint": "061434857f8b325ab7be60a1d017d2e81a493dffee64e36c020a421793ba52dc",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#883"
+			],
+			"rationale": "Owner-reported POS concurrency bug fix with passing tests and clean lint/type gates, missing only browser proof.",
+			"evidence": [
+				"19/19 vitest passed, bun run check 0 errors",
+				"test fails on origin/master and passes here"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-gateway-client-onevent-errors",
@@ -14790,6 +14990,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:05:24.643Z"
+		},
+		{
+			"key": "spec:2026-10-23-harness-factory-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-factory",
+			"title": "Bounded Factory Jev admission and deadlines",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-factory-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "ec9eafa1f0e3cc887b8286a18d59396b76f33e989a57d9e86401c0fe750d546a",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Addresses token-reset/admission defects with an approved contract but no implementation evidence yet in this batch.",
+			"evidence": [
+				"two independent Astra passes approved the batch",
+				"verification requires an installed-loopback harness procedure not yet evidenced"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
 		},
 		{
 			"key": "issue:minion-meta#609",
@@ -17798,41 +18030,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T17:10:01.458Z"
-		},
-		{
-			"key": "pr:minion-meta#881",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#881 feat(evals): compare agent outcomes and account for every inference attempt",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/881",
-			"sourceUpdatedAt": "2026-10-23T15:59:27Z",
-			"sourceFingerprint": "b6b90f4bafa5a6866bdc3ed3f29bc117b73ce4212e52275131f2a8df6389620a",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#356"
-			],
-			"rationale": "Evaluation framework with a reviewed spec but still draft, dependent on the gateway record from #356 and lacking human-adjudicated examples.",
-			"evidence": [
-				"Complaint reports consume the versioned Gateway record from minion-ai#356",
-				"the supplied corpus has24 synthetic examples and zero human-adjudicated examples",
-				"this PR stays draft pending those proofs and CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T16:26:21.325Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
@@ -27608,6 +27805,38 @@
 			"scoredAt": "2026-10-21T08:57:40.666Z"
 		},
 		{
+			"key": "run:minion (gateway)#39992376785",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/39992376785",
+			"sourceUpdatedAt": "2026-10-23T17:11:25Z",
+			"sourceFingerprint": "035c3ff877c2b2f9b43c28acaf5dbe7d924781c00f20e843d0d177d6e5005bf8",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run on a DEV push, not an independently actionable goal.",
+			"evidence": [
+				"in_progress CI run triggered by push on DEV",
+				"no linked work beyond the automated pipeline status"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -27638,40 +27867,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T15:55:02.506Z"
-		},
-		{
-			"key": "pr:minion-meta#883",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#883 docs(spec): 033 amendment B — catalog composition editor accepts 0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/883",
-			"sourceUpdatedAt": "2026-10-23T16:31:11Z",
-			"sourceFingerprint": "d53338e21ae5d3770690ca28435b01f1a52dbdb21123ddf5d2dcef195b12505a",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#592"
-			],
-			"rationale": "Small, ready spec amendment that documents the already-tested composition editor fix and should merge alongside it.",
-			"evidence": [
-				"Adds the fourth zero-qty surface (/pos/catalog CompositionEditor) to spec 033",
-				"Implementation: hub #592"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T16:55:50.160Z"
 		},
 		{
 			"key": "proposal:2026-08-28-gateway-plugin-effect-disposers",
@@ -29011,6 +29206,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:00:12.850Z"
+		},
+		{
+			"key": "pr:minion-meta#883",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#883 docs(spec): 033 amendment B — catalog composition editor accepts 0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/883",
+			"sourceUpdatedAt": "2026-10-23T17:18:56Z",
+			"sourceFingerprint": "2a40489b5732283f434b7495275c5fc7251a8998793b105812a95efc447815c4",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#593"
+			],
+			"rationale": "Documentation spec amendment is a one-to-one companion to the hub implementation PR and should land together.",
+			"evidence": [
+				"adds fourth zero-qty surface to spec 033",
+				"implementation listed as hub #592 paired with batch PR #593"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
@@ -30774,38 +31003,6 @@
 			"scoredAt": "2026-10-23T16:55:50.160Z"
 		},
 		{
-			"key": "run:minion_hub#39991053331",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/39991053331",
-			"sourceUpdatedAt": "2026-10-23T16:57:25Z",
-			"sourceFingerprint": "bc99eae3242ac45b5e68c80867a66ccace9b2a6c14fa8d3c99c31fcb354333f7",
-			"score": 32,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single in-progress CI run on master has no observable failure or blocker yet to justify action.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T16:59:47.911Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -32300,6 +32497,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T03:30:22.758Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "393e365dd2f215b88b02e5f19e02d3d1251bb2779af18a0a4478e39520853cf6",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "One omnibus proposal bundles over a dozen unrelated TODO markers across the codebase, so it cannot resolve as a single coherent outcome.",
+			"evidence": [
+				"17+ distinct markers spanning org-scoping, migrations, UI, auth, race conditions",
+				"definition of done requires every marker resolved before the proposal closes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T17:22:20.979Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-5ff1c51",
@@ -37111,38 +37340,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T03:35:54.682Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "41d81105e212c6c1502b9d11ea7a19f08002f3d0b06c1bbef67ca8dd59d46a1b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated handoff marker bundling 15+ unrelated TODO fragments scattered across a rankings index file with no coherent scope or verifiable outcome.",
-			"evidence": [
-				"Markers (as of 2026-10-23) lists 15+ disparate line references across unrelated topics",
-				"Filed automatically by the factory handoff-ledger sweep"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T15:25:28.406Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-277751425",
