@@ -1,11 +1,12 @@
 ---
 id: 2026-08-28-factory-reviewer-instruction-isolation
 title: Isolate the factory reviewer from repo-resident agent instructions
-status: draft
+status: review
 created: 2026-08-28
-updated: 2026-08-28
+updated: 2026-10-23
 repos: [minion-factory]
 tags: [security]
+duplicate_candidate: 2026-08-17-factory-worker-containment
 ---
 
 # Isolate the factory reviewer from repo-resident agent instructions
