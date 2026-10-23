@@ -1,7 +1,7 @@
 {
   "authorization": "Batch remaining implementations in one PR per group; Astra SDD/escalation/verification and Sol development; run autonomously.",
   "createdAt": "2026-10-23T04:46:11.094618+00:00",
-  "updatedAt": "2026-10-23T08:16:06.584914+00:00",
+  "updatedAt": "2026-10-23T09:58:52.276561+00:00",
   "spec": "2026-10-22-agent-harness-reliability-and-proactivity-spec",
   "execution": "autonomous until six grouped PRs implemented and independently verified; human merge, live paid inference and production activation retain separate gates",
   "models": {
@@ -27,7 +27,7 @@
         4,
         5
       ],
-      "state": "source-frozen-fullcheck-green-runtime-qualification-pending",
+      "state": "source-reviewed-committed-final-qualification-pending",
       "pr": null,
       "supportingWork": [
         "Hub browser evaluation adapters for Slice26"
@@ -44,13 +44,24 @@
       "developer": "/root/sol_chat_recovery",
       "developerModel": "gpt-6.1-sol",
       "validation": {
-        "focused": "87/87",
-        "matrix": "105 collected, runtime pending",
-        "independentReview": "pending",
-        "fullcheck": "0 errors, 0 warnings"
+        "source": "68 hashes/modes independently matched",
+        "focused": "original stock3/3; actual producers63/63; source review carries prior119 focused and original probes",
+        "matrix": "105 collected; current runtime pending",
+        "fullcheck": "historical0 errors0 warnings; current final pending",
+        "manualBrowser": "pending",
+        "actualStdioHistory": "pending",
+        "actualAFinalIntegration": "pending"
       },
-      "sourceInventoryHash": "019a6d7f7077da2da2a73d2c416c0972d5e627c56d225d0c02ef752ed994c191",
-      "ownedSourceFiles": 59
+      "sourceInventoryHash": "75f6bf6e7c5612006c3a54b8dac63240fbdec791f16e0f4e8fc18d73314379f0",
+      "ownedSourceFiles": 68,
+      "implementationCommit": "abe7eeabc7f7bb6993a7b291ffefe49722abd294",
+      "implementationManifest": "development/a-chat/revision2/source-manifest.json",
+      "implementationReview": {
+        "verdict": "source-converged-qualification-pending",
+        "path": "verification/a-chat/revision2/convergence.json",
+        "closedFindings": 6,
+        "openSourceFindings": 0
+      }
     },
     {
       "group": "b-factory",
@@ -117,7 +128,7 @@
         15,
         16
       ],
-      "state": "Sol-revision2-queue-corrections-and-suggestion-kill-proof",
+      "state": "source-reviewed-committed-full-local-gates-passed-joint-review-pending",
       "pr": null,
       "supportingWork": [
         "Gateway Slice20 cron explicit-agent/session binding",
@@ -135,34 +146,32 @@
       "developer": "/root/sol_gateway_recovery",
       "developerModel": "gpt-6.1-sol",
       "checkpoint": "development/c-gateway/HANDOFF.md",
-      "fullTest": "root-run exit1 after observed new failures; no full pass",
+      "fullTest": {
+        "status": "passed",
+        "passed": 13570,
+        "failed": 0,
+        "pending": 16,
+        "path": "development/c-gateway/revision2/root-gates-attempt03/root-gates.jsonl"
+      },
       "implementationReview": {
-        "verdict": "changes-requested",
-        "path": "verification/c-gateway/revision1/REVIEW.md",
-        "originalThreeFindings": "independently resolved",
-        "newCorrections": [
-          "live terminal queue retention",
-          "atomic-write backup privacy cleanup",
-          "suppressed queue terminal settlement"
-        ],
-        "missingRequiredProof": "suggestion subprocess kills; now author-green pending review"
+        "verdict": "source-converged-final-root-gates-and-joint-evidence-review-pending",
+        "path": "verification/c-gateway/revision2.1/REVIEW.md",
+        "openSourceFindings": 0
       },
-      "revision1": {
-        "unchangedProbes": "3/3 final exit0; independent rereview pending",
-        "expandedRegressions": "33/33 focused; actual C/F 18 revisions reconcile",
-        "fullGates": "pending",
-        "sourceHashRootRecheck": "61/61 file hashes and untracked archive match"
-      },
-      "implementationManifest": "development/c-gateway/revision1/source-manifest.json",
-      "ownedSourceFiles": 61,
-      "sourceManifestSha256": "06eb968c11873d48218cf619b90e8b479d145500788d220947a4626adee1493d",
+      "implementationManifest": "development/c-gateway/revision2.1/source-manifest.json",
+      "ownedSourceFiles": 66,
+      "sourceManifestSha256": "e5b6de5ca3d91e9c8ce676cb10acae3f6a575ed7179703568d138edaecfc15dd",
       "fullCheck": {
-        "exit": 0,
-        "seconds": 60.51,
-        "source": "revision1 manifest06eb968c",
-        "mainWarnings": "57 warning sites in46 byte-identical unchanged files outside61candidate; independent provenance recorded",
-        "changedScope": "56TS0warnings/errors",
-        "path": "development/c-gateway/revision1/check-full-root.log"
+        "status": "passed",
+        "includes": "format,tsgo,lint,manifest,capabilities",
+        "source": "exact revision2.1",
+        "path": "development/c-gateway/revision2/root-gates-attempt03/unchanged-source-check-receipt.json"
+      },
+      "implementationCommit": "9da5b35a6e26ac0154b1f9aa215b218a064afe5d",
+      "build": {
+        "status": "passed",
+        "explicitDts": "passed",
+        "path": "development/c-gateway/revision2/root-gates-attempt03/build-result-reconciliation.json"
       }
     },
     {
@@ -179,7 +188,7 @@
         19,
         20
       ],
-      "state": "final-browser90-and-manual-proof-green-full-Hub-gates-running",
+      "state": "source-reviewed-committed-final-gates-running",
       "pr": null,
       "dependsOn": [
         "c-gateway binding contract"
@@ -196,10 +205,18 @@
       "developer": "/root/sol_dev_pulse",
       "developerModel": "gpt-6.1-sol",
       "validation": {
-        "focusedSql": "migration/store7, selected5, worker10, routes7",
-        "fullcheck": "running on final source, no terminal claim",
-        "matrix": "finalrun05:90/90 passed all5projects; popup18reads+1POST with actor/org/capability-held-receipt assertions",
-        "manualBrowser": "6 asserted browser-harness screenshot states passed; exact current run05 artifact"
+        "source": "80 hashes/modes independently matched; all source corrections closed",
+        "focused": "native55; mounted/helper22; original client20 and actual PG budget/lease probes pass",
+        "fullcheck": "current final running",
+        "matrix": "historical90/90; current mandatory combined120 pending",
+        "manualBrowser": "historical6; current10 pending"
+      },
+      "implementationCommit": "4c9b5bf19d9e298df2795324f3f9f8f105b3cf08",
+      "ownedSourceFiles": 80,
+      "sourceManifestSha256": "b91cdf11f45a21fb7e4b1ea2729feb65277700c8723965b18dd1d3d0fddf34ba",
+      "implementationReview": {
+        "verdict": "source-converged-qualification-pending",
+        "path": "verification/d-pulse/correction-03/review-03.md"
       }
     },
     {
@@ -218,7 +235,7 @@
         25,
         32
       ],
-      "state": "sdd-approved-awaiting-verified-d-base",
+      "state": "Sol-implementation-active-on-source-reviewed-D-baseline",
       "pr": null,
       "dependsOn": [
         "d-pulse schema/selected-worker/receipts"
@@ -231,7 +248,11 @@
         "verdict": "approved",
         "path": "sdd/e-digest-pass2.md"
       },
-      "sddCommit": "f2e949f046bc3865ea56ccf4def8d1ad826d5317"
+      "sddCommit": "f2e949f046bc3865ea56ccf4def8d1ad826d5317",
+      "developer": "/root/sol_dev_digest",
+      "developerModel": "gpt-6.1-sol",
+      "stackedDevelopmentBase": "4c9b5bf19d9e298df2795324f3f9f8f105b3cf08",
+      "stackedBaseQualification": "D source independently reviewed; D final full gates pending; E draft dependency until D human merge/base refresh"
     },
     {
       "group": "f-evals",
@@ -249,7 +270,7 @@
         30,
         31
       ],
-      "state": "seven-corrections-author-focused-green-awaiting-freeze-and-independent-recheck",
+      "state": "Sol-terminal-receipt-conflict-correction-active",
       "pr": null,
       "dependsOn": [
         "a-chat callback/decision-event contract"
@@ -267,61 +288,63 @@
         "path": "sdd/f-evals-pass2.md"
       },
       "sddCommit": "8d0dffc1",
-      "developer": "/root/sol_dev_evals",
+      "developer": "/root/sol_f_terminal_reconciliation",
       "developerModel": "gpt-6.1-sol",
       "checkpoint": "development/f-evals/root-gates-checkpoint/checkpoint.json",
       "validation": {
-        "rootGates": "passed",
-        "focused": "41/41",
-        "actualAAdapter": "intermediate12/12 zero paid requests; final source pin pending",
-        "finalCProvenance": "pending",
-        "independentReview": "pending"
+        "rootGates": "historical original84 source passed; current final required",
+        "focused": "author revision2 56/56; independent25 boundary cases plus original replay pass",
+        "actualAAdapter": "intermediate12/12; current final commit/build pending",
+        "finalCProvenance": "exact C commit now9da5b35a6e26ac0154b1f9aa215b218a064afe5d; final refresh pending",
+        "independentReview": "revision2 changes requested: terminal collection conflict input-order dependent"
       },
       "verifier": "/root/astra_verify_evals",
       "independentFindings": [
         {
           "id": "F-01",
-          "status": "reproduced-Sol-correction-active",
+          "status": "independently-corrected",
           "description": "Repeat matching/weighting changes the declared trial estimand"
         },
         {
           "id": "F-02",
-          "status": "reproduced-Sol-correction-active",
+          "status": "independently-closed-except-F02-terminal-collection-conflict",
           "description": "Receipt lineage and financial status lose to cached result claims"
         },
         {
           "id": "F-03",
-          "status": "reproduced-Sol-correction-active",
+          "status": "independently-corrected",
           "description": "Signed approval expiry not rechecked during live run"
         },
         {
           "id": "F-04",
-          "status": "reproduced-Sol-correction-active",
+          "status": "independently-corrected",
           "description": "Untrusted episode ID escapes private raw artifact root"
         },
         {
           "id": "F-05",
-          "status": "reproduced-Sol-correction-active",
+          "status": "independently-corrected",
           "description": "Duplicate trace IDs inflate independent review sample and certainty"
         },
         {
           "id": "F-06",
-          "status": "reproduced-Sol-correction-active",
+          "status": "independently-corrected",
           "description": "Admitted unknown receipt fails to reconcile later known zero bill"
         },
         {
           "id": "F-07",
-          "status": "author-corrected-integration-green-independent-recheck-pending",
+          "status": "independently-corrected",
           "description": "Current authority evolves without replacing immutable admission facts or dropping historical eligible paid units"
         }
       ],
       "independentReview": {
         "verdict": "changes-requested",
-        "path": "verification/f-evals/REVIEW.md",
-        "source": "original84file checkpoint",
-        "correctionStatus": "author54/54; independent correction review pending"
+        "path": "verification/f-evals/revision2/REVIEW.md",
+        "source": "92 file revision2",
+        "openFinding": "F-02-R2 terminal collection conflict must be order-independent; preserve bills"
       },
-      "correctionFocusedTests": "54/54 before final two reconciliation guards; final frozen rerun pending"
+      "correctionFocusedTests": "54/54 before final two reconciliation guards; final frozen rerun pending",
+      "implementationManifest": "development/f-evals/revision2/owned-files.json",
+      "ownedSourceFiles": 92
     }
   ],
   "remainingSlices": [
@@ -373,7 +396,7 @@
     "disposablePostgres": "setup/disposable-postgres.json",
     "pinnedFactoryHarness": "setup/pinned-harness.json"
   },
-  "heavyValidationOwner": "/root/sol_dev_pulse",
+  "heavyValidationOwner": "/root/sol_d_final_gates",
   "recovery": {
     "at": "2026-10-23T05:55:51.351714+00:00",
     "reason": "daemon restart interrupted all subagent threads",
@@ -414,16 +437,13 @@
     32
   ],
   "validationHandoff": {
-    "oldWorkerSession": 46134,
-    "rootWatcherSession": 49682,
-    "outcome": "worker final stopped process; watcher correctly reported incomplete without exit receipt",
-    "rootRunSession": 55910,
-    "rootRunOutcome": "stopped after observed failures; durable wrapper exit1",
-    "next": "focused diagnosis/correction then complete required full rerun"
+    "current": "C full gates completed; D final owner active; source-reviewed A/C/D local commits establish exact test references",
+    "historicalFailures": "preserved in original receipts; no failed run relabeled as passing"
   },
   "heavyValidationQueue": [
-    "d-pulse fixture/browser/gates",
-    "c-gateway final root-owned gates",
-    "a-chat matrix/build/gates"
+    "d-pulse final current gates/default120/manual10",
+    "a-chat final gates/default105/manual/stdio",
+    "f-evals final root gates and actual A/F integration",
+    "e-digest final gates after implementation"
   ]
 }

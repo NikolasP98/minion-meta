@@ -1,0 +1,8 @@
+import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import {pathToFileURL} from 'node:url';
+const root=process.cwd(),at=(p:string)=>pathToFileURL(path.join(root,p)).href;
+await import(at('src/plugins/runtime.ts'));
+const {positiveFixture}=await import(at('extensions/alert-watcher/src/work-test-fixtures.ts'));
+const {snapshotHash}=await import(at('extensions/alert-watcher/src/provenance.ts'));
+const q=await import(at('src/infra/outbound/delivery-queue-files.ts'));const {enqueueDelivery}=await import(at('src/infra/outbound/delivery-queue-store.ts'));
+const dir=fs.mkdtempSync(path.join(os.tmpdir(),'diagnose-retention-')),f=positiveFixture(dir,[{channel:'telegram',accountId:'default',to:'owner-0'}]);
+try{const row=f.db.prepare('SELECT * FROM alert_delivery_receipts').get();const binding={version:1,owner:'alert-watcher',namespaceHash:snapshotHash('namespace'),receiptId:row.id,payloadHash:row.payload_hash,recipientHash:row.recipient_hash,expiresAt:row.payload_expires_at};await enqueueDelivery({id:row.id,channel:'telegram',accountId:'default',to:'owner-0',payloads:JSON.parse(row.payload_json),completionPolicy:'caller',callerRetention:binding},dir);fs.copyFileSync(q.resolveEntryPath(row.id,dir),q.resolveEntryPath(row.id,dir)+'.bak-123-11111111-1111-4111-8111-111111111111');Date.now=()=>row.payload_expires_at+1;const lease=await q.acquireDeliveryEntryLease(row.id,dir);try{await q.retireExpiredCallerDelivery(binding,lease,dir,{generation:0,payloads:[]});console.log('PASS');}finally{await q.releaseDeliveryQueueLease(lease);}}finally{f.db.close();fs.rmSync(dir,{recursive:true,force:true});}

@@ -1,0 +1,3166 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index d4188eda..2b29214e 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -681,7 +681,7 @@ jobs:
+           CREATE ROLE authenticated NOLOGIN NOINHERIT NOSUPERUSER NOBYPASSRLS;
+           SQL
+ 
+-      - name: Five formerly uncovered native PostgreSQL fixtures
++      - name: Native PostgreSQL fixtures including Pulse decisions and dispatch
+         env:
+           HUB_TEST_DB_URL: postgresql://postgres:postgres@127.0.0.1:54422/postgres
+           REQUIRE_QA_NATIVE_POSTGRES: '1'
+@@ -692,7 +692,7 @@ jobs:
+             --reporter=default --reporter=json \
+             --outputFile.json=test-results/qa-native-postgres.json
+ 
+-      - name: Refuse incomplete formerly-uncovered native evidence
++      - name: Refuse incomplete native evidence
+         if: always()
+         run: bun scripts/qc/native-postgres-report.ts qa-native test-results/qa-native-postgres.json
+ 
+diff --git a/messages/en.json b/messages/en.json
+index 11b7e110..a426de9a 100644
+--- a/messages/en.json
++++ b/messages/en.json
+@@ -7001,5 +7001,36 @@
+   "channel_memberAgentsLabel": "Members talk to their own assistant",
+   "channel_memberAgentsHint": "Members with a verified WhatsApp get replies from their personal assistant. 'Receive only' blocks it.",
+   "channelWizard_dmMembers": "members only — closed to the public; org members reach their own assistant",
+-  "chat_history_oversized": "This earlier message is too large to display here."
++  "chat_history_oversized": "This earlier message is too large to display here.",
++  "pulse_pageSubtitle": "Proposed actions waiting for your review.",
++  "pulse_empty": "Nothing needs your attention.",
++  "pulse_arguments": "Arguments",
++  "pulse_cancel": "Cancel",
++  "pulse_save": "Save",
++  "pulse_edit": "Edit",
++  "pulse_approve": "Approve",
++  "pulse_dismiss": "Dismiss",
++  "pulse_invalidJson": "Invalid JSON",
++  "pulse_readFailed": "Could not refresh Pulse. Try reading again.",
++  "pulse_decisionFailed": "Could not save this decision.",
++  "pulse_refreshRequired": "This proposal changed. Refresh before deciding.",
++  "pulse_scheduled": "Scheduled; execution unverified",
++  "pulse_queued": "Queued for dispatch",
++  "pulse_admitted": "Dispatch admitted; awaiting receipt",
++  "pulse_indeterminate": "Remote acceptance unknown; will not retry",
++  "pulse_legacyUnverified": "Historical execution unverified",
++  "pulse_rejected": "Dispatch rejected",
++  "pulse_canceled": "Dispatch canceled",
++  "pulse_dismissed": "Dismissed",
++  "pulse_approved": "Decision approved",
++  "pulse_revision": "Revision {revision}",
++  "pulse_remoteJob": "Remote job: {id}",
++  "pulse_recent": "Recent decisions",
++  "pulse_reasonAuthority": "Current owner, permission, agent or gateway authority is unavailable.",
++  "pulse_reasonQualification": "The assigned gateway needs a current verified build record.",
++  "pulse_reasonPayload": "The reviewed payload is no longer available.",
++  "pulse_reasonPreAdmission": "The gateway was unavailable before admission.",
++  "pulse_reasonUnknown": "No verified remote acceptance receipt is available.",
++  "pulse_reasonCanceled": "Work was canceled after its authority or worker configuration changed.",
++  "pulse_reasonUnavailable": "Status details are unavailable."
+ }
+diff --git a/messages/es.json b/messages/es.json
+index 787cd144..377ea6c7 100644
+--- a/messages/es.json
++++ b/messages/es.json
+@@ -7001,5 +7001,36 @@
+   "channel_memberAgentsLabel": "Miembros hablan con su propio asistente",
+   "channel_memberAgentsHint": "Los miembros con WhatsApp verificado reciben respuesta de su asistente personal. 'Solo recibir' lo bloquea.",
+   "channelWizard_dmMembers": "solo miembros — cerrado al público; los miembros hablan con su propio asistente",
+-  "chat_history_oversized": "Este mensaje anterior es demasiado grande para mostrarlo aquí."
++  "chat_history_oversized": "Este mensaje anterior es demasiado grande para mostrarlo aquí.",
++  "pulse_pageSubtitle": "Acciones propuestas pendientes de revisión.",
++  "pulse_empty": "No hay nada pendiente de revisión.",
++  "pulse_arguments": "Argumentos",
++  "pulse_cancel": "Cancelar",
++  "pulse_save": "Guardar",
++  "pulse_edit": "Editar",
++  "pulse_approve": "Aprobar",
++  "pulse_dismiss": "Descartar",
++  "pulse_invalidJson": "JSON no válido",
++  "pulse_readFailed": "No se pudo actualizar Pulse. Vuelve a consultar.",
++  "pulse_decisionFailed": "No se pudo guardar esta decisión.",
++  "pulse_refreshRequired": "Esta propuesta cambió. Actualiza antes de decidir.",
++  "pulse_scheduled": "Programado; ejecución sin verificar",
++  "pulse_queued": "En cola para envío",
++  "pulse_admitted": "Envío admitido; esperando constancia",
++  "pulse_indeterminate": "Aceptación remota desconocida; no se reintentará",
++  "pulse_legacyUnverified": "Ejecución histórica sin verificar",
++  "pulse_rejected": "Envío rechazado",
++  "pulse_canceled": "Envío cancelado",
++  "pulse_dismissed": "Descartado",
++  "pulse_approved": "Decisión aprobada",
++  "pulse_revision": "Revisión {revision}",
++  "pulse_remoteJob": "Tarea remota: {id}",
++  "pulse_recent": "Decisiones recientes",
++  "pulse_reasonAuthority": "La autoridad actual de propietario, permiso, agente o gateway no está disponible.",
++  "pulse_reasonQualification": "El gateway asignado necesita una constancia de compilación verificada vigente.",
++  "pulse_reasonPayload": "El contenido revisado ya no está disponible.",
++  "pulse_reasonPreAdmission": "El gateway no estaba disponible antes de la admisión.",
++  "pulse_reasonUnknown": "No hay una constancia verificada de aceptación remota.",
++  "pulse_reasonCanceled": "El trabajo se canceló tras cambiar su autoridad o configuración.",
++  "pulse_reasonUnavailable": "Los detalles del estado no están disponibles."
+ }
+diff --git a/playwright.critical.config.ts b/playwright.critical.config.ts
+index d7cf76d4..409f5ce8 100644
+--- a/playwright.critical.config.ts
++++ b/playwright.critical.config.ts
+@@ -8,7 +8,10 @@ if (!process.env.MINION_CRITICAL_OUT) throw new Error('Exact built artifact requ
+ const evidence = path.resolve(process.env.MINION_CRITICAL_EVIDENCE ?? '.test-artifacts/critical');
+ export default defineConfig({
+   testDir: './tests/e2e/ui-audit',
+-  testMatch: 'critical-journeys.spec.ts',
++  testMatch:
++    process.env.MINION_CRITICAL_PULSE_ONLY === '1'
++      ? 'pulse-critical-journeys.spec.ts'
++      : ['critical-journeys.spec.ts', 'pulse-critical-journeys.spec.ts'],
+   workers: 1,
+   fullyParallel: false,
+   retries: 0,
+diff --git a/scripts/db-migrate.ts b/scripts/db-migrate.ts
+index 608535cc..5c90b02a 100644
+--- a/scripts/db-migrate.ts
++++ b/scripts/db-migrate.ts
+@@ -23,57 +23,55 @@
+  * Show status:   bun run db:status
+  */
+ import postgres from 'postgres';
++import { applyHubMigration } from './db-migrate-core';
+ import { readdirSync, readFileSync } from 'node:fs';
+ import { join, dirname } from 'node:path';
+ import { fileURLToPath } from 'node:url';
+ 
+-const MIGRATIONS_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'supabase', 'migrations');
+-const LOCK_KEY = 826744; // single advisory-lock namespace for hub migrations
++const MIGRATIONS_DIR = join(
++  dirname(fileURLToPath(import.meta.url)),
++  '..',
++  'supabase',
++  'migrations',
++);
+ const versionOf = (file: string) => file.replace(/_.*/, '');
+ 
+ // ── guard: only touch prod on a production build or an explicit manual run ──
+ if (process.env.VERCEL_ENV !== 'production' && process.env.FORCE_DB_MIGRATE !== '1') {
+-	console.log(
+-		`db:migrate skipped — VERCEL_ENV='${process.env.VERCEL_ENV ?? 'unset'}' (set FORCE_DB_MIGRATE=1 to override)`,
+-	);
+-	process.exit(0);
++  console.log(
++    `db:migrate skipped — VERCEL_ENV='${process.env.VERCEL_ENV ?? 'unset'}' (set FORCE_DB_MIGRATE=1 to override)`,
++  );
++  process.exit(0);
+ }
+ const url = process.env.SUPABASE_DB_URL;
+ if (!url) {
+-	console.error('db:migrate FAILED — SUPABASE_DB_URL is not set in this environment');
+-	process.exit(1);
++  console.error('db:migrate FAILED — SUPABASE_DB_URL is not set in this environment');
++  process.exit(1);
+ }
+ 
+ const files = readdirSync(MIGRATIONS_DIR)
+-	.filter((f) => f.endsWith('.sql'))
+-	.sort();
++  .filter((f) => f.endsWith('.sql'))
++  .sort();
+ 
+ const sql = postgres(url, { prepare: false, max: 1, onnotice: () => {} });
+ try {
+-	await sql`create table if not exists public.hub_migrations (version text primary key, applied_at timestamptz not null default now())`;
+-	const rows = await sql<{ version: string }[]>`select version from public.hub_migrations`;
+-	const applied = new Set(rows.map((r) => r.version));
++  await sql`create table if not exists public.hub_migrations (version text primary key, applied_at timestamptz not null default now())`;
++  const rows = await sql<{ version: string }[]>`select version from public.hub_migrations`;
++  const applied = new Set(rows.map((r) => r.version));
+ 
+-	let count = 0;
+-	for (const file of files) {
+-		const ver = versionOf(file);
+-		if (applied.has(ver)) continue;
+-		const body = readFileSync(join(MIGRATIONS_DIR, file), 'utf8');
+-		console.log(`db:migrate — applying ${ver} (${file})…`);
+-		await sql.begin(async (tx) => {
+-			await tx`select pg_advisory_xact_lock(${LOCK_KEY})`;
+-			// re-check under the lock: a concurrent build may have applied it first
+-			const dup = await tx`select 1 from public.hub_migrations where version = ${ver}`;
+-			if (dup.length > 0) return;
+-			await tx.unsafe(body); // multi-statement DDL, no params → simple protocol
+-			await tx`insert into public.hub_migrations(version) values (${ver})`;
+-		});
+-		count++;
+-	}
+-	console.log(`db:migrate — done (${count} applied).`);
++  let count = 0;
++  for (const file of files) {
++    const ver = versionOf(file);
++    if (applied.has(ver)) continue;
++    const body = readFileSync(join(MIGRATIONS_DIR, file), 'utf8');
++    console.log(`db:migrate — applying ${ver} (${file})…`);
++    await applyHubMigration(sql, { version: ver, body });
++    count++;
++  }
++  console.log(`db:migrate — done (${count} applied).`);
+ } catch (err) {
+-	console.error('db:migrate FAILED —', err instanceof Error ? err.message : err);
+-	process.exitCode = 1;
++  console.error('db:migrate FAILED —', err instanceof Error ? err.message : err);
++  process.exitCode = 1;
+ } finally {
+-	await sql.end({ timeout: 5 });
++  await sql.end({ timeout: 5 });
+ }
+diff --git a/scripts/qa/seed/db.ts b/scripts/qa/seed/db.ts
+index 98581a25..664d3257 100644
+--- a/scripts/qa/seed/db.ts
++++ b/scripts/qa/seed/db.ts
+@@ -80,6 +80,8 @@ export const SEEDED_TABLES: readonly string[] = [
+   'org_roles',
+   'permission_rules',
+   'app_modules',
++  'pulse_proposals',
++  'pulse_dispatches',
+   'personal_agents',
+   'join_link',
+   'join_request',
+diff --git a/scripts/qa/seed/ids.ts b/scripts/qa/seed/ids.ts
+index 743ea32f..5e96f975 100644
+--- a/scripts/qa/seed/ids.ts
++++ b/scripts/qa/seed/ids.ts
+@@ -64,3 +64,7 @@ export function personaEmail(matrixId: string): string {
+ /** One password for every QA persona this run — simplest thing that works for
+  *  a disposable, non-production stack; override via QA_SEED_PASSWORD. */
+ export const QA_PASSWORD = process.env.QA_SEED_PASSWORD ?? 'QaStack!2026';
++
++/** Stable replay namespace for Pulse decision/dispatch fixture rows. */
++export const pulseFixtureId = (scenario: string, kind = 'proposal') =>
++  matrixUuid(`pulse.${scenario}`, kind);
+diff --git a/scripts/qa/seed/index.ts b/scripts/qa/seed/index.ts
+index af5347cd..9fade943 100644
+--- a/scripts/qa/seed/index.ts
++++ b/scripts/qa/seed/index.ts
+@@ -33,6 +33,7 @@ import * as columnPresentation from './column-presentation';
+ import * as formulaVariables from './formula-variables';
+ import * as inbox from './inbox';
+ import * as release from './release';
++import * as pulse from './pulse';
+ 
+ const MODULES: ReadonlyArray<{
+   domain: string;
+@@ -64,6 +65,7 @@ const MODULES: ReadonlyArray<{
+   { domain: 'gateway', label: 'gateway-libsql', seed: gatewayLibsql.seed },
+   { domain: 'inbox', label: 'inbox', seed: inbox.seed },
+   { domain: 'release', label: 'release', seed: release.seed },
++  { domain: 'pulse', label: 'pulse', seed: pulse.seed },
+   // Not a matrix domain — keeps the ui-audit-seed.ts personas alive on the same stack.
+   { domain: 'ui-audit', label: 'ui-audit-compat', seed: uiAuditCompat.seed },
+ ];
+diff --git a/scripts/qa/seed/matrix.ts b/scripts/qa/seed/matrix.ts
+index 8bb1b5c8..e1039d5b 100644
+--- a/scripts/qa/seed/matrix.ts
++++ b/scripts/qa/seed/matrix.ts
+@@ -35,13 +35,19 @@ export interface MatrixEntry {
+     | 'column-presentation'
+     | 'ui-audit'
+     | 'inbox'
+-    | 'release';
++    | 'release'
++    | 'pulse';
+   readonly why: string;
+ }
+ 
+ export const MATRIX_VERSION = 'qa-seed-v1';
+ 
+ export const MATRIX: readonly MatrixEntry[] = [
++  ...['legacy', 'owner', 'other-owner', 'conflict', 'indeterminate'].map((scenario) => ({
++    id: `pulse.${scenario}`,
++    domain: 'pulse' as const,
++    why: 'Pulse owner privacy, revision conflicts and retained uncertain receipt',
++  })),
+   ...(['owner', 'manager', 'member', 'restricted'] as const).map((persona) => ({
+     id: `ui-audit.persona.${persona}-agent`,
+     domain: 'ui-audit' as const,
+diff --git a/scripts/qa/seed/tenancy.ts b/scripts/qa/seed/tenancy.ts
+index 9800864a..880d42ea 100644
+--- a/scripts/qa/seed/tenancy.ts
++++ b/scripts/qa/seed/tenancy.ts
+@@ -30,7 +30,7 @@ export async function ensureSeededPersonalAgent(
+     profileId: string;
+     agentId: string;
+     displayName: string;
+-    provisioningStatus?: 'pending' | 'active';
++    provisioningStatus?: UserSpec['provisioningStatus'];
+   },
+ ): Promise<void> {
+   const status = params.provisioningStatus ?? 'active';
+diff --git a/scripts/qc/native-postgres-manifest.test.ts b/scripts/qc/native-postgres-manifest.test.ts
+index bd8c95bf..19264146 100644
+--- a/scripts/qc/native-postgres-manifest.test.ts
++++ b/scripts/qc/native-postgres-manifest.test.ts
+@@ -67,7 +67,7 @@ describe('native PostgreSQL ownership manifest', () => {
+       .map((file) => path.relative(process.cwd(), file).replaceAll('\\', '/'))
+       .filter(isOrdinaryVitestNativeExclusion);
+     validateNativePostgresOwnership(discovered, NATIVE_POSTGRES_MANIFEST, existsSync);
+-    expect(discovered).toHaveLength(37);
++    expect(discovered).toHaveLength(42);
+     expect(NATIVE_POSTGRES_LANES).toHaveLength(9);
+     const crmBulk = NATIVE_POSTGRES_MANIFEST['qa-native'].find(
+       ({ file }) => file === 'src/server/services/crm-contact-tags-bulk.sql.integration.test.ts',
+diff --git a/scripts/qc/native-postgres-manifest.ts b/scripts/qc/native-postgres-manifest.ts
+index 1dcab1f2..e52aee44 100644
+--- a/scripts/qc/native-postgres-manifest.ts
++++ b/scripts/qc/native-postgres-manifest.ts
+@@ -1,5 +1,10 @@
+ export const NATIVE_POSTGRES_EXCLUDES = [
+   '**/*.sql.integration.test.ts',
++  'src/server/services/pulse-dispatch.store.test.ts',
++  'src/server/services/bg-runtime.selection.test.ts',
++  'src/server/services/pulse-dispatch.worker.test.ts',
++  'src/routes/api/pulse/proposals/pulse-approval.test.ts',
++  'src/routes/(app)/notifications/notifications-page.server.test.ts',
+   'src/server/services/brain-business-persistence.service.test.ts',
+   'src/server/services/crm-funnel.concurrent.integration.test.ts',
+ ] as const;
+@@ -622,6 +627,72 @@ export const NATIVE_POSTGRES_MANIFEST = {
+     },
+   ],
+   'qa-native': [
++    {
++      file: 'src/server/services/pulse-dispatch.store.test.ts',
++      minimumAssertions: 9,
++      requiredBehaviors: [
++        'actual Pulse migration and restricted owner storage excludes every owner-bound proposal from shared corpus content and identity even for its owner',
++        'actual Pulse migration and restricted owner storage runs actual paired QA seed twice without replacing immutable decisions or duplicating receipts',
++        'actual Pulse migration and restricted owner storage reruns actual migration without inventing legacy decisions or revision history',
++        'actual Pulse migration and restricted owner storage uses the actual CLI migration core for independent-connection lock dedupe and rollback',
++        'actual Pulse migration and restricted owner storage constrains unique revision/job binding, admission, immutable content and tombstone deletion',
++        'actual Pulse migration and restricted owner storage detects the old mutable-approved-content counterexample when its actual SQL guard is deliberately removed',
++        'actual Pulse migration and restricted owner storage FORCE RLS enforces org AND owner under the effective app role',
++        'actual Pulse migration and restricted owner storage retention fences expired queued work and irreversibly redacts only payload while retaining the tombstone',
++        'actual Pulse migration and restricted owner storage rejects mismatched job owner and scoped proposal reference',
++      ],
++    },
++    {
++      file: 'src/server/services/bg-runtime.selection.test.ts',
++      minimumAssertions: 7,
++      requiredBehaviors: [
++        'selected queue uses real PostgreSQL admission predicates does not invoke after a post-claim read exhausts its budget and retains resumable bookkeeping',
++        'selected queue uses real PostgreSQL admission predicates does not extend selected admission or callback budget when wall time moves backward',
++        'selected queue uses real PostgreSQL admission predicates selects owner/org/type/due before LIMIT and counts only handler invocation',
++        'selected queue uses real PostgreSQL admission predicates rechecks due time and generation after a stale candidate waits for another transaction',
++        'selected queue uses real PostgreSQL admission predicates postpones domain/job atomically, releases ownership and cannot direct-advance due work',
++        'selected queue uses real PostgreSQL admission predicates rolls back domain retry bookkeeping when the owned postponement transaction fails',
++        'selected queue uses real PostgreSQL admission predicates does not count a missing handler and rejects accidental postponement opt-in',
++      ],
++    },
++    {
++      file: 'src/server/services/pulse-dispatch.worker.test.ts',
++      minimumAssertions: 10,
++      requiredBehaviors: [
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership serializes flat cron schema with explicit personal agent/origin, no delivery, and scheduling-only receipt',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership two profiles sharing a gateway freeze distinct personal agents and origin sessions',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership malformed acceptance and socket loss become indeterminate and are never automatically replayed',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership version/short-commit qualification rejects before cron admission and never uses ambient fallback',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership revoked membership/assignment/module cancels queued work and preserves admitted tombstones',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership fresh role grants, module enablement, personal agent and gateway linkage fence admission',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership revocation during an admitted RPC fences late settlement without clearing ambiguous evidence',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership actual membership removal and account deletion callers cancel queued work before revocation',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership crashes actual worker processes after admission, acceptance and settlement without automatic repeats',
++        'registered Pulse worker uses one qualified local WebSocket and actual PostgreSQL ownership reclaimed committed admission cannot send again after process loss before dispatch',
++      ],
++    },
++    {
++      file: 'src/routes/api/pulse/proposals/pulse-approval.test.ts',
++      minimumAssertions: 7,
++      requiredBehaviors: [
++        'actual versioned Pulse route and domain PostgreSQL transaction concurrent approvals commit one decision, dispatch and job, with stable duplicate receipt and no route RPC',
++        'actual versioned Pulse route and domain PostgreSQL transaction approve versus edit/dismiss serializes, stale/missing revision creates no dispatch',
++        'actual versioned Pulse route and domain PostgreSQL transaction rolls back decision, dispatch and queue together on an actual queue insertion error',
++        'actual versioned Pulse route and domain PostgreSQL transaction concurrent approve and edit decide only the content revision that won the lock',
++        'actual versioned Pulse route and domain PostgreSQL transaction same-org other owner and wrong org cannot read or mutate bound proposals',
++        'actual versioned Pulse route and domain PostgreSQL transaction projects bounded keyset receipts and keeps legacy executedAt explicitly unverified',
++        'actual versioned Pulse route and domain PostgreSQL transaction informational kinds cannot dispatch by smuggling a tool and preserve legacy atomic decisions',
++      ],
++    },
++    {
++      file: 'src/routes/(app)/notifications/notifications-page.server.test.ts',
++      minimumAssertions: 2,
++      requiredBehaviors: [
++        'actual notifications SSR with owner-scoped Pulse reader excludes same-org other-owner, includes unbound legacy, projects only reviewed fields and revision',
++        'actual notifications SSR with owner-scoped Pulse reader retains review, Pulse read and organization-kind gates without changing inbox/join requests',
++      ],
++    },
++
+     {
+       file: 'src/server/services/design-durability.sql.integration.test.ts',
+       minimumAssertions: 5,
+@@ -743,6 +814,13 @@ export function nativePostgresFiles(lane: NativePostgresLane) {
+ export function isOrdinaryVitestNativeExclusion(file: string) {
+   const normalized = file.replaceAll('\\', '/');
+   return (
++    [
++      'src/server/services/pulse-dispatch.store.test.ts',
++      'src/server/services/bg-runtime.selection.test.ts',
++      'src/server/services/pulse-dispatch.worker.test.ts',
++      'src/routes/api/pulse/proposals/pulse-approval.test.ts',
++      'src/routes/(app)/notifications/notifications-page.server.test.ts',
++    ].includes(normalized) ||
+     normalized.endsWith('.sql.integration.test.ts') ||
+     normalized === 'src/server/services/brain-business-persistence.service.test.ts' ||
+     normalized === 'src/server/services/crm-funnel.concurrent.integration.test.ts'
+diff --git a/scripts/qc/run-critical-journeys.mjs b/scripts/qc/run-critical-journeys.mjs
+index 4719b772..ecd8d162 100644
+--- a/scripts/qc/run-critical-journeys.mjs
++++ b/scripts/qc/run-critical-journeys.mjs
+@@ -36,6 +36,7 @@ const baseEnvironment = {
+   PWTEST_CACHE_DIR: cache,
+   PLAYWRIGHT_BROWSERS_PATH: browserCache,
+   NODE_OPTIONS: '--max-old-space-size=1536',
++  MINION_CRITICAL_PULSE_ONLY: process.env.MINION_CRITICAL_PULSE_ONLY,
+ };
+ const receipt = {
+   status: 'failed',
+@@ -64,10 +65,14 @@ async function waitForServer() {
+     if (serverError) throw serverError;
+     if (server && server.exitCode !== null) throw new Error('Critical fixture server exited');
+     try {
+-      const response = await fetch('http://127.0.0.1:18903/home.html', {
+-        method: 'HEAD',
+-        signal: AbortSignal.timeout(500),
+-      });
++      const response = await fetch(
++        'http://127.0.0.1:18903/' +
++          (process.env.MINION_CRITICAL_PULSE_ONLY === '1' ? 'pulse.html' : 'home.html'),
++        {
++          method: 'HEAD',
++          signal: AbortSignal.timeout(500),
++        },
++      );
+       if (response.ok && response.headers.get('x-minion-fixture-run') === runId) return;
+     } catch {}
+     await new Promise((resolve) => setTimeout(resolve, 100));
+diff --git a/src/lib/components/layout/NotificationsPopup.svelte b/src/lib/components/layout/NotificationsPopup.svelte
+index 5a51adfb..4917c8ff 100644
+--- a/src/lib/components/layout/NotificationsPopup.svelte
++++ b/src/lib/components/layout/NotificationsPopup.svelte
+@@ -1,14 +1,21 @@
+ <script lang="ts">
+-  import type { Snippet } from 'svelte';
++  import { untrack, type Snippet } from 'svelte';
++  import { canClient, canViewPath } from '$lib/access/can.svelte';
+   import * as m from '$lib/paraglide/messages';
+   import { Bell, ArrowRight, Download, Check, CheckCheck, X } from 'lucide-svelte';
+   import { afterNavigate } from '$lib/navigation';
+   import { updateState } from '$lib/state/gateway/update-state.svelte';
+   import { Button, Popover, Spinner, Tooltip, iconSizes } from '$lib/components/ui';
++  import { conn } from '$lib/state/gateway/connection.svelte';
+   import { pulse } from '$lib/state/features/pulse.svelte';
+   import { notifications, refreshNotifications } from '$lib/state/features/notifications.svelte';
+   import { kindLabel, timeAgo } from '$lib/inbox/feed';
+-  import type { PulseProposalRow } from '$server/db/pg-schema/pulse';
++  import PulseReceipt from '$lib/components/pulse/PulseReceipt.svelte';
++  import { tryUseActions } from '$lib/services/actions/context';
++  const actions = tryUseActions();
++  $effect(() => {
++    if (conn.connectedAt && canViewPath('/pulse')) untrack(() => void pulse.recover(undefined));
++  });
+ 
+   interface PendingRequest {
+     id: string;
+@@ -37,40 +44,43 @@
+     placement?: 'top' | 'bottom' | 'left' | 'right' | 'bottom-end';
+   } = $props();
+ 
++  let refreshGeneration = 0;
+   let requests = $state<PendingRequest[]>([]);
+   let inboxRows = $state<InboxRow[]>([]);
+   let loading = $state(false);
+   let pulseBusyId = $state<string | null>(null);
+ 
+-  const pulseItems = $derived(pulse.items as unknown as PulseProposalRow[]);
++  const pulseItems = $derived(pulse.items);
+   // Unread first so a fresh reminder is never pushed below yesterday's read rows.
+   const orderedInbox = $derived(
+     [...inboxRows].sort((a, b) => Number(Boolean(a.readAt)) - Number(Boolean(b.readAt))),
+   );
+   // Rows rendered — read inbox rows included — drives the empty state only.
+-  const total = $derived(requests.length + pulseItems.length + inboxRows.length);
++  const total = $derived(
++    requests.length + pulseItems.length + inboxRows.length + pulse.receipts.length,
++  );
+ 
+-  async function fetchRequests() {
++  async function fetchRequests(generation = refreshGeneration) {
+     loading = true;
+     try {
+       const res = await fetch('/api/join-requests/pending');
+       if (res.ok) {
+         const data = await res.json();
+-        requests = data.requests ?? [];
++        if (generation === refreshGeneration) requests = data.requests ?? [];
+       }
+     } catch {
+       // silent
+     } finally {
+-      loading = false;
++      if (generation === refreshGeneration) loading = false;
+     }
+   }
+ 
+-  async function fetchInboxRows() {
++  async function fetchInboxRows(generation = refreshGeneration) {
+     try {
+       const res = await fetch('/api/inbox?limit=8');
+       if (res.ok) {
+         const data = await res.json();
+-        inboxRows = data.items ?? [];
++        if (generation === refreshGeneration) inboxRows = data.items ?? [];
+       }
+     } catch {
+       // silent — the inbox section just stays empty this open
+@@ -103,26 +113,43 @@
+     void refreshNotifications();
+   }
+ 
+-  async function pulseAct(id: string, action: 'approve' | 'dismiss') {
++  async function pulseAct(id: string, revision: number, action: 'approve' | 'dismiss') {
++    if (pulseBusyId || pulse.recovery || pulse.receipt(id)) return;
+     pulseBusyId = id;
+     try {
+       // pulse.act() already re-fetches items + count internally, and
+       // notifications.badgeCount reads pulse.pendingCount reactively — the
+       // bell badge updates on its own, no extra refresh call needed.
+-      await (action === 'approve' ? pulse.approve(id) : pulse.dismiss(id));
++      await (action === 'approve'
++        ? pulse.approve(id, revision, { actions })
++        : pulse.dismiss(id, revision, { actions }));
+     } finally {
+       pulseBusyId = null;
+     }
+   }
+ 
++  // Refresh only for intentional open/identity/access changes. Receipt publication is
++  // an output of these reads and must not become another refresh dependency.
+   $effect(() => {
+-    if (open) {
+-      fetchRequests();
+-      fetchInboxRows();
+-      pulse.refresh();
+-      // Same source as the bell badge, so the header count can never disagree with it.
++    pulse.syncScope(actions?.scopeVersion);
++    const pulseAllowed = canViewPath('/pulse');
++    const reviewAllowed = canClient('users:manage');
++    const isOpen = open;
++    const generation = ++refreshGeneration;
++    untrack(() => {
++      requests = [];
++      inboxRows = [];
++      pulseBusyId = null;
++      if (!isOpen) {
++        loading = false;
++        return;
++      }
++      if (reviewAllowed) void fetchRequests(generation);
++      else loading = false;
++      void fetchInboxRows(generation);
++      if (pulseAllowed) void pulse.refresh();
+       void refreshNotifications();
+-    }
++    });
+   });
+ 
+   // Belt-and-suspenders close: the Popover already dismisses on outside
+@@ -217,6 +244,13 @@
+         </span>
+       </a>
+     {/if}
++    {#if pulse.error}<p class="t-caption" role="alert">{pulse.error}</p>{/if}
++    {#if pulse.recovery}<Button
++        variant="secondary"
++        loading={pulse.busy}
++        onclick={() => pulse.recover()}>{m.asyncAction_reload()}</Button
++      >{/if}
++    {#each pulse.receipts as receipt (receipt.proposalId)}<PulseReceipt {receipt} />{/each}
+     {#if loading}
+       <div class="flex items-center justify-center py-8">
+         <Spinner size="md" />
+@@ -240,6 +274,7 @@
+             class="flex flex-col px-4 py-3 border-b border-[var(--hairline)] hover:bg-bg3/50 transition-colors duration-[var(--duration-fast)]"
+           >
+             <span class="text-sm font-medium text-foreground truncate">{p.title}</span>
++            <span class="t-caption">{m.pulse_revision({ revision: p.revision })}</span>
+             {#if p.summary}
+               <p class="text-xs text-muted mt-0.5 line-clamp-2">{p.summary}</p>
+             {/if}
+@@ -248,7 +283,10 @@
+                 variant="ghost"
+                 size="xs"
+                 loading={pulseBusyId === p.id}
+-                onclick={() => pulseAct(p.id, 'approve')}
++                disabled={pulseBusyId !== null ||
++                  pulse.recovery !== null ||
++                  pulse.receipt(p.id) !== undefined}
++                onclick={() => pulseAct(p.id, p.revision, 'approve')}
+               >
+                 <Check size={iconSizes.xs} />
+                 {m.notif_approve()}
+@@ -257,7 +295,10 @@
+                 variant="ghost"
+                 size="xs"
+                 loading={pulseBusyId === p.id}
+-                onclick={() => pulseAct(p.id, 'dismiss')}
++                disabled={pulseBusyId !== null ||
++                  pulse.recovery !== null ||
++                  pulse.receipt(p.id) !== undefined}
++                onclick={() => pulseAct(p.id, p.revision, 'dismiss')}
+               >
+                 <X size={iconSizes.xs} />
+                 {m.common_dismiss()}
+diff --git a/src/lib/server/cron-auth-path.ts b/src/lib/server/cron-auth-path.ts
+index 106de1d2..b1b331ce 100644
+--- a/src/lib/server/cron-auth-path.ts
++++ b/src/lib/server/cron-auth-path.ts
+@@ -6,6 +6,7 @@ const CRON_AUTH_PATHS = new Set([
+   '/api/memberships/tick',
+   '/api/org-config/tick',
+   '/api/jobs/tick',
++  '/api/pulse/tick',
+   '/api/brains/reconcile/tick',
+   '/api/meta/sync/tick',
+   '/api/marketplace/sync/tick',
+diff --git a/src/lib/server/gateway-rpc.ts b/src/lib/server/gateway-rpc.ts
+index ece5f79d..c67adefa 100644
+--- a/src/lib/server/gateway-rpc.ts
++++ b/src/lib/server/gateway-rpc.ts
+@@ -354,3 +354,189 @@ export async function pluginsUiList(
+   const raw = Array.isArray(res) ? res : (res?.entries ?? res?.occupants ?? []);
+   return raw.filter((e) => !HIDDEN_PLUGIN_IDS.has(e.pluginId));
+ }
++
++export type QualifiedGatewayInput = {
++  orgId: string;
++  profileId: string;
++  gatewayId: string;
++  channel: GatewayChannel;
++  endpoint: string;
++  credentialRevision: string;
++  version: string;
++  commit: string;
++  signal?: AbortSignal;
++};
++export type QualifiedGatewayConnection = {
++  /** One request, on the authenticated and qualified socket. Reconnect is never attempted. */
++  dispatch: (params: Record<string, unknown>) => Promise<unknown>;
++  close: () => void;
++  isConnected: () => boolean;
++};
++
++/** Exact assigned credential row. Every lookup failure propagates; no ambient fallback. */
++export async function resolveStrictGatewayCredentials(
++  input: QualifiedGatewayInput,
++): Promise<{ url: string; token: string }> {
++  const { sql } = await import('drizzle-orm');
++  const { getCoreDb } = await import('$server/db/pg-client');
++  const { decrypt } = await import('$server/auth/crypto');
++  const { pulseHash } = await import('$server/services/pulse-action-contract');
++  const [row] = await getCoreDb().execute<{
++    url: string;
++    token_ciphertext: string;
++    token_iv: string;
++  }>(sql`
++    select g.url,g.token_ciphertext,g.token_iv from gateway g
++    join user_gateway ug on ug.gateway_id=g.id
++    join gateway_lease l on l.gateway_id=g.id and l.org_id=g.org_id and l.channel=g.channel
++    where g.id=${input.gatewayId}::uuid and g.org_id=${input.orgId}::uuid and ug.profile_id=${input.profileId}::uuid
++      and g.channel=${input.channel} and l.expires_at>now()`);
++  if (
++    !row ||
++    row.url !== input.endpoint ||
++    !row.token_ciphertext ||
++    pulseHash([row.token_ciphertext, row.token_iv]) !== input.credentialRevision
++  )
++    throw new Error('Assigned gateway credentials unavailable');
++  return {
++    url: toWsUrl(row.url),
++    token: row.token_iv ? decrypt(row.token_ciphertext, row.token_iv) : row.token_ciphertext,
++  };
++}
++
++export async function prepareQualifiedGateway(
++  input: QualifiedGatewayInput,
++): Promise<QualifiedGatewayConnection> {
++  if (!input.version || !/^[0-9a-f]{40}$/.test(input.commit))
++    throw new Error('Gateway qualification unavailable');
++  const credentials = await resolveStrictGatewayCredentials(input);
++  return openQualifiedGateway(credentials, input);
++}
++
++/** Exposed for local transport contract tests; production credentials always use the strict resolver. */
++export function openQualifiedGateway(
++  credentials: { url: string; token: string },
++  input: Pick<QualifiedGatewayInput, 'version' | 'commit' | 'signal'>,
++): Promise<QualifiedGatewayConnection> {
++  return new Promise((resolve, reject) => {
++    const ws = new WebSocket(credentials.url, {
++      headers: { Origin: env.MINION_HUB_ORIGIN || hubBaseUrl() },
++    });
++    let connected = false;
++    let consumed = false;
++    let closed = false;
++    let connectId: string | undefined;
++    let requestId: string | undefined;
++    let pending: { resolve: (value: unknown) => void; reject: (error: Error) => void } | undefined;
++    let timer: ReturnType<typeof setTimeout>;
++    const close = () => {
++      closed = true;
++      connected = false;
++      clearTimeout(timer);
++      input.signal?.removeEventListener('abort', onAbort);
++      ws.close();
++    };
++    const fail = () => {
++      const error = new Error('Qualified gateway connection unavailable');
++      pending?.reject(error);
++      pending = undefined;
++      close();
++      reject(error);
++    };
++    const onAbort = () => fail();
++    timer = setTimeout(fail, DEFAULT_TIMEOUT_MS);
++    timer.unref?.();
++    input.signal?.addEventListener('abort', onAbort, { once: true });
++    if (input.signal?.aborted) {
++      fail();
++      return;
++    }
++    ws.on('error', fail);
++    ws.on('close', fail);
++    ws.on('message', (raw) => {
++      let frame: Record<string, unknown>;
++      try {
++        frame = JSON.parse(raw.toString()) as Record<string, unknown>;
++      } catch {
++        return;
++      }
++      if (frame.type === 'event' && frame.event === 'connect.challenge' && !connectId) {
++        connectId = randomUUID();
++        ws.send(
++          JSON.stringify({
++            type: 'req',
++            id: connectId,
++            method: 'connect',
++            params: {
++              minProtocol: 3,
++              maxProtocol: 3,
++              client: { id: 'minion-control-ui', version: '1.0', platform: 'node', mode: 'ui' },
++              role: 'operator',
++              scopes: ['operator.admin', 'operator.read', 'operator.write'],
++              caps: [],
++              auth: { token: credentials.token },
++            },
++          }),
++        );
++      } else if (frame.type === 'res' && connectId && frame.id === connectId && !connected) {
++        const hello = frame.payload ?? frame.result ?? frame.data;
++        const server =
++          hello && typeof hello === 'object'
++            ? (hello as { server?: { version?: unknown; commit?: unknown } }).server
++            : undefined;
++        if (
++          frame.ok !== true ||
++          (hello as { type?: unknown } | null)?.type !== 'hello-ok' ||
++          server?.version !== input.version ||
++          server?.commit !== input.commit ||
++          !/^[0-9a-f]{40}$/.test(String(server.commit))
++        ) {
++          fail();
++          return;
++        }
++        connected = true;
++        clearTimeout(timer);
++        resolve({
++          close,
++          isConnected: () =>
++            connected && !closed && ws.readyState === WebSocket.OPEN && !input.signal?.aborted,
++          dispatch: (params) => {
++            if (
++              consumed ||
++              closed ||
++              !connected ||
++              ws.readyState !== WebSocket.OPEN ||
++              input.signal?.aborted
++            )
++              return Promise.reject(new Error('Qualified socket is no longer available'));
++            consumed = true;
++            requestId = randomUUID();
++            return new Promise((requestResolve, requestReject) => {
++              pending = { resolve: requestResolve, reject: requestReject };
++              timer = setTimeout(fail, DEFAULT_TIMEOUT_MS);
++              timer.unref?.();
++              try {
++                ws.send(
++                  JSON.stringify({ type: 'req', id: requestId, method: 'cron.add', params }),
++                  (error) => {
++                    if (error) fail();
++                  },
++                );
++              } catch {
++                fail();
++              }
++            });
++          },
++        });
++      } else if (frame.type === 'res' && requestId && frame.id === requestId && pending) {
++        const waiting = pending;
++        pending = undefined;
++        clearTimeout(timer);
++        // A negative/malformed response after admission is still conservatively indeterminate.
++        if (frame.ok !== true) waiting.reject(new Error('Remote acceptance is unknown'));
++        else waiting.resolve(frame.payload ?? frame.result ?? frame.data);
++        close();
++      }
++    });
++  });
++}
+diff --git a/src/lib/state/features/notifications.svelte.test.ts b/src/lib/state/features/notifications.svelte.test.ts
+index f09dfec3..e1f1dbc6 100644
+--- a/src/lib/state/features/notifications.svelte.test.ts
++++ b/src/lib/state/features/notifications.svelte.test.ts
+@@ -3,7 +3,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
+ const refreshPulse = vi.fn(async () => {});
+ const setPulsePendingCount = vi.fn();
+ vi.mock('./pulse.svelte', () => ({
+-  pulse: { pendingCount: 0, refreshCount: refreshPulse, setPendingCount: setPulsePendingCount },
++  pulse: {
++    pendingCount: 0,
++    refreshCount: refreshPulse,
++    beginCountRead: () => setPulsePendingCount,
++  },
+ }));
+ vi.mock('$lib/state/gateway/update-state.svelte', () => ({
+   updateState: { pending: false },
+diff --git a/src/lib/state/features/notifications.svelte.ts b/src/lib/state/features/notifications.svelte.ts
+index 13b4d01a..dede5cca 100644
+--- a/src/lib/state/features/notifications.svelte.ts
++++ b/src/lib/state/features/notifications.svelte.ts
+@@ -59,6 +59,7 @@ let pollTimer: ReturnType<typeof setInterval> | null = null;
+ /** One request instead of three (`/api/join-requests/count` + `/api/inbox/count`
+  *  + `/api/pulse/count`) — see `/api/shell/counts`. */
+ async function runRefreshNotifications() {
++  const publishPulseCount = pulse.beginCountRead();
+   try {
+     const res = await fetch('/api/shell/counts');
+     if (res.ok) {
+@@ -69,7 +70,7 @@ async function runRefreshNotifications() {
+       notifications.inboxUnreadCount = next;
+       inboxPrimed = true;
+       if (grew) void announceNewestUnread();
+-      pulse.setPendingCount(data.pulse ?? 0);
++      publishPulseCount(data.pulse ?? 0);
+       notifications.posPendingWork = typeof data.posPending === 'number' ? data.posPending : null;
+       notifications.lastFetched = Date.now();
+     }
+diff --git a/src/lib/state/features/pulse.svelte.ts b/src/lib/state/features/pulse.svelte.ts
+index d9366f11..ec763d05 100644
+--- a/src/lib/state/features/pulse.svelte.ts
++++ b/src/lib/state/features/pulse.svelte.ts
+@@ -1,59 +1,347 @@
+-type PulseItem = Record<string, unknown>;
+-
+-let s = $state<{ pendingCount: number; items: PulseItem[] }>({ pendingCount: 0, items: [] });
++import { page } from '$app/state';
++import { canViewPath } from '$lib/access/can.svelte';
++import type { PulseProposalView } from '$server/services/pulse.service';
++import type { PulseReceipt } from '$server/services/pulse-dispatch.store';
++import type { ActionRuntime } from '$lib/services/actions/runtime.svelte';
++import type { CommandOutcome } from '$lib/services/actions/definition';
++import { requireOk, runCheckedMutation, runTrackedCommand } from '$lib/services/actions/mutations';
++import * as m from '$lib/paraglide/messages';
+ 
++const attemptedIds = new Set<string>();
++let scopeGeneration = 0;
++let readEpoch = 0;
++let readSequence = 0;
++let countRead = 0;
++let itemsRead = 0;
++let refreshSequence = 0;
++const receiptReads = new Map<string, number>();
++type ActiveDecision = {
++  id: string;
++  scope: number;
++  latest?: { receipt: PulseReceipt; version: number };
++};
++// Only one decision is admitted at a time. Its evidence survives recent-cache
++// eviction until completion, without retaining a permanent per-id tombstone.
++let activeDecision: ActiveDecision | undefined;
++function retireReads() {
++  readEpoch += 1;
++  refreshSequence += 1;
++  receiptReads.clear();
++}
++function beginRead() {
++  const scope = scopeGeneration;
++  const epoch = readEpoch;
++  return () => scope === scopeGeneration && epoch === readEpoch;
++}
++function beginCountRead() {
++  const current = beginRead();
++  const request = (countRead = ++readSequence);
++  return {
++    current: () => current() && countRead === request,
++    publish: (count: number) => {
++      if (current() && countRead === request) s.pendingCount = count;
++    },
++  };
++}
++function publishReceipt(id: string, receipt: PulseReceipt, version: number) {
++  if (
++    activeDecision?.id === id &&
++    activeDecision.scope === scopeGeneration &&
++    version >= (activeDecision.latest?.version ?? -1)
++  )
++    activeDecision.latest = { receipt, version };
++  // Recent receipts are bounded just like the server reader; in-flight tokens are
++  // removed on completion and never become a permanent per-id version history.
++  const entries = Object.entries(s.receipts).filter(([key]) => key !== id);
++  entries.push([id, receipt]);
++  s.receipts = Object.fromEntries(entries.slice(-50));
++  attemptedIds.delete(id);
++}
++function latestDecisionOutcome(
++  decision: ActiveDecision,
++  outcome: CommandOutcome<PulseReceipt>,
++): CommandOutcome<PulseReceipt> {
++  if (decision.scope !== scopeGeneration || activeDecision !== decision)
++    return { status: 'unknown' };
++  if ('value' in outcome && outcome.value && decision.latest) {
++    const { receipt, version } = decision.latest;
++    publishReceipt(decision.id, receipt, version);
++    return { ...outcome, value: receipt };
++  }
++  return outcome;
++}
++let currentScope: string | number | undefined;
++let pendingRecovery: { refresh?: () => Promise<void> } | undefined;
++function drainRecovery() {
++  const pending = pendingRecovery;
++  pendingRecovery = undefined;
++  if (pending) void recover(pending.refresh);
++}
++type Recovery = 'unknown' | 'committed-refreshing' | 'conflict';
++let s = $state<{
++  pendingCount: number;
++  items: PulseProposalView[];
++  receipts: Record<string, PulseReceipt>;
++  recovery: Recovery | null;
++  error: string | null;
++  busy: boolean;
++}>({ pendingCount: 0, items: [], receipts: {}, recovery: null, error: null, busy: false });
+ async function fetchCount() {
++  const read = beginCountRead();
+   try {
+-    const r = await fetch('/api/pulse/count');
+-    if (r.ok) s.pendingCount = (await r.json()).count ?? 0;
+-  } catch {
+-    /* transient */
++    const response = await requireOk(await fetch('/api/pulse/count'), m.pulse_readFailed());
++    const data = await response.json();
++    if (!read.current()) return false;
++    read.publish(data.count ?? 0);
++    return true;
++  } catch (cause) {
++    if (read.current()) throw cause;
++    return false;
+   }
+ }
+-
+ async function fetchItems() {
++  const current = beginRead();
++  const request = (itemsRead = ++readSequence);
++  const isCurrent = () => current() && request === itemsRead;
+   try {
+-    const r = await fetch('/api/pulse/proposals');
+-    if (r.ok) s.items = (await r.json()).proposals ?? [];
+-  } catch {
+-    /* transient */
++    const response = await requireOk(await fetch('/api/pulse/proposals'), m.pulse_readFailed());
++    const data = await response.json();
++    if (!isCurrent()) return false;
++    s.items = data.proposals ?? [];
++    return true;
++  } catch (cause) {
++    if (isCurrent()) throw cause;
++    return false;
++  }
++}
++async function readReceipt(id: string) {
++  const current = beginRead();
++  const request = ++readSequence;
++  receiptReads.set(id, request);
++  const isCurrent = () => current() && receiptReads.get(id) === request;
++  try {
++    const response = await requireOk(
++      await fetch(`/api/pulse/proposals/${id}/receipt`),
++      m.pulse_readFailed(),
++    );
++    const receipt = (await response.json()) as PulseReceipt;
++    if (!isCurrent()) return undefined;
++    if (receipt.decision !== 'pending') publishReceipt(id, receipt, request);
++    else attemptedIds.delete(id);
++    return receipt;
++  } catch (cause) {
++    if (isCurrent()) throw cause;
++    return undefined;
++  } finally {
++    if (receiptReads.get(id) === request) receiptReads.delete(id);
+   }
+ }
+-
+-// Every consumer of `refresh` (popover open, external callers) needs the list
+-// and the bell badge count to agree — fetching items alone left pendingCount
+-// stale relative to what the popover just rendered.
+ async function refreshAll() {
+-  await Promise.all([fetchItems(), fetchCount()]);
++  const current = beginRead();
++  const refresh = ++refreshSequence;
++  const results = await Promise.all([
++    fetchItems(),
++    fetchCount(),
++    ...[...new Set([...Object.keys(s.receipts), ...attemptedIds])].map(
++      async (id) => (await readReceipt(id)) !== undefined,
++    ),
++  ]);
++  return current() && refresh === refreshSequence && results.every(Boolean);
+ }
+-
+-async function act(id: string, action: 'approve' | 'dismiss') {
+-  const r = await fetch(`/api/pulse/proposals/${id}`, {
+-    method: 'POST',
+-    headers: { 'content-type': 'application/json' },
+-    body: JSON.stringify({ action }),
+-  });
+-  if (!r.ok) {
+-    console.error(`pulse ${action} failed: ${r.status}`);
+-    return; // leave items/pendingCount as-is — the action did not take effect
++async function recover(refresh?: () => Promise<void>) {
++  if (s.busy) {
++    pendingRecovery = { refresh: refresh ?? pendingRecovery?.refresh };
++    return;
++  }
++  s.busy = true;
++  const generation = scopeGeneration;
++  const current = beginRead();
++  const refreshToken = refreshSequence + 1;
++  try {
++    if (!(await refreshAll()) || !current() || refreshToken !== refreshSequence) return;
++    await refresh?.();
++    if (current() && refreshToken === refreshSequence) {
++      s.recovery = null;
++      s.error = null;
++    }
++  } catch {
++    if (current() && refreshToken === refreshSequence) s.error = m.pulse_readFailed();
++  } finally {
++    if (generation === scopeGeneration) {
++      s.busy = false;
++      drainRecovery();
++    }
++  }
++}
++async function act(
++  id: string,
++  expectedRevision: number,
++  action: 'approve' | 'dismiss',
++  options: { actions?: ActionRuntime | null; refresh?: () => Promise<void> } = {},
++) {
++  if (s.busy || s.recovery) return;
++  retireReads();
++  const decisionVersion = ++readSequence;
++  s.busy = true;
++  attemptedIds.add(id);
++  const generation = scopeGeneration;
++  const decision: ActiveDecision = { id, scope: generation };
++  activeDecision = decision;
++  try {
++    const outcome = latestDecisionOutcome(
++      decision,
++      await runTrackedCommand(
++        options.actions ?? undefined,
++        'pulse.proposal.update',
++        async (context) => {
++          const result = await runCheckedMutation({
++            context,
++            attemptId: `pulse.${action}.write`,
++            mutate: async (signal) => {
++              const response = await requireOk(
++                await fetch(`/api/pulse/proposals/${id}`, {
++                  method: 'POST',
++                  headers: { 'content-type': 'application/json' },
++                  body: JSON.stringify({ action, expectedRevision }),
++                  signal,
++                }),
++                m.pulse_decisionFailed(),
++              );
++              const receipt = (await response.json()) as PulseReceipt;
++              return decision.latest && decision.latest.version > decisionVersion
++                ? decision.latest.receipt
++                : receipt;
++            },
++            onCommitted: (receipt) => {
++              if (generation !== scopeGeneration || activeDecision !== decision) return;
++              retireReads();
++              const latest = decision.latest;
++              publishReceipt(
++                id,
++                latest && latest.version > decisionVersion ? latest.receipt : receipt,
++                latest && latest.version > decisionVersion ? latest.version : decisionVersion,
++              );
++            },
++            refresh: async () => {
++              if (generation !== scopeGeneration) return;
++              if (!(await refreshAll())) throw new Error('Pulse read superseded');
++              if (generation !== scopeGeneration) return;
++              await options.refresh?.();
++            },
++            refreshAttemptId: `pulse.${action}.refresh`,
++          });
++          return latestDecisionOutcome(decision, result);
++        },
++      ),
++    );
++    if (generation !== scopeGeneration) return outcome;
++    retireReads();
++    if (outcome.status === 'failed') attemptedIds.delete(id);
++    if (
++      outcome.status === 'unknown' ||
++      outcome.status === 'committed-refreshing' ||
++      outcome.status === 'conflict'
++    )
++      s.recovery = outcome.status;
++    s.error =
++      outcome.status === 'succeeded'
++        ? null
++        : outcome.status === 'unknown'
++          ? m.asyncAction_unknown()
++          : outcome.status === 'committed-refreshing'
++            ? m.asyncAction_refreshing()
++            : outcome.status === 'conflict'
++              ? m.pulse_refreshRequired()
++              : m.pulse_decisionFailed();
++    return outcome;
++  } finally {
++    if (activeDecision === decision) {
++      if (decision.scope === scopeGeneration && decision.latest)
++        publishReceipt(id, decision.latest.receipt, decision.latest.version);
++      activeDecision = undefined;
++    }
++    if (generation === scopeGeneration) {
++      s.busy = false;
++      drainRecovery();
++    }
+   }
+-  await refreshAll();
+ }
+-
+ export const pulse = {
++  scopeKey: (scopeVersion: number | undefined) => {
++    const data = page.data as {
++      user?: { id?: string; role?: string } | null;
++      activeOrgId?: string | null;
++      permissions?: { permissions?: string[] } | null;
++    };
++    return JSON.stringify([
++      scopeVersion,
++      data.user?.id ?? null,
++      data.activeOrgId ?? null,
++      canViewPath('/pulse'),
++      data.permissions?.permissions?.includes('users:manage') ?? false,
++    ]);
++  },
++  syncScope: (scopeVersion: number | undefined) => {
++    const key = pulse.scopeKey(scopeVersion);
++    pulse.setScope(key);
++    return key;
++  },
++  setScope: (scope: string | number | undefined) => {
++    if (currentScope === scope) return;
++    currentScope = scope;
++    scopeGeneration += 1;
++    retireReads();
++    attemptedIds.clear();
++    activeDecision = undefined;
++    pendingRecovery = undefined;
++    s = { pendingCount: 0, items: [], receipts: {}, recovery: null, error: null, busy: false };
++  },
+   get pendingCount() {
+     return s.pendingCount;
+   },
+   get items() {
+     return s.items;
+   },
+-  refreshCount: fetchCount,
+-  refresh: refreshAll,
+-  approve: (id: string) => act(id, 'approve'),
+-  dismiss: (id: string) => act(id, 'dismiss'),
+-  /** Set the badge count from a value already fetched elsewhere (the shell's
+-   *  combined /api/shell/counts poll) without an extra /api/pulse/count round trip. */
+-  setPendingCount: (count: number) => {
+-    s.pendingCount = count;
++  get receipts() {
++    return Object.values(s.receipts);
++  },
++  get recovery() {
++    return s.recovery;
++  },
++  get error() {
++    return s.error;
++  },
++  get busy() {
++    return s.busy;
++  },
++  receipt: (id: string) =>
++    s.receipts[id] ??
++    (activeDecision?.id === id && activeDecision.scope === scopeGeneration
++      ? activeDecision.latest?.receipt
++      : undefined),
++  readReceipt,
++  recover,
++  refreshCount: async () => {
++    try {
++      await fetchCount();
++    } catch {
++      /* Shell retries reads only. */
++    }
++  },
++  refresh: async () => {
++    const current = beginRead();
++    const refresh = refreshSequence + 1;
++    try {
++      if (await refreshAll()) {
++        if (current() && refresh === refreshSequence && !s.recovery) s.error = null;
++      }
++    } catch {
++      if (current() && refresh === refreshSequence) s.error = m.pulse_readFailed();
++    }
+   },
++  approve: (id: string, revision: number, options?: Parameters<typeof act>[3]) =>
++    act(id, revision, 'approve', options),
++  dismiss: (id: string, revision: number, options?: Parameters<typeof act>[3]) =>
++    act(id, revision, 'dismiss', options),
++  beginCountRead: () => beginCountRead().publish,
+ };
+diff --git a/src/routes/(app)/notifications/+page.server.ts b/src/routes/(app)/notifications/+page.server.ts
+index a676331f..18f92312 100644
+--- a/src/routes/(app)/notifications/+page.server.ts
++++ b/src/routes/(app)/notifications/+page.server.ts
+@@ -6,7 +6,7 @@ import type { JoinRequestRow } from '$server/services/join/requests.service';
+ import { isModuleVisibleForKind } from '$lib/org-kind';
+ import { requireCoreCtx } from '$server/auth/core-ctx';
+ import { listPending } from '$server/services/pulse.service';
+-import type { PulseProposalRow } from '$server/db/pg-schema/pulse';
++import type { PulseProposalView } from '$server/services/pulse.service';
+ import { hasOrgCapability } from '$server/services/rbac.service';
+ import { listFeed } from '$server/services/inbox/inbox.service';
+ 
+@@ -31,8 +31,12 @@ export const load: PageServerLoad = async ({ locals, parent, depends }) => {
+   const ctx = await requireCoreCtx(locals);
+   // Pulse review is an admin surface like the join-request review above —
+   // the pre-inbox page required admin for both (security review 2026-10-10).
+-  let pulseProposals: PulseProposalRow[] = [];
+-  if (canReviewAccess && isModuleVisibleForKind('pulse', activeOrgKind)) {
++  let pulseProposals: PulseProposalView[] = [];
++  if (
++    canReviewAccess &&
++    isModuleVisibleForKind('pulse', activeOrgKind) &&
++    (await hasOrgCapability(locals, 'pulse', 'view'))
++  ) {
+     pulseProposals = await listPending(ctx);
+   }
+ 
+diff --git a/src/routes/(app)/notifications/+page.svelte b/src/routes/(app)/notifications/+page.svelte
+index 7164767a..e7750fcc 100644
+--- a/src/routes/(app)/notifications/+page.svelte
++++ b/src/routes/(app)/notifications/+page.svelte
+@@ -1,9 +1,15 @@
+ <script lang="ts">
++  import { untrack } from 'svelte';
+   import { rememberView } from '$lib/shell/remember-view.svelte';
+   import * as m from '$lib/paraglide/messages';
+   import type { PageData } from './$types';
++  import { page } from '$app/state';
++  import { checkedRefresh } from '$lib/services/actions/refresh';
++  import { tryUseActions } from '$lib/services/actions/context';
++  import PulseReceipt from '$lib/components/pulse/PulseReceipt.svelte';
+   import { invalidate } from '$app/navigation';
+   import { refreshNotifications } from '$lib/state/features/notifications.svelte';
++  import { conn } from '$lib/state/gateway/connection.svelte';
+   import { pulse } from '$lib/state/features/pulse.svelte';
+   import { toastPromise } from '$lib/state/ui/toast.svelte';
+   import { dayGroupLabel, groupByDay, kindLabel, timeAgo } from '$lib/inbox/feed';
+@@ -36,6 +42,13 @@
+ 
+   let { data }: { data: PageData } = $props();
+ 
++  const actions = tryUseActions();
++  $effect(() => {
++    pulse.syncScope(actions?.scopeVersion);
++  });
++  $effect(() => {
++    if (conn.connectedAt) untrack(() => void pulse.recover(refreshPulseNotifications));
++  });
+   let reviewing = $state<string | null>(null);
+   let pulseBusyId = $state<string | null>(null);
+ 
+@@ -108,11 +121,20 @@
+     void refetchInbox();
+   }
+ 
+-  async function decidePulse(id: string, action: 'approve' | 'dismiss') {
++  async function refreshPulseNotifications() {
++    await checkedRefresh(
++      () => invalidate('app:notifications'),
++      () => page,
++    );
++  }
++  async function decidePulse(id: string, revision: number, action: 'approve' | 'dismiss') {
++    if (pulseBusyId || pulse.recovery || pulse.receipt(id)) return;
+     pulseBusyId = id;
+     try {
+-      await (action === 'approve' ? pulse.approve(id) : pulse.dismiss(id));
+-      await invalidate('app:notifications');
++      const options = { actions, refresh: refreshPulseNotifications };
++      await (action === 'approve'
++        ? pulse.approve(id, revision, options)
++        : pulse.dismiss(id, revision, options));
+     } finally {
+       pulseBusyId = null;
+     }
+@@ -184,6 +206,14 @@
+   </PageHeader>
+ 
+   <PageBody width="content">
++    {#if pulse.error}<p class="t-caption" role="alert">{pulse.error}</p>{/if}
++    {#if pulse.recovery}<Button
++        variant="secondary"
++        loading={pulse.busy}
++        onclick={() => pulse.recover(refreshPulseNotifications)}>{m.asyncAction_reload()}</Button
++      >{/if}
++    {#each pulse.receipts as receipt (receipt.proposalId)}<PulseReceipt {receipt} />{/each}
++
+     <div class="inbox-toolbar">
+       <SegmentedControl
+         aria-label={m.inbox_kindAll()}
+@@ -288,13 +318,16 @@
+                   <p>{p.summary}</p>
+                 {/if}
+                 <Badge variant="neutral" size="sm">{m.nav_pulse()}</Badge>
++                <span class="t-caption">{m.pulse_revision({ revision: p.revision })}</span>
+               </div>
+               <div class="notification-actions">
+                 <Button
+                   variant="secondary"
+                   size="sm"
+-                  disabled={pulseBusyId === p.id}
+-                  onclick={() => decidePulse(p.id, 'approve')}
++                  disabled={pulseBusyId !== null ||
++                    pulse.recovery !== null ||
++                    pulse.receipt(p.id) !== undefined}
++                  onclick={() => decidePulse(p.id, p.revision, 'approve')}
+                 >
+                   <Check size={iconSizes.sm} />
+                   {m.notif_approve()}
+@@ -303,7 +336,10 @@
+                   variant="danger"
+                   size="sm"
+                   loading={pulseBusyId === p.id}
+-                  onclick={() => decidePulse(p.id, 'dismiss')}
++                  disabled={pulseBusyId !== null ||
++                    pulse.recovery !== null ||
++                    pulse.receipt(p.id) !== undefined}
++                  onclick={() => decidePulse(p.id, p.revision, 'dismiss')}
+                 >
+                   <X size={iconSizes.sm} />
+                   {m.common_dismiss()}
+diff --git a/src/routes/(app)/pulse/+page.server.ts b/src/routes/(app)/pulse/+page.server.ts
+index ccf2659a..c624ace6 100644
+--- a/src/routes/(app)/pulse/+page.server.ts
++++ b/src/routes/(app)/pulse/+page.server.ts
+@@ -4,7 +4,7 @@ import { requireAuth } from '$server/auth/authorize';
+ import { requireCoreCtx } from '$server/auth/core-ctx';
+ import { requireOrgCapability } from '$server/services/rbac.service';
+ import { getTenant } from '$server/services/tenant.service';
+-import { listPending } from '$server/services/pulse.service';
++import { listPending, listRecentPulseDecisions } from '$server/services/pulse.service';
+ 
+ export const load: PageServerLoad = async ({ locals, depends }) => {
+   requireAuth(locals);
+@@ -17,5 +17,5 @@ export const load: PageServerLoad = async ({ locals, depends }) => {
+   const tenant = await getTenant({ tenantId: ctx.tenantId } as Parameters<typeof getTenant>[0]);
+   if (tenant?.kind === 'business') throw error(404, 'Not found');
+   depends('pulse:feed');
+-  return { proposals: await listPending(ctx) };
++  return { proposals: await listPending(ctx), recent: await listRecentPulseDecisions(ctx) };
+ };
+diff --git a/src/routes/(app)/pulse/+page.svelte b/src/routes/(app)/pulse/+page.svelte
+index 05b48d44..1de7b992 100644
+--- a/src/routes/(app)/pulse/+page.svelte
++++ b/src/routes/(app)/pulse/+page.svelte
+@@ -1,12 +1,15 @@
+ <script lang="ts">
+-  import { onDestroy } from 'svelte';
++  import { onDestroy, untrack } from 'svelte';
+   import { invalidate } from '$app/navigation';
+   import { page } from '$app/state';
+   import { Badge, Button, Card, PageHeader } from '$lib/components/ui';
+   import { PageShell, PageBody, AsyncBoundary } from '$lib/components/ui/foundations';
+   import MarkdownMessage from '$lib/components/chat/MarkdownMessage.svelte';
++  import { conn } from '$lib/state/gateway/connection.svelte';
+   import { pulse } from '$lib/state/features/pulse.svelte';
+-  import type { PulseProposalRow } from '$server/db/pg-schema/pulse';
++  import type { PulseProposalView } from '$server/services/pulse.service';
++  import type { PulseReceipt as Receipt } from '$server/services/pulse-dispatch.store';
++  import PulseReceipt from '$lib/components/pulse/PulseReceipt.svelte';
+   import { tryUseActions } from '$lib/services/actions/context';
+   import { checkedRefresh } from '$lib/services/actions/refresh';
+   import {
+@@ -17,18 +20,22 @@
+   import { toastError } from '$lib/state/ui/toast.svelte';
+   import * as m from '$lib/paraglide/messages';
+ 
+-  let { data }: { data: { proposals: PulseProposalRow[] } } = $props();
++  let {
++    data,
++  }: { data: { proposals: PulseProposalView[]; recent?: (Receipt & { title: string })[] } } =
++    $props();
+ 
+-  // Kinds whose payload.args are worth surfacing/editing before approval — the
+-  // gateway executes them verbatim on approve (see api/pulse/proposals/[id]).
++  // Executable proposals expose typed arguments for review. Approval queues a
++  // frozen dispatch; its remote scheduling receipt remains distinct from execution.
+   const EXECUTE_KINDS = new Set(['create_event', 'reminder']);
+ 
+   let busyId = $state<string | null>(null);
+   let editingId = $state<string | null>(null);
++  let editingRevision = $state<number | null>(null);
+   let editDraft = $state('');
+   let editError = $state<string | null>(null);
+   let feedError = $state<string | null>(null);
+-  let recovery = $state<'unknown' | 'committed-refreshing' | null>(null);
++  let recovery = $state<'unknown' | 'committed-refreshing' | 'conflict' | null>(null);
+   const refreshPending = $derived(recovery !== null);
+   let refreshing = $state(false);
+   let refreshActionId: number | undefined;
+@@ -36,6 +43,21 @@
+   let saveGeneration = 0;
+   let disposed = false;
+   const actions = tryUseActions();
++  $effect(() => {
++    pulse.syncScope(actions?.scopeVersion);
++  });
++  $effect(() => {
++    if (conn.connectedAt)
++      untrack(
++        () =>
++          void pulse.recover(() =>
++            checkedRefresh(
++              () => invalidate('pulse:feed'),
++              () => page,
++            ),
++          ),
++      );
++  });
+   let commandScopeVersion = actions?.scopeVersion;
+ 
+   onDestroy(() => {
+@@ -75,7 +97,11 @@
+       );
+       if (!current()) return;
+       recovery = null;
+-      if (prior === 'committed-refreshing') {
++      if (editingId) {
++        const currentProposal = data.proposals.find((proposal) => proposal.id === editingId);
++        if (currentProposal) editingRevision = currentProposal.revision;
++      }
++      if (prior === 'committed-refreshing' || prior === 'conflict') {
+         feedError = null;
+         if (refreshActionId !== undefined) actions?.reconcile(refreshActionId, 'succeeded');
+       }
+@@ -88,24 +114,29 @@
+     }
+   }
+ 
+-  async function decide(id: string, action: 'approve' | 'dismiss') {
+-    if (disposed || busyId !== null || refreshing || refreshPending) return;
+-    const operation = ++saveGeneration;
+-    const scopeVersion = actions?.scopeVersion;
++  async function decide(id: string, revision: number, action: 'approve' | 'dismiss') {
++    if (disposed || busyId !== null || refreshing || refreshPending || pulse.recovery) return;
+     busyId = id;
+     try {
+-      if (action === 'approve') await pulse.approve(id);
+-      else await pulse.dismiss(id);
+-      if (!disposed && actions?.scopeVersion === scopeVersion) await invalidate('pulse:feed');
++      const options = {
++        actions,
++        refresh: () =>
++          checkedRefresh(
++            () => invalidate('pulse:feed'),
++            () => page,
++          ),
++      };
++      if (action === 'approve') await pulse.approve(id, revision, options);
++      else await pulse.dismiss(id, revision, options);
+     } finally {
+-      if (!disposed && operation === saveGeneration && actions?.scopeVersion === scopeVersion)
+-        busyId = null;
++      if (!disposed) busyId = null;
+     }
+   }
+ 
+-  function startEdit(p: PulseProposalRow) {
++  function startEdit(p: PulseProposalView) {
+     editorGeneration += 1;
+     editingId = p.id;
++    editingRevision = p.revision;
+     editDraft = JSON.stringify(p.payload.args ?? {}, null, 2);
+     editError = null;
+   }
+@@ -117,6 +148,8 @@
+   }
+ 
+   async function saveEdit(id: string) {
++    const expectedRevision = editingRevision;
++    if (expectedRevision === null) return;
+     if (disposed || busyId !== null || refreshing || refreshPending) return;
+     const submittedEditor = editorGeneration;
+     const submittedDraft = editDraft;
+@@ -130,7 +163,7 @@
+     try {
+       args = JSON.parse(editDraft) as Record<string, unknown>;
+     } catch {
+-      editError = 'Invalid JSON';
++      editError = m.pulse_invalidJson();
+       return;
+     }
+     editError = null;
+@@ -149,10 +182,10 @@
+             const response = await fetch(`/api/pulse/proposals/${id}`, {
+               method: 'PATCH',
+               headers: { 'content-type': 'application/json' },
+-              body: JSON.stringify({ args }),
++              body: JSON.stringify({ args, expectedRevision }),
+               signal,
+             });
+-            await requireOk(response, 'Could not save proposal.');
++            await requireOk(response, m.pulse_decisionFailed());
+           },
+           onCommitted: () => {
+             // Another proposal or a newer draft may now own the visible editor.
+@@ -177,17 +210,22 @@
+           ? m.asyncAction_refreshing()
+           : outcome.status === 'unknown'
+             ? m.asyncAction_unknown()
+-            : outcome.status === 'partial'
+-              ? m.asyncAction_partial()
+-              : outcome.error instanceof Error
+-                ? outcome.error.message
+-                : 'Could not save proposal.';
++            : outcome.status === 'conflict'
++              ? m.pulse_refreshRequired()
++              : outcome.status === 'partial'
++                ? m.asyncAction_partial()
++                : m.pulse_decisionFailed();
+       if (
+         outcome.status === 'committed-refreshing' ||
+         outcome.status === 'unknown' ||
++        outcome.status === 'conflict' ||
+         !ownsEditor()
+       ) {
+-        if (outcome.status === 'committed-refreshing' || outcome.status === 'unknown')
++        if (
++          outcome.status === 'committed-refreshing' ||
++          outcome.status === 'unknown' ||
++          outcome.status === 'conflict'
++        )
+           recovery = outcome.status;
+         feedError = message;
+         toastError(message);
+@@ -199,22 +237,29 @@
+     }
+   }
+ 
+-  // Existing Pulse page copy remains literal; shared action outcomes use the
+-  // established Paraglide messages so recovery language stays consistent.
+   const pageState = $derived(
+     data.proposals.length === 0
+-      ? ({ kind: 'empty', title: 'Nothing needs your attention.' } as const)
++      ? ({ kind: 'empty', title: m.pulse_empty() } as const)
+       : ({ kind: 'ready' } as const),
+   );
+ </script>
+ 
+ <PageShell archetype="collection" scroll="region" labelledBy="pulse-page-title">
+-  <PageHeader
+-    title="Pulse"
+-    subtitle="Proposed actions waiting for your review."
+-    titleId="pulse-page-title"
+-  />
++  <PageHeader title="Pulse" subtitle={m.pulse_pageSubtitle()} titleId="pulse-page-title" />
+   <PageBody width="content" scroll="region">
++    {#if pulse.error}<p class="t-caption error" role="alert">{pulse.error}</p>{/if}
++    {#if pulse.recovery}<Button
++        variant="secondary"
++        loading={pulse.busy}
++        onclick={() =>
++          pulse.recover(() =>
++            checkedRefresh(
++              () => invalidate('pulse:feed'),
++              () => page,
++            ),
++          )}>{m.asyncAction_reload()}</Button
++      >{/if}
++    {#each pulse.receipts as receipt (receipt.proposalId)}<PulseReceipt {receipt} />{/each}
+     {#if feedError}<p class="t-caption error" role="alert">{feedError}</p>{/if}
+     {#if refreshPending}
+       <Button
+@@ -233,6 +278,7 @@
+             {#snippet header()}
+               <div class="card-head">
+                 <h3 class="t-title">{p.title}</h3>
++                <span class="t-caption">{m.pulse_revision({ revision: p.revision })}</span>
+                 <div class="badges">
+                   <Badge variant="neutral" size="sm">{p.source}</Badge>
+                   <Badge variant="neutral" size="sm">{p.kind}</Badge>
+@@ -248,7 +294,7 @@
+               {#if EXECUTE_KINDS.has(p.kind)}
+                 <div class="args">
+                   {#if editingId === p.id}
+-                    <label class="t-label" for={`args-${p.id}`}>Arguments</label>
++                    <label class="t-label" for={`args-${p.id}`}>{m.pulse_arguments()}</label>
+                     <textarea
+                       id={`args-${p.id}`}
+                       class="args-editor t-mono"
+@@ -256,15 +302,21 @@
+                       bind:value={editDraft}></textarea>
+                     {#if editError}<p class="t-caption error" role="alert">{editError}</p>{/if}
+                     <div class="actions">
+-                      <Button variant="secondary" size="touch" onclick={cancelEdit}>Cancel</Button>
++                      <Button variant="secondary" size="touch" onclick={cancelEdit}
++                        >{m.pulse_cancel()}</Button
++                      >
+                       <Button
+                         variant="primary"
+                         size="touch"
+                         loading={busyId === p.id}
+-                        disabled={busyId !== null || refreshing || refreshPending}
++                        disabled={busyId !== null ||
++                          refreshing ||
++                          refreshPending ||
++                          pulse.recovery !== null ||
++                          pulse.receipt(p.id) !== undefined}
+                         onclick={() => saveEdit(p.id)}
+                       >
+-                        Save
++                        {m.pulse_save()}
+                       </Button>
+                     </div>
+                   {:else}
+@@ -273,7 +325,9 @@
+                         null,
+                         2,
+                       )}</pre>
+-                    <Button variant="ghost" size="touch" onclick={() => startEdit(p)}>Edit</Button>
++                    <Button variant="ghost" size="touch" onclick={() => startEdit(p)}
++                      >{m.pulse_edit()}</Button
++                    >
+                   {/if}
+                 </div>
+               {/if}
+@@ -285,19 +339,27 @@
+                   variant="secondary"
+                   size="touch"
+                   loading={busyId === p.id}
+-                  disabled={busyId !== null || refreshing || refreshPending}
+-                  onclick={() => decide(p.id, 'dismiss')}
++                  disabled={busyId !== null ||
++                    refreshing ||
++                    refreshPending ||
++                    pulse.recovery !== null ||
++                    pulse.receipt(p.id) !== undefined}
++                  onclick={() => decide(p.id, p.revision, 'dismiss')}
+                 >
+-                  Dismiss
++                  {m.pulse_dismiss()}
+                 </Button>
+                 <Button
+                   variant="primary"
+                   size="touch"
+                   loading={busyId === p.id}
+-                  disabled={busyId !== null || refreshing || refreshPending}
+-                  onclick={() => decide(p.id, 'approve')}
++                  disabled={busyId !== null ||
++                    refreshing ||
++                    refreshPending ||
++                    pulse.recovery !== null ||
++                    pulse.receipt(p.id) !== undefined}
++                  onclick={() => decide(p.id, p.revision, 'approve')}
+                 >
+-                  Approve
++                  {m.pulse_approve()}
+                 </Button>
+               </div>
+             {/snippet}
+@@ -305,6 +367,17 @@
+         {/each}
+       </div>
+     </AsyncBoundary>
++    {#if data.recent?.length}
++      <section aria-label={m.pulse_recent()}>
++        <h2 class="t-title">{m.pulse_recent()}</h2>
++        {#each data.recent as receipt (receipt.proposalId)}
++          <Card padding="md"
++            ><p class="t-body">{receipt.title}</p>
++            <PulseReceipt {receipt} /></Card
++          >
++        {/each}
++      </section>
++    {/if}
+   </PageBody>
+ </PageShell>
+ 
+diff --git a/src/routes/(app)/pulse/page.edit-readiness.test.ts b/src/routes/(app)/pulse/page.edit-readiness.test.ts
+index 07c095e9..1ee80a10 100644
+--- a/src/routes/(app)/pulse/page.edit-readiness.test.ts
++++ b/src/routes/(app)/pulse/page.edit-readiness.test.ts
+@@ -4,6 +4,8 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/svelte';
+ import { tick } from 'svelte';
+ import type { PulseProposalRow } from '$server/db/pg-schema/pulse';
+ import { createActionRuntime } from '$lib/services/actions/runtime.svelte';
++import { pulse } from '$lib/state/features/pulse.svelte';
++import type { PulseReceipt } from '$server/services/pulse-dispatch.store';
+ 
+ const invalidate = vi.hoisted(() => vi.fn(async () => {}));
+ vi.mock('$app/navigation', () => ({ invalidate }));
+@@ -14,6 +16,13 @@ let runtime: ReturnType<typeof createActionRuntime> | undefined;
+ const { default: PulsePage } = await import('./+page.svelte');
+ 
+ const proposal: PulseProposalRow = {
++  revision: 1,
++  ownerProfileId: null,
++  decidedAt: null,
++  internalRunId: null,
++  internalPolicyRevision: null,
++  internalInputHash: null,
++  internalResultHash: null,
+   id: 'proposal-1',
+   orgId: 'org-1',
+   createdAt: new Date('2026-10-02T12:00:00Z'),
+@@ -37,9 +46,80 @@ afterEach(() => {
+   runtime?.dispose();
+   runtime = undefined;
+   tryUseActions.mockReset();
++  vi.restoreAllMocks();
++  pulse.setScope(undefined);
+ });
+ 
+ describe('Pulse proposal edit readiness', () => {
++  it('renders and returns the newer scheduled receipt after active-decision cache pressure and refresh failure', async () => {
++    runtime = createActionRuntime();
++    runtime.setScope('mounted-receipt-pressure');
++    tryUseActions.mockReturnValue(runtime);
++    const makeReceipt = (id: string, state = 'queued'): PulseReceipt => ({
++      proposalId: id,
++      revision: 1,
++      decision: 'approved',
++      decidedAt: '2026-10-23T00:00:00Z',
++      receiptId: `dispatch-${id}`,
++      dispatch: {
++        state,
++        reason: null,
++        remoteJobId: state === 'scheduled' ? 'mounted-known-remote' : null,
++      },
++    });
++    let post!: (response: Response) => void;
++    let holding = false;
++    let failRefresh = false;
++    const held = new Map<string, (response: Response) => void>();
++    const fetchMock = vi.fn((url: string, options?: RequestInit) => {
++      if (options?.method === 'POST')
++        return new Promise<Response>((resolve) => {
++          post = resolve;
++        });
++      if (failRefresh) return Promise.resolve(Response.json({}, { status: 503 }));
++      if (url.endsWith('/count')) return Promise.resolve(Response.json({ count: 0 }));
++      if (url.endsWith('/proposals')) return Promise.resolve(Response.json({ proposals: [] }));
++      const id = url.split('/').at(-2)!;
++      return holding && id !== proposal.id
++        ? new Promise<Response>((resolve) => held.set(id, resolve))
++        : Promise.resolve(
++            Response.json(makeReceipt(id, id === proposal.id ? 'scheduled' : 'queued')),
++          );
++    });
++    vi.stubGlobal('fetch', fetchMock);
++    render(PulsePage, { props: { data: { proposals: [proposal] } } });
++    await tick();
++    for (let n = 0; n < 50; n++) await pulse.readReceipt(`pressure-${n}`);
++    const command: { result?: ReturnType<typeof pulse.approve> } = {};
++    const approve = pulse.approve;
++    vi.spyOn(pulse, 'approve').mockImplementation((...args) => {
++      command.result = approve(...args);
++      return command.result;
++    });
++    await fireEvent.click(screen.getByRole('button', { name: /^approve$/i }));
++    holding = true;
++    const refreshing = pulse.refresh();
++    await vi.waitFor(() => expect(pulse.receipt(proposal.id)?.dispatch?.state).toBe('scheduled'));
++    expect(held.size).toBe(50);
++    for (const [id, release] of held) release(Response.json(makeReceipt(id)));
++    await refreshing;
++    expect(pulse.receipts).toHaveLength(50);
++    failRefresh = true;
++    post(Response.json(makeReceipt(proposal.id)));
++    const outcome = await command.result;
++    expect(outcome?.status).toBe('committed-refreshing');
++    expect(outcome && 'value' in outcome ? outcome.value?.dispatch?.remoteJobId : undefined).toBe(
++      'mounted-known-remote',
++    );
++    await tick();
++    expect(screen.getByText('Remote job: mounted-known-remote')).toBeTruthy();
++    expect(screen.getByRole('button', { name: /^approve$/i }).hasAttribute('disabled')).toBe(true);
++    expect(pulse.receipt(proposal.id)?.dispatch?.state).toBe('scheduled');
++    expect(pulse.receipts).toHaveLength(50);
++    expect(fetchMock.mock.calls.filter(([, options]) => options?.method === 'POST')).toHaveLength(
++      1,
++    );
++  });
+   it.each([false, true])(
+     'requires read repair after a lost reply (replacement editor: %s)',
+     async (replaceEditor) => {
+@@ -259,7 +339,7 @@ describe('Pulse proposal edit readiness', () => {
+     expect(fetchMock).toHaveBeenCalledTimes(1);
+   });
+ 
+-  it('blocks duplicate saves, retains a rejected draft, and closes after acknowledged retry', async () => {
++  it('blocks duplicate saves, retains a conflicted draft, and requires a refreshed revision before retry', async () => {
+     let resolveFirst!: (response: Response) => void;
+     const first = new Promise<Response>((resolve) => {
+       resolveFirst = resolve;
+@@ -269,7 +349,7 @@ describe('Pulse proposal edit readiness', () => {
+       .mockImplementationOnce(() => first)
+       .mockResolvedValueOnce(new Response(null, { status: 200 }));
+     vi.stubGlobal('fetch', fetchMock);
+-    render(PulsePage, { props: { data: { proposals: [proposal] } } });
++    const view = render(PulsePage, { props: { data: { proposals: [proposal] } } });
+ 
+     await fireEvent.click(screen.getByRole('button', { name: /^edit$/i }));
+     const editor = screen.getByLabelText('Arguments') as HTMLTextAreaElement;
+@@ -290,11 +370,19 @@ describe('Pulse proposal edit readiness', () => {
+     await screen.findByRole('alert');
+     expect(editor.value).toBe(draft);
+     expect(invalidate).not.toHaveBeenCalled();
++    expect(save.hasAttribute('disabled')).toBe(true);
++    invalidate.mockImplementationOnce(async () => {
++      await view.rerender({ data: { proposals: [{ ...proposal, revision: 2 }] } });
++    });
++    await fireEvent.click(screen.getByRole('button', { name: /reload current data/i }));
+     await vi.waitFor(() => expect(save.hasAttribute('disabled')).toBe(false));
++    expect(editor.value).toBe(draft);
+ 
+     await fireEvent.click(save);
+     await vi.waitFor(() => expect(screen.queryByLabelText('Arguments')).toBeNull());
+     expect(fetchMock).toHaveBeenCalledTimes(2);
+-    expect(invalidate).toHaveBeenCalledTimes(1);
++    expect(invalidate).toHaveBeenCalledTimes(2);
++    expect(JSON.parse(fetchMock.mock.calls[0][1].body).expectedRevision).toBe(1);
++    expect(JSON.parse(fetchMock.mock.calls[1][1].body).expectedRevision).toBe(2);
+   });
+ });
+diff --git a/src/routes/api/pulse/count/+server.ts b/src/routes/api/pulse/count/+server.ts
+index 30f18262..66770ae3 100644
+--- a/src/routes/api/pulse/count/+server.ts
++++ b/src/routes/api/pulse/count/+server.ts
+@@ -1,3 +1,4 @@
++import { assertPulsePersonalOrg } from '$server/services/pulse-dispatch.store';
+ import type { RequestHandler } from '@sveltejs/kit';
+ import { json } from '@sveltejs/kit';
+ import { requireCoreCtx } from '$server/auth/core-ctx';
+@@ -8,5 +9,6 @@ import { countPending } from '$server/services/pulse.service';
+ export const GET: RequestHandler = async ({ locals }) => {
+   await requireOrgCapability(locals, 'pulse', 'view');
+   const ctx = await requireCoreCtx(locals);
++  await assertPulsePersonalOrg(ctx);
+   return json({ count: await countPending(ctx) });
+ };
+diff --git a/src/routes/api/pulse/proposals/+server.ts b/src/routes/api/pulse/proposals/+server.ts
+index 33d547d3..2f3b727a 100644
+--- a/src/routes/api/pulse/proposals/+server.ts
++++ b/src/routes/api/pulse/proposals/+server.ts
+@@ -1,3 +1,4 @@
++import { assertPulsePersonalOrg } from '$server/services/pulse-dispatch.store';
+ import type { RequestHandler } from '@sveltejs/kit';
+ import { json } from '@sveltejs/kit';
+ import { requireCoreCtx } from '$server/auth/core-ctx';
+@@ -8,5 +9,6 @@ import { listPending } from '$server/services/pulse.service';
+ export const GET: RequestHandler = async ({ locals }) => {
+   await requireOrgCapability(locals, 'pulse', 'view');
+   const ctx = await requireCoreCtx(locals);
++  await assertPulsePersonalOrg(ctx);
+   return json({ proposals: await listPending(ctx) });
+ };
+diff --git a/src/routes/api/pulse/proposals/[id]/+server.ts b/src/routes/api/pulse/proposals/[id]/+server.ts
+index c996e7bb..6c0264d3 100644
+--- a/src/routes/api/pulse/proposals/[id]/+server.ts
++++ b/src/routes/api/pulse/proposals/[id]/+server.ts
+@@ -1,81 +1,36 @@
+ import type { RequestHandler } from './$types';
+-import { json, error } from '@sveltejs/kit';
++import { error, json } from '@sveltejs/kit';
+ import { z } from 'zod';
+ import { requireAuth } from '$server/auth/authorize';
+ import { requireCoreCtx } from '$server/auth/core-ctx';
+ import { requireOrgCapability } from '$server/services/rbac.service';
+ import { parseBody } from '$server/api/validate';
+-import { gatewayCallAsUser } from '$lib/server/gateway-rpc';
+-import { getProposal, markApproved, dismiss, editPayload } from '$server/services/pulse.service';
+-
+-/** Kinds that execute immediately on approve via a one-shot gateway agentTurn.
+- *  Everything else (digest, fyi, draft_reply) is just marked approved — no
+- *  gateway call, the card was informational or the user will act manually. */
+-const EXECUTE_KINDS = new Set(['create_event', 'reminder']);
+-
+-const postSchema = z.object({ action: z.enum(['approve', 'dismiss']) });
+-const patchSchema = z.object({ args: z.record(z.string(), z.unknown()) });
+-
+-/** POST /api/pulse/proposals/[id] — approve or dismiss a Pulse card.
+- *  Approving a create_event/reminder card fires a one-shot gateway agentTurn
+- *  (via cron.add, deleteAfterRun) to execute it in the user's session. */
++import { decidePulseProposal, editPulseProposal } from '$server/services/pulse.service';
++
++const postSchema = z
++  .object({
++    action: z.enum(['approve', 'dismiss']),
++    expectedRevision: z.number().int().positive().optional(),
++  })
++  .strict();
++const patchSchema = z
++  .object({
++    args: z.record(z.string(), z.unknown()),
++    expectedRevision: z.number().int().positive().optional(),
++  })
++  .strict();
+ export const POST: RequestHandler = async ({ locals, params, request }) => {
+-  const user = requireAuth(locals);
++  requireAuth(locals);
+   await requireOrgCapability(locals, 'pulse', 'edit');
+   const ctx = await requireCoreCtx(locals);
+-  const { action } = await parseBody(request, postSchema);
+-
+-  const id = params.id;
+-  const proposal = await getProposal(ctx, id);
+-  if (!proposal) throw error(404, 'proposal not found');
+-  if (proposal.status !== 'pending') {
+-    return json({ ok: false, status: proposal.status, reason: 'already decided' }, { status: 409 });
+-  }
+-
+-  const by = ctx.profileId ?? user.id;
+-
+-  if (action === 'dismiss') {
+-    await dismiss(ctx, id, by);
+-    return json({ ok: true, status: 'dismissed' });
+-  }
+-
+-  // approve
+-  if (EXECUTE_KINDS.has(proposal.kind)) {
+-    const instruction =
+-      proposal.kind === 'create_event'
+-        ? `Execute now, without asking: call calendar_create_event with these args: ${JSON.stringify(proposal.payload.args)}. Then confirm in one short line.`
+-        : `Execute now, without asking: set a reminder using your cron tool for: ${JSON.stringify(proposal.payload.args)}. Then confirm in one short line.`;
+-    // ponytail: async receipt via WhatsApp confirm — a sync executed-status write is
+-    // slice 2 (needs the agent to call back). Fire-and-forget; the agent's one-line
+-    // confirmation is the receipt.
+-    await gatewayCallAsUser(
+-      'cron.add',
+-      {
+-        job: {
+-          name: `pulse-exec-${proposal.id}`,
+-          enabled: true,
+-          scope: 'session',
+-          sessionTarget: 'isolated',
+-          wakeMode: 'next-heartbeat',
+-          schedule: { kind: 'at', at: new Date(Date.now() + 5000).toISOString() },
+-          deleteAfterRun: true,
+-          payload: { kind: 'agentTurn', message: instruction },
+-          delivery: { mode: 'announce', channel: 'whatsapp' },
+-        },
+-      },
+-      ctx.profileId,
+-      { orgId: ctx.tenantId },
+-    );
+-  }
+-  await markApproved(ctx, id, by);
+-  return json({ ok: true, status: 'approved' });
++  const { action, expectedRevision } = await parseBody(request, postSchema);
++  return json(await decidePulseProposal(ctx, params.id, action, expectedRevision));
+ };
+-
+-/** PATCH /api/pulse/proposals/[id] — edit a card's payload args before approving. */
+ export const PATCH: RequestHandler = async ({ locals, params, request }) => {
++  requireAuth(locals);
+   await requireOrgCapability(locals, 'pulse', 'edit');
+   const ctx = await requireCoreCtx(locals);
+-  const { args } = await parseBody(request, patchSchema);
+-  await editPayload(ctx, params.id, args);
+-  return json({ ok: true });
++  const { args, expectedRevision } = await parseBody(request, patchSchema);
++  if (expectedRevision === undefined) throw error(409, 'refresh_required');
++  return json({ proposal: await editPulseProposal(ctx, params.id, args, expectedRevision) });
+ };
+diff --git a/src/server/db/pg-schema/bg-jobs.ts b/src/server/db/pg-schema/bg-jobs.ts
+index ca286609..40fc2d21 100644
+--- a/src/server/db/pg-schema/bg-jobs.ts
++++ b/src/server/db/pg-schema/bg-jobs.ts
+@@ -22,6 +22,7 @@ export const bgJobs = pgTable(
+     error: text('error'),
+     attempts: integer('attempts').notNull().default(0),
+     leaseGeneration: integer('lease_generation').notNull().default(0),
++    nextAttemptAt: bigint('next_attempt_at', { mode: 'number' }),
+     leaseUntil: bigint('lease_until', { mode: 'number' }), // ms — stale-running reclaim guard
+     createdAt: bigint('created_at', { mode: 'number' }).notNull(),
+     updatedAt: bigint('updated_at', { mode: 'number' }).notNull(),
+@@ -30,6 +31,13 @@ export const bgJobs = pgTable(
+   },
+   (t) => [
+     check('bg_jobs_lease_generation_nonnegative', sql`${t.leaseGeneration} >= 0`),
++    index('bg_jobs_selected_due_idx').on(
++      t.tenantId,
++      t.type,
++      t.userId,
++      t.nextAttemptAt,
++      t.updatedAt,
++    ),
+     index('idx_bgjobs_status').on(t.status),
+     index('idx_bgjobs_tenant').on(t.tenantId),
+     index('idx_bgjobs_ref').on(t.refId),
+diff --git a/src/server/db/pg-schema/pulse.ts b/src/server/db/pg-schema/pulse.ts
+index c507701e..0724a761 100644
+--- a/src/server/db/pg-schema/pulse.ts
++++ b/src/server/db/pg-schema/pulse.ts
+@@ -1,4 +1,14 @@
+-import { pgTable, text, jsonb, boolean, timestamp, uuid, index, unique } from 'drizzle-orm/pg-core';
++import {
++  pgTable,
++  text,
++  jsonb,
++  boolean,
++  timestamp,
++  uuid,
++  index,
++  unique,
++  integer,
++} from 'drizzle-orm/pg-core';
+ 
+ export const pulseProposals = pgTable(
+   'pulse_proposals',
+@@ -16,12 +26,20 @@ export const pulseProposals = pgTable(
+       .default({}),
+     status: text('status').notNull().default('pending'),
+     dedupKey: text('dedup_key').notNull(),
++    revision: integer('revision').notNull().default(1),
++    ownerProfileId: text('owner_profile_id'),
++    decidedAt: timestamp('decided_at', { withTimezone: true }),
++    internalRunId: uuid('internal_run_id'),
++    internalPolicyRevision: text('internal_policy_revision'),
++    internalInputHash: text('internal_input_hash'),
++    internalResultHash: text('internal_result_hash'),
+     decidedBy: text('decided_by'),
+     executedAt: timestamp('executed_at', { withTimezone: true }),
+     error: text('error'),
+   },
+   (t) => [
+     index('pulse_proposals_org_status_idx').on(t.orgId, t.status, t.createdAt),
++    unique('pulse_proposals_org_id_uq').on(t.orgId, t.id),
+     unique('pulse_proposals_org_dedup_uq').on(t.orgId, t.dedupKey),
+   ],
+ );
+diff --git a/src/server/services/bg-runtime.test.ts b/src/server/services/bg-runtime.test.ts
+index 7b3b0088..b04c7620 100644
+--- a/src/server/services/bg-runtime.test.ts
++++ b/src/server/services/bg-runtime.test.ts
+@@ -5,7 +5,10 @@ import { drizzle } from 'drizzle-orm/pglite';
+ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+ 
+ const entry = vi.hoisted(() => ({ db: vi.fn() }));
+-vi.mock('$server/db/pg-client', () => ({ getCoreDb: entry.db }));
++vi.mock('$server/db/pg-client', () => ({
++  getCoreDb: entry.db,
++  getOrgTransactionDb: (db: unknown) => db,
++}));
+ import {
+   advanceJob,
+   drainJobs,
+@@ -72,7 +75,7 @@ beforeAll(async () => {
+   await client.exec(`CREATE TABLE bg_jobs (
+     id text PRIMARY KEY, tenant_id text NOT NULL, user_id text, type text NOT NULL, ref_id text,
+     status text NOT NULL DEFAULT 'queued', cursor text, error text, attempts integer NOT NULL DEFAULT 0,
+-    lease_until bigint, created_at bigint NOT NULL, updated_at bigint NOT NULL, started_at bigint, finished_at bigint
++    next_attempt_at bigint, lease_until bigint, created_at bigint NOT NULL, updated_at bigint NOT NULL, started_at bigint, finished_at bigint
+   ); INSERT INTO bg_jobs (id, tenant_id, type, created_at, updated_at) VALUES ('existing', 'tenant-a', 'fixture', 1, 1);`);
+   await client.exec(migration);
+ }, 30_000);
+diff --git a/src/server/services/bg-runtime.ts b/src/server/services/bg-runtime.ts
+index 2af5b9b5..2c0d35dc 100644
+--- a/src/server/services/bg-runtime.ts
++++ b/src/server/services/bg-runtime.ts
+@@ -23,6 +23,8 @@ export type JobExecution = {
+   tenantId: string;
+   leaseGeneration: number;
+   signal: AbortSignal;
++  /** Remaining immutable admission budget; selected workers may use the full tick. */
++  remainingMs: () => number;
+   /** Stable across lease generations. Entity scope also joins duplicate jobs. */
+   effectKey: (logicalStep: string, entityId?: string) => string;
+   /** Short database-only transaction. Never hold this across a provider call. */
+@@ -36,6 +38,8 @@ export type AdvanceResult = {
+   cursor?: unknown;
+   /** Non-fatal status note (ignored unless `done`+`failed`). */
+   error?: string;
++  postponeUntil?: number;
++  commitPostpone?: (tx: JobTransaction, current: BgJob) => Promise<void>;
+ };
+ 
+ /** Explicit database-only transient signal. Currently admitted only for booking_stock;
+@@ -49,6 +53,8 @@ export class RetryableJobError extends Error {
+ 
+ export type JobHandler = {
+   type: string;
++  /** Explicit opt-in for the Pulse family only. */
++  pulseRetry?: boolean;
+   /** Advance the job by one bounded step. Persist domain changes here. */
+   advance: (job: BgJob, execution: JobExecution) => Promise<AdvanceResult>;
+ };
+@@ -87,17 +93,32 @@ const LEASE_MS = 60_000; // a claimed job is owned for this long before reclaim
+ const HEARTBEAT_MS = LEASE_MS / 3;
+ type Lease = Pick<BgJob, 'id' | 'tenantId' | 'leaseGeneration'>;
+ 
+-export async function enqueueJob(input: {
++export type EnqueueJobInput = {
+   tenantId: string;
+   userId?: string | null;
+   type: string;
+   refId?: string | null;
+   cursor?: unknown;
+-}): Promise<string> {
+-  const db = getCoreDb();
++};
++
++export async function enqueueJob(input: EnqueueJobInput): Promise<string> {
++  return insertJob(getCoreDb(), input);
++}
++
++export async function enqueueJobInTransaction(
++  tx: JobTransaction,
++  input: EnqueueJobInput,
++): Promise<string> {
++  return insertJob(tx, input);
++}
++
++async function insertJob(
++  tx: Pick<JobTransaction, 'insert'>,
++  input: EnqueueJobInput,
++): Promise<string> {
+   const id = crypto.randomUUID();
+   const now = Date.now();
+-  await db.insert(bgJobs).values({
++  await tx.insert(bgJobs).values({
+     id,
+     tenantId: input.tenantId,
+     userId: input.userId ?? null,
+@@ -127,7 +148,9 @@ export async function cancelJobsByRef(refId: string): Promise<void> {
+ }
+ 
+ /** Claim atomically and return the committed ownership generation. */
+-async function claim(job: BgJob): Promise<Lease | null> {
++type Selection = { tenantId: string; ownerProfileId: string; types: readonly string[] };
++
++async function claim(job: BgJob, selection?: Selection): Promise<Lease | null> {
+   const now = Date.now();
+   const [lease] = await getCoreDb()
+     .update(bgJobs)
+@@ -142,6 +165,15 @@ async function claim(job: BgJob): Promise<Lease | null> {
+       and(
+         eq(bgJobs.id, job.id),
+         eq(bgJobs.tenantId, job.tenantId),
++        eq(bgJobs.leaseGeneration, job.leaseGeneration),
++        or(sql`${bgJobs.nextAttemptAt} is null`, lte(bgJobs.nextAttemptAt, now)),
++        ...(selection
++          ? [
++              eq(bgJobs.tenantId, selection.tenantId),
++              eq(bgJobs.userId, selection.ownerProfileId),
++              inArray(bgJobs.type, [...selection.types]),
++            ]
++          : []),
+         or(
+           eq(bgJobs.status, 'queued'),
+           and(eq(bgJobs.status, 'running'), lte(bgJobs.leaseUntil, now)),
+@@ -236,26 +268,54 @@ async function freshJob(jobId: string): Promise<BgJob | null> {
+  * Advance a single job until it completes, is cancelled, or the time budget is
+  * spent. Each handler.advance() is one model call / one bounded step.
+  */
+-export function advanceJob(jobId: string, budgetMs = 25_000): Promise<void> {
+-  if (quiescing) return Promise.resolve();
++export function advanceJob(jobId: string, budgetMs = 25_000): Promise<boolean> {
++  if (quiescing) return Promise.resolve(false);
+   return track(advanceAdmittedJob(jobId, budgetMs));
+ }
+ 
+-async function advanceAdmittedJob(jobId: string, budgetMs: number): Promise<void> {
+-  const deadline = Date.now() + budgetMs;
++async function advanceAdmittedJob(
++  jobId: string,
++  budgetMs: number,
++  selection?: Selection,
++  observedGeneration?: number,
++): Promise<boolean> {
++  const budgetNow = selection ? () => performance.now() : () => Date.now();
++  const deadline = budgetNow() + budgetMs;
+   const initial = await freshJob(jobId);
+-  if (!initial || Date.now() >= deadline) return;
++  if (
++    !initial ||
++    budgetNow() >= deadline ||
++    (observedGeneration !== undefined && initial.leaseGeneration !== observedGeneration)
++  )
++    return false;
+   const handler = handlers.get(initial.type);
+-  if (!handler || (initial.status !== 'queued' && initial.status !== 'running')) return;
+-  const lease = await claim(initial);
+-  if (!lease) return;
++  if (!handler || (initial.status !== 'queued' && initial.status !== 'running')) return false;
++  const lease = await claim(initial, selection);
++  if (!lease) return false;
++  let invoked = false;
+   const pulse = heartbeat(lease);
+   const abort = new AbortController();
++  const budgetExpired = Symbol('budget-expired');
++  let expire!: (value: typeof budgetExpired) => void;
++  const expiration = new Promise<typeof budgetExpired>((resolve) => {
++    expire = resolve;
++  });
++  const deadlineTimer = selection
++    ? setTimeout(
++        () => {
++          abort.abort();
++          expire(budgetExpired);
++        },
++        Math.max(0, deadline - budgetNow()),
++      )
++    : undefined;
++  deadlineTimer?.unref?.();
+   const execution: JobExecution = {
+     jobId: lease.id,
+     tenantId: lease.tenantId,
+     leaseGeneration: lease.leaseGeneration,
+     signal: abort.signal,
++    remainingMs: () => Math.max(0, deadline - budgetNow()),
+     effectKey: (step, entityId = lease.id) =>
+       createHash('sha256')
+         .update(JSON.stringify([lease.tenantId, initial.type, entityId, step]))
+@@ -294,8 +354,12 @@ async function advanceAdmittedJob(jobId: string, budgetMs: number): Promise<void
+     return leaseLost;
+   });
+   try {
+-    while (!quiescing && !lost && Date.now() < deadline) {
++    while (!quiescing && !lost && budgetNow() < deadline) {
+       const job = await freshJob(jobId);
++      if (selection && (abort.signal.aborted || budgetNow() >= deadline)) {
++        abort.abort();
++        return invoked;
++      }
+       if (
+         quiescing ||
+         lost ||
+@@ -305,13 +369,22 @@ async function advanceAdmittedJob(jobId: string, budgetMs: number): Promise<void
+         job.leaseGeneration !== lease.leaseGeneration ||
+         (job.leaseUntil ?? 0) <= Date.now()
+       )
+-        return;
++        return invoked;
+       let result: AdvanceResult;
+       try {
+         // Losing the lease ends our wait, not the external operation. Promise.race
+         // retains a rejection handler for a callback that settles after cancellation.
+-        const outcome = await Promise.race([track(handler.advance(job, execution)), loss]);
+-        if (outcome === leaseLost || lost) return;
++        if (selection && (abort.signal.aborted || budgetNow() >= deadline)) {
++          abort.abort();
++          return invoked;
++        }
++        invoked = true;
++        const outcome = await Promise.race([
++          track(handler.advance(job, execution)),
++          loss,
++          expiration,
++        ]);
++        if (outcome === leaseLost || outcome === budgetExpired || lost) return invoked;
+         result = outcome;
+       } catch (err) {
+         if (err instanceof RetryableJobError && job.type === 'booking_stock') {
+@@ -332,20 +405,52 @@ async function advanceAdmittedJob(jobId: string, budgetMs: number): Promise<void
+               // the persisted lease is sufficient for a later tick to reclaim.
+             }
+           }
+-          return;
++          return invoked;
+         }
+         if (!lost) await finish(lease, 'failed', err instanceof Error ? err.message : String(err));
+-        return;
++        return invoked;
++      }
++      if (result.postponeUntil !== undefined) {
++        const until = result.postponeUntil;
++        if (
++          !handler.pulseRetry ||
++          !['pulse_dispatch', 'pulse_digest'].includes(job.type) ||
++          !result.commitPostpone ||
++          !Number.isFinite(until) ||
++          until <= Date.now() ||
++          until > Date.now() + 30_000
++        ) {
++          await finish(lease, 'failed', 'Invalid Pulse postponement');
++          return invoked;
++        }
++        const commit = result.commitPostpone;
++        await execution.withOwnership(async (tx, current) => {
++          await commit(tx, current);
++          await tx
++            .update(bgJobs)
++            .set({
++              status: 'queued',
++              cursor: result.cursor === undefined ? current.cursor : JSON.stringify(result.cursor),
++              nextAttemptAt: until,
++              leaseUntil: null,
++              leaseGeneration: sql`${bgJobs.leaseGeneration} + 1`,
++              updatedAt: Date.now(),
++            })
++            .where(ownsLease(lease, Date.now()));
++        });
++        return invoked;
+       }
+       if (result.done) {
+         await finish(lease, result.error ? 'failed' : 'done', result.error);
+-        return;
++        return invoked;
+       }
+-      if (!(await persistProgress(lease, result.cursor))) return;
++      if (!(await persistProgress(lease, result.cursor))) return invoked;
+     }
++    return invoked;
+     // The budget bounds admission, not a callback already in flight. Leave the
+     // final lease to expire so a future tick resumes the persisted cursor.
+   } finally {
++    if (deadlineTimer) clearTimeout(deadlineTimer);
+     pulse.stop();
+     abort.abort();
+   }
+@@ -360,9 +465,12 @@ export async function runTick(budgetMs = 50_000): Promise<{ advanced: number }>
+     .select({ id: bgJobs.id })
+     .from(bgJobs)
+     .where(
+-      or(
+-        eq(bgJobs.status, 'queued'),
+-        and(eq(bgJobs.status, 'running'), lte(bgJobs.leaseUntil, now)),
++      and(
++        or(sql`${bgJobs.nextAttemptAt} is null`, lte(bgJobs.nextAttemptAt, now)),
++        or(
++          eq(bgJobs.status, 'queued'),
++          and(eq(bgJobs.status, 'running'), lte(bgJobs.leaseUntil, now)),
++        ),
+       ),
+     )
+     .orderBy(asc(bgJobs.updatedAt))
+@@ -372,8 +480,66 @@ export async function runTick(budgetMs = 50_000): Promise<{ advanced: number }>
+   for (const { id } of resumable) {
+     if (quiescing || Date.now() >= deadline) break;
+     const remaining = deadline - Date.now();
+-    await advanceJob(id, Math.min(remaining, 25_000));
+-    advanced += 1;
++    if (await advanceJob(id, Math.min(remaining, 25_000))) advanced += 1;
++  }
++  return { advanced };
++}
++
++/** Trusted, bounded Pulse-only admission. Predicates precede LIMIT and repeat at claim. */
++export async function runSelectedTick(
++  input: Selection & { budgetMs: number; maxCandidates?: number },
++): Promise<{ advanced: number }> {
++  if (
++    !input.tenantId ||
++    !input.ownerProfileId ||
++    !input.types.length ||
++    input.types.some((type) => !['pulse_dispatch', 'pulse_digest'].includes(type))
++  )
++    throw new Error('Invalid selected job scope');
++  if (!Number.isFinite(input.budgetMs) || input.budgetMs <= 0 || input.budgetMs > 50_000)
++    throw new Error('Invalid selected budget');
++  const cap = input.maxCandidates ?? 20;
++  if (!Number.isInteger(cap) || cap < 1 || cap > 20)
++    throw new Error('Invalid selected candidate cap');
++  if (quiescing) return { advanced: 0 };
++  const selection: Selection = Object.freeze({
++    tenantId: input.tenantId,
++    ownerProfileId: input.ownerProfileId,
++    types: Object.freeze([...input.types]),
++  });
++  const deadline = performance.now() + input.budgetMs;
++  const now = Date.now();
++  const candidates = await getCoreDb()
++    .select({ id: bgJobs.id, generation: bgJobs.leaseGeneration })
++    .from(bgJobs)
++    .where(
++      and(
++        eq(bgJobs.tenantId, selection.tenantId),
++        eq(bgJobs.userId, selection.ownerProfileId),
++        inArray(bgJobs.type, [...selection.types]),
++        or(sql`${bgJobs.nextAttemptAt} is null`, lte(bgJobs.nextAttemptAt, now)),
++        or(
++          eq(bgJobs.status, 'queued'),
++          and(eq(bgJobs.status, 'running'), lte(bgJobs.leaseUntil, now)),
++        ),
++      ),
++    )
++    .orderBy(asc(bgJobs.updatedAt), asc(bgJobs.id))
++    .limit(cap);
++  let advanced = 0;
++  for (const candidate of candidates) {
++    if (quiescing || performance.now() >= deadline) break;
++    if (
++      await track(
++        advanceAdmittedJob(
++          candidate.id,
++          deadline - performance.now(),
++          selection,
++          candidate.generation,
++        ),
++      )
++    )
++      advanced += 1;
+   }
+   return { advanced };
+ }
+diff --git a/src/server/services/brain-business-corpus.service.ts b/src/server/services/brain-business-corpus.service.ts
+index 48be0187..58c06633 100644
+--- a/src/server/services/brain-business-corpus.service.ts
++++ b/src/server/services/brain-business-corpus.service.ts
+@@ -1005,6 +1005,7 @@ export const BUSINESS_KNOWLEDGE_EXCLUDED_TABLES: Readonly<Record<string, string>
+   fin_sync_jobs: 'background-job state, cursors, and errors',
+   meta_sync_jobs: 'background-job state, cursors, and errors',
+   bg_jobs: 'generic background-job infrastructure',
++  pulse_dispatches: 'owner-private immutable admission and remote acceptance evidence',
+   stk_ledger:
+     'append-only valuation event stream; normalized stock entities and balances are indexed instead',
+   doc_audit_log: 'high-volume field-level audit deltas',
+@@ -1539,6 +1540,7 @@ export function requiredColumnsForBusinessTable(definition: BusinessTableDefinit
+     definition.updatedAtExpression ?? '',
+   ];
+   const columns = new Set<string>([definition.orgColumn ?? 'org_id']);
++  if (definition.table === 'pulse_proposals') columns.add('owner_profile_id');
+   for (const field of BUSINESS_FIELD_ALLOWLISTS[definition.table] ?? []) columns.add(field);
+   for (const expression of expressions) {
+     for (const match of expression.matchAll(/\br\.([a-z][a-z0-9_]*)\b/g)) columns.add(match[1]);
+@@ -1609,6 +1611,11 @@ function cursorPredicate(definition: BusinessTableDefinition, afterCursor?: stri
+   return `and (${cursorExpression}) > ${sqlStringLiteral(afterCursor)}`;
+ }
+ 
++function sharedCorpusPredicate(table: string): string {
++  // This corpus is shared by the organization, including when indexed by the owner.
++  return table === 'pulse_proposals' ? 'and r.owner_profile_id is null' : '';
++}
++
+ /** Build one production-Postgres query for a single table/page. The predicate is
+  * deliberately inside the source query so grouped telemetry does not aggregate
+  * every historical row merely to discard earlier cursor keys outside it. */
+@@ -1643,6 +1650,7 @@ export function businessTableQueryText(
+       (${updatedAt})::timestamptz as source_updated_at
+     from ${table} r
+     where r.${orgColumn}::text = current_setting('app.current_org_id', true)
++      ${sharedCorpusPredicate(table)}
+       ${cursorPredicate(definition, afterCursor)}
+   `;
+ }
+@@ -1669,7 +1677,8 @@ export function businessTableIdentityQueryText(definition: BusinessTableDefiniti
+   const idExpression = definition.idExpression ?? 'r.id::text';
+   return `select '${table}:' || (${idExpression}) as external_id
+     from ${table} r
+-    where r.${orgColumn}::text = current_setting('app.current_org_id', true)`;
++    where r.${orgColumn}::text = current_setting('app.current_org_id', true)
++      ${sharedCorpusPredicate(table)}`;
+ }
+ 
+ /** UNION is reserved for the one terminal deletion/count reconciliation pass;
+diff --git a/src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts b/src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts
+index ea381161..a48a1ebb 100644
+--- a/src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts
++++ b/src/server/services/brain-corpus.effect-ownership.sql.integration.test.ts
+@@ -187,7 +187,7 @@ beforeAll(async () => {
+   await owner.unsafe(`CREATE SCHEMA "${schema}"; SET search_path TO "${schema}",pg_catalog;
+     CREATE EXTENSION vector WITH SCHEMA "${schema}";
+     CREATE TABLE bg_jobs(id text primary key,tenant_id text not null,user_id text,type text not null,ref_id text,status text not null default 'queued',
+-      cursor text,error text,attempts integer not null default 0,lease_until bigint,created_at bigint not null,updated_at bigint not null,started_at bigint,finished_at bigint);
++      cursor text,error text,attempts integer not null default 0,next_attempt_at bigint, lease_until bigint,created_at bigint not null,updated_at bigint not null,started_at bigint,finished_at bigint);
+     CREATE TABLE organizations(id uuid primary key default gen_random_uuid());
+     CREATE TABLE messages(id uuid primary key default gen_random_uuid(),org_id text not null,channel text not null,account_id text,chat_id text,message_id text,
+       direction text not null default 'inbound',content text,sender_id text,sender_name text,occurred_at timestamptz,created_at timestamptz not null default now(),
+diff --git a/src/server/services/brains.effect-ownership.sql.integration.test.ts b/src/server/services/brains.effect-ownership.sql.integration.test.ts
+index aaa9eec3..90406fce 100644
+--- a/src/server/services/brains.effect-ownership.sql.integration.test.ts
++++ b/src/server/services/brains.effect-ownership.sql.integration.test.ts
+@@ -119,7 +119,7 @@ beforeAll(async () => {
+   expect(extension).toEqual({ extversion: '0.8.6', nspname: 'extensions' });
+   expect(harness.identity.database).toBe('minion_qc_vectors');
+   await owner.unsafe(`CREATE SCHEMA "${schema}"; SET search_path TO "${schema}",pg_catalog;
+-    CREATE TABLE bg_jobs (id text primary key, tenant_id text not null, user_id text, type text not null, ref_id text, status text not null default 'queued', cursor text, error text, attempts integer not null default 0, lease_until bigint, created_at bigint not null, updated_at bigint not null, started_at bigint, finished_at bigint);`);
++    CREATE TABLE bg_jobs (id text primary key, tenant_id text not null, user_id text, type text not null, ref_id text, status text not null default 'queued', cursor text, error text, attempts integer not null default 0, next_attempt_at bigint, lease_until bigint, created_at bigint not null, updated_at bigint not null, started_at bigint, finished_at bigint);`);
+   // TODO(handoff): Qualify actual Qdrant generation/outbox triggers under 10-06 and
+   // phase15; this fixture proves PostgreSQL document/chunk/vector RLS only. See
+   // meta proposals/2026-09-08-platform-qc-remediation.md (JOB-02 vector propagation).
+diff --git a/src/server/services/finance-statements.effect-ownership.sql.integration.test.ts b/src/server/services/finance-statements.effect-ownership.sql.integration.test.ts
+index 5412ad69..a70b73e6 100644
+--- a/src/server/services/finance-statements.effect-ownership.sql.integration.test.ts
++++ b/src/server/services/finance-statements.effect-ownership.sql.integration.test.ts
+@@ -147,7 +147,7 @@ beforeAll(async () => {
+     await owner.unsafe(`CREATE SCHEMA "${schema}"; SET search_path TO "${schema}";
+     CREATE TABLE bg_jobs (id text primary key, tenant_id text not null, user_id text, type text not null,
+       ref_id text, status text not null default 'queued', cursor text, error text, attempts integer not null default 0,
+-      lease_until bigint, created_at bigint not null, updated_at bigint not null, started_at bigint, finished_at bigint);`);
++      next_attempt_at bigint, lease_until bigint, created_at bigint not null, updated_at bigint not null, started_at bigint, finished_at bigint);`);
+     for (const file of [
+       '20260909090100_bg_job_lease_generation.sql',
+       '20260909090300_job_effect_receipts.sql',
+diff --git a/src/server/services/groupchat.effect-ownership.test.ts b/src/server/services/groupchat.effect-ownership.test.ts
+index 1b970569..3143f3a2 100644
+--- a/src/server/services/groupchat.effect-ownership.test.ts
++++ b/src/server/services/groupchat.effect-ownership.test.ts
+@@ -45,7 +45,7 @@ beforeAll(async () => {
+   await client.exec(`CREATE TABLE bg_jobs (
+     id text PRIMARY KEY, tenant_id text NOT NULL, user_id text, type text NOT NULL, ref_id text,
+     status text NOT NULL DEFAULT 'queued', cursor text, error text, attempts integer NOT NULL DEFAULT 0,
+-    lease_generation integer NOT NULL DEFAULT 0, lease_until bigint, created_at bigint NOT NULL,
++    lease_generation integer NOT NULL DEFAULT 0, next_attempt_at bigint, lease_until bigint, created_at bigint NOT NULL,
+     updated_at bigint NOT NULL, started_at bigint, finished_at bigint);
+     CREATE TABLE workshop_groupchat_runs (id text PRIMARY KEY, tenant_id text NOT NULL,
+     server_id text, user_id text, prompt text NOT NULL, status text NOT NULL DEFAULT 'draft',
+diff --git a/src/server/services/job-effect-pages.service.test.ts b/src/server/services/job-effect-pages.service.test.ts
+index f8b136a4..29d428b5 100644
+--- a/src/server/services/job-effect-pages.service.test.ts
++++ b/src/server/services/job-effect-pages.service.test.ts
+@@ -39,6 +39,7 @@ function forbiddenDatabase() {
+     jobId: 'job-a',
+     tenantId: 'org-a',
+     leaseGeneration: 1,
++    remainingMs: () => 25_000,
+     signal: new AbortController().signal,
+     effectKey: () => 'unused',
+     withOwnership,
+@@ -181,6 +182,7 @@ function helperFixture(foreign: BgJob | undefined, lockFailure?: unknown) {
+     error: null,
+     attempts: 1,
+     leaseGeneration: 1,
++    nextAttemptAt: null,
+     leaseUntil: Date.now() + 60_000,
+     createdAt: 0,
+     updatedAt: 0,
+@@ -238,6 +240,7 @@ function helperFixture(foreign: BgJob | undefined, lockFailure?: unknown) {
+     jobId: current.id,
+     tenantId: current.tenantId,
+     leaseGeneration: 1,
++    remainingMs: () => 25_000,
+     signal: new AbortController().signal,
+     effectKey: () => 'unused',
+     withOwnership: async (operation) => operation(tx, current),
+diff --git a/src/server/services/job-effect-pages.sql.integration.test.ts b/src/server/services/job-effect-pages.sql.integration.test.ts
+index 5950610f..a1a40b9f 100644
+--- a/src/server/services/job-effect-pages.sql.integration.test.ts
++++ b/src/server/services/job-effect-pages.sql.integration.test.ts
+@@ -241,7 +241,7 @@ beforeAll(async () => {
+   owner = harness.owner;
+   await owner.unsafe(`CREATE SCHEMA "${schema}"; SET search_path TO "${schema}";
+     CREATE TABLE bg_jobs(id text primary key,tenant_id text not null,user_id text,type text not null,ref_id text,status text not null default 'queued',
+-      cursor text,error text,attempts integer not null default 0,lease_until bigint,created_at bigint not null,updated_at bigint not null,started_at bigint,finished_at bigint);
++      cursor text,error text,attempts integer not null default 0,next_attempt_at bigint, lease_until bigint,created_at bigint not null,updated_at bigint not null,started_at bigint,finished_at bigint);
+     CREATE TABLE documents(tenant_id text not null,id text not null,source_hash text not null,published integer not null default 0,PRIMARY KEY(tenant_id,id));
+     CREATE TABLE qc_commit_probe(id integer PRIMARY KEY,parent integer REFERENCES qc_commit_probe(id) DEFERRABLE INITIALLY DEFERRED);`);
+   let legacyBefore: string | undefined;
+diff --git a/src/server/services/job-effects.sql.integration.test.ts b/src/server/services/job-effects.sql.integration.test.ts
+index 75e66605..ff5cc616 100644
+--- a/src/server/services/job-effects.sql.integration.test.ts
++++ b/src/server/services/job-effects.sql.integration.test.ts
+@@ -142,7 +142,7 @@ beforeAll(async () => {
+   await owner.unsafe(`CREATE SCHEMA "${schema}"; SET search_path TO "${schema}";
+     CREATE TABLE bg_jobs (id text primary key, tenant_id text not null, user_id text, type text not null,
+       ref_id text, status text not null default 'queued', cursor text, error text, attempts integer not null default 0,
+-      lease_until bigint, created_at bigint not null, updated_at bigint not null, started_at bigint, finished_at bigint);
++      next_attempt_at bigint, lease_until bigint, created_at bigint not null, updated_at bigint not null, started_at bigint, finished_at bigint);
+     CREATE TABLE documents (tenant_id text not null, id text not null, source_hash text not null,
+       published integer not null default 0, primary key(tenant_id,id));`);
+   for (const file of [
+diff --git a/src/server/services/job-stock-concurrency.sql.integration.test.ts b/src/server/services/job-stock-concurrency.sql.integration.test.ts
+index a238bfd0..4c1946f1 100644
+--- a/src/server/services/job-stock-concurrency.sql.integration.test.ts
++++ b/src/server/services/job-stock-concurrency.sql.integration.test.ts
+@@ -70,7 +70,7 @@ const fixtureDdl = `
+ CREATE TABLE qc_crash_process (pid integer NOT NULL);
+ CREATE TABLE bg_jobs (id text PRIMARY KEY, tenant_id text NOT NULL, user_id text, type text NOT NULL,
+   ref_id text, status text NOT NULL DEFAULT 'queued', cursor text, error text, attempts integer NOT NULL DEFAULT 0,
+-  lease_until bigint, created_at bigint NOT NULL, updated_at bigint NOT NULL, started_at bigint, finished_at bigint);
++  next_attempt_at bigint, lease_until bigint, created_at bigint NOT NULL, updated_at bigint NOT NULL, started_at bigint, finished_at bigint);
+ CREATE TABLE fin_invoices (id uuid PRIMARY KEY, org_id text NOT NULL, provider_ref text);
+ CREATE TABLE stk_items (id uuid PRIMARY KEY, org_id text NOT NULL, units_per_stock_uom numeric,
+   code text NOT NULL DEFAULT 'FIXTURE-ITEM', name text NOT NULL DEFAULT 'Fixture Item');
+diff --git a/src/server/services/pulse-tenant-boundary.sql.integration.test.ts b/src/server/services/pulse-tenant-boundary.sql.integration.test.ts
+index 5a77665d..4ae4dfba 100644
+--- a/src/server/services/pulse-tenant-boundary.sql.integration.test.ts
++++ b/src/server/services/pulse-tenant-boundary.sql.integration.test.ts
+@@ -202,6 +202,19 @@ beforeAll(async () => {
+     'utf8',
+   );
+   await owner.unsafe(migration.replaceAll('public.', `"${schema}".`));
++  await owner.unsafe(
++    `CREATE TABLE bg_jobs(id text PRIMARY KEY,tenant_id text NOT NULL,user_id text,type text NOT NULL,ref_id text,status text NOT NULL DEFAULT 'queued',cursor text,error text,attempts integer NOT NULL DEFAULT 0,lease_generation integer NOT NULL DEFAULT 0,lease_until bigint,created_at bigint NOT NULL,updated_at bigint NOT NULL,started_at bigint,finished_at bigint)`,
++  );
++  await owner.unsafe(
++    readFileSync(
++      new URL(
++        '../../../supabase/migrations/20261023010000_pulse_dispatch_receipts.sql',
++        import.meta.url,
++      ),
++      'utf8',
++    ),
++  );
++
+   await owner.unsafe(`CREATE TABLE gateway (
+       id uuid PRIMARY KEY,
+       legacy_server_id text,
+@@ -224,7 +237,7 @@ beforeAll(async () => {
+ }, 20_000);
+ 
+ beforeEach(async () => {
+-  await owner`TRUNCATE pulse_proposals,pulse_settings`;
++  await owner`TRUNCATE pulse_dispatches,bg_jobs,pulse_proposals,pulse_settings`;
+ });
+ 
+ afterAll(async () => {
+diff --git a/src/server/services/pulse.service.ts b/src/server/services/pulse.service.ts
+index f03b6993..1be16297 100644
+--- a/src/server/services/pulse.service.ts
++++ b/src/server/services/pulse.service.ts
+@@ -1,5 +1,12 @@
+-import { sql, eq, and } from 'drizzle-orm';
++import { sql, eq, and, desc, or, lt } from 'drizzle-orm';
+ import { withOrgCore } from '$server/db/with-org-core';
++import {
++  pulseOwnerPredicate,
++  getPulseReceipt,
++  decidePulseProposal,
++  editPulseProposal,
++} from './pulse-dispatch.store';
++export { getPulseReceipt, decidePulseProposal, editPulseProposal };
+ import type { CoreCtx } from '$server/auth/core-ctx';
+ import {
+   pulseProposals,
+@@ -40,12 +47,33 @@ export async function upsertProposals(ctx: CoreCtx, cards: ProposalInput[]) {
+   });
+ }
+ 
+-export async function listPending(ctx: CoreCtx): Promise<PulseProposalRow[]> {
++export const pulseSafeColumns = {
++  id: pulseProposals.id,
++  orgId: pulseProposals.orgId,
++  createdAt: pulseProposals.createdAt,
++  source: pulseProposals.source,
++  kind: pulseProposals.kind,
++  title: pulseProposals.title,
++  summary: pulseProposals.summary,
++  payload: pulseProposals.payload,
++  status: pulseProposals.status,
++  revision: pulseProposals.revision,
++  ownerProfileId: pulseProposals.ownerProfileId,
++  decidedAt: pulseProposals.decidedAt,
++};
++export type PulseProposalView = { [K in keyof typeof pulseSafeColumns]: PulseProposalRow[K] };
++export async function listPending(ctx: CoreCtx): Promise<PulseProposalView[]> {
+   return withOrgCore(ctx, (tx) =>
+     tx
+-      .select()
++      .select(pulseSafeColumns)
+       .from(pulseProposals)
+-      .where(and(eq(pulseProposals.orgId, ctx.tenantId), eq(pulseProposals.status, 'pending')))
++      .where(
++        and(
++          eq(pulseProposals.orgId, ctx.tenantId),
++          eq(pulseProposals.status, 'pending'),
++          pulseOwnerPredicate(ctx),
++        ),
++      )
+       .orderBy(sql`${pulseProposals.createdAt} desc`),
+   );
+ }
+@@ -55,44 +83,36 @@ export async function countPending(ctx: CoreCtx): Promise<number> {
+     tx
+       .select({ n: sql<number>`count(*)::int` })
+       .from(pulseProposals)
+-      .where(and(eq(pulseProposals.orgId, ctx.tenantId), eq(pulseProposals.status, 'pending'))),
++      .where(
++        and(
++          eq(pulseProposals.orgId, ctx.tenantId),
++          eq(pulseProposals.status, 'pending'),
++          pulseOwnerPredicate(ctx),
++        ),
++      ),
+   );
+   return rows[0]?.n ?? 0;
+ }
+ 
+-export async function markApproved(ctx: CoreCtx, id: string, by: string) {
+-  return withOrgCore(ctx, (tx) =>
+-    tx
+-      .update(pulseProposals)
+-      .set({ status: 'approved', decidedBy: by })
+-      .where(and(eq(pulseProposals.orgId, ctx.tenantId), eq(pulseProposals.id, id))),
+-  );
+-}
+-
+-export async function dismiss(ctx: CoreCtx, id: string, by: string) {
+-  return withOrgCore(ctx, (tx) =>
+-    tx
+-      .update(pulseProposals)
+-      .set({ status: 'dismissed', decidedBy: by })
+-      .where(and(eq(pulseProposals.orgId, ctx.tenantId), eq(pulseProposals.id, id))),
+-  );
+-}
+-
+-export async function editPayload(ctx: CoreCtx, id: string, args: Record<string, unknown>) {
+-  return withOrgCore(ctx, (tx) =>
+-    tx
+-      .update(pulseProposals)
+-      .set({ payload: sql`jsonb_set(${pulseProposals.payload}, '{args}', ${JSON.stringify(args)}::jsonb)` })
+-      .where(and(eq(pulseProposals.orgId, ctx.tenantId), eq(pulseProposals.id, id))),
+-  );
+-}
++/** Compatibility names retain atomic decision semantics; no unconditional writes remain. */
++export const markApproved = (ctx: CoreCtx, id: string, _by: string, expectedRevision?: number) =>
++  decidePulseProposal(ctx, id, 'approve', expectedRevision);
++export const dismiss = (ctx: CoreCtx, id: string, _by: string, expectedRevision?: number) =>
++  decidePulseProposal(ctx, id, 'dismiss', expectedRevision);
++export const editPayload = editPulseProposal;
+ 
+ export async function getProposal(ctx: CoreCtx, id: string): Promise<PulseProposalRow | null> {
+   const rows = await withOrgCore(ctx, (tx) =>
+     tx
+       .select()
+       .from(pulseProposals)
+-      .where(and(eq(pulseProposals.orgId, ctx.tenantId), eq(pulseProposals.id, id)))
++      .where(
++        and(
++          eq(pulseProposals.orgId, ctx.tenantId),
++          eq(pulseProposals.id, id),
++          pulseOwnerPredicate(ctx),
++        ),
++      )
+       .limit(1),
+   );
+   return rows[0] ?? null;
+@@ -111,7 +131,10 @@ export async function getSettings(ctx: CoreCtx): Promise<PulseSettingsRow> {
+   const rows = await withOrgCore(ctx, (tx) =>
+     tx.select().from(pulseSettings).where(eq(pulseSettings.orgId, ctx.tenantId)).limit(1),
+   );
+-  return rows[0] ?? ({ orgId: ctx.tenantId, ...DEFAULT_SETTINGS, updatedAt: new Date() } as PulseSettingsRow);
++  return (
++    rows[0] ??
++    ({ orgId: ctx.tenantId, ...DEFAULT_SETTINGS, updatedAt: new Date() } as PulseSettingsRow)
++  );
+ }
+ 
+ export async function saveSettings(ctx: CoreCtx, patch: Partial<typeof DEFAULT_SETTINGS>) {
+@@ -119,6 +142,55 @@ export async function saveSettings(ctx: CoreCtx, patch: Partial<typeof DEFAULT_S
+     tx
+       .insert(pulseSettings)
+       .values({ orgId: ctx.tenantId, ...DEFAULT_SETTINGS, ...patch, updatedAt: new Date() })
+-      .onConflictDoUpdate({ target: pulseSettings.orgId, set: { ...patch, updatedAt: new Date() } }),
++      .onConflictDoUpdate({
++        target: pulseSettings.orgId,
++        set: { ...patch, updatedAt: new Date() },
++      }),
++  );
++}
++
++/** Bounded keyset history; pending feed/count semantics stay unchanged. */
++export async function listRecentPulseDecisions(
++  ctx: CoreCtx,
++  input: { limit?: number; cursor?: { decidedAt: string | null; id: string } } = {},
++) {
++  const limit = input.limit ?? 20;
++  if (!Number.isInteger(limit) || limit < 1 || limit > 50) throw new Error('Invalid receipt limit');
++  const cursorDate = input.cursor?.decidedAt ? new Date(input.cursor.decidedAt) : undefined;
++  if (cursorDate && !Number.isFinite(cursorDate.getTime()))
++    throw new Error('Invalid receipt cursor');
++  const rows = await withOrgCore(ctx, (tx) =>
++    tx
++      .select()
++      .from(pulseProposals)
++      .where(
++        and(
++          eq(pulseProposals.orgId, ctx.tenantId),
++          pulseOwnerPredicate(ctx),
++          sql`${pulseProposals.status}<>'pending'`,
++          ...(input.cursor
++            ? [
++                cursorDate
++                  ? or(
++                      lt(pulseProposals.decidedAt, cursorDate),
++                      sql`${pulseProposals.decidedAt} is null`,
++                      and(
++                        eq(pulseProposals.decidedAt, cursorDate),
++                        lt(pulseProposals.id, input.cursor.id),
++                      ),
++                    )
++                  : and(
++                      sql`${pulseProposals.decidedAt} is null`,
++                      lt(pulseProposals.id, input.cursor.id),
++                    ),
++              ]
++            : []),
++        ),
++      )
++      .orderBy(sql`${pulseProposals.decidedAt} desc nulls last`, desc(pulseProposals.id))
++      .limit(limit),
++  );
++  return Promise.all(
++    rows.map(async (row) => ({ title: row.title, ...(await getPulseReceipt(ctx, row.id)) })),
+   );
+ }
+diff --git a/src/server/services/rbac.service.ts b/src/server/services/rbac.service.ts
+index 6f810399..89e013f7 100644
+--- a/src/server/services/rbac.service.ts
++++ b/src/server/services/rbac.service.ts
+@@ -1284,3 +1284,32 @@ export async function requireOrgCapability(
+   if (!caps.can(module, action)) throw error(403, denied);
+   return caps;
+ }
++
++/** Uncached row adapter for short admission transactions; same role semantics as navigation. */
++export async function resolveFreshCapabilitiesInTransaction(
++  tx: import('$server/db/with-org-core').CoreTx,
++  orgId: string,
++  profileId: string,
++): Promise<{ capabilities: Capabilities; roles: string[]; membershipRole: string | null }> {
++  const { sql } = await import('drizzle-orm');
++  const members = await tx.execute<{ role: string | null }>(
++    sql`select role from organization_members where organization_id=${orgId}::uuid and profile_id=${profileId}::uuid for share`,
++  );
++  if (!members[0])
++    return { capabilities: buildCapabilities([], []), roles: [], membershipRole: null };
++  const assigned = await tx.execute<{ role_key: string }>(
++    sql`select role_key from member_roles where org_id=${orgId}::uuid and profile_id=${profileId}::uuid for share`,
++  );
++  const roles = resolveMemberRoleKeys(
++    assigned.map((row) => row.role_key),
++    members[0].role,
++  );
++  const rules = await tx.execute<CapabilityOverrideRow & Record<string, unknown>>(
++    sql`select role_key,module,can_view,can_create,can_edit,can_delete,can_export,can_manage,if_owner,field_level from permission_rules where org_id=${orgId}::uuid for share`,
++  );
++  return {
++    capabilities: buildCapabilities(roles, [...rules]),
++    roles,
++    membershipRole: members[0].role,
++  };
++}
+diff --git a/src/server/services/user.service.test.ts b/src/server/services/user.service.test.ts
+index eec1470b..b94c73ac 100644
+--- a/src/server/services/user.service.test.ts
++++ b/src/server/services/user.service.test.ts
+@@ -38,6 +38,16 @@ function makeAdmin() {
+   return { from, auth: { admin: authAdmin } };
+ }
+ 
++vi.mock('$server/db/pg-client', () => ({
++  getCoreDb: () => ({}),
++  getOrgTransactionDb: () => ({
++    transaction: async (
++      operation: (tx: { execute: () => Promise<unknown[]> }) => Promise<unknown>,
++    ) => operation({ execute: async () => [] }),
++  }),
++}));
++vi.mock('$server/services/pulse-dispatch.store', () => ({ cancelPulseForOwnerTx: vi.fn() }));
++
+ vi.mock('$server/supabase', () => ({ supabaseAdmin: () => makeAdmin() }));
+ 
+ import { listUsers, createUser, updateUserRole, deleteUser } from './user.service';
+diff --git a/src/server/services/user.service.ts b/src/server/services/user.service.ts
+index 7b211bfd..f2d74cd7 100644
+--- a/src/server/services/user.service.ts
++++ b/src/server/services/user.service.ts
+@@ -1,3 +1,6 @@
++import { getCoreDb, getOrgTransactionDb } from '$server/db/pg-client';
++import { cancelPulseForOwnerTx } from './pulse-dispatch.store';
++import { sql as pulseSql } from 'drizzle-orm';
+ import type { TenantContext } from './base';
+ import { supabaseAdmin } from '$server/supabase';
+ 
+@@ -210,6 +213,13 @@ export async function deleteUser(_ctx: TenantContext, userId: string) {
+     console.error('[user.service] deleteUser called with non-uuid id, skipping:', userId);
+     return;
+   }
++  await getOrgTransactionDb(getCoreDb()).transaction(async (tx) => {
++    const memberships = await tx.execute<{ organization_id: string }>(
++      pulseSql`select organization_id::text from organization_members where profile_id=${userId}::uuid order by organization_id`,
++    );
++    for (const row of memberships)
++      await cancelPulseForOwnerTx(tx, { tenantId: row.organization_id, profileId: userId });
++  });
+   await admin.from('organization_members').delete().eq('profile_id', userId);
+   const { error } = await admin.auth.admin.deleteUser(userId);
+   if (error) {
+@@ -298,6 +308,10 @@ export async function updateUserOrganizations(
+   const toAdd = [...desiredIds].filter((id) => !currentIds.has(id));
+ 
+   if (toRemove.length > 0) {
++    await getOrgTransactionDb(getCoreDb()).transaction(async (tx) => {
++      for (const tenantId of [...toRemove].sort())
++        await cancelPulseForOwnerTx(tx, { tenantId, profileId: userId });
++    });
+     const { error: delErr } = await admin
+       .from('organization_members')
+       .delete()
+diff --git a/tests/e2e/ui-audit/critical-artifact.ts b/tests/e2e/ui-audit/critical-artifact.ts
+index 15c4eab4..ead6e08e 100644
+--- a/tests/e2e/ui-audit/critical-artifact.ts
++++ b/tests/e2e/ui-audit/critical-artifact.ts
+@@ -1,3 +1,4 @@
++import { PULSE_CRITICAL_TITLES } from './pulse-critical-contract';
+ import type {
+   Reporter,
+   FullConfig,
+@@ -45,7 +46,23 @@ export default class CriticalArtifact implements Reporter {
+   onTestEnd(test: TestCase, result: TestResult) {
+     const evidence: Record<string, unknown> = {};
+     for (const item of result.attachments) {
+-      if (!['runtime-identity', 'network-boundary', 'native-focus-states'].includes(item.name))
++      if (item.name.startsWith('pulse-') && item.contentType === 'image/png') {
++        const body = item.body ?? (item.path ? fs.readFileSync(item.path) : undefined);
++        if (body)
++          evidence[item.name] = {
++            sha256: crypto.createHash('sha256').update(body).digest('hex'),
++            bytes: body.length,
++          };
++        continue;
++      }
++      if (
++        ![
++          'runtime-identity',
++          'network-boundary',
++          'native-focus-states',
++          'pulse-call-counts',
++        ].includes(item.name)
++      )
+         continue;
+       const body = item.body ?? (item.path ? fs.readFileSync(item.path) : undefined);
+       if (body) evidence[item.name] = JSON.parse(body.toString('utf8'));
+@@ -59,7 +76,10 @@ export default class CriticalArtifact implements Reporter {
+     });
+   }
+   async onEnd(result: FullResult): Promise<{ status: FullResult['status'] }> {
+-    const expected = ['CJ1 ', 'CJ2 ', 'CJ3 ', 'CJ4 ', 'CJ5 ', 'CJ6 '];
++    const expected =
++      process.env.MINION_CRITICAL_PULSE_ONLY === '1'
++        ? [...PULSE_CRITICAL_TITLES]
++        : ['CJ1 ', 'CJ2 ', 'CJ3 ', 'CJ4 ', 'CJ5 ', 'CJ6 ', ...PULSE_CRITICAL_TITLES];
+     const requiredProjects = [
+       'chromium-fine',
+       'chromium-coarse',
+@@ -91,7 +111,8 @@ export default class CriticalArtifact implements Reporter {
+         (r) =>
+           r.status === 'passed' &&
+           Object.hasOwn(r.evidence, 'runtime-identity') &&
+-          Object.hasOwn(r.evidence, 'network-boundary'),
++          Object.hasOwn(r.evidence, 'network-boundary') &&
++          (!r.title.startsWith('PULSE') || Object.hasOwn(r.evidence, 'pulse-rendered-state')),
+       ) &&
+       result.status === 'passed';
+     const report = {
+diff --git a/tests/fixtures/critical-journeys/build.mjs b/tests/fixtures/critical-journeys/build.mjs
+index 0a2ea77f..b60a7f95 100644
+--- a/tests/fixtures/critical-journeys/build.mjs
++++ b/tests/fixtures/critical-journeys/build.mjs
+@@ -23,7 +23,15 @@ if (
+ )
+   throw Error('Existing private evidence directory required');
+ const sha = (data) => crypto.createHash('sha256').update(data).digest('hex');
+-const authority = [
++const pulseOnly = process.env.MINION_CRITICAL_PULSE_ONLY === '1';
++const pulseAuthority = [
++  'src/routes/(app)/pulse/+page.svelte',
++  'src/routes/(app)/notifications/+page.svelte',
++  'src/lib/components/layout/NotificationsPopup.svelte',
++  'src/lib/state/features/pulse.svelte.ts',
++  'src/lib/components/pulse/PulseReceipt.svelte',
++];
++const baseAuthority = [
+   'src/routes/(app)/home/+page.svelte',
+   'src/routes/(app)/scheduling/calendar/+page.svelte',
+   'src/lib/services/gateway.svelte.ts',
+@@ -31,6 +39,7 @@ const authority = [
+   'src/lib/components/settings/SecretEditModal.svelte',
+   'src/lib/components/my-agent/ImageLightbox.svelte',
+ ];
++const authority = pulseOnly ? pulseAuthority : [...baseAuthority, ...pulseAuthority];
+ const transformed = new Set();
+ const modules = new Set();
+ // A prior bundle records selected authority hashes, not every transitive source input.
+@@ -38,20 +47,28 @@ const modules = new Set();
+ if (process.env.MINION_CRITICAL_REUSE)
+   throw Error('Artifact reuse is unsupported; compile current source into fresh output');
+ const compilationReuse = null;
+-for (const mode of ['home', 'calendar', 'overlay']) {
++for (const mode of pulseOnly ? ['pulse'] : ['home', 'calendar', 'overlay', 'pulse']) {
+   const mobile = path.join(hub, 'tests/fixtures/mobile-composition');
+   const overlay = path.join(hub, 'tests/fixtures/overlay-native');
+   const entry = '\0critical:' + mode;
+   const source =
+-    mode === 'home'
+-      ? `import {install} from ${JSON.stringify(fixture + 'gateway-transport.ts')};install(); const {mount}=await import('svelte'); const {default:Fixture}=await import(${JSON.stringify(fixture + 'HomeFixture.svelte')}); await import(${JSON.stringify(hub + 'src/app.css')}); await import(${JSON.stringify(mobile + '/fixture.css')});mount(Fixture,{target:document.getElementById('app')});`
+-      : `import ${JSON.stringify(mode === 'calendar' ? mobile + '/calendar.js' : overlay + '/main.js')};`;
++    mode === 'pulse'
++      ? `import {installPulseTransport} from ${JSON.stringify(fixture + 'pulse-transport.ts')};installPulseTransport(); const {mount}=await import('svelte'); const {default:Fixture}=await import(${JSON.stringify(fixture + 'PulseFixture.svelte')}); await import(${JSON.stringify(hub + 'src/app.css')}); await import(${JSON.stringify(mobile + '/fixture.css')});mount(Fixture,{target:document.getElementById('app')});`
++      : mode === 'home'
++        ? `import {install} from ${JSON.stringify(fixture + 'gateway-transport.ts')};install(); const {mount}=await import('svelte'); const {default:Fixture}=await import(${JSON.stringify(fixture + 'HomeFixture.svelte')}); await import(${JSON.stringify(hub + 'src/app.css')}); await import(${JSON.stringify(mobile + '/fixture.css')});mount(Fixture,{target:document.getElementById('app')});`
++        : `import ${JSON.stringify(mode === 'calendar' ? mobile + '/calendar.js' : overlay + '/main.js')};`;
+   await build({
+     base: '/' + mode + '/',
+     logLevel: 'warn',
+     configFile: false,
+     envDir: false,
+     root: hub,
++    publicDir: path.join(hub, 'static'),
++    experimental: {
++      renderBuiltUrl(filename, { type }) {
++        if (type === 'public' && filename.startsWith('fonts/')) return '/' + filename;
++      },
++    },
+     cacheDir: path.join(base, 'cache', mode),
+     plugins: [
+       {
+@@ -79,8 +96,12 @@ for (const mode of ['home', 'calendar', 'overlay']) {
+         mode === 'overlay'
+           ? { '$lib/paraglide/messages': overlay + '/messages.js', $lib: hub + 'src/lib' }
+           : {
+-              '$app/state': fixture + 'gateway-transport.ts',
+-              '$app/navigation': mobile + '/stubs/app-navigation.js',
++              '$app/state':
++                fixture + (mode === 'pulse' ? 'pulse-transport.ts' : 'gateway-transport.ts'),
++              '$app/navigation':
++                mode === 'pulse'
++                  ? fixture + 'pulse-transport.ts'
++                  : mobile + '/stubs/app-navigation.js',
+               '$app/environment': mobile + '/stubs/app-environment.js',
+               '$app/stores': mobile + '/stubs/app-stores.js',
+               '$env/dynamic/public': mobile + '/stubs/env-public.js',
+@@ -90,6 +111,7 @@ for (const mode of ['home', 'calendar', 'overlay']) {
+     },
+     build: {
+       target: 'es2022',
++      copyPublicDir: false,
+       outDir: path.join(out, mode),
+       emptyOutDir: false,
+       minify: true,
+@@ -144,6 +166,14 @@ const files = list(out).map((file) => ({
+   size: fs.statSync(file).size,
+   sha256: sha(fs.readFileSync(file)),
+ }));
++// Font assets are shared at the manifest root even though each entry has its own base.
++for (const file of list(out).filter((file) => file.endsWith('.css'))) {
++  for (const match of fs.readFileSync(file, 'utf8').matchAll(/url\(([^)]+)\)/g)) {
++    const url = match[1].replace(/["']/g, '');
++    if (url.includes('/fonts/') && !url.startsWith('/fonts/'))
++      throw Error('Unexpected fixture font base: ' + url);
++  }
++}
+ const artifacts = list(out)
+   .filter((file) => /\.(?:html|js|mjs)$/i.test(file))
+   .map((file) => ({ path: path.relative(out, file), source: fs.readFileSync(file, 'utf8') }));
+@@ -168,13 +198,15 @@ for (const rel of authority)
+ const clients = [...modules].filter(
+   (p) => p.includes('@minion-stack/shared') && p.endsWith('/gateway/client.js'),
+ );
+-if (clients.length !== 1) throw Error('Actual installed shared client missing/ambiguous');
++if (!pulseOnly && clients.length !== 1)
++  throw Error('Actual installed shared client missing/ambiguous');
+ fs.writeFileSync(
+   path.join(out, 'manifest.json'),
+   JSON.stringify(
+     {
+       files,
+       compilationReuse,
++      profile: pulseOnly ? 'pulse' : 'base-and-pulse',
+       authority: [...authority.map((p) => hub + p), ...clients].map((p) => ({
+         path: p,
+         sha256: sha(fs.readFileSync(p)),
+diff --git a/tests/fixtures/mutation-drafts/BeforePulse.svelte b/tests/fixtures/mutation-drafts/BeforePulse.svelte
+index a9f2b65c..98cfadd9 100644
+--- a/tests/fixtures/mutation-drafts/BeforePulse.svelte
++++ b/tests/fixtures/mutation-drafts/BeforePulse.svelte
+@@ -5,7 +5,7 @@
+   import { PageShell, PageBody, AsyncBoundary } from '$lib/components/ui/foundations';
+   import MarkdownMessage from '$lib/components/chat/MarkdownMessage.svelte';
+   import { pulse } from '$lib/state/features/pulse.svelte';
+-  import type { PulseProposalRow } from '$server/db/pg-schema/pulse';
++  import type { PulseProposalView } from '$server/services/pulse.service';
+   import { tryUseActions } from '$lib/services/actions/context';
+   import { checkedRefresh } from '$lib/services/actions/refresh';
+   import {
+@@ -16,7 +16,7 @@
+   import { toastError } from '$lib/state/ui/toast.svelte';
+   import * as m from '$lib/paraglide/messages';
+ 
+-  let { data }: { data: { proposals: PulseProposalRow[] } } = $props();
++  let { data }: { data: { proposals: PulseProposalView[] } } = $props();
+ 
+   // Kinds whose payload.args are worth surfacing/editing before approval — the
+   // gateway executes them verbatim on approve (see api/pulse/proposals/[id]).
+@@ -44,15 +44,16 @@
+   async function decide(id: string, action: 'approve' | 'dismiss') {
+     busyId = id;
+     try {
+-      if (action === 'approve') await pulse.approve(id);
+-      else await pulse.dismiss(id);
++      if (action === 'approve')
++        await pulse.approve(id, data.proposals.find((p) => p.id === id)?.revision ?? 1);
++      else await pulse.dismiss(id, data.proposals.find((p) => p.id === id)?.revision ?? 1);
+       await invalidate('pulse:feed');
+     } finally {
+       busyId = null;
+     }
+   }
+ 
+-  function startEdit(p: PulseProposalRow) {
++  function startEdit(p: PulseProposalView) {
+     editingId = p.id;
+     editDraft = JSON.stringify(p.payload.args ?? {}, null, 2);
+     editError = null;
+diff --git a/tests/fixtures/mutation-drafts/Fixture.svelte b/tests/fixtures/mutation-drafts/Fixture.svelte
+index 7cb30353..9d8523a1 100644
+--- a/tests/fixtures/mutation-drafts/Fixture.svelte
++++ b/tests/fixtures/mutation-drafts/Fixture.svelte
+@@ -17,6 +17,9 @@
+   onDestroy(() => actions.dispose());
+   onDestroy(restoreTransport);
+   const proposal = {
++    revision: 1,
++    ownerProfileId: null,
++    decidedAt: null,
+     id: 'proposal-a',
+     orgId: 'synthetic-org-a',
+     createdAt: new Date('2026-10-03T12:00:00Z'),

@@ -1,0 +1,144 @@
+{
+  "disposition": "source_converged_qualification_pending",
+  "sourceManifestSha256": "75f6bf6e7c5612006c3a54b8dac63240fbdec791f16e0f4e8fc18d73314379f0",
+  "closedFindings": [
+    {
+      "id": "A-IMP-01",
+      "originalSeverity": "HIGH",
+      "title": "Accepted UI authority survives socket and client replacement",
+      "status": "closed_source_and_bounded_proof; revision1 correction retained by revision2 source identity",
+      "evidence": [
+        "../revision1/original-core-replay.json",
+        "../revision1/actual-producers-regression.json"
+      ],
+      "limitation": "Full qualification gates and exact reviewed commit/current-F proof remain pending."
+    },
+    {
+      "id": "A-IMP-02",
+      "originalSeverity": "HIGH",
+      "title": "Lazy expiry is checked after a producer has already performed its UI effect",
+      "status": "closed_source_and_bounded_proof; revision1 correction retained by revision2 source identity",
+      "evidence": [
+        "../revision1/original-core-replay.json",
+        "../revision1/actual-producers-regression.json"
+      ],
+      "limitation": "Full qualification gates and exact reviewed commit/current-F proof remain pending."
+    },
+    {
+      "id": "A-IMP-03",
+      "originalSeverity": "HIGH",
+      "title": "Provider requests omit actual fixture history and compaction",
+      "status": "closed_source_and_bounded_proof; revision1 correction retained by revision2 source identity",
+      "evidence": [
+        "../revision1/original-core-replay.json",
+        "../revision1/actual-producers-regression.json"
+      ],
+      "limitation": "Full qualification gates and exact reviewed commit/current-F proof remain pending."
+    },
+    {
+      "id": "A-IMP-04",
+      "originalSeverity": "HIGH",
+      "title": "Display filtering drops terminal events for older still-active accepted runs",
+      "status": "closed_source_and_bounded_proof; revision1 correction retained by revision2 source identity",
+      "evidence": [
+        "../revision1/original-core-replay.json",
+        "../revision1/actual-producers-regression.json"
+      ],
+      "limitation": "Full qualification gates and exact reviewed commit/current-F proof remain pending."
+    },
+    {
+      "id": "A-IMP-05",
+      "originalSeverity": "HIGH",
+      "title": "Unknown merged live-tool artifact borrows unrelated stream lineage",
+      "status": "closed_source_and_bounded_proof; revision1 correction retained by revision2 source identity",
+      "evidence": [
+        "../revision1/original-mounted-replay.json",
+        "../revision1/actual-producers-regression.json"
+      ],
+      "limitation": "Full qualification gates and exact reviewed commit/current-F proof remain pending."
+    },
+    {
+      "id": "A-IMP-06",
+      "severity": "HIGH",
+      "gapType": "partial",
+      "axes": [
+        "Standards",
+        "Spec"
+      ],
+      "refs": [
+        "FR-001",
+        "FR-002",
+        "SC-001",
+        "US1/AC2",
+        "T007",
+        "T009",
+        "plan: every actual awaited producer and indirect consumer"
+      ],
+      "title": "Stock entry supplier autofill detaches from the accepted tool lifetime",
+      "trigger": "Actual fill_stock_entry matches an item with defaultSupplierPartyId. Its guarded setter calls addItem, which starts void autofillProvider. Hold GET /api/crm/parties/supplier-a, then Stop the accepted surface or advance Date.now beyond accepted expiresAt without a sweep; release a successful supplier response.",
+      "impact": "The detached helper awaits fetch and JSON without signal/private live checks, then calls the actual PartyPicker.pick after the accepted authority is stopped or expired. The setter can settle before this child finishes, so the runner cannot fence its later field mutation.",
+      "smallestCorrection": "Thread the optional private EffectLease through addItem/autofillProvider, await the supplier child from the assistant setter, and validate after fetch, after body parsing and immediately before pick. Preserve ordinary manual add/preselection, one-shot supplier behavior, and received committed-effect evidence; this lookup itself is a read. Avoid a global executing flag or serialized authority.",
+      "probe": "preserved-probes/stock-indirect-autofill.test.ts",
+      "probeSha256": "2f95a0ef816dce54f02a22ae1ce14fd29ea27fc0400a577e56e8850fef2543c1",
+      "sourceClass": "Actual mounted StockEntry and PartyPicker, actual registerForm/model-context/accepted lease; only disposable fetch and route shell dependencies substituted. No copied setter or helper algorithm.",
+      "status": "closed_at_revision2_source_and_independent_unchanged_probe",
+      "originalSource": [
+        {
+          "path": "src/routes/(app)/stock/entries/new/+page.svelte",
+          "lines": [
+            174,
+            187,
+            190,
+            201,
+            205,
+            409
+          ],
+          "sha256": "bcb0ecc9ce7b7d1a2c179eff1bb28ec4a3f0d5ca6e58032e59debb1d8a7e245b"
+        }
+      ],
+      "source": [
+        {
+          "path": "src/routes/(app)/stock/entries/new/+page.svelte",
+          "lines": [
+            175,
+            192,
+            196,
+            217,
+            219,
+            221,
+            431,
+            432,
+            433,
+            522
+          ],
+          "sha256": "c907242f9bfec533f65823e8cdec07fbac4845f491501d19d7bf7e1648223828"
+        }
+      ],
+      "originalResult": {
+        "current": "passed",
+        "stop": "failed: late supplier selected",
+        "expiry": "failed: late supplier selected",
+        "testCount": 3,
+        "passed": 1,
+        "failed": 2,
+        "exitCode": 1
+      },
+      "result": {
+        "current": "passed",
+        "stop": "passed",
+        "expiry": "passed",
+        "testCount": 3,
+        "passed": 3,
+        "failed": 0,
+        "exitCode": 0
+      },
+      "originalReceipt": "../revision1/stock-indirect-autofill-v1.json",
+      "originalLog": "../revision1/stock-indirect-autofill-v1.log",
+      "receipt": "stock-original-replay.json",
+      "log": "stock-original-replay.log",
+      "correction": "Private optional lease is threaded through awaited addItem/autofillProvider, guards both awaits and immediate synchronous pick; exact row identity and local supplier selection version preserve concurrent/manual intent. Optional lookup failures preserve already-added row and consumed one-shot without retry."
+    }
+  ],
+  "openImplementationFindings": [],
+  "finalAcceptance": false
+}
