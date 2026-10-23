@@ -61,7 +61,7 @@
 ## Phase 7: Qualification and review
 
 - [x] T029 Run `contracts/validation.md` commands, actual process/storage tests, migration twice, existing watcher/outbound/cron regressions and full Gateway `pnpm check`, `pnpm tsgo`, `pnpm test`; record source/installed hashes and exact exits (SC-C01–C06).
-- [ ] T030 Obtain independent Standards and Spec code review; close full acceptance trace with group D/F joint evidence, document any genuine remaining implementation gap in exact `TODO(handoff)` plus meta proposal, and prepare one scoped Gateway PR to `DEV`. Keep merge/deployment/paid/active classifier gates (SC-C06).
+- [x] T030 Obtain independent Standards and Spec code review; close full acceptance trace with group D/F joint evidence, document any genuine remaining implementation gap in exact `TODO(handoff)` plus meta proposal, and prepare one scoped Gateway PR to `DEV`. Keep merge/deployment/paid/active classifier gates (SC-C06).
 
 ## Dependencies and execution strategy
 
@@ -69,4 +69,4 @@ T001–T003 block implementation. A11 T004→T005→T006 precedes store T007→T
 
 ## Qualification checkpoint
 
-C-owned local source and proof independently closed by final84-item review; T030 retains final joint acceptance and PR delivery. See the batch program and independent review evidence.
+C-owned source and proof are independently closed by the complete84-item review and bounded security-fixture refinement. T030 joint D/F software acceptance is closed; PR356 targets DEV and exact HEAD2289b2fe has16 successful CI checks and15 workflow skips. PR356 was MERGED to DEV on 2026-10-23 (merge commit de958807) under the owner's explicit authorization. Deployed Gateway qualification and active classifier/paid operations remain separate gates. See the batch program and independent review evidence.

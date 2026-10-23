@@ -81,4 +81,4 @@ Current-source assessment follows independent review `audits/2026-10-23-agent-ha
 
 ## Qualification checkpoint
 
-Convergence source findings T027–T033 independently closed; T034 and final qualification/delivery remain open. See the batch program and independent review evidence.
+Convergence source findings T027–T033 and complete local qualification T034 are independently closed. Draft PR589 at HEAD493a0126 is open; exact-head branch CI and human review remain delivery gates. See verification/d-pulse/final/REVIEW.md in the batch audit.

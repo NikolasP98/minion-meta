@@ -84,11 +84,13 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-11",
       "acceptance": "**Topics:** `logic`, `data`, `test`\n\n**Dependencies:** 10. **Owner/files:** Gateway: watcher index.ts, dedup.ts, envelope.ts; no external langgraph-server changes.\n\n**DoD A11:** Cross-chat equal IDs stay distinct; dual hooks bind one source; policy revision changes resume old admission; same immutable ID/different bytes conflicts; verified edit/new explicit reevaluation is distinct; legacy flow/manual calls stay fresh and cannot assert trusted origin.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/provenance.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/c-gateway/revision2.1/REVIEW.md",
-        "development/c-gateway/revision2.1/source-commit.json",
-        "development/c-gateway/revision2/root-gates-attempt03/root-gates.jsonl"
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -99,11 +101,13 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-12",
       "acceptance": "**Topics:** `logic`, `data`, `migrations`, `test`\n\n**Dependencies:** 11. **Owner/files:** Gateway watcher: store.ts, migrate.ts, new classification-work.ts, real temporary alerts.db.\n\n**DoD A12:** Atomic unique claim, lease generation, capped attempt history, nextAttemptAt and all terminal states; known invalid result records usage then fails; negative completed state survives; raw payload retention leaves replay tombstones; concurrent/process-restart claims use real SQLite.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/classification-work.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/c-gateway/revision2.1/REVIEW.md",
-        "development/c-gateway/revision2.1/source-commit.json",
-        "development/c-gateway/revision2/root-gates-attempt03/root-gates.jsonl"
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -114,11 +118,13 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-13",
       "acceptance": "**Topics:** `logic`, `data`, `test`\n\n**Dependencies:** 12. **Owner/files:** Gateway watcher: bounded lifecycle dispatcher plus hook/classifier and legacy RPC adapters.\n\n**DoD A13:** 5s poll/30s lease/10s renew, one active classifier, safe retry5s/30s cap3; admitted crash unknown; received restart no recall; revoked policy cannot dispatch; receipt refs scope/input checked. Hook custom policies remain supported; flow origin remains uncertified.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/classification-recovery.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/c-gateway/revision2.1/REVIEW.md",
-        "development/c-gateway/revision2.1/source-commit.json",
-        "development/c-gateway/revision2/root-gates-attempt03/root-gates.jsonl"
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -129,11 +135,13 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-14",
       "acceptance": "**Topics:** `logic`, `data`, `test`\n\n**Dependencies:** 12. **Owner/files:** Gateway watcher recipient receipt store and bridge to deliver.ts, delivery-queue-store/files/recovery; reuse queueId and caller completion.\n\n**DoD A14:** SQLite admission precedes queue; existing matching queue reconciles under lease; terminal queue survives until SQLite settlement then acknowledgeCallerManagedDelivery; missing/mismatched admitted evidence never re-enqueues; crash at each cross-store boundary is injected.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/delivery-bridge.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/c-gateway/revision2.1/REVIEW.md",
-        "development/c-gateway/revision2.1/source-commit.json",
-        "development/c-gateway/revision2/root-gates-attempt03/root-gates.jsonl"
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -144,11 +152,13 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-15",
       "acceptance": "**Topics:** `logic`, `data`, `migrations`, `test`\n\n**Dependencies:** 13, 14. **Owner/files:** Gateway watcher: destinations.ts, index.ts, positive/suggestion result publication and old pending boot retry.\n\n**DoD A15:** Success recipient never repeats when another fails; first confirmed send stamps hook cooldown once; source count once; current recipient authorization checked before queue admission; old pending rows migrate legacy-unreconciled and cannot fan out. Recovery after admission has documented revocation limit. Kill after suggestion admission/result/recipient materialization: no second suggestion call, unknown uses explicit empty fallback. Expired queue copies are redacted with tombstones preserved; expired queued input cancels.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/delivery-recovery.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/c-gateway/revision2.1/REVIEW.md",
-        "development/c-gateway/revision2.1/source-commit.json",
-        "development/c-gateway/revision2/root-gates-attempt03/root-gates.jsonl"
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -159,11 +169,13 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-16",
       "acceptance": "**Topics:** `logic`, `test`\n\n**Dependencies:** 13. **Owner/files:** Gateway: opt-in DroneHost wrapper, classifier.ts and reply-flow/suggestions-drone.ts, both hook and flow callers.\n\n**DoD A16:** One priced record from returned resolvedModel; overlapping classifier/suggestion A/B and fallback A\u2192B correct; missing result or unreported retry bill preserves unknown/incomplete coverage; inferred host price suppressed only for opted-in runs. SDK signature unchanged and exact installed result seam qualified.\n\n**Verification:** `pnpm exec vitest run src/drones/host.test.ts; pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/usage-finalization.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
+      "implementationVerified": true,
       "evidence": [
-        "verification/c-gateway/revision2.1/REVIEW.md",
-        "development/c-gateway/revision2.1/source-commit.json",
-        "development/c-gateway/revision2/root-gates-attempt03/root-gates.jsonl"
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
       ],
       "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
     },
@@ -285,7 +297,9 @@
       "anchor": "slice-26",
       "acceptance": "**Topics:** `test`, `logic`, `data`\n\n**Dependencies:** 3, 5. **Owner/files:** Meta: scripts/agent-evals/run.mjs, lib/manifest.mjs and tests; Hub existing critical-journeys synthetic HTTP/WS adapters.\n\n**DoD A26:** Default fixture mode denies network; three arms reset identical data and capture append-only events/receipts; small synthetic episodes cover joins/missing receipts/zero budget. Explicit live approval parser rejects missing permission/cost bound. No Factory/digest prerequisite.\n\n**Verification:** `node --test scripts/agent-evals/run.test.mjs; node scripts/agent-evals/run.mjs --mode fixture --manifest audits/2026-10-22-agent-use-transcripts/spec/fixtures/smoke-manifest.json`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
       "implementationVerified": false,
-      "evidence": []
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
     },
     {
       "slice": 27,
@@ -295,7 +309,9 @@
       "anchor": "slice-27",
       "acceptance": "**Topics:** `test`, `data`\n\n**Dependencies:** 26. **Owner/files:** Meta: scripts/agent-evals/corpus.mjs, fixture schema, small validated example set and labeling/holdout protocol.\n\n**DoD A27:** Reject missing truth/permissions/receipt expectations, duplicate episode leakage and exposed holdout in dev mode; bilingual strata/compaction represented by fixtures; import and readiness report count human-adjudicated labels. Creating/adjudicating 300 episodes is a separate governed operation, not claimed inside this 4\u20138h software slice.\n\n**Verification:** `node --test scripts/agent-evals/corpus.test.mjs; node scripts/agent-evals/corpus.mjs validate --input audits/2026-10-22-agent-use-transcripts/spec/fixtures/corpus`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
       "implementationVerified": false,
-      "evidence": []
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
     },
     {
       "slice": 28,
@@ -305,7 +321,9 @@
       "anchor": "slice-28",
       "acceptance": "**Topics:** `test`, `logic`, `data`\n\n**Dependencies:** 26, 27. **Owner/files:** Meta: scripts/agent-evals/report.mjs and seeded synthetic outcomes; no provider calls.\n\n**DoD A28:** Cluster-paired bootstrap reproducible; cheaper but less-successful arm can fail cost-per-success gate; critical violation veto; missing/unbounded cost and zero success nonpromotable; drift-separated cohorts; correct expansion/stopping metadata. Small fixtures prove tool, full holdout remains separately operated.\n\n**Verification:** `node --test scripts/agent-evals/report.test.mjs; node scripts/agent-evals/report.mjs --run <fixture-run-directory>`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
       "implementationVerified": false,
-      "evidence": []
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
     },
     {
       "slice": 29,
@@ -315,7 +333,9 @@
       "anchor": "slice-29",
       "acceptance": "**Topics:** `test`, `data`, `logic`\n\n**Dependencies:** 5, 28. **Owner/files:** Meta: scripts/agent-evals/screen.mjs plus seeded trace faults and independently versioned labels.\n\n**DoD A29:** Deterministic receipt faults first; semantic abstain preserved; random apparently-good controls retained with weighting; fixed-review-budget yield/miss estimates; no billing/release authority. Fixture proof independent of digest UI; optional Pulse feedback import uses Slice25 only when enabled.\n\n**Verification:** `node --test scripts/agent-evals/screen.test.mjs`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
       "implementationVerified": false,
-      "evidence": []
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
     },
     {
       "slice": 30,
@@ -324,8 +344,14 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-30",
       "acceptance": "**Topics:** `test`, `logic`, `data`\n\n**Dependencies:** 11, 13, 15, 16, 28. **Owner/files:** Gateway watcher eligibility/census/shadow adapter; meta evaluation fixtures/report; no live activation.\n\n**DoD A30:** Default-policy+certified source only; custom/idless/model-drift bypass; census no eligible traffic stops; shadow baseline always runs; timeout never negative; gate+forwarded+retry/unknown costs use logical source denominator. Frozen threshold/severity miss bounds required before paid holdout or active promotion.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/jev-shadow-eligibility.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
-      "evidence": []
+      "implementationVerified": true,
+      "evidence": [
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
+      ]
     },
     {
       "slice": 31,
@@ -335,7 +361,9 @@
       "anchor": "slice-31",
       "acceptance": "**Topics:** `test`, `security`, `logic`, `data`\n\n**Dependencies:** 26, 27, 28. **Owner/files:** Meta: scripts/agent-evals/lib/live-provider.mjs, runner transport selection and stub transport tests; reuse Slice26 disposable tool/HTTP/WS fixtures.\n\n**DoD A31:** A valid approved manifest exercises the complete live-mode path with stub transport; missing/expired approval, unknown exposure, exhausted budget or model/fixture drift dispatches zero requests. Allowlisted provider endpoint only; every actual attempt reserves exposure before dispatch and persists terminal/unknown receipt. Disable automatic SDK retry/fallback; no automatic replay of ambiguous requests. Live mode changes inference transport only: tools still operate marked disposable fixture state, never production business endpoints. Production credentials are neither discovered nor inferred. Actual paid execution remains a separate approved operation.\n\n**Verification:** `node --test scripts/agent-evals/live-provider.test.mjs scripts/agent-evals/run.test.mjs`. Tests use stub providers and deny external network, including valid-manifest and budget-exhaustion cases. Apply the affected repository gates in \u00a711.",
       "implementationVerified": false,
-      "evidence": []
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
     },
     {
       "slice": 32,
