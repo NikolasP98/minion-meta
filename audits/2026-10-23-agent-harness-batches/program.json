@@ -1,7 +1,7 @@
 {
   "authorization": "Batch remaining implementations in one PR per group; Astra SDD/escalation/verification and Sol development; run autonomously.",
   "createdAt": "2026-10-23T04:46:11.094618+00:00",
-  "updatedAt": "2026-10-23T05:42:13.240648+00:00",
+  "updatedAt": "2026-10-23T05:49:20.608155+00:00",
   "spec": "2026-10-22-agent-harness-reliability-and-proactivity-spec",
   "execution": "autonomous until six grouped PRs implemented and independently verified; human merge, live paid inference and production activation retain separate gates",
   "models": {
@@ -27,7 +27,7 @@
         4,
         5
       ],
-      "state": "sdd-approved-development-ready",
+      "state": "developing",
       "pr": null,
       "supportingWork": [
         "Hub browser evaluation adapters for Slice26"
@@ -39,7 +39,10 @@
       "reviewPass2": {
         "verdict": "approved",
         "path": "sdd/a-chat-pass2.md"
-      }
+      },
+      "sddCommit": "8d0dffc1",
+      "developer": "/root/sol_dev_chat",
+      "developerModel": "gpt-6.1-sol"
     },
     {
       "group": "b-factory",
@@ -53,7 +56,7 @@
         8,
         9
       ],
-      "state": "correcting-independent-B-V1",
+      "state": "independent-correction-reverification",
       "pr": null,
       "reviewPass1": {
         "verdict": "approved",
@@ -83,7 +86,8 @@
         "blockingFindings": [
           "B-V1"
         ]
-      }
+      },
+      "correctionManifest": "development/b-factory/revision1/source-manifest.json"
     },
     {
       "group": "c-gateway",
@@ -133,11 +137,15 @@
         19,
         20
       ],
-      "state": "sdd-independent-pass1-review",
+      "state": "sdd-pass1-approved-pass2-pending",
       "pr": null,
       "dependsOn": [
         "c-gateway binding contract"
-      ]
+      ],
+      "reviewPass1": {
+        "verdict": "approved",
+        "path": "sdd/d-pulse-pass1.md"
+      }
     },
     {
       "group": "e-digest",
@@ -155,11 +163,15 @@
         25,
         32
       ],
-      "state": "sdd-independent-pass1-review",
+      "state": "sdd-pass1-approved-pass2-pending",
       "pr": null,
       "dependsOn": [
         "d-pulse schema/selected-worker/receipts"
-      ]
+      ],
+      "reviewPass1": {
+        "verdict": "approved",
+        "path": "sdd/e-digest-pass1.md"
+      }
     },
     {
       "group": "f-evals",
@@ -193,7 +205,8 @@
       "reviewPass2": {
         "verdict": "approved",
         "path": "sdd/f-evals-pass2.md"
-      }
+      },
+      "sddCommit": "8d0dffc1"
     }
   ],
   "remainingSlices": [
@@ -234,7 +247,8 @@
     "factoryDeveloper": "/root/sol_dev_factory",
     "gatewayReviewPass1": "/root/astra_sdd_chat_evals",
     "gatewayReviewPass2": "/root/astra_sdd_pulse_digest",
-    "gatewayDeveloper": "/root/sol_dev_gateway"
+    "gatewayDeveloper": "/root/sol_dev_gateway",
+    "chatDeveloper": "/root/sol_dev_chat"
   },
   "frozenInstalls": "setup/installs.json",
   "setupStatus": "all-six-frozen-installs-passed-locks-unchanged",
