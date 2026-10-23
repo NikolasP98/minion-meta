@@ -11,6 +11,8 @@
 - [x] Recipient queue crash windows, suggestion recovery, legacy cutover, retention and tombstones are covered.
 - [x] Shared D/F interfaces, caller wiring and compatibility boundaries are explicit.
 - [x] Shadow/census disabled default, no paid holdout, no active classifier change and human release gates remain.
+- [x] Revision 1 closes raw cron/config-loader/strict-authority/queue-expiry/keyed-owner-reply review findings with source anchors and actual caller tests.
+- [x] Existing provider crash checkpoint reuse, SDK invocation identity and best-effort analytics limits are explicit.
 - [ ] Independent technical pass 1 and pass 2 approve exact artifact hashes.
 
-Technical AS-IS anchors are required by Constitution II; implementation details otherwise live in plan/contracts. Unchecked technical review is a workflow gate, not claimed implementation completion.
+Revision 1 is author-complete and awaits independent re-review; checked author items do not self-approve the package. Technical AS-IS anchors are required by Constitution II; implementation details otherwise live in plan/contracts. Unchecked technical review is a workflow gate, not claimed implementation completion.

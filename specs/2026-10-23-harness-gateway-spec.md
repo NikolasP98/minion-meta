@@ -1,9 +1,9 @@
 ---
 id: 2026-10-23-harness-gateway-spec
 title: Gateway watcher receipts usage and explicit target binding
-stage: spec
-status: review
-pass: 1
+stage: dev
+status: implementing
+pass: 2
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion]
@@ -12,14 +12,14 @@ relationship: extends
 related: [2026-10-22-agent-harness-reliability-and-proactivity-spec]
 tags: [logic, data, security, migrations, test]
 type: fix
-verdict: pending
+verdict: approved
 ---
 
 # Gateway watcher receipts, usage and explicit target binding
 
 ## 0. Product
 
-Approved parent slices 11–16 plus Gateway A20/A30 seams ship in one group C Gateway PR under the owner's batching directive. See [specification](107-harness-gateway/spec.md), [plan](107-harness-gateway/plan.md), [tasks](107-harness-gateway/tasks.md), [receipts](107-harness-gateway/contracts/receipts.md), [usage/shadow](107-harness-gateway/contracts/usage-shadow.md), and [cron handoff](107-harness-gateway/contracts/cron-binding.md). Source-backed AS-IS, TO-BE, DELTA and every acceptance ID are in the specification. Technical two-pass review is pending; parent implementation authorization does not waive merge, deployment or paid/active-experiment gates.
+Approved parent slices 11–16 plus Gateway A20/A30 seams ship in one group C Gateway PR under the owner's batching directive. See [specification](107-harness-gateway/spec.md), [plan](107-harness-gateway/plan.md), [tasks](107-harness-gateway/tasks.md), [receipts](107-harness-gateway/contracts/receipts.md), [usage/shadow](107-harness-gateway/contracts/usage-shadow.md), and [cron handoff](107-harness-gateway/contracts/cron-binding.md). Source-backed AS-IS, TO-BE, DELTA and every acceptance ID are in the specification. Both independent Astra reviews approved revision 1 plus the exact null-compatibility correction; parent implementation authorization does not waive merge, deployment or paid/active-experiment gates.
 
 ## 1. AS-IS, TO-BE and DELTA
 

@@ -2,7 +2,7 @@
 
 **Feature Branch**: `feature/agent-harness-c-gateway`; meta artifacts on `feature/agent-harness-f-evals`
 **Created**: 2026-10-23
-**Status**: Review; owner implementation authorization inherited; two independent technical reviews pending.
+**Status**: Approved for development; owner implementation authorization inherited; two independent Astra technical reviews approved.
 **Input**: Approved slices 11–16, Gateway portion of 20, and Gateway portion of 30 in one Gateway PR.
 
 The [approved parent](../2026-10-22-agent-harness-reliability-and-proactivity-spec.md) §§6, 7.1, 8–12 remains normative. One group PR is the owner's explicit packaging exception to Constitution III. Gateway owns shared A20/A30 code because Hub/meta PRs cannot change its repository. Group D owns Hub approval/dispatch; group F owns evaluation reports. Full acceptance is joint, with precise seams below. Paid holdout, active classifier changes, merge and deployment retain their human gates. This refines the current watcher and queue; engine P1–P4 and a new workflow framework are excluded.
@@ -74,7 +74,7 @@ An evaluator can count qualified logical events and run a disabled-by-default st
 
 ### Edge Cases
 
-Old queue entry, partial provider acceptance, filesystem fsync failure, received result with schema error, expired lease with late result, policy revoke during awaits, same text/different source, media-only source, two subscriptions to one watcher, forged receipt ID, changed recipients after first admission, missing account authority, provider edit without certified revision, queue recovery after payload redaction, missing canonical origin session, cron update changing agent only, and SDK credential fallback differing from terminal execution model.
+Expired unredacted queue entry recovered before watcher startup, DB mirror miss with stale JSON, blank cron input erased by normalization, rejected patch mutating stored state, dropped session scope, config rejected by plugin manifest, first delivery before pending-reply materialization, old queue entry, partial provider acceptance, filesystem fsync failure, received result with schema error, expired lease with late result, policy revoke during awaits, same text/different source, media-only source, two subscriptions to one watcher, forged receipt ID, changed recipients after first admission, missing account authority, provider edit without certified revision, queue recovery after payload redaction, missing canonical origin session, cron update changing agent only, and SDK credential fallback differing from terminal execution model.
 
 ## Requirements
 
@@ -91,6 +91,12 @@ Verified Gateway base `cc150b56b2b0d4396d44b9ef6f14b5d772c52db8`:
 | `src/drones/host.ts:30–39,83–112`; watcher `index.ts:106` | Shared watcher host emits usage from last key lookup, not final model. |
 | Installed Drone `dist/types.d.ts:95–113`, `dist/run.js:102–182,211–236` | Success returns resolvedModel; failures do not. Failed fallback usage can be absent. Exact installed package is 0.6.0. |
 | `src/infra/outbound/deliver.ts:320–328,565–580,650–660`; queue store `:282–313` | Queue IDs, required durability, caller-managed completion and acknowledgement already exist. Queue is not wired to watcher. |
+| Watcher `minion.plugin.json:5–8,57–84`; `index.ts:40–63,113–156`; `src/plugins/loader.ts:435–479` | Strict manifest is validated before registration; no complaint experiment config is currently declared/resolved. |
+| `src/plugins/org-enforcement.ts:51–97`; `src/gateway/channel-mirror.ts:133–164`; `src/channels/telegram/accounts.ts:53–62` | DB mirror miss falls back to JSON; missing ownership maps become unscoped []; last-good snapshots can persist, and account enumeration can synthesize default. These alone cannot authorize certified resumption. |
+| `src/infra/outbound/deliver.ts:1095,1139–1159`; `delivery-queue-store.ts:219–239`; `delivery-queue-recovery.ts:144–153` | Durable in-flight checkpoint already prevents automatic replay after provider-success/crash-before-terminal by recovering uncertain. |
+| `src/infra/outbound/delivery-queue-types.ts:65–109,377–418`; `delivery-queue-recovery.ts:116–192` | Queue has no caller retention metadata; generic recovery can send pending work independently of watcher startup. |
+| Watcher `index.ts:788–800`; `src/reply-flow/store.ts:4–57`; `handle-reply.ts:43–73` | Confirmed delivery inserts an unkeyed pending reply consumed by owner selection; no restart-safe identity prevents duplicate/lost reply rows. |
+| `src/platform/cron/normalize.ts:311–338`; `service/ops.ts:141–147`; `service/jobs.ts:345–441` | Blank bindings disappear before RPC schema validation; updates mutate the live job, and scope is omitted on create/patch. |
 | `src/gateway/server-core/server-cron.ts:76–120,188–195` | Unknown explicit agent and mismatched session fall back; isolated execution has a separate cron session. |
 | `src/web/inbound/monitor.ts:142–189` | Later WhatsApp code emits raw hooks per entry but no canonical carrier, and skips personal-assistant member traffic. Telegram certification does not certify WhatsApp. |
 
@@ -102,11 +108,11 @@ Paths abbreviated as “Watcher” are relative to `extensions/alert-watcher/`. 
 - **FR-C02 / A12**: SQLite uniqueness, bounded snapshots/attempts and owner/generation predicates MUST survive process restart; negative and failed results, usage and replay tombstones MUST be durable.
 - **FR-C03 / A13**: The existing plugin lifecycle MUST own a bounded dispatcher (5s poll, 30s lease, 10s renew, one active classifier, at most 10 candidates/tick). Only proven unsubmitted failures retry after 5s/30s, maximum three attempts. Ambiguous admitted work MUST NOT automatically recall providers.
 - **FR-C04 / A14**: Every certified recipient MUST commit SQLite admission before queue dispatch and settle SQLite before queue acknowledgement; missing/mismatched admitted evidence MUST NOT enqueue again.
-- **FR-C05 / A15**: Positive/suggestion/recipient materialization MUST be durable, recipient-specific and authority checked; legacy retry must be fenced, source-window count and first-sent cooldown applied once, payload copies expire after seven days by default without clearing replay identity.
+- **FR-C05 / A15**: Positive/suggestion/recipient materialization MUST be durable, recipient-specific and authority checked; legacy retry must be fenced, source-window count and first-sent cooldown applied once, expired payloads cannot dispatch even through generic queue recovery with the watcher absent, and all receipt-bound copies are redacted without clearing replay identity. The first confirmed send MUST preserve one idempotent owner-reply row with frozen suggestions and a window that recovery cannot restart.
 - **FR-C06 / A16**: Both hook and flow classifier/suggestion paths MUST use opt-in per-invocation final usage from the installed terminal result, preserving ordinary callers and honest unknown/incomplete cost.
-- **FR-C07 / A20gateway**: Explicit cron agent/session binding MUST fail closed at admission and execution, while omitted general-cron agent retains defaults; qualified Pulse execution MUST use its current exact gateway and no automatic announcement.
-- **FR-C08 / A30gateway**: Eligibility/census/shadow MUST default disabled, never bypass baseline, exclude uncertified/custom/model-drift inputs, and export complete logical-source accounting or explicit incomplete coverage. No active classifier change or paid holdout occurs here.
-- **FR-C09 / shared safety**: Provenance, receipt IDs and scores MUST NOT grant authority. Current enablement/owner/recipient scope MUST be rechecked before dispatch and local completion. Data migrations/rollback MUST preserve uncertain admissions and tombstones.
+- **FR-C07 / A20gateway**: Explicit cron agent/session binding MUST fail closed at admission and execution, before lossy input normalization and at effective candidate-copy update, preserving stored session scope and leaving rejected memory/disk state unchanged; omitted general-cron agent retains defaults; qualified Pulse execution MUST use its current exact gateway and no automatic announcement.
+- **FR-C08 / A30gateway**: Eligibility/census/shadow MUST be accepted and resolved through the real strict plugin manifest/loader, default disabled, never bypass baseline, exclude uncertified/custom/model-drift inputs, and export complete logical-source accounting or explicit incomplete coverage. No active classifier change or paid holdout occurs here.
+- **FR-C09 / shared safety**: Provenance, receipt IDs and scores MUST NOT grant authority. Current enablement/owner/recipient scope MUST be rechecked before dispatch and local completion through source-qualified authority evidence. Missing/stale DB mirror or missing JSON account mapping MUST NOT inherit fail-open fallback authority. Data migrations/rollback MUST preserve uncertain admissions and tombstones.
 
 ### Key Entities
 
@@ -136,4 +142,4 @@ Canonical source unit; stable admission and pinned policy/input; classification 
 
 ## Assumptions
 
-Single watcher ownership is local to its alerts.db/state directory; multiple-host shared ownership requires a new design. The current trusted gateway plugin configuration is the authority source, with current account/org resolution and enablement checks. Manual/flow RPCs remain uncertified. Only raw-hook normalization plus Telegram constituent producer tests establish the supported certification matrix; WhatsApp/other transports require their own later source-backed certification. No production worker, classifier or schedule is activated by this work.
+Single watcher ownership is local to its alerts.db/state directory; multiple-host shared ownership requires a new design. Trusted gateway plugin configuration plus the qualified current account/org source establish authority; the existing fail-open lookup alone does not. DB mirror freshness is bounded by the existing five-minute refresh interval and does not promise instantaneous remote revocation. Manual/flow RPCs remain uncertified. Only raw-hook normalization plus Telegram constituent producer tests establish the supported certification matrix; WhatsApp/other transports require their own later source-backed certification. No production worker, classifier or schedule is activated by this work.

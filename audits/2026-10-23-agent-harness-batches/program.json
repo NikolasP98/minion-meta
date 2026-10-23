@@ -1,7 +1,7 @@
 {
   "authorization": "Batch remaining implementations in one PR per group; Astra SDD/escalation/verification and Sol development; run autonomously.",
   "createdAt": "2026-10-23T04:46:11.094618+00:00",
-  "updatedAt": "2026-10-23T05:07:43.655234+00:00",
+  "updatedAt": "2026-10-23T05:21:30.465598+00:00",
   "spec": "2026-10-22-agent-harness-reliability-and-proactivity-spec",
   "execution": "autonomous until six grouped PRs implemented and independently verified; human merge, live paid inference and production activation retain separate gates",
   "models": {
@@ -27,11 +27,15 @@
         4,
         5
       ],
-      "state": "sdd-review-pending",
+      "state": "sdd-pass1-changes-requested",
       "pr": null,
       "supportingWork": [
         "Hub browser evaluation adapters for Slice26"
-      ]
+      ],
+      "reviewPass1": {
+        "verdict": "changes_requested",
+        "path": "sdd/a-chat-pass1.md"
+      }
     },
     {
       "group": "b-factory",
@@ -75,12 +79,20 @@
         15,
         16
       ],
-      "state": "sdd-independent-review",
+      "state": "sdd-approved-development-ready",
       "pr": null,
       "supportingWork": [
         "Gateway Slice20 cron explicit-agent/session binding",
         "Gateway Slice30 eligibility/census/shadow adapter"
-      ]
+      ],
+      "reviewPass1": {
+        "verdict": "approved",
+        "path": "sdd/c-gateway-pass1.md"
+      },
+      "reviewPass2": {
+        "verdict": "approved",
+        "path": "sdd/c-gateway-pass2.md"
+      }
     },
     {
       "group": "d-pulse",
@@ -140,14 +152,18 @@
         30,
         31
       ],
-      "state": "sdd-review-pending",
+      "state": "sdd-pass1-changes-requested",
       "pr": null,
       "dependsOn": [
         "a-chat callback/decision-event contract"
       ],
       "supportingWork": [
         "Meta SDD and review artifacts for all six groups"
-      ]
+      ],
+      "reviewPass1": {
+        "verdict": "changes_requested",
+        "path": "sdd/f-evals-pass1.md"
+      }
     }
   ],
   "remainingSlices": [
@@ -180,7 +196,7 @@
     32
   ],
   "heavyValidationConcurrency": 1,
-  "status": "sdd-authoring",
+  "status": "development-and-independent-sdd-review",
   "agents": {
     "chatEvalsSdd": "/root/astra_sdd_chat_evals",
     "factoryGatewaySdd": "/root/astra_sdd_factory_gateway",
