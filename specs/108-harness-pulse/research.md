@@ -1,0 +1,19 @@
+# Pulse source reconciliation and decisions
+
+Date: 2026-10-23. Hub checkout `d-pulse`, branch `feature/agent-harness-d-pulse`, source `ef62e8ac2dd8d83d7f38dae8ec04f59c50cf4283`. Meta source `220a9b9a0a96e950a5c2d986c6c218cd54ab307e`. Repository role: Hub PR base `master`; meta PR base `dev` (registry confirmed by orchestrator). Installed dependencies and runtime remain unqualified until development checks.
+
+| Decision | Source / rationale | Alternative rejected |
+|---|---|---|
+| Atomic proposal/dispatch/job transaction | `pulse.service.ts:63–86` mutates independently; route dispatches first. Add revision CAS and a durable dispatch keyed by org/proposal/revision. | Route mutex cannot serialize multiple processes. |
+| Reuse background runtime | `bg-runtime.ts:21–29,263–287` already supplies generation ownership and short transactions. | New scheduler/queue abstraction duplicates tested lease logic. |
+| Domain RLS inside ownership transaction | `with-org-core.ts:28–65` exports `withOrgCoreTransaction`, restoring prior role/GUCs. `job-effects.service.ts:375,423` demonstrates usage. | Nested `withOrgCore` risks a separate commit and breaks atomicity. |
+| Add exact selected-worker API | Existing runTick query has no domain predicates and limit 20. Default HTTP tick intentionally skips jobs. | Global `jobs=1` activation revives unrelated backlog. |
+| Strict resolver shared by route and worker | `gateway-rpc.ts:79–130` deliberately falls back; `personal-agent-binding.ts:35–98` proves membership, gateway, lease and personal-agent rereads are available. | Reusing fallback as-user call can choose a different principal/target. |
+| Freeze typed actions | Gateway `extensions/gmail-calendar/src/calendar-tools.ts:95–116,248–279` defines create-event schema and approval behavior; `src/gateway/protocol/schema/cron.ts:51–76,200–212` defines cron schedule. | Free-text privileged prompt is neither validation nor immutable intent. |
+| Preserve origin vs isolated execution distinction | C contract `../107-harness-gateway/contracts/cron-binding.md`; Gateway source `cc150b56b2b0d4396d44b9ef6f14b5d772c52db8`. `server-cron.ts:76–120,188–195` currently defaults/rewrites explicit bindings; isolated agent uses a cron session. | Claiming origin session is the actual isolated execution session misstates evidence. |
+| Include popup and action state | `src/lib/state/features/pulse.svelte.ts`, `NotificationsPopup.svelte:106–114`, Pulse page call approval. | Page-only repair leaves a current client sending revisionless executable approval. |
+| Existing role policy plus strict owner | `rbac.service.ts:340–425` has cached capability reads; admission must read current rows using the same `resolveMemberRoleKeys`/`buildCapabilities` semantics. | Cached capability alone cannot prove immediate revocation. |
+
+No unresolved product decisions. Exact tool-schema fixture SHA, gateway qualification build, dependency versions and disposable DB coordinates are execution evidence to collect, not invented facts. Do not invoke external sources or providers for this SDD task. Existing `job_effects` is embedding-specific and is not reused for Pulse receipts.
+
+Spec Kit resolved active templates through `.specify/scripts/bash/resolve-template.sh`. `.specify/extensions.yml` is absent: no before/after hooks registered. Explicit absolute feature directories and `SPECIFY_FEATURE_NO_PERSIST=1` avoid `.specify/feature.json` mutation. Setup reports the feature identifier as BRANCH; actual Git branch remains `feature/agent-harness-f-evals` for artifact storage. Research was performed directly under the no-child-agent task instruction.

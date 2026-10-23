@@ -51,3 +51,18 @@ B-P1-01 resolved: stub now has actual Product, out-of-scope and verification hea
 The previously conditional accounting propagation is now concrete: run/spec/reconcile emitters → queue FinishResult/parse/finish/restart → reservation settlement; bounded admitted/settled journal survives guard temp cleanup, incomplete totals retain unknown commitments, and stats cannot permanently cache late/unresolved receipts. These satisfy the approved Slice 8 accounting handoff; they do not introduce model retries or an acting-mode change. Entry bounds/write failure behavior and actual-caller tests are explicit. Existing installed harness qualification remains required even with a pinned binary available.
 
 **Standards: approved. Spec: approved. Pass 1 final disposition: approved for development at the exact revised hashes above, subject to the separate independent pass 2.** No runtime qualification, CI, merge or deployment is claimed. The live-ledger finite ceiling remains a routine implementation detail to freeze/test beside existing capacity, not a reason to erase admission history.
+
+## Final G2 scores
+
+Scores apply to the bounded underlying Slices 8 and 9, packaged together by the owner's explicit authorization. They do not characterize the entire two-slice group as a single 4–8 hour slice. Minimum across the underlying slices is reported on the 0–10 scale.
+
+| Axis | Score | Basis |
+|---|---:|---|
+| slice_size | 7 | Slice 8 spans the proxy ledger and several cost receipt consumers; task boundaries and serialized implementation keep it bounded. Slice 9 is a narrower lifecycle repair. |
+| dod_verifiability | 9 | Frozen acceptance maps to concrete run/queue/stats and local transport boundaries, with required installed harness evidence. |
+| scope_containment | 9 | Auxiliary accounting and transport lifecycle are explicit; acting mode, paid calls and release remain gated. |
+| impact_zones | 8 | Actual run/spec/reconcile, queue recovery and stats consumers are named; cross-consumer changes require the specified integration proof. |
+| collisions | 9 | One isolated Factory checkout and one group PR, with no overlapping runtime ownership from the other groups. |
+| testability | 9 | Local HTTP provider fixtures, restart/cleanup races and installed binary checks exercise actual callers without paid inference. |
+
+All six axes meet the constitution's threshold. Standards and Spec dispositions remain independently **approved** at the exact revised hashes above.

@@ -1,0 +1,61 @@
+# Canonical admission and durable receipt contract
+
+## Canonical source and authority
+
+Use installed source type `TransportSourceProvenance {version:1,sources:readonly CanonicalTransportSourceUnit[]}` from `src/plugins/types/hooks.ts`. Read inbound and received `event.metadata.sourceProvenance`; received context fields are `channelId`, `accountId`, `conversationId`, `agentId`, not guessed `chatId`. Carrier comes only from authenticated channel intake. RPC JSON and flow `meta`, `runId`, `nodeId` or receipt strings never create trusted provenance.
+
+Source key is the versioned ordered tuple `[1,channel,accountId,rawConversationId,providerMessageId,providerRevisionOrNull]`. Preserve exact provider text/caption, including whitespace; never hash trimmed, composed envelope or merged batch text as the original. `sourceHash = SHA256(canonical source snapshot)` includes exact source bytes and stable provider attributes. Store separately `inputHash = SHA256(canonical effective classifier input)` and `policyHash = SHA256(effective prompt, rubric, categories, language, schema, requested model and policy revision)`. Object keys use stable lexical ordering; ordered arrays retain order. No hash or raw text enters general analytics.
+
+Stable admission tuple is `[1,authorityNamespace,watcherPolicyId,sourceKey,reevaluationGeneration]`. It excludes current model/rule hashes. `authorityNamespace` is the stable local gateway state-store/account namespace, independent of mutable org ownership. Pin current sorted org ownership IDs separately in the admission snapshot, or explicit local-gateway authority for a genuinely unscoped account; missing/ambiguous resolution is not treated as a new authority. Reuse `resolveAccountOrgIds` and `isPluginEnabledForAnyOrg` with freshly loaded config. Recheck that bound ownership has not changed before dispatch/settlement. A later reassignment changes the authority check, never the admission key, and does not authorize old-owner replay. Stable configured watcher policy ID is `alert-watcher:default` within this namespace for current single plugin configuration; both channel/agent subscriptions share it. A distinct future policy requires a distinct explicit ID, never inferred from config hash.
+
+Look up admission key first. Exact redelivery resumes frozen snapshot. Same stable source identity with changed original bytes yields `identity_conflict`; it cannot overwrite or recall. Verified provider edit revision changes source key. Explicit authorized reevaluation increments generation and links the prior receipt with actor/reason; ordinary config changes do not. No customer-facing reevaluation/retry RPC is added. Local operator retirement/reevaluation must use current owner checks and retain audit evidence; no automatic retry for indeterminate requests.
+
+Certification: Telegram producer raw+received+debounce fixtures only. Other raw hook adapters may normalize structural fields but remain uncertified unless producer evidence proves identity/original units. Idless/unqualified/flow calls use fresh invocation identity and baseline behavior, excluded from cross-hook dedup and A30. Existing legacy flow gate behavior remains a separate compatibility path. Watcher dedup cache may cache completed receipt identities only; pre-call seen marking is removed from certified hooks.
+
+## SQLite data model
+
+Add only `classification_work` and `alert_delivery_receipts` to alerts.db. Use SQL CHECKs, unique indexes, prepared parameters and short `BEGIN IMMEDIATE` transactions; never hold a DB transaction across await. Read/claim/update helpers take the exact owner and expected generation; no unfenced generic update helper.
+
+`classification_work`: UUID; authority namespace; policy ID; stable source key/hash; explicit reevaluation generation and optional prior work ID; immutable policy/input hashes; bounded nullable raw snapshot; state; leaseOwner/generation/expiresAt; attemptCount (0..3); nextAttemptAt; admitted/received/completed times; bounded terminal SDK result/usage; cost status and coverage; safe error; source-counted and first-confirmed-sent markers; optional complaint ID; suggestion subreceipt; retention/redaction and namespace-retired markers. Unique stable admission tuple and unique computation key derived from bound admission/input/policy. SQL checks require admitted timestamp/attempt identity for admitted/indeterminate, retained terminal response or redaction marker for received/completed/failed-after-response, and failed state for invalid results rather than negative classification.
+
+`alert_delivery_receipts`: UUID (also queueId); work ID/result revision; normalized channel/account/recipient identity plus hash; delivery policy/hash; immutable bounded nullable payload/hash; state; lease owner/generation/expiry; admission/settlement times; queue generation and bounded provider receipts; safe reason; redaction/tombstone metadata. Unique `(work,resultRevision,deliveryPolicyHash,recipientIdentityHash)`; scoped parent binding must match. `sent` requires positive provider/queue evidence; `indeterminate` requires admitted timestamp/reason. Never cascade-delete admission tombstones with complaint rows.
+
+Bounds: raw input/config snapshot <=64 KiB; terminal SDK result <=64 KiB; suggestion result <=16 KiB; recipient payload <=64 KiB; safe error code <=128 characters; capped attempt array <=3 records with no raw prompt/error stack. Validate byte bounds before persistence/dispatch. Oversized required snapshot terminates with explicit failure, never truncates classified source bytes. Existing transport-level limits still apply.
+
+### Classification transitions
+
+| State | Authorized next action |
+|---|---|
+| queued | Claim due work under one current owner/generation and revalidate authority; commit admitted attempt before provider dispatch. |
+| admitted | Persist bounded terminal SDK result/usage as received under matching generation; after process death/expired ownership, mark indeterminate, never recall. |
+| received | Validate/materialize locally without classifier call; negative → completed; SDK/schema-invalid → failed with cost preserved; positive awaits bounded suggestion disposition then atomic complaint/recipient materialization. |
+| failed/canceled/completed/indeterminate | Terminal, no automatic provider call. Only positive evidence reconciliation or explicitly authorized new reevaluation can create a distinct outcome. |
+
+Proven pre-dispatch transient failure may return queued under persisted attempt cap and due time; retry at 5s then 30s, maximum three dispatch attempts. Failure after provider invocation is conservatively ambiguous unless the adapter proves no external request occurred. SDK `NO_API_KEY` before any candidate request can qualify; generic network exception cannot. Max attempts exhaustion fails. A stale generation cannot publish, settle, release a successor lease or append another attempt. Persist supplied terminal SDK error before watcher-local validation; SDK already validates output, so raw pre-validation provider text is not promised.
+
+Dispatcher: one active classifier per plugin instance, poll 5s, lease30s, renew10s, scan<=10 due candidates/tick. Actual SQLite claim independently repeats due/state/generation predicates. Lease loss aborts cooperatively and prevents local completion; abort is not proof remote stopped. Stop waits boundedly for local settlement then closes DB; new start recovers using persisted states. Retention work is bounded within the same lifecycle.
+
+### Suggestion and delivery transitions
+
+Suggestion subreceipt is `not_requested|queued|admitted|received|indeterminate`, with one attempt ID, frozen input/model, times, bounded result and known/unknown usage. Admission precedes one invocation; received result is persisted before recipient payloads. Ambiguous admitted recovery records indeterminate and uses `suggestions:[]` plus `suggestionsUnavailableReason`; known errors also degrade to explicit empty suggestions. Neither case recalls automatically. Positive classification remains valid.
+
+In one transaction: materialize complaint and recipient rows from frozen intended recipients and final suggestion disposition. Current recipient permission is checked before queue admission. Destination authorization uses the trusted current configured destination set, normalized channel/account/recipient and unchanged ownership binding; it never uses an envelope string as a grant. Config changes cannot redirect old work. Revoked queued recipients cancel; prior admitted execution has only best-effort revocation.
+
+Delivery protocol:
+
+1. Under receipt lease/generation, commit `queued→admitted` with its UUID queueId and exact payload/recipient hashes.
+2. Call existing `deliverOutboundPayloadsWithOutcome` with `durability:'required'`, `queueId`, `completionPolicy:'caller'`, frozen channel/account/to and payload. Actual exported signature must be used; do not substitute runtime channel direct-send helpers.
+3. Inspect typed provider/durability/uncertainty outcome. Commit sent/failed/indeterminate and provider receipts in SQLite under the owning generation. Provider-complete with pending caller acknowledgement is a known send, not a reason to resend.
+4. Only after SQLite settlement call `acknowledgeCallerManagedDelivery(queueId,stateDir)`. Preserve minimal queue identity tombstone when payload bytes are removed.
+
+Recovery acquires the existing queue entry lease, reads actual entry/generation, verifies queueId/channel/account/recipient/payload binding, and reconciles matching terminal accepted evidence. Pending safe entries continue through the existing queue recovery path under its lease, never a fresh enqueue. Missing/mismatched evidence after SQLite admission becomes indeterminate. Uncertain payloads stay withheld. Queue success followed by SQLite failure retains terminal queue bytes. SQLite success followed by acknowledgement failure retries only acknowledgement. No provider action is duplicated to resolve uncertainty.
+
+Count each admitted canonical hook source once toward existing window semantics and persist the marker with its admission. Reconstruct relevant window state from bounded receipt timestamps on restart. Stamp cooldown once in the transaction settling the first confirmed sent recipient; later settlements do not restamp. Restore cooldown from persisted first-sent timestamps after restart. Legacy flow gate has its existing behavior and no certified delivery promise.
+
+## Retention, legacy cutover and retirement
+
+Default raw source/SDK/suggestion/recipient payload retention is at most seven days, including queue files and optional usage payload copies. Same dispatcher scans a bounded batch (<=10 records/tick) and redacts each expired copy under its SQLite/queue owner fence. Retention scheduling must complete before expiry: schedule cleanup ahead of deadline or reject a payload whose required lifetime cannot be serviced under configured backlog bounds. Queued work missing required expired snapshot cancels. Admitted uncertain work loses payload but retains hashed identity/state and cannot recreate it.
+
+Add a narrow queue tombstone path under its existing state directory: minimal queueId, payload/recipient binding hashes, settled/uncertain disposition and retirement time, no raw body/address. Queue enqueue rejects a retained tombstone ID; recovery never sends tombstone entries. Atomic filesystem write/rename/fsync and entry lease protect redaction/acknowledgement; generic callers retain current policy. SQLite and queue tombstones survive until the bound source/policy replay namespace is explicitly retired. Retirement first blocks new admission for that namespace, then permits owner-scoped deletion; deleting raw payload is not retirement.
+
+Old complaint rows lacking recipient history get `legacy_unreconciled` disposition, retain visibility, and never enter the new recipient queue. Pause/fence old boot catch-up before enabling dispatcher. Migrate twice safely on a disposable old schema; do not invent sent receipt from notified_at alone. Rollback leaves old fan-out disabled and preserves receipt/tombstone readers. No reset-to-queued for admitted/indeterminate work.
