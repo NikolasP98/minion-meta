@@ -1,0 +1,1979 @@
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/shadow-receipt.ts:62:17]
+ 61 |   const previous = JSON.parse(row.shadow_json) as ShadowReceipt | null;
+ 62 |   if (previous) return;
+    :                 ^^^^^^^
+ 63 |   const unavailable: ShadowReceipt = {
+    `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/shadow-receipt.ts:81:37]
+ 80 |   ) {
+ 81 |     if (snapshot.mode === "shadow") save(unavailable);
+    :                                     ^^^^^^^^^^^^^^^^^^
+ 82 |     return;
+    `----
+  help: Replace `save(unavailable);` with `{save(unavailable);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/shadow-receipt.ts:106:49]
+ 105 |     ]);
+ 106 |     if (response.usage.attemptId !== attemptId) throw Error("gate_receipt_mismatch");
+     :                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 107 |     const cost = response.usage.costUsd;
+     `----
+  help: Replace `throw Error("gate_receipt_mismatch");` with `{throw Error("gate_receipt_mismatch");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/complaint-evaluation.ts:131:13]
+ 130 |   const row = getWork(db, id) as WorkRow & { evaluation_binding: string; shadow_json: string };
+ 131 |   if (!row) throw new Error("missing_work");
+     :             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 132 |   const binding = JSON.parse(row.evaluation_binding) as EvaluationBinding;
+     `----
+  help: Replace `throw new Error("missing_work");` with `{throw new Error("missing_work");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/complaint-evaluation.ts:165:5]
+ 164 |       if (suggestion.attemptId)
+ 165 | ,->     attempts.push(
+ 166 | |         attemptRecord(
+ 167 | |           {
+ 168 | |             ...suggestion.usage,
+ 169 | |             attemptId: suggestion.attemptId,
+ 170 | |             disposition:
+ 171 | |               suggestion.state === "received"
+ 172 | |                 ? suggestion.result?.ok
+ 173 | |                   ? "received"
+ 174 | |                   : "failed"
+ 175 | |                 : suggestion.state === "indeterminate"
+ 176 | |                   ? "indeterminate"
+ 177 | |                   : "admitted",
+ 178 | |           },
+ 179 | |           binding,
+ 180 | |           "suggestion",
+ 181 | |         ),
+ 182 | `->     );
+ 183 |       const terminal = row.terminal_result
+     `----
+  help: Replace `attempts.push(
+              attemptRecord(
+                {
+                  ...suggestion.usage,
+                  attemptId: suggestion.attemptId,
+                  disposition:
+                    suggestion.state === "received"
+                      ? suggestion.result?.ok
+                        ? "received"
+          ...` with `{attempts.push(
+              attemptRecord(
+                {
+                  ...suggestion.usage,
+                  attemptId: suggestion.attemptId,
+                  disposition:
+                    suggestion.state === "received"
+                      ? suggestion.result?.ok
+                        ? "received"
+         ...`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/complaint-evaluation.ts:192:5]
+ 191 |       if (shadow?.attemptId)
+ 192 | ,->     attempts.push(
+ 193 | |         attemptRecord(
+ 194 | |           {
+ 195 | |             ...shadow.usage,
+ 196 | |             attemptId: shadow.attemptId,
+ 197 | |             disposition:
+ 198 | |               shadow.state === "received"
+ 199 | |                 ? "received"
+ 200 | |                 : shadow.state === "indeterminate" || row.state === "indeterminate"
+ 201 | |                   ? "indeterminate"
+ 202 | |                   : "admitted",
+ 203 | |             requestedModel: shadow.requestedModel,
+ 204 | |             resolvedModel: shadow.resolvedModel,
+ 205 | |           },
+ 206 | |           binding,
+ 207 | |           "gate",
+ 208 | |         ),
+ 209 | `->     );
+ 210 |       const baselineIds = attempts.filter((a) => a.purpose === "baseline").map((a) => a.attemptId);
+     `----
+  help: Replace `attempts.push(
+              attemptRecord(
+                {
+                  ...shadow.usage,
+                  attemptId: shadow.attemptId,
+                  disposition:
+                    shadow.state === "received"
+                      ? "received"
+                      : shadow.state === "indeterminate" || ro...` with `{attempts.push(
+              attemptRecord(
+                {
+                  ...shadow.usage,
+                  attemptId: shadow.attemptId,
+                  disposition:
+                    shadow.state === "received"
+                      ? "received"
+                      : shadow.state === "indeterminate" || r...`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/provenance.ts:20:5]
+ 19 |   )
+ 20 |     return null;
+    :     ^^^^^^^^^^^^
+ 21 |   if (
+    `----
+  help: Replace `return null;` with `{return null;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/provenance.ts:35:5]
+ 34 |   )
+ 35 |     return null;
+    :     ^^^^^^^^^^^^
+ 36 |   return provenance.sources;
+    `----
+  help: Replace `return null;` with `{return null;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/reply-flow/suggestions-drone.ts:92:19]
+ 91 |   } catch (err) {
+ 92 |     if (observer) throw err;
+    :                   ^^^^^^^^^^
+ 93 |     return [];
+    `----
+  help: Replace `throw err;` with `{throw err;}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.test.ts:32:5]
+ 31 |   ] as const)
+ 32 |     expect(complaintEligibility({ ...eligible, ...patch })).toHaveProperty("reason", reason);
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 33 | });
+    `----
+  help: Replace `expect(complaintEligibility({ ...eligible, ...patch })).toHaveProperty("reason", reason);` with `{expect(complaintEligibility({ ...eligible, ...patch })).toHaveProperty("reason", reason);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.test.ts:44:33]
+ 43 |   const work = admitSource(db, "namespace", workFixture());
+ 44 |   if (work.kind !== "admitted") throw Error();
+    :                                 ^^^^^^^^^^^^^^
+ 45 |   const initial = exportComplaintEvaluation(db, work.work.id);
+    `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/classification-recovery.test.ts:18:43]
+ 17 | afterEach(() => {
+ 18 |   for (const child of children.splice(0)) child.kill("SIGKILL");
+    :                                           ^^^^^^^^^^^^^^^^^^^^^^
+ 19 |   for (const dir of dirs.splice(0)) fs.rmSync(dir, { recursive: true, force: true });
+    `----
+  help: Replace `child.kill("SIGKILL");` with `{child.kill("SIGKILL");}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/classification-recovery.test.ts:19:37]
+ 18 |   for (const child of children.splice(0)) child.kill("SIGKILL");
+ 19 |   for (const dir of dirs.splice(0)) fs.rmSync(dir, { recursive: true, force: true });
+    :                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 20 | });
+    `----
+  help: Replace `fs.rmSync(dir, { recursive: true, force: true });` with `{fs.rmSync(dir, { recursive: true, force: true });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/classification-recovery.test.ts:57:37]
+ 56 |   const admitted = admitSource(db, "namespace", workFixture());
+ 57 |   if (admitted.kind !== "admitted") throw Error();
+    :                                     ^^^^^^^^^^^^^^
+ 58 |   return { dir, file, db, id: admitted.work.id, marker: path.join(dir, "calls") };
+    `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/classification-work.test.ts:49:36]
+ 48 |     expect(first.kind).toBe("admitted");
+ 49 |     if (first.kind !== "admitted") throw Error();
+    :                                    ^^^^^^^^^^^^^^
+ 50 |     expect(
+    `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/classification-work.test.ts:90:39]
+ 89 |     const admitted = admitSource(db, "n", workFixture());
+ 90 |     if (admitted.kind !== "admitted") throw Error();
+    :                                       ^^^^^^^^^^^^^^
+ 91 |     const lease = claimWork(db, admitted.work.id, "owner")!;
+    `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.test.ts:104:36]
+ 103 |     const first = admitSource(db, "n", workFixture());
+ 104 |     if (first.kind !== "admitted") throw Error();
+     :                                    ^^^^^^^^^^^^^^
+ 105 |     let now = Date.now();
+     `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'else'.
+     ,-[extensions/alert-watcher/src/classification-work.test.ts:123:14]
+ 122 |         now = row.next_attempt_at;
+ 123 |       } else expect(row.state).toBe("failed");
+     :              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 124 |     }
+     `----
+  help: Replace `expect(row.state).toBe("failed");` with `{expect(row.state).toBe("failed");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.test.ts:152:36]
+ 151 |     const first = admitSource(db, "n", workFixture());
+ 152 |     if (first.kind !== "admitted") throw Error();
+     :                                    ^^^^^^^^^^^^^^
+ 153 |     const lease = claimWork(db, first.work.id, "owner")!;
+     `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/src/delivery-recovery.test.ts:14:39]
+ 13 | afterEach(() => {
+ 14 |   for (const c of children.splice(0)) c.kill("SIGKILL");
+    :                                       ^^^^^^^^^^^^^^^^^^
+ 15 |   for (const d of dirs.splice(0)) fs.rmSync(d, { recursive: true, force: true });
+    `----
+  help: Replace `c.kill("SIGKILL");` with `{c.kill("SIGKILL");}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/src/delivery-recovery.test.ts:15:35]
+ 14 |   for (const c of children.splice(0)) c.kill("SIGKILL");
+ 15 |   for (const d of dirs.splice(0)) fs.rmSync(d, { recursive: true, force: true });
+    :                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 16 | });
+    `----
+  help: Replace `fs.rmSync(d, { recursive: true, force: true });` with `{fs.rmSync(d, { recursive: true, force: true });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/delivery-recovery.test.ts:56:19]
+ 55 |       c.once("exit", (code) => {
+ 56 |         if (code) reject(Error(error));
+    :                   ^^^^^^^^^^^^^^^^^^^^^
+ 57 |       });
+    `----
+  help: Replace `reject(Error(error));` with `{reject(Error(error));}`.
+
+  x eslint(curly): Expected { after 'else'.
+    ,-[extensions/alert-watcher/src/delivery-recovery.test.ts:91:12]
+ 90 |       }).catch(() => {});
+ 91 |     } else await drainDeliveryReceipts(f.db, deps);
+    :            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 92 |     if (stage === "queue-accepted" || stage === "settled") {
+    `----
+  help: Replace `await drainDeliveryReceipts(f.db, deps);` with `{await drainDeliveryReceipts(f.db, deps);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-recovery.test.ts:98:7]
+  97 |         } else if (stage !== "enqueued")
+  98 | ,->       expect(f.db.prepare("SELECT state FROM alert_delivery_receipts").get()).toEqual({
+  99 | |           state: "indeterminate",
+ 100 | `->       });
+ 101 |         expect(send).not.toHaveBeenCalled();
+     `----
+  help: Replace `expect(f.db.prepare("SELECT state FROM alert_delivery_receipts").get()).toEqual({
+                state: "indeterminate",
+              });` with `{expect(f.db.prepare("SELECT state FROM alert_delivery_receipts").get()).toEqual({
+                state: "indeterminate",
+              });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/usage-finalization.test.ts:90:41]
+ 89 |   stubs.complete.mockImplementation(async (model: { provider: string }) => {
+ 90 |     if (model.provider === "anthropic") throw Error("stub failure");
+    :                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 91 |     return response({ value: true });
+    `----
+  help: Replace `throw Error("stub failure");` with `{throw Error("stub failure");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:15:28]
+ 14 | export function resolveComplaintExperiment(value: unknown): { mode: ExperimentMode } {
+ 15 |   if (value === undefined) return { mode: "off" };
+    :                            ^^^^^^^^^^^^^^^^^^^^^^^
+ 16 |   if (
+    `----
+  help: Replace `return { mode: "off" };` with `{return { mode: "off" };}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:22:5]
+ 21 |   )
+ 22 |     throw new Error("invalid complaintExperiment");
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 23 |   const mode = (value as { mode?: unknown }).mode;
+    `----
+  help: Replace `throw new Error("invalid complaintExperiment");` with `{throw new Error("invalid complaintExperiment");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:25:5]
+ 24 |   if (mode !== undefined && mode !== "off" && mode !== "census" && mode !== "shadow")
+ 25 |     throw new Error("invalid complaintExperiment.mode");
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 26 |   return { mode: mode ?? "off" };
+    `----
+  help: Replace `throw new Error("invalid complaintExperiment.mode");` with `{throw new Error("invalid complaintExperiment.mode");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:37:19]
+ 36 | }): Eligibility {
+ 37 |   if (!i.enabled) return { status: "disabled", reason: "plugin_disabled" };
+    :                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 38 |   if (i.mode === "off") return { status: "disabled", reason: "mode_off" };
+    `----
+  help: Replace `return { status: "disabled", reason: "plugin_disabled" };` with `{return { status: "disabled", reason: "plugin_disabled" };}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:38:25]
+ 37 |   if (!i.enabled) return { status: "disabled", reason: "plugin_disabled" };
+ 38 |   if (i.mode === "off") return { status: "disabled", reason: "mode_off" };
+    :                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 39 |   for (const [pass, reason] of [
+    `----
+  help: Replace `return { status: "disabled", reason: "mode_off" };` with `{return { status: "disabled", reason: "mode_off" };}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:46:5]
+ 45 |   ] as const)
+ 46 |     if (!pass) return { status: "bypass", reason };
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 47 |   return { status: "eligible", reason: "eligible" };
+    `----
+  help: Replace `if (!pass) return { status: "bypass", reason };` with `{if (!pass) return { status: "bypass", reason };}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:46:16]
+ 45 |   ] as const)
+ 46 |     if (!pass) return { status: "bypass", reason };
+    :                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 47 |   return { status: "eligible", reason: "eligible" };
+    `----
+  help: Replace `return { status: "bypass", reason };` with `{return { status: "bypass", reason };}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:79:5]
+ 78 |   )
+ 79 |     return "unavailable";
+    :     ^^^^^^^^^^^^^^^^^^^^^
+ 80 |   try {
+    `----
+  help: Replace `return "unavailable";` with `{return "unavailable";}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/work-test-fixtures.ts:60:33]
+ 59 |   const work = admitSource(db, "namespace", snapshot);
+ 60 |   if (work.kind !== "admitted") throw Error();
+    :                                 ^^^^^^^^^^^^^^
+ 61 |   const lease = claimWork(db, work.work.id, "owner")!,
+    `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:122:38]
+ 121 |   const text = canonicalSnapshot(value);
+ 122 |   if (Buffer.byteLength(text) > max) throw new Error("snapshot_too_large");
+     :                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 123 |   return text;
+     `----
+  help: Replace `throw new Error("snapshot_too_large");` with `{throw new Error("snapshot_too_large");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:181:5]
+ 180 |       if (!columns.some((column) => column.name === "authority_observation"))
+ 181 | ,->     db.exec(
+ 182 | |         "ALTER TABLE classification_work ADD COLUMN authority_observation TEXT CHECK(authority_observation IS NULL OR length(CAST(authority_observation AS BLOB))<=1024)",
+ 183 | `->     );
+ 184 |     }
+     `----
+  help: Replace `db.exec(
+              "ALTER TABLE classification_work ADD COLUMN authority_observation TEXT CHECK(authority_observation IS NULL OR length(CAST(authority_observation AS BLOB))<=1024)",
+            );` with `{db.exec(
+              "ALTER TABLE classification_work ADD COLUMN authority_observation TEXT CHECK(authority_observation IS NULL OR length(CAST(authority_observation AS BLOB))<=1024)",
+            );}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:225:5]
+ 224 |       )
+ 225 | ,->     db.prepare(
+ 226 | |         "UPDATE classification_work SET authority_observation=?,receipt_revision=receipt_revision+1 WHERE id=? AND generation=?",
+ 227 | `->     ).run(boundedJson(observation, 1024), row.id, row.generation);
+ 228 |       return valid;
+     `----
+  help: Replace `db.prepare(
+              "UPDATE classification_work SET authority_observation=?,receipt_revision=receipt_revision+1 WHERE id=? AND generation=?",
+            ).run(boundedJson(observation, 1024), row.id, row.generation);` with `{db.prepare(
+              "UPDATE classification_work SET authority_observation=?,receipt_revision=receipt_revision+1 WHERE id=? AND generation=?",
+            ).run(boundedJson(observation, 1024), row.id, row.generation);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:252:7]
+ 251 |     )
+ 252 |       return { kind: "retired" };
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 253 |     const existing = db
+     `----
+  help: Replace `return { kind: "retired" };` with `{return { kind: "retired" };}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:257:7]
+ 256 |         if (existing)
+ 257 | ,->       return existing.source_hash !== sourceHash
+ 258 | |           ? { kind: "identity_conflict" }
+ 259 | `->         : { kind: "existing", work: existing };
+ 260 |         if (reevaluation) {
+     `----
+  help: Replace `return existing.source_hash !== sourceHash
+                ? { kind: "identity_conflict" }
+                : { kind: "existing", work: existing };` with `{return existing.source_hash !== sourceHash
+                ? { kind: "identity_conflict" }
+                : { kind: "existing", work: existing };}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:271:9]
+ 270 |       )
+ 271 |         throw new Error("invalid_reevaluation");
+     :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 272 |     }
+     `----
+  help: Replace `throw new Error("invalid_reevaluation");` with `{throw new Error("invalid_reevaluation");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:280:7]
+ 279 |     )
+ 280 |       throw new Error("retention_capacity");
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 281 |     let raw: string | null = null;
+     `----
+  help: Replace `throw new Error("retention_capacity");` with `{throw new Error("retention_capacity");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:326:7]
+ 325 |         if (raw === null)
+ 326 | ,->       db.prepare(
+ 327 | |           "UPDATE classification_work SET state='failed',safe_error='snapshot_too_large',completed_at=?,redacted_at=? WHERE id=?",
+ 328 | `->       ).run(now, now, id);
+ 329 |         return { kind: "admitted", work: getWork(db, id)! };
+     `----
+  help: Replace `db.prepare(
+                "UPDATE classification_work SET state='failed',safe_error='snapshot_too_large',completed_at=?,redacted_at=? WHERE id=?",
+              ).run(now, now, id);` with `{db.prepare(
+                "UPDATE classification_work SET state='failed',safe_error='snapshot_too_large',completed_at=?,redacted_at=? WHERE id=?",
+              ).run(now, now, id);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:349:7]
+ 348 |     )
+ 349 |       return undefined;
+     :       ^^^^^^^^^^^^^^^^^
+ 350 |     const r = db
+     `----
+  help: Replace `return undefined;` with `{return undefined;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:367:5]
+ 366 |   )
+ 367 |     throw new Error("work_lease_lost");
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 368 |   return row;
+     `----
+  help: Replace `throw new Error("work_lease_lost");` with `{throw new Error("work_lease_lost");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:376:19]
+ 375 |     .run(now + 30000, lease.id, lease.owner, lease.generation, now);
+ 376 |   if (!r.changes) throw new Error("work_lease_lost");
+     :                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 377 | }
+     `----
+  help: Replace `throw new Error("work_lease_lost");` with `{throw new Error("work_lease_lost");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:382:7]
+ 381 |     if (row.state !== "queued" || row.attempt_count >= 3 || row.next_attempt_at > now)
+ 382 |       throw new Error("invalid_dispatch");
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 383 |     const id = crypto.randomUUID();
+     `----
+  help: Replace `throw new Error("invalid_dispatch");` with `{throw new Error("invalid_dispatch");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:402:7]
+ 401 |     if (row.state !== "admitted" || row.attempt_id !== usage.attemptId)
+ 402 |       throw new Error("invalid_receipt");
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 403 |     let terminal: string;
+     `----
+  help: Replace `throw new Error("invalid_receipt");` with `{throw new Error("invalid_receipt");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:439:5]
+ 438 |   )
+ 439 |     throw new Error("retry_not_proven_safe");
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 440 |   if (row.attempt_count >= 3) {
+     `----
+  help: Replace `throw new Error("retry_not_proven_safe");` with `{throw new Error("retry_not_proven_safe");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:463:9]
+ 462 |           if (shadow?.state === "admitted")
+ 463 | ,->         db.prepare(
+ 464 | |             "UPDATE classification_work SET shadow_json=?,receipt_revision=receipt_revision+1 WHERE id=?",
+ 465 | |           ).run(
+ 466 | |             boundedJson({ ...shadow, state: "indeterminate", disposition: "unavailable" }),
+ 467 | |             row.id,
+ 468 | `->         );
+ 469 |           const s = JSON.parse(row.suggestion_json) as SuggestionReceipt;
+     `----
+  help: Replace `db.prepare(
+                  "UPDATE classification_work SET shadow_json=?,receipt_revision=receipt_revision+1 WHERE id=?",
+                ).run(
+                  boundedJson({ ...shadow, state: "indeterminate", disposition: "unavailable" }),
+                  row.id,
+                );` with `{db.prepare(
+                  "UPDATE classification_work SET shadow_json=?,receipt_revision=receipt_revision+1 WHERE id=?",
+                ).run(
+                  boundedJson({ ...shadow, state: "indeterminate", disposition: "unavailable" }),
+                  row.id,
+                );}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:471:9]
+ 470 |           if (s.state === "admitted")
+ 471 | ,->         db.prepare(
+ 472 | |             "UPDATE classification_work SET suggestion_json=?,receipt_revision=receipt_revision+1 WHERE id=?",
+ 473 | |           ).run(
+ 474 | |             boundedJson(
+ 475 | |               { ...s, state: "indeterminate", suggestions: [], reason: "admitted_owner_expired" },
+ 476 | |               16384,
+ 477 | |             ),
+ 478 | |             row.id,
+ 479 | `->         );
+ 480 |         }
+     `----
+  help: Replace `db.prepare(
+                  "UPDATE classification_work SET suggestion_json=?,receipt_revision=receipt_revision+1 WHERE id=?",
+                ).run(
+                  boundedJson(
+                    { ...s, state: "indeterminate", suggestions: [], reason: "admitted_owner_expired" },
+        ...` with `{db.prepare(
+                  "UPDATE classification_work SET suggestion_json=?,receipt_revision=receipt_revision+1 WHERE id=?",
+                ).run(
+                  boundedJson(
+                    { ...s, state: "indeterminate", suggestions: [], reason: "admitted_owner_expired" },...`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:498:5]
+ 497 |   if (!allowed[previous.state].includes(suggestion.state))
+ 498 |     throw new Error("invalid_suggestion_transition");
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 499 |   if (previous.attemptId && suggestion.attemptId !== previous.attemptId)
+     `----
+  help: Replace `throw new Error("invalid_suggestion_transition");` with `{throw new Error("invalid_suggestion_transition");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:500:5]
+ 499 |   if (previous.attemptId && suggestion.attemptId !== previous.attemptId)
+ 500 |     throw new Error("suggestion_identity_conflict");
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 501 |   let serialized: string;
+     `----
+  help: Replace `throw new Error("suggestion_identity_conflict");` with `{throw new Error("suggestion_identity_conflict");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:506:7]
+ 505 |     if (suggestion.state !== "received" || !suggestion.result)
+ 506 |       throw new Error("suggestion_snapshot_too_large");
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 507 |     serialized = boundedJson(
+     `----
+  help: Replace `throw new Error("suggestion_snapshot_too_large");` with `{throw new Error("suggestion_snapshot_too_large");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:537:7]
+ 536 |     if (row.state !== "received" || !row.snapshot || row.payload_expires_at <= now)
+ 537 |       throw new Error("invalid_materialization");
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 538 |     if (row.complaint_id !== null) return row.complaint_id;
+     `----
+  help: Replace `throw new Error("invalid_materialization");` with `{throw new Error("invalid_materialization");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:538:36]
+ 537 |       throw new Error("invalid_materialization");
+ 538 |     if (row.complaint_id !== null) return row.complaint_id;
+     :                                    ^^^^^^^^^^^^^^^^^^^^^^^^
+ 539 |     const snapshot = JSON.parse(row.snapshot) as WorkSnapshot;
+     `----
+  help: Replace `return row.complaint_id;` with `{return row.complaint_id;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:589:9]
+ 588 |           if (row.complaint_id !== null)
+ 589 | ,->         db.prepare(
+ 590 | |             "UPDATE complaints SET content='',summary='',from_sender='',chat_id='' WHERE id=?",
+ 591 | `->         ).run(row.complaint_id);
+ 592 |           const binding = snapshotHash([row.id, 1]);
+     `----
+  help: Replace `db.prepare(
+                  "UPDATE complaints SET content='',summary='',from_sender='',chat_id='' WHERE id=?",
+                ).run(row.complaint_id);` with `{db.prepare(
+                  "UPDATE complaints SET content='',summary='',from_sender='',chat_id='' WHERE id=?",
+                ).run(row.complaint_id);}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+     ,-[extensions/alert-watcher/src/classification-work.ts:598:9]
+ 597 |       for(const delivery of deliveries)
+ 598 |         db.prepare("UPDATE alert_delivery_receipts SET provider_receipts=? WHERE id=?").run(boundedJson({receiptHash:snapshotHash(JSON.parse(delivery.provider_receipts))}),delivery.id);
+     :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 599 |       db.prepare(
+     `----
+  help: Replace `db.prepare("UPDATE alert_delivery_receipts SET provider_receipts=? WHERE id=?").run(boundedJson({receiptHash:snapshotHash(JSON.parse(delivery.provider_receipts))}),delivery.id);` with `{db.prepare("UPDATE alert_delivery_receipts SET provider_receipts=? WHERE id=?").run(boundedJson({receiptHash:snapshotHash(JSON.parse(delivery.provider_receipts))}),delivery.id);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:662:18]
+ 661 |   const tick = (): Promise<void> => {
+ 662 |     if (stopped) return Promise.resolve();
+     :                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 663 |     if (current) return current;
+     `----
+  help: Replace `return Promise.resolve();` with `{return Promise.resolve();}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:663:18]
+ 662 |     if (stopped) return Promise.resolve();
+ 663 |     if (current) return current;
+     :                  ^^^^^^^^^^^^^^^
+ 664 |     current = (async () => {
+     `----
+  help: Replace `return current;` with `{return current;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:673:22]
+ 672 |       for (const row of rows) {
+ 673 |         if (stopped) break;
+     :                      ^^^^^^
+ 674 |         if (!row.snapshot) continue;
+     `----
+  help: Replace `break;` with `{break;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:674:28]
+ 673 |         if (stopped) break;
+ 674 |         if (!row.snapshot) continue;
+     :                            ^^^^^^^^^
+ 675 |         const snapshot = JSON.parse(row.snapshot) as WorkSnapshot;
+     `----
+  help: Replace `continue;` with `{continue;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:685:21]
+ 684 |         const lease = claimWork(db, row.id, owner);
+ 685 |         if (!lease) continue;
+     :                     ^^^^^^^^^
+ 686 |         controller = new AbortController();
+     `----
+  help: Replace `continue;` with `{continue;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:705:17]
+ 704 |               if (latest?.state === "admitted")
+ 705 |                 finishWork(db, lease, "indeterminate", "invocation_interrupted");
+     :                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 706 |               else if (latest?.state === "received")
+     `----
+  help: Replace `finishWork(db, lease, "indeterminate", "invocation_interrupted");` with `{finishWork(db, lease, "indeterminate", "invocation_interrupted");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:707:17]
+ 706 |               else if (latest?.state === "received")
+ 707 |                 finishWork(db, lease, "failed", "local_processing_failed");
+     :                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 708 |               else finishWork(db, lease, "failed", "dispatch_failed");
+     `----
+  help: Replace `finishWork(db, lease, "failed", "local_processing_failed");` with `{finishWork(db, lease, "failed", "local_processing_failed");}`.
+
+  x eslint(curly): Expected { after 'else'.
+     ,-[extensions/alert-watcher/src/classification-work.ts:708:20]
+ 707 |                 finishWork(db, lease, "failed", "local_processing_failed");
+ 708 |               else finishWork(db, lease, "failed", "dispatch_failed");
+     :                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 709 |             } catch {
+     `----
+  help: Replace `finishWork(db, lease, "failed", "dispatch_failed");` with `{finishWork(db, lease, "failed", "dispatch_failed");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/classification-work.ts:744:9]
+ 743 |           if (current)
+ 744 | ,->         await Promise.race([
+ 745 | |             current,
+ 746 | |             new Promise<void>((resolve) => {
+ 747 | |               const timer = setTimeout(resolve, 31000);
+ 748 | |               timer.unref();
+ 749 | |             }),
+ 750 | `->         ]);
+ 751 |           return current === undefined;
+     `----
+  help: Replace `await Promise.race([
+                  current,
+                  new Promise<void>((resolve) => {
+                    const timer = setTimeout(resolve, 31000);
+                    timer.unref();
+                  }),
+                ]);` with `{await Promise.race([
+                  current,
+                  new Promise<void>((resolve) => {
+                    const timer = setTimeout(resolve, 31000);
+                    timer.unref();
+                  }),
+                ]);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/delivery-bridge.ts:75:7]
+ 74 |     )
+ 75 |       throw new Error("delivery_lease_lost");
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 76 |     const work = getWork(db, row.work_id);
+    `----
+  help: Replace `throw new Error("delivery_lease_lost");` with `{throw new Error("delivery_lease_lost");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/delivery-bridge.ts:77:16]
+ 76 |     const work = getWork(db, row.work_id);
+ 77 |     if (!work) throw new Error("missing_work");
+    :                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 78 |     const snapshot = work.snapshot ? (JSON.parse(work.snapshot) as WorkSnapshot) : null;
+    `----
+  help: Replace `throw new Error("missing_work");` with `{throw new Error("missing_work");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/delivery-bridge.ts:80:7]
+ 79 |     if (state === "sent" && (!evidence.acceptedAt || !evidence.receipts))
+ 80 |       throw new Error("sent_requires_acceptance");
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 81 |     const first = state === "sent" && work.first_sent_at === null;
+    `----
+  help: Replace `throw new Error("sent_requires_acceptance");` with `{throw new Error("sent_requires_acceptance");}`.
+
+  x eslint(curly): Expected { after 'else'.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:146:7]
+ 145 |         } else
+ 146 | ,->       db.prepare(
+ 147 | |           "UPDATE classification_work SET receipt_revision=receipt_revision+1 WHERE id=?",
+ 148 | `->       ).run(work.id);
+ 149 |         return { first, snapshot };
+     `----
+  help: Replace `db.prepare(
+                "UPDATE classification_work SET receipt_revision=receipt_revision+1 WHERE id=?",
+              ).run(work.id);` with `{db.prepare(
+                "UPDATE classification_work SET receipt_revision=receipt_revision+1 WHERE id=?",
+              ).run(work.id);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:107:11]
+ 106 |             if (destinations.length)
+ 107 | ,->           insertBoundPending(db, {
+ 108 | |               alertId: work.complaint_id,
+ 109 | |               originChannel: snapshot.source.channel,
+ 110 | |               originAccountId: snapshot.source.accountId,
+ 111 | |               originChatId: snapshot.source.conversationId,
+ 112 | |               destinations,
+ 113 | |               suggestions: suggestion.suggestions ?? [],
+ 114 | |               language: snapshot.language,
+ 115 | |               receiptBinding: snapshotHash([work.id, 1]),
+ 116 | |               createdAt: at,
+ 117 | |               payloadExpiresAt: work.payload_expires_at,
+ 118 | |               expiresAt: Math.min(at + snapshot.replyFlow.windowMs, work.payload_expires_at),
+ 119 | `->           });
+ 120 |           }
+     `----
+  help: Replace `insertBoundPending(db, {
+                    alertId: work.complaint_id,
+                    originChannel: snapshot.source.channel,
+                    originAccountId: snapshot.source.accountId,
+                    originChatId: snapshot.source.conversationId,
+                    destinations,...` with `{insertBoundPending(db, {
+                    alertId: work.complaint_id,
+                    originChannel: snapshot.source.channel,
+                    originAccountId: snapshot.source.accountId,
+                    originChatId: snapshot.source.conversationId,
+                    destinations...`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:126:11]
+ 125 |             if (binding.replyEnabled)
+ 126 | ,->           insertBoundPending(db, {
+ 127 | |               alertId: work.complaint_id,
+ 128 | |               originChannel: "",
+ 129 | |               originAccountId: null,
+ 130 | |               originChatId: "",
+ 131 | |               destinations: [],
+ 132 | |               suggestions: [],
+ 133 | |               language: null,
+ 134 | |               receiptBinding: snapshotHash([work.id, 1]),
+ 135 | |               createdAt: at,
+ 136 | |               payloadExpiresAt: work.payload_expires_at,
+ 137 | |               expiresAt: Math.min(at + binding.replyWindowMs, work.payload_expires_at),
+ 138 | `->           });
+ 139 |           }
+     `----
+  help: Replace `insertBoundPending(db, {
+                    alertId: work.complaint_id,
+                    originChannel: "",
+                    originAccountId: null,
+                    originChatId: "",
+                    destinations: [],
+                    suggestions: [],
+                    language: null,
+                ...` with `{insertBoundPending(db, {
+                    alertId: work.complaint_id,
+                    originChannel: "",
+                    originAccountId: null,
+                    originChatId: "",
+                    destinations: [],
+                    suggestions: [],
+                    language: null,
+               ...`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:141:9]
+ 140 |           if (work.complaint_id !== null)
+ 141 | ,->         db.prepare("UPDATE complaints SET notified_at=COALESCE(notified_at,?) WHERE id=?").run(
+ 142 | |             at,
+ 143 | |             work.complaint_id,
+ 144 | `->         );
+ 145 |         } else
+     `----
+  help: Replace `db.prepare("UPDATE complaints SET notified_at=COALESCE(notified_at,?) WHERE id=?").run(
+                  at,
+                  work.complaint_id,
+                );` with `{db.prepare("UPDATE complaints SET notified_at=COALESCE(notified_at,?) WHERE id=?").run(
+                  at,
+                  work.complaint_id,
+                );}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:167:31]
+ 166 |         new Promise<never>((_, reject) => {
+ 167 |           if (signal.aborted) reject(new Error("delivery_interrupted"));
+     :                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 168 |           else
+     `----
+  help: Replace `reject(new Error("delivery_interrupted"));` with `{reject(new Error("delivery_interrupted"));}`.
+
+  x eslint(curly): Expected { after 'else'.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:169:13]
+ 168 |               else
+ 169 | ,->             signal.addEventListener("abort", () => reject(new Error("delivery_interrupted")), {
+ 170 | |                 once: true,
+ 171 | `->             });
+ 172 |             }),
+     `----
+  help: Replace `signal.addEventListener("abort", () => reject(new Error("delivery_interrupted")), {
+                      once: true,
+                    });` with `{signal.addEventListener("abort", () => reject(new Error("delivery_interrupted")), {
+                      once: true,
+                    });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:184:31]
+ 183 |   for (const scanned of rows) {
+ 184 |     if (deps.signal?.aborted) break;
+     :                               ^^^^^^
+ 185 |     const work = getWork(db, scanned.work_id);
+     `----
+  help: Replace `break;` with `{break;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:186:16]
+ 185 |     const work = getWork(db, scanned.work_id);
+ 186 |     if (!work) continue;
+     :                ^^^^^^^^^
+ 187 |     const snapshot = work.snapshot ? (JSON.parse(work.snapshot) as WorkSnapshot) : null;
+     `----
+  help: Replace `continue;` with `{continue;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:216:27]
+ 215 |       .run(owner, generation, Date.now() + 30000, scanned.id, scanned.generation, Date.now());
+ 216 |     if (!claimed.changes) continue;
+     :                           ^^^^^^^^^
+ 217 |     const leaseRenew = setInterval(() => {
+     `----
+  help: Replace `continue;` with `{continue;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:228:34]
+ 227 |       const r = settleDelivery(db, scanned.id, owner, generation, state, evidence);
+ 228 |       if (r.first && r.snapshot) deps.onFirstSent?.(r.snapshot, evidence.acceptedAt!);
+     :                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 229 |     };
+     `----
+  help: Replace `deps.onFirstSent?.(r.snapshot, evidence.acceptedAt!);` with `{deps.onFirstSent?.(r.snapshot, evidence.acceptedAt!);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:283:13]
+ 282 |           )
+ 283 |             throw new Error("queue_binding_mismatch");
+     :             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 284 |           if (await enforceDeliveryRetention(entry, queueLease, deps.stateDir)) {
+     `----
+  help: Replace `throw new Error("queue_binding_mismatch");` with `{throw new Error("queue_binding_mismatch");}`.
+
+  x eslint(curly): Expected { after 'else'.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:316:18]
+ 315 |             terminal = entry;
+ 316 |           } else terminal = await readDeliveryTombstone(scanned.id, deps.stateDir);
+     :                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 317 |         }
+     `----
+  help: Replace `terminal = await readDeliveryTombstone(scanned.id, deps.stateDir);` with `{terminal = await readDeliveryTombstone(scanned.id, deps.stateDir);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:354:9]
+ 353 |       } else if (terminal.payloads.some((p) => p.state === "uncertain" || p.state === "in-flight"))
+ 354 |         settle("indeterminate", { reason: "uncertain_provider" });
+     :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 355 |       else if ("retiredAt" in terminal) settle("failed", { reason: "payload_expired" });
+     `----
+  help: Replace `settle("indeterminate", { reason: "uncertain_provider" });` with `{settle("indeterminate", { reason: "uncertain_provider" });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:355:41]
+ 354 |         settle("indeterminate", { reason: "uncertain_provider" });
+ 355 |       else if ("retiredAt" in terminal) settle("failed", { reason: "payload_expired" });
+     :                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 356 |       else if (!authorized)
+     `----
+  help: Replace `settle("failed", { reason: "payload_expired" });` with `{settle("failed", { reason: "payload_expired" });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/delivery-bridge.ts:357:9]
+ 356 |       else if (!authorized)
+ 357 |         settle("indeterminate", { reason: "authority_changed_after_admission" });
+     :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 358 |       else {
+     `----
+  help: Replace `settle("indeterminate", { reason: "authority_changed_after_admission" });` with `{settle("indeterminate", { reason: "authority_changed_after_admission" });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/reply-flow/store.ts:32:7]
+ 31 |     if (!columns.some((c) => c.name === name))
+ 32 |       db.exec(`ALTER TABLE pending_replies ADD COLUMN ${name} ${type}`);
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 33 |   }
+    `----
+  help: Replace `db.exec(`ALTER TABLE pending_replies ADD COLUMN ${name} ${type}`);` with `{db.exec(`ALTER TABLE pending_replies ADD COLUMN ${name} ${type}`);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/reply-flow/store.ts:90:33]
+ 89 |     const dests = JSON.parse(row.destinations_json) as string[];
+ 90 |     if (dests.includes(sender)) return row;
+    :                                 ^^^^^^^^^^^
+ 91 |   }
+    `----
+  help: Replace `return row;` with `{return row;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/reply-flow/store.ts:140:35]
+ 139 |   if (old) {
+ 140 |     if (old.redacted_at !== null) return old.id;
+     :                                   ^^^^^^^^^^^^^^
+ 141 |     if (
+     `----
+  help: Replace `return old.id;` with `{return old.id;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/reply-flow/store.ts:152:7]
+ 151 |     )
+ 152 |       throw new Error("pending_reply_binding_conflict");
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 153 |     return old.id;
+     `----
+  help: Replace `throw new Error("pending_reply_binding_conflict");` with `{throw new Error("pending_reply_binding_conflict");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/store.ts:25:5]
+ 24 |       if (!deliveryCols.some((c) => c.name === "delivery_disposition"))
+ 25 | ,->     db.exec(
+ 26 | |         "ALTER TABLE complaints ADD COLUMN delivery_disposition TEXT NOT NULL DEFAULT 'legacy_unreconciled'",
+ 27 | `->     );
+ 28 |       initWorkSchema(db);
+    `----
+  help: Replace `db.exec(
+              "ALTER TABLE complaints ADD COLUMN delivery_disposition TEXT NOT NULL DEFAULT 'legacy_unreconciled'",
+            );` with `{db.exec(
+              "ALTER TABLE complaints ADD COLUMN delivery_disposition TEXT NOT NULL DEFAULT 'legacy_unreconciled'",
+            );}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/classifier.ts:54:31]
+ 53 |   const rubricLines: string[] = [];
+ 54 |   if (r?.low && r.low.trim()) rubricLines.push(`- low: ${r.low.trim()}`);
+    :                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 55 |   if (r?.med && r.med.trim()) rubricLines.push(`- med: ${r.med.trim()}`);
+    `----
+  help: Replace `rubricLines.push(`- low: ${r.low.trim()}`);` with `{rubricLines.push(`- low: ${r.low.trim()}`);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/classifier.ts:55:31]
+ 54 |   if (r?.low && r.low.trim()) rubricLines.push(`- low: ${r.low.trim()}`);
+ 55 |   if (r?.med && r.med.trim()) rubricLines.push(`- med: ${r.med.trim()}`);
+    :                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 56 |   if (r?.high && r.high.trim()) rubricLines.push(`- high: ${r.high.trim()}`);
+    `----
+  help: Replace `rubricLines.push(`- med: ${r.med.trim()}`);` with `{rubricLines.push(`- med: ${r.med.trim()}`);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/classifier.ts:56:33]
+ 55 |   if (r?.med && r.med.trim()) rubricLines.push(`- med: ${r.med.trim()}`);
+ 56 |   if (r?.high && r.high.trim()) rubricLines.push(`- high: ${r.high.trim()}`);
+    :                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 57 |   const rubricBlock =
+    `----
+  help: Replace `rubricLines.push(`- high: ${r.high.trim()}`);` with `{rubricLines.push(`- high: ${r.high.trim()}`);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:22:5]
+ 21 |   if (!channel || !accountId || channel.trim() !== channel || accountId.trim() !== accountId)
+ 22 |     return unavailable("invalid_account");
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 23 |   if (cfg.plugins?.entries?.["alert-watcher"]?.enabled === false)
+    `----
+  help: Replace `return unavailable("invalid_account");` with `{return unavailable("invalid_account");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:24:5]
+ 23 |   if (cfg.plugins?.entries?.["alert-watcher"]?.enabled === false)
+ 24 |     return unavailable("plugin_disabled");
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 25 |   if (orgScopeSource() === "db") {
+    `----
+  help: Replace `return unavailable("plugin_disabled");` with `{return unavailable("plugin_disabled");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:41:7]
+ 40 |     )
+ 41 |       return unavailable("unavailable_mirror");
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 42 |     const orgIds = [entry.orgId];
+    `----
+  help: Replace `return unavailable("unavailable_mirror");` with `{return unavailable("unavailable_mirror");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:47:7]
+ 46 |     )
+ 47 |       return unavailable("plugin_disabled");
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 48 |     return {
+    `----
+  help: Replace `return unavailable("plugin_disabled");` with `{return unavailable("plugin_disabled");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:58:5]
+ 57 |   if (!plugin || !section || typeof section !== "object" || section.enabled === false)
+ 58 |     return unavailable("missing_account");
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 59 |   const accounts = section.accounts as Record<string, unknown> | undefined;
+    `----
+  help: Replace `return unavailable("missing_account");` with `{return unavailable("missing_account");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:65:5]
+ 64 |   )
+ 65 |     return unavailable("ambiguous_account");
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 66 |   const exact = accounts && Object.hasOwn(accounts, accountId);
+    `----
+  help: Replace `return unavailable("ambiguous_account");` with `{return unavailable("ambiguous_account");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:77:5]
+ 76 |   )
+ 77 |     return unavailable("missing_account");
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 78 |   const ids = plugin.config.listAccountIds(cfg);
+    `----
+  help: Replace `return unavailable("missing_account");` with `{return unavailable("missing_account");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:83:5]
+ 82 |   )
+ 83 |     return unavailable("ambiguous_account");
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 84 |   try {
+    `----
+  help: Replace `return unavailable("ambiguous_account");` with `{return unavailable("ambiguous_account");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:93:7]
+ 92 |     )
+ 93 |       return unavailable("unconfigured_account");
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 94 |   } catch {
+    `----
+  help: Replace `return unavailable("unconfigured_account");` with `{return unavailable("unconfigured_account");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/authority.ts:98:55]
+ 97 |   const mapping = cfg.channels?.accountOrgs?.[channel];
+ 98 |   if (!mapping || !Object.hasOwn(mapping, accountId)) return unavailable("missing_mapping");
+    :                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 99 |   const raw = mapping[accountId];
+    `----
+  help: Replace `return unavailable("missing_mapping");` with `{return unavailable("missing_mapping");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/authority.ts:104:5]
+ 103 |   )
+ 104 |     return unavailable("invalid_mapping");
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 105 |   const orgIds = [...new Set(raw)].sort();
+     `----
+  help: Replace `return unavailable("invalid_mapping");` with `{return unavailable("invalid_mapping");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/authority.ts:110:5]
+ 109 |   )
+ 110 |     return unavailable("plugin_disabled");
+     :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 111 |   const evidenceHash = retentionHash([channel, accountId, "json_config", orgIds]);
+     `----
+  help: Replace `return unavailable("plugin_disabled");` with `{return unavailable("plugin_disabled");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/index.test.ts:69:25]
+ 68 |       cases.push({ dir: stateDir, stop: () => svc.stop() });
+ 69 |       if (!manualStart) svc.start({ stateDir, config: {}, logger: {} });
+    :                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 70 |     }),
+    `----
+  help: Replace `svc.start({ stateDir, config: {}, logger: {} });` with `{svc.start({ stateDir, config: {}, logger: {} });}`.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+    ,-[extensions/alert-watcher/index.test.ts:45:26]
+ 44 | });
+ 45 | function makeApi(config: any = {}, manualStart = false) {
+    :                          ^^^
+ 46 |   delete (globalThis as unknown as Record<string, unknown>).__minion_alert_watcher_state__;
+    `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+    ,-[extensions/alert-watcher/index.test.ts:48:20]
+ 47 |   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "watcher-legacy-"));
+ 48 |   let capturedSvc: any = null;
+    :                    ^^^
+ 49 |   const ledger = { all: vi.fn(() => []) };
+    `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+    ,-[extensions/alert-watcher/index.test.ts:64:47]
+ 63 |       },
+ 64 |       messageLedger: { getDb: () => ledger as any },
+    :                                               ^^^
+ 65 |     },
+    `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+    ,-[extensions/alert-watcher/index.test.ts:98:25]
+ 97 |     process.env.ANTHROPIC_API_KEY = "k";
+ 98 |     (insertComplaint as any).mockReturnValue(42);
+    :                         ^^^
+ 99 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 1, perDestination: [] });
+    `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:99:20]
+  98 |     (insertComplaint as any).mockReturnValue(42);
+  99 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 1, perDestination: [] });
+     :                    ^^^
+ 100 |   });
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:103:30]
+ 102 |   it("registers both hooks + service", () => {
+ 103 |     const api = makeApi() as any;
+     :                              ^^^
+ 104 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:111:25]
+ 110 |   it("channel sub: message_inbound matches and classifies", async () => {
+ 111 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+     :                         ^^^
+ 112 |     const api = makeApi() as any;
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:112:30]
+ 111 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+ 112 |     const api = makeApi() as any;
+     :                              ^^^
+ 113 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:114:55]
+ 113 |     plugin.register(api);
+ 114 |     const inboundHandler = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                                       ^^^
+ 115 |     await inboundHandler(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:123:25]
+ 122 |   it("uncertified hooks keep fresh baseline invocations without claiming canonical dedup", async () => {
+ 123 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+     :                         ^^^
+ 124 |     const api = makeApi({
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:129:11]
+ 128 |       ],
+ 129 |     }) as any;
+     :           ^^^
+ 130 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:131:55]
+ 130 |     plugin.register(api);
+ 131 |     const inboundHandler = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                                       ^^^
+ 132 |     const receivedHandler = api.on.mock.calls.find((c: any) => c[0] === "message_received")[1];
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:132:56]
+ 131 |     const inboundHandler = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+ 132 |     const receivedHandler = api.on.mock.calls.find((c: any) => c[0] === "message_received")[1];
+     :                                                        ^^^
+ 133 |     // Use a messageId unique to this test — the dedup store persists across tests
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:146:25]
+ 145 |   it("agent sub: message_received matches if no channel sub matched", async () => {
+ 146 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+     :                         ^^^
+ 147 |     const api = makeApi({
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:149:11]
+ 148 |       subscriptions: [{ kind: "agent", agentId: "panik" }],
+ 149 |     }) as any;
+     :           ^^^
+ 150 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:151:56]
+ 150 |     plugin.register(api);
+ 151 |     const receivedHandler = api.on.mock.calls.find((c: any) => c[0] === "message_received")[1];
+     :                                                        ^^^
+ 152 |     await receivedHandler(
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:160:25]
+ 159 |   it("non-complaint: no insert, no alert", async () => {
+ 160 |     (classifyMessage as any).mockResolvedValue({
+     :                         ^^^
+ 161 |       is_complaint: false,
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:166:30]
+ 165 |     });
+ 166 |     const api = makeApi() as any;
+     :                              ^^^
+ 167 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:168:42]
+ 167 |     plugin.register(api);
+ 168 |     const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                          ^^^
+ 169 |     await h(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:175:25]
+ 174 |   it("all destinations fail → no markNotified", async () => {
+ 175 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+     :                         ^^^
+ 176 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 0, perDestination: [] });
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:176:20]
+ 175 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+ 176 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 0, perDestination: [] });
+     :                    ^^^
+ 177 |     const api = makeApi() as any;
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:177:30]
+ 176 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 0, perDestination: [] });
+ 177 |     const api = makeApi() as any;
+     :                              ^^^
+ 178 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:179:42]
+ 178 |     plugin.register(api);
+ 179 |     const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                          ^^^
+ 180 |     await h(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:185:25]
+ 184 |   it("ledger disabled: warns and classifies the synthetic current-message context", async () => {
+ 185 |     (classifyMessage as any).mockResolvedValue({
+     :                         ^^^
+ 186 |       is_complaint: false,
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:191:30]
+ 190 |     });
+ 191 |     const api = makeApi() as any;
+     :                              ^^^
+ 192 |     api.runtime.messageLedger.getDb = () => null;
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:194:42]
+ 193 |     plugin.register(api);
+ 194 |     const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                          ^^^
+ 195 |     await h(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:209:51]
+ 208 |   it("empty subscriptions: skips all classification", async () => {
+ 209 |     const api = makeApi({ subscriptions: [] }) as any;
+     :                                                   ^^^
+ 210 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:211:42]
+ 210 |     plugin.register(api);
+ 211 |     const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                          ^^^
+ 212 |     await h(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x eslint(curly): Expected { after 'for-of'.
+     ,-[extensions/alert-watcher/index.ts:191:32]
+ 190 |       lines.push("", `Contexto (últimos ${history.length}):`);
+ 191 |       for (const h of history) lines.push(`  • [${h.role}] ${h.content}`);
+     :                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 192 |     }
+     `----
+  help: Replace `lines.push(`  • [${h.role}] ${h.content}`);` with `{lines.push(`  • [${h.role}] ${h.content}`);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:193:25]
+ 192 |     }
+ 193 |     if (result.summary) lines.push("", `Resumen: ${result.summary}`);
+     :                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 194 |     return lines.join("\n");
+     `----
+  help: Replace `lines.push("", `Resumen: ${result.summary}`);` with `{lines.push("", `Resumen: ${result.summary}`);}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+     ,-[extensions/alert-watcher/index.ts:204:30]
+ 203 |     lines.push("", `Context (last ${history.length}):`);
+ 204 |     for (const h of history) lines.push(`  • [${h.role}] ${h.content}`);
+     :                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 205 |   }
+     `----
+  help: Replace `lines.push(`  • [${h.role}] ${h.content}`);` with `{lines.push(`  • [${h.role}] ${h.content}`);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:206:23]
+ 205 |   }
+ 206 |   if (result.summary) lines.push("", `Summary: ${result.summary}`);
+     :                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 207 |   return lines.join("\n");
+     `----
+  help: Replace `lines.push("", `Summary: ${result.summary}`);` with `{lines.push("", `Summary: ${result.summary}`);}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+     ,-[extensions/alert-watcher/index.ts:237:45]
+ 236 |         });
+ 237 |         for (const step of migration.steps) api.logger.info(`${PLUGIN_ID}: migrate — ${step}`);
+     :                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 238 |         for (const err of migration.errors) api.logger.warn(`${PLUGIN_ID}: migrate — ${err}`);
+     `----
+  help: Replace `api.logger.info(`${PLUGIN_ID}: migrate — ${step}`);` with `{api.logger.info(`${PLUGIN_ID}: migrate — ${step}`);}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+     ,-[extensions/alert-watcher/index.ts:238:45]
+ 237 |         for (const step of migration.steps) api.logger.info(`${PLUGIN_ID}: migrate — ${step}`);
+ 238 |         for (const err of migration.errors) api.logger.warn(`${PLUGIN_ID}: migrate — ${err}`);
+     :                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 239 | 
+     `----
+  help: Replace `api.logger.warn(`${PLUGIN_ID}: migrate — ${err}`);` with `{api.logger.warn(`${PLUGIN_ID}: migrate — ${err}`);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:297:32]
+ 296 |         const stopped = await state.certified?.stop();
+ 297 |         if (stopped !== false) state.db?.close();
+     :                                ^^^^^^^^^^^^^^^^^^
+ 298 |         state.certified = undefined;
+     `----
+  help: Replace `state.db?.close();` with `{state.db?.close();}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:493:37]
+ 492 |       }
+ 493 |       if (!suppressed && cdEnabled) state.cooldown.markAlerted(chatKey, env.severity);
+     :                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 494 |       const out = { ...env, suppressed };
+     `----
+  help: Replace `state.cooldown.markAlerted(chatKey, env.severity);` with `{state.cooldown.markAlerted(chatKey, env.severity);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:495:34]
+ 494 |       const out = { ...env, suppressed };
+ 495 |       if (alertId !== undefined) out.alertId = alertId;
+     :                                  ^^^^^^^^^^^^^^^^^^^^^^
+ 496 |       respond(true, { reply: serializeEnvelope(out) });
+     `----
+  help: Replace `out.alertId = alertId;` with `{out.alertId = alertId;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:624:16]
+ 623 |       const db = state.db;
+ 624 |       if (!db) return;
+     :                ^^^^^^^
+ 625 |       const { cooldown } = state;
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:711:33]
+ 710 |       );
+ 711 |       if (!result.is_complaint) return;
+     :                                 ^^^^^^^
+ 712 |       if (SEVERITY_ORDER[result.severity] < SEVERITY_ORDER[cfg.classifier.minSeverity]) {
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:828:48]
+ 827 |       }
+ 828 |       if (await state.certified?.admit(event)) return;
+     :                                                ^^^^^^^
+ 829 |       await handle(event, undefined);
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:840:41]
+ 839 |     api.on("message_intercept", async (event) => {
+ 840 |       if (event.channel !== "whatsapp") return;
+     :                                         ^^^^^^^
+ 841 |       const db = state.db;
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:842:16]
+ 841 |       const db = state.db;
+ 842 |       if (!db) return;
+     :                ^^^^^^^
+ 843 |       const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:844:35]
+ 843 |       const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
+ 844 |       if (!cfg.replyFlow.enabled) return;
+     :                                   ^^^^^^^
+ 845 |       const result = await handleOwnerReply(db, api, cfg.replyFlow, {
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:857:61]
+ 856 |       const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
+ 857 |       if (!matchesAgentSub(cfg.subscriptions, ctx.agentId)) return;
+     :                                                             ^^^^^^^
+ 858 |       const originalEvent = {
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/index.ts:864:69]
+ 863 |       };
+ 864 |       if (await state.certified?.admit(originalEvent, ctx.agentId)) return;
+     :                                                                     ^^^^^^^
+ 865 |       await handle(
+     `----
+  help: Replace `return;` with `{return;}`.
+
+  ! eslint(no-unused-vars): Parameter 'api' is declared but never used. Unused parameters should start with a '_'.
+    ,-[extensions/alert-watcher/index.ts:92:25]
+ 91 | const STATE_SYMBOL = "__minion_alert_watcher_state__";
+ 92 | function getSharedState(api: MinionPluginApi): AlertWatcherState {
+    :                         ^|^
+    :                          `-- 'api' is declared here
+ 93 |   const g = globalThis as unknown as Record<string, AlertWatcherState | undefined>;
+    `----
+  help: Consider removing this parameter.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:25:35]
+ 24 | afterEach(() => {
+ 25 |   for (const d of dirs.splice(0)) fs.rmSync(d, { recursive: true, force: true });
+    :                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 26 | });
+    `----
+  help: Replace `fs.rmSync(d, { recursive: true, force: true });` with `{fs.rmSync(d, { recursive: true, force: true });}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:75:5]
+ 74 |   for (const row of f.db.prepare("SELECT * FROM alert_delivery_receipts").all() as DeliveryRow[])
+ 75 |     expect(await readDeliveryTombstone(row.id, dir)).toMatchObject({ reason: "settled" });
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 76 |   f.db.close();
+    `----
+  help: Replace `expect(await readDeliveryTombstone(row.id, dir)).toMatchObject({ reason: "settled" });` with `{expect(await readDeliveryTombstone(row.id, dir)).toMatchObject({ reason: "settled" });}`.
+
+  ! eslint(no-unused-vars): Identifier 'admitSource' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:12:3]
+ 11 | import {
+ 12 |   admitSource,
+    :   ^^^^^|^^^^^
+    :        `-- 'admitSource' is imported here
+ 13 |   claimWork,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'claimWork' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:13:3]
+ 12 |   admitSource,
+ 13 |   claimWork,
+    :   ^^^^|^^^^
+    :       `-- 'claimWork' is imported here
+ 14 |   admitInvocation,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'admitInvocation' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:14:3]
+ 13 |   claimWork,
+ 14 |   admitInvocation,
+    :   ^^^^^^^|^^^^^^^
+    :          `-- 'admitInvocation' is imported here
+ 15 |   receiveInvocation,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'receiveInvocation' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:15:3]
+ 14 |   admitInvocation,
+ 15 |   receiveInvocation,
+    :   ^^^^^^^^|^^^^^^^^
+    :           `-- 'receiveInvocation' is imported here
+ 16 |   materializePositive,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'materializePositive' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:16:3]
+ 15 |   receiveInvocation,
+ 16 |   materializePositive,
+    :   ^^^^^^^^^|^^^^^^^^^
+    :            `-- 'materializePositive' is imported here
+ 17 |   finishWork,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'finishWork' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:17:3]
+ 16 |   materializePositive,
+ 17 |   finishWork,
+    :   ^^^^^|^^^^
+    :        `-- 'finishWork' is imported here
+ 18 |   type DeliveryRow,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'testDb' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:22:10]
+ 21 | import { positiveFixture } from "./work-test-fixtures.js";
+ 22 | import { testDb, workFixture } from "./work-test-fixtures.js";
+    :          ^^^|^^
+    :             `-- 'testDb' is imported here
+ 23 | const dirs: string[] = [];
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'workFixture' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:22:18]
+ 21 | import { positiveFixture } from "./work-test-fixtures.js";
+ 22 | import { testDb, workFixture } from "./work-test-fixtures.js";
+    :                  ^^^^^|^^^^^
+    :                       `-- 'workFixture' is imported here
+ 23 | const dirs: string[] = [];
+    `----
+  help: Consider removing this import.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/src/authority.test.ts:69:39]
+ 68 | afterEach(async () => {
+ 69 |   for (const stop of stops.splice(0)) await stop();
+    :                                       ^^^^^^^^^^^^^
+ 70 |   for (const d of dirs.splice(0)) fs.rmSync(d, { recursive: true, force: true });
+    `----
+  help: Replace `await stop();` with `{await stop();}`.
+
+  x eslint(curly): Expected { after 'for-of'.
+    ,-[extensions/alert-watcher/src/authority.test.ts:70:35]
+ 69 |   for (const stop of stops.splice(0)) await stop();
+ 70 |   for (const d of dirs.splice(0)) fs.rmSync(d, { recursive: true, force: true });
+    :                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 71 |   delete process.env.ORG_SCOPE_SOURCE;
+    `----
+  help: Replace `fs.rmSync(d, { recursive: true, force: true });` with `{fs.rmSync(d, { recursive: true, force: true });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/authority.test.ts:312:41]
+ 311 |   const authority = await resolveWatcherAuthority(f.cfg, "telegram", "default");
+ 312 |   if (authority.kind === "unavailable") throw Error();
+     :                                         ^^^^^^^^^^^^^^
+ 313 |   const snapshot = workFixture({
+     `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/authority.test.ts:324:33]
+ 323 |   const work = admitSource(f.db, "suggestion-recovery", snapshot);
+ 324 |   if (work.kind !== "admitted") throw Error();
+     :                                 ^^^^^^^^^^^^^^
+ 325 |   const lease = claimWork(f.db, work.work.id, "crashed")!,
+     `----
+  help: Replace `throw Error();` with `{throw Error();}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/authority.test.ts:456:19]
+ 455 |     transport.complete.mockImplementation(async () => {
+ 456 |       if (revoke) f.cfg.plugins!.entries!["alert-watcher"]!.enabled = false;
+     :                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 457 |       return {
+     `----
+  help: Replace `f.cfg.plugins!.entries!["alert-watcher"]!.enabled = false;` with `{f.cfg.plugins!.entries!["alert-watcher"]!.enabled = false;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/usage-finalization.ts:19:12]
+ 18 | ): TerminalObserver {
+ 19 |   if (!db) throw new Error("alert-watcher store unavailable");
+    :            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 20 |   const identity = crypto.randomUUID();
+    `----
+  help: Replace `throw new Error("alert-watcher store unavailable");` with `{throw new Error("alert-watcher store unavailable");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/usage-finalization.ts:53:37]
+ 52 |   });
+ 53 |   if (admitted.kind !== "admitted") throw new Error("fresh_invocation_admission_failed");
+    :                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 54 |   const lease = claimWork(db, admitted.work.id, identity);
+    `----
+  help: Replace `throw new Error("fresh_invocation_admission_failed");` with `{throw new Error("fresh_invocation_admission_failed");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/usage-finalization.ts:55:15]
+ 54 |   const lease = claimWork(db, admitted.work.id, identity);
+ 55 |   if (!lease) throw new Error("fresh_invocation_claim_failed");
+    :               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 56 |   const attemptId = admitInvocation(db, lease);
+    `----
+  help: Replace `throw new Error("fresh_invocation_claim_failed");` with `{throw new Error("fresh_invocation_claim_failed");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/certified-runtime.ts:51:25]
+ 50 |     rejectAbort = () => reject(new Error("operation_interrupted"));
+ 51 |     if (signal.aborted) rejectAbort();
+    :                         ^^^^^^^^^^^^^^
+ 52 |     else signal.addEventListener("abort", rejectAbort, { once: true });
+    `----
+  help: Replace `rejectAbort();` with `{rejectAbort();}`.
+
+  x eslint(curly): Expected { after 'else'.
+    ,-[extensions/alert-watcher/src/certified-runtime.ts:52:10]
+ 51 |     if (signal.aborted) rejectAbort();
+ 52 |     else signal.addEventListener("abort", rejectAbort, { once: true });
+    :          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 53 |   });
+    `----
+  help: Replace `signal.addEventListener("abort", rejectAbort, { once: true });` with `{signal.addEventListener("abort", rejectAbort, { once: true });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/certified-runtime.ts:80:7]
+ 79 |     )
+ 80 |       return Promise.resolve({ kind: "unavailable" as const, reason: "policy_unmatched" });
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 81 |     return resolveWatcherAuthority(currentConfig(), s.source.channel, s.source.accountId);
+    `----
+  help: Replace `return Promise.resolve({ kind: "unavailable" as const, reason: "policy_unmatched" });` with `{return Promise.resolve({ kind: "unavailable" as const, reason: "policy_unmatched" });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/certified-runtime.ts:88:37]
+ 87 |   function suppressed(snapshot: WorkSnapshot, result: ComplaintResult, row: WorkRow): boolean {
+ 88 |     if (!snapshot.cooldown.enabled) return false;
+    :                                     ^^^^^^^^^^^^^
+ 89 |     const recent = db
+    `----
+  help: Replace `return false;` with `{return false;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/certified-runtime.ts:95:31]
+ 94 |     for (const previous of recent) {
+ 95 |       if (!previous.snapshot) continue;
+    :                               ^^^^^^^^^
+ 96 |       const p = JSON.parse(previous.snapshot) as WorkSnapshot;
+    `----
+  help: Replace `continue;` with `{continue;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:111:9]
+ 110 |       )
+ 111 |         continue;
+     :         ^^^^^^^^^
+ 112 |       const elapsed = Date.now() - previous.first_sent_at!;
+     `----
+  help: Replace `continue;` with `{continue;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:113:63]
+ 112 |       const elapsed = Date.now() - previous.first_sent_at!;
+ 113 |       if (elapsed >= snapshot.cooldown.windowMinutes * 60000) return false;
+     :                                                               ^^^^^^^^^^^^^
+ 114 |       const originals = db
+     `----
+  help: Replace `return false;` with `{return false;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:122:26]
+ 121 |       const count = originals.filter((r) => {
+ 122 |         if (!r.snapshot) return false;
+     :                          ^^^^^^^^^^^^^
+ 123 |         const source = (JSON.parse(r.snapshot) as WorkSnapshot).source;
+     `----
+  help: Replace `return false;` with `{return false;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:152:24]
+ 151 |     let row = assertWorkLease(db, lease);
+ 152 |     if (!row.snapshot) throw new Error("missing_snapshot");
+     :                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 153 |     const snapshot = JSON.parse(row.snapshot) as WorkSnapshot;
+     `----
+  help: Replace `throw new Error("missing_snapshot");` with `{throw new Error("missing_snapshot");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:154:25]
+ 153 |     const snapshot = JSON.parse(row.snapshot) as WorkSnapshot;
+ 154 |     if (signal.aborted) throw new Error("work_stopped");
+     :                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 155 |     if (!(await stillAuthorized(lease, snapshot))) {
+     `----
+  help: Replace `throw new Error("work_stopped");` with `{throw new Error("work_stopped");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:191:11]
+ 190 |         if (getWork(db, row.id)?.state !== "received")
+ 191 |           throw new Error("classification_receipt_missing");
+     :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 192 |       } finally {
+     `----
+  help: Replace `throw new Error("classification_receipt_missing");` with `{throw new Error("classification_receipt_missing");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:215:25]
+ 214 |     }
+ 215 |     if (signal.aborted) throw new Error("work_stopped");
+     :                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 216 |     if (!(await stillAuthorized(lease, snapshot))) {
+     `----
+  help: Replace `throw new Error("work_stopped");` with `{throw new Error("work_stopped");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:232:25]
+ 231 |     }
+ 232 |     if (signal.aborted) throw new Error("work_stopped");
+     :                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 233 |     if (!(await stillAuthorized(lease, snapshot))) {
+     `----
+  help: Replace `throw new Error("work_stopped");` with `{throw new Error("work_stopped");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:256:27]
+ 255 |     if (suggestion.state === "queued") {
+ 256 |       if (signal.aborted) throw new Error("work_stopped");
+     :                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 257 |       if (!(await stillAuthorized(lease, snapshot))) {
+     `----
+  help: Replace `throw new Error("work_stopped");` with `{throw new Error("work_stopped");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:284:47]
+ 283 |               onTerminal: (terminalResult, usage) => {
+ 284 |                 if (suggestionSignal.aborted) throw new Error("suggestion_interrupted");
+     :                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 285 |                 const replies = terminalResult.ok
+     `----
+  help: Replace `throw new Error("suggestion_interrupted");` with `{throw new Error("suggestion_interrupted");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:310:11]
+ 309 |             if (latest.state !== "received")
+ 310 | ,->           setSuggestion(db, lease, {
+ 311 | |               state: "indeterminate",
+ 312 | |               attemptId,
+ 313 | |               suggestions: [],
+ 314 | |               reason: "suggestions_unavailable",
+ 315 | `->           });
+ 316 |           }
+     `----
+  help: Replace `setSuggestion(db, lease, {
+                    state: "indeterminate",
+                    attemptId,
+                    suggestions: [],
+                    reason: "suggestions_unavailable",
+                  });` with `{setSuggestion(db, lease, {
+                    state: "indeterminate",
+                    attemptId,
+                    suggestions: [],
+                    reason: "suggestions_unavailable",
+                  });}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:320:25]
+ 319 |     }
+ 320 |     if (signal.aborted) throw new Error("work_stopped");
+     :                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 321 |     if (!(await stillAuthorized(lease, snapshot))) {
+     `----
+  help: Replace `throw new Error("work_stopped");` with `{throw new Error("work_stopped");}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:327:7]
+ 326 |     if (snapshot.replyFlow.enabled)
+ 327 |       text = appendSuggestionsBlock(text, suggestion.suggestions ?? [], snapshot.language);
+     :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 328 |     if (suggestion.reason)
+     `----
+  help: Replace `text = appendSuggestionsBlock(text, suggestion.suggestions ?? [], snapshot.language);` with `{text = appendSuggestionsBlock(text, suggestion.suggestions ?? [], snapshot.language);}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:329:7]
+ 328 |         if (suggestion.reason)
+ 329 | ,->       text +=
+ 330 | `->         snapshot.language === "es" ? "\nSugerencias no disponibles." : "\nSuggestions unavailable.";
+ 331 |         const configured = config().destinations;
+     `----
+  help: Replace `text +=
+                snapshot.language === "es" ? "\nSugerencias no disponibles." : "\nSuggestions unavailable.";` with `{text +=
+                snapshot.language === "es" ? "\nSugerencias no disponibles." : "\nSuggestions unavailable.";}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:355:23]
+ 354 |             ];
+ 355 |           if (!bound) return false;
+     :                       ^^^^^^^^^^^^^
+ 356 |           const current = await resolveWatcherAuthority(
+     `----
+  help: Replace `return false;` with `{return false;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:384:21]
+ 383 |       });
+ 384 |       if (!sources) return false;
+     :                     ^^^^^^^^^^^^^
+ 385 |       for (const source of sources) {
+     `----
+  help: Replace `return false;` with `{return false;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:392:46]
+ 391 |         );
+ 392 |         if (resolved.kind === "unavailable") continue;
+     :                                              ^^^^^^^^^
+ 393 |         const overrides = {
+     `----
+  help: Replace `continue;` with `{continue;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:411:46]
+ 410 |           );
+ 411 |           if (target.kind === "unavailable") continue;
+     :                                              ^^^^^^^^^
+ 412 |           if (
+     `----
+  help: Replace `continue;` with `{continue;}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[extensions/alert-watcher/src/certified-runtime.ts:417:13]
+ 416 |           )
+ 417 |             continue;
+     :             ^^^^^^^^^
+ 418 |           destinationAuthorities[
+     `----
+  help: Replace `continue;` with `{continue;}`.
+
+Found 9 warnings and 184 errors.
+Finished in 966ms on 52 files with 119 rules using 3 threads.

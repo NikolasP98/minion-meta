@@ -1,0 +1,33 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat
+
+ ❯ src/lib/assistant/pending-submission.mounted.test.ts (38 tests | 1 failed | 37 skipped) 360ms
+     × session permits only one acknowledged fresh continuation 356ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/assistant/pending-submission.mounted.test.ts > Home actual sender with held sandbox handoff > session permits only one acknowledged fresh continuation
+AssertionError: expected [ [ 'chat.send', { …(4) } ], …(1) ] to have a length of 1 but got 2
+
+- Expected
++ Received
+
+- 1
++ 2
+
+ ❯ src/lib/assistant/pending-submission.mounted.test.ts:274:90
+    272|       await running;await tick();
+    273|       expect(next).not.toHaveBeenCalled();
+    274|       expect(vi.mocked(sendRequest).mock.calls.filter(([method])=>meth…
+       |                                                                                          ^
+    275|       expect(vi.mocked(fetch).mock.calls.filter(([url,init])=>url==='/…
+    276|     }finally{offUnrelated?.();offNext();tools.abort();lease.dispose();…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 37 skipped (38)
+   Start at  01:21:59
+   Duration  63.55s (transform 51.67s, setup 54ms, import 62.44s, tests 360ms, environment 474ms)
+

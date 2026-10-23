@@ -1,0 +1,56 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat
+
+ ❯ src/lib/assistant/dispatch.ownership.test.ts (13 tests | 7 failed) 67ms
+     × real sandbox tool/host/lease handoff: valid 9ms
+     × real sandbox tool/host/lease handoff: user_navigation 1ms
+     × real sandbox tool/host/lease handoff: registry 2ms
+     × real sandbox tool/host/lease handoff: forged 1ms
+     × real sandbox tool/host/lease handoff: failed_refresh 2ms
+     × real sandbox tool/host/lease handoff: expired 1ms
+     × capability is private, single publication/consumption, registration/lease bound 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: valid
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: user_navigation
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: registry
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: forged
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: failed_refresh
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: expired
+AssertionError: expected undefined to be defined
+ ❯ src/lib/assistant/dispatch.ownership.test.ts:74:21
+     72|     const binding = s.submit(); const running = runAssistantUiCalls('a…
+     73|     for(let i=0;i<10 && !release;i++) await Promise.resolve();
+     74|     expect(release).toBeDefined();
+       |                     ^
+     75|     if(variant==='user_navigation') { setPageContextLocation('/other')…
+     76|     if(variant==='registry') disposers.push(registerTool({name:'unrela…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > capability is private, single publication/consumption, registration/lease bound
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/lib/assistant/dispatch.ownership.test.ts:90:42
+     88|     const capability = beginInvocation(binding,'sandbox.arrange')!;
+     89|     expect(lease.update('next',capability)).toBe(true);
+     90|     expect(settleInvocation(capability)).toBe(true); expect(settleInvo…
+       |                                          ^
+     91|     expect(lease.update('duplicate',capability)).toBe(false); expect(i…
+     92|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  7 failed | 26 passed (33)
+   Start at  00:55:43
+   Duration  54.02s (transform 43.27s, setup 66ms, import 52.38s, tests 906ms, environment 322ms)
+

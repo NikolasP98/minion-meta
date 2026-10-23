@@ -1,7 +1,7 @@
 {
   "authorization": "Batch remaining implementations in one PR per group; Astra SDD/escalation/verification and Sol development; run autonomously.",
   "createdAt": "2026-10-23T04:46:11.094618+00:00",
-  "updatedAt": "2026-10-23T07:33:42.191738+00:00",
+  "updatedAt": "2026-10-23T07:51:30.087909+00:00",
   "spec": "2026-10-22-agent-harness-reliability-and-proactivity-spec",
   "execution": "autonomous until six grouped PRs implemented and independently verified; human merge, live paid inference and production activation retain separate gates",
   "models": {
@@ -27,7 +27,7 @@
         4,
         5
       ],
-      "state": "focused-tests-green-full-typecheck-retry",
+      "state": "source-frozen-fullcheck-green-runtime-qualification-pending",
       "pr": null,
       "supportingWork": [
         "Hub browser evaluation adapters for Slice26"
@@ -46,8 +46,11 @@
       "validation": {
         "focused": "87/87",
         "matrix": "105 collected, runtime pending",
-        "independentReview": "pending"
-      }
+        "independentReview": "pending",
+        "fullcheck": "0 errors, 0 warnings"
+      },
+      "sourceInventoryHash": "019a6d7f7077da2da2a73d2c416c0972d5e627c56d225d0c02ef752ed994c191",
+      "ownedSourceFiles": 59
     },
     {
       "group": "b-factory",
@@ -114,7 +117,7 @@
         15,
         16
       ],
-      "state": "correcting-three-independent-findings",
+      "state": "revision1-source-frozen-focused-green-awaiting-final-gates-and-Astra",
       "pr": null,
       "supportingWork": [
         "Gateway Slice20 cron explicit-agent/session binding",
@@ -143,10 +146,14 @@
         ]
       },
       "revision1": {
-        "unchangedProbes": "3/3 pass",
+        "unchangedProbes": "3/3 final exit0; independent rereview pending",
         "expandedRegressions": "33/33 focused; actual C/F 18 revisions reconcile",
-        "fullGates": "pending"
-      }
+        "fullGates": "pending",
+        "sourceHashRootRecheck": "61/61 file hashes and untracked archive match"
+      },
+      "implementationManifest": "development/c-gateway/revision1/source-manifest.json",
+      "ownedSourceFiles": 61,
+      "sourceManifestSha256": "06eb968c11873d48218cf619b90e8b479d145500788d220947a4626adee1493d"
     },
     {
       "group": "d-pulse",
@@ -162,7 +169,7 @@
         19,
         20
       ],
-      "state": "developing-real-postgres-tests-green-heavy-queue",
+      "state": "correcting-popup-reactive-request-loop",
       "pr": null,
       "dependsOn": [
         "c-gateway binding contract"
@@ -181,7 +188,7 @@
       "validation": {
         "focusedSql": "migration/store7, selected5, worker10, routes7",
         "fullcheck": "initial29 test errors corrected; retry pending",
-        "matrix": "90 cells pending"
+        "matrix": "run03 all Chromium/Firefox54 pass; WebKit launches/passes most cases but popup timeout exposed reactive refresh loop with429-1096 requests; fixing with strict bounded request regression before final all90"
       }
     },
     {
@@ -231,7 +238,7 @@
         30,
         31
       ],
-      "state": "software-checkpoint-root-gates-green-awaiting-final-A-C-bindings-and-review",
+      "state": "Sol-correcting-six-independent-findings",
       "pr": null,
       "dependsOn": [
         "a-chat callback/decision-event contract"
@@ -258,7 +265,40 @@
         "actualAAdapter": "intermediate12/12 zero paid requests; final source pin pending",
         "finalCProvenance": "pending",
         "independentReview": "pending"
-      }
+      },
+      "verifier": "/root/astra_verify_evals",
+      "independentFindings": [
+        {
+          "id": "F-01",
+          "status": "reproduced-Sol-correction-active",
+          "description": "Repeat matching/weighting changes the declared trial estimand"
+        },
+        {
+          "id": "F-02",
+          "status": "reproduced-Sol-correction-active",
+          "description": "Receipt lineage and financial status lose to cached result claims"
+        },
+        {
+          "id": "F-03",
+          "status": "reproduced-Sol-correction-active",
+          "description": "Signed approval expiry not rechecked during live run"
+        },
+        {
+          "id": "F-04",
+          "status": "reproduced-Sol-correction-active",
+          "description": "Untrusted episode ID escapes private raw artifact root"
+        },
+        {
+          "id": "F-05",
+          "status": "reproduced-Sol-correction-active",
+          "description": "Duplicate trace IDs inflate independent review sample and certainty"
+        },
+        {
+          "id": "F-06",
+          "status": "reproduced-Sol-correction-active",
+          "description": "Admitted unknown receipt fails to reconcile later known zero bill"
+        }
+      ]
     }
   ],
   "remainingSlices": [
@@ -310,7 +350,7 @@
     "disposablePostgres": "setup/disposable-postgres.json",
     "pinnedFactoryHarness": "setup/pinned-harness.json"
   },
-  "heavyValidationOwner": "/root/sol_chat_recovery",
+  "heavyValidationOwner": "/root/sol_dev_pulse",
   "recovery": {
     "at": "2026-10-23T05:55:51.351714+00:00",
     "reason": "daemon restart interrupted all subagent threads",

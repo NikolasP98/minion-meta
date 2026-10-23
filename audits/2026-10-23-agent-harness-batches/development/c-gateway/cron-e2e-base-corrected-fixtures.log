@@ -1,0 +1,43 @@
+
+ RUN  v4.1.10 /tmp/c-base-cron-e2e-vl5lby6z
+
+ ❯ |e2e| src/gateway/server.cron.e2e.test.ts (3 tests | 1 failed | 2 skipped) 10148ms
+     × posts webhooks for delivery mode and legacy notify fallback only when summary exists 5527ms
+ ❯ |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts (17 tests | 1 failed | 16 skipped) 95ms
+     × starts a fresh session id for each cron run 92ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |e2e| src/gateway/server.cron.e2e.test.ts > gateway server cron > posts webhooks for delivery mode and legacy notify fallback only when summary exists
+Error: timeout waiting for condition
+ ❯ waitForCondition src/gateway/server.cron.e2e.test.ts:62:13
+     60|     const elapsedMs = Number(process.hrtime.bigint() - startedAt) / 1e…
+     61|     if (elapsedMs >= timeoutMs) {
+     62|       throw new Error("timeout waiting for condition");
+       |             ^
+     63|     }
+     64|     await yieldToEventLoop();
+ ❯ src/gateway/server.cron.e2e.test.ts:525:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > starts a fresh session id for each cron run
+AssertionError: expected 'c87d0239-cf70-48e5-a4d4-c4bedc599d62' not to be 'c87d0239-cf70-48e5-a4d4-c4bedc599d62' // Object.is equality
+ ❯ src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts:491:36
+    489|       expect(first.sessionId).toBeDefined();
+    490|       expect(second.sessionId).toBeDefined();
+    491|       expect(second.sessionId).not.toBe(first.sessionId);
+       |                                    ^
+    492|       expect(first.sessionKey).toMatch(/^agent:main:cron:job-1:run:/);
+    493|       expect(second.sessionKey).toMatch(/^agent:main:cron:job-1:run:/);
+ ❯ withTempHome test/helpers/temp-home.ts:112:12
+ ❯ src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts:465:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 18 skipped (20)
+   Start at  01:14:05
+   Duration  19.36s (transform 7.10s, setup 353ms, import 8.51s, tests 10.24s, environment 0ms)
+

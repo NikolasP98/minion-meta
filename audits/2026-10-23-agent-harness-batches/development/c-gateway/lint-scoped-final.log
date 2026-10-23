@@ -1,0 +1,45 @@
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:46:17]
+ 45 |   ] as const)
+ 46 |     {if (!pass) return { status: "bypass", reason };}
+    :                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 47 |   return { status: "eligible", reason: "eligible" };
+    `----
+  help: Replace `return { status: "bypass", reason };` with `{return { status: "bypass", reason };}`.
+
+  x typescript-eslint(no-unnecessary-boolean-literal-compare): This expression unnecessarily compares a boolean value to a boolean instead of negating it.
+    ,-[extensions/alert-watcher/src/authority.ts:35:7]
+ 34 |       entry.orgId.trim() !== entry.orgId ||
+ 35 |       entry.projection?.enabled !== true ||
+    :       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 36 |       !Number.isSafeInteger(at) ||
+    `----
+
+  x typescript-eslint(require-array-sort-compare): Require 'compare' argument.
+     ,-[extensions/alert-watcher/src/authority.test.ts:299:10]
+ 298 |   }>;
+ 299 |   expect(rows.map((r) => JSON.parse(r.evaluation_binding).sourceCertification).sort()).toEqual([
+     :          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 300 |     "certified",
+     `----
+
+  x typescript-eslint(require-array-sort-compare): Require 'compare' argument.
+     ,-[extensions/alert-watcher/src/usage-finalization.test.ts:120:10]
+ 119 |   expect(new Set(values.map((v) => v.attemptId)).size).toBe(2);
+ 120 |   expect(values.map((v) => v.resolvedModel?.provider).sort()).toEqual(["anthropic", "openai"]);
+     :          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 121 | });
+     `----
+
+  x typescript-eslint(no-floating-promises): Promises must be awaited, add void operator to ignore.
+    ,-[extensions/alert-watcher/index.test.ts:74:26]
+ 73 |       cases.push({ dir: stateDir, stop: async () => {await svc.stop();} });
+ 74 |       if (!manualStart) {svc.start({ stateDir, config: {}, logger: {} });}
+    :                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 75 |     }),
+    `----
+  help: The promise must end with a call to .catch, or end with a call to .then with a rejection handler, or be explicitly marked as ignored with the `void` operator.
+
+Found 0 warnings and 5 errors.
+Finished in 12.2s on 52 files with 134 rules using 4 threads.
