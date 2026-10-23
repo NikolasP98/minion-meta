@@ -23,6 +23,8 @@ Open ends left by S1 (hub #579) and S2 (gateway #353). Each has a `TODO(handoff)
 5. **Card reply-mode buttons may not save (unverified).** The ChannelCard behaviour block (reply-mode buttons, enable toggle) only renders for gateway-only `gw:whatsapp:…` cards, whose PUT can't match a DB row, so those controls may not persist. Found while building S1; not reproduced in a browser.
 6. **Removal reaches the gateway late.** A cached "yes" can outlive a membership removal by up to 5 minutes (shortcut). TO-BE: hub push on membership/identity change.
 7. **Multi-gateway orgs.** Unbound agents never auto-bind there (shortcut). TO-BE: bind when an org runs more than one gateway.
+8. **Gateway settings come from the wrong record.** Channel hydration sends no gateway id, so both netcup gateways load the MINION record's rows. The FACES member-mode toggle had no effect, and a one-row DB write on `chan_4090d197…` was needed (2026-10-23). TO-BE and the handover flow: spec 034 (`specs/034-whatsapp-number-handover/`).
+9. **Phone-format normalization.** `user_identities.external_id` mixes `+51…` and digits. The member lookup compares digits and fails closed when two users match (hub #588). TO-BE: migrate rows to digits and add a normalized unique index (prod data write, needs the owner's go).
 
 **DELTA**: one PR per item. Each test asserts the TO-BE: no ledger row for member sessions, no member chats imported, a member's slash command authorized, a "not ready" reply for multi-org members, and a reply-mode change that persists.
 
