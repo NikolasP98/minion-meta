@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-23T22:47:07.883Z",
+	"generatedAt": "2026-10-23T23:17:07.628Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1520,38 +1520,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T04:57:59.928Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/93141a2cda7ff4b65db8e31cd285ad60d9050785",
-			"sourceUpdatedAt": "2026-10-23T18:29:46Z",
-			"sourceFingerprint": "72a92b2dacfe0ae5b10ee9344cc9d8ff70139e3a77ac3cf754aede6204a3cc21",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A shared-module config bug caused WhatsApp extension to always report hub_disconnected in production, a concrete functional regression already fixed and ready to verify in deploy.",
-			"evidence": [
-				"server.impl never sets the plugin-sdk copy of hub-rest-registry",
-				"member lookup always returned hub_disconnected in prod"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T22:47:07.738Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-722867358",
@@ -34585,38 +34553,6 @@
 			"scoredAt": "2026-10-17T06:36:09.620Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-d222079",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ d222079",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-d222079.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "7db017599e97386d1b70882b7dd70586266ef4759f715a7d743f234526af1386",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A medium-severity weakened-test finding with an exact file:line location and documented cause is a small, bounded fix.",
-			"evidence": [
-				"medium weakened-test at src/shells/bridge-ws.test.ts:609",
-				"test conditionally skipped on win32 platform, reducing coverage"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T23:10:22.972Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-f2de5e0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39053,6 +38989,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T02:27:15.698Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-d222079",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ d222079",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-d222079.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "7db017599e97386d1b70882b7dd70586266ef4759f715a7d743f234526af1386",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single medium-severity, narrowly-scoped test-skip finding with a documented reason and alternative assertion already in place, so it carries low urgency and no clear actionable fix plan yet.",
+			"evidence": [
+				"medium weakened-test finding at src/shells/bridge-ws.test.ts:609",
+				"skip is win32-specific with documented reason and alternative assertion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T23:17:07.488Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
