@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3056368971
 title: Handoff marker — src/web/inbound/monitor.ts (minion-ai)
-status: draft
+status: merged
 created: 2026-10-22
 updated: 2026-10-23
 repos: [minion-ai]
 tags: [handoff-sweep]
+merged_into: 2026-10-22-whatsapp-member-agents-followups
 ---
 
 # Handoff marker — src/web/inbound/monitor.ts

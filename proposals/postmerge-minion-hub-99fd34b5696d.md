@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-99fd34b5696d
 title: "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz (minion_hub)"
-status: draft
+status: review
 created: 2026-10-22
-updated: 2026-10-22
+updated: 2026-10-23
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-shared-0.9.0-agent-harness.e6e69bb92fd1.tgz`
