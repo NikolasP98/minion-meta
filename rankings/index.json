@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-23T20:24:00.814Z",
+	"generatedAt": "2026-10-23T20:48:07.825Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7226,38 +7226,6 @@
 			"scoredAt": "2026-10-19T12:57:47.793Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1975235460",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1975235460.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "f924d60cc30107879b045c62c3bb68df84bd1b9b9e4f9f76501912abdab75747",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Three markers on the POS sell page flag till-draw timing, a synthetic line posting a null product id, and a cross-reference to a production-readiness recon finding (HS-011), all touching live financial transaction flows.",
-			"evidence": [
-				"pos/sell/+page.svelte:514 TODO: 'this synthetic line posts finProductId: null'",
-				"pos/sell/+page.svelte:821 references HS-011 in hub-gateway-production-readiness-recon.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T03:30:22.758Z"
-		},
-		{
 			"key": "spec:2026-09-29-hub-table-toolbar-notion-filters-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -12402,6 +12370,39 @@
 			"scoredAt": "2026-10-23T03:30:22.758Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1975235460",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/sell/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1975235460.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "7263b1e8a0894dacd2ae8ba0838400fee29e0892103ed06684668b24e4ea1cb2",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Three concrete POS sell-page markers (click-vs-submit draw timing, a null finProductId write, and an HS-011 cross-reference) describe real transactional edge cases that need spec work before implementation.",
+			"evidence": [
+				"that till-side draw happens on CLICK, not on submit",
+				"this synthetic line posts finProductId: null",
+				"HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3693488587",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13069,38 +13070,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T18:57:07.236Z"
-		},
-		{
-			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deprecated i18n adapter has a demonstrated concurrency bug but migration requires re-verifying external API before implementation can start.",
-			"evidence": [
-				"setLanguageTag concurrency test shows deterministic locale bleed under Promise.all",
-				"plan requires re-reading paraglide-js v2 docs before coding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
 			"key": "proposal:2026-09-11-hub-telemetry-boundary-followups",
@@ -17205,74 +17174,6 @@
 			"scoredAt": "2026-10-23T03:26:35.045Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1895569552",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/assistant/global-tools.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1895569552.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "8165dba8c05972321f5fe686f573af84e7eb1bbe5161b088b60d8280e0d1bbfe",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2083655976"
-			],
-			"rationale": "global-tools.ts and forms.ts both flag the same unresolved need for request-bound intent on native assistant actions tied to the same meta proposal, so they should be unified into one goal.",
-			"evidence": [
-				"global-tools.ts:85 TODO references 'proposals/2026-10-18-assistant-navigation-confirmation.md'",
-				"forms.ts:96 TODO references the same proposal file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T03:30:22.758Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2083655976",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/assistant/forms.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2083655976.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "8f641c5a18587faa6b0adc7b095c49de73024236d982fa20294f5e99a2e09eea",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-1895569552"
-			],
-			"rationale": "forms.ts's TODO describes the identical unresolved request-bound-intent gap for native assistant effects as global-tools.ts, pointing at the same meta proposal.",
-			"evidence": [
-				"forms.ts:96 TODO references 'proposals/2026-10-18-assistant-navigation-confirmation.md'",
-				"global-tools.ts:85 TODO references the same proposal file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T03:30:22.758Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-5e6d2717c59c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18085,6 +17986,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T08:26:53.177Z"
+		},
+		{
+			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A deprecated i18n adapter with a characterized concurrency-induced locale bleed bug has a concrete file-by-file migration sketch ready to execute.",
+			"evidence": [
+				"@inlang/paraglide-sveltekit is npm-deprecated per npm view",
+				"locale-parity.test.ts shows ambient setLanguageTag/languageTag state bleeds across concurrent requests",
+				"sketch lists exact files: i18n.ts, hooks.server.ts, hooks.ts, canonical-path.ts, svelte.config.js"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
 		},
 		{
 			"key": "proposal:2026-09-28-hub-stock-receipt-purchase-link",
@@ -20318,41 +20252,6 @@
 			"scoredAt": "2026-10-23T11:26:47.599Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-4011639041",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/candidate.patch (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-4011639041.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "7e7b889578ba6c4b542ba8124941fd09406f58f687fb3a6d229c1d23518894bf",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-meta-3937092169",
-				"proposal:handoff-minion-meta-4031975496"
-			],
-			"rationale": "Bundles the shared navigation-confirmation dependency with a distinct Slice-3 binding requirement, making it the anchor of the related-marker group.",
-			"evidence": [
-				"marker at line 124 cites the same 'assistant-navigation-confirmation.md' proposal as the global-tools.ts and forms.ts markers",
-				"marker at line 2186 names a 'Slice 3' scope for bounding automatic UI calls/follow-ups"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T17:51:32.029Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-f4c1a23",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22067,6 +21966,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:02:58.630Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/93141a2cda7ff4b65db8e31cd285ad60d9050785",
+			"sourceUpdatedAt": "2026-10-23T18:29:46Z",
+			"sourceFingerprint": "72a92b2dacfe0ae5b10ee9344cc9d8ff70139e3a77ac3cf754aede6204a3cc21",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The prod hub_disconnected bug already has a merged fix commit, so the only open question is deployment health verification, which the status field marks unknown.",
+			"evidence": [
+				"fix(gateway): share the hub REST config across bundled module copies (#358)",
+				"status: unknown"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
 		},
 		{
 			"key": "issue:minion-meta#356",
@@ -23951,6 +23882,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T13:01:56.016Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-1895569552",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/assistant/global-tools.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1895569552.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "9fb26b72bcfbd01c896979873e197e5d2b9d71c6ec9379373fbe5dac643e9f63",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2083655976"
+			],
+			"rationale": "This marker and the forms.ts marker describe the same unresolved request-bound-intent gap for native assistant actions and both point to the same unmerged design proposal.",
+			"evidence": [
+				"Independent native guides need request-bound intent; navigation batches alone are fenced",
+				"See meta proposals/2026-10-18-assistant-navigation-confirmation.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2083655976",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/assistant/forms.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2083655976.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "34bf84257d2871729075f81166caba1c59c7059d23037b91ff085ceaf5c5de86",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-1895569552"
+			],
+			"rationale": "This marker duplicates the global-tools.ts marker's unresolved request-bound-intent gap for native assistant effects and cites the same pending design proposal.",
+			"evidence": [
+				"native effect grants need meta proposals/2026-10-18-assistant-navigation-confirmation.md",
+				"legacy navigation batches are fenced"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2131866440",
@@ -30048,37 +30047,6 @@
 			"scoredAt": "2026-10-23T03:33:32.692Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-4221605246",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/assistant/dispatch.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4221605246.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "1eb9f4b8322b8e8c6b7c369896ab4b4aa7976fd501b3356f325f4330e2c4938c",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Assistant dispatch marker about silent follow-up persistence is underspecified with no stated user-visible consequence.",
-			"evidence": [
-				"dispatch.ts:12 — 'silent follow-up turns are persisted in the gateway transcript'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T03:33:32.692Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-732128239",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30892,6 +30860,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T00:40:38.379Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-a357d1f6520e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-a357d1f6520e.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "9abeac3886f680e8a31999037164fb185b99b6eef4b1b019b50cfbc66c8aa2b9",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A committed shared-package tarball harms reproducibility, but the reconciliation note flags it as possibly the same unpublished artifact as another open remediation item, so a human must confirm before any fix is applied.",
+			"evidence": [
+				"file: deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz",
+				"flagged duplicate_candidate ... the auto-diagnosis's suggested bun install fix may not apply while the package remains unpublished"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
 		},
 		{
 			"key": "spec:2026-08-19-gateway-client-error-hook-consumer-adoption-spec",
@@ -32551,72 +32551,6 @@
 			"scoredAt": "2026-10-23T03:30:22.758Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "2ecce0065b3955c256e5d196d4819ff577ef416e4ae74acd336310065f9d7535",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This ledger sweep bundles 17+ unrelated TODO markers spanning POS, bookings, WebGL, and schema into a single proposal with no coherent scope, so it cannot be executed as one goal.",
-			"evidence": [
-				"markers span rankings/index.json lines 1616 through 17597 covering unrelated topics (org-scoping, WebGL contexts, RUC parties, stock schema)",
-				"definition of done requires resolving each marker individually, not a single unified change"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T19:17:30.781Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-506184729",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — audits/2026-10-23-agent-harness-batches/development/b-factory/factory.patch (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-506184729.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "ee0e92f20aadb837832f4c1532972adefd6346032e62572dec2ef63e72cd3c19",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:handoff-minion-meta-689343339"
-			],
-			"rationale": "Its two markers are a strict subset of the revision1 copy's markers, making this version superseded.",
-			"evidence": [
-				"lines 132 and 234 marker text identical to handoff-minion-meta-689343339",
-				"revision1 copy adds a third marker at line 320 absent here"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T17:51:32.029Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-796158015",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33142,38 +33076,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T21:57:40.156Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-site-a357d1f6520e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-a357d1f6520e.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "9abeac3886f680e8a31999037164fb185b99b6eef4b1b019b50cfbc66c8aa2b9",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Committed tarball bloats repo but the suggested bun-install fix may not apply while the package remains unpublished, per the reconciliation note.",
-			"evidence": [
-				"flagged duplicate_candidate pending license text and immutable version",
-				"fix suggestion may not apply while package is unpublished"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T20:40:21.032Z"
 		},
 		{
 			"key": "issue:minion-meta#566",
@@ -33901,38 +33803,6 @@
 			"evidence": [
 				"canvas-accessibility.spec.ts:217 flags mocked engine parity gap",
 				"status: draft, not yet reviewed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T03:32:40.785Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-3215540846",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — tests/fixtures/critical-journeys/README.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3215540846.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "e0ace7f870a911adaca6109f25bab1f8fe8d345a22dba1630a6bc6dc3dabfeae",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Critical-journeys test fixtures need real login/session and CRM routing qualification, but the truncated note leaves the exact gap unclear.",
-			"evidence": [
-				"tests/fixtures/critical-journeys/README.md:40 text cuts off mid-sentence",
-				"status: draft"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -37369,6 +37239,37 @@
 			"scoredAt": "2026-10-23T03:32:40.785Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-3215540846",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — tests/fixtures/critical-journeys/README.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3215540846.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "aee0101ad2038c73abb51cd6d879f3c85085fb7e73a9bf5d78ae1f8e6ddcf62c",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The marker is a one-line, truncated note about qualifying login/session test coverage with too little detail to scope as actionable work yet.",
+			"evidence": [
+				"Qualify actual login/session and authenticated CRM routing using a"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3234352348",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -37394,37 +37295,6 @@
 			"rationale": "OverviewCard duplicating its own card styling is a small, localized design-token cleanup.",
 			"evidence": [
 				"invoices/[id]/+page.svelte:487 notes OverviewCard's own .card border/radius/background"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T03:32:40.785Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-348234352",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-348234352.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "a56c4c634868be81acc683539230e7dbd56fc72dfbfcb75b5b0d524f6adf5d49",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 2,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The marker describing stock entry table columns is badly truncated, leaving the actual defect and scope unverifiable.",
-			"evidence": [
-				"stock/entries/new/+page.svelte:812 text cuts off at 'adjustment/transfer entries (5 columns: item, qty,'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -38863,6 +38733,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T03:30:22.758Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-348234352",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-348234352.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "14fdfbe8eb056f74e2baa3c0654b9430cd635e9f4e6ddfd1183134278bcac304",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The marker text is truncated mid-sentence and gives no verifiable problem or outcome to act on.",
+			"evidence": [
+				"on adjustment/transfer entries (5 columns: item, qty,"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3542676477",
@@ -40568,6 +40469,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T03:30:22.758Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "7c405b8833dd36329b922f32775e06b112bfcb3150e796636d99d2890a1f806b",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged lines are quoted text inside the ranking tool's own generated data file, not real code TODOs, so there is no code-level open end to resolve.",
+			"evidence": [
+				"file: rankings/index.json",
+				"markers point at lines like 'the result is still platform-wide, not org-scoped' inside a JSON values array"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T20:48:07.640Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
