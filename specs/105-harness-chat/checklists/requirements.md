@@ -24,8 +24,9 @@
 - [x] The test plan exercises real seams; helper-only mirrors cannot qualify the requirement.
 - [x] Local protocols/data model and validation guide are available under contracts/.
 - [x] Plan/tasks derived using resolved Spec Kit templates with no shared feature.json writes.
-- [ ] Two independent technical review passes approve exact final artifact hashes.
+- [x] Revision 1 maps the shared high finding and applicable precision notes to source-owned implementation tasks and real positive/negative tests.
+- [x] Two independent technical rereviews approve exact revision 1 artifact hashes; final dispositions are linked in the top-level review sidecar.
 
 ## Notes
 
-Checked entries are author SDD completeness assertions, not implemented/passing runtime evidence. The unchecked review item remains the explicit next gate. Parent authorization settles product scope; it does not substitute for independent review of this refinement.
+Checked entries are author SDD completeness assertions, not implemented/passing runtime evidence. Initial independent reviews requested the bounded revision; both subsequent exact-hash rereviews approved it. Parent authorization settles product scope; it does not substitute for independent review of this refinement.

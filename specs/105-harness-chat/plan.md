@@ -48,7 +48,8 @@ No constitution waiver is inferred from convenience. One-PR-per-group is the exp
 
 ### Source Code (Hub A PR)
 
-- Existing: `src/lib/assistant/{pending-submission,dispatch,runner,model-context,turn-router}.ts`, `src/lib/services/gateway.svelte.ts`, `src/lib/services/gateway/chat-rpc.ts`, Home/Floating and callback renderers.
+- Existing: `src/lib/assistant/{pending-submission,dispatch,runner,model-context,page-context,turn-router}.ts`, `src/lib/services/gateway.svelte.ts`, `src/lib/services/gateway/chat-rpc.ts`, Home/Floating and callback renderers.
+- Narrow context producer: `src/lib/sandbox/{tools.ts,host.svelte.ts}` and `src/routes/(app)/sandbox/+page.svelte`; local acknowledged mutation/reload callback and page-owner lease, with existing UI/window reloads unqualified.
 - New: `src/lib/assistant/{accepted-runs,decision-events,decision-lineage}.ts` with focused integration tests.
 - Existing server: `src/server/services/assistant-router.service.ts`, `src/routes/api/assistant/route/+server.ts`, `src/lib/server/{observability-context,posthog}.ts`, `src/server/auth/rate-limit.ts`, `src/server/services/rbac.service.ts` and tests.
 - New route: `src/routes/api/assistant/decision-events/+server.ts`, endpoint test beside it.
@@ -62,9 +63,9 @@ Use [research](research.md). Inventory all `runAssistantUiCalls`, `sendAssistant
 
 ## Phase 1 - Design and implementation order
 
-1. A03: implement accepted binding and final-claim integration first. Use red tests that emit actual gateway events, hold `waitForTool/executeTool`, change current owner/page and deliver duplicate/delayed finals. Extend signal support additively. Preserve navigation and callback bypass. Update Home/Floating Stop/teardown and explicit callback origin/parent wiring together.
+1. A03: implement accepted binding and final-claim integration first. Use red tests that emit actual gateway events, hold `waitForTool/executeTool`, change current owner/page and deliver duplicate/delayed finals. Give accepted runs a controller separate from preparation cleanup; extend signal support additively. Add the private bounded invocation handoff through the actual sandbox tools, host reload and stable page-context lease. Prove positive acknowledged handoff and negative concurrent/reordered user or registry transitions; no global executing flag or DOM-event attribution. Preserve navigation and callback bypass. Update Home/Floating Stop/teardown and explicit callback origin/parent wiring together.
 2. A04: introduce service attempt envelope, early header, requested/resolved identity and canonical revisions; change real route/sanitizer together. Keep old nullable decision callers compatible. Test all successful/failure dispositions and unknown cost with the real capture sink boundary.
-3. A05: define flat observation schema and bounded client buffer; wire prepared/applied/discarded, transport and run-relation producers. Add strict self-only ingress, current-org/auth/origin/body/weighted-limit checks. Record analytics loss separately from fixture receipts.
+3. A05: define flat observation schema and bounded client buffer; wire prepared/applied/discarded, transport and run-relation producers. Add strict self-only ingress, current-org/auth/origin/body/weighted-limit checks. Bound only the new observation namespace to 4,096 keys/60-second idle expiry; reject unseen keys at capacity without evicting charged budgets. Record analytics loss separately from fixture receipts.
 4. A26-Hub: build the versioned adapter on actual critical-journeys components/transport; reset all disposable state per arm, deny external requests, expose actual envelopes/provider bridge and independent domain receipts. F implements the subprocess client and accounting. Add source hashes and no-reuse proof to builder manifest.
 
 Each phase is independently testable but all deliver in the one A PR. A03 is the first useful increment; it does not replace the remaining required work.

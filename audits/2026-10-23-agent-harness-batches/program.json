@@ -1,7 +1,7 @@
 {
   "authorization": "Batch remaining implementations in one PR per group; Astra SDD/escalation/verification and Sol development; run autonomously.",
   "createdAt": "2026-10-23T04:46:11.094618+00:00",
-  "updatedAt": "2026-10-23T05:21:30.465598+00:00",
+  "updatedAt": "2026-10-23T05:42:13.240648+00:00",
   "spec": "2026-10-22-agent-harness-reliability-and-proactivity-spec",
   "execution": "autonomous until six grouped PRs implemented and independently verified; human merge, live paid inference and production activation retain separate gates",
   "models": {
@@ -27,14 +27,18 @@
         4,
         5
       ],
-      "state": "sdd-pass1-changes-requested",
+      "state": "sdd-approved-development-ready",
       "pr": null,
       "supportingWork": [
         "Hub browser evaluation adapters for Slice26"
       ],
       "reviewPass1": {
-        "verdict": "changes_requested",
+        "verdict": "approved",
         "path": "sdd/a-chat-pass1.md"
+      },
+      "reviewPass2": {
+        "verdict": "approved",
+        "path": "sdd/a-chat-pass2.md"
       }
     },
     {
@@ -49,7 +53,7 @@
         8,
         9
       ],
-      "state": "developing",
+      "state": "correcting-independent-B-V1",
       "pr": null,
       "reviewPass1": {
         "verdict": "approved",
@@ -61,6 +65,24 @@
       "reviewPass2": {
         "verdict": "approved",
         "path": "sdd/b-factory-pass2.md"
+      },
+      "implementationManifest": "development/b-factory/source-manifest.json",
+      "verifier": "/root/astra_sdd_pulse_digest",
+      "verificationPacket": "development/b-factory/verification.json",
+      "independentFindings": [
+        {
+          "id": "B-V1",
+          "status": "confirmed-pending-correction",
+          "description": "Python/JS numeric canonicalization mismatch for known fractional bill leaves real worker reservations unsettled",
+          "evidence": "verification/b-factory/tiny-cost-chain.log"
+        }
+      ],
+      "implementationReview": {
+        "verdict": "changes_requested",
+        "path": "verification/b-factory/review.md",
+        "blockingFindings": [
+          "B-V1"
+        ]
       }
     },
     {
@@ -79,7 +101,7 @@
         15,
         16
       ],
-      "state": "sdd-approved-development-ready",
+      "state": "developing",
       "pr": null,
       "supportingWork": [
         "Gateway Slice20 cron explicit-agent/session binding",
@@ -92,7 +114,10 @@
       "reviewPass2": {
         "verdict": "approved",
         "path": "sdd/c-gateway-pass2.md"
-      }
+      },
+      "sddCommit": "d2e20c17",
+      "developer": "/root/sol_dev_gateway",
+      "developerModel": "gpt-6.1-sol"
     },
     {
       "group": "d-pulse",
@@ -108,7 +133,7 @@
         19,
         20
       ],
-      "state": "sdd-review-pending",
+      "state": "sdd-independent-pass1-review",
       "pr": null,
       "dependsOn": [
         "c-gateway binding contract"
@@ -130,7 +155,7 @@
         25,
         32
       ],
-      "state": "sdd-review-pending",
+      "state": "sdd-independent-pass1-review",
       "pr": null,
       "dependsOn": [
         "d-pulse schema/selected-worker/receipts"
@@ -152,7 +177,7 @@
         30,
         31
       ],
-      "state": "sdd-pass1-changes-requested",
+      "state": "sdd-approved-development-ready",
       "pr": null,
       "dependsOn": [
         "a-chat callback/decision-event contract"
@@ -161,8 +186,13 @@
         "Meta SDD and review artifacts for all six groups"
       ],
       "reviewPass1": {
-        "verdict": "changes_requested",
+        "verdict": "approved",
         "path": "sdd/f-evals-pass1.md"
+      },
+      "integratedBaseSha": "792e73ccb3c6c73bee6d60363139a25781c95959",
+      "reviewPass2": {
+        "verdict": "approved",
+        "path": "sdd/f-evals-pass2.md"
       }
     }
   ],
@@ -203,12 +233,14 @@
     "pulseDigestSdd": "/root/astra_sdd_pulse_digest",
     "factoryDeveloper": "/root/sol_dev_factory",
     "gatewayReviewPass1": "/root/astra_sdd_chat_evals",
-    "gatewayReviewPass2": "/root/astra_sdd_pulse_digest"
+    "gatewayReviewPass2": "/root/astra_sdd_pulse_digest",
+    "gatewayDeveloper": "/root/sol_dev_gateway"
   },
   "frozenInstalls": "setup/installs.json",
   "setupStatus": "all-six-frozen-installs-passed-locks-unchanged",
   "qualificationResources": {
     "disposablePostgres": "setup/disposable-postgres.json",
     "pinnedFactoryHarness": "setup/pinned-harness.json"
-  }
+  },
+  "heavyValidationOwner": null
 }

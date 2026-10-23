@@ -10,6 +10,6 @@
 - [x] Unknown exposure, duplicate settlement, malformed debit and deadline body/disconnect cases are covered.
 - [x] Existing slice 6–7 receipts and legacy three-argument calls remain compatibility gates.
 - [x] Installed dependency versions are verified; installed harness timing is an explicit implementation gate.
-- [ ] Independent technical pass 1 and pass 2 approve exact artifact hashes.
+- [x] Independent technical pass 1 and pass 2 approve exact artifact hashes; final reports are registered in the top-level review sidecar.
 
-Spec Kit template checks are adapted to Constitution II: technical file anchors are required in AS-IS; these do not replace user-oriented success criteria. Unchecked review is a workflow gate, not claimed implementation completion.
+Spec Kit template checks are adapted to Constitution II: technical file anchors are required in AS-IS; these do not replace user-oriented success criteria. Checked review records SDD approval, not implementation completion.

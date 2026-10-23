@@ -1,9 +1,9 @@
 ---
 id: 2026-10-23-harness-evals-spec
 title: Reproducible agent evaluation and gated inference
-stage: spec
-status: review
-pass: 1
+stage: dev
+status: implementing
+pass: 2
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
@@ -12,14 +12,14 @@ relationship: extends
 related: [2026-10-22-agent-harness-reliability-and-proactivity-spec]
 tags: [logic, data, security, test]
 type: feature
-verdict: pending
+verdict: approved
 ---
 
 # Reproducible agent evaluation and gated inference
 
 ## 0. Product
 
-This is the board entry for [Spec Kit feature 110](./110-harness-evals/spec.md), an implementation refinement of the approved parent contract under the owner's one-PR-per-group directive. Parent approval authorizes requirements; two independent technical passes on this batch are still pending. Merge, deployment and paid operations keep their separate gates.
+This is the board entry for [Spec Kit feature 110](./110-harness-evals/spec.md), an implementation refinement of the approved parent contract under the owner's one-PR-per-group directive. Parent approval authorizes requirements. Both independent Astra reviewers approved revision 1 at exact hashes. Merge, deployment and paid operations keep their separate gates.
 
 ## AS-IS, TO-BE and DELTA
 

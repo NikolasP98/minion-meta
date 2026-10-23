@@ -61,3 +61,50 @@ C's current implementation has incomplete SDK fallback billing coverage, and its
 **Pass 1: changes_requested**, limited to F1-01. Standards are approved; Spec approval waits for the bounded accounting-identity correction and hash-bound re-review. No software execution, actual paid smoke, corpus readiness, quality promotion or release is claimed by this SDD review.
 
 Final canonical G2 scores are deferred until the revised artifacts are approved. The axes are `slice_size`, `dod_verifiability`, `scope_containment`, `impact_zones`, `collisions`, `testability`, scored on the underlying bounded slices with the owner's authorized group packaging.
+
+
+## Revision 1 bounded rereview — final pass 1 disposition
+
+Date: 2026-10-23. **Standards: approved. Spec: approved.** This appended disposition supersedes the earlier changes-requested outcome only for the exact revision-1 artifacts below. Original findings remain intact. Review was limited to F1-01's canonical accounting identity, resulting CLI/initialization/retirement contracts and their proving tasks; unchanged cleared areas were not broadly re-audited. This decision is independent of the other reviewer's approval.
+
+The exact revision report hash is `e21e07d47f3ba4665552628632cd3e073be783b2bafae0297a816dad17438f81`; its 17-file manifest hash is `b386fe6e6964bd3ac75cb58644ed68cfe01097a922588dfa36f75bbda29bf02b`. Independently recomputed the report and manifest hashes and all 17 file hashes; all matched. Hub HEAD remains `ef62e8ac2dd8d83d7f38dae8ec04f59c50cf4283`; meta observed HEAD is `1d6fa05484a72fb067e6bd4d8494d3a21b174b06`. Hub lock `c5e63e6b708c7abc562da19c95d7c317f2fd329fc558b43267e3853d15e454f0` and meta lock `15cbb75ffccdb3aa06ec97b776f3ed9bc0ff1ff68c10b1718741b32ea855f75a` also match the freeze. No runtime tests or provider calls were run for this document rereview; no source/spec/index/branch/commit changes were made.
+
+### F1-01 closure: one configured accounting authority
+
+At the observed meta source, `scripts/agent-evals/` remains absent; there is no existing registry that can supply missing semantics implicitly. Revised `contracts/evaluation.md:15,19,25–35` now defines them explicitly. Manifest and detached approval bind `accountingRegistryId`, stable `accountingScopeId` and the trusted operator configuration hash. The read-only configuration sits outside generated manifests/runs and pins owner/key fingerprint, canonical root and metadata/journal paths, genesis and root/metadata/journal opened filesystem identities. This is an explicit local POSIX boundary, not a claim against a trusted operator who can rewrite keys/config and accounting files.
+
+The optional journal flag is only an assertion of the already configured exact canonical path. Alternate paths, symlinks, copied roots and missing/replaced/corrupt expected state fail closed. Existing files are opened without create/truncate; descriptor identity is rechecked before reservation/dispatch. One fixed registry-wide writer lock protects all scopes/aliases through attempt settlement. `approvalNamespace`, run ID, manifest and renewed approval are aliases, never new budget authorities. Retained spend, unknown reservations and irreversible scope retirement therefore cannot be bypassed by a fresh path or approval alias.
+
+The separate offline exclusive initializer creates only private state/genesis and an identity report, with fsync and no transport, credentials, key, approval or trusted-config creation. Live reopen never initializes missing state. Relocation requires explicit offline operator reconciliation preserving all spend/unknown/retirement records and newly bound configuration/approval. Retirement (`:61`) resolves an existing alias under the same registry identity and lock, appends/fsyncs a permanent scope marker, and rejects every alias without erasing unknown obligations. The brief inherited phrase “namespace lock” in `:57` is governed unambiguously by the fixed registry-wide lock in `:31–33,55`; no separate namespace lock is authorized.
+
+T014/T015 implement the actual verifier and CLI path/config assertion. T016/T017 require actual subprocess tests for two journal arguments, alias/symlink/copied-root attempts, missing/replaced state, unknown/exhausted/retired scopes and crash/reopen, with request counters. T019 completes actual provider-adapter/A-fixture wiring and same-lock retirement; `quickstart.md:26` repeats these executable obligations. A valid canonical path must reach the stub, preventing an always-reject implementation from passing. The initializer is a bounded prerequisite for a usable local ledger, not a signing or approval service.
+
+### Standards, scope and G2
+
+No new blocking Standards or Spec finding. The revision closes F1-01 with one local filesystem authority and existing planned budget/approval/CLI modules; it adds no remote service or operational registry setup. Strict external-network denial and test-only keys remain required in the live-mode stub tests. Actual paid operations, corpus adjudication, promotion and release remain separately gated. F still must pin the delivered independently verified A adapter and final C schema/source before claiming cross-group integration.
+
+Canonical six-axis G2 scores (underlying bounded slices, with authorized group PR packaging):
+
+| Axis | Score | Rationale |
+|---|---:|---|
+| `slice_size` | 7 | Evaluation stories have independent parser/statistical/screening/approval/budget/complaint increments; the whole batch is not represented as one small slice. |
+| `dod_verifiability` | 9 | Actual CLI positive/negative, subprocess crash and source-pin checks have observable pass conditions. |
+| `scope_containment` | 9 | Local canonical registry and offline identity initializer close the approved budget boundary without an approval service. |
+| `impact_zones` | 9 | Meta CLI, trusted configuration, A adapter and C schema responsibilities are explicit. |
+| `collisions` | 8 | Cross-repository adapter/schema delivery and shared meta CI/index sequencing remain parent-controlled dependencies. |
+| `testability` | 9 | Test-only signatures, real CLI concurrency/crash and injected provider transport prove both successful admission and zero-request rejection. |
+
+Approved F revision-1 hashes:
+
+```text
+695de1345df3e62025eb1c3792bdaf673cc41342be739c27156a964da899c23a  specs/110-harness-evals/checklists/requirements.md
+53f91c7e249dfcea71a9280cf52f3ff729843dba7084f0aab673c7e6e61d0e12  specs/110-harness-evals/contracts/evaluation.md
+5f4f501442d64eab3d8b9620c0727e593450cf235f27234859a7b96489ae1715  specs/110-harness-evals/contracts/quickstart.md
+ac6538f7a0a88f5e75e899ffa1ea0c406f6b3cf9b67d982c1ec74e48a2056d7a  specs/110-harness-evals/plan.md
+eb8196f4689af48537dd6f0731b513731e488d046394966ff8b470d8a2a17d34  specs/110-harness-evals/research.md
+94bd692f02fd7049b0790128da750fe7c7be983d504fdb433c5d75bb294e76a9  specs/110-harness-evals/spec.md
+f7fded252f9dc7f6726694774d700f53b44c01270b0f3727a10ff695539cc445  specs/110-harness-evals/tasks.md
+1a3c1ad6983d8c7923fdc4b8a6efa6e1e1e7dddad0f0369464215fd7d5a7ecec  specs/2026-10-23-harness-evals-spec.md
+```
+
+**Final pass 1: approved for implementation at these hashes.** This approves the SDD correction, not implemented runtime safety, actual paid smoke, corpus readiness, promotion, merge or deployment.

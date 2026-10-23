@@ -4,7 +4,7 @@
 
 **Created**: 2026-10-23
 
-**Status**: Review pending; approved parent requirements, implementation refinement awaiting two independent passes.
+**Status**: Approved for development; both independent Astra technical reviews approved revision 1 at exact hashes.
 
 **Input**: Owner: “batch their implementations in 1 PR per group … Run autonomously.” F batches parent Slices 26–29, 31 and the evaluation portion of 30 in one meta PR. The [approved parent](../2026-10-22-agent-harness-reliability-and-proactivity-spec.md), especially §§4.2, 8, 9 and 11, is normative. A owns required Hub fixture code; C owns production watcher Slice 30. Six PRs total. No extra repository or patch-only deliverable is added.
 
@@ -80,7 +80,8 @@ An operator can prove the software path admits only separately approved bounded 
 1. `--live`, an immutable manifest and a valid separate trusted approval are all required. A manifest's own `approved` value/key/reference cannot authorize it. Missing/expired approval, unknown price/exposure, exhausted limits, fixture/source/model drift or ambiguous prior spend dispatches zero provider requests.
 2. Each provider attempt reserves worst-case bounded exposure durably before dispatch and writes received/terminal or unknown evidence. Timeout/cancel/lost response after admission never permits automatic replay. SDK retry/fallback is disabled.
 3. The same live path used operationally reaches a stub provider and exercises request shaping, endpoint allowlist, reply parsing, receipt persistence and budget settlement. A separate fake-live implementation cannot qualify it.
-4. Tools remain marked disposable fixtures in live mode. Production credentials/endpoints are never discovered/inferred; provider credentials are explicitly supplied to the invocation and never persisted. No actual paid request is run in implementation/CI.
+4. A separately initialized canonical operator registry and signed accounting identity are required. Reusing one approval through an alternate journal path, symlink, copied registry, new manifest or namespace alias cannot reset a cap, unknown fence or retirement marker. Missing/replaced expected state rejects without initialization; the correct canonical path still reaches the actual stub transport.
+5. Tools remain marked disposable fixtures in live mode. Production credentials/endpoints are never discovered/inferred; provider credentials are explicitly supplied to the invocation and never persisted. No actual paid request is run in implementation/CI.
 
 ### User Story 5 - Report the conditional complaint census without activating it (Priority: P2)
 
@@ -96,14 +97,14 @@ An operator imports C's certified default-policy census/shadow receipts and rece
 
 ### Edge Cases
 
-Crash between durable admission and dispatch is conservatively unknown. Crash after response persistence resumes analysis/materialization without a provider recall. Zero successes means undefined cost per success, not zero. Missing paired arms and conflicting duplicate records lower coverage/quarantine. Upper exposure is not invented from mean token usage. UTC rollover carries outstanding reservations; a new run ID cannot reset a daily approval budget. Split aliases/translated variants retain the same leakage group. Screen abstention, unknown ground truth and unlabeled controls are not negatives. Model aliases drifting to another resolved identity invalidate the cohort. Deletion of raw payload does not erase unresolved paid admission identities.
+Crash between durable admission and dispatch is conservatively unknown. Crash after response persistence resumes analysis/materialization without a provider recall. Zero successes means undefined cost per success, not zero. Missing paired arms and conflicting duplicate records lower coverage/quarantine. Upper exposure is not invented from mean token usage. UTC rollover carries outstanding reservations; a new run ID, journal path or approval namespace alias cannot reset the configured accounting scope's daily budget. Deleting/replacing registry state fails closed; offline initialization is distinct from live reopen and does not confer approval. Split aliases/translated variants retain the same leakage group. Screen abstention, unknown ground truth and unlabeled controls are not negatives. Model aliases drifting to another resolved identity invalidate the cohort. Deletion of raw payload does not erase unresolved paid admission identities.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
 - **FR-001 / A26**: Default fixture runner, three identical-state arms, randomized recorded order, actual A adapter, append-only `events.jsonl`/`receipts.jsonl`, explicit joins and missing-receipt coverage; fixture network denied.
-- **FR-002 / A26,A31**: Validate immutable complete manifests, source/lock/model/tool/data/question/gate/rubric/split revisions, scope/side effects, per-call/run/day caps, retention/stop rules and separate approval; reject missing/zero/unknown live exposure before dispatch.
+- **FR-002 / A26,A31**: Validate immutable complete manifests, source/lock/model/tool/data/question/gate/rubric/split revisions, scope/side effects, per-call/run/day caps, retention/stop rules and separate approval bound to the trusted operator config/canonical accounting registry; reject missing/zero/unknown live exposure before dispatch.
 - **FR-003 / A27**: Strict episode/label/split schema, import/validate/readiness commands, duplicate-leakage and development holdout boundary, bilingual twelve-family/compaction representation in examples; report human-label readiness without fabricating 300 episodes.
 - **FR-004 / A28**: Deterministic receipt-based terminal scoring and independent rubric labels; cost of all attempts, unknown exposure/coverage, drift-separated cohorts and 10,000 seeded paired episode-cluster bootstrap draws.
 - **FR-005 / A28**: Preserve parent promotion criteria: zero additional critical actions; success-difference 95% lower bound ≥−0.02; cost-per-success ratio 95% upper bound <1; p95 latency ratio ≤1.10 under the prespecified paired procedure. Missing/underpowered/zero-success/unbounded cohorts stay inconclusive, baseline retained.
@@ -111,11 +112,11 @@ Crash between durable admission and dispatch is conservatively unknown. Crash af
 - **FR-007 / A30-F**: Validate/import C's exact pinned ComplaintEvaluationRecordV1 schema and certified logical-source census/shadow receipts, reconciling monotonic receiptRevision and actual versus counterfactual costs and report eligibility/baseline completeness, costs and frozen severity/threshold gates; no eligible traffic stops the pilot recommendation.
 - **FR-008 / A31**: Implement the actual live inference adapter behind explicit selection and independently trusted approval, allowlisted provider transport, durable pre-dispatch reservations and terminal/unknown receipts; disable retries/fallback and automatic ambiguous replay; enforce known input/output exposure bounds.
 - **FR-009 / A31**: Reuse A's disposable tools in both modes; explicitly supplied provider credentials only, no production QA/business endpoints or credential discovery. Valid live path is tested with stub transport and zero paid calls.
-- **FR-010 / A26–A31**: Keep stable run/approval budget identity, crash/cancel/retention semantics and replay tombstones. New run/policy/day cannot erase unresolved exposure. Register nested tests in executed CI; record all source/lock/test evidence and separate software qualification from corpus, paid, promotion and release operations.
+- **FR-010 / A26–A31**: Keep operator-configured canonical registry/scope identity, crash/cancel/retention semantics and replay tombstones. Signed manifest/approval bind that identity; a caller-selected journal path is only a matching assertion. New run/policy/day/approval alias cannot erase prior spend, unknown exposure or scope retirement. Live reopen never creates missing state; offline first initialization creates no approval or trust. Register nested tests in executed CI; record all source/lock/test evidence and separate software qualification from corpus, paid, promotion and release operations.
 
 ### Key Entities *(include if feature involves data)*
 
-Manifest/approval attestation; episode/split/label; run/arm/attempt; immutable tool/domain receipt; exposure reservation; terminal task outcome; drift cohort; trace-screen selection; certified complaint source record. [Data/CLI/approval contracts](contracts/evaluation.md) specify exact fields and transitions; [A/F adapter](../105-harness-chat/contracts/eval-adapter.md) defines the only Hub bridge.
+Manifest/approval attestation; trusted operator registry/scope binding; episode/split/label; run/arm/attempt; immutable tool/domain receipt; exposure reservation; terminal task outcome; drift cohort; trace-screen selection; certified complaint source record. [Data/CLI/approval contracts](contracts/evaluation.md) specify exact fields and transitions; [A/F adapter](../105-harness-chat/contracts/eval-adapter.md) defines the only Hub bridge.
 
 ## Success Criteria *(mandatory)*
 
@@ -142,7 +143,7 @@ Manifest/approval attestation; episode/split/label; run/arm/attempt; immutable t
 
 ## Assumptions
 
-The owner explicitly overrides one-PR-per-slice with one F PR and six PRs total. Node ≥22 and root pnpm are already declared. A delivers the only Hub adapter and event schema; C delivers runtime complaint exports; Factory and digest are not prerequisites for the basic runner. Optional Pulse feedback import may use E's Slice25 export only when enabled and version compatible; absence does not block A26/A29. A detached local approval attestation verified with built-in crypto is a narrow trust boundary, not an approval service: trusted public key/owner reference is explicitly configured outside the manifest/run output; no minting CLI is included. Tests use test-only signing material. Maximum effort, price/input/output bounds and review budgets are operator-approved manifest values; unknown values fail closed rather than silently becoming defaults.
+The owner explicitly overrides one-PR-per-slice with one F PR and six PRs total. Node ≥22 and root pnpm are already declared. A delivers the only Hub adapter and event schema; C delivers runtime complaint exports; Factory and digest are not prerequisites for the basic runner. Optional Pulse feedback import may use E's Slice25 export only when enabled and version compatible; absence does not block A26/A29. A detached local approval attestation verified with built-in crypto is a narrow trust boundary, not an approval service: trusted public key/owner reference is explicitly configured outside the manifest/run output; no minting CLI is included. The canonical local registry is preprovisioned separately, pinned by read-only operator configuration and signed manifest/approval; an offline initializer creates identity/state only, no keys, trusted config or approval. Filesystem identities and explicit relocation reconciliation assume a local POSIX filesystem and a trusted operator controlling that configuration; this is not a multi-host or malicious-operator-proof ledger. Tests use test-only signing material. Maximum effort, price/input/output bounds and review budgets are operator-approved manifest values; unknown values fail closed rather than silently becoming defaults.
 
 ## Out-of-scope
 

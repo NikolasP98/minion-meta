@@ -14,7 +14,7 @@ Build one offline-first Node evaluation toolset with strict manifests/corpus/rec
 
 **Primary Dependencies**: built-in fs/crypto/child_process/test; existing repository schema tooling if required, existing Hub adapter uses Hub's frozen Bun dependencies.
 
-**Storage**: private append-only JSONL run artifacts plus per-approval single-writer budget journal and retained replay tombstones. No production DB.
+**Storage**: private append-only JSONL run artifacts plus operator-configured canonical single-writer registry/scope journal and retained replay tombstones, bound by signed manifest/approval; no caller-selected alternative ledger. No production DB.
 
 **Testing**: `node --test` CLI/subprocess integration and independent synthetic statistics; valid live path with stub transport; real A adapter integration recorded separately.
 
@@ -22,7 +22,7 @@ Build one offline-first Node evaluation toolset with strict manifests/corpus/rec
 
 **Project Type**: evaluation CLI, corpus validator, deterministic reports and explicit inference transport.
 
-**Performance Goals**: bounded manifest effort/request/time budgets; exactly 10,000 seeded bootstrap draws for qualified router reports; one outstanding paid attempt per namespace.
+**Performance Goals**: bounded manifest effort/request/time budgets; exactly 10,000 seeded bootstrap draws for qualified router reports; one outstanding paid attempt per canonical registry.
 
 **Constraints**: fixture default, denied external network, fixture-only tools in all modes; actual paid calls zero during implementation/CI. No synthetic readiness/promotion claim.
 
@@ -64,7 +64,7 @@ Use [research](research.md). Freeze A adapter protocol, source/lock/manifest han
 3. A28: task receipt scoring, exact joins/dedup/quarantine, cohorts, all-cost numerator and seeded paired cluster statistics. Use independently calculated counterexamples including a cheaper but less-successful arm, zero-success draws and bounded/unbounded exposure.
 4. A29: deterministic screen faults, semantic abstain and independent labels; budget-fixed random/control design with explicit weighting and uncertainty. Optional E feedback stays file-based/versioned/off by default.
 5. A30-F: complaint importer/report with C compatibility fixtures; runtime gate/census still owned and verified in C.
-6. A31: detached approval, durable shared-budget reservations, real live transport selection/provider adapters, request/result bounds and crash/cancel recovery. Test actual CLI valid admission with injected stub, malformed/expired/self-approval rejection, wrong endpoint/model/fixture, unknown/exhausted budget, partial body and persisted-response recovery. Disable all automatic retries/fallback.
+6. A31: detached approval binding trusted operator config hash and canonical registry/scope. Add an offline exclusive initializer returning an identity report only; live reopen never creates ledger/trust. Validate path/genesis/opened filesystem identities and fixed registry lock before durable shared-budget reservations, real live transport selection/provider adapters, request/result bounds and crash/cancel recovery. Test actual CLI valid admission with injected stub, malformed/expired/self-approval rejection, wrong endpoint/model/fixture, unknown/exhausted budget, alternate path/symlink/copied registry/namespace alias, missing/replaced expected state, scope retirement, partial body and persisted-response recovery. Verify the valid canonical path still dispatches; alternate paths never create another allowance. Disable all automatic retries/fallback.
 7. CI/documentation: execute nested tests, real A integration, update scoped indices once orchestrator owns all new stubs; publish only draft PR evidence, no merge/live operation.
 
 Libraries are internal to these entrypoints. Do not introduce a generic workflow/runtime or a second Hub tool engine.
@@ -86,5 +86,5 @@ Keep statuses separate: software fixture passed; real A adapter integrated; corp
 | Explicit choice/deviation | Reason | Boundary |
 |---|---|---|
 | One PR across six planned evaluation slices | Owner one-PR-per-group instruction | One meta F PR, with runtime seams in A/C PRs. |
-| Local detached approval and one journal lock | Manifest cannot authorize itself; run/day caps survive new IDs/crash | No approval service, key discovery, signing command or multi-host scheduler. |
+| Local detached approval, operator-configured registry and one fixed lock | Manifest cannot authorize itself; run/day caps and unknown/retirement state survive new IDs, paths and aliases | Offline initializer creates identity/state only; no approval service, key discovery, signing command or multi-host scheduler. |
 | Contracts contain data model/quickstart | Delegated file ownership | Full content retained under owned paths. |

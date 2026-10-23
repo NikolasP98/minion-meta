@@ -60,3 +60,57 @@ Installed SDK `beginRequest` (`client.js:99–146`, declaration `:111–120`) ex
 **Pass 1: changes_requested**, limited to A1-01. Standards are approved with A1-N1; Spec approval requires the bounded contract/task correction and hash-bound re-review. No runtime readiness, merge or deployment is claimed.
 
 Final canonical G2 scores are deferred until revised artifacts are approved. The six axes will be `slice_size`, `dod_verifiability`, `scope_containment`, `impact_zones`, `collisions`, `testability`, scored on the underlying bounded slices with the authorized group packaging, not on the whole group as a single 4–8-hour slice.
+
+
+## Revision 1 bounded rereview — final pass 1 disposition
+
+Date: 2026-10-23. **Standards: approved. Spec: approved.** This appended disposition supersedes the earlier changes-requested outcome only for the exact revision-1 artifacts below. Original findings and evidence remain intact. Scope was A1-01, A1-N1 and the closely related accepted-controller lifecycle correction; unchanged cleared areas were not broadly re-audited. This is independent contract review, not agreement inferred from the other reviewer's decision.
+
+The exact revision report hash is `e21e07d47f3ba4665552628632cd3e073be783b2bafae0297a816dad17438f81`; its 17-file manifest hash is `b386fe6e6964bd3ac75cb58644ed68cfe01097a922588dfa36f75bbda29bf02b`. Independently recomputed the report and manifest hashes and all 17 file hashes; all matched. Hub HEAD remains `ef62e8ac2dd8d83d7f38dae8ec04f59c50cf4283`; meta observed HEAD is `1d6fa05484a72fb067e6bd4d8494d3a21b174b06`. Hub lock `c5e63e6b708c7abc562da19c95d7c317f2fd329fc558b43267e3853d15e454f0` and meta lock `15cbb75ffccdb3aa06ec97b776f3ed9bc0ff1ff68c10b1718741b32ea855f75a` also match the freeze. No runtime tests or provider calls were run for this document rereview; no source/spec/index/branch/commit changes were made.
+
+### A1-01 closure: concrete producer, publication and consumption
+
+Re-read actual `page-context.ts:8–32`, `model-context.ts:18–26,54–76,109–120`, sandbox `tools.ts:25–28,189–225,270–302`, host `host.svelte.ts:110–123,187–196`, sandbox page `+page.svelte:65–88`, Home `+page.svelte:689–694` and Floating `:309–315`. The current callers still have the original unqualified event/revision path; the revised design now owns every file needed to change it.
+
+`contracts/chat-evidence.md:27–35` specifies one nonserializable private capability tied to the exact accepted run, sending surface/generation, invocation, registered tool object, page-owner lease and prior/resulting revision. Only the existing three sandbox mutation tools enroll. Their API write awaits a local page callback, then host reload, then synchronous element-snapshot/context publication under a stable page lease. It expressly removes the duplicate unqualified window notification for this path and replaces the effect that currently disposes/recreates ownership. Existing UI/window reloads carry no capability. Native execution receives no accepted capability, consistent with the existing local/native tool split.
+
+The publication capability closes on publication or invocation settlement/revocation/30-second expiry. Its recorded single-use acknowledgement is consumed only at the immediate guarded post-execution boundary before the same expiry, so settlement does not require keeping publication authority alive. Source registration, lease, revision and accepted generation are checked before publication and after await. User navigation, A→B→A, unrelated registration/reload, teardown, forged/reordered/duplicate events and Stop revoke irreversibly. Failed refresh preserves the completed write and sends no continuation or replay. The old batch ends; only completed results may enter a newly prepared continuation under the existing five-follow-up cap.
+
+T003/T007/T008 name the actual stores, notification layer, sandbox producer/host/page and both senders. T009 requires a positive single-continuation/zero-old-call case and the relevant negative races in actual mounted Home/Floating. T017/T019 and `eval-adapter.md:19,38` require the real sandbox producer through the adapter; fixture protocol cannot fabricate a capability or provenance receipt. This closes the causality ambiguity without a general async context engine or new navigation authority.
+
+### Lifecycle and limiter precision closure
+
+`pending-submission.ts:92–97` aborts successful preparation; Home `:749–752` and Floating `:373–376` call it. Revised contract `:11–13` and T005/T008/T009 explicitly give accepted runs their own controller/generation at submitted transition, preserving the signal through preparation finish and capturing exact-run Stop after smoother clearing. The real caller test is required, not merely a helper test.
+
+Actual `src/server/auth/rate-limit.ts:9–25` still has no key eviction. Revised contract `:59`, FR-005 and T014/T015 now add a separate bounded observation namespace inside that module: 120 charged events per 60 seconds, at most 4,096 keys, charged-idle expiry, reject unseen keys at capacity, no active-budget eviction, no charge or lifetime extension on a denied batch, bounded per-key history and unchanged existing weight-one callers. Controlled-clock endpoint/limiter tests and the quickstart explicitly cover these rules. A1-N1 is closed.
+
+### Standards, scope and G2
+
+No new blocking Standards or Spec finding. The source-confirmed sandbox ownership is the narrow producer needed to implement parent A03 and A26. Required UI governance and actual browser gates remain; parent serialization still controls Home/Floating and shared fixture collisions. Approval does not assert that the specified runtime code or tests already exist.
+
+Canonical six-axis G2 scores (underlying bounded slices, with the owner's authorized group PR packaging):
+
+| Axis | Score | Rationale |
+|---|---:|---|
+| `slice_size` | 7 | Individual lineage, route-provenance, ingress and adapter work remains decomposed; the grouped PR is not claimed to be one 4–8-hour slice. |
+| `dod_verifiability` | 9 | Positive/negative actual-call and mounted-browser outcomes are explicit. |
+| `scope_containment` | 9 | Only existing sandbox mutations enroll; no new wire or navigation authority. |
+| `impact_zones` | 9 | Registry/page/host/senders/sanitizer and adapter consumers have explicit owners. |
+| `collisions` | 8 | Shared Home/Floating and fixture edits require the documented parent serialization. |
+| `testability` | 9 | Controlled awaits, expiry/clock cases, real producers and removed-fence mutation discriminate the safety guarantees. |
+
+Approved A revision-1 hashes:
+
+```text
+515fef5b0b6e61363f329fbc75757d316903f6295bcc1d6013cd1506ac838ed1  specs/105-harness-chat/checklists/requirements.md
+a625c2bd9520949944c9c58c0efb0dbbd63d41d4980ef510a042cfe2ff62f6b4  specs/105-harness-chat/contracts/chat-evidence.md
+b4729f80a7323eb0ecc45853e31c6432e9bba10263d0980f1f32a25ccbd05b14  specs/105-harness-chat/contracts/eval-adapter.md
+3350788b4208e24c3a54830535034c29c0dc722329fcc37d60c94f34f1e67f23  specs/105-harness-chat/contracts/quickstart.md
+8a9712c4815a732d0efbffcaef514992d46c2cd6433faa6052484f64da6ace10  specs/105-harness-chat/plan.md
+1d984bd6aeb3a2a853109729701cd7871e6ec3d7b49d811bed4ac8a7c5a6ed81  specs/105-harness-chat/research.md
+ce8d8b2de23922f390d0f30e079eb0002e1ddfb9d0e93ac341e9fa0cd7927966  specs/105-harness-chat/spec.md
+52b66a5dffdb5b4a87f9af3c248dc24dbf855a1180ee894d1115e5d4cc7502d2  specs/105-harness-chat/tasks.md
+dd40370cee877a11d9b7b4611e8e328f6d8a22eb966e2a6fd182e0304230f414  specs/2026-10-23-harness-chat-spec.md
+```
+
+**Final pass 1: approved for implementation at these hashes.** Runtime acceptance, cross-repository adapter qualification, human merge, deployment and paid-operation gates remain separate.
