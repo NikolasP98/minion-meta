@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-23T19:08:46.029Z",
+	"generatedAt": "2026-10-23T19:17:30.915Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -600,40 +600,6 @@
 			"scoredAt": "2026-10-19T13:00:36.825Z"
 		},
 		{
-			"key": "proposal:2026-08-28-factory-reviewer-instruction-isolation",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Isolate the factory reviewer from repo-resident agent instructions",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-28-factory-reviewer-instruction-isolation.md",
-			"sourceUpdatedAt": "2026-08-28",
-			"sourceFingerprint": "2725e3a07cf981a95535c4324dacf3f6c378677194e240f18d71498692cb30c2",
-			"score": 83,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-08-28-factory-gate-weakening-detector"
-			],
-			"rationale": "Identified as the top cheat vector, allowing a develop agent to inject a forced PASS verdict or even arbitrary code execution into the sole reviewer gate.",
-			"evidence": [
-				"committed CLAUDE.md or .claude/settings.json hook can forge VERDICT: PASS",
-				"reviewer runs with --dangerously-skip-permissions inside the agent-written tree"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-09-16T16:59:42.409Z"
-		},
-		{
 			"key": "spec:2026-08-31-dev-key-at-rest-audit-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -732,6 +698,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-12T02:55:06.557Z"
+		},
+		{
+			"key": "proposal:2026-08-28-factory-reviewer-instruction-isolation",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Isolate the factory reviewer from repo-resident agent instructions",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-28-factory-reviewer-instruction-isolation.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "25b3c4f6671759960b494c85ebdecb4920989bbc63d08d26df3239e04eed0e59",
+			"score": 81,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This is a concrete, well-specified security fix for a prompt-injection path that can forge automerge PASS verdicts in the factory review harness.",
+			"evidence": [
+				"develop agent can commit CLAUDE.md or settings hook that writes VERDICT: PASS to /out/REVIEW.md before harness check",
+				"proposal lists specific remediation steps for both legacy and containment-v2 review paths"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T19:17:30.781Z"
 		},
 		{
 			"key": "spec:2026-08-17-factory-token-budget-governance-spec",
@@ -25890,6 +25888,38 @@
 			"scoredAt": "2026-10-21T05:56:28.048Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/93141a2cda7ff4b65db8e31cd285ad60d9050785",
+			"sourceUpdatedAt": "2026-10-23T18:29:46Z",
+			"sourceFingerprint": "72a92b2dacfe0ae5b10ee9344cc9d8ff70139e3a77ac3cf754aede6204a3cc21",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The commit message describes a fix already merged (anchoring hub-rest-registry on globalThis), so no outstanding action remains for this deploy record.",
+			"evidence": [
+				"commit 93141a2c fixes hub_disconnected by anchoring value on globalThis",
+				"summary states fix already implemented, not pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T19:17:30.781Z"
+		},
+		{
 			"key": "issue:minion-meta#329",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27923,6 +27953,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T11:28:10.944Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-0323908",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 0323908",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-0323908.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "aae0abcfad752a241811e1abdd9f27e80f3b1116525e1642b9a5a9f4e4c294c1",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A single, precisely located medium-severity unchecked-access bug in a test file is a small, bounded, actionable fix.",
+			"evidence": [
+				"finding cites exact location src/shells/run-store.forks.test.ts:138",
+				"issue: process.platform descriptor asserted non-null but finally block crashes if undefined"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T19:17:30.781Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
@@ -32583,6 +32645,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T03:30:22.758Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "2ecce0065b3955c256e5d196d4819ff577ef416e4ae74acd336310065f9d7535",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This ledger sweep bundles 17+ unrelated TODO markers spanning POS, bookings, WebGL, and schema into a single proposal with no coherent scope, so it cannot be executed as one goal.",
+			"evidence": [
+				"markers span rankings/index.json lines 1616 through 17597 covering unrelated topics (org-scoping, WebGL contexts, RUC parties, stock schema)",
+				"definition of done requires resolving each marker individually, not a single unified change"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T19:17:30.781Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-506184729",
@@ -37684,38 +37778,6 @@
 			"scoredAt": "2026-10-23T18:47:55.017Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-0323908",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 0323908",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-0323908.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "aae0abcfad752a241811e1abdd9f27e80f3b1116525e1642b9a5a9f4e4c294c1",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A specific, narrowly-scoped test-robustness bug (unvalidated property descriptor in a finally block) with a clear file/line is bounded enough to fix directly.",
-			"evidence": [
-				"src/shells/run-store.forks.test.ts:138 (unchecked-access)",
-				"finally block will crash if undefined"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T19:10:16.931Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-1b3a991",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38927,37 +38989,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T03:34:47.327Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "42b6bea07952a19a6c0f5ed79618ca1034104626ce0746e7eff072766dc25239",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This sweep result bundles over a dozen unrelated quoted strings from rankings/index.json rather than describing one coherent open end.",
-			"evidence": [
-				"16+ disparate quoted lines pulled from rankings/index.json spanning unrelated topics (sessions, SQL drops, WebGL budgets, RUC parties)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T18:47:55.017Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3082127154",
