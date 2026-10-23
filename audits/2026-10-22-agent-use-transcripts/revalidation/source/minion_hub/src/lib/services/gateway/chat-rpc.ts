@@ -1,0 +1,369 @@
+// Chat + voice-turn send/load helpers (split from gateway.svelte.ts).
+// These mutate per-agent chat state via `$lib/state/chat/chat.svelte` and
+// dispatch through `sendRequest`. Imported through the gateway facade so
+// existing `$lib/services/gateway.svelte` import paths keep working.
+
+import { ensureAgentChat, pushChatMessage } from '$lib/state/chat/chat.svelte';
+import * as m from '$lib/paraglide/messages';
+import { conn } from '$lib/state/gateway/connection.svelte';
+import { uuid } from '@minion-stack/shared';
+import { sendRequest, gwTrace } from '../gateway-rpc';
+
+export function loadChatHistory(
+  agentId: string,
+  sessionKey?: string,
+  current: () => boolean = () => true,
+): Promise<void> {
+  const chat = ensureAgentChat(agentId);
+  const targetSessionKey = sessionKey ?? chat.sessionKey ?? `agent:${agentId}:main`;
+  chat.sessionKey = targetSessionKey;
+  const isInitialLoad = chat.messages.length === 0;
+  if (isInitialLoad) chat.loading = true;
+  return sendRequest('chat.history', { sessionKey: targetSessionKey, limit: 200 })
+    .then((res) => {
+      if (!current() || chat.sessionKey !== targetSessionKey) return;
+      const incoming = Array.isArray((res as { messages?: never[] })?.messages)
+        ? (res as { messages: never[] }).messages
+        : [];
+      // Guard: never let a transient empty history response wipe a populated
+      // thread (would flash it blank on a hiccup). The UI keys rows by content,
+      // so this splice reconciles in place without re-mounting unchanged rows.
+      if (incoming.length === 0 && chat.messages.length > 0) return;
+      chat.messages.splice(0, chat.messages.length, ...incoming);
+    })
+    .catch(() => {})
+    .finally(() => {
+      if (current() && chat.sessionKey === targetSessionKey) chat.loading = false;
+    });
+}
+
+/**
+ * New chat: select a fresh named session key and clear the local thread.
+ * Do not reset/archive the previous key — keeping it in the session store is
+ * what makes it available from chat history.
+ */
+export async function resetChat(agentId: string): Promise<void> {
+  const chat = ensureAgentChat(agentId);
+  const nextSessionKey = `agent:${agentId}:chat:${uuid()}`;
+  // Materialize the empty session immediately. Without this, the gateway only
+  // creates it on first send and the history popover cannot recover an empty
+  // newly-created conversation after the user switches away.
+  await sendRequest('sessions.patch', { key: nextSessionKey, label: null });
+  chat.messages.splice(0, chat.messages.length);
+  chat.sessionKey = nextSessionKey;
+  chat.stream = null;
+  chat.streamMessage = null;
+  chat.streamDisplay = '';
+  chat.lastError = null;
+  chat.liveTools = [];
+  chat.liveActivity = null;
+}
+
+/**
+ * Stop the reply running in a conversation (spec 019 FR-003). Aborts every run
+ * on the session key; the gateway answers with an `aborted` chat event, which
+ * `onChatEvent` already turns into the partial reply + cleared stream state.
+ * Harmless when nothing is running (`aborted: false`).
+ */
+export function abortChat(agentId: string, sessionKey?: string): Promise<unknown> {
+  const chat = ensureAgentChat(agentId);
+  const key = sessionKey ?? chat.sessionKey ?? `agent:${agentId}:main`;
+  return sendRequest('chat.abort', { sessionKey: key }).catch((e) => {
+    gwTrace('chat.abort_failed', { sessionKey: key, error: String(e) });
+  });
+}
+
+export function sendChatMsg(agentId: string) {
+  const chat = ensureAgentChat(agentId);
+  const msg = chat.inputText.trim();
+  if (!msg || chat.sending || !conn.connected) return;
+
+  const sessionKey = chat.sessionKey ?? `agent:${agentId}:main`;
+  const runId = uuid();
+
+  pushChatMessage(chat, {
+    role: 'user',
+    content: [{ type: 'text', text: msg }],
+    timestamp: Date.now(),
+  } as never);
+  chat.inputText = '';
+  chat.sending = true;
+  chat.streamMessage = null;
+  chat.runId = runId;
+  chat.stream = '';
+  chat.lastError = null;
+  chat.liveTools = [];
+  chat.liveActivity = null;
+
+  // Keep `sending` (the "thinking" indicator) up until the run actually starts
+  // streaming — the chat.send RPC resolving only means the gateway ACCEPTED the
+  // message, not that the agent has produced output. onChatEvent clears `sending`
+  // on the first event for this run, so the indicator hands off smoothly to the
+  // streaming bubble instead of flashing out for the gap before the first token.
+  // Safety net: if no event ever arrives, drop the indicator after 2 minutes
+  // AND reload from the gateway — the reply may well exist server-side even
+  // though no live `chat` event reached this client (verified in prod: the
+  // gateway produced a reply, the hub never rendered it, socket stayed open).
+  const guard = setTimeout(() => {
+    if (chat.runId !== runId) return;
+    chat.sending = false;
+    gwTrace('chat.guard_timeout', { runId, sessionKey });
+    void loadChatHistory(agentId, sessionKey);
+  }, 120_000);
+
+  sendRequest('chat.send', {
+    sessionKey,
+    message: msg,
+    deliver: false,
+    idempotencyKey: runId,
+  }).catch((e) => {
+    clearTimeout(guard);
+    chat.runId = null;
+    chat.stream = null;
+    chat.streamMessage = null;
+    chat.sending = false;
+    chat.lastError = String(e);
+    // Sync in case the message was processed despite the error
+    loadChatHistory(agentId);
+  });
+}
+
+/**
+ * Spoken-call equivalent of sendChatMsg. Routes a transcribed utterance through
+ * the same agent + main session (so prompt engineering, tools and context match
+ * text chat), but prepends a voice-call header instructing short spoken replies —
+ * mirroring the gateway voice-call extension's composed-message approach. The
+ * clean transcript (not the header) is what shows in the chat thread, so the
+ * call reads naturally in the transcript.
+ */
+export const VOICE_TURN_PREFIX =
+  '[Voice call — the user is speaking to you out loud and will hear your reply spoken aloud. ' +
+  'Reply in short, natural, spoken sentences (one to three). ' +
+  'No markdown, lists, code blocks or emoji — plain spoken words only.]\n\n';
+
+/**
+ * Strip the voice-call header so the transcript reads cleanly in the UI.
+ * Tolerant of whitespace drift after the gateway round-trips the message:
+ * removes any leading `[Voice call …]` block, not just the exact constant.
+ */
+export function stripVoiceTurnPrefix(text: string): string {
+  return text.replace(/^\s*\[Voice call[^\]]*\]\s*/, '');
+}
+
+/**
+ * Strip the page-context envelope (buildAssistantContext) from a stored user
+ * message so the transcript shows only the clean text. The gateway persists the
+ * full sent message (envelope + text), so it reappears on history reload — same
+ * problem stripVoiceTurnPrefix solves for voice turns. Anchored on the envelope's
+ * fixed closing sentence because the block itself contains `]` (markdown links),
+ * so a bracket-balanced match would stop early.
+ */
+export function stripAssistantContext(text: string): string {
+  return text.replace(
+    /^\s*\[In-app assistant context[\s\S]*?Don't restate this context\.\]\s*/,
+    '',
+  );
+}
+
+/** A dragged-context block parsed back out of a sent user message. */
+export interface UserContextChip {
+  kind: string;
+  label: string;
+  text: string;
+}
+
+// `[Context <kind>: <label>]<body>[/Context]` blocks composed by ChatInput.
+// Whitespace-tolerant: the gateway flattens newlines to spaces when it records
+// the turn, so the newlines ChatInput composes may come back as single spaces.
+// Labels are bracket-sanitized at compose time, so `]` terminates the label.
+const CONTEXT_CHIP_RE = /\[Context (\w+): ([^\]]*)\]\s?([\s\S]*?)\s?\[\/Context\]\s*/;
+
+/**
+ * Split a user message into its leading dragged-context chips and the typed
+ * text. Chips render OUTSIDE the bubble; the bubble shows only the typed text.
+ * Legacy `Context:\n…` messages (pre-marker format) pass through untouched.
+ */
+export function parseUserContext(text: string): { chips: UserContextChip[]; text: string } {
+  const chips: UserContextChip[] = [];
+  let t = text;
+  for (let m = t.match(CONTEXT_CHIP_RE); m && m.index === 0; m = t.match(CONTEXT_CHIP_RE)) {
+    chips.push({ kind: m[1], label: m[2], text: m[3] });
+    t = t.slice(m[0].length).trimStart();
+  }
+  return { chips, text: t };
+}
+
+// Leading context blocks the gateway composes into the RECORDED user turn (for
+// the model, not the user): semantic-recall memories, the untrusted-metadata
+// JSON, the timestamp envelope, the page-context envelope, and the voice-turn
+// header. The transcript stores the full composed prompt, so on history reload
+// these reappear in the user bubble — strip them for display. Order-independent:
+// loop until no known leading block remains, then trim.
+const INBOUND_CONTEXT_BLOCKS: RegExp[] = [
+  /^\s*##\s*Relevant memories\n(?:.+\n)*\n?/, // semantic recall list
+  /^\s*[^\n]*\(untrusted metadata\):\s*\n```json\n[\s\S]*?\n```\s*/i, // metadata json fence
+  /^\s*\[(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[^\]]*\]\s*/, // [Thu 2026-06-25 12:00 …] timestamp
+  /^\s*\[In-app assistant context[\s\S]*?Don't restate this context\.\]\s*/, // page envelope
+  /^\s*\[Voice call[^\]]*\]\s*/, // voice turn
+];
+
+/**
+ * Button callbacks (`chat_artifact` callback_data such as `SHOW_ME_HOW`) land in
+ * the transcript as a user turn. They are machine tokens, not something the
+ * user typed — surfaces hide them.
+ */
+export function isActionToken(text: string): boolean {
+  return /^[A-Z][A-Z0-9_]{2,40}$/.test(text.trim());
+}
+
+/**
+ * Clean a USER message for display: strip every leading gateway-injected context
+ * block so the bubble shows only what the user actually typed. Safe on already-
+ * clean text (no-op) and on assistant replies (they don't carry these blocks).
+ */
+const ENVELOPE_START = '[In-app assistant context';
+const ENVELOPE_END = "Don't restate this context.]";
+const METADATA_HEAD = 'Conversation info (untrusted metadata):';
+
+export function cleanInboundForDisplay(text: string): string {
+  let t = text;
+  // Gateway-injected prefix: memories (any layout) + metadata fence + timestamp.
+  // Everything up to the end of the metadata fence is machine context.
+  const meta = t.indexOf(METADATA_HEAD);
+  if (meta >= 0) {
+    const open = t.indexOf('```', meta);
+    const close = open >= 0 ? t.indexOf('```', open + 3) : -1;
+    if (close >= 0) t = t.slice(close + 3);
+  }
+  t = t.replace(/^\s*\[(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun)[^\]]*\]\s*/, '');
+  // Our page envelope: the user's text is sent BEFORE it (so gateway history
+  // truncation never eats what they typed); cut from its start to its end
+  // marker, or to the end of the text when the gateway truncated it.
+  const env = t.indexOf(ENVELOPE_START);
+  if (env >= 0) {
+    const end = t.indexOf(ENVELOPE_END, env);
+    const before = t.slice(0, env);
+    t = before + (end >= 0 ? t.slice(end + ENVELOPE_END.length) : '');
+    // Turns recorded envelope-first (before 2026-09-02) that the gateway
+    // truncated lost the user's words entirely: say so instead of a gap.
+    if (end < 0 && !before.trim()) return m.chat_history_truncated();
+  }
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const re of INBOUND_CONTEXT_BLOCKS) {
+      const next = t.replace(re, '');
+      if (next !== t) {
+        t = next;
+        changed = true;
+      }
+    }
+  }
+  return t.trim();
+}
+
+/**
+ * Context-aware equivalent of sendChatMsg. Floating surfaces use the default
+ * main session; `/home` passes its selected conversation key explicitly. The
+ * message the gateway sees is prefixed with a page-context envelope (route,
+ * focus, navigation instructions) so the assistant is situationally aware.
+ * The clean user text — not the envelope — is what's stored in the visible
+ * transcript, exactly like the voice-turn path. `context` is built by
+ * buildAssistantContext() at the callsite (it needs `$app/state` page, which
+ * only resolves in the component tree).
+ */
+export function sendAssistantTurn(
+  agentId: string,
+  text: string,
+  context: string,
+  sessionKey = `agent:${agentId}:main`,
+  opts: { silent?: boolean } = {},
+) {
+  const chat = ensureAgentChat(agentId);
+  const clean = text.trim();
+  // Silent turns carry only a context envelope (UI tool results): nothing is
+  // shown in the transcript and the envelope regex hides it on history reload.
+  if (opts.silent ? !context.trim() : !clean) return;
+  if (chat.sending || !conn.connected) return;
+
+  const runId = uuid();
+
+  if (!opts.silent) {
+    pushChatMessage(chat, {
+      role: 'user',
+      content: [{ type: 'text', text: clean }],
+      timestamp: Date.now(),
+    } as never);
+  }
+  chat.inputText = '';
+  chat.sending = true;
+  chat.streamMessage = null;
+  chat.runId = runId;
+  chat.stream = '';
+  chat.lastError = null;
+  chat.liveTools = [];
+  chat.liveActivity = null;
+
+  // See sendChatMsg's guard: same safety net, same reason to reload history.
+  const guard = setTimeout(() => {
+    if (chat.runId !== runId) return;
+    chat.sending = false;
+    gwTrace('chat.guard_timeout', { runId, sessionKey });
+    void loadChatHistory(agentId, sessionKey);
+  }, 120_000);
+
+  // Text first, envelope after: the gateway records the whole prompt and
+  // truncates long ones from the END, so the envelope must be the part that
+  // gets cut, never the user's words.
+  sendRequest('chat.send', {
+    sessionKey,
+    message: opts.silent ? context : `${clean}\n\n${context.trim()}`,
+    deliver: false,
+    idempotencyKey: runId,
+  }).catch((e) => {
+    clearTimeout(guard);
+    chat.runId = null;
+    chat.stream = null;
+    chat.streamMessage = null;
+    chat.sending = false;
+    chat.lastError = String(e);
+    loadChatHistory(agentId);
+  });
+}
+
+export function sendVoiceTurn(agentId: string, transcript: string) {
+  const chat = ensureAgentChat(agentId);
+  const clean = transcript.trim();
+  if (!clean || chat.sending || !conn.connected) return;
+
+  const sessionKey = `agent:${agentId}:main`;
+  const runId = uuid();
+
+  pushChatMessage(chat, {
+    role: 'user',
+    content: [{ type: 'text', text: clean }],
+    timestamp: Date.now(),
+  } as never);
+  chat.sending = true;
+  chat.runId = runId;
+  chat.stream = '';
+  chat.lastError = null;
+  chat.liveTools = [];
+  chat.liveActivity = null;
+
+  sendRequest('chat.send', {
+    sessionKey,
+    message: VOICE_TURN_PREFIX + clean,
+    deliver: false,
+    idempotencyKey: runId,
+  })
+    .then(() => {
+      chat.sending = false;
+    })
+    .catch((e) => {
+      chat.runId = null;
+      chat.stream = null;
+      chat.sending = false;
+      chat.lastError = String(e);
+      loadChatHistory(agentId);
+    });
+}

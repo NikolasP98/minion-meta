@@ -1,0 +1,657 @@
+
+> @nikolasp98/minion@2026.8.7-dev check /home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion
+> pnpm format:check && pnpm tsgo && pnpm lint && node --import tsx scripts/generate-plugin-manifests.ts --check && node --import tsx scripts/generate-capabilities.ts --check
+
+
+> @nikolasp98/minion@2026.8.7-dev format:check /home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion
+> oxfmt --check
+
+Checking formatting...
+
+All matched files use the correct format.
+Finished in 14190ms on 5964 files using 5 threads.
+
+> @nikolasp98/minion@2026.8.7-dev lint /home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion
+> oxlint --type-aware
+
+
+  ! eslint(no-unused-vars): Function '_syncAuthProfileStore' is declared but never used.
+    ,-[src/agents/auth-profiles/store.ts:15:10]
+ 14 | 
+ 15 | function _syncAuthProfileStore(target: AuthProfileStore, source: AuthProfileStore): void {
+    :          ^^^^^^^^^^|^^^^^^^^^^
+    :                    `-- '_syncAuthProfileStore' is declared here
+ 16 |   target.version = source.version;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ctx' is declared but never used.
+    ,-[src/agents/pi-tools/pi-tool-definition-adapter.ts:75:42]
+ 74 |   if (isLegacyToolExecuteArgs(args)) {
+ 75 |     const [toolCallId, params, onUpdate, _ctx, signal] = args;
+    :                                          ^^|^
+    :                                            `-- '_ctx' is declared here
+ 76 |     return {
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_details' is declared but never used.
+    ,-[src/agents/sessions/session-transcript-repair.ts:84:22]
+ 83 |     }
+ 84 |     const { details: _details, ...rest } = msg as unknown as Record<string, unknown>;
+    :                      ^^^^|^^^
+    :                          `-- '_details' is declared here
+ 85 |     touched = true;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+    ,-[src/channels/discord/accounts.ts:34:21]
+ 33 | function mergeDiscordAccountConfig(cfg: MinionConfig, accountId: string): DiscordAccountConfig {
+ 34 |   const { accounts: _ignored, ...base } = (cfg.channels?.discord ?? {}) as DiscordAccountConfig & {
+    :                     ^^^^|^^^
+    :                         `-- '_ignored' is declared here
+ 35 |     accounts?: unknown;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+    ,-[src/channels/telegram/accounts.ts:93:21]
+ 92 | function mergeTelegramAccountConfig(cfg: MinionConfig, accountId: string): TelegramAccountConfig {
+ 93 |   const { accounts: _ignored, ...base } = (cfg.channels?.telegram ??
+    :                     ^^^^|^^^
+    :                         `-- '_ignored' is declared here
+ 94 |     {}) as TelegramAccountConfig & { accounts?: unknown };
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_content' is declared but never used.
+     ,-[src/agents/pi-tools/pi-tools.read.ts:171:20]
+ 170 | 
+ 171 |   const { content: _content, ...restTruncation } = truncation;
+     :                    ^^^^|^^^
+     :                        `-- '_content' is declared here
+ 172 |   return {
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+    ,-[src/channels/impl/signal/accounts.ts:31:21]
+ 30 | function mergeSignalAccountConfig(cfg: MinionConfig, accountId: string): SignalAccountConfig {
+ 31 |   const { accounts: _ignored, ...base } = (cfg.channels?.signal ?? {}) as SignalAccountConfig & {
+    :                     ^^^^|^^^
+    :                         `-- '_ignored' is declared here
+ 32 |     accounts?: unknown;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_contentType' is declared but never used.
+     ,-[src/channels/impl/slack/send.ts:192:18]
+ 191 |     buffer,
+ 192 |     contentType: _contentType,
+     :                  ^^^^^^|^^^^^
+     :                        `-- '_contentType' is declared here
+ 193 |     fileName,
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_removed' is declared but never used.
+     ,-[src/browser/profiles-service.ts:165:21]
+ 164 | 
+ 165 |     const { [name]: _removed, ...remainingProfiles } = profiles;
+     :                     ^^^^|^^^
+     :                         `-- '_removed' is declared here
+ 166 |     const nextConfig: MinionConfig = {
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+    ,-[src/channels/impl/slack/accounts.ts:48:21]
+ 47 | function mergeSlackAccountConfig(cfg: MinionConfig, accountId: string): SlackAccountConfig {
+ 48 |   const { accounts: _ignored, ...base } = (cfg.channels?.slack ?? {}) as SlackAccountConfig & {
+    :                     ^^^^|^^^
+    :                         `-- '_ignored' is declared here
+ 49 |     accounts?: unknown;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Type 'ChannelId' is imported but never used.
+    ,-[src/plugins/types/plugin.ts:9:15]
+  8 | import type { ChannelDock } from "../../channels/dock.js";
+  9 | import type { ChannelId, ChannelPlugin } from "../../channels/plugins/types.js";
+    :               ^^^^|^^^^
+    :                   `-- 'ChannelId' is imported here
+ 10 | import type { MinionConfig } from "../../config/config.js";
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+    ,-[src/channels/imessage/accounts.ts:30:21]
+ 29 | function mergeIMessageAccountConfig(cfg: MinionConfig, accountId: string): IMessageAccountConfig {
+ 30 |   const { accounts: _ignored, ...base } = (cfg.channels?.imessage ??
+    :                     ^^^^|^^^
+    :                         `-- '_ignored' is declared here
+ 31 |     {}) as IMessageAccountConfig & { accounts?: unknown };
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_details' is declared but never used.
+     ,-[src/agents/pi-embedded-runner/tool-result-context-guard.ts:194:20]
+ 193 |   const sourceRecord = msg as unknown as Record<string, unknown>;
+ 194 |   const { details: _details, ...rest } = sourceRecord;
+     :                    ^^^^|^^^
+     :                        `-- '_details' is declared here
+ 195 |   return {
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_allowedMimesConfigured' is declared but never used.
+     ,-[src/media-understanding/apply.ts:421:39]
+ 420 |       const mediaType = utf16Charset ? `${mimeType}; charset=${utf16Charset}` : mimeType;
+ 421 |       const { allowedMimesConfigured: _allowedMimesConfigured, ...baseLimits } = limits;
+     :                                       ^^^^^^^^^^^|^^^^^^^^^^^
+     :                                                  `-- '_allowedMimesConfigured' is declared here
+ 422 |       extracted = await extractFileContentFromSource({
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_announceCompletedAt' is declared but never used.
+    ,-[src/agents/subagents/subagent-registry.store.ts:93:28]
+ 92 |     const {
+ 93 |       announceCompletedAt: _announceCompletedAt,
+    :                            ^^^^^^^^^^|^^^^^^^^^
+    :                                      `-- '_announceCompletedAt' is declared here
+ 94 |       announceHandled: _announceHandled,
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_announceHandled' is declared but never used.
+    ,-[src/agents/subagents/subagent-registry.store.ts:94:24]
+ 93 |       announceCompletedAt: _announceCompletedAt,
+ 94 |       announceHandled: _announceHandled,
+    :                        ^^^^^^^^|^^^^^^^
+    :                                `-- '_announceHandled' is declared here
+ 95 |       requesterChannel: _channel,
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_channel' is declared but never used.
+    ,-[src/agents/subagents/subagent-registry.store.ts:95:25]
+ 94 |       announceHandled: _announceHandled,
+ 95 |       requesterChannel: _channel,
+    :                         ^^^^|^^^
+    :                             `-- '_channel' is declared here
+ 96 |       requesterAccountId: _accountId,
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_accountId' is declared but never used.
+    ,-[src/agents/subagents/subagent-registry.store.ts:96:27]
+ 95 |       requesterChannel: _channel,
+ 96 |       requesterAccountId: _accountId,
+    :                           ^^^^^|^^^^
+    :                                `-- '_accountId' is declared here
+ 97 |       ...rest
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_lastInboundMsg' is assigned a value but never used.
+     ,-[src/web/auto-reply/monitor.ts:160:9]
+ 159 |     let handledMessages = 0;
+ 160 |     let _lastInboundMsg: WebInboundMsg | null = null;
+     :         ^^^^^^^|^^^^^^^
+     :                `-- '_lastInboundMsg' is declared here
+ 161 |     let unregisterUnhandled: (() => void) | null = null;
+ 162 | 
+ 163 |     // Watchdog to detect stuck message processing (e.g., event emitter died)
+ 164 |     const MESSAGE_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes without any messages
+ 165 |     const WATCHDOG_CHECK_MS = 60 * 1000; // Check every minute
+ 166 | 
+ 167 |     const backgroundTasks = new Set<Promise<unknown>>();
+ 168 |     const onMessage = createWebOnMessageHandler({
+ 169 |       cfg,
+ 170 |       verbose,
+ 171 |       connectionId,
+ 172 |       maxMediaBytes,
+ 173 |       groupHistoryLimit,
+ 174 |       groupHistories,
+ 175 |       groupMemberNames,
+ 176 |       echoTracker,
+ 177 |       backgroundTasks,
+ 178 |       replyResolver: replyResolver ?? getReplyFromConfig,
+ 179 |       replyLogger,
+ 180 |       baseMentionConfig,
+ 181 |       account,
+ 182 |     });
+ 183 | 
+ 184 |     const inboundDebounceMs = resolveInboundDebounceMs({ cfg, channel: "whatsapp" });
+ 185 |     const shouldDebounce = (msg: WebInboundMsg) => {
+ 186 |       if (msg.mediaPath || msg.mediaType) {
+ 187 |         return false;
+ 188 |       }
+ 189 |       if (msg.location) {
+ 190 |         return false;
+ 191 |       }
+ 192 |       if (msg.replyToId || msg.replyToBody) {
+ 193 |         return false;
+ 194 |       }
+ 195 |       // Plugin-registered instant commands (e.g. the relay's `/end`, `fin`) must
+ 196 |       // never be debounced into the previous message — flush + process alone.
+ 197 |       if (isInstantCommand(msg.body)) {
+ 198 |         return false;
+ 199 |       }
+ 200 |       return !hasControlCommand(msg.body, cfg);
+ 201 |     };
+ 202 | 
+ 203 |     const listener = await (listenerFactory ?? monitorWebInbox)({
+ 204 |       verbose,
+ 205 |       accountId: account.accountId,
+ 206 |       authDir: account.authDir,
+ 207 |       mediaMaxMb: account.mediaMaxMb,
+ 208 |       sendReadReceipts: account.sendReadReceipts,
+ 209 |       markOnline: account.markOnline,
+ 210 |       historySync: account.historySync,
+ 211 |       debounceMs: inboundDebounceMs,
+ 212 |       shouldDebounce,
+ 213 |       onHistorySync: (historySync) => {
+ 214 |         // Rides the existing debounced channels.status broadcast — no new event.
+ 215 |         status.historySync = historySync;
+ 216 |         emitStatus();
+ 217 |       },
+ 218 |       onMessage: async (msg: WebInboundMsg) => {
+ 219 |         handledMessages += 1;
+ 220 |         lastMessageAt = Date.now();
+ 221 |         status.lastMessageAt = lastMessageAt;
+ 222 |         status.lastEventAt = lastMessageAt;
+ 223 |         emitStatus();
+ 224 |         _lastInboundMsg = msg;
+     :         ^^^^^^^|^^^^^^^
+     :                `-- it was last assigned here
+ 225 |         await onMessage(msg);
+     `----
+  help: Did you mean to use this variable?
+
+  ! eslint(no-unused-vars): Variable '_resolve' is assigned a value but never used.
+    ,-[src/web/auto-reply.web-auto-reply.reconnects-after-connection-close.e2e.test.ts:91:11]
+ 90 |     const listenerFactory = vi.fn(async () => {
+ 91 |       let _resolve!: () => void;
+    :           ^^^^|^^^
+    :               `-- '_resolve' is declared here
+ 92 |       const onClose = new Promise<void>((res) => {
+ 93 |         _resolve = res;
+    :         ^^^^|^^^
+    :             `-- it was last assigned here
+ 94 |         closeResolvers.push(res);
+    `----
+  help: Did you mean to use this variable?
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+     ,-[src/cli/commands/model-defaults/model-picker.ts:491:21]
+ 490 |     }
+ 491 |     const { models: _ignored, ...restDefaults } = defaults;
+     :                     ^^^^|^^^
+     :                         `-- '_ignored' is declared here
+ 492 |     return {
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+    ,-[src/cli/commands/doctor/doctor-legacy-config.ts:79:23]
+ 78 |         if (updated.dm !== undefined) {
+ 79 |           const { dm: _ignored, ...rest } = updated;
+    :                       ^^^^|^^^
+    :                           `-- '_ignored' is declared here
+ 80 |           updated = rest;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Identifier 'path' is imported but never used.
+   ,-[src/agents/auth-profiles/startup-check.ts:1:8]
+ 1 | import path from "node:path";
+   :        ^^|^
+   :          `-- 'path' is imported here
+ 2 | import { emitReliabilityEvent } from "../../logging/reliability.js";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Variable '_redirect' is declared but never used.
+    ,-[src/channels/impl/slack/monitor/media.ts:57:45]
+ 56 |     const url = resolveRequestUrl(input);
+ 57 |     const { headers: initHeaders, redirect: _redirect, ...rest } = init ?? {};
+    :                                             ^^^^|^^^^
+    :                                                 `-- '_redirect' is declared here
+ 58 |     const headers = new Headers(initHeaders);
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignoredEntry' is declared but never used.
+     ,-[src/auto-reply/reply/directive-handling.model.test.ts:115:27]
+ 114 |     const store = storeOverride ?? ({ [sessionKey]: entry } as const);
+ 115 |     const { sessionEntry: _ignoredEntry, sessionStore: _ignoredStore, ...rest } = overrides;
+     :                           ^^^^^^|^^^^^^
+     :                                 `-- '_ignoredEntry' is declared here
+ 116 | 
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignoredStore' is declared but never used.
+     ,-[src/auto-reply/reply/directive-handling.model.test.ts:115:56]
+ 114 |     const store = storeOverride ?? ({ [sessionKey]: entry } as const);
+ 115 |     const { sessionEntry: _ignoredEntry, sessionStore: _ignoredStore, ...rest } = overrides;
+     :                                                        ^^^^^^|^^^^^^
+     :                                                              `-- '_ignoredStore' is declared here
+ 116 | 
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_wakeMode' is declared but never used.
+    ,-[src/gateway/protocol/cron-validators.test.ts:24:23]
+ 23 |   it("rejects add params when required scheduling fields are missing", () => {
+ 24 |     const { wakeMode: _wakeMode, ...withoutWakeMode } = minimalAddParams;
+    :                       ^^^^|^^^^
+    :                           `-- '_wakeMode' is declared here
+ 25 |     expect(validateCronAddParams(withoutWakeMode)).toBe(false);
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_sessionId' is declared but never used.
+    ,-[src/gateway/sessions/session-worker-entry.ts:14:7]
+ 13 | 
+ 14 | const _sessionId: string = workerData?.sessionId ?? "unknown";
+    :       ^^^^^|^^^^
+    :            `-- '_sessionId' is declared here
+ 15 | 
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Identifier 'vi' is imported but never used.
+   ,-[src/agents/system-prompt/user-queue.test.ts:1:43]
+ 1 | import { afterEach, describe, expect, it, vi } from "vitest";
+   :                                           ^|
+   :                                            `-- 'vi' is imported here
+ 2 | import { activeQueueCount, clearQueues, enqueueForUser } from "./user-queue.js";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Type alias 'TursoClient' is declared but never used.
+    ,-[scripts/stripe-reconciliation-cron.test.ts:11:6]
+ 10 | // Test database client wrapper (same pattern as the main script)
+ 11 | type TursoClient = {
+    :      ^^^^^|^^^^^
+    :           `-- 'TursoClient' is declared here
+ 12 |   batch: (stmts: Array<{ sql: string; args: unknown[] }>) => Promise<unknown>;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_server' is declared but never used.
+    ,-[src/gateway/openresponses-http.e2e.test.ts:95:11]
+ 94 |     const port = await getFreePort();
+ 95 |     const _server = await startServer(port);
+    :           ^^^|^^^
+    :              `-- '_server' is declared here
+ 96 |     try {
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+    ,-[src/linq/accounts.ts:56:21]
+ 55 |     | undefined;
+ 56 |   const { accounts: _ignored, ...base } = linqSection ?? {};
+    :                     ^^^^|^^^
+    :                         `-- '_ignored' is declared here
+ 57 |   const account = resolveAccountConfig(cfg, accountId) ?? {};
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Identifier 'vi' is imported but never used.
+    ,-[src/security/security-taxonomy.test.ts:15:32]
+ 14 | 
+ 15 | import { describe, expect, it, vi } from "vitest";
+    :                                ^|
+    :                                 `-- 'vi' is imported here
+ 16 | 
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Function 'makeSystemPrompt' is declared but never used.
+    ,-[src/security/security-taxonomy.test.ts:19:10]
+ 18 | 
+ 19 | function makeSystemPrompt(content: string) {
+    :          ^^^^^^^^|^^^^^^^
+    :                  `-- 'makeSystemPrompt' is declared here
+ 20 |   return { role: "system" as const, content };
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable 'agent' is declared but never used.
+     ,-[src/voice/livekit-voice-agent.test.ts:246:15]
+ 245 |       if (result.ok) {
+ 246 |         const agent = result as unknown as { getSession?: () => unknown };
+     :               ^^|^^
+     :                 `-- 'agent' is declared here
+ 247 |         // Agent instance not exposed, so we can't test getSession directly
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_ignored' is declared but never used.
+     ,-[src/channels/plugins/setup-helpers.ts:110:17]
+ 109 |   }
+ 110 |   const { name: _ignored, ...rest } = base ?? {};
+     :                 ^^^^|^^^
+     :                     `-- '_ignored' is declared here
+ 111 |   return {
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_unusedDockerOverrides' is declared but never used.
+   ,-[src/agents/sandbox/test-fixtures.ts:8:19]
+ 7 |   const overrides = params?.overrides ?? {};
+ 8 |   const { docker: _unusedDockerOverrides, ...sandboxOverrides } = overrides;
+   :                   ^^^^^^^^^^^|^^^^^^^^^^
+   :                              `-- '_unusedDockerOverrides' is declared here
+ 9 |   const docker = {
+   `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable 'log' is declared but never used.
+    ,-[src/channels/feishu-adapter.ts:17:7]
+ 16 | 
+ 17 | const log = createSubsystemLogger("channels/feishu");
+    :       ^|^
+    :        `-- 'log' is declared here
+ 18 | 
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_updated' is declared but never used.
+    ,-[src/cli/commands/models/aliases.ts:57:9]
+ 56 |   const resolved = resolveModelTarget({ raw: modelRaw, cfg: loadConfig() });
+ 57 |   const _updated = await updateConfig((cfg) => {
+    :         ^^^^|^^^
+    :             `-- '_updated' is declared here
+ 58 |     const modelKey = `${resolved.provider}/${resolved.model}`;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_' is declared but never used.
+     ,-[src/infra/tracked-provider.ts:152:20]
+ 151 |   totals(): Omit<SessionLedger, "calls"> {
+ 152 |     const { calls: _, ...totals } = this.ledger;
+     :                    |
+     :                    `-- '_' is declared here
+ 153 |     return totals;
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_AGENT_ID' is declared but never used.
+    ,-[scripts/test-oauth-via-gateway.ts:12:7]
+ 11 | const TOKEN = "502c5a92f4999c7e95457a16c5791e1ffbad84132eafb29acc816271472166d2";
+ 12 | const _AGENT_ID = "panik";
+    :       ^^^^|^^^^
+    :           `-- '_AGENT_ID' is declared here
+ 13 | const SESSION_KEY = "test-oauth-local";
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Type 'TSchema' is imported but never used.
+    ,-[src/plugin-sdk/test/index.ts:10:15]
+  9 | 
+ 10 | import type { TSchema } from "@sinclair/typebox";
+    :               ^^^|^^^
+    :                  `-- 'TSchema' is imported here
+ 11 | import type { MinionConfig } from "../../config/config.js";
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Variable '_' is declared but never used.
+    ,-[src/config/profile-loader.ts:72:22]
+ 71 |     // Strip metadata fields
+ 72 |     const { $schema: _, _description: __, ...config } = parsed;
+    :                      |
+    :                      `-- '_' is declared here
+ 73 |     return config;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '__' is declared but never used.
+    ,-[src/config/profile-loader.ts:72:39]
+ 71 |     // Strip metadata fields
+ 72 |     const { $schema: _, _description: __, ...config } = parsed;
+    :                                       ^|
+    :                                        `-- '__' is declared here
+ 73 |     return config;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Type 'ApiKeyCredential' is imported but never used.
+    ,-[src/providers/inference-proxy.ts:18:15]
+ 17 | import { resolveCredentialNonce } from "../agents/auth-profiles/credential-proxy.js";
+ 18 | import type { ApiKeyCredential } from "../agents/auth-profiles/types.js";
+    :               ^^^^^^^^|^^^^^^^
+    :                       `-- 'ApiKeyCredential' is imported here
+ 19 | import { createSubsystemLogger } from "../logging/subsystem.js";
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'beforeEach' is imported but never used.
+   ,-[src/memory/mem0-adapter.test.ts:1:21]
+ 1 | import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+   :                     ^^^^^|^^^^
+   :                          `-- 'beforeEach' is imported here
+ 2 | import { Mem0Adapter, resolveMem0Config } from "./mem0-adapter.js";
+   `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Variable '_updated' is declared but never used.
+     ,-[src/cli/commands/models/scan.ts:288:9]
+ 287 | 
+ 288 |   const _updated = await updateConfig((cfg) => {
+     :         ^^^^|^^^
+     :             `-- '_updated' is declared here
+ 289 |     const nextModels = { ...cfg.agents?.defaults?.models };
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable 'log' is declared but never used.
+    ,-[src/infra/turn-timing.ts:12:7]
+ 11 | 
+ 12 | const log = createSubsystemLogger("infra/turn-timing");
+    :       ^|^
+    :        `-- 'log' is declared here
+ 13 | 
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_' is declared but never used.
+    ,-[src/plugins/uninstall.ts:82:25]
+ 81 |   if (entries && pluginId in entries) {
+ 82 |     const { [pluginId]: _, ...rest } = entries;
+    :                         |
+    :                         `-- '_' is declared here
+ 83 |     entries = Object.keys(rest).length > 0 ? rest : undefined;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_' is declared but never used.
+    ,-[src/plugins/uninstall.ts:91:25]
+ 90 |   if (installs && pluginId in installs) {
+ 91 |     const { [pluginId]: _, ...rest } = installs;
+    :                         |
+    :                         `-- '_' is declared here
+ 92 |     installs = Object.keys(rest).length > 0 ? rest : undefined;
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_id' is declared but never used.
+    ,-[src/registry/loader.test.ts:73:17]
+ 72 |   it("skips manifest with missing id", () => {
+ 73 |     const { id: _id, ...noId } = VALID_MANIFEST;
+    :                 ^|^
+    :                  `-- '_id' is declared here
+ 74 |     const deps = makeDeps({ readManifests: () => [{ raw: noId, source: "test" }] });
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_h' is declared but never used.
+    ,-[src/registry/loader.test.ts:81:22]
+ 80 |   it("skips manifest with missing handler", () => {
+ 81 |     const { handler: _h, ...noHandler } = VALID_MANIFEST;
+    :                      ^|
+    :                       `-- '_h' is declared here
+ 82 |     const deps = makeDeps({ readManifests: () => [{ raw: noHandler, source: "test" }] });
+    `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Variable '_tc' is declared but never used.
+     ,-[src/registry/loader.test.ts:182:27]
+ 181 |   it("excludes skill with undefined coverage when gate is active", () => {
+ 182 |     const { testCoverage: _tc, ...noTC } = VALID_MANIFEST;
+     :                           ^|^
+     :                            `-- '_tc' is declared here
+ 183 |     const deps = makeDeps({
+     `----
+  help: Consider removing this declaration.
+
+  ! eslint(no-unused-vars): Identifier 'createRoom' is imported but never used.
+    ,-[src/config/livekit.test.ts:9:3]
+  8 | import {
+  9 |   createRoom,
+    :   ^^^^^|^^^^
+    :        `-- 'createRoom' is imported here
+ 10 |   deleteRoom,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'deleteRoom' is imported but never used.
+    ,-[src/config/livekit.test.ts:10:3]
+  9 |   createRoom,
+ 10 |   deleteRoom,
+    :   ^^^^^|^^^^
+    :        `-- 'deleteRoom' is imported here
+ 11 |   generateRoomToken,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'generateRoomToken' is imported but never used.
+    ,-[src/config/livekit.test.ts:11:3]
+ 10 |   deleteRoom,
+ 11 |   generateRoomToken,
+    :   ^^^^^^^^|^^^^^^^^
+    :           `-- 'generateRoomToken' is imported here
+ 12 |   isLiveKitConfigured,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Type 'EstopLevel' is imported but never used.
+   ,-[src/security/estop.test.ts:6:15]
+ 5 | import { EstopManager } from "./estop.js";
+ 6 | import type { EstopLevel } from "./estop.js";
+   :               ^^^^^|^^^^
+   :                    `-- 'EstopLevel' is imported here
+ 7 | 
+   `----
+  help: Consider removing this import.
+
+Found 57 warnings and 0 errors.
+Finished in 28.1s on 4652 files with 134 rules using 4 threads.
+[capabilities] capabilities.json is up to date (161 methods).

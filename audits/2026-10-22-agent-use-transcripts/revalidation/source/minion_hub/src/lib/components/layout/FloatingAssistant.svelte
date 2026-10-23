@@ -1,0 +1,1319 @@
+<script module lang="ts">
+  // Dragged spot, as a fraction of the free viewport area. Module scope on
+  // purpose: it survives client-side navigation and shell remounts but NOT a
+  // page reload — a refresh always returns the pill to its default corner.
+  let savedFrac: { fx: number; fy: number } | null = null;
+</script>
+
+<script lang="ts">
+  import { useDropRegistry } from '$lib/shell/drop-context.svelte';
+  import { preferenceOwner } from '$lib/state/ui/scoped-preference.svelte';
+  import { fetchJson } from '$lib/api/fetch-json';
+  import { fileDraftContext, type DraftFile } from '$lib/attachments/draft';
+  import { toastError } from '$lib/state/ui/toast.svelte';
+  import { AttachmentUploadError } from '$lib/attachments/upload';
+  import { ATTACHMENT_LIMITS } from '$lib/attachments/limits';
+  import ThinkingShader from '$lib/components/assistant/ThinkingShader.svelte';
+  import { canonicalPath } from '$lib/canonical-path';
+  import { appLocale } from '$lib/utils/format';
+  import { Button, iconSizes } from '$lib/components/ui';
+  import * as m from '$lib/paraglide/messages';
+  import {
+    Minus,
+    SquarePen,
+    Copy,
+    ChevronDown,
+    AlertCircle,
+    Mic,
+    MicOff,
+    PhoneOff,
+    Factory,
+    MessageCircle,
+  } from 'lucide-svelte';
+  import { voiceCall, mouth, toggleMute, endCall } from '$lib/state/features/voice-call.svelte';
+  import {
+    assistant,
+    toggleAssistant,
+    closeAssistant,
+    loadPersonalAgent,
+  } from '$lib/state/features/assistant.svelte';
+  import { userState } from '$lib/state/features/user.svelte';
+  import { ui } from '$lib/state/ui/ui.svelte';
+  import { conn } from '$lib/state/gateway/connection.svelte';
+  import { agentChat } from '$lib/state/chat/chat.svelte';
+  import {
+    sendAssistantTurn,
+    abortChat,
+    loadChatHistory,
+    cleanInboundForDisplay,
+    isActionToken,
+    resetChat,
+  } from '$lib/services/gateway.svelte';
+  import { buildAssistantContext } from '$lib/state/features/assistant-context';
+  import {
+    requestRouteDecision,
+    gateManifests,
+    routerMode,
+    type ManifestId,
+    type RouteMode,
+  } from '$lib/assistant/turn-router';
+  import { languageTag } from '$lib/paraglide/runtime';
+  import { extractText, stripTtsTags } from '$lib/utils/text';
+  import { stripUiBlocks } from '$lib/assistant/ui-blocks';
+  import MarkdownMessage from '$lib/components/chat/MarkdownMessage.svelte';
+  import ChatBlocks from '$lib/chat/ChatBlocks.svelte';
+  import {
+    AiConversation,
+    AiMessage,
+    AiOrbFace,
+    AiPromptInput,
+    chatFaceState,
+    voiceFaceState,
+  } from '$lib/components/ai';
+  import type { MessageAction } from '$lib/components/my-agent/MessageActions.svelte';
+  import {
+    isToolResultOnly,
+    assistantHasContent,
+    foldToolTurns,
+    toolResultsById as computeToolResultsById,
+  } from '$lib/chat/blocks';
+  import { page } from '$app/state';
+  import { onMount, tick } from 'svelte';
+  import { createHotkey, formatForDisplay } from '$lib/hotkeys';
+  import FactoryIntakeCard from '$lib/components/workforce/FactoryIntakeCard.svelte';
+  import {
+    factoryIntakeIsSettled,
+    factoryIntakeAttempt,
+    normalizeFactoryIntake,
+    type FactoryIntakeAttempt,
+    type FactoryIntakeView,
+  } from '$lib/workforce/factory-intake';
+  import { onDestroy } from 'svelte';
+
+  let inputEl: HTMLTextAreaElement | null = $state(null);
+  let conversation: AiConversation | undefined = $state();
+
+  // Launcher kbd hint — ⌘J on macOS, Ctrl+J elsewhere. Seeded to the mac glyph
+  // (matches SSR) and corrected to the real platform after mount.
+  let kbdToggle = $state('⌘J');
+
+  onMount(() => {
+    loadPersonalAgent();
+    kbdToggle = formatForDisplay('Mod+J');
+  });
+
+  // ⌘J / Ctrl+J — ⌘K is owned by the command palette (CommandPalette.svelte).
+  createHotkey(
+    'Mod+J',
+    () => {
+      toggleAssistant();
+      if (assistant.open) requestAnimationFrame(() => inputEl?.focus());
+    },
+    { meta: { name: m.shortcuts_assistantName(), description: m.shortcuts_assistantDesc() } },
+  );
+
+  // Escape closes only while open; keep it propagating to other overlays
+  // (`allow` = shared ownership is intended; see ShortcutsOverlay).
+  createHotkey(
+    'Escape',
+    () => closeAssistant(),
+    () => ({
+      enabled: assistant.open,
+      stopPropagation: false,
+      conflictBehavior: 'allow',
+    }),
+  );
+
+  // Update scope reactively from current route + selected agent
+  $effect(() => {
+    assistant.scope.route = canonicalPath(page.url.pathname);
+    assistant.scope.agentId = ui.selectedAgentId;
+  });
+
+  // The panel's active conversation per agent. "New chat" picks a fresh
+  // `agent:<id>:chat:<uuid>` key; persisting it is what makes a refresh reload
+  // the SAME thread instead of falling back to the agent's main session.
+  const sessionStorageKey = (id: string) => `assistant:session:${id}`;
+  const sessionKeyFor = (id: string) => agentChat[id]?.sessionKey ?? `agent:${id}:main`;
+  let restoredFor: string | null = null;
+
+  // When opened + connected + we know the agent ID, lazy-load chat history —
+  // restoring the persisted session key once per agent (before any history load).
+  $effect(() => {
+    if (!(assistant.open && conn.connected && assistant.personalAgentId)) return;
+    const id = assistant.personalAgentId;
+    const existing = agentChat[id];
+    if (restoredFor !== id) {
+      restoredFor = id;
+      let stored: string | null = null;
+      try {
+        stored = localStorage.getItem(sessionStorageKey(id));
+      } catch {
+        /* ignore */
+      }
+      if (stored) {
+        loadChatHistory(id, stored);
+        return;
+      }
+    }
+    if (!existing || existing.messages.length === 0) loadChatHistory(id);
+  });
+
+  // Persist whichever key the shared chat state ends up on (new chat here, or a
+  // conversation picked on /home) — only after the restore above has run, so a
+  // pre-restore `main` never overwrites the saved key.
+  $effect(() => {
+    const id = assistant.personalAgentId;
+    const sk = id ? agentChat[id]?.sessionKey : undefined;
+    if (!id || !sk || restoredFor !== id) return;
+    try {
+      localStorage.setItem(sessionStorageKey(id), sk);
+    } catch {
+      /* ignore */
+    }
+  });
+
+  const chat = $derived(
+    assistant.personalAgentId ? agentChat[assistant.personalAgentId] : undefined,
+  );
+  const messages = $derived(chat?.messages ?? []);
+  const sending = $derived(chat?.sending ?? false);
+  const stream = $derived(chat?.stream ?? null);
+  // What the reader would actually see of the streamed text: a reply that
+  // opens with a ```minion-ui fence streams as an EMPTY bubble until the fence
+  // closes (MarkdownMessage hides the block), so the bubble waits for prose
+  // and the "Thinking…" row covers the gap.
+  const streamText = $derived(stream ? stripUiBlocks(stripTtsTags(stream)) : '');
+
+  const greeting = $derived.by(() => {
+    const name = userState.user?.displayName?.split(' ')[0] ?? 'there';
+    return `Hi ${name}`;
+  });
+
+  const scopeLabel = $derived.by(() => {
+    const parts: string[] = [];
+    if (assistant.scope.route && assistant.scope.route !== '/') {
+      parts.push(assistant.scope.route);
+    }
+    if (assistant.scope.agentId) {
+      parts.push(`agent: ${assistant.scope.agentId}`);
+    }
+    // A mode id, like the agent id above it — a technical token, not a
+    // translated string.
+    if (lastMode) parts.push(lastMode);
+    return parts.length > 0 ? parts.join(' · ') : 'Home';
+  });
+
+  const canSend = $derived(!!assistant.personalAgentId && conn.connected && !sending);
+
+  type ComposerMode = 'chat' | 'factory';
+  let composerMode = $state<ComposerMode>('chat');
+  let previousRoute = $state('');
+  let factorySending = $state(false);
+  let factoryIntake = $state<FactoryIntakeView | null>(null);
+  let factoryError = $state<string | null>(null);
+  let factoryPollTimer: ReturnType<typeof setTimeout> | null = null;
+  let factoryAttempt = $state<FactoryIntakeAttempt | null>(null);
+
+  // Route entry chooses a sensible default once. The explicit selector remains
+  // authoritative until the next navigation, so chat is always available.
+  $effect(() => {
+    const route = canonicalPath(page.url.pathname);
+    if (route === previousRoute) return;
+    previousRoute = route;
+    composerMode = route === '/work' || route.startsWith('/workforce') ? 'factory' : 'chat';
+  });
+
+  const canSubmit = $derived(composerMode === 'factory' ? !factorySending : canSend);
+
+  // Local-only draft — written to chat.inputText only at send time, no
+  // bidirectional $effect mirroring (that creates reactive loops that
+  // interfere with chat.messages tracking downstream).
+  let draft = $state('');
+  let stagedFiles = $state<DraftFile[]>([]);
+  let draftOwner = preferenceOwner();
+  $effect(() => {
+    const next = preferenceOwner();
+    if (next !== draftOwner) {
+      draftOwner = next;
+      draft = '';
+      stagedFiles = [];
+    }
+  });
+
+  const dropRegistry = useDropRegistry();
+  $effect(() => {
+    const owner = preferenceOwner();
+    if (!dropRegistry || !owner) return;
+    return dropRegistry.register({
+      id: 'assistant-draft',
+      label: m.shell_drop_assistant(),
+      available: () => !!assistant.personalAgentId,
+      async receive(files, signal) {
+        for (const file of files) {
+          signal.throwIfAborted();
+          if (file.size > ATTACHMENT_LIMITS.proxiedMaxBytes)
+            throw new AttachmentUploadError('too_large', 'Assistant upload too large');
+          const form = new FormData();
+          form.set('file', file);
+          form.set('category', 'inbox');
+          const result = await fetchJson<{ id: string }>('/api/files', {
+            method: 'POST',
+            body: form,
+            signal,
+          });
+          if (signal.aborted || preferenceOwner() !== owner) return;
+          if (typeof result.id !== 'string' || !result.id)
+            throw new Error('Missing upload receipt');
+          stagedFiles = [...stagedFiles, { id: result.id, name: file.name, size: file.size }];
+          composerMode = 'chat';
+          assistant.open = true;
+        }
+      },
+    });
+  });
+
+  // In flight: the JEV turn router call that decides which context manifests
+  // this turn gets. Guards against a double send across the await.
+  let routing = $state(false);
+  // Last classified turn mode, shown in the scope line so the router's
+  // behaviour is visible without opening PostHog.
+  let lastMode = $state<RouteMode | null>(null);
+
+  async function send() {
+    if (composerMode === 'factory') {
+      void submitFactoryIntake();
+      return;
+    }
+    if (!canSend || routing) return;
+    const id = assistant.personalAgentId;
+    if (!id) return;
+    const text = draft.trim();
+    const files = [...stagedFiles];
+    const owner = preferenceOwner();
+    if (!text && !files.length) return;
+    let message = text;
+    // Cleared before the await so the composer empties on Enter as it always
+    // has; `routing` is what stops a second Enter from sending the same turn
+    // twice while the classifier call is in flight.
+    draft = '';
+    routing = true;
+    let loaded: ReadonlySet<ManifestId> | undefined;
+    try {
+      const fileContext = await fileDraftContext(files);
+      message = [text, fileContext].filter(Boolean).join('\n\n');
+      if (preferenceOwner() !== owner || assistant.personalAgentId !== id) return;
+      const path = canonicalPath(page.url.pathname);
+      const decision = await requestRouteDecision(
+        text || m.shell_drop_assistant(),
+        languageTag(),
+        path,
+      );
+      lastMode = decision?.mode ?? null;
+      loaded = gateManifests(decision, routerMode(), path);
+    } catch {
+      if (preferenceOwner() === owner) {
+        draft = text;
+        toastError(m.shell_drop_failed());
+      }
+      return;
+    } finally {
+      routing = false;
+    }
+    // Prepend page-context envelope (route + focus + nav instructions) for the
+    // model; the clean text is what shows in the transcript. The envelope
+    // carries only the manifests this turn needs (null decision => all of them).
+    if (preferenceOwner() !== owner || assistant.personalAgentId !== id) return;
+    if (!canSend) {
+      draft = text;
+      return;
+    }
+    sendAssistantTurn(id, message, buildAssistantContext(loaded), sessionKeyFor(id));
+    stagedFiles = stagedFiles.filter((file) => !files.some((sent) => sent.id === file.id));
+  }
+
+  function stopFactoryPolling() {
+    if (factoryPollTimer) clearTimeout(factoryPollTimer);
+    factoryPollTimer = null;
+  }
+
+  function scheduleFactoryPoll(issueId: string) {
+    stopFactoryPolling();
+    factoryPollTimer = setTimeout(() => void pollFactoryIntake(issueId), 2500);
+  }
+
+  async function pollFactoryIntake(issueId: string) {
+    try {
+      const response = await fetch(`/api/workforce/factory-intake/${encodeURIComponent(issueId)}`);
+      if (!response.ok) throw new Error('status unavailable');
+      const next = normalizeFactoryIntake(await response.json());
+      if (!next) throw new Error('invalid status response');
+      factoryIntake = next;
+      if (!factoryIntakeIsSettled(next)) scheduleFactoryPoll(next.issueId);
+    } catch {
+      // Keep the accepted intake card and its issue link. A transient
+      // polling failure must never imply that the ticket was lost.
+      if (factoryIntake && !factoryIntakeIsSettled(factoryIntake)) {
+        scheduleFactoryPoll(factoryIntake.issueId);
+      }
+    }
+  }
+
+  async function submitFactoryIntake() {
+    if (factorySending) return;
+    const request = draft.trim();
+    if (!request) return;
+    factoryAttempt = factoryIntakeAttempt(factoryAttempt, request, () => crypto.randomUUID());
+    factorySending = true;
+    factoryError = null;
+    factoryIntake = null;
+    stopFactoryPolling();
+    try {
+      const response = await fetch('/api/workforce/factory-intake', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          request,
+          source: {
+            kind: 'hub_assistant',
+            route: canonicalPath(page.url.pathname),
+            selectedAgentId: ui.selectedAgentId ?? undefined,
+          },
+          idempotencyKey: factoryAttempt.idempotencyKey,
+        }),
+      });
+      if (!response.ok) throw new Error('factory unavailable');
+      const accepted = normalizeFactoryIntake(await response.json());
+      if (!accepted) {
+        factoryError = m.factoryDesk_invalidResponse();
+        return;
+      }
+      factoryIntake = accepted;
+      factoryAttempt = null;
+      draft = '';
+      if (!factoryIntakeIsSettled(accepted)) scheduleFactoryPoll(accepted.issueId);
+    } catch {
+      factoryError = m.factoryDesk_unavailable();
+    } finally {
+      factorySending = false;
+    }
+  }
+
+  onDestroy(stopFactoryPolling);
+
+  function newChat() {
+    if (composerMode === 'factory') {
+      stopFactoryPolling();
+      factoryIntake = null;
+      factoryError = null;
+      factoryAttempt = null;
+      draft = '';
+      requestAnimationFrame(() => inputEl?.focus());
+      return;
+    }
+    const id = assistant.personalAgentId;
+    if (!id) return;
+    void resetChat(id);
+    conversation?.scrollToBottom();
+    draft = '';
+    requestAnimationFrame(() => inputEl?.focus());
+  }
+
+  // Every open starts pinned to the newest message (the panel re-mounts at
+  // scrollTop 0); after that AiConversation follows only while the reader is
+  // at the bottom.
+  $effect(() => {
+    if (!assistant.open) return;
+    void messages.length;
+    void tick().then(() => conversation?.scrollToBottom());
+  });
+  // The assistant's face mirrors the conversation: thinking, answering, failed.
+  const faceState = $derived(composerMode === 'chat' ? chatFaceState(chat) : 'idle');
+  const threadKey = $derived(`${messages.length}:${stream?.length ?? -1}:${sending}`);
+  // Chat mode only: the factory desk has no run to stop.
+  const replyRunning = $derived(composerMode === 'chat' && (sending || stream !== null || routing));
+  function stopReply() {
+    const id = assistant.personalAgentId;
+    if (id) void abortChat(id, sessionKeyFor(id));
+  }
+  function copyAction(text: string): MessageAction[] {
+    if (!text.trim()) return [];
+    return [
+      {
+        icon: Copy,
+        label: m.chat_copy(),
+        confirm: true,
+        onclick: () => void navigator.clipboard?.writeText(text).catch(() => {}),
+      },
+    ];
+  }
+
+  function fmtTime(ts: number | undefined): string {
+    if (!ts) return '';
+    const d = new Date(ts);
+    return d.toLocaleTimeString(appLocale(), { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function msgRole(msg: unknown): 'user' | 'assistant' {
+    return (msg as { role?: string }).role === 'user' ? 'user' : 'assistant';
+  }
+
+  function msgTs(msg: unknown): number | undefined {
+    return (msg as { timestamp?: number }).timestamp;
+  }
+
+  // tool_use_id → result, collected across the whole thread, so assistant
+  // turns rendered via ChatBlocks can show tool card outcomes.
+  const toolResultsById = $derived(computeToolResultsById(messages));
+  // One "N tool uses" row per reply, not one row + timestamp per call.
+  const shown = $derived(foldToolTurns(messages));
+
+  // On /my-agent the user is already in a full chat with this same personal
+  // agent (same thread, same AI), so the floating assistant is redundant
+  // there — hide it entirely on that route.
+  const onMyAgentPage = $derived(canonicalPath(page.url.pathname) === '/home');
+
+  // A call lives at the app level (module singleton). When it's running and
+  // the user has navigated off the call UI, this anchored popup surfaces the
+  // live status + controls so the call is never interrupted by navigation.
+  const callElsewhere = $derived(voiceCall.active && !onMyAgentPage);
+  const CALL_STATUS_LABEL: Record<string, string> = {
+    idle: m.floatingAssistant_muted(),
+    listening: m.floatingAssistant_listening(),
+    thinking: m.floatingAssistant_thinking(),
+    speaking: m.floatingAssistant_speaking(),
+  };
+
+  // ── Draggable, edge-snapping launcher ───────────────────────────────────
+  // The collapsed pill is icon-only and expands its label on hover. It can be
+  // dragged anywhere and snaps to the nearest screen edge on release (smooth),
+  // persisting its spot. Anchored by whichever half it lands in so the
+  // hover-expand always grows inward and never spills off-screen.
+  const LAUNCH_MARGIN = 20;
+  let launcherEl: HTMLElement | null = $state(null);
+  let pos = $state<{ left: number; top: number } | null>(null);
+  let dragging = $state(false);
+  let dragMoved = $state(false);
+  // Home zone: dropping the pill within this distance of the bottom-right
+  // corner clears the saved position, so it returns to the hard-refresh default.
+  const HOME_ZONE = 64;
+  let homing = false;
+  let vw = $state(typeof window !== 'undefined' ? window.innerWidth : 1280);
+  let vh = $state(typeof window !== 'undefined' ? window.innerHeight : 800);
+  let drag = { px: 0, py: 0, moved: false };
+  let suppressClick = false;
+
+  const clampN = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+
+  // Measured COLLAPSED pill size. Everything (edge snapping, the mirrored
+  // `right:` anchor, cursor centring, the in-view clamp) is derived from it,
+  // so it has to be the real box — the old `launcherEl?.offsetWidth ?? 56`
+  // read `null` on every first paint (the ref was only assigned on
+  // pointerdown), and `right: vw - left - 56` on a ~140px pill rendered it
+  // ~80px away from where it was dropped. Sampled only while collapsed:
+  // hovering expands the label, which must NOT move the anchor.
+  let launcherSize = $state({ w: 56, h: 44 });
+  const launcherW = () => launcherSize.w;
+  const launcherH = () => launcherSize.h;
+  function measureLauncher() {
+    if (!launcherEl || dragging) return;
+    const { offsetWidth: w, offsetHeight: h } = launcherEl;
+    if (w > 0 && h > 0 && (w !== launcherSize.w || h !== launcherSize.h)) launcherSize = { w, h };
+  }
+
+  // The settled spot lives as a fraction of the free area (0 = left/top edge,
+  // 1 = right/bottom edge). Pixels are re-derived from it whenever the viewport
+  // or the measured pill size changes, so a resize keeps the pill on the same
+  // edge at the same relative place instead of re-snapping it somewhere else,
+  // and it can never land off-screen.
+  let frac = $state(savedFrac);
+  $effect(() => {
+    if (!frac || dragging || homing) return;
+    const { w, h } = launcherSize;
+    pos = {
+      left: LAUNCH_MARGIN + frac.fx * Math.max(0, vw - w - 2 * LAUNCH_MARGIN),
+      top: LAUNCH_MARGIN + frac.fy * Math.max(0, vh - h - 2 * LAUNCH_MARGIN),
+    };
+  });
+
+  onMount(() => {
+    const onResize = () => {
+      vw = window.innerWidth;
+      vh = window.innerHeight;
+      measureLauncher();
+    };
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  });
+
+  const inHomeZone = $derived(
+    dragging &&
+      dragMoved &&
+      !!pos &&
+      vw - (pos.left + launcherSize.w) <= HOME_ZONE &&
+      vh - (pos.top + launcherSize.h) <= HOME_ZONE,
+  );
+
+  // Docked = resting at the default corner — `pos` is only ever non-null once
+  // a real drag has moved the pill (see onLauncherPointerMove), so this stays
+  // true through a plain click and through the whole pre-threshold hold of a
+  // pointerdown, and only flips once the pill actually leaves the corner.
+  // Collapses to an icon-only circle; anywhere else it's the full label+kbd pill.
+  const docked = $derived(!pos);
+
+  // The docked circle and the full pill are different footprints (not just a
+  // hover-only size change like the label reveal) — re-measure whenever the
+  // shape flips so edge-snap/clamp math uses the real box, not a stale one.
+  $effect(() => {
+    void docked;
+    measureLauncher();
+  });
+
+  // Slide to the default corner with the normal snap transition, then drop the
+  // custom position entirely (same state as a hard refresh).
+  function snapHome() {
+    const w = launcherW();
+    const h = launcherH();
+    pos = { left: vw - w - LAUNCH_MARGIN, top: vh - h - LAUNCH_MARGIN };
+    homing = true;
+    frac = savedFrac = null;
+    setTimeout(homeSettled, 400); // fallback if no transition fires (already home)
+  }
+  function homeSettled() {
+    if (!homing) return;
+    homing = false;
+    pos = null;
+  }
+
+  function snapToEdge() {
+    if (!pos) return;
+    const w = launcherW();
+    const h = launcherH();
+    let { left, top } = pos;
+    const dl = left;
+    const dr = vw - (left + w);
+    const dt = top;
+    const db = vh - (top + h);
+    const min = Math.min(dl, dr, dt, db);
+    if (min === dl) left = LAUNCH_MARGIN;
+    else if (min === dr) left = vw - w - LAUNCH_MARGIN;
+    else if (min === dt) top = LAUNCH_MARGIN;
+    else top = vh - h - LAUNCH_MARGIN;
+    left = clampN(left, LAUNCH_MARGIN, vw - w - LAUNCH_MARGIN);
+    top = clampN(top, LAUNCH_MARGIN, vh - h - LAUNCH_MARGIN);
+    // Setting `frac` makes the $effect above derive (and keep deriving) `pos`.
+    frac = savedFrac = {
+      fx: clampN((left - LAUNCH_MARGIN) / Math.max(1, vw - w - 2 * LAUNCH_MARGIN), 0, 1),
+      fy: clampN((top - LAUNCH_MARGIN) / Math.max(1, vh - h - 2 * LAUNCH_MARGIN), 0, 1),
+    };
+  }
+
+  function onLauncherPointerDown(e: PointerEvent) {
+    if (e.button !== 0 || !launcherEl) return;
+    // `pos` stays null (docked) here — it's only set once the move handler
+    // below confirms a real drag, so a plain click never promotes the default
+    // corner to a "custom" position and strands the pill out of its docked look.
+    drag = { px: e.clientX, py: e.clientY, moved: false };
+    launcherEl.setPointerCapture(e.pointerId);
+    dragging = true;
+    dragMoved = false;
+    homing = false;
+  }
+  function onLauncherPointerMove(e: PointerEvent) {
+    if (!dragging || !launcherEl) return;
+    // Wait for a real drag before moving so a click never jumps the pill.
+    if (!drag.moved && Math.abs(e.clientX - drag.px) < 4 && Math.abs(e.clientY - drag.py) < 4)
+      return;
+    drag.moved = true;
+    dragMoved = true;
+    // Centre the COLLAPSED pill on the cursor. Measured size, not a live
+    // offsetWidth read: the label collapse is a transition, so reading it
+    // mid-drag returns an interpolated width and the pill slides sideways
+    // under the cursor for the length of the animation.
+    const { w, h } = launcherSize;
+    pos = {
+      left: clampN(e.clientX - w / 2, LAUNCH_MARGIN, vw - w - LAUNCH_MARGIN),
+      top: clampN(e.clientY - h / 2, LAUNCH_MARGIN, vh - h - LAUNCH_MARGIN),
+    };
+  }
+  function onLauncherPointerUp(e: PointerEvent) {
+    if (!dragging) return;
+    dragging = false;
+    try {
+      launcherEl?.releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+    if (drag.moved) {
+      suppressClick = true; // a drag is not a click
+      if (inHomeZone) snapHome();
+      else snapToEdge();
+    }
+    dragMoved = false;
+  }
+  function onLauncherClick() {
+    if (suppressClick) {
+      suppressClick = false;
+      return;
+    }
+    toggleAssistant();
+  }
+
+  // ── Panel: opens from the launcher's corner, draggable by its header ─────
+  const PANEL_W = 380;
+  const PANEL_H = 560;
+  let panelPos = $state<{ left: number; top: number } | null>(null);
+  let panelDragging = $state(false);
+  let panelDrag = { px: 0, py: 0, left: 0, top: 0 };
+
+  // Re-origin from the bubble on every open (don't keep the last dragged spot).
+  $effect(() => {
+    if (assistant.open) panelPos = null;
+  });
+
+  // The corner nearest the launcher = where the panel docks and grows from.
+  const panelAnchor = $derived.by(() => {
+    const lw = launcherW();
+    const lh = launcherH();
+    const cx = pos ? pos.left + lw / 2 : vw - LAUNCH_MARGIN - lw / 2;
+    const cy = pos ? pos.top + lh / 2 : vh - LAUNCH_MARGIN - lh / 2;
+    const right = cx > vw / 2;
+    const bottom = cy > vh / 2;
+    return { right, bottom, origin: `${bottom ? 'bottom' : 'top'} ${right ? 'right' : 'left'}` };
+  });
+  const panelStyle = $derived.by(() => {
+    const a = panelAnchor;
+    if (panelDragging || panelPos) {
+      const p = panelPos!;
+      return `left:${p.left}px; top:${p.top}px; right:auto; bottom:auto; transform-origin:${a.origin};`;
+    }
+    const horiz = a.right ? 'right:20px; left:auto;' : 'left:20px; right:auto;';
+    const vert = a.bottom ? 'bottom:20px; top:auto;' : 'top:20px; bottom:auto;';
+    return `${horiz} ${vert} transform-origin:${a.origin}; animation: assistant-pop-in 240ms cubic-bezier(.2,.8,.2,1);`;
+  });
+
+  function onPanelHeaderPointerDown(e: PointerEvent) {
+    if (e.button !== 0) return;
+    if ((e.target as HTMLElement).closest('button')) return; // header buttons aren't drag handles
+    const header = e.currentTarget as HTMLElement;
+    const panel = header.parentElement as HTMLElement | null;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    panelPos = { left: r.left, top: r.top }; // freeze current spot → no jump
+    panelDrag = { px: e.clientX, py: e.clientY, left: r.left, top: r.top };
+    header.setPointerCapture(e.pointerId);
+    panelDragging = true;
+  }
+  function onPanelHeaderPointerMove(e: PointerEvent) {
+    if (!panelDragging) return;
+    panelPos = {
+      left: clampN(panelDrag.left + (e.clientX - panelDrag.px), 8, vw - PANEL_W - 8),
+      top: clampN(panelDrag.top + (e.clientY - panelDrag.py), 8, vh - PANEL_H - 8),
+    };
+  }
+  function onPanelHeaderPointerUp(e: PointerEvent) {
+    if (!panelDragging) return;
+    panelDragging = false;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  // Hub dialogs are native <dialog>.showModal() (top layer + inert outside), so
+  // z-index alone can never paint the panel over them and it goes unclickable.
+  // The whole surface is a manual popover (top layer) re-parented INTO the open
+  // dialog while one is open, and back to <body> once it closes (a closed dialog
+  // may be removed from the DOM, taking the node with it).
+  let root = $state<HTMLDivElement | null>(null);
+  $effect(() => {
+    if (!root) return;
+    const el = root;
+    const place = () => {
+      const host = document.querySelector<HTMLElement>('dialog[open]') ?? document.body;
+      if (!el.isConnected || el.parentElement !== host) host.appendChild(el);
+      try {
+        if (!el.matches(':popover-open')) el.showPopover();
+      } catch {
+        /* already open or unsupported — z-index fallback still applies */
+      }
+    };
+    place();
+    const poll = setInterval(place, 400);
+    // Teardown removes the node ourselves: once re-parented out of the
+    // component's own DOM range, Svelte's unmount no longer reaches it, and the
+    // app shell is re-keyed per module (root +layout `{#key}`), so every module
+    // switch would otherwise leave an orphan pill behind (shipped: two ⌘J pills).
+    return () => {
+      clearInterval(poll);
+      el.remove();
+    };
+  });
+
+  // Anchor by the half it sits in so hover-expand grows inward (never off-screen).
+  const anchorRight = $derived(!!pos && pos.left + launcherW() / 2 > vw / 2);
+  const launcherStyle = $derived.by(() => {
+    if (!pos) return '';
+    if (dragging) return `left:${pos.left}px; right:auto; top:${pos.top}px;`;
+    const ease =
+      'transition: left var(--duration-normal) var(--ease-standard), top var(--duration-normal) var(--ease-standard), right var(--duration-normal) var(--ease-standard);';
+    const horiz = anchorRight
+      ? `right:${Math.max(LAUNCH_MARGIN, vw - pos.left - launcherW())}px; left:auto;`
+      : `left:${pos.left}px; right:auto;`;
+    return `${horiz} top:${pos.top}px; ${ease}`;
+  });
+</script>
+
+<div bind:this={root} popover="manual" class="fa-root">
+  <!-- Pill (collapsed state) -->
+  {#if onMyAgentPage}
+    <!-- redundant on /my-agent — the page hosts the same chat inline -->
+  {:else if callElsewhere && !assistant.open}
+    <!-- Live-call status pill: keeps the call reachable after navigating away. -->
+    <div
+      class="fixed bottom-[max(var(--space-4,16px),env(safe-area-inset-bottom,0px))] right-[max(var(--space-4,16px),env(safe-area-inset-right,0px))] z-[var(--layer-popover,40)] flex items-center gap-2.5 pl-2 pr-2.5 py-2 rounded-full bg-bg2 border border-accent/40 shadow-[var(--shadow-elevation-3,var(--shadow-md))]"
+    >
+      <Button
+        variant="ghost"
+        size="xs"
+        type="button"
+        onclick={() => (assistant.open = true)}
+        class="flex items-center gap-2 group"
+        title={m.a11y3_openCallTranscript()}
+      >
+        <span
+          class="w-7 h-7 rounded-full overflow-hidden bg-[var(--color-overlay)] ring-1 ring-accent/50 shrink-0"
+        >
+          <AiOrbFace
+            diameter={28}
+            gaze={false}
+            status={voiceFaceState(voiceCall.status)}
+            amplitude={() => mouth.open}
+          />
+        </span>
+        <span class="text-xs font-medium text-foreground tabular-nums">
+          {CALL_STATUS_LABEL[voiceCall.status] ?? m.floatingAssistant_onCall()}
+        </span>
+      </Button>
+      <Button
+        variant="ghost"
+        size="xs"
+        type="button"
+        onclick={toggleMute}
+        class="w-7 h-[var(--control-height-sm)] flex items-center justify-center rounded-full border border-border hover:bg-bg3 transition-colors {voiceCall.muted
+          ? 'text-accent border-accent/50'
+          : 'text-foreground'}"
+        title={voiceCall.muted ? m.a11y3_unmute() : m.a11y3_mute()}
+        aria-pressed={voiceCall.muted}
+      >
+        {#if voiceCall.muted}<MicOff size={iconSizes.sm} />{:else}<Mic size={iconSizes.sm} />{/if}
+      </Button>
+      <Button
+        variant="ghost"
+        size="xs"
+        type="button"
+        onclick={endCall}
+        class="w-7 h-[var(--control-height-sm)] flex items-center justify-center rounded-full border border-destructive/40 text-destructive hover:bg-destructive/15 transition-colors"
+        title={m.a11y3_endCall()}
+      >
+        <PhoneOff size={iconSizes.sm} />
+      </Button>
+    </div>
+  {:else if !assistant.open}
+    {#if inHomeZone}
+      <!-- Drop target: the default bottom-right corner (clears the saved position). -->
+      <div
+        aria-hidden="true"
+        class="fixed z-[var(--layer-popover,40)] rounded-full bg-accent/14 border border-dashed border-accent pointer-events-none"
+        style={`right:${LAUNCH_MARGIN - 12}px; bottom:${LAUNCH_MARGIN - 12}px; width:${launcherSize.w + 24}px; height:${launcherSize.h + 24}px;`}
+      ></div>
+    {/if}
+    <!-- `!fixed` / `!h-auto` below are load-bearing, not cosmetic: Button's base
+         class hardcodes `relative` and `h-[--control-height-xs]`, and Tailwind
+         emits `.relative` AFTER `.fixed`, so class-attribute order does not
+         decide the winner. Un-forced, the pill is position:relative — it renders
+         at its static flow position (document bottom-left) and dragging writes
+         left/top as RELATIVE offsets, throwing it off-screen. -->
+    <Button
+      variant="ghost"
+      size="xs"
+      type="button"
+      {@attach (el: HTMLElement) => {
+        launcherEl = el;
+        measureLauncher();
+      }}
+      onpointerdown={onLauncherPointerDown}
+      onpointermove={onLauncherPointerMove}
+      onpointerup={onLauncherPointerUp}
+      ontransitionend={homeSettled}
+      onclick={onLauncherClick}
+      class="!fixed z-[var(--layer-popover,40)] rounded-full shadow-[var(--shadow-elevation-3,var(--shadow-md))] transition-[background-color,border-color,box-shadow] group select-none touch-none {dragging
+        ? 'cursor-grabbing shadow-[var(--shadow-elevation-4,var(--shadow-lg))]'
+        : 'cursor-grab'} {pos ? '' : 'bottom-5 right-5'} {docked
+        ? '!h-[var(--control-height-touch)] !w-11 !p-0 flex items-center justify-center bg-accent/10 border border-accent/20 hover:bg-accent/16 hover:border-accent/40'
+        : '!h-auto flex items-center gap-1.5 p-1.5 bg-bg2 border border-border hover:border-accent/50 hover:bg-bg3'}"
+      style={launcherStyle}
+      aria-label={`${m.floatingAssistant_openLabel()} (${kbdToggle})`}
+      title={`${m.floatingAssistant_openTitle()} (${kbdToggle})`}
+    >
+      {#if docked}
+        <!-- Docked in the corner: icon-only, subtly-filled circle — the kbd hint
+             moves into aria-label/title since there's no room for the chip. -->
+        <AiOrbFace diameter={32} status={faceState} />
+      {:else}
+        <!-- Icon chip — pairs with the kbd as a balanced two-token collapsed pill. -->
+        <AiOrbFace diameter={28} status={faceState} />
+        <!-- Label reveals on hover. Grid 0fr→1fr animates to the text's exact width
+             (no hardcoded max-width, no clipping). Flex items-center handles vertical
+             centring; leading-tight + py-0.5 give descenders (g, y) room inside the clip. -->
+        <span
+          class="grid grid-cols-[0fr] transition-[grid-template-columns] duration-[var(--duration-normal)] ease-out {dragging
+            ? ''
+            : 'group-hover:grid-cols-[1fr]'}"
+        >
+          <span class="overflow-hidden min-w-0">
+            <span
+              class="block px-1 py-0.5 whitespace-nowrap text-[length:var(--font-size-body)] font-medium leading-tight text-foreground"
+              >{m.floatingAssistant_askAnything()}</span
+            >
+          </span>
+        </span>
+        <kbd
+          class="shrink-0 flex items-center h-5 px-1.5 rounded-md bg-bg3 text-[length:var(--font-size-telemetry)] font-medium font-mono leading-none text-muted-foreground border border-border"
+          >{kbdToggle}</kbd
+        >
+      {/if}
+    </Button>
+  {:else}
+    <!-- Expanded panel — grows out of the launcher's corner, draggable by header -->
+    <div
+      class="fixed z-[var(--layer-popover,40)] w-[min(380px,calc(100vw-var(--space-page-gutter,16px)-var(--space-page-gutter,16px)))] h-[min(560px,calc(100dvh-var(--space-page-gutter,16px)-var(--space-page-gutter,16px)-env(safe-area-inset-bottom,0px)))] flex flex-col bg-bg2 border border-border rounded-xl shadow-[var(--shadow-overlay,var(--shadow-xl,var(--shadow-lg)))] overflow-hidden"
+      style={panelStyle}
+    >
+      <!-- Header (drag handle) -->
+      <div
+        role="toolbar"
+        tabindex="-1"
+        aria-label={m.floatingAssistant_title()}
+        class="shrink-0 flex items-center gap-1 px-2 py-1.5 border-b border-border bg-bg3/40 select-none touch-none {panelDragging
+          ? 'cursor-grabbing'
+          : 'cursor-grab'}"
+        onpointerdown={onPanelHeaderPointerDown}
+        onpointermove={onPanelHeaderPointerMove}
+        onpointerup={onPanelHeaderPointerUp}
+      >
+        <AiOrbFace diameter={22} status={faceState} class="ml-1" />
+        <span
+          class="text-[length:var(--font-size-label)] font-semibold text-foreground flex-1 truncate"
+          >{m.floatingAssistant_title()}</span
+        >
+        {#if !conn.connected && composerMode === 'chat'}
+          <span
+            class="shrink-0 w-1.5 h-1.5 rounded-full bg-warning"
+            title={m.floatingAssistant_offline()}
+          ></span>
+        {/if}
+        <Button
+          variant="ghost"
+          size="xs"
+          type="button"
+          onclick={newChat}
+          class="w-6 h-[var(--control-height-xs)] flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-bg3 transition-colors"
+          aria-label={m.floatingAssistant_newChat()}
+          title={m.floatingAssistant_newChat()}
+        >
+          <SquarePen size={iconSizes.sm} />
+        </Button>
+        <Button
+          variant="ghost"
+          size="xs"
+          type="button"
+          onclick={closeAssistant}
+          class="w-6 h-[var(--control-height-xs)] flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-bg3 transition-colors"
+          aria-label={m.floatingAssistant_minimize()}
+          title={m.floatingAssistant_minimize()}
+        >
+          <Minus size={iconSizes.md} />
+        </Button>
+      </div>
+
+      {#if callElsewhere}
+        <!-- Live-call strip: status + controls while the call runs in the background -->
+        <div
+          class="shrink-0 flex items-center gap-2 px-3 py-2 border-b border-accent/30 bg-accent/5"
+        >
+          <span
+            class="w-7 h-7 rounded-full overflow-hidden bg-[var(--color-overlay)] ring-1 ring-accent/50 shrink-0"
+          >
+            <AiOrbFace
+              diameter={28}
+              gaze={false}
+              status={voiceFaceState(voiceCall.status)}
+              amplitude={() => mouth.open}
+            />
+          </span>
+          <span
+            class="text-[length:var(--font-size-label)] font-medium text-foreground flex-1 tabular-nums"
+          >
+            On call · {CALL_STATUS_LABEL[voiceCall.status] ?? ''}
+            {#if voiceCall.interim}<span class="text-muted-foreground italic"
+                >“{voiceCall.interim}”</span
+              >{/if}
+          </span>
+          <Button
+            variant="ghost"
+            size="xs"
+            type="button"
+            onclick={toggleMute}
+            class="w-6 h-[var(--control-height-xs)] flex items-center justify-center rounded-md border border-border hover:bg-bg3 transition-colors {voiceCall.muted
+              ? 'text-accent border-accent/50'
+              : 'text-foreground'}"
+            title={voiceCall.muted ? m.a11y3_unmute() : m.a11y3_mute()}
+            aria-pressed={voiceCall.muted}
+          >
+            {#if voiceCall.muted}<MicOff size={iconSizes.xs} />{:else}<Mic
+                size={iconSizes.xs}
+              />{/if}
+          </Button>
+          <Button
+            variant="ghost"
+            size="xs"
+            type="button"
+            onclick={endCall}
+            class="w-6 h-[var(--control-height-xs)] flex items-center justify-center rounded-md border border-destructive/40 text-destructive hover:bg-destructive/15 transition-colors"
+            title={m.a11y3_endCall()}
+          >
+            <PhoneOff size={iconSizes.xs} />
+          </Button>
+        </div>
+      {/if}
+
+      <!-- Messages -->
+      <AiConversation
+        bind:this={conversation}
+        class="flex-1 min-h-0"
+        viewportClass="px-3 py-3"
+        contentKey={threadKey}
+      >
+        <div class="flex-1 flex flex-col gap-2">
+          {#if composerMode === 'factory'}
+            <div
+              class="flex-1 flex flex-col items-center justify-center text-center px-7 factory-welcome"
+            >
+              <div class="factory-welcome-mark"><Factory size={iconSizes.lg} /></div>
+              <span class="factory-welcome-status"><i></i>{m.factoryDesk_stateQueued()}</span>
+              <h3>{m.factoryDesk_welcomeTitle()}</h3>
+              <p>{m.factoryDesk_welcomeDescription()}</p>
+            </div>
+          {:else if assistant.loading}
+            <div
+              class="flex-1 flex items-center justify-center text-[length:var(--font-size-label)] text-muted-foreground"
+            >
+              {m.floatingAssistant_loading()}
+            </div>
+          {:else if assistant.error}
+            <div class="flex-1 flex flex-col items-center justify-center text-center px-6">
+              <AlertCircle size={iconSizes.lg} class="text-destructive mb-2" />
+              <p class="text-[length:var(--font-size-label)] text-muted-foreground">
+                {assistant.error}
+              </p>
+            </div>
+          {:else if !assistant.personalAgentId}
+            <div
+              class="flex-1 flex items-center justify-center text-[length:var(--font-size-label)] text-muted-foreground"
+            >
+              {m.floatingAssistant_connecting()}
+            </div>
+          {:else if messages.length === 0 && !chat?.loading && !stream}
+            <div class="flex-1 flex flex-col items-center justify-center text-center px-6">
+              <AiOrbFace
+                diameter={64}
+                status={faceState}
+                class="mb-3"
+                aria-label={m.floatingAssistant_title()}
+              />
+              <h3 class="text-sm font-semibold text-foreground mb-1">{greeting}</h3>
+              <p class="text-[length:var(--font-size-label)] text-muted-foreground leading-relaxed">
+                {m.floatingAssistant_greeting()}
+              </p>
+            </div>
+          {:else}
+            {#each shown as msg, i (`${msgTs(msg) ?? ''}_${i}`)}
+              {@const role = msgRole(msg)}
+              {#if isToolResultOnly(msg)}
+                <!-- tool-output carrier turn — folded into the matching tool card, not its own bubble -->
+              {:else if role === 'user'}
+                {@const text = cleanInboundForDisplay(extractText(msg) ?? '')}
+                {#if text && !isActionToken(text)}
+                  <AiMessage
+                    from="user"
+                    timestamp={fmtTime(msgTs(msg)) || undefined}
+                    actions={copyAction(text)}
+                  >
+                    <div
+                      class="rounded-lg px-3 py-2 text-[length:var(--font-size-label)] leading-relaxed break-words bg-accent/15 text-foreground border border-accent/20 whitespace-pre-wrap"
+                    >
+                      {text}
+                    </div>
+                  </AiMessage>
+                {/if}
+              {:else if assistantHasContent(msg)}
+                <AiMessage
+                  from="assistant"
+                  timestamp={fmtTime(msgTs(msg)) || undefined}
+                  actions={copyAction(extractText(msg) ?? '')}
+                >
+                  <!-- TODO(handoff): onArtifactCallback/onChoice are NOT routed
+                     through the JEV turn router on purpose — a ui.choice reply is
+                     the literal string "Show me how", which classifies as `chat`
+                     and would strip the very page list and form catalog the agent
+                     needs to act on that choice. Routing them needs the PRIOR
+                     turn's decision carried forward. See meta proposals/
+                     2026-10-12-hub-assistant-jev-context-router.md open end 4. -->
+                  <ChatBlocks
+                    message={msg}
+                    toolResults={toolResultsById}
+                    compact
+                    onArtifactCallback={(cb) => {
+                      const id = assistant.personalAgentId;
+                      if (id) sendAssistantTurn(id, cb, buildAssistantContext(), sessionKeyFor(id));
+                    }}
+                    onChoice={(text) => {
+                      const id = assistant.personalAgentId;
+                      if (id)
+                        sendAssistantTurn(id, text, buildAssistantContext(), sessionKeyFor(id));
+                    }}
+                  />
+                </AiMessage>
+              {/if}
+            {/each}
+
+            {#if streamText}
+              <div class="flex flex-col gap-0.5 items-start">
+                <div
+                  class="max-w-[85%] rounded-lg px-3 py-2 text-[length:var(--font-size-label)] leading-relaxed break-words bg-bg3 text-foreground border border-dashed border-border opacity-90"
+                >
+                  <MarkdownMessage value={stripTtsTags(stream ?? '')} tone="assistant" />
+                </div>
+              </div>
+            {:else if sending || stream !== null}
+              <div
+                class="flex items-center gap-2 px-3 py-2 text-[length:var(--font-size-label)] text-muted-foreground"
+              >
+                <ThinkingShader />
+                {m.floatingAssistant_thinking()}
+              </div>
+            {/if}
+
+            {#if chat?.lastError}
+              <div
+                class="flex items-start gap-1.5 px-2 py-1.5 text-[length:var(--font-size-label)] text-destructive bg-destructive/10 border border-destructive/20 rounded-md"
+              >
+                <AlertCircle size={iconSizes.xs} class="mt-0.5 shrink-0" />
+                <span class="break-words">{chat.lastError}</span>
+              </div>
+            {/if}
+          {/if}
+        </div>
+      </AiConversation>
+
+      {#if composerMode === 'factory' && (factorySending || factoryIntake || factoryError)}
+        <FactoryIntakeCard intake={factoryIntake} pending={factorySending} error={factoryError} />
+      {/if}
+
+      <!-- Scope badge + input -->
+      <div class="shrink-0 border-t border-border bg-bg3/40">
+        <div class="composer-modes" aria-label={m.factoryDesk_controlDesk()}>
+          <Button
+            variant="ghost"
+            size="xs"
+            type="button"
+            class={composerMode === 'chat' ? 'active' : undefined}
+            aria-pressed={composerMode === 'chat'}
+            onclick={() => (composerMode = 'chat')}
+            ><MessageCircle size={iconSizes.xs} /> {m.factoryDesk_modeChat()}</Button
+          >
+          <Button
+            variant="ghost"
+            size="xs"
+            type="button"
+            class={composerMode === 'factory' ? 'active' : undefined}
+            aria-pressed={composerMode === 'factory'}
+            onclick={() => (composerMode = 'factory')}
+            ><Factory size={iconSizes.xs} /> {m.factoryDesk_modeFactory()}</Button
+          >
+          {#if composerMode === 'factory'}
+            <span>{m.factoryDesk_factoryHint()}</span>
+          {/if}
+        </div>
+        <div
+          class="flex items-center gap-1.5 px-3 py-1.5 text-[length:var(--font-size-telemetry)] text-muted-foreground border-b border-border/60"
+        >
+          <span class="font-semibold uppercase tracking-wider"
+            >{m.floatingAssistant_viewing()}:</span
+          >
+          <span class="truncate flex-1">{scopeLabel}</span>
+          <ChevronDown size={iconSizes.xs} class="opacity-50" />
+        </div>
+        <div class="p-2.5">
+          <AiPromptInput
+            compact
+            bind:value={draft}
+            attachments={composerMode === 'chat' ? stagedFiles : []}
+            allowEmpty={composerMode === 'chat' && stagedFiles.length > 0}
+            onremoveattachment={(id) => {
+              stagedFiles = stagedFiles.filter((file) => file.id !== id);
+            }}
+            onattach={() => {
+              if (dropRegistry) dropRegistry.open = true;
+            }}
+            bind:textarea={inputEl}
+            placeholder={composerMode === 'factory'
+              ? m.factoryDesk_placeholder()
+              : canSend
+                ? m.floatingAssistant_askAnything()
+                : conn.connected
+                  ? m.common_loading()
+                  : m.floatingAssistant_offline()}
+            disabled={composerMode === 'factory'
+              ? factorySending
+              : !assistant.personalAgentId || !conn.connected}
+            status={replyRunning ? 'streaming' : chat?.lastError ? 'error' : 'idle'}
+            onsubmit={() => void send()}
+            onstop={stopReply}
+            submitLabel={composerMode === 'factory' ? m.factoryDesk_submit() : undefined}
+          />
+        </div>
+      </div>
+    </div>
+  {/if}
+</div>
+
+<style>
+  /* Manual popover = top layer. Reset the UA popover box to a transparent,
+     click-through viewport overlay; the pill/panel inside keep their own
+     `position: fixed` coordinates (top-layer boxes are viewport-relative). */
+  .fa-root,
+  .fa-root:popover-open {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+    z-index: var(--layer-popover);
+    pointer-events: none;
+  }
+  .fa-root::backdrop {
+    background: transparent;
+  }
+  .fa-root > :global(*) {
+    pointer-events: auto;
+  }
+  /* Grows out of the launcher: transform-origin is set inline to the bubble's
+       corner, so scaling up reads as the chat window emerging from the pill. */
+  @keyframes assistant-pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  .composer-modes {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    min-height: 2rem;
+    padding: var(--space-2);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-border) 65%, transparent);
+  }
+  .composer-modes :global(button) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+    padding: var(--space-1) var(--space-2);
+    color: var(--color-muted-foreground);
+    font-size: var(--font-size-telemetry);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .composer-modes :global(button:hover),
+  .composer-modes :global(button:focus-visible) {
+    color: var(--color-foreground);
+    outline: none;
+  }
+  .composer-modes :global(button.active) {
+    border-color: color-mix(in srgb, var(--color-accent) 35%, var(--color-border));
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  }
+  .composer-modes span {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    color: var(--color-muted-foreground);
+    font-size: var(--font-size-telemetry);
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .factory-welcome-mark {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    margin-bottom: var(--space-3);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
+    border-radius: var(--radius-xl);
+    color: var(--color-accent);
+    background: repeating-linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-accent) 9%, transparent) 0 5px,
+      transparent 5px 10px
+    );
+    box-shadow: var(--shadow-status-glow);
+  }
+  .factory-welcome-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-muted-foreground);
+    font-family: ui-monospace, monospace;
+    font-size: var(--font-size-telemetry);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .factory-welcome-status i {
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: var(--radius-full);
+    background: var(--color-success);
+    color: var(--color-success);
+    box-shadow: var(--shadow-status-glow);
+  }
+  .factory-welcome h3 {
+    margin-top: var(--space-2);
+    color: var(--color-foreground);
+    font-size: var(--font-size-body);
+    font-weight: 700;
+  }
+  .factory-welcome p {
+    margin-top: var(--space-1);
+    max-width: 17rem;
+    color: var(--color-muted-foreground);
+    font-size: var(--font-size-telemetry);
+    line-height: 1.5;
+  }
+</style>

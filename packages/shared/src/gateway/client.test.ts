@@ -1366,3 +1366,59 @@ describe('14-01 wire boundary: outbound requests and pending cleanup', () => {
     expect(lastSent(mockWs).traceparent).not.toContain('0af7651916cd43dd8448eb211c80319c');
   });
 });
+
+describe('GatewayClient synchronous submission boundary', () => {
+  afterEach(() => { vi.restoreAllMocks(); });
+
+  it('rejects an unopened or closing socket before returning a response promise', async () => {
+    const socket = new MockWebSocket();
+    const client = makeClient(socket, { autoReconnect: false });
+    expect(() => client.beginRequest('chat.send')).toThrow('not connected');
+    await performConnect(client, socket);
+    const sent = socket.sentMessages.length;
+    socket.readyState = MockWebSocket.CLOSING; // close event has not updated the consumer yet.
+    expect(() => client.beginRequest('chat.send')).toThrow('not connected');
+    expect(socket.sentMessages).toHaveLength(sent);
+    // The existing Promise API keeps its asynchronous rejection contract.
+    await expect(client.request('chat.send')).rejects.toMatchObject({ code: 'NOT_CONNECTED' });
+    client.close();
+  });
+
+  it('rejects unserializable payload synchronously without sending a frame', async () => {
+    const socket = new MockWebSocket();
+    const client = makeClient(socket, { autoReconnect: false });
+    await performConnect(client, socket);
+    const sent = socket.sentMessages.length;
+    const cyclic: { self?: unknown } = {}; cyclic.self = cyclic;
+    expect(() => client.beginRequest('chat.send', cyclic)).toThrow('not serializable');
+    expect(socket.sentMessages).toHaveLength(sent);
+    client.close();
+  });
+
+  it('rejects an announced payload limit synchronously before sending', async () => {
+    const socket = new MockWebSocket();
+    const client = makeClient(socket, { autoReconnect: false });
+    const { connectPromise, id } = await handshakeUntilConnect(client, socket);
+    socket.__simulateMessage(JSON.stringify({ type: 'res', id, ok: true, payload: {
+      type: 'hello-ok', protocol: 3, policy: { maxPayload: 256, maxBufferedBytes: 512, tickIntervalMs: 1 },
+    } }));
+    await connectPromise;
+    const before = socket.sentMessages.length;
+    expect(() => client.beginRequest('chat.send', { message: 'é'.repeat(300) })).toThrow('maxPayload');
+    expect(socket.sentMessages).toHaveLength(before);
+    client.close();
+  });
+
+  it('sends before returning and leaves accepted-then-throw as an unknown promise outcome', async () => {
+    const socket = new MockWebSocket();
+    const client = makeClient(socket, { autoReconnect: false });
+    await performConnect(client, socket);
+    const send = socket.send.bind(socket);
+    vi.spyOn(socket, 'send').mockImplementation((wire) => { send(wire); throw new Error('after accept'); });
+    let response!: Promise<unknown>;
+    expect(() => { response = client.beginRequest('chat.send', { message: 'hello' }); }).not.toThrow();
+    expect(JSON.parse(socket.sentMessages.at(-1)!).method).toBe('chat.send');
+    await expect(response).rejects.toMatchObject({ code: 'SEND_FAILED' });
+    client.close();
+  });
+});
