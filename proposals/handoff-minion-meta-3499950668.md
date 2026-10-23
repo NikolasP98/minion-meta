@@ -1,12 +1,20 @@
 ---
 id: handoff-minion-meta-3499950668
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/development/c-gateway/security-fixture-correction/original/.github/scripts/ci-security-scope.sh (minion-meta)
-status: draft
+status: review
+duplicate_candidate: 2026-08-24-minion-ai-secret-baseline-refresh
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Reconciliation note: this is a frozen-source audit snapshot of minion-ai's
+> .github/scripts/ci-security-scope.sh carrying the same "audit and refresh the
+> February 2026 baseline" marker already tracked by
+> 2026-08-24-minion-ai-secret-baseline-refresh (and previously cross-referenced
+> by handoff-minion-ai-1480236091). Flagged rather than merged outright since
+> this copy lives in a different repo/audit path — human review decides.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/development/c-gateway/security-fixture-correction/original/.github/scripts/ci-security-scope.sh
 

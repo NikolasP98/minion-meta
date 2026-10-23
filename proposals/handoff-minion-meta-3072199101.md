@@ -1,12 +1,17 @@
 ---
 id: handoff-minion-meta-3072199101
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/verification/a-chat/revision2/frozen-source/src/lib/state/chat/chat.svelte.ts (minion-meta)
-status: draft
+status: merged
+merged_into: handoff-minion-meta-1448907741
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Reconciliation note: identical TODO(handoff) markers (same lines, same text) as
+> handoff-minion-meta-1448907741 — this is the verification/revision2 frozen-source
+> snapshot of the same file content. Merged as a duplicate; canonical kept as tombstone.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/verification/a-chat/revision2/frozen-source/src/lib/state/chat/chat.svelte.ts
 

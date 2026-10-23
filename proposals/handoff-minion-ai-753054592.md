@@ -1,12 +1,15 @@
 ---
 id: handoff-minion-ai-753054592
 title: Handoff marker — src/gateway/hub-credential-client-registry.ts (minion-ai)
-status: draft
+status: review
+duplicate_candidate: 2026-10-22-whatsapp-member-agents-followups
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-ai]
 tags: [handoff-sweep]
 ---
+
+> Reconciliation note: the marker text itself cites "meta proposals/2026-10-22-whatsapp-member-agents-followups.md item 10" as already covering this same duplicate-chunk risk. Flagged as a likely duplicate rather than merged outright, since that proposal bundles multiple open ends and only one item may be in scope here — human review decides whether this closes against that item or stays open.
 
 # Handoff marker — src/gateway/hub-credential-client-registry.ts
 

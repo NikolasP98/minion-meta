@@ -1,12 +1,17 @@
 ---
 id: handoff-minion-meta-3306110172
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/verification/a-chat/revision2/candidate.patch (minion-meta)
-status: draft
+status: merged
+merged_into: handoff-minion-meta-3693488587
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Reconciliation note: identical TODO(handoff) markers (same lines, same text) as
+> handoff-minion-meta-3693488587 — this is the verification/revision2 frozen-source
+> snapshot of the same file content. Merged as a duplicate; canonical kept as tombstone.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/verification/a-chat/revision2/candidate.patch
 

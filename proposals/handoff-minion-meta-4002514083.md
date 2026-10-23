@@ -1,12 +1,17 @@
 ---
 id: handoff-minion-meta-4002514083
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/verification/a-chat/revision2/frozen-source/src/lib/components/layout/FloatingAssistant.svelte (minion-meta)
-status: draft
+status: merged
+merged_into: handoff-minion-meta-796158015
 created: 2026-10-23
 updated: 2026-10-23
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Reconciliation note: identical TODO(handoff) marker (same line, same text) as
+> handoff-minion-meta-796158015 — this is the verification/revision2 frozen-source
+> snapshot of the same file content. Merged as a duplicate; canonical kept as tombstone.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/verification/a-chat/revision2/frozen-source/src/lib/components/layout/FloatingAssistant.svelte
 
