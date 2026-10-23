@@ -40,8 +40,14 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-8",
       "acceptance": "**Topics:** `logic`, `security`, `test`\n\n**Dependencies:** 6. **Owner/files:** Factory: runner/src/jev-proxy.ts and capability lifecycle callers; serialize after Slice 6.\n\n**DoD A08:** One inflight per run across token remint; concurrent max_calls=1 admits one; busy consumes no extra inference; malformed debit remains capped; revoked request settles once; unknown spend fences; expiry never frees unresolved exposure.\n\n**Verification:** `(cd runner && node --import tsx --test src/jev-proxy.test.ts)`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
-      "evidence": []
+      "implementationVerified": true,
+      "evidence": [
+        "development/b-factory/revision1/source-manifest.json",
+        "verification/b-factory/revision1/review.md",
+        "development/b-factory/revision1/github-checks.json",
+        "https://github.com/NikolasP98/minion-factory/pull/201"
+      ],
+      "stage": "PR-ready-human-merge-pending"
     },
     {
       "slice": 9,
@@ -50,8 +56,14 @@
       "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
       "anchor": "slice-9",
       "acceptance": "**Topics:** `logic`, `security`, `test`\n\n**Dependencies:** 8. **Owner/files:** Factory: runner/src/index.ts Express Jev route, jev-proxy.ts, jev.ts, agent/lib/jev.sh and hook.\n\n**DoD A09:** Signal/remaining budget reaches fetch/body; delayed headers/body and client disconnect are bounded/unknown; hook wait stays within 6s with max4s semantic budget; local floor denies immediately. Actual installed harness version/proxy-delay proof required.\n\n**Verification:** `(cd runner && node --import tsx --test src/jev-deadline.test.ts); bash agent/lib/jev.test.sh; bash agent/hooks/jev-guard.deadline.test.sh`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
-      "implementationVerified": false,
-      "evidence": []
+      "implementationVerified": true,
+      "evidence": [
+        "development/b-factory/revision1/source-manifest.json",
+        "verification/b-factory/revision1/review.md",
+        "development/b-factory/revision1/github-checks.json",
+        "https://github.com/NikolasP98/minion-factory/pull/201"
+      ],
+      "stage": "PR-ready-human-merge-pending"
     },
     {
       "slice": 11,
