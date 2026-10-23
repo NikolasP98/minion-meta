@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-23T08:55:16.461Z",
+	"generatedAt": "2026-10-23T09:26:34.273Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14471,42 +14471,6 @@
 			"scoredAt": "2026-10-18T02:05:58.834Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-e863232",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ e863232",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e863232.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "e530e7d5d91046720d120609f0fd58fc4045d61446928c151915141ea05db278",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-490d681c114f",
-				"proposal:postmerge-minion-hub-6e3297fea67e",
-				"proposal:postmerge-minion-hub-ba5345e2cb9d"
-			],
-			"rationale": "A high-severity unchecked-access crash plus three medium findings in the same team/ module and commit as three related postmerge handoff items make this one team-view fix session.",
-			"evidence": [
-				"high-severity unchecked-access in PeopleView.svelte:382 can crash confirmLeave",
-				"findings share commit e863232/PR #234 with hr.service.ts, timeline.svelte.ts, TeamSettingsView.svelte postmerge items"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:12:53.591Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-18d28cf31dcf",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17710,6 +17674,38 @@
 			"scoredAt": "2026-10-20T20:56:23.103Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-e863232",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ e863232",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e863232.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "e530e7d5d91046720d120609f0fd58fc4045d61446928c151915141ea05db278",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Bundles a high-severity unchecked-access crash risk in team people management with three smaller correctness/hygiene gaps from the same merge window.",
+			"evidence": [
+				"high: onPersonMenu calls openLeave() without setting selectedForLeave; confirmLeave later accesses selectedForLeave.id",
+				"three additional medium findings: missing handoff marker, unguarded array index, empty catch swallowing fetch errors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T09:26:34.130Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-490d681c114f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17727,23 +17723,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:merge-scan-minion-hub-e863232",
-				"proposal:postmerge-minion-hub-6e3297fea67e",
-				"proposal:postmerge-minion-hub-ba5345e2cb9d"
-			],
-			"rationale": "Silent holiday-conflict skips cause real HR data inconsistency and share commit e863232/PR #234 with other team-view gaps worth fixing together.",
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clearly scoped HR correctness bug where a holiday-date conflict is silently skipped, causing incorrect absence records.",
 			"evidence": [
-				"a date already held by a manual holiday is skipped silently, risking double-booking confusion",
-				"shares PR #234/commit e863232 with TeamSettingsView.svelte and timeline.svelte.ts findings"
+				"marker: 'a date already held by a manual holiday is skipped silently'",
+				"diagnosis specifies two concrete fix options (409 conflict or upfront validation)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:12:53.591Z"
+			"scoredAt": "2026-10-23T09:26:34.130Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7e2a23e32c73",
@@ -22589,42 +22581,6 @@
 			"scoredAt": "2026-10-21T05:56:28.048Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ba5345e2cb9d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/team/TeamSettingsView.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba5345e2cb9d.md",
-			"sourceUpdatedAt": "2026-09-04",
-			"sourceFingerprint": "a7a0bf86ae4b720f8e789b72beadc8a50c998fc56a0de91e259ab8bca5d2f852",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:merge-scan-minion-hub-e863232",
-				"proposal:postmerge-minion-hub-490d681c114f",
-				"proposal:postmerge-minion-hub-6e3297fea67e"
-			],
-			"rationale": "Team settings being add-only blocks real team management workflows and shares commit e863232/PR #234 with the hr.service.ts and timeline.svelte.ts gaps.",
-			"evidence": [
-				"team settings support add-only; rename/deactivate/max-days edits need a modal",
-				"same PR #234/commit e863232 as related team-view findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:12:53.591Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-c7c309cb2647",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22673,53 +22629,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 4,
+				"implementation": 2
 			},
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "An access-control bug that denies calendar access via RBAC where only a per-viewer preference toggle was intended needs a permission-check audit before a fix can be scoped.",
+			"rationale": "Describes a plausible access-control UX bug in the booking calendar but the proposed fix direction starts with an open-ended permission audit rather than a bounded change.",
 			"evidence": [
-				"calendar enforces a system-level RBAC restriction instead of a per-viewer preference",
-				"fix direction requires auditing all permission checks in BookingCalendar.svelte"
+				"marker: 'this is a per-VIEWER preference, not an RBAC restriction'",
+				"fix direction: 'Audit the BookingCalendar component for any permission checks' is unbounded"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:12:53.591Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/cc150b56b2b0d4396d44b9ef6f14b5d772c52db8",
-			"sourceUpdatedAt": "2026-10-22T22:46:49Z",
-			"sourceFingerprint": "6910474feb88386096b10bd4118e8df4fe8bb783e6df8fcca03baea7f01005d2",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployed feature-gated WhatsApp routing change appears healthy and inert by default, warranting monitoring rather than urgent action.",
-			"evidence": [
-				"feat(whatsapp): verified org members reach their own assistant (#353)",
-				"Inert until the toggle is on",
-				"fail-closed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T07:55:11.291Z"
+			"scoredAt": "2026-10-23T09:26:34.130Z"
 		},
 		{
 			"key": "issue:minion-meta#654",
@@ -24961,41 +24884,6 @@
 			"scoredAt": "2026-10-22T23:28:55.735Z"
 		},
 		{
-			"key": "pr:minion (gateway)#331",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#331 chore(security): audit generated WhatsApp schema checksum",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/331",
-			"sourceUpdatedAt": "2026-10-16T09:05:35Z",
-			"sourceFingerprint": "2be830afa86b7b96889c3f8630b0e70da257963e9f61506634a8c6728eaf45fa",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#330"
-			],
-			"rationale": "A small, reproducibly-evidenced audit entry only needs a human merge exception to unblock CI for the much larger WhatsApp PR.",
-			"evidence": [
-				"Adds one filename-and-fingerprint baseline entry marked is_secret: false, with reproducible derivation evidence",
-				"Negative control with a different synthetic checksum still triggers detection",
-				"Prerequisite for #330"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:11:31.900Z"
-		},
-		{
 			"key": "pr:minion-base#45",
 			"kind": "pr",
 			"stage": "development",
@@ -25316,38 +25204,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-16T23:32:09.705Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-0cbe5486fa58",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/sunat-baja-hub-emissions.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0cbe5486fa58.md",
-			"sourceUpdatedAt": "2026-09-25",
-			"sourceFingerprint": "3d31ecefa182997e853c3025630faf3dfc6f4c41aafab87b75e29b69ec9b89cc",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The marker text itself is truncated mid-rationale, leaving unclear whether --apply for SUNAT baja emissions is deliberately deferred or simply incomplete.",
-			"evidence": [
-				"TODO reads '--apply is intentionally unimplemented. Building it' with no further rationale visible",
-				"diagnosis assumes it's a dead-end for users but cannot confirm business intent"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:12:53.591Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-676808e46687",
@@ -27323,6 +27179,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T07:25:43.702Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ba5345e2cb9d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/team/TeamSettingsView.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba5345e2cb9d.md",
+			"sourceUpdatedAt": "2026-09-04",
+			"sourceFingerprint": "a7a0bf86ae4b720f8e789b72beadc8a50c998fc56a0de91e259ab8bca5d2f852",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clearly scoped missing CRUD capability: team settings support creation only, blocking rename/deactivate/max-days edits for admins.",
+			"evidence": [
+				"marker: 'add-only; rename / deactivate / max-days edits need a modal'",
+				"diagnosis: team settings read-only except creation is a critical management gap"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T09:26:34.130Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
@@ -30708,6 +30596,38 @@
 			"scoredAt": "2026-10-22T23:04:42.871Z"
 		},
 		{
+			"key": "pr:minion (gateway)#331",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#331 chore(security): audit generated WhatsApp schema checksum",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/331",
+			"sourceUpdatedAt": "2026-10-16T09:05:35Z",
+			"sourceFingerprint": "2be830afa86b7b96889c3f8630b0e70da257963e9f61506634a8c6728eaf45fa",
+			"score": 32,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A narrow, thoroughly-verified false-positive scanner baseline fix that is a prerequisite for #330, but low urgency and low blast radius on its own.",
+			"evidence": [
+				"Reproducible local verification steps 1-5 including a negative control confirm the fix is correct and narrow",
+				"Draft pending the required human audit per the existing ci-security-scope.sh guard"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T09:26:34.130Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -32402,38 +32322,6 @@
 			"scoredAt": "2026-10-22T08:10:18.992Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/booking-color.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1f676fb29e24.md",
-			"sourceUpdatedAt": "2026-09-25",
-			"sourceFingerprint": "65e936ff40bbe5dbaeab5aaad108e42b68605ebaa812ac8e9952d8a0330e6211",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The 'custom select columns' request has no scope detail (which columns, where, who configures them), so it needs clarification before it is actionable.",
-			"evidence": [
-				"marker text truncates the owner's actual ask",
-				"diagnosis explicitly calls out unresolved scope questions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:12:53.591Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-3a0cbc999981",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32482,24 +32370,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 3,
 				"implementation": 3
 			},
 			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:merge-scan-minion-hub-e863232",
-				"proposal:postmerge-minion-hub-490d681c114f",
-				"proposal:postmerge-minion-hub-ba5345e2cb9d"
-			],
-			"rationale": "Stale-year coupling in the team timeline is a smaller issue but belongs with the other PR #234/commit e863232 team-view findings for one coordinated fix.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Plausible stale-year display risk in the team timeline, but the diagnosis is speculative and offers no clear preferred fix.",
 			"evidence": [
-				"leave bars and holiday shading are pegged to the loader's current-year with no validation or fallback",
-				"diagnosis itself is tentative ('I need to look at that timeline component')"
+				"marker: 'leave bars + holiday shading come from the loader's current-year'",
+				"diagnosis narrates uncertainty ('I need to look at that...') and proposes two unresolved alternative fixes"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-16T09:12:53.591Z"
+			"scoredAt": "2026-10-23T09:26:34.130Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7103ac983198",
@@ -34432,6 +34316,38 @@
 			"scoredAt": "2026-10-16T21:59:56.865Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-0cbe5486fa58",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/sunat-baja-hub-emissions.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0cbe5486fa58.md",
+			"sourceUpdatedAt": "2026-09-25",
+			"sourceFingerprint": "3d31ecefa182997e853c3025630faf3dfc6f4c41aafab87b75e29b69ec9b89cc",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The gap is already documented by this very proposal, so the open question is a deferral decision, not unscoped implementation work.",
+			"evidence": [
+				"TODO(handoff) marker states --apply is intentionally unimplemented",
+				"diagnosis notes the handoff contract only requires a corresponding proposal to exist, which this filing provides"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T09:26:34.130Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-8b315b355b71",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35388,6 +35304,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T06:25:45.965Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/booking-color.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1f676fb29e24.md",
+			"sourceUpdatedAt": "2026-09-25",
+			"sourceFingerprint": "65e936ff40bbe5dbaeab5aaad108e42b68605ebaa812ac8e9952d8a0330e6211",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The underlying feature request ('custom select columns') is itself undefined, so the fix direction is to scope it in a new proposal before any implementation.",
+			"evidence": [
+				"TODO text is a truncated fragment referencing an undefined feature",
+				"diagnosis's own fix direction is to create a new scoped proposal, not to implement directly"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-23T09:26:34.130Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-3ba60040d060",
