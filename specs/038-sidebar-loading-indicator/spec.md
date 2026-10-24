@@ -6,6 +6,8 @@
 
 ## Owner decisions (answer before the hub PR leaves draft)
 
+**Owner answer (2026-10-23):** D3 = **2 px** ("I like 3b, make it 2px"), shipped in hub #595 `b2c9e957`: 2 px bar + `space-1 − 1px` margin = the idle 1 px hairline + `space-1`, so nothing shifts. D1/D2 left at the recommendations.
+
 | # | Decision | Options | Recommendation |
 |---|---|---|---|
 | D1 | Default placement for users who never open Appearance | `icon-ring` (option 1) · `divider-bar` (option 2) | **`icon-ring`** — it is the imperative half of the ask ("move the ring to the section icon"); it also works in the collapsed rail, where the divider is only 40 px wide. |
