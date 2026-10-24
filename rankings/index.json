@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-24T17:17:05.856Z",
+	"generatedAt": "2026-10-24T17:47:25.467Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14868,39 +14868,6 @@
 			"scoredAt": "2026-10-24T01:31:24.440Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-bb06e3a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ bb06e3a",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-bb06e3a.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "f701c0742b4c35a43bdd3fb16da8b15931ff41e7037dc7c69d09fa6bc328f9ea",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Five high-severity unchecked-access findings across three CI test-helper files are specific, bounded, and describe the same repeatable null-check fix.",
-			"evidence": [
-				"dispatch-purpose-fixture.ts:87/105/115 resolver/detection/scope.run accessed without null check after .find()",
-				"ci-workflow.test.ts:322 base.env accessed without null-checking base",
-				"security-scope-workflow.test.ts:189/224/227 similar unchecked .find() result access"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T17:40:12.329Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-10e9567",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17642,6 +17609,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T01:22:02.061Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-bb06e3a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ bb06e3a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-bb06e3a.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "f701c0742b4c35a43bdd3fb16da8b15931ff41e7037dc7c69d09fa6bc328f9ea",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Five high-severity unchecked-access findings with exact file:line locations across test infrastructure give a clear, bounded fix target.",
+			"evidence": [
+				"high unchecked-access findings at test/ci/ci-workflow.test.ts:322 and dispatch-purpose-fixture.ts:87,105,115",
+				"commit range 1b3a991..bb06e3a, status draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T17:47:25.284Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
@@ -26040,18 +26039,17 @@
 				"specification": 7,
 				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Approved post-merge finding pinpoints a specific file and root cause for broken drag-and-drop in BookingCalendar with a clear fix direction.",
+			"rationale": "An approved finding pinpoints a drag-and-drop handler misplacement in BookingCalendar.svelte with a concrete fix direction, making it ready for bounded execution.",
 			"evidence": [
-				"status: approved",
-				"TODO(handoff) marker: ondragover/ondrop live on .track, an ancestor of the intended drop target",
-				"fix direction: move handlers to individual slot elements"
+				"TODO(handoff) marker flags ondragover/ondrop delegated to ancestor .track element",
+				"status approved, merged PR #461 on minion_hub@d626d53"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T17:40:12.329Z"
+			"scoredAt": "2026-10-24T17:47:25.284Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e73000965c43",
@@ -37005,6 +37003,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:57:54.316Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary is only a routine merged feature commit with no deployment failure or incident described, leaving nothing actionable.",
+			"evidence": [
+				"summary is a merged whatsapp session-reset feature commit, not an incident report",
+				"status is unknown with no health problem stated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T17:47:25.284Z"
 		},
 		{
 			"key": "issue:minion-meta#573",
