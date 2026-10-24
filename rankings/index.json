@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-24T17:47:25.467Z",
+	"generatedAt": "2026-10-24T18:17:26.026Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1626,6 +1626,38 @@
 			"scoredAt": "2026-10-23T04:57:59.928Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
+			"sourceUpdatedAt": "2026-10-03",
+			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Backups and retention pruning silently never run because the scheduler has zero call sites, risking unrecoverable data loss with no error signal.",
+			"evidence": [
+				"startBackupScheduler() has zero call sites anywhere in the repo",
+				"no backup is ever taken and retention pruning never runs, silently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T18:17:25.889Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-722867358",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2251,38 +2283,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:02:37.437Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Backups and retention pruning silently never run because the scheduler has zero call sites, risking unrecoverable data loss with a clear two-option fix already specified.",
-			"evidence": [
-				"startBackupScheduler() has zero call sites anywhere in the repo",
-				"no backup is ever taken and retention pruning never runs, silently"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T18:09:57.950Z"
 		},
 		{
 			"key": "proposal:2026-10-13-hub-first-paint-performance",
@@ -37005,38 +37005,6 @@
 			"scoredAt": "2026-10-21T04:57:54.316Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The summary is only a routine merged feature commit with no deployment failure or incident described, leaving nothing actionable.",
-			"evidence": [
-				"summary is a merged whatsapp session-reset feature commit, not an incident report",
-				"status is unknown with no health problem stated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T17:47:25.284Z"
-		},
-		{
 			"key": "issue:minion-meta#573",
 			"kind": "issue",
 			"stage": "proposal",
@@ -40890,17 +40858,16 @@
 				"specification": 5,
 				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a single medium-severity cosmetic finding about a hardcoded timeout constant name in a test file, with negligible production consequence.",
+			"rationale": "This is a single medium-severity cosmetic hardcoded-constant finding in a test file with negligible consequence if deferred.",
 			"evidence": [
-				"medium severity, hardcoded-config finding",
-				"60_000 timeout value should be a named constant, consistent with existing constants on same line"
+				"medium ... hardcoded-config ... 60_000 timeout value should be imported as a named constant"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T18:09:57.950Z"
+			"scoredAt": "2026-10-24T18:17:25.889Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
