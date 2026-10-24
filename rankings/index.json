@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-24T02:17:53.910Z",
+	"generatedAt": "2026-10-24T02:47:56.875Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1820,6 +1820,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:27:53.094Z"
+		},
+		{
+			"key": "pr:minion_hub#599",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#599 feat(pos): POS screens show \"your role can't view\" instead of loading data the role may not see (S2)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/599",
+			"sourceUpdatedAt": "2026-10-24T02:45:42Z",
+			"sourceFingerprint": "1174df63375c0fb8562babbeeeabe789505751b3974404ccf1e63d5e7df389d3",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#596"
+			],
+			"rationale": "Closes a real unauthorized-data-exposure gap by masking finance/stock/crm reads on POS screens for roles lacking pos:view, with tests and ratchet count dropping.",
+			"evidence": [
+				"ratchet baseline drops from 75 to 64 unguarded reads with POS at zero",
+				"DatasetDenied marker replaces data or a 500 for denied roles",
+				"owner-merge security+data tag"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T02:47:56.728Z"
 		},
 		{
 			"key": "spec:2026-09-16-hub-local-qa-stack-spec",
@@ -3900,20 +3935,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 6,
 				"implementation": 3
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Missing JobExecution ownership gates across four ingest/corpus services is a real authorization gap tied to a broader remediation effort, but the exact gate rule still depends on an external proposal (HDS-05).",
+			"rationale": "Independently flagged by two separate sweeps, this names a concrete ownership-gate gap across four ingest/corpus services that mutate business data without authorization checks.",
 			"evidence": [
-				"TODO names four services (statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp, brain_corpus_business) lacking ownership gates",
-				"references meta proposals/2026-09-08-platform-qc-remediation.md (HDS-05) for the exact rule, not yet resolved"
+				"same marker found by both postmerge-discovery and handoff-ledger sweeps",
+				"four named services (statement_ingest, brain_ingest, brain_corpus_conversations/whatsapp, brain_corpus_business) lack ownership gates",
+				"references existing remediation proposal HDS-05"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T02:40:35.843Z"
+			"scoredAt": "2026-10-24T02:47:56.728Z"
 		},
 		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
@@ -5564,6 +5600,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T05:56:30.705Z"
+		},
+		{
+			"key": "pr:minion_hub#596",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#596 feat(rbac): data-source read guard, denied-data visual and unguarded-read ratchet (S1)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/596",
+			"sourceUpdatedAt": "2026-10-24T02:44:22Z",
+			"sourceFingerprint": "7a16a5a0ad75d69dcfdb248c87c67c2be400d99a199e3a6ceaec59a9a925ebd2",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#599"
+			],
+			"rationale": "Security-tagged RBAC primitives and a regression ratchet unblock the POS enforcement slice even though no module is enforced yet.",
+			"evidence": [
+				"DATASET_ENFORCED=[] so nothing is enforced yet",
+				"ratchet fixture proves it fails on a new unguarded read",
+				"205 tests passing across 20 files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T02:47:56.728Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -8421,19 +8492,20 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 7
+				"implementation": 3
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Unbounded provider JSON parsing before res.json() is a concrete, bounded DoS fix with a clear concrete mitigation path.",
+			"rationale": "Approved finding of an unbounded provider JSON read before res.json(), a plausible memory-exhaustion DoS vector that is still unmitigated.",
 			"evidence": [
-				"TODO: provider JSON reader not byte bounded before res.json()",
-				"diagnosis proposes Content-Length check or size-limiting stream wrapper (~10MB threshold)"
+				"TODO(handoff) notes reader is not byte bounded before res.json()",
+				"diagnosis flags trivial DoS risk",
+				"status approved, fix not yet merged"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T02:40:35.843Z"
+			"scoredAt": "2026-10-24T02:47:56.728Z"
 		},
 		{
 			"key": "spec:2026-08-31-handoff-minion-hub-722867358-spec",
@@ -10879,14 +10951,14 @@
 			"scoredAt": "2026-10-22T23:23:08.693Z"
 		},
 		{
-			"key": "pr:minion_hub#596",
+			"key": "pr:minion_hub#597",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#596 feat(rbac): data-source read guard, denied-data visual and unguarded-read ratchet (S1)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/596",
-			"sourceUpdatedAt": "2026-10-24T02:15:27Z",
-			"sourceFingerprint": "0f20a7f8bdd146950a764e4c94ca3c7720fc1ec91bcc476ff8812ba1b4bebb91",
+			"title": "#597 feat(nav): custom sections and page links — storage, model, API and seed (S1)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/597",
+			"sourceUpdatedAt": "2026-10-24T02:44:06Z",
+			"sourceFingerprint": "a2715cd5bf1d7bed56fc112e8ea838d591024cfdf519c72b182ba878c1073074",
 			"score": 52,
 			"band": "medium",
 			"axes": {
@@ -10901,51 +10973,18 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#597"
+				"pr:minion_hub#598",
+				"pr:minion_hub#600"
 			],
-			"rationale": "RBAC read-guard primitive with a passing ratchet test and full gate suite is ready for the required owner security merge.",
-			"evidence": [
-				"ratchet baseline 73 files/75 reads with proof of failure on new unguarded read",
-				"205 tests passing, security + data: owner merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T02:17:53.760Z"
-		},
-		{
-			"key": "pr:minion_hub#597",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#597 feat(nav): custom sections and page links — storage, model, API and seed (S1)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/597",
-			"sourceUpdatedAt": "2026-10-24T02:15:30Z",
-			"sourceFingerprint": "e2093c4965bce5021d8e86f4ccd8562082e6e0f697d6efc245c4f1538f7b76e1",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#596"
-			],
-			"rationale": "Nav-config storage/model/API slice passes all gates and QA seed verification, ready for the required owner merge, with a known rebase conflict against #596 noted.",
+			"rationale": "Foundational nav storage/model/API slice that two stacked PRs (#598, #600) directly depend on, with full QA seed verification passing.",
 			"evidence": [
 				"qa:seed:verify 245/245 passed",
-				"621 tests passing, security + data: owner merges",
-				"open end: DATASET_ENFORCED collision with spec 037 S1 (#596)"
+				"36 files/621 tests exit 0",
+				"two downstream PRs stacked on this one"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T02:17:53.760Z"
+			"scoredAt": "2026-10-24T02:47:56.728Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
@@ -13058,6 +13097,42 @@
 			"scoredAt": "2026-10-22T17:10:01.458Z"
 		},
 		{
+			"key": "pr:minion_hub#598",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#598 feat(nav): custom sections and page links appear in the sidebar, module mode and the switcher (S3)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/598",
+			"sourceUpdatedAt": "2026-10-24T02:26:59Z",
+			"sourceFingerprint": "cc56b364772b3badf5bf57b437d10756e5d9a95725a3e49d5158c129dbb947b9",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#597",
+				"pr:minion_hub#600"
+			],
+			"rationale": "Nav rendering slice is gated green but explicitly admits required browser proof (Q9/Q11/Q12) could not be run until the unmerged S2 routing slice lands.",
+			"evidence": [
+				"\"Browser proof (Q9/Q11/Q12) NOT done\"",
+				"TODO(handoff) to run proof once S2 is merged",
+				"targeted vitest incl. new custom-sections-nav.test.ts passing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T02:47:56.728Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14953,20 +15028,21 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Orphaned blob risk on failed/concurrent imports is a real data-consistency issue but needs a transactional/GC design decided before scoping implementation.",
+			"rationale": "Approved finding that uploaded finance-statement blobs can orphan on failed or concurrent import creation, risking storage/billing drift.",
 			"evidence": [
-				"TODO: Reconcile uploaded blobs after failed/concurrent import creation",
-				"diagnosis suggests transactional upload plus GC job keyed on import ID, not yet designed"
+				"TODO(handoff) marker names reconciliation gap explicitly",
+				"diagnosis proposes transactional write plus GC job",
+				"status approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T02:40:35.843Z"
+			"scoredAt": "2026-10-24T02:47:56.728Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
@@ -21039,20 +21115,21 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 6,
 				"implementation": 3
 			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
+			"confidence": 5,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The TODO flags a real gap in indeterminate job recovery semantics but the diagnosis gives only generic policy options, not a concrete design to implement.",
+			"rationale": "Approved finding about undefined indeterminate-job recovery semantics in job-effects.service.ts with a clear but unimplemented fix direction.",
 			"evidence": [
-				"TODO(handoff): Add an explicitly reviewed indeterminate recovery policy",
-				"diagnosis lists generic options (backoff retry, dead-letter queue, state-machine reset) without a chosen design"
+				"TODO(handoff) marker still present at the named file",
+				"status approved",
+				"auto-diagnosis names backoff/dead-letter/state-machine options but no code yet"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T02:40:35.843Z"
+			"scoredAt": "2026-10-24T02:47:56.728Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bd7700d5dd6a",
@@ -23667,6 +23744,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:37:43.569Z"
+		},
+		{
+			"key": "pr:minion_hub#600",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#600 feat(nav): right-click the sidebar to copy, duplicate, move, rename, hide or delete pages and sections (S4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/600",
+			"sourceUpdatedAt": "2026-10-24T02:44:33Z",
+			"sourceFingerprint": "514a10464b82b2a2b489671ee68594d0b5eda892854d14387389b1201146f9b0",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#598",
+				"pr:minion_hub#597"
+			],
+			"rationale": "Nav context-menu UX feature is gated green but explicitly has no browser screenshots for its listed interaction scenarios (Q1-Q8, Q17-Q19).",
+			"evidence": [
+				"\"No browser screenshots (Q1-Q8, Q17-Q19 not run)\"",
+				"TODO(handoff) for deferred Access… entries pending S5",
+				"NavContextMenu.mounted.test.ts 6 cases passing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T02:47:56.728Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
@@ -28259,38 +28372,6 @@
 			"scoredAt": "2026-10-22T15:55:02.506Z"
 		},
 		{
-			"key": "pr:minion_hub#595",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#595 feat(sidebar): show the loading indicator on the section icon or the header divider, chosen in Appearance",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/595",
-			"sourceUpdatedAt": "2026-10-24T02:14:32Z",
-			"sourceFingerprint": "e15a4b7e731454a008f799fc8146cff1414871978ec1722b342e5969fc7b1ab9",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A fully gated, tested, and browser-verified UI feature PR with no blocking issues is ready to merge.",
-			"evidence": [
-				"targeted vitest 39 tests exit 0, bun run check 0 errors",
-				"lint:design and lint:tokens exit 0, browser proof screenshots included"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T02:17:53.760Z"
-		},
-		{
 			"key": "proposal:2026-08-28-gateway-plugin-effect-disposers",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31861,6 +31942,39 @@
 			"scoredAt": "2026-10-21T04:56:58.311Z"
 		},
 		{
+			"key": "pr:minion_hub#595",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#595 feat(sidebar): show the loading indicator on the section icon or the header divider, chosen in Appearance",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/595",
+			"sourceUpdatedAt": "2026-10-24T02:18:09Z",
+			"sourceFingerprint": "5f10e4f2f925b41e32aee979b94e3f74d30b73c5edffb7358480899c27240630",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Low-risk UI preference feature with full gates, lint, and browser proof already passing, so it is ready to merge as-is.",
+			"evidence": [
+				"targeted vitest 7 files/39 tests exit 0",
+				"lint:design and lint:tokens exit 0",
+				"browser proof screenshots for both placements and reduced motion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T02:47:56.728Z"
+		},
+		{
 			"key": "pr:minion-meta#827",
 			"kind": "pr",
 			"stage": "development",
@@ -35272,38 +35386,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:39:36.979Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deploy-health entry only restates an already-merged commit (#361) with no open deployment issue or actionable scope.",
-			"evidence": [
-				"summary is a merged commit message for PR #361",
-				"status: unknown with no incident or failure signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T02:17:53.760Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
