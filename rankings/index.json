@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-24T04:17:21.731Z",
+	"generatedAt": "2026-10-24T05:17:29.958Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -631,6 +631,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:21:50.290Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-807f018d50fd",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/channel-identities/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-807f018d50fd.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "0590179e88d195cb34b0b140354eb9ce138e93b147c3f73917179745500d8171",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A multi-tenant data isolation breach where a channel-identities endpoint returns platform-wide results instead of org-scoped data, violating the canonical withOrgCore pattern.",
+			"evidence": [
+				"TODO marker: 'the result is still platform-wide, not org-scoped'",
+				"Diagnosis flags this as exposing multi-tenant data to unauthorized users, violating withOrgCore convention"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T05:17:29.819Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-agent-event-audience-spec",
@@ -1657,38 +1689,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T02:36:42.051Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-807f018d50fd",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/channel-identities/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-807f018d50fd.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "0590179e88d195cb34b0b140354eb9ce138e93b147c3f73917179745500d8171",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding of a multi-tenant data isolation breach: channel-identities endpoint returns platform-wide data instead of org-scoped.",
-			"evidence": [
-				"TODO(handoff): the result is still platform-wide, not org-scoped",
-				"violates the canonical withOrgCore org-scoped access pattern"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T05:11:13.649Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-tenant-boundaries-spec",
@@ -2743,6 +2743,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:00:12.850Z"
+		},
+		{
+			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Measured production envelope costs ~4,000 tokens per turn regardless of content, and the ledger already has tests and a routing design to fix it.",
+			"evidence": [
+				"AS-IS table measures envelope at ≈16,096 chars ≈4,000 tokens every turn",
+				"DELTA lists concrete files and named test suites (turn-router.test.ts, assistant-router.service.test.ts)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T05:17:29.819Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-reserva-keyword-config-spec",
@@ -15392,40 +15424,6 @@
 			"scoredAt": "2026-10-18T01:37:26.163Z"
 		},
 		{
-			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:2026-10-16-hub-sandbox-builder-context-engineering"
-			],
-			"rationale": "The ledger shows most of the JEV turn router already measured and tested, so the goal needs re-scoping to just the remaining open items like threshold calibration.",
-			"evidence": [
-				"measured envelope drop from a ~16,096 char baseline with test proof",
-				"DELTA table lists completed callsite wiring and PostHog event work"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:32:16.747Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-1883922325",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17440,6 +17438,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:27:07.333Z"
+		},
+		{
+			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Sandbox builder — programmatic context engineering (defaults, lint-as-feedback, JEV style cards, pi context pruning)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-16-hub-sandbox-builder-context-engineering.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "95afc3b5d30009d8f2f8f2eba3f273ad62bd8aa4e2d504eb510b4daa1f6688bf",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Chart styling and context-pruning issues are real but the four proposed mechanisms (S1-S4) are still design-stage with no test or implementation evidence shown.",
+			"evidence": [
+				"AS-IS cites stock ECharts defaults and a context-pruning extension that only prunes toolResult messages",
+				"TO-BE lists S1 defaults mechanism but cuts off before showing tests or completion evidence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T05:17:29.819Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1895569552",
@@ -21772,41 +21802,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-18T04:26:03.320Z"
-		},
-		{
-			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Sandbox builder — programmatic context engineering (defaults, lint-as-feedback, JEV style cards, pi context pruning)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-16-hub-sandbox-builder-context-engineering.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "95afc3b5d30009d8f2f8f2eba3f273ad62bd8aa4e2d504eb510b4daa1f6688bf",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#542",
-				"proposal:2026-10-12-hub-assistant-jev-context-router"
-			],
-			"rationale": "This follow-up context-engineering work for sandbox charts and JEV manifests directly extends the sandbox PR and the JEV turn router, so it should be tracked as one goal rather than three.",
-			"evidence": [
-				"cites the same sandbox bridge.ts/tools.ts files as pr:minion_hub#542",
-				"proposes reusing assistant-router.service.ts JEV classifier from the turn-router work"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T04:32:16.747Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1431194768",
@@ -30866,6 +30861,38 @@
 			"scoredAt": "2026-10-21T09:56:29.037Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A narrow, well-scoped test gap (predicate tested, wiring untested) with a clear bounded fix: add one integration test.",
+			"evidence": [
+				"TODO marker: 'the PREDICATE is covered here, the WIRING is not — no test'",
+				"Fix direction specifies a single happy-path integration test plus one edge case"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T05:17:29.819Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-78f81166a2c1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34357,38 +34384,6 @@
 			"scoredAt": "2026-10-17T06:10:26.060Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, bounded gap: scheduling merge-target has unit tests but no integration test covering its wiring.",
-			"evidence": [
-				"TODO(handoff): the PREDICATE is covered here, the WIRING is not — no test",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T05:11:13.649Z"
-		},
-		{
 			"key": "spec:2026-10-03-readiness-pos-service-boundaries-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -35434,38 +35429,6 @@
 			"scoredAt": "2026-10-22T23:39:36.979Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Deploy health entry is just a merged feature commit message with no indicated incident, failure, or actionable task.",
-			"evidence": [
-				"commit adds a whatsapp session-reset feature, no failure mentioned",
-				"status is unknown with no incident signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T04:17:21.578Z"
-		},
-		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -36167,20 +36130,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 5,
+				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "execute",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Approved, bounded UX-consistency fix to make CRM customer tags inline-editable like /pos/catalog.",
+			"rationale": "A UX inconsistency between two tag-editing flows with no confirmed root cause (feasibility of the fix is still conditional).",
 			"evidence": [
-				"TODO(handoff): tags are NOT inline-editable here while /pos/catalog",
-				"status: approved"
+				"TODO marker: tags are NOT inline-editable in CRM customers while /pos/catalog supports it",
+				"Fix direction is conditional: 'If inline editing is feasible... If intentionally read-only, document the reason'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T05:11:13.649Z"
+			"scoredAt": "2026-10-24T05:17:29.819Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-66cd0246e677",
