@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-106140775
 title: Handoff marker — src/lib/utils/agent-settings-schema.ts (minion_hub)
-status: draft
+status: review
 created: 2026-10-24
 updated: 2026-10-24
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-7d52df5770f2
 ---
 
 # Handoff marker — src/lib/utils/agent-settings-schema.ts
