@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-24T20:17:06.619Z",
+	"generatedAt": "2026-10-24T20:47:08.837Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4585,6 +4585,39 @@
 			"scoredAt": "2026-10-21T05:26:26.575Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "9cbbdebbbd1eb4be1eec75e10c3533391b97ac36e4e147f2013210f4fd8502cc",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved migration is incomplete, leaving schema drift risk in production DB that should be resolved soon.",
+			"evidence": [
+				"status: approved",
+				"DROP COLUMN/DROP CONSTRAINT statements missing from migration intended to retire the column",
+				"diagnosis specifies verification step against src/server/db/schema/ before completing or reverting"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T20:47:08.671Z"
+		},
+		{
 			"key": "spec:2026-10-03-gw022a-config-cas-distribution",
 			"kind": "spec",
 			"stage": "spec",
@@ -5675,39 +5708,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T08:09:54.837Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-25e2bb7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 25e2bb7",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-25e2bb7.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "fca373cc727b9a3be6d4afb72144e1eed12348ef3bd65547aed495576b39a11f",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The scan lists concrete high-severity unchecked-access findings that throw at runtime in production CRM/booking pages, with exact file:line locations from a bounded commit range.",
-			"evidence": [
-				"crm/customers/+page.svelte:61 unchecked-access — throws at runtime if tag_ids undefined",
-				"[contactId]/+page.svelte:891 unchecked-access on b.startTime",
-				"commit range e98422b..25e2bb7, status draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T20:29:32.226Z"
 		},
 		{
 			"key": "spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec",
@@ -7097,39 +7097,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T02:25:56.492Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "9cbbdebbbd1eb4be1eec75e10c3533391b97ac36e4e147f2013210f4fd8502cc",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved, incomplete schema migration leaves live schema drift with a clearly specified two-path remediation (complete DDL or revert pending a usage check).",
-			"evidence": [
-				"TODO(handoff): drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
-				"status: approved",
-				"migration file exists but the actual DROP COLUMN/DROP CONSTRAINT statements are missing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T20:29:32.226Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fc192ff88fe3",
@@ -13037,38 +13004,6 @@
 			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8c6ed5b4021d.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "fbf0b49f7defde96baf86e012b61f2ef19445c9effe36ad308bda37d4cb6daf1",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A concrete booking-calendar drag bug with a clear fix direction is independently actionable regardless of the unresolved ledger-duplicate question (that ledger is outside this batch).",
-			"evidence": [
-				"TODO(handoff): HC-017 — while a copy is being dragged only THAT copy",
-				"Fix direction: capture/update state for only the specific copy instance being dragged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T20:29:32.226Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-pos-appointments-fork-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -15526,6 +15461,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T01:28:37.312Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-25e2bb7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 25e2bb7",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-25e2bb7.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "fca373cc727b9a3be6d4afb72144e1eed12348ef3bd65547aed495576b39a11f",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A large batch of mostly medium-severity empty-catch and unchecked-access findings across many files needs triage/splitting before it's actionable as one goal.",
+			"evidence": [
+				"multiple high-severity unchecked-access findings in integration tests and CRM pages",
+				"mixes many unrelated files/findings into a single draft proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T20:47:08.671Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
@@ -26249,38 +26216,6 @@
 			"scoredAt": "2026-10-21T05:56:28.048Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment health signal is just the latest merged WhatsApp session-reset commit with no reported failure or incident.",
-			"evidence": [
-				"commit title: feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T20:17:06.458Z"
-		},
-		{
 			"key": "issue:minion-meta#329",
 			"kind": "issue",
 			"stage": "proposal",
@@ -28418,6 +28353,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T22:56:13.381Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8c6ed5b4021d.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "fbf0b49f7defde96baf86e012b61f2ef19445c9effe36ad308bda37d4cb6daf1",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A scoped drag-state bug with a clear fix direction, but flagged as a likely duplicate of an existing handoff ledger pending human reconciliation.",
+			"evidence": [
+				"explicit note: possible duplicate of handoff-minion-hub-1194287278",
+				"status review, single-file fix direction given"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T20:47:08.671Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f91a16126171",
