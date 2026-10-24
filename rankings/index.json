@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-24T06:18:50.455Z",
+	"generatedAt": "2026-10-24T06:47:43.635Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6456,21 +6456,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 4,
+				"implementation": 3
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "Multiple high-severity empty-catch and unchecked-access findings in gateway shutdown and server-core paths risk masking real production failures.",
+			"rationale": "Bundles roughly 15 unrelated findings (CI test gating, empty-catch shutdown swallowing, lock bugs) across many files under one goal with no single verifiable outcome.",
 			"evidence": [
-				"high: server-channels.ts:549 task errors silently swallowed by .catch(()=>{})",
-				"high: server-owned-resources.ts:507 late-registration task error silently swallowed",
-				"high: session-write-lock.ts:582 variable held is undefined in scope"
+				"high: ci.yml:530 weakened-test missing set -e",
+				"high: server-channels.ts:549 and server-owned-resources.ts:507 empty-catch swallowing shutdown errors",
+				"high: session-write-lock.ts:582 undefined variable bug"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:36:09.620Z"
+			"scoredAt": "2026-10-24T06:47:43.480Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-0173b6586d14",
@@ -14863,38 +14863,6 @@
 			"scoredAt": "2026-10-24T06:17:56.257Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-18d28cf31dcf",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in .github/workflows/notification-worker-artifact.yml (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-18d28cf31dcf.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "0f21da0e81c4c8f82bd653140c4b371932bdb33016d3e8a38a1b58fe9a0593aa",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding already carries a concrete diagnosis and fix direction for gating the B2 artifact publisher on credentials.",
-			"evidence": [
-				"status: approved",
-				"Fix direction: add condition checking B2_APPLICATION_ID/KEY before publisher step"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:36:09.620Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-274eede277fe",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20780,39 +20748,6 @@
 			"scoredAt": "2026-10-17T09:41:29.136Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-222d6a6aa4c3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/canvas.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-222d6a6aa4c3.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "d211b98e94f8aef20b4f5315278c84a196145b5f03305955152dea0f5e8e5425",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Approved finding about regex-based element inference risking silent canvas failures, but the proposed AST-parser rewrite needs scoping before it is an actionable, bounded task.",
-			"evidence": [
-				"TODO(handoff): regex inference over the element JS",
-				"Fix direction proposes replacing regex with an AST-based parser (Acorn/SWC)",
-				"Status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:19:23.856Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-2769d3127d2e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24316,6 +24251,38 @@
 			"scoredAt": "2026-10-24T01:23:25.997Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-222d6a6aa4c3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/canvas.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-222d6a6aa4c3.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "d211b98e94f8aef20b4f5315278c84a196145b5f03305955152dea0f5e8e5425",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding on sandbox canvas element inference with a stated fix direction, affecting the workshop's PixiJS sprite/physics builder.",
+			"evidence": [
+				"status: approved",
+				"fix direction: replace regex inference with AST-based parser (Acorn/SWC)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T06:47:43.480Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-7d52df5770f2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25470,6 +25437,74 @@
 			"scoredAt": "2026-10-22T23:28:55.735Z"
 		},
 		{
+			"key": "issue:minion-meta#889",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#889 [monitor:unstick] spec run 8330b151 (postmerge-minion-hub-807f018d50fd) failed pass1 rc=1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/889",
+			"sourceUpdatedAt": "2026-10-24T06:17:19Z",
+			"sourceFingerprint": "fb3f9e5d9f23120da603c5fbb9c2fcdc2490810f2506008f9f802caab2d84a2a",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#890"
+			],
+			"rationale": "Spec-run pass1 failure needs a human log pull before any fix, and its own diagnosis ties it to the same classifier work as #890.",
+			"evidence": [
+				"\"a human should pull the full log... before failing\"",
+				"\"this is a candidate for the same recurring-provider-failure signature as run c2463db6\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T06:47:43.480Z"
+		},
+		{
+			"key": "issue:minion-meta#890",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#890 [monitor:unstick] rank run c2463db6 (rank board goals) failed - both providers exhausted on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/890",
+			"sourceUpdatedAt": "2026-10-24T06:17:35Z",
+			"sourceFingerprint": "5d72e72345fc7bf2e4c7b1a04ca00767b070ca1cfc23a4405559036c672fe397",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#889"
+			],
+			"rationale": "Diagnosed as transient dual-provider exhaustion with a clear retry-plus-classifier fix, and explicitly linked to #889's unresolved pass1 case.",
+			"evidence": [
+				"\"safe to retry the run; this looks like provider-side flakiness\"",
+				"\"worth adding to the host classifier as a known transient-provider-exhaustion signature\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T06:47:43.480Z"
+		},
+		{
 			"key": "pr:minion-base#45",
 			"kind": "pr",
 			"stage": "development",
@@ -25818,6 +25853,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T23:48:04.899Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-18d28cf31dcf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in .github/workflows/notification-worker-artifact.yml (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-18d28cf31dcf.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "0f21da0e81c4c8f82bd653140c4b371932bdb33016d3e8a38a1b58fe9a0593aa",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved TODO-handoff with a concrete fix direction (gate publisher on B2 creds, add run-once guard) for a single workflow file.",
+			"evidence": [
+				"status: approved",
+				"fix direction: gate on B2_APPLICATION_ID/KEY and add run-once guard before exact-ID publisher"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T06:47:43.480Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5006c27444a5",
@@ -30996,38 +31063,6 @@
 			"scoredAt": "2026-10-17T22:30:26.814Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-baa32d84d57c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in static/vendor/d3-slim.min.js (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-baa32d84d57c.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "d78c245d2487984e00c606866325829eb62cd3971c2a518ff3ce6027963503c5",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A clear, low-risk hygiene fix (stop vendoring a minified d3 file) is proposed, but the sweep's own reconciliation note flags likely overlap with an existing remediation doc and asks a human to confirm scope before acting.",
-			"evidence": [
-				"static/vendor/d3-slim.min.js is a minified third-party lib committed to git in minion_hub #542",
-				"reconciliation note (2026-10-17) flags it as duplicate_candidate against 2026-09-08-platform-qc-remediation and asks for human confirmation before folding in or closing separately"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:40:21.437Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-be298870a398",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34867,37 +34902,6 @@
 			"scoredAt": "2026-10-24T01:29:51.752Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-2ee0fee",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 2ee0fee",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-2ee0fee.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "d806574953acff5b20928b05df20dee34b82012143c789b87b753a70c512ef39",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Single well-located medium-severity unchecked-access finding in a test file is a small, bounded, low-risk fix.",
-			"evidence": [
-				"test/ci/ci-workflow.test.ts:512 unchecked-access on testResults[0]"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T06:36:09.620Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-f2de5e0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36901,6 +36905,38 @@
 			"scoredAt": "2026-10-21T04:57:54.316Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health record carries only a routine feature commit message, not a scoped deployment goal to act on.",
+			"evidence": [
+				"summary is a merged whatsapp session-reset commit, not a deployment issue description",
+				"tags: [\"deployment\"] with no stated problem or outcome"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T06:47:43.480Z"
+		},
+		{
 			"key": "issue:minion-meta#573",
 			"kind": "issue",
 			"stage": "proposal",
@@ -38083,6 +38119,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-17T07:55:46.666Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-2ee0fee",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 2ee0fee",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-2ee0fee.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "d806574953acff5b20928b05df20dee34b82012143c789b87b753a70c512ef39",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single, precisely located unchecked-access finding in a test file is a small, bounded fix.",
+			"evidence": [
+				"test/ci/ci-workflow.test.ts:512 unchecked-access on report.testResults[0]"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T06:47:43.480Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-322a0d0",
@@ -39738,6 +39805,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T07:56:24.615Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-baa32d84d57c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in static/vendor/d3-slim.min.js (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-baa32d84d57c.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "d78c245d2487984e00c606866325829eb62cd3971c2a518ff3ce6027963503c5",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The proposal's own reconciliation note flags it as a possible duplicate pending human confirmation before merging or closing, so it isn't yet actionable as its own goal.",
+			"evidence": [
+				"\"Flagged duplicate_candidate rather than merged... a human should confirm this specific file is covered\"",
+				"status: review"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T06:47:43.480Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bb9cd7740cf0",
