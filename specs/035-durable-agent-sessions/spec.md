@@ -207,3 +207,20 @@ Deploy chain (memory `netcup-gateway-swarm-deploy`): merge to gateway `DEV` → 
 - **D1 — default flip (G2).** Recommended **yes**: it is what "durable where possible" means for new installs and for any agent without an explicit policy. Both prod tenants set the mode explicitly, so they are unaffected by the default either way. Cost: anyone relying on the implicit daily reset gets durable sessions on upgrade (CHANGELOG line).
 - **D2 — cron isolated sessions.** With `never` they persist across runs (per-job key, compaction-bounded). Recommended **accept** (the owner's rule), noting that a job wanting a clean slate should set `resetByType.direct`… which also hits member DMs; if that ever matters, a per-job `forceNew` is a one-line follow-up in `src/platform/cron/isolated-agent/run.ts:295`.
 - **D3 — `daily` kept as a deprecated opt-in, not deleted.** Recommended **keep**: deleting the literal breaks any existing config at boot. Deletion can follow once no config in the fleet carries it.
+
+## Rollout record (R1, 2026-10-24 ~01:35Z)
+- Shipped:
+  - gw #360 (G1+G2) and #361 (G3) merged to DEV;
+  - promoted by #362. Image `sha256:3a86fd16…` is live on `minion_gateway-faces` and `minion_gateway-default`; its bundled schema accepts `never`.
+  - hub #594 (H1) merged.
+- Each gateway:
+  - backup `~/.minion/gateway.json.bak-20261023-pre-never`;
+  - `node minion.mjs config set --json session.reset '{"mode":"never"}'` (this removed `atHour`/`idleMinutes`);
+  - `docker service update --force`;
+  - after the restart, both persisted configs read `reset:{mode:"never"}`.
+- faces after restart:
+  - PANIK connected ("Listening for personal WhatsApp inbound messages");
+  - +51992376833 still logged out (pre-existing, 401).
+- default after restart: PANIK logged out there (pre-existing; faces owns the session).
+- Pending: an owner `/new` test from a member phone (SC-002 in prod).
+- Rollback: `cp gateway.json.bak-20261023-pre-never gateway.json`, then `docker service update --force`.
