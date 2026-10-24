@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-7d52df5770f2
 title: "Post-merge finding — todo-handoff in src/lib/utils/agent-settings-schema.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-10-24
 updated: 2026-10-24
 repos: [minion-hub]
