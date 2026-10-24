@@ -4,7 +4,7 @@ title: Handoff marker — src/gateway/hub-credential-client-registry.ts (minion-
 status: review
 duplicate_candidate: 2026-10-22-whatsapp-member-agents-followups
 created: 2026-10-23
-updated: 2026-10-23
+updated: 2026-10-24
 repos: [minion-ai]
 tags: [handoff-sweep]
 ---
@@ -27,7 +27,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-10-23)
+## Markers (as of 2026-10-24)
 
 - `NikolasP98/minion-ai@DEV src/gateway/hub-credential-client-registry.ts:11` — same duplicate-chunk risk as hub-rest-registry.ts (2026-10-23); move to globalThis if a plugin-sdk caller reads it. See meta proposals/2026-10-22-whatsapp-member-agents-followups.md item 10.
   https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/hub-credential-client-registry.ts#L11
