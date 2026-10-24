@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-24T10:17:01.880Z",
+	"generatedAt": "2026-10-24T10:47:06.118Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2446,39 +2446,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T07:27:57.667Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Unscoped CRM rollups breaking multi-tenant isolation is a concrete data-isolation defect with a clear fix direction and merged-PR evidence.",
-			"evidence": [
-				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
-				"TODO(handoff): scope word-frequency/sentiment/win-index rollups by owner",
-				"merged PR: https://github.com/NikolasP98/minion_hub/pull/268"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-17T10:39:51.316Z"
 		},
 		{
 			"key": "spec:2026-08-28-factory-containment-base-reconciliation-spec",
@@ -7066,6 +7033,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T05:26:26.575Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A merged PR left CRM dashboard rollups unscoped by owner, breaking multi-tenant isolation with a clear, bounded fix direction already identified.",
+			"evidence": [
+				"TODO(handoff): scope word-frequency/sentiment/win-index rollups by owner",
+				"Fix direction: Add owner_id grouping ... Filter dashboard results to the authenticated user's scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-24T10:47:05.955Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f523e410f9a1",
@@ -33630,38 +33629,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T21:57:40.156Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a routine deployment health record for a merged WhatsApp session-reset feature with no indication of failure or urgency.",
-			"evidence": [
-				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"status unknown with no error details"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T10:17:01.738Z"
 		},
 		{
 			"key": "issue:minion-meta#566",
