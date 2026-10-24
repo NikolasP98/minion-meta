@@ -95,9 +95,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33396
 - `NikolasP98/minion-meta@dev rankings/index.json:33430` — a period with NO purchases no longer appears at all",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33430
-- `NikolasP98/minion-meta@dev rankings/index.json:36220` — other consumption-mapping surfaces (e.g.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36220
-- `NikolasP98/minion-meta@dev rankings/index.json:38515` — brief-debloat-c §3 asked for this to be wrapped in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38515
-- `NikolasP98/minion-meta@dev rankings/index.json:38614` — <what, why, pointer>"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38614
+- `NikolasP98/minion-meta@dev rankings/index.json:36219` — other consumption-mapping surfaces (e.g.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36219
+- `NikolasP98/minion-meta@dev rankings/index.json:38514` — brief-debloat-c §3 asked for this to be wrapped in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38514
+- `NikolasP98/minion-meta@dev rankings/index.json:38613` — <what, why, pointer>"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38613
