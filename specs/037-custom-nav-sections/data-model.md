@@ -1,4 +1,4 @@
-# Data model: `app_nav_config` (Amendment A — symlink model)
+# Data model: `app_nav_config` (Amendment A symlink model + Amendment B ids and page roles)
 
 ## Table (migration `supabase/migrations/20261024000000_app_nav_config.sql`) — unchanged from v1 (exists in the S1 worktree)
 
@@ -26,7 +26,7 @@ create policy app_nav_config_org_guc on public.app_nav_config
 
 Drizzle mirror `src/server/db/pg-schema/nav-config.ts` (exists in the worktree). No relation entries.
 
-Link view rules are NOT in this table: they are `permission_rules` rows `(org_id, role_key, module = 'nav.<pageId>', can_view, …)` — the existing overrides table, written by `setRoleOverride` / `clearRoleOverride` through `POST/DELETE /api/roles/overrides`.
+Page view rules are NOT in this table: they are `permission_rules` rows `(org_id, role_key, module = 'page:<id>' | 'page:<pattern>' | 'section:<id>', can_view, …)` — the existing overrides table, written by `setRoleOverride` / `clearRoleOverride` through `POST/DELETE /api/roles/overrides`.
 
 ## Document shape (`value`)
 
@@ -34,16 +34,16 @@ Link view rules are NOT in this table: they are `permission_rules` rows `(org_id
 // src/lib/nav/custom-sections.ts
 export type NavPageKind = 'link' | 'main';
 export interface NavPage {
-  id: string;          // uuid v4, stable across renames; the link's permission key is `nav.${id}`
+  id: string;          // ^[a-z0-9]{6}$ — part of the URL (`/<section>/<slug>~<id>`); page-role key `page:${id}`
   kind: NavPageKind;   // 'link' = alias of target; 'main' = the target's canonical location moved here
-  slug: string;        // ^[a-z][a-z0-9-]{0,31}$ ; unique within the section
+  slug: string;        // ^[a-z][a-z0-9-]{0,31}$ ; cosmetic (the resolver matches the id)
   label: string;       // 1..40 chars, user data (not translated)
   icon?: string;       // one emoji (one grapheme) or a key of PLUGIN_ICON_MAP; absent = default
   target: string;      // static (app) screen pattern from SCREEN_DESIGN_MANIFEST, e.g. '/pos/sell'; maps the PREFIX
   hidden?: true;       // org-wide nav hide (I10); absent = shown
 }
 export interface NavSection {
-  id: string;          // uuid v4
+  id: string;          // ^[a-z0-9]{6}$ ; page-role key `section:${id}`
   slug: string;        // ^[a-z][a-z0-9-]{0,31}$ ; unique within the org; not in reservedSectionSlugs()
   label: string;       // 1..40 chars
   icon?: string;
@@ -55,12 +55,14 @@ export interface BuiltinOverride { label?: string; hidden?: true }
 export interface NavConfig {
   version: 1;          // no stored rows exist before S1 merges, so the amended shape keeps version 1
   sections: NavSection[];                   // ≤ 20, ordered = display order
+  /** Instances pasted/duplicated INTO a built-in module's nav (`/pos/sell~k3x9q2`), keyed by module segment. */
+  builtinSections: Record<string, NavPage[]>;
   builtin: Record<string, BuiltinOverride>; // keyed by target pattern
 }
-export const EMPTY_NAV_CONFIG: NavConfig = { version: 1, sections: [], builtin: {} };
+export const EMPTY_NAV_CONFIG: NavConfig = { version: 1, sections: [], builtinSections: {}, builtin: {} };
 ```
 
-An absent row, `{}`, or a v1-shaped document without `builtin` reads as `normalizeNavConfig` → `builtin: {}` and `kind: 'link'` defaulted (I7).
+An absent row, `{}`, or a document missing `builtin`/`builtinSections` reads as `normalizeNavConfig` → empty maps and `kind: 'link'` defaulted (I7).
 
 ## Validation rules (`validateNavConfig(config, ctx): NavConfigIssue[]`)
 
@@ -69,26 +71,30 @@ An absent row, `{}`, or a v1-shaped document without `builtin` reads as `normali
 | ≤ 20 sections; ≤ 30 pages per section | `limit` | section / page |
 | slug grammar `^[a-z][a-z0-9-]{0,31}$` | `slug.format` | field |
 | section slug ∉ `reservedSectionSlugs()` | `slug.reserved` | field |
-| section slugs unique (org); page slugs unique (section) | `slug.duplicate` | field |
+| section slugs unique (org) | `slug.duplicate` | field |
+| ids `^[a-z0-9]{6}$`, unique across sections, pages and `builtinSections` | `id.invalid` | field |
+| `builtinSections` keys ∈ first segments of `MODULE_MANIFEST` app prefixes / static sections (`pos`, `crm`, …) | `section.unknown` | key |
 | label 1..40 chars after trim (also `builtin[*].label`) | `label.length` | field |
 | icon: emoji (one grapheme, `\p{Extended_Pictographic}`) or `PLUGIN_ICON_MAP` key | `icon.unknown` | field |
 | target ∈ `aliasableTargets()` (static `(app)` screens; also every `builtin` key) | `target.invalid` | field |
 | at most ONE `kind: 'main'` entry per target across the document | `main.duplicate` | second entry's `kind` |
 | `kind` ∈ `{'link','main'}` | `kind.invalid` | field |
-| ids are uuids; unique across the document | `id.invalid` | field |
 
 `role.unknown` (v1) is removed — roles are no longer in the document. Read-time validation (layout + "Not shown ›" submenu) runs the same function and reports `slug.reserved` / `target.invalid` as warnings; the nav builders drop offending entries instead of rendering dead links.
 
 ## Derived values (pure, `src/lib/nav/custom-sections.ts`)
 
-- `entryPath(section, page) = '/' + section.slug + '/' + page.slug`
-- `resolveNavPrefix(config, canonicalPath): { section, page, prefix, target, rest } | null` — `prefix` = `/<section>/<page>` matched on whole segments (`/staff/sell` and `/staff/sell/…`, never `/staff/sell-x`); `rest` = the remainder including its leading `/` (or `''`); `target + rest` is the rewritten path.
+- `instancePath(sectionSlug, page) = '/' + sectionSlug + '/' + page.slug + '~' + page.id` (section slug = custom section slug or built-in module segment)
+- `newId()` = 6 base36 chars from `crypto.randomUUID()` (first 6 of the hex, re-encoded); callers re-roll on collision within the document
+- `resolveNavInstance(config, canonicalPath): { sectionSlug, sectionId: string | null, page, prefix, target, rest, slugStale: boolean } | null` — the second segment must contain `~`; the id after the last `~` is looked up across `sections[].pages` and `builtinSections[*]`; the first segment must equal that instance's section slug / module segment; `prefix` = the two matched segments as requested; `rest` = remainder incl. leading `/` or `''`; `slugStale` = the slug part differs from the stored slug (D8).
+- `canonicalInstancePath(config, canonicalPath): string | null` — when `slugStale`, the same path with the stored slug (shell client-replaces).
 - `movedTargets(config): Map<target, mainPath>` — every `kind: 'main'` entry (hidden or not).
 - `mainPathFor(config, canonicalPath): string | null` — if the path starts with a moved target (whole segments), the same path under the main; else `null`. Used by I9 (client-replace) only.
-- `linkViewKey(page) = 'nav.' + page.id`; `navLinkKeys(config): { key, label: '<Section> › <Page>', target }[]` (links only, hidden included).
+- `pageViewKey(page) = 'page:' + page.id`; `sectionViewKey(section) = 'section:' + section.id`; `builtinPageKey(pattern) = 'page:' + pattern`; `navPageKeys(config): { key, sectionKey: string | null, target }[]` (every custom instance, hidden included).
+- `DATASET_ENFORCED: readonly Module[]` lives in `src/lib/permissions.ts` (shared with spec 039; `[]` until 039 S2 adds `'pos'`). `floorApplies(target)` = `moduleOf(target) ∉ DATASET_ENFORCED`.
 - `moduleViewFloor(target): string | null` — among `ROUTE_ACCESS_RULES` prefix rules matching `target` whose `policyId` is `permission:<module>:view` with no dot in `<module>`, the longest pattern's permission string (`'pos:view'`); `null` when none.
-- `linkAllowed(page, permissions: ReadonlySet<string>, target = page.target): boolean` = `permissions.has(linkViewKey(page) + ':view') && (floor ? permissions.has(floor) : canAccessRoute(target, ctx))`.
-- `visibleNavConfig(config, permissions: ReadonlySet<string>, canManage: boolean): NavConfig` — keeps links with `permissions.has('nav.<id>:view')`, keeps every main (the client gates mains through `canViewPath(target)`), drops `hidden` entries/sections unless `canManage` (I8). `builtin` ships to everyone unchanged: built-in items are code on the client, so the client needs `builtin[target].hidden` to hide them and `builtin[target].label` to relabel them.
+- `instanceAllowed(page, permissions: ReadonlySet<string>): boolean` = `permissions.has(pageViewKey(page) + ':view') && (!floorApplies(page.target) || !moduleViewFloor(page.target) || permissions.has(moduleViewFloor(page.target)))`.
+- `visibleNavConfig(config, permissions: ReadonlySet<string>, canManage: boolean): NavConfig` — keeps instances (links AND moved mains) with `permissions.has('page:<id>:view')`, drops `hidden` entries/sections unless `canManage` (I8). `builtin` ships to everyone unchanged: built-in items are code on the client, so the client needs `builtin[target].hidden` to hide them and `builtin[target].label` to relabel them.
 - `reservedSectionSlugs()`, `aliasableTargets()` — unchanged (v1 R5).
 - `customSections(config)`, `customModules(config)`, `navPath()` — `src/lib/nav/custom-sections-nav.ts` (v1 R6) plus: skip `hidden`; moved-main items carry the target's native icon when `icon` is absent.
 
@@ -96,12 +102,11 @@ An absent row, `{}`, or a v1-shaped document without `builtin` reads as `normali
 
 | Function | Transition |
 |---|---|
-| `slugify(label)` | `label.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,32)` or `'page'` when empty |
-| `uniqueSlug(section, base)` | `base`, `base-2`, `base-3`, … first not taken in `section.pages` |
-| `addLink(config, sectionId, { target, label, icon? })` | appends `{ id: uuid, kind:'link', slug: uniqueSlug(section, slugify(label)), label, icon, target }` |
-| `duplicatePage(config, sectionId, pageId)` | appends a copy with a new id and `uniqueSlug(section, page.slug)` (custom sections only) |
-| `moveBuiltin(config, target, destSectionId, label)` | removes any `main` for `target`, appends `{ kind:'main', slug: uniqueSlug(dest, slugify(label)), label, target }` |
-| `movePage(config, pageId, destSectionId)` | relocates the entry; slug kept, or `uniqueSlug(dest, slug)` when taken (caller shows the resulting slug) |
+| `slugify(label)` | `label.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,32)` or `'page'` when empty (never emits `~`) |
+| `addLink(config, dest: { sectionId } \| { module }, { target, label, icon? })` | appends `{ id: newId(), kind:'link', slug: slugify(label), label, icon, target }` to `sections[dest].pages` or `builtinSections[module]` |
+| `duplicatePage(config, ref: { pageId } \| { target, module })` | appends a link copy with `newId()` next to the source (custom section page, built-in-section instance, or a built-in main → `builtinSections[module]`) |
+| `moveBuiltin(config, target, destSectionId, label)` | removes any `main` for `target`, appends `{ id: newId(), kind:'main', slug: slugify(label), label, target }` |
+| `movePage(config, pageId, dest)` | relocates the entry (id and slug kept) between custom sections / `builtinSections` |
 | `renamePage(config, pageId, { label?, slug? })` / `renameBuiltin(config, target, label)` / `renameSection(config, sectionId, { label?, slug? })` | field updates; a `null` builtin label deletes the override |
 | `removePage(config, pageId)` | drops the entry (link = delete; main = restore) |
 | `setHidden(config, ref: { pageId } \| { target } \| { sectionId }, hidden)` | sets/clears `hidden` on the entry, `builtin[target]`, or the section (removes empty `builtin[target]` objects) |
@@ -115,11 +120,12 @@ Upsert `app_nav_config` for `ORG_BUSINESS` with
 ```json
 { "version": 1,
   "builtin": {},
-  "sections": [ { "id": "<matrixUuid('tenancy.nav.staff-section')>", "slug": "staff", "label": "Staff", "icon": "🧑‍⚕️",
+  "sections": [ { "id": "st4ff1", "slug": "staff", "label": "Staff", "icon": "🧑‍⚕️",
     "pages": [
-      { "id": "<matrixUuid('tenancy.nav.staff-sell')>", "kind": "link", "slug": "sell", "label": "Sell", "target": "/pos/sell" },
-      { "id": "<matrixUuid('tenancy.nav.staff-appointments')>", "kind": "main", "slug": "appointments", "label": "Appointments", "target": "/pos/appointments" } ] } ] }
+      { "id": "k3x9q2", "kind": "link", "slug": "sell", "label": "Sell", "target": "/pos/sell" },
+      { "id": "a1b2c3", "kind": "main", "slug": "appointments", "label": "Appointments", "target": "/pos/appointments" } ] } ],
+  "builtinSections": {} }
 ```
-plus one `permission_rules` row `{ org_id: ORG_BUSINESS, role_key: 'viewer', module: 'nav.<matrixUuid('tenancy.nav.staff-sell')>', can_view: false, can_create: false, can_edit: false, can_delete: false, can_export: false, can_manage: false }` (so the viewer persona proves the 404 path even though the link's default rule — `/pos/sell` → `pos:create` — already denies a viewer; the explicit row proves the override path).
+(fixed ids: seeds must be deterministic — `matrixUuid` is kept for the registry key only) plus one `permission_rules` row `{ org_id: ORG_BUSINESS, role_key: 'viewer', module: 'page:k3x9q2', can_view: false, can_create: false, can_edit: false, can_delete: false, can_export: false, can_manage: false }` (so the viewer persona proves the 404 path even though the link's default rule — `/pos/sell` → `pos:create` — already denies a viewer; the explicit row proves the override path).
 
-`matrix.ts` entries: `tenancy.nav.staff-section` (table `app_nav_config`, where `org_id`) and `tenancy.nav.staff-sell-viewer-rule` (table `permission_rules`, where `{ org_id, role_key: 'viewer', module: 'nav.<uuid>' }`). `seed.contract.test.ts` asserts: `sections[0].slug === 'staff'`, kinds `['link','main']`, targets `['/pos/sell','/pos/appointments']`, and the rule row `can_view === false`.
+`matrix.ts` entries: `tenancy.nav.staff-section` (table `app_nav_config`, where `org_id`) and `tenancy.nav.staff-sell-viewer-rule` (table `permission_rules`, where `{ org_id, role_key: 'viewer', module: 'page:k3x9q2' }`). `seed.contract.test.ts` asserts: `sections[0].slug === 'staff'`, kinds `['link','main']`, targets `['/pos/sell','/pos/appointments']`, and the rule row `can_view === false`.

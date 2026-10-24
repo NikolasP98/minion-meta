@@ -1,7 +1,7 @@
 # Specification Quality Checklist: Custom navigation sections with alias pages (Amendment A)
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
-**Created**: 2026-10-23 · **Amended**: 2026-10-23 (symlink model)
+**Created**: 2026-10-23 · **Amended**: 2026-10-23 (A: symlink model; B: page/data role axes, ids in URLs)
 **Feature**: [spec.md](../spec.md)
 
 ## Content Quality
@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [x] No [NEEDS CLARIFICATION] markers remain (D5–D7 carry recommended defaults; D1/D4 recorded as superseded, D2/D3 as standing)
+- [x] No [NEEDS CLARIFICATION] markers remain (D5–D7 answered; D8–D10 carry recommended defaults; D1/D4 recorded as superseded, D2/D3 as standing)
 - [x] Requirements are testable and unambiguous (FR-001..FR-010 each map to a DELTA proof T1–T11)
 - [x] Success criteria are measurable (SC-001..SC-005)
 - [x] Success criteria are technology-agnostic where they describe outcomes (SC-003/SC-005 name gates by project convention)
@@ -31,14 +31,14 @@
 
 ## Security review points (for the owner's approval)
 
-- [x] Data-read exposure finding stated as an invariant (I1′ module-view floor) with anchors (`pos/sell/+page.server.ts:19-27`, `pos/+layout.server.ts:14-22`, no caps in `pos.service.ts`)
-- [x] Relaxation of page-level view rules by links is an explicit owner decision (D5) with the 3-line fallback named (research R12)
-- [x] Moved mains are never relaxed (US3.5)
-- [x] Link view rules reuse `permission_rules` + the existing `users:manage` overrides API; orphan rows deleted on link removal; RBAC cache invalidated on document writes
+- [x] Data-read exposure finding stated as the transition invariant (I1‴ module-view floor keyed on `DATASET_ENFORCED`, flipped per module by spec 039) with anchors (`pos/sell/+page.server.ts:19-27`, `pos/+layout.server.ts:14-22`, no caps in `pos.service.ts`; 62/73 loads unguarded — 039 R1)
+- [x] Page roles never gate data (D5 answered); built-in mains keep today's registry decision until an explicit `page:<pattern>` row exists (US3.5)
+- [x] Page rules reuse `permission_rules` + the existing `users:manage` overrides API; orphan rows deleted on instance/section removal; RBAC cache invalidated on document writes; cascade is an explicit walk (research R16)
+- [x] Instance ids are unguessable enough for URLs but NOT a secret: access is the page rule, never the id (R18)
 - [x] Hidden entries ship only to `settings:manage` members (I8); hide is nav-only (I10)
 
 ## Notes
 
 - Security + data tagged: owner approval of this spec is required before `/speckit-implement`; owner merges each hub slice.
-- Unverified item carried into quickstart Q20: `PageHeader` fallback title behaviour on entry paths (research R8).
+- Unverified items: quickstart Q20 (`PageHeader` fallback title on instance paths, R8); Q21 (`~` marker through Vercel edge normalisation, R18); whether `GET /api/roles` exists (R17).
 - S1 is a delta on the uncommitted worktree `~/.cache/claude-tmp/hub-037-s1`; tasks.md T001–T002 state what to revert and keep.

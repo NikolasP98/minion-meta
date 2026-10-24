@@ -145,3 +145,49 @@ Therefore:
 - Module mode renders `navMode.activeModule.items` (`Sidebar.svelte:307-350`), i.e. `ModuleNavItem`s from `getAreaItems`/`customModules`. The item menu needs `{ href, label, target? }`; for built-in items `target = href` (a static screen) — the menu resolves "is this a page item" through `aliasableTargets()` membership, "is this a custom entry" through `resolveNavPrefix(navConfig(), href)`, and "is this moved" through `movedTargets(navConfig())`. No shape change to `ModuleNavItem`/`SectionItem`.
 - Mobile sheet (`Topbar.svelte:396-410`) uses the same `NavContextMenu` host; keyboard opener is moot there, long-press is the opener.
 - The module switcher (`ModuleSwitcher.svelte`, `Topbar.svelte` picker) lists custom sections as modules (R6); no menu on switcher rows (sections are edited from their header).
+
+---
+
+# Amendment B research (2026-10-23, owner answers to D5–D7)
+
+## R15 — Two role axes: page roles vs data roles (D5 answered)
+
+**Decision: page roles ("may navigate here") on every page instance and custom section; data roles (view/add/edit/remove per dataset) in spec 039. A page grant never gates data; a denied dataset renders as a disabled visual. Until 039 enforces a module's reads, the Amendment A module-view floor stays (I1‴).**
+
+- Why the floor cannot simply go: R12's finding stands — 62 of the 73 `(app)` server loads that touch tenant data have no capability call (method and list in `specs/039-data-source-rbac/research.md` R1). Dropping the floor before 039 guards those reads would let a page grant ship data the role may not view.
+- Why a shared constant: `DATASET_ENFORCED` in `src/lib/permissions.ts` is read by 037's guards/`canViewPath` (skip the floor) and by 039's ratchet test (forbid bare ctx reads under the module's prefixes). One list, two consumers, one PR per module to grow it. Alternatives: (a) a per-page `dataEnforced` flag in the route manifest — duplicates per screen what is a per-module fact; (b) a DB flag — runtime data for a code property.
+- Built-in mains at their native path keep `defaultPolicy` (today's registry decision, including action-level overrides such as `/pos/sell` → `pos:create`) until an admin writes an explicit `page:<pattern>` row. So the floor is only observable on custom instances; day one is byte-identical for existing URLs (SC-003).
+
+## R16 — Page-role storage and cascade
+
+**Decision: `permission_rules` rows keyed `page:<id>` (custom instance), `page:<pattern>` (built-in main, e.g. `page:/pos/sell`), `section:<sectionId>` (custom section); resolution `page row ?? section row ?? defaultPolicy(target)`; the route-access registry IS the default table.**
+
+- Key column is free text (`CapabilityOverrideRow.module: string`, `rbac.service.ts:251`); only `isModuleOrSub` validates at the overrides API (`api/roles/overrides/+server.ts:36,52`) — extended to accept the three key forms when they name an existing instance / section / `SCREEN_DESIGN_MANIFEST` pattern.
+- Cascade: `buildCapabilities.effective()` (`:287-292`) strips a dotted key to its FIRST dot, so `page.<section>.<id>` would skip the section level; and its final fallback is `defaultCaps(role, 'page…')` = NONE. The cascade is therefore an explicit three-step walk on the raw override map (`explicitView`, introduced in Amendment A), not the dotted inheritance. Evidence that section→page cascade is wanted: the owner's "access permission actions in the context menu per page/section"; the hub already has the same shape for module→sub-resource rows (`listRbacRoles` `subResources`, `:596-600`).
+- Why not reuse the registry's `MODULE_SUBRESOURCES` dotted keys (`pos.sell`) as the built-in page keys: they are *also* the client permission strings that `ROUTE_PERMISSION_PREFIXES` consumes (`route-access-registry.ts:195-197`) and the Roles matrix "Sections" rows; renaming them is a migration of `permission_rules` data. Instead `page:/pos/sell` is a NEW key whose absence means "use the registry as today", so existing `pos.sell` rows keep working untouched. When 039 S6 removes the "Sections" rows from the matrix, the dotted keys become read-only defaults (ledger: fold them into `page:` rows).
+- Rejected: `roles[]` on the document (v1) — two sources of truth; a `page_access` table — a second overrides table for the same role × key × bool shape.
+
+## R17 — "Access…" dialog instead of Roles-matrix rows
+
+**Decision: a `PageAccessDialog` opened from the context menu on page items and custom section headers, for `users:manage` holders (the role-management capability: `settings/roles/+page.server.ts:20`, `api/roles/+server.ts:19`, `api/roles/overrides/+server.ts:27,49`). One tri-state per role (inherit / allow / deny) writing `POST`/`DELETE /api/roles/overrides`.** The Amendment A synthetic "Custom pages" module in `listRbacRoles` is dropped.
+
+- Owner: "right-click a page in the sidemenu and view access permission actions in the context menu per page/section". The matrix stays the *data* editor (039); page rules are edited where pages are.
+- Tri-state maps 1:1 to the existing API: allow → `POST {caps:{view:true}}`, deny → `POST {caps:{view:false}}`, inherit → `DELETE`. No new endpoint; the dialog needs the role catalog — `GET /api/roles` (unverified: `api/roles/+server.ts` has `POST`; if no `GET`, S5 adds one returning `listRoleCatalog(orgId)` gated `users:manage`).
+- The dialog shows the *effective* default per role as the inherit label ("inherits: allowed / denied") computed client-side from `canViewPath(target)` for the acting user only — per-role effective defaults need the server; shown as "inherits the page's rule" text when unknown (same honesty as A/R11).
+
+## R18 — Page ids in URLs (D7 answered)
+
+**Decision: every custom instance URL is `/<section>/<slug>~<id>/<rest>`; `id` = 6 chars base36 (`[a-z0-9]{6}`, ~2.2 × 10⁹ values; generated from `crypto.randomUUID()` and checked unique within the document); the resolver matches `~<id>` only (D8: slug cosmetic); `~` in the second segment marks an instance path for the reroute (I5).**
+
+Options weighed:
+| Scheme | Readable | Built-in-section duplicates | Reserved-slug rule | Rename-safe | Verdict |
+|---|---|---|---|---|---|
+| `/<section>/<slug>` (A) | yes | no (reserved prefix short-circuit) | sections + pages | no | superseded |
+| `/<section>/<slug>~<id>` | yes | **yes** (`/pos/sell~k3x9q2`) | sections only | **yes** | **chosen** |
+| `/<section>/<id>` | no | yes | sections only | yes | rejected: unreadable sidebar/bookmark URLs |
+| `/p/<id>/<rest>` | no | yes | none (one reserved `p`) | yes | rejected: loses the owner's `/<section>/<page>/<subpages>` shape and module-mode `viewMemory` keys by first segment (`(app)/+layout.svelte:48-54`) |
+| `/<section>/<slug>-<id>` | yes | needs a slug grammar that forbids trailing `-xxxxxx` | sections only | yes | rejected: ambiguous with real slugs (`sell-2`) |
+
+- Built-in mains keep their filesystem path (`/pos/sell`); a moved main gets an id like any instance (`/staff/sell~k3x9q2`), and its old path keeps rendering + client-replaces (I9 unchanged).
+- Consequences: `slug.duplicate` for pages disappears; `uniqueSlug` disappears; Duplicate/Paste into built-in sections is allowed — instances pasted into a built-in module live in `C.builtinSections[module]` and render after that module's native area items (`getAreaItems`); R10's cut is lifted.
+- Reroute check: `second.includes('~')` is a one-character test; the filesystem never produces it (SvelteKit route dirs are `[a-z0-9-[\]…]`), `slugify` never emits it. Unverified: edge normalisation of `~` on Vercel/Cloudflare (quickstart Q21 on a preview deployment); fallback marker `--` is a one-line constant swap plus a `slugify` rule forbidding `--`.
