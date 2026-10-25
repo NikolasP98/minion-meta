@@ -55,18 +55,18 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21172
 - `NikolasP98/minion-meta@dev rankings/index.json:21337` — HC-028 hand-rolled modal; migrate to shared Dialog",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21337
-- `NikolasP98/minion-meta@dev rankings/index.json:21927` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21927
-- `NikolasP98/minion-meta@dev rankings/index.json:21991` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21991
-- `NikolasP98/minion-meta@dev rankings/index.json:22023` — startBackupScheduler() has no call site anywhere in src/",
+- `NikolasP98/minion-meta@dev rankings/index.json:21959` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21959
+- `NikolasP98/minion-meta@dev rankings/index.json:22023` — this hasn't been exercised against a live local Supabase",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22023
-- `NikolasP98/minion-meta@dev rankings/index.json:22055` — remove once the phone failure is root-caused",
+- `NikolasP98/minion-meta@dev rankings/index.json:22055` — startBackupScheduler() has no call site anywhere in src/",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22055
-- `NikolasP98/minion-meta@dev rankings/index.json:22950` — the agenda lists every booking in bookings",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22950
-- `NikolasP98/minion-meta@dev rankings/index.json:24558` — HC-028 hand-rolled modal anchored at canvas (x,y); shared Dialog has no anchor API",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24558
+- `NikolasP98/minion-meta@dev rankings/index.json:22087` — remove once the phone failure is root-caused",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22087
+- `NikolasP98/minion-meta@dev rankings/index.json:22982` — the agenda lists every booking in bookings",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22982
+- `NikolasP98/minion-meta@dev rankings/index.json:24590` — HC-028 hand-rolled modal anchored at canvas (x,y); shared Dialog has no anchor API",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24590
 - `NikolasP98/minion-meta@dev rankings/index.json:27484` — raw fetch moved verbatim from TeamTab",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27484
 - `NikolasP98/minion-meta@dev rankings/index.json:27580` — tagOptions is the FILTER's list — decoupled from event-scope registry",
@@ -91,9 +91,9 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33276
 - `NikolasP98/minion-meta@dev rankings/index.json:33310` — a period with NO purchases no longer appears at all",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33310
-- `NikolasP98/minion-meta@dev rankings/index.json:36108` — other consumption-mapping surfaces (e.g.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36108
-- `NikolasP98/minion-meta@dev rankings/index.json:38341` — brief-debloat-c §3 asked for this to be wrapped in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38341
-- `NikolasP98/minion-meta@dev rankings/index.json:38472` — <what, why, pointer>"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38472
+- `NikolasP98/minion-meta@dev rankings/index.json:36076` — other consumption-mapping surfaces (e.g.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36076
+- `NikolasP98/minion-meta@dev rankings/index.json:38309` — brief-debloat-c §3 asked for this to be wrapped in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38309
+- `NikolasP98/minion-meta@dev rankings/index.json:38440` — <what, why, pointer>"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38440
