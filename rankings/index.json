@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-25T21:47:09.298Z",
+	"generatedAt": "2026-10-25T22:17:21.154Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5997,38 +5997,6 @@
 			"scoredAt": "2026-10-19T12:59:29.193Z"
 		},
 		{
-			"key": "proposal:2026-09-10-hub-finance-parser-version-binding",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Bind stored statement parser_version to the parser's own exported version",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-finance-parser-version-binding.md",
-			"sourceUpdatedAt": "2026-10-04",
-			"sourceFingerprint": "6c971e974a023e35919b5d7aa955cf52e2c0fa115d1dfff6b6c14a06fa30f51b",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The proposal is well-specified with explicit steps and exclusions, but it is explicitly gated on the frozen 10-04 candidate and 10-07 landing first, so it isn't independently actionable yet.",
-			"evidence": [
-				"'finance-statements.service.ts keeps a private copy, const PARSER_VERSION = 1' while the parser exports STATEMENT_PARSER_VERSION = 3",
-				"'owned by the frozen 10-04 candidate...which is not on origin/master'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T21:56:08.070Z"
-		},
-		{
 			"key": "proposal:2026-09-12-hub-booking-stock-postcommit-recovery",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11950,6 +11918,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T21:47:28.848Z"
+		},
+		{
+			"key": "proposal:2026-09-10-hub-finance-parser-version-binding",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Bind stored statement parser_version to the parser's own exported version",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-finance-parser-version-binding.md",
+			"sourceUpdatedAt": "2026-10-04",
+			"sourceFingerprint": "6c971e974a023e35919b5d7aa955cf52e2c0fa115d1dfff6b6c14a06fa30f51b",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The provenance/version-binding fix is clearly scoped but explicitly blocked until the 10-07 and 10-04 candidates land, so it cannot be executed yet.",
+			"evidence": [
+				"\"once 10-07 + 10-04 land\" gates the proposed change",
+				"service still hardcodes PARSER_VERSION=1 while the parser exports v3, risking stale-cursor row skip/double-count on resume"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T22:17:21.011Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-99fd34b5696d",
@@ -35362,6 +35362,38 @@
 			"scoredAt": "2026-10-22T23:39:36.979Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary describes an already-merged whatsapp session-reset PR with no stated deployment problem, so there is no actionable goal here.",
+			"evidence": [
+				"summary is commit text for merged PR #361 (whatsapp session reset)",
+				"status is unknown with no indicated health issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T22:17:21.011Z"
+		},
+		{
 			"key": "issue:minion-meta#461",
 			"kind": "issue",
 			"stage": "proposal",
@@ -37492,20 +37524,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 4,
 				"implementation": 2
 			},
 			"confidence": 4,
-			"recommendation": "prune",
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "This entry is a reconciliation record that tombstones a prior handoff with no new content and no actual qualification work started.",
+			"rationale": "Native Swift toolchain qualification is disconnected from the currently authorized Linux gateway deployment and the proposal's heavily padded text needs a clearer bounded restatement before it is actionable.",
 			"evidence": [
-				"'tombstoned as merged here, no new content'",
-				"'Native Swift build/tests were not reached' due to SwiftFormat failing on 116 of 208 files"
+				"\"authorized current deployment targets the Linux Gateway Docker services\"",
+				"SwiftFormat failed on 116 of 208 untouched native files with no pinned toolchain version"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T21:56:08.070Z"
+			"scoredAt": "2026-10-25T22:17:21.011Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-mention-contrast",
