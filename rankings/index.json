@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-25T03:47:04.565Z",
+	"generatedAt": "2026-10-25T03:54:40.409Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1232,40 +1232,6 @@
 			"scoredAt": "2026-10-22T17:10:01.458Z"
 		},
 		{
-			"key": "pr:minion_hub#605",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#605 feat(rbac): every hub screen now checks the role can view its data before loading it (S5)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/605",
-			"sourceUpdatedAt": "2026-10-25T03:34:51Z",
-			"sourceFingerprint": "e8a00c52b46c1a9c63ffcc2c779e568bee59fcdfd6808f9a7286529ffe729b1b",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#885"
-			],
-			"rationale": "Security/data RBAC slice is verified locally with passing tests and ready for owner review and merge.",
-			"evidence": [
-				"Ratchet: unchecked page/layout loads 22 → 0 files",
-				"Verified locally: bun run check 0 errors; 604 targeted tests"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T03:39:10.461Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1862,6 +1828,41 @@
 			"scoredAt": "2026-10-19T03:27:53.094Z"
 		},
 		{
+			"key": "pr:minion_hub#605",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#605 feat(rbac): every hub screen now checks the role can view its data before loading it (S5)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/605",
+			"sourceUpdatedAt": "2026-10-25T03:52:27Z",
+			"sourceFingerprint": "f2ffd3a5c152e62f837b622a598dc1bb833d2caf650cbe4b3d98b94961ab0c63",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#604",
+				"pr:minion_hub#599"
+			],
+			"rationale": "Completes the hub-wide dataset-view RBAC initiative, zeroing the unchecked-load ratchet and adding a new regression test.",
+			"evidence": [
+				"ratchet unchecked loads 22->0 files",
+				"604 tests pass incl. new layout shell-read regression"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
+		},
+		{
 			"key": "spec:2026-09-16-hub-local-qa-stack-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1924,6 +1925,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:07:59.514Z"
+		},
+		{
+			"key": "pr:minion_hub#606",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#606 fix(pos): a calendar charge with consumed products no longer blanks the cart",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/606",
+			"sourceUpdatedAt": "2026-10-25T03:52:13Z",
+			"sourceFingerprint": "accd83b082ef630f216c6d133816f439b69d4c82c552d96ea535a15da6ebe398",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 8,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Root-caused hotfix for an active production bug with direct, measured revenue loss on an affected device, already gate-verified with a regression test.",
+			"evidence": [
+				"0 sales finished in 14 days on affected device",
+				"each_key_duplicate crash root-caused via PostHog replay",
+				"new test fails on master, passes with fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -2651,41 +2685,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T17:56:23.716Z"
-		},
-		{
-			"key": "pr:minion_hub#603",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#603 feat(scheduling,stock): scheduling and stock screens show \"your role can't view\" instead of loading data the role may not see (S3)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/603",
-			"sourceUpdatedAt": "2026-10-24T08:06:36Z",
-			"sourceFingerprint": "8bf76584cec09db4031eff5ded5d42072b3971709ef9893745562ee3c05277cf",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#599",
-				"pr:minion-meta#885"
-			],
-			"rationale": "Extends dataset RBAC across scheduling/stock/team with the broadest ratchet reduction and strongest test evidence in the chain.",
-			"evidence": [
-				"Unchecked-read ratchet 62→44 files; scheduling/stock/team now zero",
-				"990 targeted tests plus design-lint, token-lint, prettier, content-contract verified locally"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T08:17:43.662Z"
 		},
 		{
 			"key": "pr:minion-factory#199",
@@ -3563,41 +3562,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:21:54.078Z"
-		},
-		{
-			"key": "pr:minion_hub#599",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#599 feat(pos): POS screens show \"your role can't view\" instead of loading data the role may not see (S2)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/599",
-			"sourceUpdatedAt": "2026-10-24T08:05:15Z",
-			"sourceFingerprint": "906e34e2f44fa430999893d267fc609932676c303da66efe14acc9fe473c9993",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#603",
-				"pr:minion-meta#885"
-			],
-			"rationale": "Security/data-tagged dataset RBAC for POS closes a real unauthorized-data-view gap and gates the scheduling/stock slice.",
-			"evidence": [
-				"DATASET_ENFORCED=['pos'] closes read gap; denied role gets marker not data",
-				"Security + data: owner merges; vitest pos suites + ratchet checks pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T08:17:43.662Z"
 		},
 		{
 			"key": "pr:minion-meta#885",
@@ -4758,14 +4722,14 @@
 			"scoredAt": "2026-10-23T16:26:21.325Z"
 		},
 		{
-			"key": "pr:minion_hub#604",
+			"key": "pr:minion_hub#603",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#604 feat(crm,finance): business screens show \"your role can't view\" for datasets the role may not see (S4)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/604",
-			"sourceUpdatedAt": "2026-10-24T08:21:10Z",
-			"sourceFingerprint": "f2db202a65d3a74eb0e1d184c8c0ae50ec26d88369f80c6a85aea4ab32c8d405",
+			"title": "#603 feat(scheduling,stock): scheduling and stock screens show \"your role can't view\" instead of loading data the role may not see (S3)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/603",
+			"sourceUpdatedAt": "2026-10-25T03:52:22Z",
+			"sourceFingerprint": "34faf02f268a251db9c9e4b9cc51572e845cc8b205509e3036e0fa62cbc8ece8",
 			"score": 61,
 			"band": "medium",
 			"axes": {
@@ -4775,20 +4739,57 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 7
+				"implementation": 8
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Stacked, well-specified security/data-visibility PR with concrete test gates and a clear ratchet reducing enforcement debt across multiple datasets, requiring owner merge due to security+data tagging.",
+			"relatedKeys": [
+				"pr:minion_hub#599",
+				"pr:minion_hub#604"
+			],
+			"rationale": "Extends dataset-view enforcement to scheduling/stock/team with broad coverage and locally verified gates across ~990 tests.",
 			"evidence": [
-				"Converts 22 loads across crm/finance/sales/support/memberships/socials to datasetCtx",
-				"Baseline 44 -> 22 files (46 -> 24 reads)",
-				"vitest 38 files / 520 tests passing"
+				"DATASET_ENFORCED += scheduling, stock",
+				"990 targeted tests verified locally"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T08:47:04.780Z"
+			"scoredAt": "2026-10-25T03:54:40.259Z"
+		},
+		{
+			"key": "pr:minion_hub#604",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#604 feat(crm,finance): business screens show \"your role can't view\" for datasets the role may not see (S4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/604",
+			"sourceUpdatedAt": "2026-10-25T03:52:26Z",
+			"sourceFingerprint": "14788ccab5cff871a1f0fc634b9f69802be128c21c7191673dcb494273b0c751",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#603",
+				"pr:minion_hub#605"
+			],
+			"rationale": "Converts 22 crm/finance/sales/support loads to enforced dataset checks with strong test coverage, though browser/persona QA is explicitly skipped.",
+			"evidence": [
+				"22 loads converted; ratchet 44->22 files",
+				"J5/P8 browser QA not run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
 		},
 		{
 			"key": "pr:minion-meta#882",
@@ -5784,39 +5785,40 @@
 			"scoredAt": "2026-10-20T05:56:30.705Z"
 		},
 		{
-			"key": "pr:minion_hub#596",
+			"key": "pr:minion_hub#599",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#596 feat(rbac): data-source read guard, denied-data visual and unguarded-read ratchet (S1)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/596",
-			"sourceUpdatedAt": "2026-10-24T02:44:22Z",
-			"sourceFingerprint": "7a16a5a0ad75d69dcfdb248c87c67c2be400d99a199e3a6ceaec59a9a925ebd2",
+			"title": "#599 feat(pos): POS screens show \"your role can't view\" instead of loading data the role may not see (S2)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/599",
+			"sourceUpdatedAt": "2026-10-25T03:52:18Z",
+			"sourceFingerprint": "7418a00d2534d9b3a630f15eaf37a1338694f133d096d1ddb550581e3c39ff74",
 			"score": 59,
 			"band": "medium",
 			"axes": {
 				"criticality": 5,
-				"importance": 8,
-				"impact": 5
+				"importance": 7,
+				"impact": 6
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#599"
+				"pr:minion_hub#603",
+				"pr:minion_hub#605"
 			],
-			"rationale": "Security-tagged RBAC primitives and a regression ratchet unblock the POS enforcement slice even though no module is enforced yet.",
+			"rationale": "First dataset-enforcement slice closes a real data-exposure gap in POS with solid test gates though lacking live persona proof.",
 			"evidence": [
-				"DATASET_ENFORCED=[] so nothing is enforced yet",
-				"ratchet fixture proves it fails on a new unguarded read",
-				"205 tests passing across 20 files"
+				"DATASET_ENFORCED=['pos']",
+				"security+data owner-merge tag",
+				"no browser J5 persona proof"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T02:47:56.728Z"
+			"scoredAt": "2026-10-25T03:54:40.259Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -6251,41 +6253,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:06:45.901Z"
-		},
-		{
-			"key": "pr:minion_hub#602",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#602 feat(nav): choose which roles can open each page or section from its right-click \"Access…\" menu (S5)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/602",
-			"sourceUpdatedAt": "2026-10-24T08:11:32Z",
-			"sourceFingerprint": "bdc23cdc6a667488603819bb37b7e7057351932c95d74e3d33385dc22d14e6bc",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#600",
-				"pr:minion-meta#885"
-			],
-			"rationale": "Role-access dialog fixes a concrete security gap (till charge without pos:create) but has thinner gate/evidence detail than sibling PRs.",
-			"evidence": [
-				"till's charge blocked without pos:create since a page grant could open /pos/sell",
-				"Security-tagged: owner approves and merges; stacked on #600"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T08:17:43.662Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -11425,42 +11392,6 @@
 			"scoredAt": "2026-10-22T23:23:08.693Z"
 		},
 		{
-			"key": "pr:minion_hub#597",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#597 feat(nav): custom sections and page links — storage, model, API and seed (S1)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/597",
-			"sourceUpdatedAt": "2026-10-24T02:44:06Z",
-			"sourceFingerprint": "a2715cd5bf1d7bed56fc112e8ea838d591024cfdf519c72b182ba878c1073074",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#598",
-				"pr:minion_hub#600"
-			],
-			"rationale": "Foundational nav storage/model/API slice that two stacked PRs (#598, #600) directly depend on, with full QA seed verification passing.",
-			"evidence": [
-				"qa:seed:verify 245/245 passed",
-				"36 files/621 tests exit 0",
-				"two downstream PRs stacked on this one"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T02:47:56.728Z"
-		},
-		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11945,6 +11876,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T17:10:01.458Z"
+		},
+		{
+			"key": "pr:minion_hub#601",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#601 feat(nav): page links open their screen at their own URL, with page access checked (S2)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/601",
+			"sourceUpdatedAt": "2026-10-25T03:51:27Z",
+			"sourceFingerprint": "0bb416d0d144860d7726ea3ca7560c024a87e76fba1d12d9c6ef1c75f14af735",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#597",
+				"pr:minion_hub#602"
+			],
+			"rationale": "Enforces page-level access on the target route with a verified RBAC matrix and completed browser checks, making it the most proven nav-stack slice.",
+			"evidence": [
+				"RBAC matrix in hooks.tenant.test.ts",
+				"browser proof Q9/Q11/Q13 done"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
+		},
+		{
+			"key": "pr:minion_hub#602",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#602 feat(nav): choose which roles can open each page or section from its right-click \"Access…\" menu (S5)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/602",
+			"sourceUpdatedAt": "2026-10-25T03:51:41Z",
+			"sourceFingerprint": "dbca05165ef9b6b9ce30b2f80121c911b6e9f21bd28434116f04f882087140d5",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#600",
+				"pr:minion_hub#601"
+			],
+			"rationale": "Security-tagged role-access dialog closes a real gap (till charge without pos:create) but has thinner gate detail than siblings.",
+			"evidence": [
+				"security-tagged: owner approves and merges",
+				"closes till-charge gap without pos:create"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -13480,76 +13481,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T17:10:01.458Z"
-		},
-		{
-			"key": "pr:minion_hub#598",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#598 feat(nav): custom sections and page links appear in the sidebar, module mode and the switcher (S3)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/598",
-			"sourceUpdatedAt": "2026-10-24T08:11:40Z",
-			"sourceFingerprint": "788202491a5207421e2070fc808fdad6d5ebcb311044b6eef09949735f83272e",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#600",
-				"pr:minion-meta#885"
-			],
-			"rationale": "Nav sidebar slice (S3) has green gates and tests but only UI breadth with no urgent deadline.",
-			"evidence": [
-				"bun run check, lint:design, vitest nav suites all pass",
-				"browser proof for Q9/Q11/Q12 explicitly not done (TODO(handoff))"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T08:17:43.662Z"
-		},
-		{
-			"key": "pr:minion_hub#601",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#601 feat(nav): page links open their screen at their own URL, with page access checked (S2)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/601",
-			"sourceUpdatedAt": "2026-10-24T02:59:34Z",
-			"sourceFingerprint": "5a7f16507a56dab738fe3e2f9b228eb28a764dde0b0c1d10f6a886656871ecd1",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#600"
-			],
-			"rationale": "This PR implements RBAC-sensitive route access logic with detailed test matrix and browser verification, making it high-value and ready pending owner security review, with one pending Vercel preview check (Q21).",
-			"evidence": [
-				"RBAC matrix verified via hooks.tenant.test.ts",
-				"Security + data: owner merges",
-				"Q21 (Vercel preview '~') pending"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T03:17:07.074Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -15806,6 +15737,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:23:08.693Z"
+		},
+		{
+			"key": "pr:minion_hub#598",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#598 feat(nav): custom sections and page links appear in the sidebar, module mode and the switcher (S3)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/598",
+			"sourceUpdatedAt": "2026-10-25T03:49:34Z",
+			"sourceFingerprint": "59b277eaa297005f27e20ff00c32e398e26df5a4bace1e27cf20ec22bb43cdab",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#597",
+				"pr:minion_hub#600"
+			],
+			"rationale": "User-facing sidebar/module-switcher integration is ready with passing targeted tests but explicitly skips the browser proof steps.",
+			"evidence": [
+				"stacked on #597",
+				"browser proof Q9/Q11/Q12 not done",
+				"9 new tests pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
@@ -18599,6 +18566,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T17:10:01.458Z"
+		},
+		{
+			"key": "pr:minion_hub#597",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#597 feat(nav): custom sections and page links — storage, model, API and seed (S1)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/597",
+			"sourceUpdatedAt": "2026-10-25T03:49:53Z",
+			"sourceFingerprint": "0e4bccf795456308f2f45a60dad2d198f110327ac15cdb9b21642d1551add1c9",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#598",
+				"pr:minion_hub#601"
+			],
+			"rationale": "Foundational storage/model/API slice for custom nav unblocks all later stages and has passing gates and QA seed verification.",
+			"evidence": [
+				"QA seed 245/245 passed",
+				"foundational dependency for S2-S5 per meta spec 037"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
@@ -21560,6 +21562,42 @@
 			"scoredAt": "2026-10-22T23:06:45.901Z"
 		},
 		{
+			"key": "pr:minion_hub#600",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#600 feat(nav): right-click the sidebar to copy, duplicate, move, rename, hide or delete pages and sections (S4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/600",
+			"sourceUpdatedAt": "2026-10-25T03:49:54Z",
+			"sourceFingerprint": "820a77549d51ffc2cf8effbca124541ed5c18e0857fd1735bc31abefbc4be5d3",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#598",
+				"pr:minion_hub#602"
+			],
+			"rationale": "Context-menu UX addition is gate-clean but cosmetic relative to the security-tagged dataset work, and still awaits the S5 Access entries.",
+			"evidence": [
+				"stacked on #598",
+				"no browser screenshots Q1-Q8",
+				"\"Access…\" entries await S5"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
+		},
+		{
 			"key": "pr:minion-meta#849",
 			"kind": "pr",
 			"stage": "development",
@@ -23078,38 +23116,6 @@
 			"scoredAt": "2026-10-23T09:26:34.130Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged feature commit on session reset authorization with no indication of deployment failure or incident.",
-			"evidence": [
-				"commit adds sessionResetAuthorized logic per Spec 035 G3",
-				"tagged deployment but no health/error signal present"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T03:47:04.398Z"
-		},
-		{
 			"key": "issue:minion-meta#654",
 			"kind": "issue",
 			"stage": "proposal",
@@ -23728,41 +23734,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:37:43.569Z"
-		},
-		{
-			"key": "pr:minion_hub#600",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#600 feat(nav): right-click the sidebar to copy, duplicate, move, rename, hide or delete pages and sections (S4)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/600",
-			"sourceUpdatedAt": "2026-10-24T08:11:40Z",
-			"sourceFingerprint": "6b64df4353c144c5bd3b2d97644c96103196213c6693eb1fa4b5278b90ed795a",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#598",
-				"pr:minion_hub#602"
-			],
-			"rationale": "Context-menu UI slice is well-tested but purely structural/UX, lower urgency than the RBAC slices it depends on.",
-			"evidence": [
-				"i18n:compile, check, lint:design, lint:tokens all exit 0",
-				"NavContextMenu.mounted.test.ts 6 new cases pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T08:17:43.662Z"
 		},
 		{
 			"key": "proposal:2026-08-28-meta-routing-pr100-recovery",
@@ -40617,38 +40588,6 @@
 			"scoredAt": "2026-10-19T06:56:57.383Z"
 		},
 		{
-			"key": "run:minion_hub#40158846528",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/40158846528",
-			"sourceUpdatedAt": "2026-10-25T03:36:50Z",
-			"sourceFingerprint": "1ecd6629332564c18befc34c04a1cf01b29305ef23e9ee4ba2e0448942623c36",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on a master push, not an actionable board goal.",
-			"evidence": [
-				"push on master",
-				"status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T03:39:10.461Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2698164841",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41219,6 +41158,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-25T02:02:00.869Z"
+		},
+		{
+			"key": "run:minion_hub#40159748731",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/40159748731",
+			"sourceUpdatedAt": "2026-10-25T03:52:12Z",
+			"sourceFingerprint": "a061e383250eb7a5ab51aaf35f325bb8bc6a5e3648f77d3d0eb58d5374ac0ac5",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An automated queued CI run on master is a status artifact, not an actionable goal to rank.",
+			"evidence": [
+				"queued run",
+				"push on master, no decision required"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T03:54:40.259Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
