@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-25T09:46:59.333Z",
+	"generatedAt": "2026-10-25T10:17:46.128Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1477,6 +1477,41 @@
 			"scoredAt": "2026-10-21T13:56:03.828Z"
 		},
 		{
+			"key": "proposal:2026-10-17-agent-dynamic-tools",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Discover current authorized tools and answer catalog questions directly",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-17-agent-dynamic-tools.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "5a92edd2880d198f48ea83e2e1db5b767205c615eccfe4c3110c74e982b73f33",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-17-agent-dynamic-tools-spec"
+			],
+			"rationale": "An approved, cross-repo proposal addressing a real tool-discovery incident, but its own text says the gateway PR is blocked pending owner authorization of a security-baseline exception.",
+			"evidence": [
+				"status approved",
+				"'Gateway PR333 remains blocked by the repository rule that an implementation branch cannot allowlist its own secret-scan findings'",
+				"hub PR567 and gateway PR333 drafts exist but are not merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T10:17:45.990Z"
+		},
+		{
 			"key": "proposal:2026-10-18-assistant-capability-failure-recovery",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1659,22 +1694,22 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 6,
-			"recommendation": "execute",
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"pr:minion (gateway)#335",
 				"proposal:2026-10-17-agent-dynamic-tools"
 			],
-			"rationale": "Detailed, actively implementing spec with explicit invariants and a defined cross-repo contract driving the dynamic-tools fix.",
+			"rationale": "Detailed implementing-stage cross-repo contract spec for dynamic tool discovery, but execution is gated by the same unresolved owner security-authorization blocker as its proposal.",
 			"evidence": [
-				"status: implementing",
-				"defines explicit TO-BE invariants and a cross-repository tool-catalog contract"
+				"status implementing",
+				"defines explicit cross-repository tool-catalog contract with schemaVersion and revision hashing",
+				"implementation blocked per linked proposal's PR333 secret-scan baseline issue"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:56:31.834Z"
+			"scoredAt": "2026-10-25T10:17:45.990Z"
 		},
 		{
 			"key": "spec:2026-10-18-assistant-capability-failure-recovery-spec",
@@ -4009,14 +4044,14 @@
 			"scoredAt": "2026-10-22T09:39:39.186Z"
 		},
 		{
-			"key": "proposal:2026-10-17-agent-dynamic-tools",
+			"key": "proposal:2026-10-18-assistant-navigation-confirmation",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion_hub",
-			"title": "Discover current authorized tools and answer catalog questions directly",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-17-agent-dynamic-tools.md",
+			"title": "Keep assistant navigation under user control",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-18-assistant-navigation-confirmation.md",
 			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "5a92edd2880d198f48ea83e2e1db5b767205c615eccfe4c3110c74e982b73f33",
+			"sourceFingerprint": "a199d2f34c3bfb51d36e037684b95ae9288607cc05b4b45e5fb615f209eda3f6",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -4026,22 +4061,22 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 4
 			},
 			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"spec:2026-10-17-agent-dynamic-tools-spec",
-				"pr:minion (gateway)#335"
+				"spec:2026-10-18-assistant-navigation-confirmation-spec"
 			],
-			"rationale": "Approved proposal with substantial implementation already merged elsewhere still lists open lifecycle/verification items that keep it from being closed.",
+			"rationale": "Targets a real trust problem (assistant claiming navigation occurred when it did not) with a clear fix direction, but the paired spec is already further along and native fill-call authorization is explicitly deferred.",
 			"evidence": [
-				"\"Implementation drafts\" lists Hub #567, Gateway #333, meta #840",
-				"\"These are retained follow-ups, not claims that the full lifecycle audit is resolved\""
+				"'message renderer can label an unexecuted fence as Opened'",
+				"status in-spec while companion spec status is implementing",
+				"'native independent fill-call authorization... requires a separate request-bound effect contract'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:56:31.834Z"
+			"scoredAt": "2026-10-25T10:17:45.990Z"
 		},
 		{
 			"key": "proposal:2026-10-22-whatsapp-member-agents-followups",
@@ -4405,6 +4440,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T03:39:15.325Z"
+		},
+		{
+			"key": "spec:2026-10-18-assistant-navigation-confirmation-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "User-confirmed assistant navigation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-18-assistant-navigation-confirmation-spec.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "381cb9fea597e95589694261626125b4bf95821c465fb31f3e30d64a4f776488",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-18-assistant-navigation-confirmation"
+			],
+			"rationale": "Well-specified, implementing-stage fix with clear invariants, a defined verification checklist, and no external blocker comparable to the dynamic-tools work.",
+			"evidence": [
+				"status implementing",
+				"lists concrete verification commands (bun run check/test/build/lint:design/lint:tokens)",
+				"defines explicit invariants for navigation proposal vs. execution"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T10:17:45.990Z"
 		},
 		{
 			"key": "spec:2026-10-23-harness-gateway-spec",
@@ -6429,42 +6499,6 @@
 			"scoredAt": "2026-10-20T01:56:36.858Z"
 		},
 		{
-			"key": "proposal:2026-10-18-assistant-navigation-confirmation",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Keep assistant navigation under user control",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-18-assistant-navigation-confirmation.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "a199d2f34c3bfb51d36e037684b95ae9288607cc05b4b45e5fb615f209eda3f6",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-18-assistant-navigation-confirmation-spec",
-				"proposal:handoff-minion-hub-1895569552",
-				"proposal:handoff-minion-hub-2083655976"
-			],
-			"rationale": "Well-articulated in-spec proposal addressing a real trust gap (assistant falsely claiming navigation) but implementation evidence is not yet present.",
-			"evidence": [
-				"\"the assistant must not claim it opened a page\"",
-				"status: in-spec with companion spec already drafted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:56:31.834Z"
-		},
-		{
 			"key": "proposal:2026-10-21-windows-release-qualification-timing",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7669,41 +7703,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T14:56:51.115Z"
-		},
-		{
-			"key": "spec:2026-10-18-assistant-navigation-confirmation-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "User-confirmed assistant navigation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-18-assistant-navigation-confirmation-spec.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "381cb9fea597e95589694261626125b4bf95821c465fb31f3e30d64a4f776488",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-18-assistant-navigation-confirmation",
-				"proposal:handoff-minion-hub-1895569552"
-			],
-			"rationale": "Clear, implementing-stage spec with a concrete DELTA table and review requirements for fixing false navigation claims.",
-			"evidence": [
-				"status: implementing",
-				"DELTA table lists tool implementation, rendering, batch execution, prompts, replay boundaries"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-18T09:56:31.834Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
@@ -35360,6 +35359,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:39:36.979Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy entry just logs an already-merged commit rather than describing an open, actionable goal.",
+			"evidence": [
+				"summary is a merged commit message for PR #361",
+				"status field is 'unknown' with no open problem described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-25T10:17:45.990Z"
 		},
 		{
 			"key": "issue:minion-meta#461",
