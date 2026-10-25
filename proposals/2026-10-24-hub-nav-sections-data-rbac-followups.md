@@ -12,7 +12,7 @@ effort: M
 # Hub custom nav sections + data roles: follow-ups
 
 Open ends left by spec 037 (custom sections, page links, page roles; hub #597, #601, #598, #600, #602)
-and spec 039 (data roles per dataset; hub #596, #599, #603, S4/S5 in flight). Each item names
+and spec 039 (data roles per dataset; hub #596, #599, #603, #604, #605). Each item names
 where it lives.
 
 ## AS-IS
@@ -34,6 +34,11 @@ where it lives.
   keys (`isPageRuleKey`).
 - **`loadCalendarWindow` signature.** It takes `foreign: { pos, stock, crm }` handles (039 S3).
   Every new caller has to pass them; there is no lint for that.
+- **Settings and admin loads hard-403** through `requireDataset` (039 S5, hub #605) instead of
+  rendering the `DataSource` "can't view" panel (`TODO(handoff)` in `src/server/auth/dataset-ctx.ts`).
+  That is fine while the route guard already 403s there. It needs converting if page roles ever
+  expose those routes to roles without the module's view.
+- **152 API GET handlers have no capability check** (039 S5 `apiGets` ratchet bucket, decrease-only).
 - **Not yet proven end to end:**
   - browser QA of 037 S3–S5 (sidebar, context menus, Access dialog);
   - that a Vercel preview keeps the `~` in instance URLs (`/<section>/<slug>~<id>`), spec 037 Q21;
