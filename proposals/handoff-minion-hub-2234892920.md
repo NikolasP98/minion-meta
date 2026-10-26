@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-2234892920
 title: Handoff marker — src/routes/(app)/finances/purchases/+page.svelte (minion_hub)
-status: review
+status: closed
 created: 2026-09-21
 updated: 2026-10-26
 repos: [minion-hub]
@@ -31,3 +31,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/purchases/+page.svelte#L32
 - `NikolasP98/minion_hub@master src/routes/(app)/finances/purchases/+page.svelte:56` — the pre-migration markup rendered a lone Lock icon for closed
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/finances/purchases/+page.svelte#L56
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-26; the sweep closed this proposal.

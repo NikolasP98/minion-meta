@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-2778272735
 title: Handoff marker — src/routes/(app)/crm/[contactId]/+page.svelte (minion_hub)
-status: review
+status: closed
 created: 2026-09-29
 updated: 2026-10-26
 repos: [minion-hub]
@@ -31,3 +31,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/+page.svelte#L785
 - `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/+page.svelte:911` — spec 2026-09-28 Bundle F asks for tags LAST inside
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/+page.svelte#L911
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-26; the sweep closed this proposal.
