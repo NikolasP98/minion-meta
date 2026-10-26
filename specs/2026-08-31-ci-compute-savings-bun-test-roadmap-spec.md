@@ -2,20 +2,56 @@
 id: 2026-08-31-ci-compute-savings-bun-test-roadmap-spec
 title: CI and Factory compute savings — attributable telemetry and Bun test adoption roadmap
 stage: spec
-status: draft
-pass: 1
+status: review
+pass: 2
 created: 2026-08-31
-updated: 2026-08-31
+updated: 2026-10-17
 proposal: 2026-08-22-ci-compute-savings-bun-test-roadmap
-verdict: pending
+verdict: changes_requested
 repos: [minion-factory, minion-base, minion, minion_hub, minion_site, paperclip]
 relationship: extends
 related: [2026-08-17-factory-token-budget-governance-spec, 2026-08-18-ci-minion-ai-ci-spec, 2026-08-22-factory-lineage-orchestrator-instance-spec]
 type: infra
-tags: [infra, test]
+tags: [infra, data, test]
 ---
 
 # CI and Factory compute savings — attributable telemetry and Bun test adoption roadmap
+
+## Current review — 2026-10-17
+
+This remains one complete six-delta goal, not a new implementation request.
+The original pass-2 run `60bca3bb` ended with index validation failure: its
+same-provider fallback wrote `verdict: degraded`, which is not a valid index
+verdict. Its existing pass-1 draft is not reviewed execution authority. Do not
+replay that failed lineage or approve this draft merely because its advisory
+ranking is high.
+
+Fresh source review at Factory
+`43a174b2e87c4d572ffd2ba030269db22a0b7bd2` finds the S1 measurement and identity
+contract incomplete. [The pass-2 review](2026-08-31-ci-compute-savings-bun-test-roadmap-spec.review.md)
+records exact seams, required corrections and proof. In particular:
+
+- Existing phase attempts, reservation slots and broker-role turns are distinct
+  identities. None universally proves one physically billed provider request.
+- Legacy run-total allocation is not directly observed phase cost. Current
+  budget enforcement must remain conservative and unchanged while analytical
+  evidence classes become explicit.
+- Broker usage, strict transport/artifact envelopes, legacy workers, normal and
+  failure/restart closures all enter scope. The old S1 file list omits several
+  of these active consumers.
+- A new persistence table is a schema migration. The `data` tag now exposes the
+  existing constitution's owner-approval-before-code and owner-merge gates; this
+  review grants neither. No migration or production write has been performed.
+- Summed phase durations cannot reconcile overlapping intervals by simple
+  addition. Resource limits are not measured CPU time/RSS. Missing observations
+  need explicit reasons, not inferred values.
+
+The draft design below is retained for revision, not approved as-is. Preserve
+D1-D6 and the reconcile, low-risk dev and test-heavy dev acceptance subjects.
+Resolve the review findings, regenerate the Spec Kit plan/tasks from the
+corrected contract, and obtain a new review before implementation. Do not
+substitute a reservation dashboard for the full attributable-telemetry goal or
+claim that the separate aggregate budget widget completes D1/D2.
 
 ## 0. Product
 
@@ -152,7 +188,9 @@ behavioral evidence; no slice may claim savings from canceled, skipped, missing,
 
 ### Slice 1 — emit one idempotent Factory phase-cost record
 
-**Topics:** `infra`, `test`
+**Topics:** `infra`, `data`, `test`
+
+<!-- TODO(handoff): Resolve the identity, allocation, transport, closure and migration-gate findings in this spec's pass-2 review before S1 implementation. The matching proposal 2026-08-22-ci-compute-savings-bun-test-roadmap.md retains the complete goal and recovery evidence. -->
 
 Define `PhaseCostRecordV1` in a new pure module. Populate it from runner-observed phase boundaries,
 harness output parsed as `unknown`, test command/result artifacts, container stats where available,
