@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-26T09:17:02.790Z",
+	"generatedAt": "2026-10-26T09:47:13.890Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -41612,38 +41612,6 @@
 			"scoredAt": "2026-10-26T03:33:02.754Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The candidate is a deployment-health tracker but the content is a routine feature commit message with no deployment failure, outage, or health signal described.",
-			"evidence": [
-				"summary is a commit message: 'feat(whatsapp): members can /new and /reset their own agent session (#361)'",
-				"tags only list 'deployment' with no incident or metric cited"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T07:47:24.994Z"
-		},
-		{
 			"key": "issue:minion-meta#541",
 			"kind": "issue",
 			"stage": "proposal",
@@ -42711,7 +42679,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "07bdf1ff123fccc6af744978ca506f1051909bf2c284030a2614544c3646048f",
+			"sourceFingerprint": "8acb6f2cdebd17d5687c6b45208c859f0c7360f23b79878f1940130a2343f545",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -42721,19 +42689,19 @@
 			},
 			"readiness": {
 				"specification": 1,
-				"implementation": 1
+				"implementation": 0
 			},
-			"confidence": 7,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The sweep scanned its own rankings index data file and matched quoted text fragments inside other entries' JSON strings, not real TODO(handoff) code markers.",
+			"rationale": "This is a self-referential sweep flagging text fragments inside rankings/index.json itself (the ranking tool's own output), not real TODO(handoff) markers in source code.",
 			"evidence": [
-				"target file is rankings/index.json, a generated artifact not source code",
-				"quoted 'markers' are JSON string fragments (e.g. rationale/evidence text), not TODO(handoff) comments"
+				"All cited locations are rankings/index.json lines, the ranking output file, not application source",
+				"Quoted fragments are disjointed excerpts from unrelated past entries, not coherent open-item descriptions"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T06:19:35.436Z"
+			"scoredAt": "2026-10-26T09:47:13.722Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
