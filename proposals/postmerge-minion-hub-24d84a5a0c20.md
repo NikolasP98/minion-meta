@@ -40,3 +40,8 @@ This TODO marks incomplete work on the adjustment/transfer entries UI—specific
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/603
 - file: `src/routes/(app)/stock/entries/new/PageBody.svelte`
 - checked: 2026-10-26
+
+## Merged from handoff-minion-hub-2965398104
+
+- line anchor: `src/routes/(app)/stock/entries/new/PageBody.svelte:853`
+- https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/entries/new/PageBody.svelte#L853
