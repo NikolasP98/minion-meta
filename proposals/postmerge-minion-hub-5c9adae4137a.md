@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-5c9adae4137a
 title: "Post-merge finding — scan-gap in src/server/services/crm-contacts.service.ts (minion_hub)"
-status: draft
+status: review
 created: 2026-10-26
 updated: 2026-10-26
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `src/server/services/crm-contacts.service.ts`

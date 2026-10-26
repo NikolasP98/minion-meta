@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-777c7720745d
 title: "Post-merge finding — scan-gap in src/routes/(app)/sales/[id]/+page.svelte (minion_hub)"
-status: draft
+status: review
 created: 2026-10-26
 updated: 2026-10-26
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `src/routes/(app)/sales/[id]/+page.svelte`

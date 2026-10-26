@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-cbe5a42fe190
 title: "Post-merge finding — todo-handoff in src/lib/components/layout/NavContextMenu.svelte (minion_hub)"
-status: draft
+status: review
 created: 2026-10-26
 updated: 2026-10-26
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+duplicate_candidate: handoff-minion-hub-2492030615
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/components/layout/NavContextMenu.svelte`

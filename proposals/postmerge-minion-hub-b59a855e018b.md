@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-b59a855e018b
 title: "Post-merge finding — scan-gap in src/routes/(app)/socials/+page.server.ts (minion_hub)"
-status: draft
+status: review
 created: 2026-10-26
 updated: 2026-10-26
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `src/routes/(app)/socials/+page.server.ts`
