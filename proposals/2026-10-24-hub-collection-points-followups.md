@@ -83,3 +83,7 @@ Still open (not blocking):
 32. **The follow-up activity row is partly English.** It shows the raw English gateway error ("No gateway configured…") in the Spanish UI, and a date format (25/10/26) that differs from the rest of the page.
 33. **Topbar notification labels are hardcoded English.** `Topbar.svelte` uses the aria-label "N notifications" and the title "Notifications". This predates the stack.
 34. **Shared `@minion-stack/ui` Input labels say "required" in English** on the public booking and intake forms. This predates the stack.
+
+## Owner rule 2026-10-26: AI features are premium
+
+35. **The FAQ door's AI draft ("Proponer desde conversaciones") is not behind a premium gate.** The hub has no plan or entitlement model; a grep for premium, entitlement and plan tier finds nothing. Everything else in the doors feature is base-plan: doors, forms, attribution, next offers (SQL ranking, no model), fixed-template follow-ups, and FAQ and offer pages. Before gating it, the owner needs to decide where the premium flag lives (per-org plan column, Infisical, or billing provider) and what a base-plan user sees: hide the button, or show it with an upgrade prompt.
