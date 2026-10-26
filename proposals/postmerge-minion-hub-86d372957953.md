@@ -1,13 +1,14 @@
 ---
 id: postmerge-minion-hub-86d372957953
 title: "Post-merge finding — todo-handoff in src/routes/(app)/pos/sell/+page.svelte (minion_hub)"
-status: review
+status: closed
 duplicate_candidate: handoff-minion-hub-1975235460
 created: 2026-10-05
-updated: 2026-10-05
+updated: 2026-10-26
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still review — closing"
 ---
 
 > Reconciliation note: `handoff-minion-hub-1975235460` is a handoff-ledger
