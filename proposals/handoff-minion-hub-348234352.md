@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-348234352
 title: Handoff marker — src/routes/(app)/stock/entries/new/+page.svelte (minion_hub)
-status: review
+status: closed
 created: 2026-09-17
 updated: 2026-10-26
 repos: [minion-hub]
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/routes/(app)/stock/entries/new/+page.svelte:851` — on adjustment/transfer entries (5 columns: item, qty,
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/entries/new/+page.svelte#L851
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-26; the sweep closed this proposal.

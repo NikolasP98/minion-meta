@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-191614546
 title: Handoff marker — src/routes/(app)/stock/entries/[id]/+page.svelte (minion_hub)
-status: review
+status: closed
 created: 2026-09-26
 updated: 2026-10-26
 repos: [minion-hub]
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/routes/(app)/stock/entries/[id]/+page.svelte:160` — the sideways-page overflow this card showed was fixed in
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/entries/[id]/+page.svelte#L160
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-26; the sweep closed this proposal.
