@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-26T12:17:06.387Z",
+	"generatedAt": "2026-10-26T12:36:55.817Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6036,8 +6036,8 @@
 			"repo": "minion_hub",
 			"title": "#602 feat(nav): choose which roles can open each page or section from its right-click \"Access…\" menu (S5)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/602",
-			"sourceUpdatedAt": "2026-10-26T06:23:53Z",
-			"sourceFingerprint": "6b9e0fb2a6d114a9cd5220e66480fd73d5deeb7b5386f8ee91acef0627976305",
+			"sourceUpdatedAt": "2026-10-26T12:33:49Z",
+			"sourceFingerprint": "fb1d32fbcc5bdb2f47d8511771a9fea98a1476e99091b6173b36a53044a97955",
 			"score": 59,
 			"band": "medium",
 			"axes": {
@@ -6046,20 +6046,23 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Security-tagged RBAC access-control feature is clearly scoped against spec 037 with an explicit allowlist mechanism, ready for owner-gated merge.",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-117cf0f5016e",
+				"proposal:postmerge-minion-hub-cbe5a42fe190"
+			],
+			"rationale": "Draft PR implementing the spec-037 PageAccessDialog with a strict allowlist and security gating is substantially complete and ready for owner review/merge.",
 			"evidence": [
-				"PageAccessDialog + /api/roles/overrides strict allowlist",
-				"explicitly security-tagged: owner approves and merges"
+				"\"Stacked on #600 (S4). Spec 037 (meta #885). Security-tagged: owner approves and merges.\"",
+				"\"/api/roles/overrides accepts page:/section: keys through a strict allowlist\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T06:48:05.926Z"
+			"scoredAt": "2026-10-26T12:36:55.662Z"
 		},
 		{
 			"key": "pr:minion-meta#891",
@@ -21988,38 +21991,6 @@
 			"scoredAt": "2026-10-22T23:06:45.901Z"
 		},
 		{
-			"key": "pr:minion_hub#600",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#600 feat(nav): right-click the sidebar to copy, duplicate, move, rename, hide or delete pages and sections (S4)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/600",
-			"sourceUpdatedAt": "2026-10-26T06:20:19Z",
-			"sourceFingerprint": "12bbe985f2c71cc1be099d8485dc94b1e26abb980f0d5418ca45d7a1fe534227",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Sidebar context-menu feature is scoped to a referenced spec with passing targeted tests, though visual verification was skipped.",
-			"evidence": [
-				"vitest run ... all green incl. new NavContextMenu.mounted.test.ts (6 cases)",
-				"PR states no browser screenshots were run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T06:48:05.926Z"
-		},
-		{
 			"key": "pr:minion_hub#612",
 			"kind": "pr",
 			"stage": "development",
@@ -36822,39 +36793,6 @@
 			"scoredAt": "2026-10-22T23:39:36.979Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a single merged WhatsApp session-reset commit framed as a deployment-health candidate with no actual health signal or incident described.",
-			"evidence": [
-				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"status: unknown",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T10:17:15.092Z"
-		},
-		{
 			"key": "issue:minion-meta#461",
 			"kind": "issue",
 			"stage": "proposal",
@@ -38489,6 +38427,38 @@
 			"scoredAt": "2026-10-21T04:57:54.316Z"
 		},
 		{
+			"key": "run:minion_hub#40323505424",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/40323505424",
+			"sourceUpdatedAt": "2026-10-26T12:34:01Z",
+			"sourceFingerprint": "1e8b5b2284aa11b90a5db1ea5fcad129f8f300b6ee0a8038caef1bba54753f69",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master, not an actionable goal in itself.",
+			"evidence": [
+				"\"push on master\"",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T12:36:55.662Z"
+		},
+		{
 			"key": "issue:minion-meta#573",
 			"kind": "issue",
 			"stage": "proposal",
@@ -39514,6 +39484,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T05:18:13.024Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-117cf0f5016e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/NavContextMenu.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-117cf0f5016e.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "fe165cd25bd2bef78a08dbc2a580b73ab7efd3959975253e928a5c978a08c2e9",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion_hub#602",
+				"proposal:postmerge-minion-hub-cbe5a42fe190"
+			],
+			"rationale": "This TODO finding about the missing Access… menu item is already being resolved by the in-flight S5 PageAccessDialog PR in this same batch.",
+			"evidence": [
+				"\"Access…\" (users:manage) is omitted until S5 ships PageAccessDialog — add `access` here.",
+				"merged PR #600, file NavContextMenu.svelte"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T12:36:55.662Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-119942b6f8e8",
@@ -41508,6 +41513,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T06:47:43.480Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-cbe5a42fe190",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/NavContextMenu.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-cbe5a42fe190.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "7aa82fb4b24528375418b312586e087be68c41e865596cae0cd31ee70a11f589",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-117cf0f5016e",
+				"pr:minion_hub#602"
+			],
+			"rationale": "Duplicate finding on the same TODO marker/file as the other proposal, with a speculative auto-diagnosis (unverified Svelte 5 migration claim) and no independent implementation evidence.",
+			"evidence": [
+				"same file NavContextMenu.svelte, same merged PR #600",
+				"diagnosis text speculates \"Svelte 5 migration issue\" without supporting evidence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T12:36:55.662Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d898dabc7265",
