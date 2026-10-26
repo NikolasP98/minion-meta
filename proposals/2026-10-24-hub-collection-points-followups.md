@@ -41,3 +41,30 @@ These were left out of spec 041 on purpose. Each one gets a matching `TODO(hando
 18. **Offer door gaps (S6).** `fin_products` has no description, so items show name, category and price only. A booking link whose scheduling module is off still renders "Reservar".
 19. **Next-offers ranking is unproven on real volume.** S3's ranking SQL was only asserted on text in unit tests; the live check caught an array-binding bug (fixed). Add a `*.sql.integration.test.ts` against the QA DB (never prod; see the `HUB_TEST_DB_URL` guard).
 20. **FAQ drafting happy path untested with a real model key.** `dev:local` blanks `OPENROUTER_API_KEY`; only the 503 "IA no configurada" path was proven live.
+
+## Verified 2026-10-25 (amendment A)
+
+21. **17c confirmed:** the netcup crontab runs the jobs tick at `15-59/30 * * * *` (every 30 min at :15 and :45), not every 10 min. A follow-up can go out up to 30 min after it is due. Acceptable for a follow-up measured in hours. Change the crontab only if a door needs tighter timing; the `system-automations` manifest still says 10 min and should be corrected.
+
+## Amendment A shipped (F1–F3, hub 2026-10-25): resolved and remaining
+
+**Resolved by F1–F3:**
+- 2: the switch only; the `_messaging_opt_out` rename stays open.
+- 3, 6, 7, 8, 9, 10, 12, 14 (both `/d/` and `/book/`), 15, 16 (form door), 17a, 17b, 17c (manifest now `half_hourly`), 18b, 19.
+
+**Found and fixed along the way:**
+- **Next-offers co-buyers.** `not (mine)` evaluated to NULL whenever `party_id` or `crm_contact_id` was NULL, so every co-buyer was dropped. Now `is not true`; caught by the new integration test.
+- **Server renders stuck in English.** `locale.svelte.ts` called `setLanguageTag` at module load, which overrides paraglide's per-request getter process-wide once any route renders on the server. Now browser-only.
+- **Content-contract ratchet failures from S3/S5/S6.** Offer prices now use `formatMoney`, and the Spanish copy is aligned with existing translations.
+
+**Still open:**
+
+22. **Error-page body on `/d/` and `/book/` renders on the client.** The status code is a real 404, but the `+error.svelte` body and its `noindex` render client-side. Fix: `ssr = true` in a new `d/[slug]/+layout.ts`, which is a new route file and means updating the manifest and all 6 counts.
+23. **Root layout state shared on the server.** The root layout's module-level stores (theme, ui, hosts) are now loaded on the server for `/d/` and `/book/`, where one copy serves every request. They are read-only on these pages today. Any future write during render would leak between requests.
+24. **`/book` still uses the per-instance in-memory limiter.** One line switches it to `checkSharedRateLimit`.
+25. **Rate-limit bucket sweep runs inline.** `shared-rate-limit.ts` sweeps on about 1 call in 100 (marked `shortcut:`). Move it to the jobs tick if the table grows.
+26. **`staff_replied` counts any outbound message,** including bot or agent replies. The owner should confirm whether bot replies should count.
+27. **`resolveCrmContact` catch.** It would still leave the transaction aborted if the CRM tables were missing (`TODO(handoff)` in `crm-contact-ensure.ts`).
+28. **Notification copy is fixed Spanish.** The door-submission notification title and body are fixed Spanish, like the other inbox rules, with no per-viewer locale.
+29. **Opt-out flag is not masked.** A field-masked principal still sees `_reminders_opt_out`; masking covers PII keys only.
+30. **Offer click counts are approximate,** because the click limiter is per-lambda and sendBeacon is best-effort.
