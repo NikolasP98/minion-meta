@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-26T14:17:18.953Z",
+	"generatedAt": "2026-10-26T14:47:28.426Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -34945,39 +34945,6 @@
 			"scoredAt": "2026-10-21T21:57:40.156Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged whatsapp session-reset authorization commit with no reported deployment failure or health signal gives little basis for urgent action.",
-			"evidence": [
-				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"status: unknown",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T14:17:18.813Z"
-		},
-		{
 			"key": "issue:minion-meta#566",
 			"kind": "issue",
 			"stage": "proposal",
@@ -36254,6 +36221,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:56:18.312Z"
+		},
+		{
+			"key": "issue:minion-meta#898",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#898 [monitor:unstick] rank run e5bba43a: batch 5 provider exhaustion",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/898",
+			"sourceUpdatedAt": "2026-10-26T14:17:28Z",
+			"sourceFingerprint": "1170646cec5af21b3cd4cb19e571864d3df01e7f5e5c17dd07fc0d280440fd18",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Transient provider exhaustion on one batch of a ranking run, with batches 1-4 persisted cleanly and no corruption, so the fix is an operational retry rather than a trackable engineering goal.",
+			"evidence": [
+				"Batches 1-4 of 5 completed cleanly via shadow provider",
+				"Batch 5 failed due to both bounded providers returning unavailable/invalid JSON, exit_code 1",
+				"Recommendation in the alert itself is to retry the run, not to ship code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T14:47:28.260Z"
 		},
 		{
 			"key": "pr:minion-meta#838",
