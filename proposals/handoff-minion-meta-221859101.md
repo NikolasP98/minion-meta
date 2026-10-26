@@ -95,5 +95,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32106
 - `NikolasP98/minion-meta@dev rankings/index.json:34440` — ?booking= deep-link query param is not wired into the",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34440
-- `NikolasP98/minion-meta@dev rankings/index.json:37599` — other consumption-mapping surfaces (e.g.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37599
+- `NikolasP98/minion-meta@dev rankings/index.json:37632` — other consumption-mapping surfaces (e.g.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37632
