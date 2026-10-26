@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-26T07:17:46.130Z",
+	"generatedAt": "2026-10-26T07:47:25.140Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -29184,6 +29184,38 @@
 			"scoredAt": "2026-10-24T02:17:53.760Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-e6dfb5bc8792",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e6dfb5bc8792.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "b4d372c1266f074b492656a019e66ba03f0ab74b94cf783949c3fc9a5fb71550",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A single-file test gap in the POS service's memoisation logic has a clear diagnosis and a concrete, bounded fix (add a unit test covering cache-hit, cache-key, and distinct-argument behavior).",
+			"evidence": [
+				"marker: 'no dedicated unit test for this function's memoisation' in pos.service.ts",
+				"diagnosis gives explicit fix direction: verify cached instance reuse, distinct results, and cache key correctness"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T07:47:24.994Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-ec72b2caa7d2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32417,38 +32449,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T01:48:29.522Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-e6dfb5bc8792",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e6dfb5bc8792.md",
-			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "b4d372c1266f074b492656a019e66ba03f0ab74b94cf783949c3fc9a5fb71550",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is an approved, narrowly-scoped unit-test addition with a concrete three-point test plan guarding against silent memoisation regressions.",
-			"evidence": [
-				"Add a unit test that verifies: (1) repeated calls ... return the same cached instance",
-				"Memoisation is a performance optimization that's easy to break silently"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T07:26:20.790Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e7566401f3cf",
@@ -39766,19 +39766,19 @@
 			},
 			"readiness": {
 				"specification": 4,
-				"implementation": 5
+				"implementation": 3
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The handoff marker text is truncated mid-sentence so the exact wrapper requirement is unclear despite approval status.",
+			"rationale": "The TODO marker text is truncated mid-sentence so the actual scope of the requested wrapping change is unclear despite an approved status.",
 			"evidence": [
-				"TODO(handoff): brief-debloat-c §3 asked for this to be wrapped in",
-				"exports several functions without an enclosing class or factory wrapper"
+				"marker text cuts off at 'asked for this to be wrapped in'",
+				"diagnosis only notes functions are exported without an enclosing class or factory wrapper"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T07:26:20.790Z"
+			"scoredAt": "2026-10-26T07:47:24.994Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b6fd4bd15db2",
@@ -41610,6 +41610,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:33:02.754Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 19,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The candidate is a deployment-health tracker but the content is a routine feature commit message with no deployment failure, outage, or health signal described.",
+			"evidence": [
+				"summary is a commit message: 'feat(whatsapp): members can /new and /reset their own agent session (#361)'",
+				"tags only list 'deployment' with no incident or metric cited"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T07:47:24.994Z"
 		},
 		{
 			"key": "issue:minion-meta#541",
