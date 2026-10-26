@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-26T06:19:35.609Z",
+	"generatedAt": "2026-10-26T06:48:06.123Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2167,8 +2167,8 @@
 			"repo": "minion_hub",
 			"title": "#605 feat(rbac): every hub screen now checks the role can view its data before loading it (S5)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/605",
-			"sourceUpdatedAt": "2026-10-26T05:13:31Z",
-			"sourceFingerprint": "1f3b3c6e025417196fc60ede8a5c03205dbe982200163dd3cb12e9451fed96fa",
+			"sourceUpdatedAt": "2026-10-26T06:22:46Z",
+			"sourceFingerprint": "a7d1f918238c2218d4ef311628548089957901e79ad877d59f25b2ac4ea81ff0",
 			"score": 69,
 			"band": "medium",
 			"axes": {
@@ -2178,19 +2178,19 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Closes a real gap (22 unchecked page loads) with a decrease-only ratchet enforcing capability checks across every hub module, already verified locally.",
+			"rationale": "This closes a measured, broad unchecked-data-access gap across the whole hub app with heavy local verification already done.",
 			"evidence": [
-				"unchecked page/layout loads ratchet 22 → 0 files",
-				"604 targeted tests plus layout shell-read regression test verified locally"
+				"ratchet: unchecked page/layout loads 22 → 0 files",
+				"604 targeted tests plus regression test; bun run check 0 errors"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T05:18:13.024Z"
+			"scoredAt": "2026-10-26T06:48:05.926Z"
 		},
 		{
 			"key": "pr:minion_hub#606",
@@ -6028,6 +6028,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:24:08.834Z"
+		},
+		{
+			"key": "pr:minion_hub#602",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#602 feat(nav): choose which roles can open each page or section from its right-click \"Access…\" menu (S5)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/602",
+			"sourceUpdatedAt": "2026-10-26T06:23:53Z",
+			"sourceFingerprint": "6b9e0fb2a6d114a9cd5220e66480fd73d5deeb7b5386f8ee91acef0627976305",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Security-tagged RBAC access-control feature is clearly scoped against spec 037 with an explicit allowlist mechanism, ready for owner-gated merge.",
+			"evidence": [
+				"PageAccessDialog + /api/roles/overrides strict allowlist",
+				"explicitly security-tagged: owner approves and merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T06:48:05.926Z"
 		},
 		{
 			"key": "pr:minion-meta#891",
@@ -10287,14 +10319,14 @@
 			"scoredAt": "2026-10-22T23:37:43.569Z"
 		},
 		{
-			"key": "pr:minion_hub#602",
+			"key": "pr:minion (gateway)#322",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#602 feat(nav): choose which roles can open each page or section from its right-click \"Access…\" menu (S5)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/602",
-			"sourceUpdatedAt": "2026-10-26T05:42:12Z",
-			"sourceFingerprint": "c10d194ae898719ba4c465a6d872c4d64677afde3562bd96cb0cd4d05108686c",
+			"repo": "minion (gateway)",
+			"title": "#322 test(ci): qualify Windows process cleanup with Job Objects",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/322",
+			"sourceUpdatedAt": "2026-10-12T06:19:36Z",
+			"sourceFingerprint": "b387049779cd7712b6554943a71af77fa46bf6bd81f65ffc84f95b8030993a35",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -10303,23 +10335,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 8,
 				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#600"
-			],
-			"rationale": "Security-tagged per-role page access control requiring owner merge, stacked on the sidebar context-menu PR.",
+			"relatedKeys": [],
+			"rationale": "Windows CI qualification work is well-specified against a named spec with extensive validation already passing, pending only the first native Windows run.",
 			"evidence": [
-				"Security-tagged: owner approves and merges",
-				"Stacked on #600 (S4)",
-				"/api/roles/overrides accepts page:/section: keys through a strict allowlist"
+				"cites spec 2026-10-11-gateway-windows-process-evidence-correction-spec.md",
+				"pnpm check passes; native Win32 run explicitly still pending before qualification claim"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T06:18:08.232Z"
+			"scoredAt": "2026-10-26T06:48:05.926Z"
 		},
 		{
 			"key": "pr:minion_hub#614",
@@ -17643,39 +17672,6 @@
 			"scoredAt": "2026-10-22T23:28:55.735Z"
 		},
 		{
-			"key": "pr:minion (gateway)#322",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#322 test(ci): qualify Windows process cleanup with Job Objects",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/322",
-			"sourceUpdatedAt": "2026-10-12T06:19:36Z",
-			"sourceFingerprint": "b387049779cd7712b6554943a71af77fa46bf6bd81f65ffc84f95b8030993a35",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Draft PR cites a spec, extensive passing validation, and bounded remaining work (first hosted Windows run) making it actionable now.",
-			"evidence": [
-				"Spec: META/specs/2026-10-11-gateway-windows-process-evidence-correction-spec.md",
-				"helper contract tests 25/25 pass, workflow admission tests 32/32 pass",
-				"native Win32 behavior intentionally still pending first hosted Windows run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T06:25:56.928Z"
-		},
-		{
 			"key": "pr:minion_hub#580",
 			"kind": "pr",
 			"stage": "development",
@@ -20532,6 +20528,74 @@
 			"scoredAt": "2026-10-22T23:38:36.951Z"
 		},
 		{
+			"key": "issue:minion-meta#896",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#896 [monitor:unstick] rank run 04896778 failed: both bounded providers invalid JSON on batch 2",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/896",
+			"sourceUpdatedAt": "2026-10-26T06:17:34Z",
+			"sourceFingerprint": "c3ddb7f6b2c3c5562cc666d9e678c0f262633a63fd21a2e9829f0218c2c09cf0",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#897"
+			],
+			"rationale": "This alert and #897 describe the same recurring bounded-provider invalid-JSON fault across near-identical rank-run failures and should become one consolidated investigation goal.",
+			"evidence": [
+				"third of three near-identical failures within ~2.5 hours (also 40ef2240, 3709fd31)",
+				"recommendation in the alert itself: retry; escalate if recurring"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T06:48:05.926Z"
+		},
+		{
+			"key": "issue:minion-meta#897",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#897 [monitor:unstick] rank run 40ef2240 failed: both bounded providers invalid JSON on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/897",
+			"sourceUpdatedAt": "2026-10-26T06:17:37Z",
+			"sourceFingerprint": "5ce6b8f7ef5f5536239eadb9bf0e5e0c416a7a5c491598e4897f6ec46ab5da03",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#896"
+			],
+			"rationale": "Same recurring bounded-provider invalid-JSON fault as #896; separate tracking fragments a single underlying pipeline reliability issue.",
+			"evidence": [
+				"first chronologically of three near-identical failures",
+				"suggests escalation as a provider-side or prompt-schema issue rather than one-off retries"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T06:48:05.926Z"
+		},
+		{
 			"key": "pr:minion (gateway)#256",
 			"kind": "pr",
 			"stage": "development",
@@ -21889,6 +21953,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:06:45.901Z"
+		},
+		{
+			"key": "pr:minion_hub#600",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#600 feat(nav): right-click the sidebar to copy, duplicate, move, rename, hide or delete pages and sections (S4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/600",
+			"sourceUpdatedAt": "2026-10-26T06:20:19Z",
+			"sourceFingerprint": "12bbe985f2c71cc1be099d8485dc94b1e26abb980f0d5418ca45d7a1fe534227",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Sidebar context-menu feature is scoped to a referenced spec with passing targeted tests, though visual verification was skipped.",
+			"evidence": [
+				"vitest run ... all green incl. new NavContextMenu.mounted.test.ts (6 cases)",
+				"PR states no browser screenshots were run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T06:48:05.926Z"
 		},
 		{
 			"key": "pr:minion_hub#612",
@@ -24515,41 +24611,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:37:43.569Z"
-		},
-		{
-			"key": "pr:minion_hub#600",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#600 feat(nav): right-click the sidebar to copy, duplicate, move, rename, hide or delete pages and sections (S4)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/600",
-			"sourceUpdatedAt": "2026-10-26T05:42:13Z",
-			"sourceFingerprint": "6d570bf423c8b2eb7765da6dd549991caadfd47c40a865f4fe621093b15cf18f",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#602"
-			],
-			"rationale": "Well-specified sidebar context-menu feature with gates and tests green, stacked beneath the related access-control PR.",
-			"evidence": [
-				"Stacked on #598 (S3)",
-				"vitest run ... NavContextMenu.mounted.test.ts (6 cases) green",
-				"i18n:compile, lint:design, lint:tokens all exit 0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T06:18:08.232Z"
 		},
 		{
 			"key": "proposal:2026-08-28-meta-routing-pr100-recovery",
@@ -28793,39 +28854,6 @@
 			"scoredAt": "2026-10-22T23:41:10.421Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-644a4610559d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-644a4610559d.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "99e4b4c19727639ae5b3dd0132a1f099e1a13df16a07b9d24066274ff09f8414",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A concrete code-level TODO describing a REST-semantics bug (GET param triggers state init but submit is POST) with a clear, bounded fix direction, distinct from the scan-gap duplicates.",
-			"evidence": [
-				"explicit TODO(handoff) marker in PageBody.svelte",
-				"form opened via ?new=1 but submitted via POST",
-				"fix direction: redirect to GET after POST success"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T05:19:28.471Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-7103ac983198",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31805,6 +31833,38 @@
 			"scoredAt": "2026-10-24T05:17:29.819Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-644a4610559d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-644a4610559d.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "6868561c387be82fd345408a0ac48f1175e11695ef0aebe94851488025afd484",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-diagnosed REST-semantics bug (GET-initialized form submitted via POST) with a concrete, already-approved fix direction.",
+			"evidence": [
+				"diagnosis identifies GET/POST semantics conflation",
+				"fix direction: redirect to fresh GET after POST success"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T06:48:05.926Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-7361920573d8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34657,38 +34717,6 @@
 			"scoredAt": "2026-10-23T09:26:34.130Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-7ad076c39cbe",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/[contactId]/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ad076c39cbe.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "3224a0327ca419abd2d3a30d26117606bf6c214ef4d0e075e2bde433b9fdffa2",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A concrete but narrow UI regression (lost mailto link for custom fields) with no clear scope on which fields or how widely it's hit.",
-			"evidence": [
-				"TODO marker: 'additional custom fields lose their mailto link'",
-				"file: crm/[contactId]/PageBody.svelte"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T05:20:19.437Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-e10f8d3cc4ce",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36791,6 +36819,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:39:36.979Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry is just a quoted merged-commit message with no distinct problem or scope defined.",
+			"evidence": [
+				"summary is a commit log for #361 (whatsapp session reset), not a stated goal",
+				"no explicit outcome or deadline given"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T06:48:05.926Z"
 		},
 		{
 			"key": "issue:minion-meta#461",
@@ -39654,6 +39714,38 @@
 			"scoredAt": "2026-10-21T21:57:09.402Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-90633259e252",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-90633259e252.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "48c9f1c19453d17df11c558319f7d9da32c191a9790256552f52300ea74e630c",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Like the mailto-link finding, the auto-diagnosis here dumps raw read/grep tool-call syntax instead of real analysis of the type mismatch.",
+			"evidence": [
+				"Diagnosis shows unresolved invoke blocks, no analysis text",
+				"marker: 'FilterValue (component) ⇄ TableFilterValue (kit) is a generic'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T06:48:05.926Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-a271953da5c9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41218,14 +41310,14 @@
 			"scoredAt": "2026-10-24T01:48:29.522Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-90633259e252",
+			"key": "proposal:postmerge-minion-hub-7ad076c39cbe",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-90633259e252.md",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/[contactId]/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ad076c39cbe.md",
 			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "40ffebcc6c58742ad8ce8f5c2998983cca44ff949e2a1acd3ad382200c117236",
+			"sourceFingerprint": "bd8a054be6ed3d0b389c9696e2f45f64a3114e8e2d49887bbf4e1553fc2a964d",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -41238,16 +41330,16 @@
 				"implementation": 2
 			},
 			"confidence": 3,
-			"recommendation": "reframe",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The marker text itself is truncated mid-sentence, leaving the actual problem unclear, so the finding needs to be re-specified before any work can be scoped.",
+			"rationale": "The auto-generated diagnosis only shows unresolved tool-call syntax rather than actual analysis, so this finding isn't actionable as specified.",
 			"evidence": [
-				"marker text cuts off: 'FilterValue (component) ⇄ TableFilterValue (kit) is a generic'",
-				"no diagnosis beyond unexecuted read/grep calls"
+				"Diagnosis section contains only function_calls/invoke blocks, no conclusion",
+				"marker only names the symptom: 'additional custom fields lose their mailto link'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T05:20:19.437Z"
+			"scoredAt": "2026-10-26T06:48:05.926Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
