@@ -49,20 +49,20 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12980
 - `NikolasP98/minion-meta@dev rankings/index.json:13614` — an all-or-nothing variant needs setBookingStatus",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13614
-- `NikolasP98/minion-meta@dev rankings/index.json:15506` — drizzle/0008_workshop_thumbnail.sql",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15506
-- `NikolasP98/minion-meta@dev rankings/index.json:18295` — RUC parties created BEFORE 2026-09-17 are unverified",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18295
-- `NikolasP98/minion-meta@dev rankings/index.json:18817` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18817
-- `NikolasP98/minion-meta@dev rankings/index.json:21254` — \"Access…\" omitted until S5 ships PageAccessDialog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21254
-- `NikolasP98/minion-meta@dev rankings/index.json:21456` — a full per-handler audit of the remaining requireAdmin",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21456
-- `NikolasP98/minion-meta@dev rankings/index.json:21491` — Qualify provider sign-in and file drops in installed OS webviews",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21491
-- `NikolasP98/minion-meta@dev rankings/index.json:21657` — HC-028 hand-rolled modal; migrate to shared Dialog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21657
+- `NikolasP98/minion-meta@dev rankings/index.json:15474` — drizzle/0008_workshop_thumbnail.sql",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15474
+- `NikolasP98/minion-meta@dev rankings/index.json:18263` — RUC parties created BEFORE 2026-09-17 are unverified",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18263
+- `NikolasP98/minion-meta@dev rankings/index.json:18785` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18785
+- `NikolasP98/minion-meta@dev rankings/index.json:21222` — \"Access…\" omitted until S5 ships PageAccessDialog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21222
+- `NikolasP98/minion-meta@dev rankings/index.json:21424` — a full per-handler audit of the remaining requireAdmin",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21424
+- `NikolasP98/minion-meta@dev rankings/index.json:21459` — Qualify provider sign-in and file drops in installed OS webviews",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21459
+- `NikolasP98/minion-meta@dev rankings/index.json:21625` — HC-028 hand-rolled modal; migrate to shared Dialog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21625
 - `NikolasP98/minion-meta@dev rankings/index.json:22352` — drop column (proposal #16)",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22352
 - `NikolasP98/minion-meta@dev rankings/index.json:22416` — this hasn't been exercised against a live local Supabase",
@@ -89,11 +89,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28942
 - `NikolasP98/minion-meta@dev rankings/index.json:29006` — the owner also asked to configure this \"via agent builder\"",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29006
-- `NikolasP98/minion-meta@dev rankings/index.json:31433` — the Price cell still formats with formatMoney's PEN",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31433
-- `NikolasP98/minion-meta@dev rankings/index.json:31664` — onArtifactCallback/onChoice are NOT routed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31664
-- `NikolasP98/minion-meta@dev rankings/index.json:34223` — ?booking= deep-link query param is not wired into the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34223
-- `NikolasP98/minion-meta@dev rankings/index.json:37857` — other consumption-mapping surfaces (e.g.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37857
+- `NikolasP98/minion-meta@dev rankings/index.json:31465` — the Price cell still formats with formatMoney's PEN",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31465
+- `NikolasP98/minion-meta@dev rankings/index.json:31696` — onArtifactCallback/onChoice are NOT routed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31696
+- `NikolasP98/minion-meta@dev rankings/index.json:34255` — ?booking= deep-link query param is not wired into the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34255
+- `NikolasP98/minion-meta@dev rankings/index.json:37888` — other consumption-mapping surfaces (e.g.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37888
