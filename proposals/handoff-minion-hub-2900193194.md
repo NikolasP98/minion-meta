@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2900193194
 title: Handoff marker — src/server/services/nav-config.service.ts (minion_hub)
-status: draft
+status: review
 created: 2026-10-26
 updated: 2026-10-26
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-44dcd134459a
 ---
 
 # Handoff marker — src/server/services/nav-config.service.ts
