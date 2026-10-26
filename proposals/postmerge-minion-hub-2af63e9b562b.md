@@ -40,3 +40,8 @@ The `TODO(handoff)` marker at `src/routes/(app)/pos/appointments/new/PageBody.sv
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/599
 - file: `src/routes/(app)/pos/appointments/new/PageBody.svelte`
 - checked: 2026-10-26
+
+## Merged from handoff-minion-hub-2742849956
+
+- line anchor: `src/routes/(app)/pos/appointments/new/PageBody.svelte:29`
+- https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/appointments/new/PageBody.svelte#L29
