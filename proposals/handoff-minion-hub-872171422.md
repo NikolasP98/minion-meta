@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-872171422
 title: Handoff marker — src/routes/(app)/pos/accounts/+page.svelte (minion_hub)
-status: review
+status: closed
 created: 2026-09-16
 updated: 2026-10-26
 repos: [minion-hub]
@@ -31,3 +31,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/accounts/+page.svelte#L137
 - `NikolasP98/minion_hub@master src/routes/(app)/pos/accounts/+page.svelte:166` — the link targets /pos/sell, so a role holding
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/accounts/+page.svelte#L166
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-10-26; the sweep closed this proposal.
