@@ -68,3 +68,18 @@ These were left out of spec 041 on purpose. Each one gets a matching `TODO(hando
 28. **Notification copy is fixed Spanish.** The door-submission notification title and body are fixed Spanish, like the other inbox rules, with no per-viewer locale.
 29. **Opt-out flag is not masked.** A field-masked principal still sees `_reminders_opt_out`; masking covers PII keys only.
 30. **Offer click counts are approximate,** because the click limiter is per-lambda and sendBeacon is best-effort.
+
+## Final live QA (2026-10-26, release PR hub #617)
+
+The QA run found two problems, both fixed on the release branch:
+- The bell showed the raw kind key and never the door or contact.
+- The Doors table overflowed at 1440.
+
+The Doors pages also now read through spec 039's `datasetCtx(locals, 'crm')`, which master gained after the stack was cut.
+
+Still open (not blocking):
+
+31. **The owner can't open "Ver todas" in the bell.** It links to `/notifications`, which is `role:admin` (platform admin) in `route-access-registry.ts`, so owners get 403. This predates the doors stack.
+32. **The follow-up activity row is partly English.** It shows the raw English gateway error ("No gateway configured…") in the Spanish UI, and a date format (25/10/26) that differs from the rest of the page.
+33. **Topbar notification labels are hardcoded English.** `Topbar.svelte` uses the aria-label "N notifications" and the title "Notifications". This predates the stack.
+34. **Shared `@minion-stack/ui` Input labels say "required" in English** on the public booking and intake forms. This predates the stack.
