@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-26T04:19:08.008Z",
+	"generatedAt": "2026-10-26T04:48:18.845Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2428,6 +2428,38 @@
 			"scoredAt": "2026-10-22T23:02:37.437Z"
 		},
 		{
+			"key": "issue:minion-meta#895",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#895 [monitor:unstick] rank board goals run 3709fd31 — provider JSON failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/895",
+			"sourceUpdatedAt": "2026-10-26T04:17:46Z",
+			"sourceFingerprint": "ed90bdc8452e40a0cbaa2e9cb727d7c291237a04de21c9689f1390192cc66ce6",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The board-ranking pipeline itself has failed on the identical provider parse-error signature three consecutive hourly runs, with a concrete, actionable next step already identified.",
+			"evidence": [
+				"3rd consecutive identical failure (02:45, 01:45, this run)",
+				"recommends checking provider credentials/rate limits and adding the signature to the host classifier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T04:48:18.674Z"
+		},
+		{
 			"key": "pr:minion_hub#609",
 			"kind": "pr",
 			"stage": "development",
@@ -2863,20 +2895,20 @@
 			"scoredAt": "2026-10-21T17:56:23.716Z"
 		},
 		{
-			"key": "pr:minion_hub#601",
+			"key": "pr:minion_hub#617",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#601 feat(nav): page links open their screen at their own URL, with page access checked (S2)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/601",
-			"sourceUpdatedAt": "2026-10-26T03:39:13Z",
-			"sourceFingerprint": "a13995458888041787d84cbe2bd9b16ebad3f3f108d1e7b864f383e05542a4cc",
+			"title": "#617 feat(crm): doors — every public entry point collects, counts and follows up (spec 041)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/617",
+			"sourceUpdatedAt": "2026-10-26T04:44:17Z",
+			"sourceFingerprint": "33f0e84d65a3d46ec0202f025047f5c38a271ce4a00cb961cd90f7b11de3d84f",
 			"score": 66,
 			"band": "medium",
 			"axes": {
 				"criticality": 6,
-				"importance": 8,
-				"impact": 6
+				"importance": 7,
+				"impact": 7
 			},
 			"readiness": {
 				"specification": 8,
@@ -2885,18 +2917,16 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#604",
-				"pr:minion_hub#605"
+				"pr:minion_hub#614"
 			],
-			"rationale": "Foundational RBAC nav slice (S2) with a verified access matrix that the later S4/S5 slices in this same stack depend on.",
+			"rationale": "This is the fully-verified release PR bundling the entire public-facing doors/CRM funnel (10 slices) with integration tests and live QA across S0-S6 and F1-F3.",
 			"evidence": [
-				"gates: check=0, lint:design=0, lint:tokens=0, targeted vitest=0",
-				"RBAC matrix verified via hooks.tenant.test.ts",
-				"stacked on #597, feeds #604/#605"
+				"bun run check 0 errors; full vitest + integration tests against QA DB",
+				"Live QA on dev:local for S0-S6 and F1-F3; security+data tagged"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T04:18:14.499Z"
+			"scoredAt": "2026-10-26T04:48:18.674Z"
 		},
 		{
 			"key": "pr:minion-factory#199",
@@ -8026,6 +8056,43 @@
 			"scoredAt": "2026-10-21T17:56:23.716Z"
 		},
 		{
+			"key": "pr:minion_hub#602",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#602 feat(nav): choose which roles can open each page or section from its right-click \"Access…\" menu (S5)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/602",
+			"sourceUpdatedAt": "2026-10-26T04:21:31Z",
+			"sourceFingerprint": "05b1f709d7d7c20c7465d14eef8de5d1f92fe881dbce37f6897f2087d87699b8",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#600",
+				"pr:minion_hub#597",
+				"pr:minion_hub#601"
+			],
+			"rationale": "S5's per-role Access dialog closes a real privilege gap (page grants could open /pos/sell to roles without pos:create) but the summary lacks the gates/test evidence the other slices provide.",
+			"evidence": [
+				"\"till's charge is blocked without pos:create\" privilege-gap fix",
+				"no Gates section listed, unlike #597/#598/#600/#601",
+				"security-tagged: owner approves and merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T04:48:18.674Z"
+		},
+		{
 			"key": "pr:minion_site#37",
 			"kind": "pr",
 			"stage": "development",
@@ -10266,34 +10333,32 @@
 			"repo": "minion_hub",
 			"title": "#614 feat(crm): public door pages render on the server — real 404s and FAQ markup search engines can read",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/614",
-			"sourceUpdatedAt": "2026-10-26T04:12:27Z",
-			"sourceFingerprint": "a0741ec75bd8d47808445152477f0e3e740c7656b1b6872fb6ae94e412995e8e",
+			"sourceUpdatedAt": "2026-10-26T04:15:58Z",
+			"sourceFingerprint": "e0520b38e93c139fd120b84260281b2a3b42dd02a34b6e85f9449ff59da1a8d6",
 			"score": 53,
 			"band": "medium",
 			"axes": {
 				"criticality": 5,
-				"importance": 6,
-				"impact": 5
+				"importance": 5,
+				"impact": 6
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#615",
-				"pr:minion_hub#616"
+				"pr:minion_hub#617"
 			],
-			"rationale": "Enables correct SSR 404s and FAQ SEO markup for public doors, with one verification item (Q21) still pending.",
+			"rationale": "Server-rendering public door pages fixes real 404 and SEO gaps and catches a cross-request language-leak bug before it could ship broadly.",
 			"evidence": [
-				"real 404 for missing/expired door/booking links",
-				"FAQPage JSON-LD shipped in raw HTML",
-				"Q21 Vercel preview check 'pending'"
+				"module-level setLanguageTag() would have leaked locale across requests process-wide; now browser-only",
+				"/d/ and /book/ now answer real HTTP 404 with FAQPage JSON-LD in raw HTML"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T04:18:14.499Z"
+			"scoredAt": "2026-10-26T04:48:18.674Z"
 		},
 		{
 			"key": "pr:minion-meta#884",
@@ -11164,40 +11229,6 @@
 			"scoredAt": "2026-10-22T23:23:08.693Z"
 		},
 		{
-			"key": "pr:minion_hub#602",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#602 feat(nav): choose which roles can open each page or section from its right-click \"Access…\" menu (S5)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/602",
-			"sourceUpdatedAt": "2026-10-26T03:21:49Z",
-			"sourceFingerprint": "8879396efba8894a7076e0cb90a8d3b907353600cd6cac35ef6295e8829cce4e",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#600"
-			],
-			"rationale": "Closes a real access-control gap (a page grant could open /pos/sell to a role without pos:create) but the PR body gives no gates/test evidence unlike its sibling slices.",
-			"evidence": [
-				"Till charge blocked without pos:create per summary",
-				"no '## Gates' verification section provided, unlike #597/#598/#600/#601"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:30:39.752Z"
-		},
-		{
 			"key": "proposal:2026-09-29-hub-data-view-container",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11591,6 +11622,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T17:10:01.458Z"
+		},
+		{
+			"key": "pr:minion_hub#601",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#601 feat(nav): page links open their screen at their own URL, with page access checked (S2)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/601",
+			"sourceUpdatedAt": "2026-10-26T04:21:59Z",
+			"sourceFingerprint": "5f265dace5775c55aad94118b962aeb2f194061405a44908607e1fcdcc802522",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#597",
+				"pr:minion_hub#598",
+				"pr:minion_hub#602"
+			],
+			"rationale": "S2 enforces page/floor access on real routes with a documented RBAC test matrix plus live browser verification of 403/404 paths.",
+			"evidence": [
+				"hooks.tenant.test.ts RBAC matrix: granted 200/no-grant 404/floor 403",
+				"Browser QA: Q9, Q11, Q13 confirmed; Q21 still pending"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T04:48:18.674Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -18722,8 +18789,8 @@
 			"repo": "minion_hub",
 			"title": "#597 feat(nav): custom sections and page links — storage, model, API and seed (S1)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/597",
-			"sourceUpdatedAt": "2026-10-26T03:21:49Z",
-			"sourceFingerprint": "1b27fc109973f4db175a389028967fc0e35ed0d8eb9dea60d697888d40736f74",
+			"sourceUpdatedAt": "2026-10-26T04:21:22Z",
+			"sourceFingerprint": "53e3bbd6a9ae5c2f2fbed5f1e432768b11bcd2f24f28b6138fa213382ea40231",
 			"score": 44,
 			"band": "low",
 			"axes": {
@@ -18738,17 +18805,18 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
+				"pr:minion_hub#598",
 				"pr:minion_hub#601",
-				"pr:minion_hub#598"
+				"pr:minion_hub#600"
 			],
-			"rationale": "Foundational S1 slice (storage/model/API) of the nav-sections spec with passing check/vitest/QA-seed gates, needed before S2-S5 can proceed.",
+			"rationale": "S1 of the nav-config spec is the foundational slice that unblocks four stacked PRs and has passing checks, targeted tests and a verified QA seed.",
 			"evidence": [
-				"bun run check exit 0, 621 tests passing",
-				"qa:seed:verify 245/245 passed"
+				"36 files/621 tests + qa:seed:verify 245/245 pass",
+				"S2-S5 stack directly on this PR"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:30:39.752Z"
+			"scoredAt": "2026-10-26T04:48:18.674Z"
 		},
 		{
 			"key": "pr:minion_site#36",
@@ -21708,6 +21776,78 @@
 			"scoredAt": "2026-10-22T23:06:45.901Z"
 		},
 		{
+			"key": "pr:minion_hub#598",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#598 feat(nav): custom sections and page links appear in the sidebar, module mode and the switcher (S3)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/598",
+			"sourceUpdatedAt": "2026-10-26T04:22:22Z",
+			"sourceFingerprint": "5b0ec83b5621a6392a8858533b0c13fe0dfbbd23711893b459e583e465dc0c68",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#597",
+				"pr:minion_hub#600",
+				"pr:minion_hub#601"
+			],
+			"rationale": "S3 nav-surfacing work passes its full gate set but its own browser verification is explicitly deferred as a TODO(handoff) pending S2.",
+			"evidence": [
+				"bun run check/lint/vitest all exit 0 incl new custom-sections-nav.test.ts",
+				"TODO(handoff): run Q9/Q11/Q12 once S2 is merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T04:48:18.674Z"
+		},
+		{
+			"key": "pr:minion_hub#600",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#600 feat(nav): right-click the sidebar to copy, duplicate, move, rename, hide or delete pages and sections (S4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/600",
+			"sourceUpdatedAt": "2026-10-26T04:21:57Z",
+			"sourceFingerprint": "497f4b44a381bd15d48633d0bc4eb6535a3c3b5ffe09bf5a178292e1244810c0",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#598",
+				"pr:minion_hub#597",
+				"pr:minion_hub#602"
+			],
+			"rationale": "S4 context-menu slice has clean gates and tests but leaves browser screenshots and an Access-menu TODO(handoff) for S5 open.",
+			"evidence": [
+				"vitest incl new NavContextMenu.mounted.test.ts (6 cases) green",
+				"Not done: No browser screenshots; TODO(handoff) Access… awaits S5"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T04:48:18.674Z"
+		},
+		{
 			"key": "pr:minion_hub#612",
 			"kind": "pr",
 			"stage": "development",
@@ -23235,39 +23375,6 @@
 			"scoredAt": "2026-10-24T06:18:50.271Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-98cb61c2223d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-98cb61c2223d.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "5a932de6e63afcee4c02cf67d1a7fc7948e1e7bf75f4d2be41d040c77cd2d46e",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding with a concrete performance problem (unpaginated booking list) and a clear bounded fix direction (virtualize or paginate).",
-			"evidence": [
-				"status: approved",
-				"TODO(handoff): the agenda lists every booking in bookings",
-				"Implement... virtualize the list using svelte-virtual-list"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T04:44:23.505Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-9f08fb1611b8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24050,76 +24157,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:37:43.569Z"
-		},
-		{
-			"key": "pr:minion_hub#598",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#598 feat(nav): custom sections and page links appear in the sidebar, module mode and the switcher (S3)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/598",
-			"sourceUpdatedAt": "2026-10-26T03:22:02Z",
-			"sourceFingerprint": "e71600c64cd5a554668447848cfc4034e3cccd089fe6590739f7c3c612aba0b6",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#597",
-				"pr:minion_hub#601"
-			],
-			"rationale": "Sidebar/switcher integration passes unit gates but explicitly could not verify instance URLs live because it depends on S2's routing which isn't in this stack yet.",
-			"evidence": [
-				"Browser proof Q9/Q11/Q12 explicitly NOT done pending S2 merge",
-				"TODO(handoff) to run browser checks once S2 merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:30:39.752Z"
-		},
-		{
-			"key": "pr:minion_hub#600",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#600 feat(nav): right-click the sidebar to copy, duplicate, move, rename, hide or delete pages and sections (S4)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/600",
-			"sourceUpdatedAt": "2026-10-26T03:22:10Z",
-			"sourceFingerprint": "414554c1693c3133a12a49f07f3a9b3112f87126b431a2e4919c0ca6bb451d12",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#598",
-				"pr:minion_hub#602"
-			],
-			"rationale": "Context-menu feature passes unit/lint gates but has no browser screenshots and defers the Access entries to S5, leaving UX unverified end-to-end.",
-			"evidence": [
-				"No browser screenshots for Q1-Q8/Q17-Q19 per PR body",
-				"Access… entries await S5 per TODO(handoff)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:30:39.752Z"
 		},
 		{
 			"key": "proposal:2026-08-28-meta-routing-pr100-recovery",
@@ -28359,6 +28396,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T07:25:43.702Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-98cb61c2223d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-98cb61c2223d.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "5a932de6e63afcee4c02cf67d1a7fc7948e1e7bf75f4d2be41d040c77cd2d46e",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved, already-diagnosed performance TODO (unbounded booking-agenda render) has concrete fix options (pagination, virtualization, or date filter) ready to implement.",
+			"evidence": [
+				"TODO(handoff): agenda lists every booking in `bookings`, the whole",
+				"status=approved; diagnosis names three concrete fix directions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T04:48:18.674Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ba5345e2cb9d",
@@ -38285,38 +38354,6 @@
 			"scoredAt": "2026-10-24T06:47:43.480Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-322a0d0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 322a0d0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-322a0d0.md",
-			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "7232931aec8455b50b52a333143bcafe138852b96e5b1951f193406edfd9a648",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two medium-severity unchecked-access findings in test files are concrete, file-line-scoped, and small enough to fix directly.",
-			"evidence": [
-				"loader.test.ts:297 (unchecked-access)",
-				"ci-workflow.test.ts:786 (unchecked-access)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-19T04:44:23.505Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-698ce81",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -40683,6 +40720,38 @@
 			"scoredAt": "2026-10-22T23:08:54.067Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health record whose only content is an already-merged commit message, with no stated problem or pending action.",
+			"evidence": [
+				"summary is a merged commit message (#361)",
+				"kind=deploy, status=unknown with no issue described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T04:48:18.674Z"
+		},
+		{
 			"key": "issue:minion-meta#689",
 			"kind": "issue",
 			"stage": "proposal",
@@ -40970,6 +41039,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T02:26:38.780Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-322a0d0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 322a0d0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-322a0d0.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "7232931aec8455b50b52a333143bcafe138852b96e5b1951f193406edfd9a648",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two medium-severity unchecked-access findings in test files are small, precisely located fixes with low stakes.",
+			"evidence": [
+				"loader.test.ts:297 .find() result used without null check",
+				"ci-workflow.test.ts:786 .find() result used without null check"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-26T04:48:18.674Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2a4c42f3e48c",
