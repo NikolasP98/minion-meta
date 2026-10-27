@@ -33,12 +33,12 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4745
 - `NikolasP98/minion-meta@dev rankings/index.json:4778` — 'Retain tombstones until provider write-quiescence'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4778
-- `NikolasP98/minion-meta@dev rankings/index.json:6844` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6844
-- `NikolasP98/minion-meta@dev rankings/index.json:6909` — the session is drawn when the cashier clicks, not when the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6909
-- `NikolasP98/minion-meta@dev rankings/index.json:7298` — scope word-frequency/sentiment/win-index rollups by owner",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7298
+- `NikolasP98/minion-meta@dev rankings/index.json:6810` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6810
+- `NikolasP98/minion-meta@dev rankings/index.json:6875` — the session is drawn when the cashier clicks, not when the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6875
+- `NikolasP98/minion-meta@dev rankings/index.json:7231` — scope word-frequency/sentiment/win-index rollups by owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7231
 - `NikolasP98/minion-meta@dev rankings/index.json:10936` — spec §4.1 also lists reschedule, \"charge in POS\" and \"book the...",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10936
 - `NikolasP98/minion-meta@dev rankings/index.json:10968` — item_group/reorder_qty/moq marker in src/server/db/pg-schema/stock.ts",
@@ -55,6 +55,8 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18104
 - `NikolasP98/minion-meta@dev rankings/index.json:18661` — the confirmed root cause (QA-stack app logs) was'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18661
+- `NikolasP98/minion-meta@dev rankings/index.json:19125` — UUID-only today — part 2 adds a per-org sequence column",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19125
 - `NikolasP98/minion-meta@dev rankings/index.json:21253` — \"Access…\" omitted until S5 ships PageAccessDialog",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21253
 - `NikolasP98/minion-meta@dev rankings/index.json:21455` — a full per-handler audit of the remaining requireAdmin",
@@ -71,27 +73,29 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22445
 - `NikolasP98/minion-meta@dev rankings/index.json:22477` — remove once the phone failure is root-caused",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22477
-- `NikolasP98/minion-meta@dev rankings/index.json:24950` — HC-028 hand-rolled modal anchored at canvas (x,y); shared Dialog has no anchor API",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24950
-- `NikolasP98/minion-meta@dev rankings/index.json:28178` — raw fetch moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28178
-- `NikolasP98/minion-meta@dev rankings/index.json:28242` — tagOptions is the FILTER's list — decoupled from event-scope registry",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28242
-- `NikolasP98/minion-meta@dev rankings/index.json:28308` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28308
-- `NikolasP98/minion-meta@dev rankings/index.json:28542` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28542
-- `NikolasP98/minion-meta@dev rankings/index.json:28574` — agenda lists every booking in bookings, the whole",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28574
-- `NikolasP98/minion-meta@dev rankings/index.json:28672` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28672
-- `NikolasP98/minion-meta@dev rankings/index.json:28738` — Choose receipt retention and indeterminate-provider recovery policy before",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28738
-- `NikolasP98/minion-meta@dev rankings/index.json:28802` — the owner also asked to configure this \"via agent builder\"",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28802
-- `NikolasP98/minion-meta@dev rankings/index.json:31589` — the Price cell still formats with formatMoney's PEN",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31589
-- `NikolasP98/minion-meta@dev rankings/index.json:34381` — ?booking= deep-link query param is not wired into the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34381
-- `NikolasP98/minion-meta@dev rankings/index.json:37821` — other consumption-mapping surfaces (e.g.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37821
+- `NikolasP98/minion-meta@dev rankings/index.json:24753` — same as crm.customers — numbered in part 2 in src/lib/tables/defs/index.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24753
+- `NikolasP98/minion-meta@dev rankings/index.json:24915` — HC-028 hand-rolled modal anchored at canvas (x,y); shared Dialog has no anchor API",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24915
+- `NikolasP98/minion-meta@dev rankings/index.json:28143` — raw fetch moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28143
+- `NikolasP98/minion-meta@dev rankings/index.json:28207` — tagOptions is the FILTER's list — decoupled from event-scope registry",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28207
+- `NikolasP98/minion-meta@dev rankings/index.json:28273` — the drawer still shows no LINKED POS TICKETS — spec §4.1",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28273
+- `NikolasP98/minion-meta@dev rankings/index.json:28507` — raw fetch + hardcoded EN strings moved verbatim from TeamTab",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28507
+- `NikolasP98/minion-meta@dev rankings/index.json:28539` — agenda lists every booking in bookings, the whole",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28539
+- `NikolasP98/minion-meta@dev rankings/index.json:28637` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28637
+- `NikolasP98/minion-meta@dev rankings/index.json:28703` — Choose receipt retention and indeterminate-provider recovery policy before",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28703
+- `NikolasP98/minion-meta@dev rankings/index.json:28767` — the owner also asked to configure this \"via agent builder\"",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28767
+- `NikolasP98/minion-meta@dev rankings/index.json:31588` — the Price cell still formats with formatMoney's PEN",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31588
+- `NikolasP98/minion-meta@dev rankings/index.json:34377` — ?booking= deep-link query param is not wired into the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34377
+- `NikolasP98/minion-meta@dev rankings/index.json:37881` — other consumption-mapping surfaces (e.g.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37881
