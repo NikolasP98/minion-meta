@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-27T16:47:28.576Z",
+	"generatedAt": "2026-10-27T17:17:38.754Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1088,17 +1088,16 @@
 			},
 			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:merge-scan-minion-ai-f2de5e0"
-			],
-			"rationale": "A documented production deploy failure already occurred because controller/workflow scripts target only slot-a, and the proposal gives a concrete, testable DELTA to close that gap.",
+			"relatedKeys": [],
+			"rationale": "A real production deploy failure already occurred because slot-a-only tooling can't see or act on a live slot-b, and the same gap risks pruning the live service.",
 			"evidence": [
-				"16:1xZ promotion failed while slot b was live, fixed by hand",
-				"DELTA row 1 adds failing-closed slot derivation with a test fixture"
+				"16:1xZ deploy-production.yml failed while slot b was live",
+				"docker stack deploy --prune could delete the -b service carrying production",
+				"DELTA row 1 has a named extraction and test fixture"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T16:56:26.472Z"
+			"scoredAt": "2026-10-27T17:17:38.619Z"
 		},
 		{
 			"key": "spec:2026-10-03-site-auth-redirect-spec",
@@ -36574,38 +36573,6 @@
 			"scoredAt": "2026-10-25T02:47:03.653Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-f2de5e0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ f2de5e0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f2de5e0.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "1fb11ec5ec82bfe0f2cce6bdac4febb1573f7dd6ae1c49943c69a29f40b4126d",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two medium-severity findings pinpoint hardcoded production IPs in cutover.sh that should be moved to an env var, a small well-scoped fix.",
-			"evidence": [
-				"cutover.sh:6 and :9 hardcode IP 152.53.91.108",
-				"finding recommends externalizing to env var"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T16:56:26.472Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-0f5a066",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41176,6 +41143,38 @@
 			"scoredAt": "2026-10-23T23:17:07.488Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-f2de5e0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ f2de5e0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f2de5e0.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "1fb11ec5ec82bfe0f2cce6bdac4febb1573f7dd6ae1c49943c69a29f40b4126d",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two medium-severity hardcoded-IP findings at exact file/line locations are trivial to externalize to an env var with low risk and effort.",
+			"evidence": [
+				"cutover.sh:6 hardcoded IP 152.53.91.108",
+				"cutover.sh:9 hardcoded IP 152.53.91.108"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T17:17:38.619Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41876,38 +41875,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:08:54.067Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit shows the WhatsApp session-reset feature already merged (#361), leaving no actionable deployment goal.",
-			"evidence": [
-				"commit message: 'Adds sessionResetAuthorized... used only at the three reset sites'",
-				"PR #361 referenced as already merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T16:47:28.428Z"
 		},
 		{
 			"key": "issue:minion-meta#689",
