@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-27T16:17:42.370Z",
+	"generatedAt": "2026-10-27T16:47:28.576Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2560,39 +2560,6 @@
 			"scoredAt": "2026-10-26T04:18:14.499Z"
 		},
 		{
-			"key": "proposal:2026-10-13-hub-first-paint-performance",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Measured production data shows ssr disabled plus a dual-locale Paraglide barrel drive 3.2-7.7s FCP despite a 5ms server, and the fix path (enable SSR / split locale bundle) is concrete.",
-			"evidence": [
-				"FCP ≈3.2s on /en/login vs server-timing app;dur=5",
-				"Paraglide barrel chunk is 246.5KB br / 1059KB raw, 59% of first-paint JS",
-				"src/routes/+layout.ts sets ssr=false leaving HTML with no markup to paint"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T16:26:01.723Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-1767155690",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3058,6 +3025,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T05:17:29.819Z"
+		},
+		{
+			"key": "proposal:2026-10-13-hub-first-paint-performance",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A well-measured, approved proposal pinpoints a concrete, high-impact fix (dual-locale Paraglide bundle) for hub's slow first paint but no code has been written yet.",
+			"evidence": [
+				"FCP measured at 3.2-7.7s while server responds in 5ms",
+				"Paraglide chunk ships both en and es (246.5KB, 59% of first-paint JS)",
+				"status: approved, no code change made yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T16:47:28.428Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1194287278",
@@ -41876,6 +41876,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:08:54.067Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit shows the WhatsApp session-reset feature already merged (#361), leaving no actionable deployment goal.",
+			"evidence": [
+				"commit message: 'Adds sessionResetAuthorized... used only at the three reset sites'",
+				"PR #361 referenced as already merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T16:47:28.428Z"
 		},
 		{
 			"key": "issue:minion-meta#689",
