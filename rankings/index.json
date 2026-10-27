@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-27T02:02:34.395Z",
+	"generatedAt": "2026-10-27T02:18:41.294Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3975,6 +3975,41 @@
 			"scoredAt": "2026-10-24T03:47:38.051Z"
 		},
 		{
+			"key": "proposal:2026-10-12-hub-pos-package-semantics",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "POS packages — grant each included item, never duplicate the base service's consumption",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-pos-package-semantics.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "70292e9fbd0ed61e97788c68a18ee728776953877d2baa08d0742a78ac4228f2",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-9f08fb1611b8",
+				"proposal:postmerge-minion-hub-3c3dde2c9372"
+			],
+			"rationale": "This verified double-consumption POS package bug and the two approved postmerge TODO findings are the same ledgered defect and should merge into one goal.",
+			"evidence": [
+				"FACES SKU-AF1 pack duplicates the base service's own stk_consumption, double-issuing 6ml insumo",
+				"reconciliation notes tie both postmerge findings to this proposal's declared open ends"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:18:41.143Z"
+		},
+		{
 			"key": "proposal:2026-10-15-hub-pos-shift-scoped-edits-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6078,6 +6113,38 @@
 			"scoredAt": "2026-10-22T05:39:46.905Z"
 		},
 		{
+			"key": "proposal:2026-10-12-hub-onboarding-org-user",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub onboarding — retire the agent wizard, add new-org and new-user first-run setup",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-onboarding-org-user.md",
+			"sourceUpdatedAt": "2026-10-12",
+			"sourceFingerprint": "8519cedcfce5b8b97d1773a7f6d09846b7443fd0f1e129d472bb26528b062c28",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Replacing the blocking agent wizard and fixing the Peru-hardcoded org defaults has a fully detailed delta, migration, and test plan ready to act on now.",
+			"evidence": [
+				"organizations.kind/timezone/currency silently default to business/America/Lima/PEN for every new org",
+				"delta names exact deleted files, migration file, and gate.test.ts cases"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:18:41.143Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-f25d9dc6080e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6411,41 +6478,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:20:04.625Z"
-		},
-		{
-			"key": "proposal:2026-10-12-hub-pos-package-semantics",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "POS packages — grant each included item, never duplicate the base service's consumption",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-pos-package-semantics.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "70292e9fbd0ed61e97788c68a18ee728776953877d2baa08d0742a78ac4228f2",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-9f08fb1611b8",
-				"proposal:postmerge-minion-hub-3c3dde2c9372"
-			],
-			"rationale": "The proposal's reconciliation note explicitly maps its two declared open ends to two already-approved postmerge TODO findings in the same files describing the identical package-consumption defect.",
-			"evidence": [
-				"AS-IS verified against origin/master @ f6b33d13 with a concrete double-issue stock defect",
-				"reconciliation note cites both postmerge findings as the in-code halves of open ends #1 and #2"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T01:56:36.858Z"
 		},
 		{
 			"key": "proposal:2026-10-21-windows-release-qualification-timing",
@@ -8165,39 +8197,6 @@
 			"scoredAt": "2026-10-25T04:47:02.540Z"
 		},
 		{
-			"key": "proposal:2026-10-12-hub-onboarding-org-user",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub onboarding — retire the agent wizard, add new-org and new-user first-run setup",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-onboarding-org-user.md",
-			"sourceUpdatedAt": "2026-10-12",
-			"sourceFingerprint": "8519cedcfce5b8b97d1773a7f6d09846b7443fd0f1e129d472bb26528b062c28",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Thorough draft spec with verbatim owner ask and detailed DELTA, but status is draft and has not yet passed the approval gate required before dev work.",
-			"evidence": [
-				"status: draft",
-				"owner ask verbatim 2026-10-12",
-				"DELTA lists specific deleted routes and a migration file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T01:56:36.858Z"
-		},
-		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8365,39 +8364,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T05:39:59.381Z"
-		},
-		{
-			"key": "proposal:2026-09-20-hub-component-service-centralization",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Centralize Hub components, domain contracts and live entity updates",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-20-hub-component-service-centralization.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "94c28677baf42d270c772997fd9b72b981cd9cc06ac2df312f0710d9a3ccf83b",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, broad Hub centralization proposal with concrete file:line AS-IS anchors and a staged DELTA table with proof requirements per slice.",
-			"evidence": [
-				"status: approved",
-				"DELTA table defines 4 slices each with required proof",
-				"cites concrete anchors like flow-editor.svelte:588 and pos.service.ts:1538"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T01:56:36.858Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1480236091",
@@ -8628,6 +8594,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-25T18:17:00.543Z"
+		},
+		{
+			"key": "proposal:2026-09-20-hub-component-service-centralization",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Centralize Hub components, domain contracts and live entity updates",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-20-hub-component-service-centralization.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "94c28677baf42d270c772997fd9b72b981cd9cc06ac2df312f0710d9a3ccf83b",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The centralization goal is legitimate but bundles unrelated stock/CRM/flow-editor/component work into one unbounded approved proposal that can't ship as a single paid slice.",
+			"evidence": [
+				"delta table spans 4 unrelated slices (mutation safety, live updates, domain services, components)",
+				"status approved but scope covers stock, CRM, flow editor and shared components simultaneously"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:18:41.143Z"
 		},
 		{
 			"key": "proposal:2026-09-26-hub-custom-columns-next-phases",
@@ -17721,6 +17719,40 @@
 			"scoredAt": "2026-10-21T04:27:07.333Z"
 		},
 		{
+			"key": "proposal:2026-10-12-hub-catalog-composition-cache-staleness",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Catalog composition editor's per-row cache never invalidates on external changes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-catalog-composition-cache-staleness.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "103276e004f7c1341a94c486897509a4d8dd4f97ccc5a8c3682f5f8ef0026801",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-121dc587ec1f"
+			],
+			"rationale": "This review-stage proposal and the approved postmerge TODO finding describe the same CompositionEditor cache-invalidation defect and should be reconciled into one goal.",
+			"evidence": [
+				"module-scoped compositionCache never invalidated by external writes (CompositionEditor.svelte)",
+				"reconciliation note flags postmerge-minion-hub-121dc587ec1f as the in-code half of the same defect"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:18:41.143Z"
+		},
+		{
 			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22819,40 +22851,6 @@
 			"scoredAt": "2026-10-26T03:20:04.625Z"
 		},
 		{
-			"key": "proposal:2026-10-12-hub-catalog-composition-cache-staleness",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Catalog composition editor's per-row cache never invalidates on external changes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-catalog-composition-cache-staleness.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "103276e004f7c1341a94c486897509a4d8dd4f97ccc5a8c3682f5f8ef0026801",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-121dc587ec1f"
-			],
-			"rationale": "The proposal's own reconciliation note ties it to an already-approved postmerge TODO finding describing the identical CompositionEditor cache-invalidation defect.",
-			"evidence": [
-				"reconciliation note cites postmerge-minion-hub-121dc587ec1f as the in-code half of the same defect",
-				"proposal status: review vs. postmerge finding status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T01:56:36.858Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-902041533",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23220,42 +23218,6 @@
 			"scoredAt": "2026-10-26T12:48:28.992Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-3c3dde2c9372",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3c3dde2c9372.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "68fa9ab0d080a88361a2e686e6edb90fbd2797dc7b489b2bc28667d1f9ea0ae8",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-12-hub-pos-package-semantics",
-				"proposal:postmerge-minion-hub-9f08fb1611b8"
-			],
-			"rationale": "TODO marker about grants' packageProductId/serviceProductId tracking is the in-code half of the pos-package-semantics proposal's declared open end #1.",
-			"evidence": [
-				"TODO marker at pos-packages.service.ts referencing packageProductId/serviceProductId",
-				"status: approved",
-				"pos-package-semantics proposal cites this file as open end #1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T01:56:36.858Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-5c9adae4137a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23429,42 +23391,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T06:18:50.271Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-9f08fb1611b8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/composition.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-9f08fb1611b8.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "7407c3877760f626f20f975cb47da6ad37bddb0fc4dcc3ee4608090432da7ddf",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-12-hub-pos-package-semantics",
-				"proposal:postmerge-minion-hub-3c3dde2c9372"
-			],
-			"rationale": "TODO marker about pack PRODUCT lines being issued at sale is the in-code half of the pos-package-semantics proposal's declared open end #2.",
-			"evidence": [
-				"TODO marker at composition.ts:88 'a pack's PRODUCT lines are issued at sale'",
-				"status: approved",
-				"pos-package-semantics proposal cites this file as open end #2"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T01:56:36.858Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a7efc85e6e06",
@@ -31537,6 +31463,40 @@
 			"scoredAt": "2026-10-21T00:26:35.139Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-121dc587ec1f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/CompositionEditor.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-121dc587ec1f.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "318c05b0e6f7a3f8fac4c69cf82e5f676f37861f94df777d39d8fcc23d85745c",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-10-12-hub-catalog-composition-cache-staleness"
+			],
+			"rationale": "This auto-filed TODO marker is a truncated comment whose cause is already fully analyzed in the paired cache-staleness proposal, so they should become one goal.",
+			"evidence": [
+				"marker text trails off at 'invalidated only by' with only a speculative auto diagnosis",
+				"paired proposal already names the exact cache key and two concrete fixes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:18:41.143Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-13ff7afd0042",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31698,6 +31658,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T09:56:29.037Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-3c3dde2c9372",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3c3dde2c9372.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "68fa9ab0d080a88361a2e686e6edb90fbd2797dc7b489b2bc28667d1f9ea0ae8",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-10-12-hub-pos-package-semantics",
+				"proposal:postmerge-minion-hub-9f08fb1611b8"
+			],
+			"rationale": "This grants-schema TODO is one of two postmerge findings already declared as open ends inside the pos-package-semantics proposal and should be reconciled into that single goal.",
+			"evidence": [
+				"marker only states grants carry packageProductId as well as serviceProductId with no finished rationale",
+				"pos-package-semantics proposal's reconciliation note cites this exact file as an open end"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:18:41.143Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-489bd42e8ffa",
@@ -31898,6 +31893,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-20T05:25:47.993Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-9f08fb1611b8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/composition.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-9f08fb1611b8.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "7407c3877760f626f20f975cb47da6ad37bddb0fc4dcc3ee4608090432da7ddf",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-10-12-hub-pos-package-semantics",
+				"proposal:postmerge-minion-hub-3c3dde2c9372"
+			],
+			"rationale": "This composition.ts TODO about pack product-line issuance matches an open end of the pos-package-semantics proposal and should be merged into that one goal.",
+			"evidence": [
+				"marker states a pack's PRODUCT lines are issued at sale with no finished rationale",
+				"pos-package-semantics proposal's reconciliation note cites this exact file as an open end"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:18:41.143Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a5a65f6d6dac",
@@ -34354,41 +34384,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T12:48:28.992Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-121dc587ec1f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/CompositionEditor.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-121dc587ec1f.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "318c05b0e6f7a3f8fac4c69cf82e5f676f37861f94df777d39d8fcc23d85745c",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-12-hub-catalog-composition-cache-staleness"
-			],
-			"rationale": "This approved TODO-handoff finding is the in-code half of the same CompositionEditor cache-invalidation defect the matching proposal already describes in detail.",
-			"evidence": [
-				"TODO marker at CompositionEditor.svelte:16 trails off at 'invalidated only by'",
-				"status: approved",
-				"merged from handoff-minion-hub-2905835452 citing the same file/line"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T01:56:36.858Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-152748b32645",
@@ -38616,6 +38611,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:57:54.316Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy entry only restates an already-merged whatsapp commit with no outstanding deployment problem described.",
+			"evidence": [
+				"commit 191d9a6 already merged feat(whatsapp) session reset",
+				"status is unknown with no described deployment issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:18:41.143Z"
 		},
 		{
 			"key": "issue:minion-meta#573",
