@@ -71,12 +71,10 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22413
 - `NikolasP98/minion-meta@dev rankings/index.json:22445` — startBackupScheduler() has no call site anywhere in src/",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22445
-- `NikolasP98/minion-meta@dev rankings/index.json:22477` — remove once the phone failure is root-caused",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22477
-- `NikolasP98/minion-meta@dev rankings/index.json:24753` — same as crm.customers — numbered in part 2 in src/lib/tables/defs/index.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24753
-- `NikolasP98/minion-meta@dev rankings/index.json:24915` — HC-028 hand-rolled modal anchored at canvas (x,y); shared Dialog has no anchor API",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24915
+- `NikolasP98/minion-meta@dev rankings/index.json:24721` — same as crm.customers — numbered in part 2 in src/lib/tables/defs/index.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24721
+- `NikolasP98/minion-meta@dev rankings/index.json:24883` — HC-028 hand-rolled modal anchored at canvas (x,y); shared Dialog has no anchor API",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24883
 - `NikolasP98/minion-meta@dev rankings/index.json:28143` — raw fetch moved verbatim from TeamTab",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28143
 - `NikolasP98/minion-meta@dev rankings/index.json:28207` — tagOptions is the FILTER's list — decoupled from event-scope registry",
@@ -97,5 +95,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31588
 - `NikolasP98/minion-meta@dev rankings/index.json:34377` — ?booking= deep-link query param is not wired into the",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34377
-- `NikolasP98/minion-meta@dev rankings/index.json:37881` — other consumption-mapping surfaces (e.g.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37881
+- `NikolasP98/minion-meta@dev rankings/index.json:37817` — other consumption-mapping surfaces (e.g.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37817
