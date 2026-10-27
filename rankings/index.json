@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-27T18:47:18.781Z",
+	"generatedAt": "2026-10-27T19:17:46.196Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4450,6 +4450,41 @@
 			"scoredAt": "2026-10-26T03:34:16.614Z"
 		},
 		{
+			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Calendar context menus pre-populated, never empty; paid and unpaid items cancelable with an explicit refund",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "0e69badcc5a46c26f8e3f8e866249fec9e8ee9092be45a8db13b5a00819184a7",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-10-13-hub-calendar-context-menu-followups"
+			],
+			"rationale": "The core TO-BE invariants for cancel/refund money-truth are already implemented via hub PRs referenced by the companion proposal, so remaining work is best tracked as one goal with that follow-up ledger rather than as a separate spec item.",
+			"evidence": [
+				"status: implementing with explicit AS-IS/TO-BE/invariants (I1-I6) for refund money-truth",
+				"companion proposal states 'Shipped as hub PRs #516...and #517'",
+				"I5 removes the shift_closed void block, a billing-correctness change with real consequence if unfinished"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T19:17:46.052Z"
+		},
+		{
 			"key": "spec:2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -5109,40 +5144,6 @@
 			"scoredAt": "2026-10-21T18:57:07.236Z"
 		},
 		{
-			"key": "proposal:2026-10-13-hub-calendar-context-menu-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Calendar context menu + cancel/refund — open ends after S1/S2",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-calendar-context-menu-followups.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "440aabd8b672a77de50e49f40154bf3997a4f85339f06965bdc3a128367c03a6",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec"
-			],
-			"rationale": "Nine concrete TODO(handoff) follow-ups with exact file:line pointers and fixes remain open after shipping hub PRs #516/#517.",
-			"evidence": [
-				"TODO(handoff) at calendar-context-menu.ts:105 for missing planPaid on instalment visits",
-				"voidTicket's final status update lacks a WHERE status='submitted' guard, risking concurrent double-void"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T18:56:17.309Z"
-		},
-		{
 			"key": "proposal:2026-10-21-windows-qualification-admission-independence",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5310,40 +5311,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:23:07.202Z"
-		},
-		{
-			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Calendar context menus pre-populated, never empty; paid and unpaid items cancelable with an explicit refund",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "0e69badcc5a46c26f8e3f8e866249fec9e8ee9092be45a8db13b5a00819184a7",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-13-hub-calendar-context-menu-followups"
-			],
-			"rationale": "Detailed AS-IS/TO-BE spec with explicit invariants (I1-I6) for the POS cancel/refund flow is already in implementing status.",
-			"evidence": [
-				"status: implementing",
-				"invariant I4 defines cash vs store-credit refund truth and shift expected accounting"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T18:56:17.309Z"
 		},
 		{
 			"key": "spec:2026-10-21-windows-qualification-kernel-containment-spec",
@@ -6443,6 +6410,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:20:04.625Z"
+		},
+		{
+			"key": "proposal:2026-10-13-hub-calendar-context-menu-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Calendar context menu + cancel/refund — open ends after S1/S2",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-calendar-context-menu-followups.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "440aabd8b672a77de50e49f40154bf3997a4f85339f06965bdc3a128367c03a6",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec"
+			],
+			"rationale": "A well-pinpointed open-ends ledger (file:line TODOs) for already-shipped PRs #516/#517, including a real money-integrity race (double-void) but no active outage.",
+			"evidence": [
+				"'voidTicket's final status update has no WHERE status='submitted' guard...two truly concurrent voids could double-write refund/ledger rows'",
+				"TODO(handoff) pointers at calendar-context-menu.ts:105 and +page.svelte:844",
+				"Postgres integration suite for refund rows not yet run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T19:17:46.052Z"
 		},
 		{
 			"key": "proposal:2026-10-21-windows-release-qualification-timing",
@@ -26589,38 +26591,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:56:58.970Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged feature commit (session reset authorization for WhatsApp) surfaced as a deployment health entry with no indication of actual deployment failure or issue.",
-			"evidence": [
-				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"Spec 035 G3 referenced, status unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T17:47:19.094Z"
 		},
 		{
 			"key": "issue:minion-meta#329",
