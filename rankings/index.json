@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-27T02:18:41.294Z",
+	"generatedAt": "2026-10-27T02:47:16.156Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -17945,38 +17945,6 @@
 			"scoredAt": "2026-10-26T07:17:45.982Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/unbilled.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-69f97a2d64c9.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "f4d049961a8a5d0ffede8f888b721a1d3d7ae3b1f256de20d566426fe28fb435",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Missing index on an anti-join causes full table scans that will worsen as ticket volume grows, with a clear bounded fix (add index + migration).",
-			"evidence": [
-				"anti-join without index forces full table scan on pos_ticket_lines",
-				"scales poorly as ticket volume grows"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T02:26:06.301Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-763d076153d2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21559,6 +21527,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T09:26:27.898Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/unbilled.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-69f97a2d64c9.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "f4d049961a8a5d0ffede8f888b721a1d3d7ae3b1f256de20d566426fe28fb435",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clear marker identifies a missing index on an anti-join causing full table scans for unbilled account lookups, with a concrete fix direction already stated.",
+			"evidence": [
+				"marker: 'the anti-join has no index to lean on — pos_ticket_lines'",
+				"diagnosis proposes adding a DB index + updating migration and Drizzle schema"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:47:16.003Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-99a49d38a1b0",
@@ -28478,6 +28478,38 @@
 			"scoredAt": "2026-10-25T02:17:28.417Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b993a41e7c7.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "a023b726001aad6e3328cac8fa38d5fbeb9bb0ee835f2000d278b2dcb7e695ff",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Marker flags unrouted callbacks in the FloatingAssistant component but the attached diagnosis is just unfinished tool-call stubs with no actual analysis or fix direction.",
+			"evidence": [
+				"marker: 'onArtifactCallback/onChoice are NOT routed'",
+				"diagnosis section ends with raw Read tool-call fragments, no conclusion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-27T02:47:16.003Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9388338cb205",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31826,38 +31858,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T06:48:05.926Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b993a41e7c7.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "a023b726001aad6e3328cac8fa38d5fbeb9bb0ee835f2000d278b2dcb7e695ff",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The callback routing gap is plausible but the auto-diagnosis is incomplete, only showing tool invocations with no concrete fix direction.",
-			"evidence": [
-				"TODO(handoff): onArtifactCallback/onChoice are NOT routed",
-				"diagnosis section shows only read-tool calls, no stated fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-20T02:26:06.301Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-948e27d654f8",
@@ -38611,38 +38611,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T04:57:54.316Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deploy entry only restates an already-merged whatsapp commit with no outstanding deployment problem described.",
-			"evidence": [
-				"commit 191d9a6 already merged feat(whatsapp) session reset",
-				"status is unknown with no described deployment issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T02:18:41.143Z"
 		},
 		{
 			"key": "issue:minion-meta#573",
