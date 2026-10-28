@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T06:17:39.344Z",
+	"generatedAt": "2026-10-28T06:47:43.234Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3484,39 +3484,6 @@
 			"scoredAt": "2026-10-28T06:17:39.199Z"
 		},
 		{
-			"key": "spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Preserve private terminal rows while quarantining exact live notification claims",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-integrity-quarantine-definer-amendment.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "fba6440ada2c9132c01f6bbf06306b9cd0004c144294f9be5b51ddc94d771f45",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Security-definer fix closes an RLS gap blocking notification quarantine while keeping worker row access scoped, with a detailed frozen-input migration plan.",
-			"evidence": [
-				"replaces direct worker UPDATE with SECURITY DEFINER function due to RLS rejection",
-				"v4 revision pending renewed two-pass review",
-				"tagged security, data"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T06:26:44.859Z"
-		},
-		{
 			"key": "spec:2026-10-03-notification-tenant-boundaries-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3718,6 +3685,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:23:07.202Z"
+		},
+		{
+			"key": "spec:2026-10-03-notification-slice5-audience-projection-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Project notification events into exact per-recipient candidates under current authority",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-audience-projection-spec.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "5f99f3e9005281f6b140e6715834f66b873bbdbf4ef639c37df28439102683a1",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment"
+			],
+			"rationale": "This is a high-value, security/data-tagged core notification contract, but seven revisions stuck at 'pending renewed two-pass review' suggest the scope isn't converging enough for bounded paid execution right now.",
+			"evidence": [
+				"Revision history shows v1 through v7 all marked 'author response, pending renewed two-pass review'",
+				"status is 'implementing' despite the spec still undergoing major contract rewrites in v7"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:47:43.090Z"
 		},
 		{
 			"key": "issue:minion-meta#591",
@@ -4239,6 +4240,38 @@
 			"scoredAt": "2026-10-28T02:01:02.574Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77b26984c8ea.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "a60fb30d2077426782ace348ec78a357e5744e80ddd708205816c875f1808605",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clear, narrow bug (reschedule drops package_id) with an explicit fix and a concrete assertion-based test criterion.",
+			"evidence": [
+				"TODO(handoff) states RESCHEDULE currently loses the package link",
+				"Fix direction: carry forward package_id and assert originalBooking.package_id === rescheduledBooking.package_id"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:47:43.090Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-c5d86be403fa",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4403,38 +4436,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:58:03.340Z"
-		},
-		{
-			"key": "spec:2026-10-03-notification-slice5-audience-projection-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Project notification events into exact per-recipient candidates under current authority",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-audience-projection-spec.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "5f99f3e9005281f6b140e6715834f66b873bbdbf4ef639c37df28439102683a1",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A security/data-tagged notification-authority spec that is actively implementing but has gone through seven revisions still pending renewed two-pass review, so it is not yet settled enough to treat as ready.",
-			"evidence": [
-				"v7 ... pending renewed two-pass review",
-				"Replaces the infeasible keep-PUBLIC source-policy design after an executable baseline reproduction found recursive RLS"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-reliability-failure-spec",
@@ -5408,6 +5409,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T01:56:39.197Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6b39120c48a2.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "6d661b6862b97d190103f8af9457e34f99f77a79e75369046258435d79373258",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Auto-diagnosis gives a concrete, bounded fix (discriminated union + denylist + composite-identity checks) for a real collision risk in POS payment routing.",
+			"evidence": [
+				"TODO(handoff) notes an org named like a credit-card ID could be misrouted in pos.service.ts",
+				"Fix direction specifies discriminated union types and a test case for the collision scenario"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:47:43.090Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-shells-lifecycle-stubs-spec",
@@ -8526,6 +8559,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T23:47:31.374Z"
+		},
+		{
+			"key": "spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Preserve private terminal rows while quarantining exact live notification claims",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-03-notification-slice5-integrity-quarantine-definer-amendment.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "fba6440ada2c9132c01f6bbf06306b9cd0004c144294f9be5b51ddc94d771f45",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-03-notification-slice5-audience-projection-spec"
+			],
+			"rationale": "A narrowly-scoped, well-bounded amendment with concrete native-failure evidence that unblocks the parent Slice5 spec, but it inherits that parent's unresolved review churn.",
+			"evidence": [
+				"Explicit frozen inputs with SHA-256 hashes and a captured native negative receipt",
+				"Decision section explicitly bounds scope: no new roles, no expanded worker terminal reads"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:47:43.090Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-hub-test-quality-spec",
@@ -13405,76 +13472,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T06:17:56.257Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-6b39120c48a2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6b39120c48a2.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "6d661b6862b97d190103f8af9457e34f99f77a79e75369046258435d79373258",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-77b26984c8ea",
-				"proposal:postmerge-minion-hub-7ec5d7436363"
-			],
-			"rationale": "A clearly diagnosed POS identity-collision risk with a concrete fix direction and test guidance, already approved.",
-			"evidence": [
-				"relying solely on ID to distinguish entities ... creates collision risk",
-				"Add discriminated union types ... Enforce composite identity (type + ID) at every lookup boundary"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T06:26:37.103Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-77b26984c8ea.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "a60fb30d2077426782ace348ec78a357e5744e80ddd708205816c875f1808605",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-6b39120c48a2",
-				"proposal:postmerge-minion-hub-7ec5d7436363"
-			],
-			"rationale": "Well-specified billing-affecting bug (reschedule drops package link) with a precise fix and test assertion, already approved.",
-			"evidence": [
-				"RESCHEDULE currently loses the package link",
-				"explicitly carry forward the package_id ... Add a test asserting originalBooking.package_id === rescheduledBooking.package_id"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9068ad039a31",
@@ -23438,41 +23435,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:41:10.421Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ec5d7436363.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "cf7ab4653cc7396bcb7f7eb2a43349a1184cee102cc0136825edb5b0aaf20d3a",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-6b39120c48a2",
-				"proposal:postmerge-minion-hub-77b26984c8ea"
-			],
-			"rationale": "The diagnosis section is a raw, incomplete agent transcript rather than a clear fix direction, so this needs rework before it is actionable.",
-			"evidence": [
-				"Diagnosis (auto) section shows unfinished tool-use narration: 'Let me read the file to understand the context.'",
-				"no concrete fix direction or test guidance is stated, unlike the two sibling postmerge findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T06:26:37.103Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-92e3e453a2ae",
@@ -34866,6 +34828,38 @@
 			"scoredAt": "2026-10-26T12:49:17.179Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos-packages.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7ec5d7436363.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "cf7ab4653cc7396bcb7f7eb2a43349a1184cee102cc0136825edb5b0aaf20d3a",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis step failed and left an incomplete agent transcript instead of an actual diagnosis, so the finding needs to be regenerated before it is actionable.",
+			"evidence": [
+				"Diagnosis (auto) section contains raw agent narration ('Let me read the file...', a function_calls block) instead of analysis",
+				"Marker text itself is a truncated sentence ('will hit this')"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:47:43.090Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-802097b5127b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42147,38 +42141,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:08:54.067Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deploy-health entry only reports an already-merged WhatsApp session-reset commit with no outstanding action.",
-			"evidence": [
-				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"commit already merged to gateway"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T06:17:39.199Z"
 		},
 		{
 			"key": "issue:minion-meta#689",
