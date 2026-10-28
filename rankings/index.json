@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T13:47:20.398Z",
+	"generatedAt": "2026-10-28T14:17:21.014Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1449,20 +1449,20 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 2
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The proposal names concrete security and durability gaps across multiple services but remains an unauthorized draft citing a private, unpublished audit with implementation not yet started.",
+			"rationale": "Draft proposal covering multiple high-severity security/durability gaps (authorization, secret logging, SQL injection, durable job races) with slice-level definitions of done but no implementation evidence yet.",
 			"evidence": [
-				"This draft authorizes no production action. Audit completed; implementation remains open.",
-				"Priority slices cover assistant authorization, secret logging, flow authority, durable job effects, and shells contract",
-				"status: draft"
+				"status: draft",
+				"Replace raw caller-authored analytics SQL with server-owned... authorized operations",
+				"Replace input-to-SQL interpolation in compile-flow.ts with bindings"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T13:56:03.828Z"
+			"scoredAt": "2026-10-28T14:17:20.856Z"
 		},
 		{
 			"key": "proposal:2026-10-17-agent-dynamic-tools",
@@ -29322,6 +29322,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T18:58:42.318Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged whatsapp session-reset feature commit, not an active deploy incident, so there is little to execute beyond routine monitoring.",
+			"evidence": [
+				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T14:17:20.856Z"
 		},
 		{
 			"key": "issue:minion-meta#441",
