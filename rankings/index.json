@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T14:47:12.153Z",
+	"generatedAt": "2026-10-28T15:17:52.945Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3448,40 +3448,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:33:02.754Z"
-		},
-		{
-			"key": "spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "One owned Workshop workspace lifecycle — loads and writes cannot erase state (HC-037)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-workshop-workspace-lifecycle-spec.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "e2bde05c29062664b3bc4e172134b9cb46a1e6095098ec7437224c59691bf4a0",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-07-hub-readiness-state-integrity-followups"
-			],
-			"rationale": "Status implementing, addressing real data-loss defects (create erases live workspace before server ack, failed persistence shown as saved, host switch persists blank snapshot) with 11 failing red tests as proof.",
-			"evidence": [
-				"Red run: '2 files, 11 failed / 1 passed (12)'",
-				"Defect: 'Failed persistence looks saved... PUT callback never reads res.ok and swallows network errors'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T14:56:51.115Z"
 		},
 		{
 			"key": "pr:minion-meta#887",
@@ -7598,40 +7564,6 @@
 			"scoredAt": "2026-10-26T03:33:02.754Z"
 		},
 		{
-			"key": "spec:2026-10-07-readiness-flow-export-ownership-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Flow export toggles are owned by the (flow, variable) pair they were written for (HC-040)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-flow-export-ownership-spec.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "6cbfbb6acaecce80e6083953135b6b440d038a5e4cec7cf32f143b606401d1ac",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-07-hub-readiness-state-integrity-followups"
-			],
-			"rationale": "Status implementing with a concrete AS-IS defect (cross-flow write bleed, double-dispatch) and failing mounted-test proof, plus a clear ownership-fence fix.",
-			"evidence": [
-				"4 failed mounted-test cases documented (a)-(d) against current component",
-				"TO-BE defines ownership fence, single in-flight write, and fresh-data precedence invariants"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T14:56:51.115Z"
-		},
-		{
 			"key": "spec:2026-10-07-readiness-overlay-dialog-contract-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8858,6 +8790,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:23:07.202Z"
+		},
+		{
+			"key": "spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "One owned Workshop workspace lifecycle — loads and writes cannot erase state (HC-037)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-workshop-workspace-lifecycle-spec.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "e2bde05c29062664b3bc4e172134b9cb46a1e6095098ec7437224c59691bf4a0",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-07-hub-readiness-state-integrity-followups"
+			],
+			"rationale": "Documented silent data-loss and state-erasure defects in the workshop canvas with a red test run (11 failed) and an in-progress fix already drafted in the worktree.",
+			"evidence": [
+				"\"evidence-hc037/vitest-red-prefix.log — 2 files, 11 failed / 1 passed (12)\"",
+				"\"unstaged in hub-ui2-wt\" fix pending commit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T15:17:52.786Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
@@ -10770,40 +10736,6 @@
 			"scoredAt": "2026-10-25T23:47:11.487Z"
 		},
 		{
-			"key": "proposal:2026-10-07-hub-readiness-ui-a11y-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Open-items ledger for the readiness UI/a11y batch (HC-043, HC-028, UI-002, HC-029, HC-027, GW-027)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-07-hub-readiness-ui-a11y-followups.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "331db018ad000a80b0ffa0178dbcdc77472bccd1ef4f7e21d4cca18c39547214",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"spec:2026-10-07-readiness-role-button-keyboard-spec"
-			],
-			"rationale": "Well-documented ledger of 13 markers plus unmarked gaps across six merged a11y/contrast fixes, including a repo-wide link-contrast token gap affecting every dark preset.",
-			"evidence": [
-				"HC-043 marker: 'runtime accent as link text measures 3.3-4.0:1 on every dark preset'",
-				"HC-028 lists 8 TODO sites needing shared Dialog migration"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T14:56:51.115Z"
-		},
-		{
 			"key": "proposal:2026-10-21-windows-heartbeat-qualification-timing",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11326,40 +11258,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T07:31:42.991Z"
-		},
-		{
-			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Every role=\"button\" control honours the native button keyboard contract (HC-027)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-role-button-keyboard-spec.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "cbd7a405347ab606edcf3098bc21d65942b7f195052806a6b4c12139d7380c24",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-07-hub-readiness-ui-a11y-followups"
-			],
-			"rationale": "Status implementing with a full inventory of 20+ role=button sites and documented keyboard defects (double activation, invisible focus ring, Space scrolling the page).",
-			"evidence": [
-				"Inventory table lists 20+ sites with specific defects per site",
-				"Acceptance criterion: Enter/Space must match click exactly once with visible focus"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T14:56:51.115Z"
 		},
 		{
 			"key": "spec:2026-10-23-harness-chat-spec",
@@ -13069,41 +12967,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:50:45.643Z"
-		},
-		{
-			"key": "proposal:2026-10-07-hub-readiness-state-integrity-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Open-items ledger for the readiness state-integrity batch (HC-040, HC-037) + NOTIF-019",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-07-hub-readiness-state-integrity-followups.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "d1b9c8311a5927e76a6b635a61a14e3e845eaa338467ce928664ed7af0b7270a",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"spec:2026-10-07-readiness-flow-export-ownership-spec",
-				"spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec"
-			],
-			"rationale": "Open-items ledger closing the loop on HC-040/HC-037 with one P2 silent-data-loss item (conflict-free last-writer-wins PUT) that needs a versioned-write fix.",
-			"evidence": [
-				"U2: 'Server-side versioned PUT / conflict detection... two tabs or two users on one save overwrite each other silently'",
-				"HC-040 TODO marker has a stated P3 fix path (depends() key + invalidate)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T14:56:51.115Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
@@ -15726,6 +15589,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:34:16.614Z"
+		},
+		{
+			"key": "spec:2026-10-07-readiness-flow-export-ownership-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Flow export toggles are owned by the (flow, variable) pair they were written for (HC-040)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-flow-export-ownership-spec.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "6cbfbb6acaecce80e6083953135b6b440d038a5e4cec7cf32f143b606401d1ac",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-07-hub-readiness-state-integrity-followups"
+			],
+			"rationale": "A well-specified cross-flow data-leak bug with reproducible failing tests and implementation already staged in the worktree awaiting PR.",
+			"evidence": [
+				"4 failing mounted-test cases documented pre-fix",
+				"\"staged in hub-ui2-wt...commits pending signing, no PR yet\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T15:17:52.786Z"
 		},
 		{
 			"key": "spec:2026-10-07-readiness-mention-contrast-spec",
@@ -29324,38 +29221,6 @@
 			"scoredAt": "2026-10-21T18:58:42.318Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged whatsapp session-reset feature commit, not an active deploy incident, so there is little to execute beyond routine monitoring.",
-			"evidence": [
-				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T14:17:20.856Z"
-		},
-		{
 			"key": "issue:minion-meta#441",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30690,6 +30555,75 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T01:56:37.221Z"
+		},
+		{
+			"key": "proposal:2026-10-07-hub-readiness-state-integrity-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Open-items ledger for the readiness state-integrity batch (HC-040, HC-037) + NOTIF-019",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-07-hub-readiness-state-integrity-followups.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "d1b9c8311a5927e76a6b635a61a14e3e845eaa338467ce928664ed7af0b7270a",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 2
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"spec:2026-10-07-readiness-flow-export-ownership-spec",
+				"spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec"
+			],
+			"rationale": "The ledger itself explicitly states it 'authorizes no change by itself', so it is a bookkeeping artifact rather than an executable goal.",
+			"evidence": [
+				"\"This proposal authorizes no change by itself\"",
+				"lists only TODO markers and scope boundaries, no new code request"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T15:17:52.786Z"
+		},
+		{
+			"key": "proposal:2026-10-07-hub-readiness-ui-a11y-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Open-items ledger for the readiness UI/a11y batch (HC-043, HC-028, UI-002, HC-029, HC-027, GW-027)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-07-hub-readiness-ui-a11y-followups.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "331db018ad000a80b0ffa0178dbcdc77472bccd1ef4f7e21d4cca18c39547214",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 2
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"spec:2026-10-07-readiness-role-button-keyboard-spec"
+			],
+			"rationale": "Like its sibling ledger, this proposal documents already-closed findings and open ends without requesting further change itself.",
+			"evidence": [
+				"\"This proposal is that ledger; it authorizes no change by itself\"",
+				"five of six referenced specs already have merged commits/PRs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T15:17:52.786Z"
 		},
 		{
 			"key": "proposal:2026-10-09-gateway-native-formatter-reproducibility",
@@ -37988,6 +37922,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:34:16.614Z"
+		},
+		{
+			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Every role=\"button\" control honours the native button keyboard contract (HC-027)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-role-button-keyboard-spec.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "cbd7a405347ab606edcf3098bc21d65942b7f195052806a6b4c12139d7380c24",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-10-07-hub-readiness-ui-a11y-followups"
+			],
+			"rationale": "The companion ledger states this finding's commit is already merged, so the spec's catalog status of 'implementing' appears stale and the work is already satisfied.",
+			"evidence": [
+				"ledger table: \"HC-027 | hub `181b1014` | #437 (merged `c43795732`)\"",
+				"re-grep in ledger found no remaining TODO marker for HC-027"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T15:17:52.786Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
