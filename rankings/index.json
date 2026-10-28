@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T07:32:06.264Z",
+	"generatedAt": "2026-10-28T07:41:00.710Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1164,39 +1164,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:34:16.614Z"
-		},
-		{
-			"key": "pr:minion_hub#607",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#607 feat(crm): doors — a list of every public entry point with an on/off switch",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/607",
-			"sourceUpdatedAt": "2026-10-26T03:14:01Z",
-			"sourceFingerprint": "808252b6d6bb36713bcee8cc2e6712c7bbec8237701915523a3f3411b14a2963",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Foundation slice unblocks six stacked downstream slices and is already live-checked with fixes applied, pending the owner gate the spec itself calls for.",
-			"evidence": [
-				"S0 is the dependency for S1-S6 of spec 041 per the meta PR's merge-order table",
-				"security/data tagged with explicit owner approval required before S0 starts",
-				"live-checked locale-doubling and public-page layout fixes on dev:local"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:18:33.441Z"
 		},
 		{
 			"key": "proposal:2026-10-02-hub-gateway-production-readiness-recon",
@@ -2388,77 +2355,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T04:48:18.674Z"
-		},
-		{
-			"key": "pr:minion_hub#609",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#609 feat(crm): form doors — public intake forms that create CRM contacts",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/609",
-			"sourceUpdatedAt": "2026-10-26T03:18:36Z",
-			"sourceFingerprint": "16cd280ee826c6f058fbb94bcc58a4ae2ab785daca25fa8d7698669961029b07",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#608",
-				"pr:minion_hub#610"
-			],
-			"rationale": "Fixes a real client data-loss incident (FACES intake silently failing to persist patient answers) with solid validation/consent/rate-limit safeguards, but is still stacked on an unmerged S0 base.",
-			"evidence": [
-				"Closes FACES intake data loss at facesculptors.net per PR body",
-				"stacked on feat/collection-points (S0), needs retarget before merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:30:39.752Z"
-		},
-		{
-			"key": "pr:minion_hub#615",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#615 fix(crm): doors hold up under real traffic — shared rate limit, safe contact upsert, follow-up skips leads staff already answered",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/615",
-			"sourceUpdatedAt": "2026-10-26T04:15:37Z",
-			"sourceFingerprint": "8552161e7d93bee6fc2b4d2512f67f8acd772d3e7f8188c6c93d3dc874116060",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#614",
-				"pr:minion_hub#616"
-			],
-			"rationale": "Hardens doors under real traffic with a concrete contact-upsert race fix and shared rate limiting, tagged security.",
-			"evidence": [
-				"savepoint-based ensureCrmContact avoids lost-identity race",
-				"shared public_rate_limits, 5/min per visitor",
-				"QA SQL run caught co-buyers dropped by NULL party/contact, fixed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T04:18:14.499Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3174605053",
@@ -7175,6 +7071,38 @@
 			"scoredAt": "2026-10-26T04:18:14.499Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-183fe9a77973",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/crm-contact-ensure.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-183fe9a77973.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "82bfcb063a7e1d48b4b2eba7ab7e180821c38c0648dda1052960b6be923d2458",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A catch block that can abort a caller-owned transaction and poison the connection is a real correctness risk with a well-specified fix direction.",
+			"evidence": [
+				"TODO(handoff) at crm-contact-ensure.ts:44 referencing flaw F2",
+				"diagnosis cites concrete tx-poisoning mechanism and offers savepoint/rethrow fix options"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T07:41:00.554Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2123c34b9bc0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8761,38 +8689,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T01:59:43.382Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-183fe9a77973",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/crm-contact-ensure.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-183fe9a77973.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "6ed5b85bfd68266df145672b86038931136c46ef096363b96ceb16583c4419d8",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A catch inside a caller-owned transaction can leave it poisoned/unrecoverable, a real transactional-integrity risk with a clear code location.",
-			"evidence": [
-				"\"this catch leaves the tx aborted (same flaw F2\"",
-				"crm-contact-ensure.ts flagged inside caller's tx"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:31:42.991Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-312a147d4932",
@@ -10567,40 +10463,6 @@
 			"scoredAt": "2026-10-26T06:48:05.926Z"
 		},
 		{
-			"key": "pr:minion_hub#614",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#614 feat(crm): public door pages render on the server — real 404s and FAQ markup search engines can read",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/614",
-			"sourceUpdatedAt": "2026-10-26T04:15:58Z",
-			"sourceFingerprint": "e0520b38e93c139fd120b84260281b2a3b42dd02a34b6e85f9449ff59da1a8d6",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#617"
-			],
-			"rationale": "Server-rendering public door pages fixes real 404 and SEO gaps and catches a cross-request language-leak bug before it could ship broadly.",
-			"evidence": [
-				"module-level setLanguageTag() would have leaked locale across requests process-wide; now browser-only",
-				"/d/ and /book/ now answer real HTTP 404 with FAQPage JSON-LD in raw HTML"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T04:48:18.674Z"
-		},
-		{
 			"key": "pr:minion-meta#884",
 			"kind": "pr",
 			"stage": "development",
@@ -11295,38 +11157,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T09:47:18.733Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-40a4a290126b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/doors/offer/Public.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-40a4a290126b.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "53a20c8fa4bc57b3412a1cdfcec57baad2a475b4ffe10c0a39a0f2d8a15a2cd8",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Payment-link integration is blocked on external provider credentials rather than bounded engineering, so it isn't actionable paid work yet.",
-			"evidence": [
-				"\"no credentials yet; see proposal 2026-10-24-hub-collection-points-followups\"",
-				"fix direction starts with \"Obtain API credentials from both payment providers\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:31:42.991Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5886b6d51578",
@@ -13775,42 +13605,6 @@
 			"scoredAt": "2026-10-22T17:10:01.458Z"
 		},
 		{
-			"key": "pr:minion_hub#611",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#611 feat(crm): one automatic WhatsApp follow-up for form leads who did not buy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/611",
-			"sourceUpdatedAt": "2026-10-26T03:19:09Z",
-			"sourceFingerprint": "80d666e71096b09117862ed64a66f967a35770dd09262d60627094a251962b7b",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#891",
-				"pr:minion_hub#612"
-			],
-			"rationale": "Well-specified WhatsApp follow-up slice with idempotency and audit safeguards, but stacked on an unmerged foundation branch and has an open UI gap.",
-			"evidence": [
-				"spec 041 S4, FR-009 with idempotency key door-fu-<door>-<contact>",
-				"stacked on feat/collection-points (S0), retarget after S0 merges",
-				"Open end: no UI writes the opt-out flag yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:31:46.403Z"
-		},
-		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14916,41 +14710,6 @@
 			"scoredAt": "2026-10-22T23:26:42.553Z"
 		},
 		{
-			"key": "pr:minion_site#37",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_site",
-			"title": "#37 release(site): homepage tells the method in plain words, one ask per section (spec 040)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/37",
-			"sourceUpdatedAt": "2026-10-26T06:14:34Z",
-			"sourceFingerprint": "6c2d3b8d27584a64f2c7b1807a2bdff8a677e5aa7c61f2a171890f2198b2adc8",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#893"
-			],
-			"rationale": "Scoped production release of site homepage redesign with full gate and visual-diff verification.",
-			"evidence": [
-				"bun run check 0/0; vitest 104/104",
-				"Visual: matches dev-based redesign with 0 pixels different",
-				"Spec: minion-meta#893"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T06:18:08.232Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15530,6 +15289,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:41:10.421Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-40a4a290126b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/doors/offer/Public.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-40a4a290126b.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "2796952635497c03cc32b80ad8004bce5dd7fa1735749dad6c350edce0ec29a8",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The blocking dependency is missing external payment-provider credentials, so the current ask isn't an executable engineering task yet.",
+			"evidence": [
+				"marker states 'no credentials yet' for Culqi/Mercado Pago",
+				"fix direction requires obtaining API credentials before any code wiring can happen"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T07:41:00.554Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-68c035f5b627",
@@ -17866,41 +17657,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T17:10:01.458Z"
-		},
-		{
-			"key": "pr:minion_hub#616",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#616 feat(crm): staff see where each contact came from, get told about new form leads, and can stop automatic messages",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/616",
-			"sourceUpdatedAt": "2026-10-26T04:15:44Z",
-			"sourceFingerprint": "97c0a68d4edd168c8c57a40ad713871c7db887a8c6481ff334b90a20d3eef80a",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#614",
-				"pr:minion_hub#615"
-			],
-			"rationale": "Attribution/notification UI feature with much thinner evidence in its summary than its stack siblings.",
-			"evidence": [
-				"summary gives no gate or test evidence unlike #614/#615",
-				"stacked on feat/doors-f2-hardening"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T04:18:14.499Z"
 		},
 		{
 			"key": "pr:minion-meta#809",
@@ -22217,78 +21973,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:06:45.901Z"
-		},
-		{
-			"key": "pr:minion_hub#612",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#612 feat(crm): FAQ doors drafted from real customer questions",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/612",
-			"sourceUpdatedAt": "2026-10-26T03:19:16Z",
-			"sourceFingerprint": "97f8ea99801f52c9e06b5663db509699019ea59b72b52df4fce440a27521eb3b",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#891",
-				"pr:minion_hub#613"
-			],
-			"rationale": "FAQ door slice is clearly scoped with privacy safeguards but depends on the unmerged S0 branch and has a known SEO gap.",
-			"evidence": [
-				"spec 041 S5, US5, FR-010/FR-011",
-				"Known gap: ssr=false means crawlers without JS miss JSON-LD (TODO handoff)",
-				"rate-limited AI draft generation at 3 per 10 min per org"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:31:46.403Z"
-		},
-		{
-			"key": "pr:minion_hub#613",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#613 feat(crm): offer doors — public price list with WhatsApp and booking buttons",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/613",
-			"sourceUpdatedAt": "2026-10-26T03:18:48Z",
-			"sourceFingerprint": "abc3d6a7877d7c3b2cefa94ed213de23bba0c85dbf16cb12d8741f5e50c50fca",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#891",
-				"pr:minion_hub#612"
-			],
-			"rationale": "Offer door slice is simple and scoped, with private fields correctly excluded, but payment integration is explicitly deferred.",
-			"evidence": [
-				"spec 041 S6",
-				"Only name, category and price leave the server",
-				"Online payment links left as a handoff TODO"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:31:46.403Z"
 		},
 		{
 			"key": "pr:minion-meta#849",
@@ -27898,41 +27582,6 @@
 			"scoredAt": "2026-10-22T23:34:17.253Z"
 		},
 		{
-			"key": "pr:minion_hub#608",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#608 feat(scheduling): booking links record where the booker came from",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/608",
-			"sourceUpdatedAt": "2026-10-26T03:18:21Z",
-			"sourceFingerprint": "259a05f5a501d2a35c19b75b983f00238ea3e9e85e675f78484ec14f629ffd5d",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#609",
-				"pr:minion_hub#610"
-			],
-			"rationale": "Booking-link attribution capture is scoped but stacked on an unmerged S0 branch and needs to be retargeted before it can land.",
-			"evidence": [
-				"Stacked on feat/collection-points (S0), retarget after S0 merges",
-				"no gates/test evidence listed in PR body"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:30:39.752Z"
-		},
-		{
 			"key": "pr:minion-meta#555",
 			"kind": "pr",
 			"stage": "development",
@@ -31529,6 +31178,38 @@
 			"scoredAt": "2026-10-28T01:50:32.631Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-1242576349",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/crm/[contactId]/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1242576349.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "b6f4086643ce979d31ee8794e383c8a79ea18cfef88e8bceb656df75ba7131e1",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two concrete, line-anchored UI defects in CRM PageBody.svelte with a clear spec reference make this a bounded fix.",
+			"evidence": [
+				"markers at PageBody.svelte:826 (mailto link lost) and :952 (tag ordering per spec Bundle F)",
+				"status review, awaiting approval into spec pipeline"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T07:41:00.554Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1323254565",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33419,41 +33100,6 @@
 			"scoredAt": "2026-10-22T23:20:58.633Z"
 		},
 		{
-			"key": "pr:minion_hub#610",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#610 feat(crm): suggest what to offer a customer next",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/610",
-			"sourceUpdatedAt": "2026-10-26T03:18:12Z",
-			"sourceFingerprint": "12df26c3e13d37f35c4ae8384cf373f29e86906954f9702b3ac831de94b1df02",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#608",
-				"pr:minion_hub#609"
-			],
-			"rationale": "Read-only upsell-suggestion feature is well scoped but stacked on the same unmerged S0 base as its sibling slices.",
-			"evidence": [
-				"Stacked on feat/collection-points (S0), retarget after S0 merges",
-				"read-only, 404s for contacts owned by another rep per PR body"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T03:30:39.752Z"
-		},
-		{
 			"key": "pr:minion-meta#827",
 			"kind": "pr",
 			"stage": "development",
@@ -35197,6 +34843,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T21:57:40.156Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Commit describes an already-merged whatsapp session-reset feature with no outstanding action.",
+			"evidence": [
+				"commit 191d9a6 already merged per summary",
+				"describes a completed feature, not a pending deployment issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T07:41:00.554Z"
 		},
 		{
 			"key": "issue:minion-meta#566",
@@ -37575,38 +37253,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:20:04.625Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-1242576349",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/crm/[contactId]/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1242576349.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "e23a86a6cb1f0f69a2b347caffa2a5822034bef4f943763462ee0b6f96c87d28",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Small CRM contact page issues, one explicitly tied to an existing spec (Bundle F) giving reasonable clarity.",
-			"evidence": [
-				"PageBody.svelte:913 spec 2026-09-28 Bundle F note",
-				"status review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T01:51:32.356Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1447734948",
@@ -40934,38 +40580,6 @@
 			"scoredAt": "2026-10-28T02:01:02.574Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "13afe7b7197c5e225fd40dd3e50aca66b934e119cab4cf432d12e0be90541fde",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a meta-ledger marker aggregating unrelated TODO strings copied from a rankings data file, not an actionable finding.",
-			"evidence": [
-				"Markers are quoted strings from rankings/index.json, not real code TODOs",
-				"Definition of done is satisfied only by the sweep removing its own generated marker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:47:16.680Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42956,6 +42570,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T01:57:48.567Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "5dbfba0e40d5e62ccfbc26456f1b9c8daafb5128d5396a0b9be8632d2e5197dc",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged markers are quoted rationale fragments inside the meta-repo's own generated rankings data file, not real unresolved code TODOs.",
+			"evidence": [
+				"all markers point into rankings/index.json lines, a generated ranking artifact",
+				"quoted fragments read as excerpts of other proposals' rationale text rather than source-code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T07:41:00.554Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
