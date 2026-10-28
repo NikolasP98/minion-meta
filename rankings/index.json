@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T19:20:05.207Z",
+	"generatedAt": "2026-10-28T19:47:28.029Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -15219,21 +15219,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 6,
 				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "An approved finding names a specific incomplete ALTER TABLE migration that can block schema pushes and has a clear verifiable fix path.",
+			"rationale": "An incomplete ALTER TABLE migration risks blocking schema pushes and has a clear, bounded fix direction already specified.",
 			"evidence": [
-				"TODO(handoff): drizzle/0008_workshop_thumbnail.sql",
-				"status: approved",
-				"test locally with bun run db:push"
+				"TODO(handoff) marker names incomplete ALTER TABLE in 0008_workshop_thumbnail.sql",
+				"Fix direction: verify statement and test with bun run db:push"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T19:26:03.802Z"
+			"scoredAt": "2026-10-28T19:47:27.872Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
@@ -42243,6 +42242,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T18:17:25.889Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The summary is a commit message for an already-merged feature with no stated deployment health issue to act on.",
+			"evidence": [
+				"Summary is commit text for merged PR #361",
+				"No deployment problem or failure described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T19:47:27.872Z"
 		},
 		{
 			"key": "issue:minion-meta#373",
