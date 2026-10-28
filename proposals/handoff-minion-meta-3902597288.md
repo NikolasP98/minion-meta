@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-3902597288
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/src/lib/assistant/turn-router.ts (minion-meta)
-status: draft
+status: review
 created: 2026-10-23
 updated: 2026-10-28
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-22-agent-decision-and-proactivity-experiments
 ---
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/src/lib/assistant/turn-router.ts

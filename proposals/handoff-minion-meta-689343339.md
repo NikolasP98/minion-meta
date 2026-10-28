@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-689343339
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/development/b-factory/revision1/factory.patch (minion-meta)
-status: draft
+status: review
 created: 2026-10-23
 updated: 2026-10-28
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-22-agent-decision-and-proactivity-experiments
 ---
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/development/b-factory/revision1/factory.patch
