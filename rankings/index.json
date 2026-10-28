@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T04:17:04.890Z",
+	"generatedAt": "2026-10-28T04:47:27.166Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2593,6 +2593,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T08:26:53.177Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-63d95b819dee",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/+layout.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-63d95b819dee.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "b0732cfb116fe2888fdea1caacd0cce9e5c6b39c35decc878e0c141cd409fe25",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Stale-session risk on CRM/POS routes handling financial and customer data is a concrete security/compliance gap with a specific, pattern-matched fix direction.",
+			"evidence": [
+				"TODO(handoff): Qualify CRM/POS leave-return with an authenticated session in +layout.svelte",
+				"Diagnosis notes stale Supabase auth tokens could allow sensitive operations after expiry; existing pattern exists in src/server/auth/"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T04:47:27.020Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c8246433d9b9",
@@ -7233,38 +7265,6 @@
 			"scoredAt": "2026-10-24T22:48:08.619Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-63d95b819dee",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/+layout.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-63d95b819dee.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "b0732cfb116fe2888fdea1caacd0cce9e5c6b39c35decc878e0c141cd409fe25",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Stale Supabase session reuse on CRM/POS routes is a security/compliance risk with a clear, bounded fix direction.",
-			"evidence": [
-				"stale auth tokens could be used for sensitive operations, creating security and compliance risks",
-				"Add session refresh logic in onMount and/or afterNavigate to verify the Supabase session is still valid"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T04:27:07.333Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-7440051c7752",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8350,6 +8350,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T18:58:06.929Z"
+		},
+		{
+			"key": "proposal:2026-09-29-hub-pos-calendar-container-cancel-drag",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "POS calendar — container status from active members, optimistic cancel, drag-to-reorder / drag-out-to-separate in the fan deck",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-pos-calendar-container-cancel-drag.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "244680993223fbcfd346e8124a5d939495334b6d662918288ca1d4299555cd7d",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Detailed TO-BE with concrete file/function targets addresses a real POS calendar UX bug around container status and cancel feedback for live bookings.",
+			"evidence": [
+				"Cancel of lead booking makes whole 3-member container read cancelled although others are active",
+				"TO-BE specifies createOptimistic overlay, statusOf mapping, and a new reorderVisit service with tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T04:47:27.020Z"
 		},
 		{
 			"key": "proposal:2026-10-07-hub-calendar-single-event-services",
@@ -17934,38 +17966,6 @@
 			"scoredAt": "2026-10-21T18:58:06.929Z"
 		},
 		{
-			"key": "proposal:2026-09-29-hub-pos-calendar-container-cancel-drag",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "POS calendar — container status from active members, optimistic cancel, drag-to-reorder / drag-out-to-separate in the fan deck",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-pos-calendar-container-cancel-drag.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "244680993223fbcfd346e8124a5d939495334b6d662918288ca1d4299555cd7d",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Detailed owner-requested UX proposal for the POS calendar remains in draft proposal stage with no spec or implementation started.",
-			"evidence": [
-				"status: draft",
-				"no API to change groupSeq order; stamps are written by group create/merge/detach only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T04:27:07.333Z"
-		},
-		{
 			"key": "proposal:2026-10-12-hub-catalog-composition-cache-staleness",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21509,23 +21509,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 4,
 				"implementation": 3
 			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-79144f323b5a",
-				"pr:minion_hub#576"
-			],
-			"rationale": "OAuth/file-drop qualification for Tauri desktop webviews is an explicitly deferred preview limitation that pairs with the signing-credentials TODO into one desktop-qualification goal.",
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Auto-filed TODO about Tauri OAuth/file-drop qualification names a real desktop-webview risk but lacks a bounded test matrix or concrete acceptance criteria.",
 			"evidence": [
-				"TODO(handoff): Qualify provider sign-in and file drops in installed OS webviews",
-				"documented ... preview limitations rather than signing gates"
+				"Marker: 'Qualify provider sign-in and file drops in installed OS webviews' in src-tauri/src/lib.rs",
+				"Fix direction asks to test OAuth across OSes and add Tauri file-drop listeners without defined scope of providers/OSes"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T04:27:07.333Z"
+			"scoredAt": "2026-10-28T04:47:27.020Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-66d88ed81830",
@@ -35131,38 +35128,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T21:57:40.156Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged WhatsApp session-reset authorization commit with no indication of deployment failure or incident, so this reads as routine shipped work rather than an urgent board goal.",
-			"evidence": [
-				"commit message describes a merged feature (#361) with spec reference",
-				"status is unknown and tags only say deployment, no failure signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T04:17:04.708Z"
 		},
 		{
 			"key": "issue:minion-meta#566",
