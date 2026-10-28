@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T08:18:12.016Z",
+	"generatedAt": "2026-10-28T08:47:37.530Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2459,38 +2459,6 @@
 			"scoredAt": "2026-10-28T02:03:59.347Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-d1c5d80",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ d1c5d80",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-d1c5d80.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "0fabf2c5b81fe8181570b001d0bc2e49db9a1cb3b717a0f6c03944b5e4d5ff6c",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The bundled findings include a high-severity cross-tenant data isolation gap in tag-links.service.ts that needs a prompt, scoped fix.",
-			"evidence": [
-				"Missing org isolation in getContactTagsBulk query; lacks eq(crmContactTags.orgId...) risking cross-tenant data access",
-				"high severity unvalidated-input finding at tag-links.service.ts:117"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T08:26:53.177Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-63d95b819dee",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3279,6 +3247,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T23:48:04.899Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-d1c5d80",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ d1c5d80",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-d1c5d80.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "0fabf2c5b81fe8181570b001d0bc2e49db9a1cb3b717a0f6c03944b5e4d5ff6c",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Merge scan surfaces a high-severity cross-tenant data access gap alongside several unchecked-access crash risks in merged production code, each pinned to exact file:line.",
+			"evidence": [
+				"tag-links.service.ts:117 missing org isolation filter, risking cross-tenant data access",
+				"scheduling.service.ts:261/476 destructure .returning() without checking row exists",
+				"SellableWizard.svelte:361 accesses sellable.productId without validating response"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:47:37.365Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
@@ -7039,38 +7040,6 @@
 			"scoredAt": "2026-10-26T04:18:14.499Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-183fe9a77973",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/crm-contact-ensure.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-183fe9a77973.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "82bfcb063a7e1d48b4b2eba7ab7e180821c38c0648dda1052960b6be923d2458",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A catch block that can abort a caller-owned transaction and poison the connection is a real correctness risk with a well-specified fix direction.",
-			"evidence": [
-				"TODO(handoff) at crm-contact-ensure.ts:44 referencing flaw F2",
-				"diagnosis cites concrete tx-poisoning mechanism and offers savepoint/rethrow fix options"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:41:00.554Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-2123c34b9bc0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8952,6 +8921,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-25T01:48:09.211Z"
+		},
+		{
+			"key": "proposal:ci-minion-ai-auto-response",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Auto response on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "CI on minion-ai main is red with a clear, bounded root cause (missing private-key input to create-github-app-token) and an explicit DoD.",
+			"evidence": [
+				"Error: Input required and not supplied: private-key",
+				"latest completed run on main failed per auto-response job log",
+				"DoD: workflow green on main or deliberately disabled with rationale"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:47:37.365Z"
 		},
 		{
 			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
@@ -11656,6 +11658,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-23T18:17:41.450Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-183fe9a77973",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/crm-contact-ensure.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-183fe9a77973.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "e25ce76fbe4e9cf21194a087dabdbcd76499141fedfa92c12d0d553aa56f9e69",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already approved post-merge finding describing a tx-abort bug with a concrete fix direction, ready to move into dev.",
+			"evidence": [
+				"catch inside caller's tx leaves the tx aborted (flaw F2)",
+				"status: approved, updatedAt 2026-10-28",
+				"fix direction given: let errors bubble, re-throw after cleanup, or use a savepoint"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:47:37.365Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7cff7d845501",
@@ -18816,38 +18851,6 @@
 			"scoredAt": "2026-10-26T13:50:45.643Z"
 		},
 		{
-			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The scoring-pipeline gaps are well documented but no G1 producer or full-axis G2 writer exists yet, so this needs further scoping before dispatch.",
-			"evidence": [
-				"No G1 producer exists",
-				"The live writer never emits collisions/testability"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T08:26:53.177Z"
-		},
-		{
 			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21748,36 +21751,37 @@
 			"scoredAt": "2026-10-22T23:05:49.610Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-auto-response",
+			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
 			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Auto response on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
+			"repo": "minion-factory",
+			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
 			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
+			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
 			"score": 42,
 			"band": "low",
 			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
+				"criticality": 3,
+				"importance": 6,
+				"impact": 4
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 7
+				"implementation": 4
 			},
 			"confidence": 6,
-			"recommendation": "execute",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The failure is a single clear missing-input bug in a GitHub Action with an exact fix target and definition of done.",
+			"rationale": "Well-documented review-pipeline gaps but bundles four distinct producer fixes (reviewed_commit writer, G2 axis completeness, missing G1 scorer, index coverage) that should be split before execution.",
 			"evidence": [
-				"Error: Input required and not supplied: private-key",
-				"Definition of done: the workflow's latest completed run on main is green"
+				"G2 reviewer only emits 4 of 6 required RUBRICS.spec axes, so sidecars validate but derive no score",
+				"no G1 producer exists for proposals/*.review.md",
+				"129 of 198 specs have no sidecar at all"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T08:26:53.177Z"
+			"scoredAt": "2026-10-28T08:47:37.365Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-3c21d7c",
@@ -39760,38 +39764,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:58:03.340Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deploy entry is just a shipped commit message (WhatsApp session reset, #361) with no stated problem or open issue.",
-			"evidence": [
-				"summary is the merged commit message for feat(whatsapp) #361",
-				"no deployment problem or failure is described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
