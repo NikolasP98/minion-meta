@@ -42,3 +42,10 @@ Reference the spec or incident log for "flaw F2" to confirm whether this service
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/617
 - file: `src/server/services/crm-contact-ensure.ts`
 - checked: 2026-10-28
+
+## Merged from handoff-minion-hub-1919405805
+
+Same marker, also caught by the handoff-ledger sweep against branch `master`:
+
+- `NikolasP98/minion_hub@master src/server/services/crm-contact-ensure.ts:44` — inside a caller's tx this catch leaves the tx aborted (same flaw F2
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/crm-contact-ensure.ts#L44

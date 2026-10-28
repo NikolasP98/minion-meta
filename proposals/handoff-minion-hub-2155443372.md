@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2155443372
 title: Handoff marker — src/lib/components/doors/offer/Public.svelte (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-40a4a290126b
 created: 2026-10-28
 updated: 2026-10-28
 repos: [minion-hub]

@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-1919405805
 title: Handoff marker — src/server/services/crm-contact-ensure.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-183fe9a77973
 created: 2026-10-28
 updated: 2026-10-28
 repos: [minion-hub]

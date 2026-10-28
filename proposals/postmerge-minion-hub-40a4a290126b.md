@@ -40,3 +40,10 @@ This payment integration is blocking the collection-points feature from handling
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/617
 - file: `src/lib/components/doors/offer/Public.svelte`
 - checked: 2026-10-28
+
+## Merged from handoff-minion-hub-2155443372
+
+Same marker, also caught by the handoff-ledger sweep against branch `master`:
+
+- `NikolasP98/minion_hub@master src/lib/components/doors/offer/Public.svelte:39` — online payment link (Culqi / Mercado Pago) — no credentials yet; see proposal 2026-10-24-hub-collection-points-followups
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/doors/offer/Public.svelte#L39
