@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T07:48:03.444Z",
+	"generatedAt": "2026-10-28T08:18:12.016Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11196,39 +11196,6 @@
 			"scoredAt": "2026-10-28T06:17:39.199Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-6200323e3d73",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "c780367e267d02cc2dcd76e815abb7d4ed88e0ba6adb28318e8366d598f0e543",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The TODO marks a real schema ambiguity between reorder_qty/moq/item_group that could produce invalid purchase orders, with a diagnosis and fix direction already given.",
-			"evidence": [
-				"TODO(handoff): item_group/reorder_qty/moq marker in src/server/db/pg-schema/stock.ts",
-				"Diagnosis notes order generation breaks if reorder_qty violates vendor moq",
-				"Fix direction specifies schema decision, check constraint, and migration update"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:57:13.897Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-9654a64b55fa",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13806,6 +13773,40 @@
 			"scoredAt": "2026-10-22T23:39:36.979Z"
 		},
 		{
+			"key": "proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Stock items — MOQ, Group and Reorder qty become custom columns (core schema keeps only what logic reads)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-stock-item-optional-fields-to-custom-columns.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "0b48c2f71c5753ac0b71593e43882ec062e58cea4aab7a4363619e853e843b01",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-6200323e3d73"
+			],
+			"rationale": "Owner-requested schema migration with explicit AS-IS/TO-BE/verification is already partway implemented across two pushed branches with tests.",
+			"evidence": [
+				"owner request 2026-09-30 to move MOQ/Group/Reorder qty to custom columns",
+				"branch feat/stock-optional-fields-custom has commits 5cc6ae6d and cdbd69e0 including a tested backfill script"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:18:11.849Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-cc150b5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15301,7 +15302,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/components/doors/offer/Public.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-40a4a290126b.md",
 			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "2796952635497c03cc32b80ad8004bce5dd7fa1735749dad6c350edce0ec29a8",
+			"sourceFingerprint": "2a34c6afb292d58ed78b805c11651773c743c68bbb4204b7cee6b8e37643792a",
 			"score": 48,
 			"band": "low",
 			"axes": {
@@ -15310,20 +15311,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 5,
 				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The blocking dependency is missing external payment-provider credentials, so the current ask isn't an executable engineering task yet.",
+			"rationale": "The blocker is missing third-party payment provider credentials, not code, so a normal engineering execution path can't close this until credentials exist.",
 			"evidence": [
-				"marker states 'no credentials yet' for Culqi/Mercado Pago",
-				"fix direction requires obtaining API credentials before any code wiring can happen"
+				"TODO(handoff): online payment link (Culqi / Mercado Pago) — no credentials yet",
+				"same marker independently caught by the separate handoff-ledger sweep"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:41:00.554Z"
+			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-68c035f5b627",
@@ -22012,14 +22013,14 @@
 			"scoredAt": "2026-10-22T23:01:41.237Z"
 		},
 		{
-			"key": "proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
+			"key": "proposal:2026-09-29-hub-table-filters-followups",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion_hub",
-			"title": "Stock items — MOQ, Group and Reorder qty become custom columns (core schema keeps only what logic reads)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-30-hub-stock-item-optional-fields-to-custom-columns.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "0b48c2f71c5753ac0b71593e43882ec062e58cea4aab7a4363619e853e843b01",
+			"title": "Table toolbar + Notion-style filters — open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "fa7c95518037b5adec5e75e0d6a74e2113811c8eb06feda350127eb0afa9e900",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -22028,20 +22029,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 7,
+				"implementation": 5
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Core removal and backfill script implementation are both already committed with tests, leaving only verification and the scheduled column drop.",
+			"rationale": "A detailed, itemized ledger of UI/filter follow-ups each naming a concrete file and next step, with one item already closed.",
 			"evidence": [
-				"branch feat/stock-optional-fields-custom has commits 5cc6ae6d and cdbd69e0 with tests",
-				"migration script supports dry-run, idempotency via templateKey, and snapshotting"
+				"item 3 marked CLOSED 2026-09-29 with a concrete DataTable prop added",
+				"items 1-2 and 5-8 each specify exact files and next steps"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:56:55.013Z"
+			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-uiux-consistency-followups",
@@ -28036,38 +28037,6 @@
 			"scoredAt": "2026-10-23T07:25:43.702Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-198db99358ad",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellCart.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-198db99358ad.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "f2fbe8eb409b19c7bff35df3513e409fc72e97f1bb931cb15691686870f7d970",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved, concretely located UX bug (one-way discount editor) with a clear fix direction is ready for implementation.",
-			"evidence": [
-				"status approved with exact file src/lib/components/pos/SellCart.svelte",
-				"diagnosis specifies adding a close affordance or toggle pattern as the fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:56:55.013Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-2d7b4a1718f3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28596,42 +28565,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T07:47:24.994Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-site-b0b6fc0066d7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/sections/FinalCTA.svelte (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-b0b6fc0066d7.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "0fc1a32c2b8925dd951ca16a7a885ed853109285ddffabbb03d0490aa169f1c9",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-24-site-stay-in-touch-updates",
-				"proposal:postmerge-minion-site-ca055449de0c"
-			],
-			"rationale": "A real, live TODO in FinalCTA.svelte with a concrete fix direction (opt-in table + Resend/Twilio wiring) that duplicates item 1 of the site's open-ends proposal and should merge into one goal.",
-			"evidence": [
-				"marker: 'send me updates' list missing in FinalCTA.svelte, the last conversion point on the landing page",
-				"fix direction specifies schema addition and Resend wiring",
-				"same open end already listed as item 1 in proposal:2026-10-24-site-stay-in-touch-updates"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:48:03.299Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-server-telemetry-lifecycle-spec",
@@ -32502,42 +32435,6 @@
 			"scoredAt": "2026-10-23T20:48:07.640Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-site-ca055449de0c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — todo-handoff in src/lib/data/pricing.ts (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ca055449de0c.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "1bfd075cc45347c1d0196ae3bd5fe4925418bb6524fe024cb9b61b6234948f2b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-24-site-stay-in-touch-updates",
-				"proposal:postmerge-minion-site-b0b6fc0066d7"
-			],
-			"rationale": "Live TODO in pricing.ts about the AI-premium rule duplicates item 4/owner-rule tracked in the site open-ends proposal, but this finding's own diagnosis section is malformed (leaked tool-call transcript rather than analysis), weakening its specification.",
-			"evidence": [
-				"marker: owner rule 2026-10-26 says AI is a premium upgrade, contradicting current pricing.ts",
-				"diagnosis section contains a garbled fake function-call transcript instead of real analysis",
-				"overlaps with pricing items already tracked in proposal:2026-10-24-site-stay-in-touch-updates"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:48:03.299Z"
-		},
-		{
 			"key": "issue:minion-meta#352",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33175,38 +33072,6 @@
 			"scoredAt": "2026-10-26T13:51:49.912Z"
 		},
 		{
-			"key": "proposal:2026-09-29-hub-table-filters-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Table toolbar + Notion-style filters — open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-table-filters-followups.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "fa7c95518037b5adec5e75e0d6a74e2113811c8eb06feda350127eb0afa9e900",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This is a bundled ledger of eight unrelated follow-up items rather than one verifiable goal, so it should be split into individually scoped goals.",
-			"evidence": [
-				"lists 8 distinct open ends across server filters, persistence, record-editor adoption, and schema cleanup",
-				"item 3 already closed 2026-09-29, showing items resolve independently"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T07:56:55.013Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1431194768",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33334,6 +33199,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T22:48:48.736Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-b0b6fc0066d7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/sections/FinalCTA.svelte (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-b0b6fc0066d7.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "3be731ffd8db39c0c08d13c0b242efbade9edd89b891cb62db430bcf646910bb",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A reasonable marketing lead-capture improvement, but not urgent and still needs scoping decisions (channel, schema) before it's execution-ready.",
+			"evidence": [
+				"TODO(handoff): a 'send me updates' list (newsletter or WhatsApp broadcast)",
+				"FinalCTA is described as the landing page's last conversion point"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
 			"key": "issue:minion-meta#416",
@@ -34141,6 +34038,38 @@
 			"scoredAt": "2026-10-22T08:10:18.992Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-198db99358ad",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellCart.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-198db99358ad.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "f2fbe8eb409b19c7bff35df3513e409fc72e97f1bb931cb15691686870f7d970",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, bounded UX fix in a single component with a clear problem statement and definition of done.",
+			"evidence": [
+				"TODO(handoff) in SellCart.svelte: discount editor is one-way with no close affordance",
+				"definition of done is simply removing or justifying the marker"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:18:11.849Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-1fcf12cd1a52",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34854,6 +34783,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T21:57:40.156Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-ca055449de0c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — todo-handoff in src/lib/data/pricing.ts (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ca055449de0c.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "f6311e41fcc6545e2388a3b687e384cfafe8f4b8e322e6ab6fbfb4c3f0470b4b",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The truncated TODO text and a malformed auto-diagnosis leave the actual pricing discrepancy unspecified, so scope needs clarification before work can start.",
+			"evidence": [
+				"TODO(handoff) text is cut off: 'owner rule 2026-10-26 says AI is a premium upgrade, yet this'",
+				"the diagnosis section contains unexecuted tool-call syntax instead of an actual finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
 			"key": "issue:minion-meta#566",
@@ -37489,6 +37450,40 @@
 			"scoredAt": "2026-10-23T22:47:07.738Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-6200323e3d73",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "c780367e267d02cc2dcd76e815abb7d4ed88e0ba6adb28318e8366d598f0e543",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns"
+			],
+			"rationale": "This exact TODO is already acknowledged and intentionally deferred inside the stock custom-columns proposal's own implementation notes.",
+			"evidence": [
+				"TODO(handoff) names the same item_group/reorder_qty/moq field set",
+				"the other proposal states these DB columns are 'kept read-only with a TODO(handoff)' pending a follow-up migration"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:18:11.849Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9732f7ab41ad",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39767,6 +39762,38 @@
 			"scoredAt": "2026-10-26T13:58:03.340Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy entry is just a shipped commit message (WhatsApp session reset, #361) with no stated problem or open issue.",
+			"evidence": [
+				"summary is the merged commit message for feat(whatsapp) #361",
+				"no deployment problem or failure is described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T08:18:11.849Z"
+		},
+		{
 			"key": "issue:minion_hub#452",
 			"kind": "issue",
 			"stage": "proposal",
@@ -41702,38 +41729,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T01:56:39.197Z"
-		},
-		{
-			"key": "run:minion_hub#40650282614",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/40650282614",
-			"sourceUpdatedAt": "2026-10-28T07:28:31Z",
-			"sourceFingerprint": "ddd300b3f2d02d39bd42b4aec711cbf62194c75170a17d5cbf283aad8c8f6611",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a transient in-progress CI run status, not an actionable goal artifact.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:32:06.104Z"
 		},
 		{
 			"key": "issue:minion-meta#429",
