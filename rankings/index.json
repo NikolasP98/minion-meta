@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T05:47:16.823Z",
+	"generatedAt": "2026-10-28T06:17:39.344Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3450,6 +3450,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T00:48:08.895Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-bf747956e314",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bf747956e314.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "c4e3b3dcf3316ef5fbef238e41fcaa68fd1ec87dc1a901d6c5818502d9b3957d",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Cancelling a plan without reconciling paid instalment lines creates orphaned billing data, risking account-balance errors and customer disputes.",
+			"evidence": [
+				"TODO(handoff): cancelling a plan leaves its already-paid instalment lines",
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/278"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:17:39.199Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment",
@@ -7434,38 +7466,6 @@
 			"scoredAt": "2026-10-26T03:31:46.403Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-bf747956e314",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos-accounts.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bf747956e314.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "c4e3b3dcf3316ef5fbef238e41fcaa68fd1ec87dc1a901d6c5818502d9b3957d",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Orphaned paid instalments on plan cancellation touches billing correctness but needs a business-rule decision (archive/credit/reverse) before implementation.",
-			"evidence": [
-				"fix direction lists three possible business rules without a chosen one",
-				"affects billing reconciliation and account balance calculations"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11164,6 +11164,40 @@
 			"scoredAt": "2026-10-21T07:27:09.761Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-5886b6d51578",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5886b6d51578.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "2dcad496613c3e7f013f25d27718b0088120bf38432ca5105f1a4fddc164ae4e",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b1533fc3bb8c"
+			],
+			"rationale": "This reschedule-outside-working-hours gap and the related BookingCreateForm resourceId gap both originate from merged PR #244 in the same scheduling flow and could become one booking-robustness goal.",
+			"evidence": [
+				"TODO(handoff): spec §3.2b allows a reschedule outside working hours",
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/244"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:17:39.199Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-6200323e3d73",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13336,38 +13370,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:31:46.403Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-5886b6d51578",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5886b6d51578.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "2dcad496613c3e7f013f25d27718b0088120bf38432ca5105f1a4fddc164ae4e",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The booking-reschedule-outside-hours gap needs a spec §3.2b policy decision (reject/clamp/authorize) before bounded implementation is actionable.",
-			"evidence": [
-				"fix direction requires reading spec §3.2b to pick among three behaviors",
-				"marker flags a working-hours validation gap in reschedule handler"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5e6d2717c59c",
@@ -21693,6 +21695,40 @@
 			"scoredAt": "2026-10-24T22:48:08.619Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-b1533fc3bb8c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCreateForm.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b1533fc3bb8c.md",
+			"sourceUpdatedAt": "2026-09-09",
+			"sourceFingerprint": "d0d3d8b43c3a97c0e7c2b7b7c4b3308d484c42c5c1ffbd8e06f7bc348b8c0c6b",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-5886b6d51578"
+			],
+			"rationale": "Fragile resourceId initialization in BookingCreateForm shares merged PR #244 and the scheduling flow with the reschedule-hours gap, making a combined scheduling-form fix more effective than two isolated goals.",
+			"evidence": [
+				"TODO(handoff): resourceId is only ever set from the calendar's",
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/244"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:17:39.199Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-b252c0822c83",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23504,38 +23540,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T06:19:35.436Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b1533fc3bb8c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCreateForm.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b1533fc3bb8c.md",
-			"sourceUpdatedAt": "2026-09-09",
-			"sourceFingerprint": "d0d3d8b43c3a97c0e7c2b7b7c4b3308d484c42c5c1ffbd8e06f7bc348b8c0c6b",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The diagnosis text itself is exploratory (\"I should look at the actual file\") rather than a resolved finding, so the problem needs re-investigation before it can be scoped as actionable work.",
-			"evidence": [
-				"diagnosis reads: \"I should look at the actual file to understand the incomplete TODO\"",
-				"fix direction offers three unresolved options without a recommendation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:56:28.048Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
@@ -26802,6 +26806,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:56:58.970Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 108584 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-10-28T06:13:13Z",
+			"sourceFingerprint": "cabab3b48d78409db3a38afbc33364e5c72551e3f3ea23d0926790aa12877842",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "An automated upstream-sync issue bundling 108,584 unrelated commits has no scoped target and should be reframed into discrete triaged fixes rather than scored as one goal.",
+			"evidence": [
+				"108584 new commit(s) available",
+				"list spans dozens of unrelated subsystems (ci, android, memory, auth) with no prioritization"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:17:39.199Z"
 		},
 		{
 			"key": "issue:minion-meta#329",
@@ -37183,38 +37219,6 @@
 			"scoredAt": "2026-10-22T23:39:36.979Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 107798 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-27T06:13:55Z",
-			"sourceFingerprint": "15c8233b58f5025f1f82dcab70f81e19464c519633a90e0271636a3a8d0db118",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Auto-generated upstream-sync notice dumps a huge raw commit log without defining any scoped, actionable task.",
-			"evidence": [
-				"title: 'Upstream sync: 107798 new commit(s) available'",
-				"body is a raw list of unrelated upstream commit hashes/messages"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T06:17:33.461Z"
-		},
-		{
 			"key": "issue:minion-meta#461",
 			"kind": "issue",
 			"stage": "proposal",
@@ -42143,6 +42147,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:08:54.067Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy-health entry only reports an already-merged WhatsApp session-reset commit with no outstanding action.",
+			"evidence": [
+				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
+				"commit already merged to gateway"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T06:17:39.199Z"
 		},
 		{
 			"key": "issue:minion-meta#689",
