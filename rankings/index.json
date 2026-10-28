@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-28T05:18:03.478Z",
+	"generatedAt": "2026-10-28T05:47:16.823Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5009,6 +5009,41 @@
 			"scoredAt": "2026-10-25T02:03:35.267Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dca03692bd9a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "18db0e81e8ba91005973f4902d9e28a45bc7b08860635e24dce0e13544efb6b6",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dd764fd1df5e",
+				"proposal:postmerge-minion-hub-d4a019b21d9a"
+			],
+			"rationale": "Non-atomic multi-transaction cancel risks real data inconsistency (orphaned bookings) in the POS/scheduling flow, a correctness bug worth fixing promptly.",
+			"evidence": [
+				"N independent transactions for a 'following' cancel instead of one atomic transaction",
+				"Fix direction: wrap all cancels in a single db.transaction()"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T05:47:16.680Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5025,20 +5060,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved financial-correctness fix: voiding an installment ticket doesn't reverse paid-to-date, risking reconciliation breakage.",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dca03692bd9a",
+				"proposal:postmerge-minion-hub-f25d9dc6080e"
+			],
+			"rationale": "Voiding an installment ticket without reversing paid-to-date creates real financial/reconciliation inconsistency in the POS system.",
 			"evidence": [
-				"'voiding an instalment ticket un-pays its plan (paid-to-date...)'",
-				"'customers appear over-paid, and reconciliation breaks'"
+				"Voiding an instalment ticket un-pays its plan without decrementing paid-to-date",
+				"Fix direction requires transactional reversal plus audit log"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:26:26.575Z"
+			"scoredAt": "2026-10-28T05:47:16.680Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
@@ -6237,38 +6275,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-27T02:18:41.143Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f25d9dc6080e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/personal-agent-binding.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f25d9dc6080e.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "90453afb4a27618d336f2a0b5d17782fa804151d5c149fadb45a714b53c208f2",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Architecturally significant multi-org binding limitation is approved but the fix requires a data-model migration that needs more scoping before execution.",
-			"evidence": [
-				"'A profile has one immutable gateway binding; concurrent multi-org'",
-				"fix direction requires 'migrate existing profiles to a default org and add a binding per additional org'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:26:26.575Z"
 		},
 		{
 			"key": "spec:2026-09-21-hub-optimistic-interactions-motion-spec",
@@ -7491,38 +7497,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T02:17:53.760Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dca03692bd9a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "18db0e81e8ba91005973f4902d9e28a45bc7b08860635e24dce0e13544efb6b6",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved data-integrity fix for a multi-transaction cancel path that can leave the DB inconsistent on partial failure.",
-			"evidence": [
-				"'N independent transactions, not one'",
-				"fix direction: 'Wrap all N cancel operations... in a single database transaction'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:26:26.575Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
@@ -14101,6 +14075,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-21T09:56:29.037Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f25d9dc6080e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/personal-agent-binding.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f25d9dc6080e.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "90453afb4a27618d336f2a0b5d17782fa804151d5c149fadb45a714b53c208f2",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Immutable single-org gateway binding is a real multi-tenant architectural limitation but the fix requires a schema migration that needs more scoping before execution.",
+			"evidence": [
+				"Profile has one immutable gateway binding, blocking concurrent multi-org use",
+				"Fix direction proposes org-scoped binding table plus migration of existing profiles"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T05:47:16.680Z"
 		},
 		{
 			"key": "spec:2026-08-17-maintenance-lane-monitors-spec",
@@ -21784,6 +21790,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T04:17:21.578Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d4a019b21d9a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "126a0dbd641e4078fe0512c08f46e715f03dac2c7bdc7e303d378da599811128",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dca03692bd9a",
+				"proposal:postmerge-minion-hub-dd764fd1df5e"
+			],
+			"rationale": "UI permission gating gap causes confusing UX but is not a correctness/data-integrity bug, with a clear fix direction already identified.",
+			"evidence": [
+				"Button gated server-side only on pos:create, no client-side check",
+				"Fix direction specifies adding client-side capability check in BookingDetailDrawer.svelte"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T05:47:16.680Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-slice4-worker-health-spec",
@@ -32292,38 +32333,6 @@
 			"scoredAt": "2026-10-27T22:47:21.501Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d4a019b21d9a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "126a0dbd641e4078fe0512c08f46e715f03dac2c7bdc7e303d378da599811128",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, bounded client-side permission-gating fix with a clear definition of done.",
-			"evidence": [
-				"status: approved",
-				"fix direction: 'Add client-side permission checks... conditionally render the button'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-21T05:26:26.575Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d5093998b234",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -40895,6 +40904,38 @@
 			"scoredAt": "2026-10-28T02:01:02.574Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "13afe7b7197c5e225fd40dd3e50aca66b934e119cab4cf432d12e0be90541fde",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a meta-ledger marker aggregating unrelated TODO strings copied from a rankings data file, not an actionable finding.",
+			"evidence": [
+				"Markers are quoted strings from rankings/index.json, not real code TODOs",
+				"Definition of done is satisfied only by the sweep removing its own generated marker"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-28T05:47:16.680Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42104,38 +42145,6 @@
 			"scoredAt": "2026-10-22T23:08:54.067Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deployment-health entry only restates a merged WhatsApp session-reset commit message with no stated deployment problem or action.",
-			"evidence": [
-				"summary is a commit message about sessionResetAuthorized, not a deployment issue",
-				"status: unknown, no failure or metric cited"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
-		},
-		{
 			"key": "issue:minion-meta#689",
 			"kind": "issue",
 			"stage": "proposal",
@@ -42885,38 +42894,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T01:57:48.567Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "3339f4d63fc02349b6f8231725820dc3b5c6ea91c98c66645e5c24667e42aad5",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The 'markers' are fragmented quotes scattered across the rankings data file itself, which is generated output from this ranking pipeline, not actionable code TODOs.",
-			"evidence": [
-				"markers are disconnected sentence fragments like 'the session is drawn when the cashier clicks' pulled from rankings/index.json",
-				"file is the ranking system's own output artifact"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T02:01:02.574Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
