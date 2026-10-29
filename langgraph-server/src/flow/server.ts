@@ -3,7 +3,7 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { streamSSE } from 'hono/streaming';
 import { z } from 'zod';
-import { compileFlow } from './compile-flow.js';
+import { compileFlow, triggeredReply } from './compile-flow.js';
 import { startHubEventListener } from './hub-events.js';
 import { UnsupportedFlowError, type FlowNode, type FlowEdge, type FlowRunEvent } from './types.js';
 
@@ -52,6 +52,9 @@ const FlowRunRequest = z.object({
   // Optional seed input for trigger-entry flows run manually from the editor —
   // without it a pluginTrigger/trigger entry starts with empty input.
   prompt: z.string().optional(),
+  // Spec 043: false when the calling client's org lacks `ai` (gateway flows-run.ts).
+  // Absent ⇒ true: safe only while this runner binds loopback (see bottom of file).
+  aiEnabled: z.boolean().optional(),
 });
 
 /**
@@ -60,7 +63,9 @@ const FlowRunRequest = z.object({
  * user auth via the optional HUB_API_TOKEN bearer. Reused by the triggered-run
  * entry too (which loads the top-level flow the same way).
  */
-function createHubFlowLoader(): (flowId: string) => Promise<{ nodes: FlowNode[]; edges: FlowEdge[] }> {
+function createHubFlowLoader(): (
+  flowId: string,
+) => Promise<{ nodes: FlowNode[]; edges: FlowEdge[]; aiEnabled?: boolean }> {
   const HUB_URL = process.env.HUB_URL ?? 'http://localhost:5173';
   const HUB_API_TOKEN = process.env.HUB_API_TOKEN ?? '';
   return async (flowId: string) => {
@@ -70,7 +75,8 @@ function createHubFlowLoader(): (flowId: string) => Promise<{ nodes: FlowNode[];
     if (!res.ok) {
       throw new UnsupportedFlowError(`Hub returned ${res.status} for flow ${flowId}.`);
     }
-    return (await res.json()) as { nodes: FlowNode[]; edges: FlowEdge[] };
+    // `aiEnabled` is the flow org's `ai` entitlement (spec 043); absent on older hubs ⇒ true.
+    return (await res.json()) as { nodes: FlowNode[]; edges: FlowEdge[]; aiEnabled?: boolean };
   };
 }
 
@@ -113,6 +119,7 @@ app.post('/flows/run', async (c) => {
         // id, so the stack seeds empty (a direct self-reference is still caught
         // one level in, and depth is bounded).
         loadFlow: loadHubFlow,
+        aiEnabled: parsed.data.aiEnabled,
       });
       await send({ level: 'debug', message: 'Compiled flow to StateGraph.' });
 
@@ -148,10 +155,12 @@ app.post('/flows/run-triggered', async (c) => {
 
   let nodes: FlowNode[];
   let edges: FlowEdge[];
+  let aiEnabled: boolean | undefined;
   try {
     const body = await loadHubFlow(flowId);
     nodes = body.nodes;
     edges = body.edges;
+    aiEnabled = body.aiEnabled;
   } catch (err) {
     return c.json({ error: `Hub unreachable: ${err instanceof Error ? err.message : String(err)}` }, 503);
   }
@@ -165,11 +174,11 @@ app.post('/flows/run-triggered', async (c) => {
       // cyclic reference is caught on the first hop.
       loadFlow: loadHubFlow,
       subflowStack: [flowId],
+      aiEnabled,
     });
     const result = await graph.invoke(initialState);
-    const lastMessage = result.messages[result.messages.length - 1];
-    const reply = String(lastMessage?.content ?? '');
-    return c.json({ reply });
+    // '' when no node produced a message, so the gateway's `reply &&` guard sends nothing.
+    return c.json({ reply: triggeredReply(result.messages, initialState.messages.length) });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return c.json({ error: `Flow run failed: ${message}` }, 500);

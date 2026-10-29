@@ -1127,3 +1127,196 @@ describe('schedule trigger entry node', () => {
     expect(String(result.messages[result.messages.length - 1].content)).toBe('seen:[]');
   });
 });
+
+// ── Spec 043 S4: AI nodes end their branch for orgs without the `ai` plan ──────
+
+import { vi } from 'vitest';
+import { triggeredReply } from './compile-flow.js';
+
+describe('compileFlow — aiEnabled:false (entitlements)', () => {
+  const node = (id: string, type: FlowNode['type'], data: Record<string, unknown>): FlowNode =>
+    ({ id, type, position: { x: 0, y: 0 }, data: { label: id, ...data } as never });
+  const flowEdge = (source: string, target: string, sourceHandle = 'out'): FlowEdge =>
+    ({ id: `${source}-${target}-${sourceHandle}`, source, sourceHandle, target, targetHandle: 'in', type: 'flow' });
+  const trig = node('t', 'trigger', { event: 'message:received', deliverResponse: true, sources: [] });
+  const chan = (id: string) => node(id, 'channel', { channel: 'whatsapp', destinations: [{ to: `to-${id}` }] });
+
+  /** Records every model call, gateway method call and channel send. */
+  function harness() {
+    const modelCalls: string[] = [];
+    const methods: Array<{ method: string; params: Record<string, unknown> }> = [];
+    const sends: Array<{ to: string; message: string }> = [];
+    const model = {
+      async invoke(msgs: BaseMessage[]) {
+        modelCalls.push(String(msgs[msgs.length - 1].content));
+        return new AIMessage('model-out');
+      },
+    };
+    const gatewayClient = {
+      async sendAgentTurn() { return 'agent-out'; },
+      async callGatewayMethod(method: string, params: Record<string, unknown>) {
+        methods.push({ method, params });
+        return `${method}-out`;
+      },
+      async sendChannelMessage(_c: string, to: string, message: string) {
+        sends.push({ to, message });
+        return { ok: true };
+      },
+    };
+    return { modelCalls, methods, sends, model, gatewayClient };
+  }
+
+  it('trigger → llm → channel: no model call, no send, empty reply', async () => {
+    const h = harness();
+    const llm = node('l', 'llm', { modelId: 'm' });
+    const { graph, initialState } = compileFlow([trig, llm, chan('c')], [flowEdge('t', 'l'), flowEdge('l', 'c')], {
+      initialPrompt: 'customer text', model: h.model, gatewayClient: h.gatewayClient, aiEnabled: false,
+    });
+    const result = await graph.invoke(initialState);
+    expect(h.modelCalls).toEqual([]);
+    expect(h.sends).toEqual([]);
+    expect(triggeredReply(result.messages, initialState.messages.length)).toBe('');
+  });
+
+  it('runs the non-AI branch only when one branch passes through an AI node', async () => {
+    const h = harness();
+    const llm = node('l', 'llm', { modelId: 'm' });
+    const xf = node('x', 'transform', { template: 'fwd:{input}' });
+    const { graph, initialState } = compileFlow(
+      [trig, llm, xf, chan('ca'), chan('cb')],
+      [flowEdge('t', 'l'), flowEdge('l', 'ca'), flowEdge('t', 'x'), flowEdge('x', 'cb')],
+      { initialPrompt: 'hi', model: h.model, gatewayClient: h.gatewayClient, aiEnabled: false },
+    );
+    await graph.invoke(initialState);
+    expect(h.modelCalls).toEqual([]);
+    expect(h.sends).toEqual([{ to: 'to-cb', message: 'fwd:hi' }]);
+  });
+
+  it('ends the branch of every AI node type (agent, structured, toolAgent, memory)', async () => {
+    for (const [type, data] of [
+      ['agent', { agentId: 'built:1' }],
+      ['structured', { modelId: 'm', schema: '{}' }],
+      ['toolAgent', { modelId: 'm', tools: [] }],
+      ['memory', { agentId: 'a' }],
+    ] as const) {
+      const h = harness();
+      const ai = node('ai', type, data);
+      const { graph, initialState } = compileFlow([trig, ai, chan('c')], [flowEdge('t', 'ai'), flowEdge('ai', 'c')], {
+        initialPrompt: 'hi', model: h.model, gatewayClient: h.gatewayClient, aiEnabled: false,
+        reactAgentFactory: () => { throw new Error('toolAgent must not run'); },
+      });
+      const result = await graph.invoke(initialState);
+      expect({ type, modelCalls: h.modelCalls, methods: h.methods, sends: h.sends }).toEqual({ type, modelCalls: [], methods: [], sends: [] });
+      expect(triggeredReply(result.messages, initialState.messages.length)).toBe('');
+    }
+  });
+
+  it('a pluginAction alertWatcher.classify ends its branch; alertWatcher.gate runs', async () => {
+    const h = harness();
+    const classify = node('pc', 'pluginAction', { pluginId: 'alert-watcher', contributionId: 'c', method: 'alertWatcher.classify' });
+    const gate = node('pg', 'pluginAction', { pluginId: 'alert-watcher', contributionId: 'g', method: 'alertWatcher.gate' });
+    const { graph, initialState } = compileFlow(
+      [trig, classify, gate, chan('ca'), chan('cb')],
+      [flowEdge('t', 'pc'), flowEdge('pc', 'ca'), flowEdge('t', 'pg'), flowEdge('pg', 'cb')],
+      { initialPrompt: 'hi', gatewayClient: h.gatewayClient, aiEnabled: false },
+    );
+    await graph.invoke(initialState);
+    expect(h.methods.map((m) => m.method)).toEqual(['alertWatcher.gate']);
+    expect(h.sends).toEqual([{ to: 'to-cb', message: 'alertWatcher.gate-out' }]);
+  });
+
+  it('a handoff node opens the relay with suggestionCount 0', async () => {
+    const h = harness();
+    const handoff = node('h', 'handoff', { destinations: [{ channel: 'whatsapp', to: 'O1' }], suggestionCount: 3 });
+    const { graph, initialState } = compileFlow([trig, handoff], [flowEdge('t', 'h')], {
+      initialPrompt: 'hi', gatewayClient: h.gatewayClient, aiEnabled: false,
+      eventPayload: { channelId: 'whatsapp', chatId: '51999@c.us', accountId: 'default' },
+    });
+    await graph.invoke(initialState);
+    expect(h.methods).toHaveLength(1);
+    expect(h.methods[0].method).toBe('flows.relay.open');
+    expect(h.methods[0].params.suggestionCount).toBe(0);
+  });
+
+  const routerFlow = (mode: 'llm' | 'hybrid', input: string, aiEnabled?: boolean) => {
+    const h = harness();
+    const router = node('r', 'router', {
+      mode, modelId: 'm',
+      branches: [{ id: 'b1', label: 'urgent', rule: { op: 'contains', value: 'urgente' } }],
+    });
+    const { graph, initialState } = compileFlow(
+      [trig, router, chan('ca'), chan('cd')],
+      [flowEdge('t', 'r'), flowEdge('r', 'ca', 'b1'), flowEdge('r', 'cd', 'default')],
+      { initialPrompt: input, model: h.model, gatewayClient: h.gatewayClient, aiEnabled },
+    );
+    return { h, run: () => graph.invoke(initialState) };
+  };
+
+  it('a router in llm mode selects no branch', async () => {
+    const { h, run } = routerFlow('llm', 'es urgente', false);
+    await run();
+    expect(h.modelCalls).toEqual([]);
+    expect(h.sends).toEqual([]);
+  });
+
+  it('a router in hybrid mode matches rule branches only', async () => {
+    const hit = routerFlow('hybrid', 'es urgente', false);
+    await hit.run();
+    expect(hit.h.sends.map((s) => s.to)).toEqual(['to-ca']);
+    const miss = routerFlow('hybrid', 'hola', false);
+    await miss.run();
+    expect(miss.h.modelCalls).toEqual([]);
+    expect(miss.h.sends).toEqual([]);
+  });
+
+  it('a subflow whose AI node was cut ends the parent branch too', async () => {
+    for (const [parentAi, childAi] of [[false, undefined], [undefined, false]] as const) {
+      const h = harness();
+      const sf = node('sf', 'subflow', { flowId: 'child' });
+      const child = {
+        nodes: [node('cp', 'promptBox', { value: '' }), node('cl', 'llm', { modelId: 'm' })],
+        edges: [flowEdge('cp', 'cl')],
+        aiEnabled: childAi,
+      };
+      const { graph, initialState } = compileFlow([trig, sf, chan('c')], [flowEdge('t', 'sf'), flowEdge('sf', 'c')], {
+        initialPrompt: 'customer text', model: h.model, gatewayClient: h.gatewayClient,
+        aiEnabled: parentAi, loadFlow: async () => child,
+      });
+      const result = await graph.invoke(initialState);
+      expect({ parentAi, childAi, modelCalls: h.modelCalls, sends: h.sends }).toEqual({ parentAi, childAi, modelCalls: [], sends: [] });
+      expect(triggeredReply(result.messages, initialState.messages.length)).toBe('');
+    }
+  });
+
+  it('logs skipped_by_entitlement with flowId, nodeId and nodeType', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const h = harness();
+      const llm = node('l', 'llm', { modelId: 'm' });
+      const { graph, initialState } = compileFlow([trig, llm], [flowEdge('t', 'l')], {
+        initialPrompt: 'hi', model: h.model, aiEnabled: false, subflowStack: ['flow-1'],
+      });
+      await graph.invoke(initialState);
+      expect(warn).toHaveBeenCalledWith('[flows] skipped_by_entitlement', { flowId: 'flow-1', nodeId: 'l', nodeType: 'llm' });
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it('aiEnabled absent or true → unchanged (model runs, channel sends, reply returned)', async () => {
+    for (const aiEnabled of [undefined, true]) {
+      const h = harness();
+      const llm = node('l', 'llm', { modelId: 'm' });
+      const { graph, initialState } = compileFlow([trig, llm, chan('c')], [flowEdge('t', 'l'), flowEdge('l', 'c')], {
+        initialPrompt: 'customer text', model: h.model, gatewayClient: h.gatewayClient, aiEnabled,
+      });
+      const result = await graph.invoke(initialState);
+      expect(h.modelCalls).toEqual(['customer text']);
+      expect(h.sends).toEqual([{ to: 'to-c', message: 'model-out' }]);
+      expect(triggeredReply(result.messages, initialState.messages.length)).toBe('Sent to 1/1 whatsapp destination(s).');
+    }
+    const llmMode = routerFlow('llm', 'es urgente');
+    await llmMode.run();
+    expect(llmMode.h.modelCalls).toEqual(['es urgente']);
+  });
+});
