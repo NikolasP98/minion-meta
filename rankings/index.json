@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-29T03:17:08.122Z",
+	"generatedAt": "2026-10-29T03:47:17.659Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -795,6 +795,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:46:38.665Z"
+		},
+		{
+			"key": "pr:minion-meta#900",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#900 docs(spec): 042 — gateway config lives in the DB (channels cutover, per-gateway settings, bootstrap-only gateway.json)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/900",
+			"sourceUpdatedAt": "2026-10-29T03:41:19Z",
+			"sourceFingerprint": "9633450eac033604d96a4bcb7179969867449130bbd329976ca7fcd6ddb7ce0d",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Active PANIK ticket shows WhatsApp cannot read two group chats because the DB/JSON config sources have diverged, and this PR is the already-scoped fix with explicit security/data owner gates.",
+			"evidence": [
+				"Trigger: PANIK WhatsApp cannot read its two group chats because the rule lives in the JSON file while the hub already writes the DB.",
+				"Security + data tag — owner approves the spec before any code and merges every slice.",
+				"CHANNEL_RUNTIME_APPLY=0 shows the DB path is still dark in prod."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-29T03:47:17.504Z"
 		},
 		{
 			"key": "proposal:2026-10-12-hub-micro-debloat",
@@ -2497,39 +2530,6 @@
 			"scoredAt": "2026-10-26T04:48:18.674Z"
 		},
 		{
-			"key": "pr:minion-meta#900",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#900 docs(spec): 042 — gateway config lives in the DB (channels cutover, per-gateway settings, bootstrap-only gateway.json)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/900",
-			"sourceUpdatedAt": "2026-10-29T02:22:27Z",
-			"sourceFingerprint": "f04e2ff36441ed373256f73a7c7b726d3a42a7f3f4007cd4ee39e8643db1726c",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-scoped spec slice tied to a live WhatsApp-rules bug, with owner-approval gates already built into the plan.",
-			"evidence": [
-				"Trigger: PANIK WhatsApp cannot read its two group chats because the rule lives in the JSON file while the hub already writes the DB.",
-				"Security + data tag — owner approves the spec before any code and merges every slice.",
-				"Fixes the hydrate server-id bug that makes every gateway load the first gateway's rows."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T02:47:43.765Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-63d95b819dee",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2992,6 +2992,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-25T04:47:02.540Z"
+		},
+		{
+			"key": "spec:2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "POS history per-shift tables + calendar totals; visit completion per service; package aggregates",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec.md",
+			"sourceUpdatedAt": "2026-10-14",
+			"sourceFingerprint": "3307613d6c47ea4042b215738e424d47b1a907cef7d8bd3d1f5616621621bc3f",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, owner-driven spec fixing active production usability/data-integrity issues (404 on removing first service, confirmation gaps) across the POS flow used daily by the clinic.",
+			"evidence": [
+				"status: approved",
+				"Confirmed against PostHog replay 01a13c14-4b83-7ab6-9fea-dc04bc6fcfd9 and production rows",
+				"removing a visit's first service must not 404; notes must not interrupt typing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-29T03:47:17.504Z"
 		},
 		{
 			"key": "issue:minion-meta#386",
@@ -4356,39 +4389,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-27T19:17:46.052Z"
-		},
-		{
-			"key": "spec:2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "POS history per-shift tables + calendar totals; visit completion per service; package aggregates",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec.md",
-			"sourceUpdatedAt": "2026-10-14",
-			"sourceFingerprint": "3307613d6c47ea4042b215738e424d47b1a907cef7d8bd3d1f5616621621bc3f",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This approved, richly detailed spec fixes confirmed production POS bugs affecting daily clinic operations.",
-			"evidence": [
-				"status: approved",
-				"Confirmed against PostHog replay ... and production rows",
-				"removing a visit's first service must not 404"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T03:39:15.325Z"
 		},
 		{
 			"key": "spec:2026-10-18-assistant-navigation-confirmation-spec",
@@ -18394,6 +18394,39 @@
 			"scoredAt": "2026-10-28T19:19:59.087Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-minion-run-dev-switcher",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "`minion run hub [--prd]` with a DEV-only user switcher in the avatar menu",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-minion-run-dev-switcher.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "9f23e5b7b95d773a30d126fc7186184907c96948c79f8bc73426a4ba26bb3c56",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, thoroughly-specced developer-experience proposal with clear slices and invariants but no urgency or outage risk.",
+			"evidence": [
+				"status: approved",
+				"Slices S1–S5 in the spec... with unit tests, a CI smoke on the live local stack, and a production 404 smoke.",
+				"Ambiguities resolved with the owner (2026-09-16)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-29T03:47:17.504Z"
+		},
+		{
 			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21888,17 +21921,18 @@
 				"specification": 7,
 				"implementation": 6
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This approved handoff finding has a clear, bounded fix direction to validate the dev-switcher smoke test against a real local database.",
+			"rationale": "Auto-filed handoff ledger item identifies a concrete untested TODO risking false confidence in the dev-switcher smoke test, with a clear fix direction.",
 			"evidence": [
 				"TODO(handoff): this hasn't been exercised against a live local Supabase",
-				"Fix direction: Run the smoke test against a real local SQLite instance ... seed minimal test data"
+				"Fix direction: Run the smoke test against a real local SQLite instance... Add a setup step to seed minimal test data",
+				"Latest occurrence ... checked: 2026-09-17"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T03:39:15.325Z"
+			"scoredAt": "2026-10-29T03:47:17.504Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cdf2e33a24b0",
@@ -23825,39 +23859,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:51:49.912Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-minion-run-dev-switcher",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "`minion run hub [--prd]` with a DEV-only user switcher in the avatar menu",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-minion-run-dev-switcher.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "9f23e5b7b95d773a30d126fc7186184907c96948c79f8bc73426a4ba26bb3c56",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This is an approved, thoroughly specified dev-workflow proposal with resolved ambiguities and bounded slices ready for implementation.",
-			"evidence": [
-				"status: approved",
-				"Ambiguities resolved with the owner (2026-09-16)",
-				"Slices S1–S5 in the spec ... with unit tests, a CI smoke ... and a production 404 smoke"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T03:39:15.325Z"
 		},
 		{
 			"key": "proposal:2026-09-28-hub-table-open-modes-followups",
@@ -27490,17 +27491,18 @@
 				"specification": 6,
 				"implementation": 4
 			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
+			"confidence": 5,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The lint proposal targets two real shipped CSS-bleed incidents but remains in draft status without full approval.",
+			"rationale": "A small, well-evidenced lint hardening addressing two shipped CSS-leak incidents, cheap to implement with a debt ratchet.",
 			"evidence": [
-				"Two shipped incidents on the POS shift banner alone: hub #523 ... and the earlier mini-rail overlap",
+				"Two shipped incidents on the POS shift banner alone: hub #523 ... and the earlier mini-rail overlap.",
+				"Evidence. grep -rn \":global(\\.[a-z-]*)\\s*{\" src --include=*.svelte on hub master.",
 				"status: draft"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T03:39:15.325Z"
+			"scoredAt": "2026-10-29T03:47:17.504Z"
 		},
 		{
 			"key": "proposal:2026-10-24-site-stay-in-touch-updates",
@@ -36420,39 +36422,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:39:36.979Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged feature commit for member session reset is low-urgency deployment health tracking without evidence of an active incident.",
-			"evidence": [
-				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"tags: deployment",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T03:17:07.975Z"
 		},
 		{
 			"key": "issue:minion-meta#461",
