@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-29T00:17:00.527Z",
+	"generatedAt": "2026-10-29T00:47:10.989Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8535,6 +8535,38 @@
 			"scoredAt": "2026-10-28T01:59:43.382Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-factory-0290030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple high-severity findings (unvalidated infinite-loop risk in rank.sh, silent test-masking in unslop.test.sh) are concrete, file-anchored, and actionable fixes.",
+			"evidence": [
+				"rank.sh:74 non-numeric FACTORY_RANK_BATCH_SIZE causes infinite loop",
+				"unslop.test.sh:63 bare grep lacks error handling, masking failed assertions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-29T00:47:10.799Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-312a147d4932",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10967,39 +10999,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T07:31:42.991Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-factory-0290030",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Contains concrete high-severity findings including a potential infinite loop in rank.sh and unchecked jq output, each with exact file:line locations making the fixes bounded and actionable.",
-			"evidence": [
-				"high: agent/rank.sh:74 'non-numeric or zero value causes infinite loop'",
-				"high: agent/rank.sh:71 'missing field silently becomes 0, loop doesn't run'",
-				"high: agent/lib/unslop.test.sh:63 'test proceeds to report success... even if assertions fail'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T00:26:06.371Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-20449cc8b981",
@@ -33017,38 +33016,6 @@
 			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine deployment-health entry restating a merged commit message with no stated incident or defined outcome, making it non-actionable as a goal.",
-			"evidence": [
-				"status: unknown with no incident described",
-				"summary is a merged commit description (#361), not a defined problem/outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T23:47:25.299Z"
-		},
-		{
 			"key": "issue:minion-meta#416",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33668,20 +33635,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Findings are well-specified with file:line detail but are limited to non-critical localStorage silent-failure edge cases in a floating assistant widget.",
+			"rationale": "Small, well-scoped fix for localStorage failures silently breaking chat session persistence in a specific component.",
 			"evidence": [
-				"high: FloatingAssistant.svelte:119 localStorage.getItem() silent failure during session restoration",
-				"medium: FloatingAssistant.svelte:469 noted as 'acceptable for non-critical cache'"
+				"FloatingAssistant.svelte:119 getItem silently fails during session restoration",
+				"FloatingAssistant.svelte:142 setItem silently fails during persistence"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T00:26:06.371Z"
+			"scoredAt": "2026-10-29T00:47:10.799Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-7012cd5",
