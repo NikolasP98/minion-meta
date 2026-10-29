@@ -1,12 +1,18 @@
 ---
 id: handoff-minion-meta-76289076
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/src/routes/(app)/stock/entries/new/+page.svelte (minion-meta)
-status: draft
+status: merged
+merged_into: handoff-minion-hub-348234352
 created: 2026-10-23
 updated: 2026-10-29
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Merged into `handoff-minion-hub-348234352`: this is an audit frozen-source
+> snapshot of `src/routes/(app)/stock/entries/new/+page.svelte` (minion_hub)
+> carrying the identical `TODO(handoff)` marker already tracked (and since
+> closed) there.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/src/routes/(app)/stock/entries/new/+page.svelte
 

@@ -8,6 +8,12 @@ repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
+## Merged content from handoff-minion-meta-1495568375
+
+Same marker, captured again in an audit frozen-source snapshot
+(`audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/tests/fixtures/critical-journeys/README.md`,
+minion-meta, line 48). No unique content beyond what is already tracked here.
+
 # Handoff marker — tests/fixtures/critical-journeys/README.md
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a

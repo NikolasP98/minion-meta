@@ -8,6 +8,12 @@ repos: [minion-hub]
 tags: [handoff-sweep]
 ---
 
+## Merged content from handoff-minion-meta-1448907741
+
+Same marker, captured again in an audit frozen-source snapshot
+(`audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/src/lib/state/chat/chat.svelte.ts`,
+minion-meta, lines 263/356). No unique content beyond what is already tracked here.
+
 # Handoff marker — src/lib/state/chat/chat.svelte.ts
 
 Filed automatically by the factory handoff-ledger sweep: this file carries a

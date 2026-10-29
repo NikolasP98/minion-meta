@@ -36,3 +36,10 @@ automatically once the file carries no more markers.
 ## Closed (auto)
 
 No `TODO(handoff):` marker found in this file as of 2026-10-26; the sweep closed this proposal.
+
+## Merged content from handoff-minion-meta-1420288674
+
+Same three markers, captured again in an audit frozen-source snapshot
+(`audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/src/routes/(app)/pos/sell/+page.svelte`,
+minion-meta, lines 460/515/827) taken before this file's markers were
+removed. No unique content beyond what is already tracked here.

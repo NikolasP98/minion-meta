@@ -1,12 +1,17 @@
 ---
 id: handoff-minion-meta-1495568375
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/tests/fixtures/critical-journeys/README.md (minion-meta)
-status: draft
+status: merged
+merged_into: handoff-minion-hub-3215540846
 created: 2026-10-23
 updated: 2026-10-29
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Merged into `handoff-minion-hub-3215540846`: this is an audit frozen-source
+> snapshot of `tests/fixtures/critical-journeys/README.md` (minion_hub)
+> carrying the identical `TODO(handoff)` marker already tracked there.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/tests/fixtures/critical-journeys/README.md
 

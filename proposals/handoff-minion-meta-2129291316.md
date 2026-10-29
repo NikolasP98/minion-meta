@@ -1,12 +1,17 @@
 ---
 id: handoff-minion-meta-2129291316
 title: Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/src/lib/assistant/forms.ts (minion-meta)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-1d6db60d6d7b
 created: 2026-10-23
 updated: 2026-10-29
 repos: [minion-meta]
 tags: [handoff-sweep]
 ---
+
+> Merged into `postmerge-minion-hub-1d6db60d6d7b` (approved — left untouched):
+> this is an audit frozen-source snapshot of `src/lib/assistant/forms.ts`
+> (minion_hub) carrying the identical `TODO(handoff)` marker already tracked there.
 
 # Handoff marker — audits/2026-10-23-agent-harness-batches/development/a-chat/integration-history-synchronization/frozen-source/src/lib/assistant/forms.ts
 
