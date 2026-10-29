@@ -91,7 +91,7 @@
 - [ ] T101 **OWNER** Merge S4 gateway and release; merge and deploy the runner change.
 - [ ] T102 **OWNER** Merge S5. Run the backfill dry run against prod; confirm the printed Bernibites id and that exactly one org will not be Premium.
 - [ ] T103 **OWNER** Run `--apply --expect-base <id>`; confirm the assertions pass; run it again and confirm 0 writes (SC-002). Keep the snapshot file.
-- [ ] T104 **OWNER** Check Q4: `PUBLIC_GATEWAY_JWT_AUTH=true` in hub prod; `multiTenant.oidcIssuers` and `hubMetrics` on every gateway; the S4 image running. Stop here if any is false.
+- [ ] T104 **OWNER** Check Q4: `PUBLIC_GATEWAY_JWT_AUTH=true` in hub prod; `multiTenant.oidcIssuers` and `hubMetrics` on every gateway; the S4 image running; spec 045 A1 deployed with `multiTenant.jwtOnlyAudiences` set (045 decision 18: JWT-only connect is disabled while it is empty, which also stops cross-gateway replay). Stop here if any is false.
 - [ ] T105 **OWNER** Set `ENTITLEMENTS_ENFORCED=true` in hub prod and redeploy.
 - [ ] T106 **OWNER** + orchestrator: acceptance walk, design §Launch order step 5 (SC-003, SC-004), with a test org moved to Base on `/orgs/plans`; then move it back. Browser QA in a private chromium or a named cloud browser, never the shared `:9223`.
 - [ ] T107 If anything regresses: **OWNER** unsets the flag and redeploys (plan §Rollback, SC-006).
