@@ -38,7 +38,7 @@ Spec 043 (`specs/043-hub-org-entitlements/`, design.md §Risks & Mitigations) ga
 
 ## Accepted, no action planned unless it bites
 
-17. **R5 — Two fail-open exceptions on lookup error.** The JWT issuer omits claims (that dashboard session is not enforced on the gateway); the token endpoint, with no cached answer, returns the shared token. Both log `lookup_error`. Revisit if `lookup_error` shows up in production logs.
+17. **R5 — Two fail-open exceptions on lookup error.** The JWT issuer omits claims (that dashboard session is not enforced on the gateway); the token endpoint, with no cached answer, returns the shared token. Both log `lookup_error`. A third, by owner decision (S2 audit): the gateway channel mirror (`/api/internal/channels/resolved`) answers a lookup error with the instance's last answer for the org, else `aiEnabled: true` (`orgAllowsForConfig`), so an outage never stops a paying org's replies. The flows runner config fetch (`/api/internal/flows/[id]`) follows the same rule. Revisit if `lookup_error` shows up in production logs.
 18. **R11 — Skipped one-off AI jobs are not redone after an upgrade.** Tick-driven re-scans catch up; a specific skipped `brain_ingest` or corpus job must be re-run by the user.
 19. **R12 — Model calls with no request and no org are not enforced** (scripts, platform jobs). The CI inventory test forces each call site to declare its gate.
 20. **R15 — `CACHE_BACKEND=memory` delays plan changes** on other Vercel instances by up to 5 minutes. Production uses `noop`.
