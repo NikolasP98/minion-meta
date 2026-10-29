@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-29T07:47:15.939Z",
+	"generatedAt": "2026-10-29T08:17:23.061Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2762,6 +2762,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:48:35.859Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Post-merge review of the 2026-09-16 hub/meta merges — findings ledger",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-post-merge-review-findings.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "b4ad64eeaff0ca6cec583bb5704e6ea78dd898451be4f0498b72c64e313644c6",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-18215ee1e8fc"
+			],
+			"rationale": "A large approved ledger of security and correctness findings (unauthenticated public booking write, org-check gap, role-grant bug) with most items already dispatched to PRs but several still open.",
+			"evidence": [
+				"Public booking is an unauthenticated write with no rate limit",
+				"Walk-in partyId stamped on the ticket without an org check... Open",
+				"join links write organization_members.role='member' ⇒ every invitee gets manager... → PR 2"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-29T08:17:22.892Z"
 		},
 		{
 			"key": "proposal:2026-10-03-gateway-managed-writer-leases",
@@ -5588,39 +5623,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-22T23:12:12.954Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Post-merge review of the 2026-09-16 hub/meta merges — findings ledger",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-post-merge-review-findings.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "b4ad64eeaff0ca6cec583bb5704e6ea78dd898451be4f0498b72c64e313644c6",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An approved 24-item findings ledger mixes already-fixed items (linked PRs in flight) with several open security/correctness gaps, so it needs to be split into discretely scoped follow-up tickets rather than tracked as one goal.",
-			"evidence": [
-				"Public booking is an unauthenticated write with no rate limit",
-				"walk-in partyId stamped on the ticket without an org check ... Open",
-				"several findings marked '→ PR' already in flight the same night"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T08:09:54.837Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-reserva-keyword-config-spec",
@@ -12499,20 +12501,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 5
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Multiple high-severity unchecked .returning()[0] destructures and unvalidated query params in the HR scheduling service are concrete, bounded fixes with clear file:line targets.",
+			"rationale": "Multiple high-severity unchecked-access findings on insert/update return values in hr.service.ts plus several unvalidated-input query params create real crash/data-integrity risk in production HR flows.",
 			"evidence": [
-				"hr.service.ts:230/315/370/564 unchecked-access on .returning()[0]",
-				"holidays/leave-allocations/leave-requests endpoints pass query params unvalidated",
-				"status: draft, not yet reviewed/approved"
+				"high unchecked-access hr.service.ts:230, 315, 370, 564 — .returning()[0] not checked for undefined",
+				"medium unvalidated-input across holidays/leave-allocations/leave-requests endpoints"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T08:10:18.992Z"
+			"scoredAt": "2026-10-29T08:17:22.892Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-4cd4ed4c43ae",
@@ -26142,6 +26143,38 @@
 			"scoredAt": "2026-10-26T13:56:58.970Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged whatsapp session-reset authorization commit is deployed but this entry gives no health signal beyond the commit message itself.",
+			"evidence": [
+				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
+				"tags: deployment"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-29T08:17:22.892Z"
+		},
+		{
 			"key": "issue:minion-meta#329",
 			"kind": "issue",
 			"stage": "proposal",
@@ -33584,20 +33617,22 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 7
+				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, narrowly-scoped Dialog reopen-during-close animation bug with a clear fix direction (cancel pending transition, reset DOM state).",
+			"relatedKeys": [
+				"proposal:2026-09-16-hub-post-merge-review-findings"
+			],
+			"rationale": "Well-scoped, approved UX bug fix for a Dialog reopen-mid-close animation glitch with a clear diagnosis and fix direction already provided.",
 			"evidence": [
-				"Dialog.svelte reopen mid-exit causes dialog to close unexpectedly",
-				"status: approved",
-				"fix direction specifies two concrete implementation options"
+				"TODO(handoff): reopened mid-exit — cancel the pending close",
+				"Fix direction: cancel the pending CSS transition... reset DOM state before restarting enter animation",
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T08:10:18.992Z"
+			"scoredAt": "2026-10-29T08:17:22.892Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-198db99358ad",
@@ -40474,20 +40509,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 7
+				"specification": 5,
+				"implementation": 4
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "A single, precisely located medium-severity test-fixture null-check bug is low risk but clear and quick to fix.",
+			"rationale": "Single medium-severity unchecked-access finding in a test fixture helper file with narrow, low-impact scope.",
 			"evidence": [
-				"tests/fixtures/overlay-native/verify.py:20 (unchecked-access)",
-				"click_selector constructs JS that calls .getBoundingClientRect() ... without checking if null/undefined first"
+				"medium unchecked-access in tests/fixtures/overlay-native/verify.py:20",
+				"status: draft"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T08:09:54.837Z"
+			"scoredAt": "2026-10-29T08:17:22.892Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-77445c0",
