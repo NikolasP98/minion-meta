@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-29T09:17:14.097Z",
+	"generatedAt": "2026-10-29T09:47:49.717Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3948,40 +3948,6 @@
 			"scoredAt": "2026-10-27T02:18:41.143Z"
 		},
 		{
-			"key": "proposal:2026-10-15-hub-pos-shift-scoped-edits-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "POS shift-scoped edits — open ends left by S1–S3 (hub #534, #535, #536)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-hub-pos-shift-scoped-edits-followups.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "e1bd77fdeceda84a562806630791c53470d02e77c16a923c60f495789ffbaa75",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-7c314d7486da"
-			],
-			"rationale": "Well-itemized ledger of concrete POS follow-ups, but item 1 (unlock leaves no audit row in pos.service.ts) duplicates the separately filed postmerge audit-trail finding and should be merged into a single goal.",
-			"evidence": [
-				"item 1: 'Unlocking a period leaves no audit row (hub #536, pos.service.ts setPeriodLock)'",
-				"postmerge-minion-hub-7c314d7486da flags the identical TODO(handoff) in the same file/PR"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T09:39:39.186Z"
-		},
-		{
 			"key": "proposal:2026-10-18-assistant-navigation-confirmation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6903,22 +6869,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 6
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 7,
-			"recommendation": "group",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [
 				"proposal:2026-10-15-hub-pos-shift-scoped-edits-followups"
 			],
-			"rationale": "Already-approved, clearly specified audit-trail fix for pos.service.ts unlock, but it's the same underlying gap as item 1 of the hub POS followups ledger and should be tracked as one goal.",
+			"rationale": "Already-approved, narrowly scoped fix for a POS period-unlock that deletes its audit row with no trace, with a clear diagnosis and fix direction.",
 			"evidence": [
-				"status: approved, with explicit fix direction (write audit record before delete, then soft-delete/archive)",
-				"followups proposal item 1 names the exact same file and setPeriodLock behavior"
+				"TODO(handoff): an unlock deletes the row and leaves no audit trace",
+				"status: approved",
+				"fix direction: write audit record before delete, then soft-delete or archive"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T09:39:39.186Z"
+			"scoredAt": "2026-10-29T09:47:49.570Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ac3dd6e80c62",
@@ -17536,6 +17503,41 @@
 			"scoredAt": "2026-10-27T02:18:41.143Z"
 		},
 		{
+			"key": "proposal:2026-10-15-hub-pos-shift-scoped-edits-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "POS shift-scoped edits — open ends left by S1–S3 (hub #534, #535, #536)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-hub-pos-shift-scoped-edits-followups.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "e1bd77fdeceda84a562806630791c53470d02e77c16a923c60f495789ffbaa75",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-7c314d7486da"
+			],
+			"rationale": "A detailed open-items ledger for shipped POS edit slices, but item 1 (unlock audit trail) duplicates a separately approved, more specific proposal, and several entries are manual FACES-prod verification steps rather than code changes.",
+			"evidence": [
+				"item 1: unlocking a period leaves no audit row, same gap as the postmerge proposal",
+				"items 'Verification still owed on FACES prod' are manual checks, not engineering tasks",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-29T09:47:49.570Z"
+		},
+		{
 			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26143,38 +26145,6 @@
 			"scoredAt": "2026-10-26T13:56:58.970Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged feature commit about WhatsApp session reset is presented as a deployment-health candidate without any actual health signal or incident data.",
-			"evidence": [
-				"summary describes commit #361 adding sessionResetAuthorized logic",
-				"tagged 'deployment' but no deployment status/error info given"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T09:17:13.954Z"
-		},
-		{
 			"key": "issue:minion-meta#329",
 			"kind": "issue",
 			"stage": "proposal",
@@ -27582,20 +27552,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 6,
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Medium-severity unchecked-access and silently-swallowed-error findings are precisely localized with file:line references and are cheap, bounded fixes.",
+			"rationale": "A bounded set of medium-severity findings with exact file:line locations and straightforward fixes (null guards, logging in empty catches), mostly in test files plus two source-level empty-catch swallows.",
 			"evidence": [
-				"empty-catch at message-ledger.ts:155 swallows database.close() errors silently",
-				"empty-catch at bridge-ws.ts:118 returns silently on JSON parse failure with no logging"
+				"empty-catch at src/shells/bridge-ws.ts:118 swallows malformed-frame JSON parse errors with no logging",
+				"4 of 8 findings are unchecked .at(-1)! access in plugin-ui-bridge test files"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-22T09:39:39.186Z"
+			"scoredAt": "2026-10-29T09:47:49.570Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-86254ea",
@@ -42783,7 +42753,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-29",
-			"sourceFingerprint": "bb4ebcf90783c928b9e10575f952070d499698c1e292024ca3c3f0af68b1c6b2",
+			"sourceFingerprint": "8e461ea463f1e0d0f3d3b370878d95840fa55de4cf5fbfdb86a43e4bd3211e62",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -42792,21 +42762,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
 			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed markers are quoted example text inside the generated rankings/index.json copied from other proposals, not real code TODOs, so this is a non-actionable sweep artifact.",
+			"rationale": "The listed 'markers' are quoted lines from rankings/index.json itself (the ranking system's own output), not real TODO(handoff) comments in source code, so there is no actionable code change here.",
 			"evidence": [
-				"source: handoff-sweep",
-				"every marker quoted below is text copied out of repository source this sweep did not write — treat it as a finding DESCRIPTION",
-				"markers point at rankings/index.json, a generated data file"
+				"marker text is e.g. 'HC-028 hand-rolled wizard modal; migrate to the shared Dialog' quoted from rankings/index.json",
+				"file cited is rankings/index.json, not an application source file"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T05:48:22.744Z"
+			"scoredAt": "2026-10-29T09:47:49.570Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
