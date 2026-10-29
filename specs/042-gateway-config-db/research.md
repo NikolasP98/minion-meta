@@ -6,6 +6,7 @@ Date: 2026-10-28. Anchors as in spec.md §AS-IS (gateway `origin/main @ 50a3036a
 
 - **Decision**: `hydrateChannels` sends `x-minion-server-id: cfg.gateway.hubMetrics.serverId` on every pull, the same way `src/infra/message-ledger-flusher.ts:77` already does. The hub's `/api/internal/channels/resolved` rejects a request whose resolved `serverId` came from the bearer fallback rather than the header (401 `missing server id`).
 - **Rationale**: the hub already honours the header (`resolve-identity.ts:311`); prod `gateway.json` already carries `serverId` (`a64274a8…` on FACES). One header line fixes the 2026-10-23 "both gateways load the MINION rows" defect.
+- **Measured 2026-10-29 (prod flip of FACES to `db`)**: without the header, `resolveServerTokenAuth` (`resolve-identity.ts:142-160`) scans every `gateway` row in no defined order and returns the first whose decrypted token matches; both netcup records (`870bd8f1`, `a64274a8`) hold the same token, so the result changes per boot. FACES boot 10-26 17:25Z hydrated `a64274a8`'s 2 rows; boot 10-29 02:14Z hydrated `870bd8f1`'s 10 rows (4 discord, 3 telegram, 3 whatsapp incl. the clinic's OFICIAL and Faces Sculptors — i.e. the clinic's real whatsapp rows sit on the record named `netcup-prd`, not on `netcup-faces-prd`). S1 must therefore also include a one-off data fix: move the FACES whatsapp rows (`+51906090526`, `+51992376833`, `+51902829738`) to `gateway_id = a64274a8` and leave discord/telegram on `870bd8f1`, and `ORG_SCOPE_SOURCE` stays `json` until that lands.
 - **Alternatives**: per-gateway bearer tokens (bigger: token rotation on both hosts, hub `gateway` row per token); deriving the gateway from the caller IP (Tailscale, brittle).
 
 ## R2 — Does the hub's change signal reach the gateways? (No, and the fix is per-gateway targeting)
@@ -19,7 +20,7 @@ Date: 2026-10-28. Anchors as in spec.md §AS-IS (gateway `origin/main @ 50a3036a
 ## R3 — Where do the flags live and how is a flip done?
 
 - **Evidence**: FACES state volume `gateway.env` = `MINION_GATEWAY_PORT=18790`, `CHANNEL_CONFIG_SOURCE=json`, `ORG_SCOPE_SOURCE=json`, `CHANNEL_RUNTIME_APPLY=0`. The docker service env lists only `MINION_*`; `/proc/1/environ` was not readable; `/opt/minion-swarm` is root-only. The three flags are read from `process.env` at call time (`channel-mirror.ts:30-54`), so they are process env, injected by the swarm stack from that file.
-- **Decision**: a flip is the owner editing `gateway.env` on the target tenant's volume and restarting that service via the swarm controller. Rollback is the reverse edit + restart. The plan does not add a hub toggle for the flags.
+- **Decision (corrected 2026-10-29)**: the process sources the Swarm secret `/run/secrets/runtime_env`, not the volume's `gateway.env`. A flip = `sudo /opt/minion-swarm/deploy/set-runtime-env.sh <default|faces> <VAR>` with the value on stdin (rewrites `/opt/minion-swarm/secrets/<tenant>.runtime_env` with a `.bak-<ts>` copy, creates a content-hash-named secret, rolls only that tenant). Done for FACES 02:14Z: `CHANNEL_CONFIG_SOURCE=db`, `CHANNEL_RUNTIME_APPLY=1`, `ORG_SCOPE_SOURCE=json` kept. Rollback is the reverse edit + restart. The plan does not add a hub toggle for the flags.
 - **Rationale**: flag-not-deploy rollback was the June design; the file already exists per tenant.
 
 ## R4 — What observable proves a flip? (FR-015)
