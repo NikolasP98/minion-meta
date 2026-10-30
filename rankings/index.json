@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-30T15:17:14.765Z",
+	"generatedAt": "2026-10-30T15:47:21.285Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -34440,38 +34440,6 @@
 			"scoredAt": "2026-10-24T06:18:50.271Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged feature commit shown as deploy health status with no actual failure or pending action evidenced.",
-			"evidence": [
-				"commit title feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"status unknown, tags deployment only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T14:47:16.836Z"
-		},
-		{
 			"key": "issue:minion-meta#357",
 			"kind": "issue",
 			"stage": "proposal",
@@ -40254,38 +40222,6 @@
 			"scoredAt": "2026-10-30T09:53:50.698Z"
 		},
 		{
-			"key": "issue:minion-meta#880",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#880 [monitor:unstick] run 63d5ea19 (minion-meta/rank): ranking catalog source unavailable",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/880",
-			"sourceUpdatedAt": "2026-10-23T15:17:31Z",
-			"sourceFingerprint": "4470238b9449d285baadb29c8b914b5b85032a3a448aec2327f55dd12db13c56",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake diagnosed as a transient gateway-unreachable infra fault with no code or spec defect, explicitly recommending only a retry.",
-			"evidence": [
-				"Diagnosis: deterministic failure, not a code bug... transient infra/dependency-availability fault",
-				"Recommendation: retry the run once the gateway source for minion is confirmed reachable; no spec or code fix needed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T15:25:28.406Z"
-		},
-		{
 			"key": "issue:minion-meta#894",
 			"kind": "issue",
 			"stage": "proposal",
@@ -41800,6 +41736,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T05:18:03.330Z"
+		},
+		{
+			"key": "issue:minion-meta#880",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#880 [monitor:unstick] run 63d5ea19 (minion-meta/rank): ranking catalog source unavailable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/880",
+			"sourceUpdatedAt": "2026-10-23T15:17:31Z",
+			"sourceFingerprint": "4470238b9449d285baadb29c8b914b5b85032a3a448aec2327f55dd12db13c56",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A transient gateway-unavailability failure with no code or spec defect and a clear retry-only diagnosis does not warrant a tracked ranking goal.",
+			"evidence": [
+				"throws when a required source for a repo is unreachable, to avoid emitting a partial catalog",
+				"transient infra/dependency-availability fault",
+				"Recommendation: retry the run once the gateway source for minion is confirmed reachable; no spec or code fix needed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-30T15:47:21.132Z"
 		},
 		{
 			"key": "issue:minion-meta#892",
