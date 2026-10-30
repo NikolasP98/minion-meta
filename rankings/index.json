@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-30T17:17:19.212Z",
+	"generatedAt": "2026-10-30T17:48:06.195Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1704,6 +1704,41 @@
 			"scoredAt": "2026-10-25T10:17:45.990Z"
 		},
 		{
+			"key": "spec:2026-10-23-harness-gateway-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Gateway watcher receipts usage and explicit target binding",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-gateway-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "243d724af037f562901da9b0e20cb68c267053cd16e052345411ed2f4aecef4b",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-23-harness-factory-spec",
+				"spec:2026-10-23-harness-pulse-spec"
+			],
+			"rationale": "Adds durable watcher receipts, qualified usage, and explicit cron target binding to the production gateway, the highest-breadth component in this batch.",
+			"evidence": [
+				"'adds durable receipts, qualified usage and explicit cron binding through current runtime components'",
+				"Both independent Astra reviews approved revision 1 plus a null-compatibility correction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-30T17:48:06.041Z"
+		},
+		{
 			"key": "issue:minion-factory#107",
 			"kind": "issue",
 			"stage": "proposal",
@@ -2834,6 +2869,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T03:34:16.614Z"
+		},
+		{
+			"key": "spec:2026-10-23-harness-factory-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion-factory",
+			"title": "Bounded Factory Jev admission and deadlines",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-factory-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "ec9eafa1f0e3cc887b8286a18d59396b76f33e989a57d9e86401c0fe750d546a",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-23-harness-gateway-spec",
+				"spec:2026-10-23-harness-evals-spec"
+			],
+			"rationale": "Fixes concrete token-reset/concurrent-admission and hook-deadline defects in the Factory's run accounting, giving it clear reliability stakes beyond the other batch items.",
+			"evidence": [
+				"'maps token-reset/concurrent admission and hook deadline defects to A08/A09'",
+				"Two independent Astra technical passes approved the batch; owner authorized implementation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-30T17:48:06.041Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -4207,14 +4277,14 @@
 			"scoredAt": "2026-10-25T10:17:45.990Z"
 		},
 		{
-			"key": "spec:2026-10-23-harness-gateway-spec",
+			"key": "spec:2026-10-23-harness-evals-spec",
 			"kind": "spec",
 			"stage": "spec",
-			"repo": "minion",
-			"title": "Gateway watcher receipts usage and explicit target binding",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-gateway-spec.md",
+			"repo": "minion-meta",
+			"title": "Reproducible agent evaluation and gated inference",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-evals-spec.md",
 			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "243d724af037f562901da9b0e20cb68c267053cd16e052345411ed2f4aecef4b",
+			"sourceFingerprint": "def88e5fb07599721e6838603e99b707ccdbfb04455d68b614103c4184e3a9dd",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -4223,23 +4293,58 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 9,
+				"implementation": 8
 			},
 			"confidence": 6,
-			"recommendation": "group",
+			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion (gateway)#357",
-				"deploy:minion (gateway)"
+				"spec:2026-10-23-harness-chat-spec",
+				"spec:2026-10-23-harness-factory-spec"
 			],
-			"rationale": "This spec's slices 11-16 and A20/A30 seams match the watcher-receipt and cron-binding changes already shipped in the pending release PR.",
+			"rationale": "Reproducible evaluation and gated inference underpins quality control for the broader harness batch and is already reviewer-approved and in implementing status.",
 			"evidence": [
-				"parent slices 11-16 plus A20/A30 seams match #357's watcher/cron changes",
-				"existing watcher hooks ignore merged provenance per spec AS-IS"
+				"title: 'Reproducible agent evaluation and gated inference'",
+				"Both independent Astra reviewers approved revision 1 at exact hashes"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T17:22:20.979Z"
+			"scoredAt": "2026-10-30T17:48:06.041Z"
+		},
+		{
+			"key": "spec:2026-10-23-harness-pulse-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Pulse approval and dispatch receipts",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-pulse-spec.md",
+			"sourceUpdatedAt": "2026-10-23",
+			"sourceFingerprint": "76dad4ac42151fee5bfbe310769d568f370d2ef93d818ba057438f3ae3c14d2a",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-23-harness-digest-spec",
+				"spec:2026-10-23-harness-gateway-spec"
+			],
+			"rationale": "Establishes the versioned owner-bound receipts and selected-worker interfaces that the digest work directly depends on, making it a prerequisite within this batch.",
+			"evidence": [
+				"'Pulse D establishes versioned owner-bound receipts and selected workers; digest E consumes those interfaces after D'",
+				"Both independent technical reviewers approved revision 1 at exact hashes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-30T17:48:06.041Z"
 		},
 		{
 			"key": "spec:2026-10-24-hub-collection-points-spec",
@@ -8913,20 +9018,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 9,
+				"implementation": 8
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Approved refinement spec with both reviewer passes complete but no implementation PR yet visible in this batch.",
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-23-harness-evals-spec",
+				"spec:2026-10-23-harness-pulse-spec"
+			],
+			"rationale": "Parent-approved, two-reviewer-approved refinement with linked spec/plan/tasks/quickstart already in implementing status makes this ready to execute as its own scoped PR.",
 			"evidence": [
-				"both independent Astra reviewers approved revision 1",
-				"implementation PR explicitly out of scope of this stub"
+				"Both independent reviewers approved revision 1 at exact hashes",
+				"status: implementing with linked spec/plan/tasks/contracts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T17:22:20.979Z"
+			"scoredAt": "2026-10-30T17:48:06.041Z"
 		},
 		{
 			"key": "spec:2026-10-23-harness-digest-spec",
@@ -8945,88 +9053,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 9,
+				"implementation": 7
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [
-				"spec:2026-10-23-harness-pulse-spec"
+				"spec:2026-10-23-harness-pulse-spec",
+				"spec:2026-10-23-harness-gateway-spec"
 			],
-			"rationale": "Digest work explicitly depends on Pulse's versioned receipts/worker-selection interfaces landing first.",
+			"rationale": "This digest work explicitly depends on Pulse's receipts/worker-selection interfaces shipping first, but is otherwise fully specified and review-approved for its own PR.",
 			"evidence": [
-				"digest E consumes those interfaces after D",
-				"no automatic merge or deployment in scope"
+				"'Pulse D establishes versioned owner-bound receipts and selected workers; digest E consumes those interfaces after D'",
+				"Both independent technical reviewers approved revision 1 at exact hashes"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T17:22:20.979Z"
-		},
-		{
-			"key": "spec:2026-10-23-harness-evals-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion-meta",
-			"title": "Reproducible agent evaluation and gated inference",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-evals-spec.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "def88e5fb07599721e6838603e99b707ccdbfb04455d68b614103c4184e3a9dd",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Title and scope closely overlap a recently merged evals PR, so remaining scope needs confirming before committing further paid work.",
-			"evidence": [
-				"recent commit 'feat(evals): compare agent outcomes and account for every inference attempt (#881)' already merged to dev",
-				"spec stub lists no acceptance IDs distinguishing it from that merged work"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T17:22:20.979Z"
-		},
-		{
-			"key": "spec:2026-10-23-harness-pulse-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Pulse approval and dispatch receipts",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-pulse-spec.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "76dad4ac42151fee5bfbe310769d568f370d2ef93d818ba057438f3ae3c14d2a",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-23-harness-digest-spec"
-			],
-			"rationale": "Establishes the versioned receipts and worker-selection interfaces that the digest spec depends on.",
-			"evidence": [
-				"Pulse D establishes versioned owner-bound receipts and selected workers",
-				"digest E consumes those interfaces after D"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T17:22:20.979Z"
+			"scoredAt": "2026-10-30T17:48:06.041Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -12991,38 +13034,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T07:32:06.104Z"
-		},
-		{
-			"key": "spec:2026-10-23-harness-factory-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion-factory",
-			"title": "Bounded Factory Jev admission and deadlines",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-23-harness-factory-spec.md",
-			"sourceUpdatedAt": "2026-10-23",
-			"sourceFingerprint": "ec9eafa1f0e3cc887b8286a18d59396b76f33e989a57d9e86401c0fe750d546a",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Addresses token-reset/admission defects with an approved contract but no implementation evidence yet in this batch.",
-			"evidence": [
-				"two independent Astra passes approved the batch",
-				"verification requires an installed-loopback harness procedure not yet evidenced"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-23T17:22:20.979Z"
 		},
 		{
 			"key": "pr:minion_hub#620",
@@ -32471,38 +32482,6 @@
 			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a routine merged feature commit framed as a deployment-health candidate with no indication of failure or urgency.",
-			"evidence": [
-				"title says 'deployment health' but summary is a merged PR #361 description",
-				"status is unknown with no incident or error signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T17:17:19.036Z"
-		},
-		{
 			"key": "issue:minion-meta#614",
 			"kind": "issue",
 			"stage": "proposal",
@@ -40759,6 +40738,38 @@
 			"scoredAt": "2026-10-30T10:05:24.031Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-30",
+			"sourceFingerprint": "905c193ee51b1afb96ca5f23ba0fd15491c3f17f119bc8be81dfca3a12b95024",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed 'markers' are quoted text fragments pulled out of rankings/index.json itself rather than real code TODOs, so there is no coherent actionable problem here.",
+			"evidence": [
+				"Markers cite line numbers inside rankings/index.json, the ranking tool's own data file",
+				"Summary states markers are 'text copied out of repository source' with no single defined scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-30T17:48:06.041Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2972777622",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -43185,38 +43196,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T10:04:35.040Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-30",
-			"sourceFingerprint": "83b1a94c39af09fec957c3fb5288a6e34091ebf668fd454483f678329c0e0eef",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 0
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed 'markers' are quoted text fragments inside the rankings/index.json data file itself (other proposals' summaries), not actual TODO(handoff) code comments, making this a self-referential sweep artifact with no real actionable target.",
-			"evidence": [
-				"all 'markers' point to lines within rankings/index.json, the generated ranking file, not source code",
-				"quoted fragments are mid-sentence excerpts from other proposals' summaries (e.g. 'cancelling a plan leaves its already-paid instalment lines')"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T14:17:26.382Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
