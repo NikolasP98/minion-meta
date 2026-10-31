@@ -56,3 +56,12 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
 - **AS-IS:** `gateway-jwt.service.ts` `LEGACY_JWT_EXPIRY_SECONDS` (3600 s, used when no `gatewayId` is sent). `organization-provision.service.ts` `mintOrgGatewayJwt` binds the audience only under the flag. Both have a `TODO(handoff)`.
 - **TO-BE:** one TTL (900 s), and the provisioning audience is always bound.
 - **DELTA:** A4 (T054) deletes the legacy branch and the flag condition.
+
+## 9. Admin-only gateway methods behind visible member UI (found in A3)
+- **AS-IS:** 045 A3's inventory (`minion_hub` `src/lib/services/gateway/platform-admin-methods.ts`, T037) lists 61 browser-called methods that need `operator.admin`. Only the channel setup controls are hidden for non-platform-admins after the switch. These surfaces still render for members and fail with "your role can't":
+  - agent files and skills, tools, flows, prompt sections, secrets, cloud shells (`shells.*`, which sit behind an org capability), workshop experiments, dream, drones, debug.
+  - `flows.trigger.register` (session bootstrap) and `reliability.plugins` (plugin health) skip the guard and fail silently.
+  - `drones.session-title` means chat auto-titles fail for members.
+  - Members on a valid JWT already fail all of these today (R2).
+- **TO-BE:** each surface is either hidden for non-platform-admins (owner rule: don't render), or served by a hub route behind `requireOrgCapability`, which takes it off the list.
+- **DELTA:** pick per surface, most-used first (chat titles, flows, agent skills). Spec 042 covers channels and gateway settings; the rest needs its own spec. `TODO(handoff)` is at `platform-admin-methods.ts`.
