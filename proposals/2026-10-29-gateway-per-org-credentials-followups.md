@@ -58,9 +58,9 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
 - **DELTA:** A4 (T054) deletes the legacy branch and the flag condition.
 
 ## 9. Admin-only gateway methods behind visible member UI (found in A3)
-- **AS-IS:** 045 A3's inventory (`minion_hub` `src/lib/services/gateway/platform-admin-methods.ts`, T037) lists 61 browser-called methods that need `operator.admin`. Only the channel setup controls are hidden for non-platform-admins after the switch. These surfaces still render for members and fail with "your role can't":
+- **AS-IS:** 045 A3's inventory (`minion_hub` `src/lib/services/gateway/platform-admin-methods.ts`, T037) lists 71 entries after the A3 audit: 70 browser-called methods that need `operator.admin`, plus the `PLUGIN_RPC` gate for every plugin-forwarded call. Only the channel setup controls and `/account/connections` plugin linking are hidden for non-platform-admins after the switch. These surfaces still render for members and fail with "your role can't":
   - agent files and skills, tools, flows, prompt sections, secrets, cloud shells (`shells.*`, which sit behind an org capability), workshop experiments, dream, drones, debug.
-  - `flows.trigger.register` (session bootstrap) and `reliability.plugins` (plugin health) skip the guard and fail silently.
+  - Reliability panels show a generic "failed" state. Plugin pages refuse every RPC.
   - `drones.session-title` means chat auto-titles fail for members.
   - Members on a valid JWT already fail all of these today (R2).
 - **TO-BE:** each surface is either hidden for non-platform-admins (owner rule: don't render), or served by a hub route behind `requireOrgCapability`, which takes it off the list.
