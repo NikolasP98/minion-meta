@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-31T03:18:11.042Z",
+	"generatedAt": "2026-10-31T03:47:34.690Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3001,34 +3001,35 @@
 			"repo": "minion (gateway)",
 			"title": "#363 feat(gateway): bind browser JWTs to one gateway, expire them on the socket, and gate Base-org methods (inert until configured)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/363",
-			"sourceUpdatedAt": "2026-10-31T03:07:35Z",
-			"sourceFingerprint": "66064b8fa428cab790c3108f2c96aee6a342dfc2d515016b19f5bc4e2af1d069",
-			"score": 66,
+			"sourceUpdatedAt": "2026-10-31T03:33:58Z",
+			"sourceFingerprint": "d4ef061f43ba99692de6e04d2cfd0b045046dc8eb43d81fdb50dd120bb14b74f",
+			"score": 67,
 			"band": "medium",
 			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
+				"criticality": 5,
+				"importance": 9,
+				"impact": 7
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 8
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 8,
-			"recommendation": "execute",
+			"confidence": 7,
+			"recommendation": "group",
 			"relatedKeys": [
 				"pr:minion_hub#622",
-				"pr:minion-meta#903",
+				"pr:minion_hub#623",
 				"pr:minion-meta#904"
 			],
-			"rationale": "Security-tagged gateway slice is inert-until-configured but fully tested and detailed, ready for owner merge alongside its hub counterpart.",
+			"rationale": "Gateway-side slice of the per-org-credential security redesign is inert until configured but detailed and audited, and only forms a coherent deliverable together with the stacked hub PRs and the spec PR.",
 			"evidence": [
-				"Merge only with hub 045 A2/A3; config steps in spec 045 design §5",
-				"pnpm vitest run test/ci/: pass (16 files, 212 tests)"
+				"three commits, all inert until configured, implementing specs 043 S4 and 045 A1",
+				"audit fixes F-1,F-2,F-3,F-5 already applied",
+				"security-tagged: owner merges"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T03:17:51.939Z"
+			"scoredAt": "2026-10-31T03:47:34.477Z"
 		},
 		{
 			"key": "pr:minion_hub#622",
@@ -3037,8 +3038,8 @@
 			"repo": "minion_hub",
 			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
-			"sourceUpdatedAt": "2026-10-31T03:13:02Z",
-			"sourceFingerprint": "d0d16eca60ac977e573a55e5f8e955eb9f62b40f65b96b6ab32c04fc69eddea0",
+			"sourceUpdatedAt": "2026-10-31T03:28:19Z",
+			"sourceFingerprint": "f42c5bdf55baa4b644743b6af35e29ce4b831240d233b150a75ac8c03a83f1b9",
 			"score": 66,
 			"band": "medium",
 			"axes": {
@@ -3047,24 +3048,25 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 8
 			},
-			"confidence": 8,
-			"recommendation": "execute",
+			"confidence": 7,
+			"recommendation": "group",
 			"relatedKeys": [
 				"pr:minion (gateway)#363",
-				"pr:minion-meta#904",
-				"pr:minion-meta#903"
+				"pr:minion_hub#623",
+				"pr:minion-meta#904"
 			],
-			"rationale": "Hub-side org-scoped JWT/plugin-permission fix is well specified and tested, gated by owner merge given security tag.",
+			"rationale": "Fixes a live authorization gap (members can currently toggle plugins) and is one slice of the per-gateway JWT rollout that only makes sense ranked with its sibling PRs.",
 			"evidence": [
-				"Spec 045 slice A2 (tasks T020–T024). Human gates at approval and merge",
-				"a plain member ... gets 403"
+				"POST /api/plugins/[id]/toggle now enforces requireOrgCapability so plain members get 403",
+				"spec 045 slice A2, tasks T020-T024",
+				"security-tagged: owner merges"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T03:17:51.939Z"
+			"scoredAt": "2026-10-31T03:47:34.477Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -4503,6 +4505,43 @@
 			"scoredAt": "2026-10-28T07:48:03.299Z"
 		},
 		{
+			"key": "pr:minion_hub#623",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#623 feat(gateway): the dashboard connects with its own per-gateway JWT (inert until switched)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/623",
+			"sourceUpdatedAt": "2026-10-31T03:43:54Z",
+			"sourceFingerprint": "859583f5400ace71df237a2d5d2d082ff2e16851f004b14f2592197b7e8b62e6",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#363",
+				"pr:minion_hub#622",
+				"pr:minion-meta#904"
+			],
+			"rationale": "Dashboard-side per-gateway JWT issuance is byte-identical/inert until a flag flip but is stacked on #622 and gated by a launch probe, so it should be evaluated as one rollout with the other spec-045 PRs.",
+			"evidence": [
+				"stacked on #622; connect frame byte-identical until flag flips",
+				"T037 method-inventory test classifies 61 admin-only methods",
+				"security-tagged: owner merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T03:47:34.477Z"
+		},
+		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -4533,6 +4572,43 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:18:24.934Z"
+		},
+		{
+			"key": "pr:minion-meta#904",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#904 docs(spec): 045 — gateway per-org credentials: no shared operator token in any browser",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/904",
+			"sourceUpdatedAt": "2026-10-31T03:45:10Z",
+			"sourceFingerprint": "1263371a0643f104cbe70de9be4c21fc61f07c627a2c785ea10faf083a279d07",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#363",
+				"pr:minion_hub#622",
+				"pr:minion_hub#623"
+			],
+			"rationale": "This is the owner-mandated design/spec PR (no shared master key; per-org validated keys) that the three implementation PRs depend on, so it belongs in the same grouped goal.",
+			"evidence": [
+				"owner rule 2026-10-29 quoted directly: no shared master key, per-org keys validated against DB",
+				"defines slices A0-A4 matching PRs #363, #622, #623",
+				"supersedes spec 043 decision 4 and task T037"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T03:47:34.477Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-igv-rate-from-org-config",
@@ -7156,42 +7232,6 @@
 			"evidence": [
 				"Implementation: hub S1 (draft, minion_hub) and gateway S4 (draft #363, minion-ai)",
 				"board stub, follow-ups proposal, both indexes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T03:17:51.939Z"
-		},
-		{
-			"key": "pr:minion-meta#904",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#904 docs(spec): 045 — gateway per-org credentials: no shared operator token in any browser",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/904",
-			"sourceUpdatedAt": "2026-10-31T03:12:00Z",
-			"sourceFingerprint": "f8fa7160c43df35fba84a8a6e7da15b8c7658f431e78af3c5d29616f9bd17395",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#903",
-				"pr:minion (gateway)#363",
-				"pr:minion_hub#622"
-			],
-			"rationale": "Per-org credentials design spec is detailed and owner-mandated but is a planning artifact, with code execution tracked in sibling PRs.",
-			"evidence": [
-				"Owner rule, 2026-10-29: no one should really get access to a master key",
-				"Must land with or before minion-ai #363"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -39201,6 +39241,38 @@
 			"scoredAt": "2026-10-26T13:58:03.340Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment marker for an already-shipped, narrow whatsapp session-reset feature with no indication of failure or follow-up need.",
+			"evidence": [
+				"commit message describes a merged feat(whatsapp) change (#361)",
+				"status unknown with no incident signal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T03:47:34.477Z"
+		},
+		{
 			"key": "issue:minion_hub#452",
 			"kind": "issue",
 			"stage": "proposal",
@@ -41731,6 +41803,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T02:38:22.574Z"
+		},
+		{
+			"key": "issue:minion-meta#927",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#927 [monitor:unstick] rank run 37c5bb41 (minion-meta): batch 3 provider fallback failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/927",
+			"sourceUpdatedAt": "2026-10-31T03:17:36Z",
+			"sourceFingerprint": "b4b6fbe99ee8dc77bfd73f024c788d9a2db17b4f99ff000f911da7344abcbcad",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated diagnosis classifies this as a transient LLM-provider failure with no repo/spec content problem, recommending a plain retry rather than code or spec work.",
+			"evidence": [
+				"diagnosis: failure is at the LLM-provider response layer, not the ranking logic",
+				"recommendation: safe to retry the run as-is",
+				"second occurrence of same transient pattern within ~30 minutes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T03:47:34.477Z"
 		},
 		{
 			"key": "proposal:2026-08-18-spec-heading-lint-baseline-backfill",
