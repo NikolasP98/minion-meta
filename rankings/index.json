@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-31T00:46:56.606Z",
+	"generatedAt": "2026-10-31T01:17:38.411Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2699,6 +2699,40 @@
 			"scoredAt": "2026-10-28T04:47:27.020Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a4e7e5bce6b1.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "f007c06ebbe2877969f83ede98d75cc1807ea83d894d3a2dce8bd49abbb6a9c2",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d3e0b507af92"
+			],
+			"rationale": "Missing pre-flight capability validation at the bridge mount boundary is a real security gap across the gateway/hub trust boundary.",
+			"evidence": [
+				"TODO(handoff): Gate constrained capabilities before component mounting, audit token/method authority",
+				"could allow unauthorized components to execute with unvalidated capabilities"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T01:17:38.215Z"
+		},
+		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3394,40 +3428,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T02:47:43.765Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a4e7e5bce6b1.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "f007c06ebbe2877969f83ede98d75cc1807ea83d894d3a2dce8bd49abbb6a9c2",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-d3e0b507af92"
-			],
-			"rationale": "Approved security gap on the gateway/hub bridge trust boundary should be fixed alongside the related error-sanitization TODO in the same file and PR.",
-			"evidence": [
-				"TODO(handoff) calls for gating constrained capabilities before mounting",
-				"diagnosis flags cross-project privilege escalation risk"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T00:48:08.895Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bf747956e314",
@@ -9330,38 +9330,6 @@
 			"scoredAt": "2026-10-26T04:19:07.867Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/provision/run/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f67a7acec33b.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "9e2c47b3404618b96fe793dabe7cb0defd389e26be6b25a4c08b599022bb9f48",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding that provisioning host error logs can leak sensitive data should be fixed by consolidating scrubbing into the existing sanitization pipeline.",
-			"evidence": [
-				"TODO(handoff) notes host error-log scrubbing is separate from the sanitized pipeline",
-				"diagnosis flags credential/internal-IP leakage risk"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T00:48:08.895Z"
-		},
-		{
 			"key": "spec:2026-10-03-readiness-mention-directory-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -10746,6 +10714,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T06:19:35.436Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d3e0b507af92.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "42389ae26aae015b787fc0a48b98f7da264255917284dde4f7fb2d0f1c5b2f06",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a4e7e5bce6b1"
+			],
+			"rationale": "Same file and PR as the capability-gating finding, so both bridge-protocol.ts security hardening items should become one goal.",
+			"evidence": [
+				"TODO(handoff): Replace raw upstream error messages with an approved safe RPC projection",
+				"merged PR #252, file src/lib/plugins/bridge-protocol.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T01:17:38.215Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-distinct-visit-dates-spec",
@@ -12707,40 +12709,6 @@
 			"scoredAt": "2026-10-26T12:50:14.477Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d3e0b507af92",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/plugins/bridge-protocol.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d3e0b507af92.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "42389ae26aae015b787fc0a48b98f7da264255917284dde4f7fb2d0f1c5b2f06",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-a4e7e5bce6b1"
-			],
-			"rationale": "Same file and PR #252 as the capability-gating finding, so it should become one bridge-protocol hardening goal rather than a separate item.",
-			"evidence": [
-				"same file src/lib/plugins/bridge-protocol.ts and merged PR #252 as the capability-gating TODO",
-				"fix direction is a safe error projection layer"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T00:48:08.895Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-e1f5f0efca2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12803,6 +12771,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-24T01:48:49.624Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/provision/run/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f67a7acec33b.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "9e2c47b3404618b96fe793dabe7cb0defd389e26be6b25a4c08b599022bb9f48",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Consolidating host error-log scrubbing into the existing sanitizer reduces a real risk of credential/IP leakage in provisioning logs.",
+			"evidence": [
+				"Error logs from host provisioning operations may contain sensitive data (credentials, internal IPs, user data)",
+				"host error-log scrubbing is separate from the sanitized"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T01:17:38.215Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb3cad8ba259",
@@ -15613,38 +15613,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T03:47:17.504Z"
-		},
-		{
-			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Calendar — time-axis scale by dragging the gutter + custom subcolumns per day",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-02-hub-calendar-time-scale-subcolumns.md",
-			"sourceUpdatedAt": "2026-10-02",
-			"sourceFingerprint": "caa9156072148b46b01e124f3ac3cddfaeb0fda455b05b54015cfe455900f78a",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Core calendar scaling/subcolumn feature is mostly shipped and browser-verified, with remaining open ends clearly named as TODO(handoff) sites ready to pick up.",
-			"evidence": [
-				"browser-verified drag/keyboard/persistence and lane drops on QA stack",
-				"TODO(handoff) sites named in BookingCalendar.svelte for built-in lane reclassification"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T00:48:08.895Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-234ac5245d15",
@@ -18809,38 +18777,6 @@
 			"scoredAt": "2026-10-26T05:18:13.024Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-e98422b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ e98422b",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e98422b.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "1c94b5cda7e606109e540876a314f0961fabe4d669b5da137c6d2049771070e4",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Bundle of mostly low-risk quality findings, but the optional-field crash risk in production code is a concrete, bounded fix worth doing now.",
-			"evidence": [
-				"compat.ts:89 unchecked optional caps.methods could throw TypeError",
-				"most other findings are in test/script files, lower severity"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T00:48:08.895Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-670e33d9ad13",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19317,6 +19253,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T08:18:11.849Z"
+		},
+		{
+			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Calendar — time-axis scale by dragging the gutter + custom subcolumns per day",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-02-hub-calendar-time-scale-subcolumns.md",
+			"sourceUpdatedAt": "2026-10-02",
+			"sourceFingerprint": "caa9156072148b46b01e124f3ac3cddfaeb0fda455b05b54015cfe455900f78a",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Most of this feature is already shipped and browser-verified, leaving narrow, well-scoped open ends to finish.",
+			"evidence": [
+				"Browser-verified on the local QA stack...reload persistence, status/service subcolumns",
+				"Open ends (TODO(handoff) sites in BookingCalendar.svelte)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T01:17:38.215Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-uiux-consistency-followups",
@@ -21344,6 +21312,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T23:17:12.161Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-e98422b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ e98422b",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-e98422b.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "1c94b5cda7e606109e540876a314f0961fabe4d669b5da137c6d2049771070e4",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Bundles several concrete, low-risk defects including crash-prone unchecked-access patterns that are straightforward to fix.",
+			"evidence": [
+				"events.at(-1) returns undefined if array is empty; accessing .event on undefined will crash",
+				"new Set(caps.methods) without checking if caps.methods is defined...would throw TypeError"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T01:17:38.215Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-site-82887a9",
@@ -36233,17 +36233,17 @@
 				"specification": 4,
 				"implementation": 3
 			},
-			"confidence": 5,
-			"recommendation": "reframe",
+			"confidence": 3,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The TODO names a POS-coupling limitation but the auto-diagnosis offers two undecided architectural directions instead of a scoped fix.",
+			"rationale": "The auto-diagnosis admits it hasn't actually examined the file, so the scope and fix direction aren't solid yet.",
 			"evidence": [
-				"fix direction lists two undecided options (POS adapter change vs view-layer selector)",
-				"client field limited to one sub-item due to POS limitation"
+				"I need to examine the file to understand the TODO context.",
+				"client has exactly ONE sub-item today because the POS"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T00:48:08.895Z"
+			"scoredAt": "2026-10-31T01:17:38.215Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f05b351ac858",
@@ -41868,38 +41868,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T10:07:02.035Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Deployment health entry only restates an already-merged feature commit with no outstanding defect or action needed.",
-			"evidence": [
-				"summary is the merge commit message for PR #361 (whatsapp session reset)",
-				"status is unknown with no issue described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T00:18:16.037Z"
 		},
 		{
 			"key": "issue:minion-meta#340",
