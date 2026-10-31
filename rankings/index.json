@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-31T21:17:29.767Z",
+	"generatedAt": "2026-10-31T21:47:16.439Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -21593,39 +21593,6 @@
 			"scoredAt": "2026-10-31T02:44:37.292Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-31",
-			"sourceFingerprint": "70f38659ad32d0acce8951434366e62dc53fdeded1b8afb5d4e1bf23c81183f8",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This is an auto-filed sweep bundling 16+ unrelated TODO markers from a rankings index file with no individual scoping, so it cannot be executed as one unit.",
-			"evidence": [
-				"Filed automatically by the factory handoff-ledger sweep",
-				"16+ distinct markers spanning auth, payments, and audit-trail topics bundled into one proposal",
-				"Definition of done is per-marker but the proposal has no per-marker breakdown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T17:47:08.637Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-492022024",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -40861,6 +40828,38 @@
 			"scoredAt": "2026-10-31T02:45:52.051Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-31",
+			"sourceFingerprint": "1436f26b48b5c4d0fd26a7c418058866b8ceb28315796a3c4110f8dec22b4a38",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited markers all point to lines inside rankings/index.json itself, meaning the sweep is quoting fragments of other candidates' own text rather than finding real source-code TODOs.",
+			"evidence": [
+				"every marker location is NikolasP98/minion-meta@dev rankings/index.json, the ranking data file",
+				"marker text matches quoted strings that originate from other ranking summaries, not code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T21:47:16.247Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41897,6 +41896,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T02:37:51.581Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 8
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health entry for an already-merged feature commit (#361) with no outstanding issue described.",
+			"evidence": [
+				"summary describes a merged PR #361 adding sessionResetAuthorized",
+				"references spec 035 G3 as the implemented scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T21:47:16.247Z"
 		},
 		{
 			"key": "issue:minion-meta#340",
