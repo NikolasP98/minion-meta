@@ -228,10 +228,13 @@ None of these is a person:
 | R6 | Read methods (`logs.tail`, sessions) have no org filter on shared gateways. | Medium | Pre-existing, owned by spec 042. Proposal item. |
 | R7 | Changing the flag on Vercel needs a redeploy. | Low | Accepted. No code change is needed. |
 | R8 | The site members area loses its (already broken) live gateway tabs. | Low | Accepted. Proposal item for a site JWT. |
+| R9 | **Blocker found 2026-10-30.** "New chat" calls `sessions.patch` (`chat-rpc.ts:60`), and chat auto-title calls it too (`ChatHistoryPopover.svelte:104`). `sessions.patch` needs `operator.admin` (`server-core/server-methods.ts:298`), so read+write sockets fail it today, and after the flag flip that means every non-platform-admin. Browser personal-agent provisioning calls `agents.create` (`personal-agent.svelte.ts:91`), which a server route already does (`api/personal-agent/create`). | High | Owner decision OQ3. Recommended: in A1, `sessions.patch` passes with `operator.write` when only `label` is set and the session belongs to an agent the socket may use. In A3, browser provisioning moves to the server route. |
 
 ## 8. Open questions for the owner
 - **OQ1.** Only platform admins get gateway admin through the browser. Org owners and admins get read+write, which is what they already get today whenever the JWT works. Channel setup and WhatsApp pairing stay with the platform admin until spec 042. Accept? *Recommended: yes.*
 - **OQ2.** JWT TTL 15 minutes with in-socket refresh every 10, so removing a member cuts their access within 15 minutes. Accept? *Recommended: yes.*
+
+- **OQ3.** Chat needs `sessions.patch`, which is admin-only (R9). Open it to `operator.write` for label-only patches on the caller's own agents' sessions? *Recommended: yes, in A1.*
 
 ## 9. Rejected alternatives
 - **A "dedicated gateway ⇒ org admin gets admin" rule.** There is no data for it, since `gateway.org_id` is per row. An admin JWT is a master key anyway: PTY `process.env`, and `config.patch` of `gateway.auth`.
