@@ -45,7 +45,7 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
 ## 6. `/mcp` accepts a legacy-audience JWT without the shared token (found in A1)
 - **AS-IS:** the `/mcp` Bearer JWT block (`src/gateway/server.impl.ts`) checks `oidcIssuers` but not `multiTenant.jwtOnlyAudiences`. So any hub JWT with the legacy audience is accepted there without the shared token, on every gateway. This predates 045 and is out of A1, which stays inert. `TODO(handoff)` is at that site.
 - **TO-BE:** `/mcp` applies the same rule as the WS connect: JWT-only only for `aud ∈ jwtOnlyAudiences`.
-- **DELTA:** pending the A1 audit's severity call. Fix before the 045 rotation step at the latest.
+- **DELTA:** RESOLVED in A1 (gw #363, `d1f131a84ca`). The A1 audit rated it HIGH: a legacy-`aud` JWT for org X got `sessions.list` on any gateway. `/mcp` now uses the same `jwtOnlyRefusal` rule as connect and refresh, plus the revocation checks.
 
 ## 7. Remove `authToken` from the plugin bridge hello (after A4)
 - **AS-IS:** `packages/plugin-ui-bridge` keeps an optional `authToken`. The 7 plugin UIs read `msg.authToken ?? ""` and pass it to `connectRpc()`, which does nothing.
