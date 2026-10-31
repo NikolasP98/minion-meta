@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-site-f287089bb777
 title: "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h7de7a0efb32dcbb6dad6c4ff41a68bfd7e2488210117fc59a00c016374c69dc3.tgz (minion-site)"
-status: draft
+status: review
 created: 2026-10-31
 updated: 2026-10-31
 repos: [minion-site]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `deps/minion-stack-design-tokens-0.1.1-durability.h7de7a0efb32dcbb6dad6c4ff41a68bfd7e2488210117fc59a00c016374c69dc3.tgz`
@@ -37,3 +38,14 @@ This matters because a binary tarball (`minion-stack-design-tokens-*.tgz`) was c
 - merged PR: https://github.com/NikolasP98/minion-site/pull/38
 - file: `deps/minion-stack-design-tokens-0.1.1-durability.h7de7a0efb32dcbb6dad6c4ff41a68bfd7e2488210117fc59a00c016374c69dc3.tgz`
 - checked: 2026-10-31
+
+## Reconciliation note (2026-10-31, proposal-sweep)
+
+Same class of finding already tracked under `2026-09-08-platform-qc-remediation`'s
+"Dependency/release provenance (UI-06)" priority item (no blanket version
+bump; publish distinct package versions/digests before adoption). That doc's
+packaging work so far is scoped to `@minion-stack/shared`
+("Shared package release emission gate"), not `@minion-stack/design-tokens`.
+Flagged `duplicate_candidate` rather than merged — a human should confirm
+this specific package/version (and site, not hub) is covered by the same
+remediation slice before folding it in or closing it separately.
