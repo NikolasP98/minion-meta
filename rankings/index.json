@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-31T04:17:56.542Z",
+	"generatedAt": "2026-10-31T04:47:35.298Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1396,6 +1396,41 @@
 			"scoredAt": "2026-10-26T03:33:02.754Z"
 		},
 		{
+			"key": "pr:minion_hub#623",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#623 feat(gateway): the dashboard connects with its own per-gateway JWT (inert until switched)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/623",
+			"sourceUpdatedAt": "2026-10-31T04:45:02Z",
+			"sourceFingerprint": "4697cd29d19bbbacd83f69a8735e9586ff3fa26ee79104452e7a6cffc78769b5",
+			"score": 74,
+			"band": "high",
+			"axes": {
+				"criticality": 6,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#904"
+			],
+			"rationale": "Well-specified, largely implemented security PR replacing shared gateway tokens with per-org JWTs, stacked and ready pending owner merge.",
+			"evidence": [
+				"Spec 045 design §3.2, §5 step 2a, §6, R9",
+				"F1–F7 fixed in 568a2486, a9a2057d, 817f1ec8",
+				"Security-tagged, owner merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T04:47:35.095Z"
+		},
+		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1734,8 +1769,8 @@
 			"repo": "minion-meta",
 			"title": "#904 docs(spec): 045 — gateway per-org credentials: no shared operator token in any browser",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/904",
-			"sourceUpdatedAt": "2026-10-31T04:06:36Z",
-			"sourceFingerprint": "c483ed3e109f99843312051a1cce2b11e28aee09a648c867afc37dea24ba4905",
+			"sourceUpdatedAt": "2026-10-31T04:42:12Z",
+			"sourceFingerprint": "3845f1a7c4bb607839e78fd9e92e9e7c771e67cd7a7b51a4073e5d4941ad47f4",
 			"score": 72,
 			"band": "high",
 			"axes": {
@@ -1747,21 +1782,20 @@
 				"specification": 9,
 				"implementation": 6
 			},
-			"confidence": 6,
-			"recommendation": "group",
+			"confidence": 7,
+			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion (gateway)#363",
 				"pr:minion_hub#623"
 			],
-			"rationale": "This is the governing design/spec for the per-org credential model that the two code PRs implement, so it anchors the same initiative and should be judged together.",
+			"rationale": "Finalizes and documents spec 045 removing the shared master gateway token for per-org DB-validated JWTs, directly gating the linked implementation PR.",
 			"evidence": [
-				"owner rule 2026-10-29: no shared master key, per-org DB-validated keys",
-				"design.md final with 3 goldfish reports and decisions 1-20",
-				"supersedes spec 043 decision 4 and task T037"
+				"Owner rule 2026-10-29: no master key, per-org keys validated against DB",
+				"Supersedes spec 043 decision 4 and task T037",
+				"Security-tagged, owner approves and merges"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
+			"scoredAt": "2026-10-31T04:47:35.095Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
@@ -3713,42 +3747,6 @@
 				"three commits inert until configured, spec 043 S4 + spec 045 A1",
 				"audit fixes F-1,F-2,F-3,F-5 addressed",
 				"must merge only with hub 045 A2/A3 per PR body"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
-		},
-		{
-			"key": "pr:minion_hub#623",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#623 feat(gateway): the dashboard connects with its own per-gateway JWT (inert until switched)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/623",
-			"sourceUpdatedAt": "2026-10-31T03:47:41Z",
-			"sourceFingerprint": "170d2aa9636c97941b22d1fc677f77d9990dcd6ef4336ccdbdae5bf01137a35e",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#363",
-				"pr:minion-meta#904"
-			],
-			"rationale": "Hub-side per-gateway JWT slice is byte-identical/inert until flag flip and explicitly stacked on another PR, so it is only coherent evaluated with the gateway and spec PRs.",
-			"evidence": [
-				"stacked on #622, connect frame byte-identical to a1893ad5 until flag flips",
-				"T037 admin-method inventory has 61 entries vs 9 expected",
-				"security-tagged, owner merges"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -18962,38 +18960,6 @@
 			"scoredAt": "2026-10-30T10:18:24.977Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c2239f0660dc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c2239f0660dc.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "b6fc1255e1a8863ecaf4c1f1def40f1b42379e33f0acd72676204e71a838b134",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Concrete UI/data-integrity bug with a specific fix direction (clamp drag position to runway bounds) makes this actionable now.",
-			"evidence": [
-				"TODO(handoff) states drag can cross the runway's visible edge",
-				"fix direction specifies adding a clamp() check in the drag handler"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T04:17:21.578Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30092,6 +30058,39 @@
 			"scoredAt": "2026-10-27T22:47:21.501Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c2239f0660dc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c2239f0660dc.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "b6fc1255e1a8863ecaf4c1f1def40f1b42379e33f0acd72676204e71a838b134",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, well-diagnosed drag-boundary bug in the booking calendar with a clear bounded fix direction.",
+			"evidence": [
+				"TODO(handoff) marker in BookingCalendar.svelte",
+				"status approved",
+				"Fix direction: clamp() check in drag handler"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T04:47:35.095Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-c371d6639113",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39228,6 +39227,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:58:03.340Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deployment-health entry merely restates an already-merged commit (#361) with no outstanding action.",
+			"evidence": [
+				"commit 191d9a6 already merged",
+				"summary describes already-shipped whatsapp reset feature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T04:47:35.095Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
