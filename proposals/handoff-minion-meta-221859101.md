@@ -31,8 +31,10 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1398
 - `NikolasP98/minion-meta@dev rankings/index.json:2694` — Qualify CRM/POS leave-return with an authenticated session in +layout.svelte",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2694
-- `NikolasP98/minion-meta@dev rankings/index.json:3390` — this narrows the race window, it does not close it —",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3390
+- `NikolasP98/minion-meta@dev rankings/index.json:2728` — Gate constrained capabilities before component mounting, audit token/method authority",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L2728
+- `NikolasP98/minion-meta@dev rankings/index.json:3424` — this narrows the race window, it does not close it —",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3424
 - `NikolasP98/minion-meta@dev rankings/index.json:3457` — cancelling a plan leaves its already-paid instalment lines",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3457
 - `NikolasP98/minion-meta@dev rankings/index.json:4573` — Replace this bounded best-effort fan-out with the durable...",
@@ -47,26 +49,28 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6327
 - `NikolasP98/minion-meta@dev rankings/index.json:8932` — spec §3.2b allows a reschedule outside working hours",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8932
-- `NikolasP98/minion-meta@dev rankings/index.json:9648` — runs after (not inside) the document write — a failure here leaves'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9648
-- `NikolasP98/minion-meta@dev rankings/index.json:10742` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10742
-- `NikolasP98/minion-meta@dev rankings/index.json:11205` — HC-028 ... no Escape path at all",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11205
-- `NikolasP98/minion-meta@dev rankings/index.json:12504` — online payment link (Culqi / Mercado Pago) — no credentials yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12504
+- `NikolasP98/minion-meta@dev rankings/index.json:9616` — runs after (not inside) the document write — a failure here leaves'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9616
+- `NikolasP98/minion-meta@dev rankings/index.json:10710` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10710
+- `NikolasP98/minion-meta@dev rankings/index.json:10745` — Replace raw upstream error messages with an approved safe RPC projection",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10745
+- `NikolasP98/minion-meta@dev rankings/index.json:11207` — HC-028 ... no Escape path at all",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11207
+- `NikolasP98/minion-meta@dev rankings/index.json:12506` — online payment link (Culqi / Mercado Pago) — no credentials yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12506
 - `NikolasP98/minion-meta@dev rankings/index.json:15305` — drop column (proposal #16)",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15305
-- `NikolasP98/minion-meta@dev rankings/index.json:15676` — HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15676
-- `NikolasP98/minion-meta@dev rankings/index.json:15710` — UUID-only today — part 2 adds a per-org sequence column",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15710
-- `NikolasP98/minion-meta@dev rankings/index.json:18076` — \"Access…\" omitted until S5 ships PageAccessDialog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18076
-- `NikolasP98/minion-meta@dev rankings/index.json:18509` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18509
-- `NikolasP98/minion-meta@dev rankings/index.json:19473` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19473
+- `NikolasP98/minion-meta@dev rankings/index.json:15644` — HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15644
+- `NikolasP98/minion-meta@dev rankings/index.json:15678` — UUID-only today — part 2 adds a per-org sequence column",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15678
+- `NikolasP98/minion-meta@dev rankings/index.json:18044` — \"Access…\" omitted until S5 ships PageAccessDialog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18044
+- `NikolasP98/minion-meta@dev rankings/index.json:18477` — resourceId is only ever set from the calendar's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18477
+- `NikolasP98/minion-meta@dev rankings/index.json:19441` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19441
 - `NikolasP98/minion-meta@dev rankings/index.json:21623` — ...are NOT [truncated]",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21623
 - `NikolasP98/minion-meta@dev rankings/index.json:22700` — same as crm.customers — numbered in part 2 in src/lib/tables/defs/index.ts",
