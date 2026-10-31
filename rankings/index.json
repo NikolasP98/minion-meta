@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-31T05:16:59.604Z",
+	"generatedAt": "2026-10-31T05:47:42.145Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3194,38 +3194,6 @@
 			"scoredAt": "2026-10-26T03:20:04.625Z"
 		},
 		{
-			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Measured production envelope costs ~4,000 tokens per turn regardless of content, and the ledger already has tests and a routing design to fix it.",
-			"evidence": [
-				"AS-IS table measures envelope at ≈16,096 chars ≈4,000 tokens every turn",
-				"DELTA lists concrete files and named test suites (turn-router.test.ts, assistant-router.service.test.ts)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T05:17:29.819Z"
-		},
-		{
 			"key": "proposal:2026-10-13-hub-first-paint-performance",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5123,6 +5091,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:19:31.564Z"
+		},
+		{
+			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-16-hub-sandbox-builder-context-engineering"
+			],
+			"rationale": "Well-evidenced AS-IS/TO-BE/DELTA with measured per-turn token waste and a DELTA table showing tests and a live-probe already in place, so this is ready to ship.",
+			"evidence": [
+				"measured 4,000 token envelope prepended to every assistant turn",
+				"DELTA table cites turn-router.test.ts, assistant-router.service.test.ts (15 cases) and a live classifier probe"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T05:47:41.963Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1767155690",
@@ -14761,20 +14763,22 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 7,
+				"implementation": 4
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Chart styling and context-pruning issues are real but the four proposed mechanisms (S1-S4) are still design-stage with no test or implementation evidence shown.",
+			"relatedKeys": [
+				"proposal:2026-10-12-hub-assistant-jev-context-router"
+			],
+			"rationale": "Four concrete AS-IS problems are documented with file-line evidence but the TO-BE mechanisms (S1-S4) are only sketched, not yet backed by delta/test evidence like the sibling JEV proposal.",
 			"evidence": [
-				"AS-IS cites stock ECharts defaults and a context-pruning extension that only prunes toolResult messages",
-				"TO-BE lists S1 defaults mechanism but cuts off before showing tests or completion evidence"
+				"AS-IS cites bridge.ts:98-109, tools.ts:391-408, dispatch.ts:12 TODO with no theme registered",
+				"TO-BE section truncated at S1 with no DELTA/test table yet"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T05:17:29.819Z"
+			"scoredAt": "2026-10-31T05:47:41.963Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1915380054",
@@ -18663,6 +18667,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T02:38:22.574Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Bounded, approved finding with a clear fix direction (add one integration test for merge-target wiring) and a named file/PR to anchor the work.",
+			"evidence": [
+				"TODO(handoff) marker: predicate tested, wiring untested, no integration test",
+				"status approved, fix direction specifies happy-path + one edge case test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T05:47:41.963Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-635403793743",
@@ -29746,38 +29782,6 @@
 			"scoredAt": "2026-10-24T06:17:56.257Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A narrow, well-scoped test gap (predicate tested, wiring untested) with a clear bounded fix: add one integration test.",
-			"evidence": [
-				"TODO marker: 'the PREDICATE is covered here, the WIRING is not — no test'",
-				"Fix direction specifies a single happy-path integration test plus one edge case"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T05:17:29.819Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-5ecd8380b71c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39229,38 +39233,6 @@
 			"scoredAt": "2026-10-26T13:58:03.340Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This deployment-health entry merely restates an already-merged commit (#361) with no outstanding action.",
-			"evidence": [
-				"commit 191d9a6 already merged",
-				"summary describes already-shipped whatsapp reset feature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:47:35.095Z"
-		},
-		{
 			"key": "issue:minion_hub#452",
 			"kind": "issue",
 			"stage": "proposal",
@@ -40791,7 +40763,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-10-31",
-			"sourceFingerprint": "7f5801af919a24fefbe40bc35943e5b1a3ecfbc51e0bebe1f953818e757067f0",
+			"sourceFingerprint": "93ac027647dca7df9bf6eb5c3fda7df84d498ceeb46cd02eeb308322b0e63cb6",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -40803,17 +40775,17 @@
 				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 4,
-			"recommendation": "reframe",
+			"confidence": 3,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "A sweep-generated bundle of dozens of unrelated TODO markers scattered across rankings/index.json itself cannot be resolved as a single unit.",
+			"rationale": "Every cited marker is a line inside rankings/index.json itself (the ranking data file), i.e. this sweep is quoting other proposals' embedded summary text back at itself rather than a real source-code defect.",
 			"evidence": [
-				"Markers (as of 2026-10-31)` lists 15+ unrelated line-specific findings",
-				"Filed automatically by the factory handoff-ledger sweep"
+				"all marker locations point to NikolasP98/minion-meta@dev rankings/index.json lines, not application source",
+				"quoted marker text duplicates summary fragments from unrelated proposals in this same catalog"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T03:17:51.939Z"
+			"scoredAt": "2026-10-31T05:47:41.963Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
