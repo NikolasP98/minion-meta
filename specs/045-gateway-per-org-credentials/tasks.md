@@ -32,6 +32,7 @@ Spec: [spec.md](./spec.md) · Plan: [plan.md](./plan.md) · Design: [design.md](
 - [ ] T033 Refresh timer + `auth.refresh`.
 - [ ] T034 Plugins: hello `authToken: ''`; stop fetching the token; remove the "no host" check (test: the plugin page loads with no token).
 - [ ] T035 Delete `(app)/terminal/` (route-contract counts); the token endpoint answers 410 when the flag is `false` (test).
+- [ ] T037 Test first: an inventory test scans hub `src/` for every `sendRequest('<method>'` and classifies it with the gateway's scope rules (copied from `server-core/server-methods.ts`, with a comment pointing there). It fails when a method needing `operator.admin` is neither in `PLATFORM_ADMIN_ONLY` nor served by a hub server route. For non-platform-admins, every UI control behind a `PLATFORM_ADMIN_ONLY` method is not rendered, and a 403 says "your role can't".
 - [ ] T036 Gates. Draft PR `feat(gateway): the dashboard connects with its own per-gateway JWT (inert until switched)` (security).
 
 ## Phase 4: Launch tool
@@ -39,6 +40,7 @@ Spec: [spec.md](./spec.md) · Plan: [plan.md](./plan.md) · Design: [design.md](
 
 ## Phase 5: Launch (owner) — design §5
 - [ ] T050 **OWNER** steps 1–2, per gateway: config plus probe.
+- [ ] T049 **OWNER** step 2a: accept the `PLATFORM_ADMIN_ONLY` list from T037 before the flag flip.
 - [ ] T051 **OWNER** step 3: flag `false` and redeploy.
 - [ ] T052 **OWNER** step 4: acceptance (HAR, 20-minute socket, removal, FACES walk).
 - [ ] T053 Step 5: 7-day bake.

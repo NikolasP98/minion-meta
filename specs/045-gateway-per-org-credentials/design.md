@@ -188,6 +188,7 @@ None of these is a person:
    - `health`, a `read` method and a `write` method allowed;
    - the admin method allowed for a platform admin and refused for a member;
    - a JWT minted for another gateway refused, which also proves A1 is live.
+2a. **Admin-method gate (owner sign-off).** The inventory test (T037) is green, and the owner accepts its `PLATFORM_ADMIN_ONLY` list: the admin methods that stay platform-admin-only until 042 moves them to hub server routes. Until then, the platform admin does those actions for clinics.
 3. Set `PUBLIC_GATEWAY_BROWSER_SHARED_TOKEN=false` and redeploy the hub.
 4. **Acceptance:**
    - a HAR of a full dashboard session, including plugins and settings, contains no token prefix;
@@ -220,7 +221,7 @@ None of these is a person:
 | # | Risk | Severity | Mitigation / status |
 |---|---|---|---|
 | R1 | No fallback: a JWT problem locks the dashboard out. | High | Launch steps 1–2 prove each gateway. The flag rolls back until rotation. |
-| R2 | Org admins have no gateway-admin power (channel setup, WhatsApp pairing) until 042. | Medium | Same as today on a valid JWT. The platform admin does it for them. |
+| R2 | Org owners and admins have no gateway-admin power until 042. That covers more than channels: `config.*` (channel setup, settings), `channels.whatsapp.pair`, `channels.logout`, `agents.create/update/delete`, `skills.install/update`, `cron.add/update/remove/run`, `sessions.patch/reset/delete/compact` (`server-core/server-methods.ts:228-300` on `DEV`). | Medium | Same as today on a valid JWT. Never fixed by giving org roles gateway `admin`, which is a master key. Each action becomes a hub server route checked with `requireOrgCapability` (042, and the plugin toggle in A2). Launch step 3 is gated on the inventory in step 2a. |
 | R3 | Before rotation, anyone who once fetched the token can still use it. | High | Rotation is launch step 6, not a follow-up. |
 | R4 | tailscale and trusted-proxy connections get admin (`allowTailscale` is on in the default config). | Medium | Out of scope: network-level operator trust, not a browser credential. `TODO(handoff)` plus a proposal item. |
 | R5 | The hub never sends `hub.token.revoked`. | Low | I3's 15-minute bound does not depend on it. Proposal item. |

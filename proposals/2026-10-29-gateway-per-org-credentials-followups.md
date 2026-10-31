@@ -38,6 +38,6 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
 - **DELTA:** owned by spec 042 (gateway config in the DB). Cross-reference only.
 
 ## 5. Org admins have no gateway-admin power (R2)
-- **AS-IS:** channel setup (`config.patch`, `channels.logout`, `web.login.*`) is platform-admin-only.
+- **AS-IS:** every gateway method needing `operator.admin` is platform-admin-only: channel setup and settings (`config.*`), `channels.whatsapp.pair`, `channels.logout`, agent create/update/delete, skill install, cron writes, session reset/delete/compact. The list is pinned by 045 T037 (`PLATFORM_ADMIN_ONLY`).
 - **TO-BE:** an org owner or admin sets up their own org's channels.
-- **DELTA:** spec 042 moves channel config into the DB, and channel setup becomes a hub server action checked against org RBAC.
+- **DELTA:** each action becomes a hub server route checked with `requireOrgCapability` that calls the gateway with the server-held credential, limited to the org's own rows. Org roles never get gateway `admin`. Spec 042 S3 covers channel config; WhatsApp pairing and logout are added to 042 as T023a. The rest (agents, skills, cron, sessions) has no spec yet. Each route that ships removes its method from `PLATFORM_ADMIN_ONLY`.
