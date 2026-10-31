@@ -1,8 +1,8 @@
 ---
 id: 2026-10-29-site-clinic-journeys-spec
 title: Site — clinical-chart aesthetic + one patient's week as the demo
-stage: spec
-status: draft
+stage: done
+status: shipped
 pass: 1
 created: 2026-10-29
 updated: 2026-10-29

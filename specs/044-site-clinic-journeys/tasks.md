@@ -30,4 +30,4 @@
 - [x] T015 Gates: check, lint:design, lint:tokens, test, build, format:check:changed; grep `flap` = 0 in `src`.
 - [x] T016 Screens 1440/390 × es/en × light/night + journey played end to end → `evidence/screens/`; fixes batched.
 - [x] T017 Commit (signed), push, draft PR site → `master`; meta: spec + contract PR → `dev`; flat stub spec + `spec-index`.
-- [ ] T018 [OWNER] Phone review, merge, Vercel prod verify.
+- [x] T018 [OWNER] Merged 2026-10-30: site #38 → master `46c212f` (Vercel prod success, `data-minion-theme="clinic"` live on www.minion-ai.org), meta #901 → dev `f06b5b8`. Phone review still open.
