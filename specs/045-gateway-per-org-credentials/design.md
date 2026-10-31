@@ -2,10 +2,10 @@
 id: 045-gateway-per-org-credentials
 title: Gateway per-org credentials — no shared operator token in any browser
 stage: design
-status: draft
-verdict: pending
+status: approved
+verdict: approved
 created: 2026-10-29
-updated: 2026-10-29
+updated: 2026-10-30
 repos: [minion_hub, minion, minion_site, minion-meta]
 tags: [security, permissions]
 ---
@@ -230,7 +230,10 @@ None of these is a person:
 | R8 | The site members area loses its (already broken) live gateway tabs. | Low | Accepted. Proposal item for a site JWT. |
 | R9 | **Blocker found 2026-10-30.** "New chat" calls `sessions.patch` (`chat-rpc.ts:60`), and chat auto-title calls it too (`ChatHistoryPopover.svelte:104`). `sessions.patch` needs `operator.admin` (`server-core/server-methods.ts:298`), so read+write sockets fail it today, and after the flag flip that means every non-platform-admin. Browser personal-agent provisioning calls `agents.create` (`personal-agent.svelte.ts:91`), which a server route already does (`api/personal-agent/create`). | High | Owner decision OQ3. Recommended: in A1, `sessions.patch` passes with `operator.write` when only `label` is set and the session belongs to an agent the socket may use. In A3, browser provisioning moves to the server route. |
 
-## 8. Open questions for the owner
+## 8. Owner decisions (2026-10-30: "proceed" on the recommendations)
+
+OQ1 to OQ3 are accepted as recommended. The flag flip does not wait for spec 042 (the platform admin does channel setup for clinics in the meantime). Specs 043 and 045 are approved.
+
 - **OQ1.** Only platform admins get gateway admin through the browser. Org owners and admins get read+write, which is what they already get today whenever the JWT works. Channel setup and WhatsApp pairing stay with the platform admin until spec 042. Accept? *Recommended: yes.*
 - **OQ2.** JWT TTL 15 minutes with in-socket refresh every 10, so removing a member cuts their access within 15 minutes. Accept? *Recommended: yes.*
 

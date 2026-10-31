@@ -2,12 +2,12 @@
 id: 2026-10-29-gateway-per-org-credentials-spec
 title: Gateway per-org credentials — no shared operator token in any browser
 stage: spec
-status: review
-verdict: pending
+status: approved
+verdict: approved
 type: feature
 pass: 1
 created: 2026-10-29
-updated: 2026-10-29
+updated: 2026-10-30
 repos: [minion_hub, minion, minion_site, minion-meta]
 tags: [security, permissions]
 ---

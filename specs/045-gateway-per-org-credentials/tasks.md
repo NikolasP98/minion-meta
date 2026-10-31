@@ -16,6 +16,7 @@ Spec: [spec.md](./spec.md) · Plan: [plan.md](./plan.md) · Design: [design.md](
 - [ ] T015 `auth-refresh.ts`/`server.impl.ts` go through `resolveJwtAuth`, with the equality check, scope re-apply, timer reset, and no broadcast.
 - [ ] T016 Test first, then the change: `hub.token.revoked` closes live sockets matching the jti or userId.
 - [ ] T017 `plugin-ui-bridge`: `authToken` optional in the hello (test: a hello without it is accepted).
+- [ ] T017a Test first, then the change (OQ3): `sessions.patch` passes with `operator.write` when the params hold only `key` and `label` and the session's agent is one the socket may use (admin, or in `assignedAgentIds` when set). Any other field still needs `operator.admin`.
 - [ ] T018 Gates (`test/ci/` + targeted, `pnpm check`, `pnpm tsgo`). Draft PR `feat(gateway): bind browser JWTs to one gateway and expire them on the socket` (security).
 
 ## Phase 2: Hub issuance (A2) · `master` · security
@@ -33,6 +34,7 @@ Spec: [spec.md](./spec.md) · Plan: [plan.md](./plan.md) · Design: [design.md](
 - [ ] T034 Plugins: hello `authToken: ''`; stop fetching the token; remove the "no host" check (test: the plugin page loads with no token).
 - [ ] T035 Delete `(app)/terminal/` (route-contract counts); the token endpoint answers 410 when the flag is `false` (test).
 - [ ] T037 Test first: an inventory test scans hub `src/` for every `sendRequest('<method>'` and classifies it with the gateway's scope rules (copied from `server-core/server-methods.ts`, with a comment pointing there). It fails when a method needing `operator.admin` is neither in `PLATFORM_ADMIN_ONLY` nor served by a hub server route. For non-platform-admins, every UI control behind a `PLATFORM_ADMIN_ONLY` method is not rendered, and a 403 says "your role can't".
+- [ ] T035a Browser personal-agent provisioning (`personal-agent.svelte.ts:91` `agents.create`) moves to the existing server route `api/personal-agent/create`.
 - [ ] T036 Gates. Draft PR `feat(gateway): the dashboard connects with its own per-gateway JWT (inert until switched)` (security).
 
 ## Phase 4: Launch tool
