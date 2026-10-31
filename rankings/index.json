@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-31T13:16:59.378Z",
+	"generatedAt": "2026-10-31T13:47:10.599Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -12557,6 +12557,38 @@
 			"scoredAt": "2026-10-31T02:39:50.532Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-10-31",
+			"sourceFingerprint": "ab31c3ddbfbe58a6b83a1458794806defe6979339cfa45465f655e3abd4a7c1f",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is a rolled-up ledger of many unrelated handoff markers across different files/concerns, not a single actionable goal.",
+			"evidence": [
+				"18+ distinct TODO(handoff) markers spanning auth, payments, race conditions, audit trails",
+				"Definition of done requires removing all markers, which are unrelated in scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T13:47:10.407Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2988591151",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22266,41 +22298,6 @@
 			"scoredAt": "2026-10-31T02:50:30.323Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-site-ce10a6641861",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.h2b5bcf9a124ff5add691c22cad63ac8d9e68096d567339d2e265f1c4c39c1c3d.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ce10a6641861.md",
-			"sourceUpdatedAt": "2026-10-31",
-			"sourceFingerprint": "5e96c3606a918473f29afb861785daddc343470cba1360246323fd3d32118b7f",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-site-ea1bced2f3b0",
-				"proposal:postmerge-minion-site-f287089bb777"
-			],
-			"rationale": "Same root cause (binary tgz files committed to minion-site deps/ via PR #38) as two sibling findings, so they should be consolidated into one fix-the-build-process goal.",
-			"evidence": [
-				"file deps/minion-stack-ui-0.1.0-durability...tgz added in PR #38",
-				"status draft, fix direction: gitignore .tgz / use lockfile instead"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T03:18:10.825Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-site-ea1bced2f3b0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22330,41 +22327,6 @@
 			"evidence": [
 				"PR #34 then latest occurrence rolled to PR #38 46c212f",
 				"diff shows 0-change/added status suggesting LFS or oversize issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T03:18:10.825Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-site-f287089bb777",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h7de7a0efb32dcbb6dad6c4ff41a68bfd7e2488210117fc59a00c016374c69dc3.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-f287089bb777.md",
-			"sourceUpdatedAt": "2026-10-31",
-			"sourceFingerprint": "58ebab890ceefe454e647bd7b8da5d6c19ff1a856948bc31bfd04559cc7a2ad5",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-site-ce10a6641861",
-				"proposal:postmerge-minion-site-ea1bced2f3b0"
-			],
-			"rationale": "Same recurring issue of binary tgz tarballs committed to minion-site deps/ via PR #38, overlapping with two sibling findings and better handled as one goal.",
-			"evidence": [
-				"file deps/minion-stack-design-tokens-0.1.1-durability...tgz added in PR #38",
-				"fix direction: git rm tarball, fetch via bun install instead"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -27462,39 +27424,6 @@
 			"scoredAt": "2026-10-28T19:19:59.087Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged WhatsApp session-reset feature commit with no indication of deployment failure or urgency, so it reads as routine shipped work rather than an active goal.",
-			"evidence": [
-				"feat(whatsapp): members can /new and /reset their own agent session (#361)",
-				"status: unknown",
-				"tags: deployment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T11:47:01.887Z"
-		},
-		{
 			"key": "issue:minion-meta#360",
 			"kind": "issue",
 			"stage": "proposal",
@@ -30558,6 +30487,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T12:50:14.477Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-ce10a6641861",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.h2b5bcf9a124ff5add691c22cad63ac8d9e68096d567339d2e265f1c4c39c1c3d.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ce10a6641861.md",
+			"sourceUpdatedAt": "2026-10-31",
+			"sourceFingerprint": "36222ab0aacc56770ff69a22d4404dcfd6307fb27037c4e35801db64157972c7",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-site-f287089bb777"
+			],
+			"rationale": "A committed binary tarball scan-gap flagged as likely duplicate of existing dependency-provenance remediation work, best merged with the sibling finding.",
+			"evidence": [
+				"Reconciliation note flags duplicate_candidate against 2026-09-08-platform-qc-remediation UI-06",
+				"Same merged PR #38 and repo as the sibling .tgz finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T13:47:10.407Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-f287089bb777",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h7de7a0efb32dcbb6dad6c4ff41a68bfd7e2488210117fc59a00c016374c69dc3.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-f287089bb777.md",
+			"sourceUpdatedAt": "2026-10-31",
+			"sourceFingerprint": "70447fe857463b6109344ac0414bacef33300b32c07a4ddee2f5a7cdd162affe",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-site-ce10a6641861"
+			],
+			"rationale": "Same class of committed-tarball scan-gap from the same PR as the sibling finding, should be resolved together under the existing remediation slice.",
+			"evidence": [
+				"Same merged PR #38 (minion-site) and same reconciliation note pointing to UI-06 remediation",
+				"Status added with zero diff captured, same deps/ pattern"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-10-31T13:47:10.407Z"
 		},
 		{
 			"key": "issue:minion-meta#755",
@@ -43375,38 +43372,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T02:38:49.627Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-10-31",
-			"sourceFingerprint": "4a651fa7d6b540bd86a23282cc42a0e73797356ed31bfe4d2bb85a1f3301514c",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted fragments of rationale/evidence text from the rankings/index.json data file itself, not actual code TODOs needing resolution.",
-			"evidence": [
-				"all 'markers' point to lines inside rankings/index.json, the ranking output file, not source code",
-				"many fragments are clearly truncated quotes from other findings' evidence/rationale fields (e.g. 'HS-011 in minion-meta/proposals/...')"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T09:47:07.339Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
