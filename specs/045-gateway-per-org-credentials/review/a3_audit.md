@@ -198,3 +198,178 @@
    - gateway config editor.
 8. **Flow triggers:** a newly activated flow's trigger is not registered until a platform admin connects. Existing triggers persist on the gateway.
 9. **Personal-agent provisioning:** unaffected, because it runs server-side.
+
+## Re-audit (817f1ec8)
+
+- **Scope:** `git diff 88df9b80 817f1ec8` (fix commits `568a2486` F1/F2/F5/F7, `a9a2057d` F4, `817f1ec8` F3/F6). Worktree `hub-045-a3`. Compared against gateway A1 `gw-043-s4` `13f8fe97e8a`.
+- **Date:** 2026-10-30.
+
+### Verdict: SHIP
+
+- Every original finding is fixed, and I confirmed each fix by running it.
+- **The flag left unset changes nothing that matters.** Run under both roles, the guard, the reliability transport, the bootstrap, plugin RPCs and ChannelLinking all reach the gateway exactly as before. The connect frame is unchanged.
+- **One real behaviour change with the flag unset is a bug fix.** ChannelLinking's old loop on an empty list is gone.
+- **What's left is Low or Info.**
+  - R1 is a robustness gap: the scanner is weaker than the old one for *future* code. The current list is complete, confirmed by two independent sweeps.
+  - It is not a security issue. The gateway enforces scope; the scanner only protects the owner's step-2a list.
+  - The fix is about 4 lines. Do it before T037 sign-off if convenient; it does not block merge.
+
+### Tests run
+
+- **Baseline:** 28 files, 377/377 green.
+  - Covered: `src/lib/services/gateway/*`, `gateway.jwt-only`, `ChannelLinking.mounted`, `personal-agent/create`, `gateway-jwt-probe-core`, `src/lib/routes`, `frontend-contract-scanner`, `scripts/ui-audit-inventory`.
+- **Throwaway probes:** 4 files named `reaudit-a3-*`, results below. All were deleted afterwards. `git status` is clean, and HEAD is still `817f1ec8`.
+- **Every run** used `env -u SUPABASE_DB_URL -u DATABASE_URL`. No integration test, no DB and no gateway were touched.
+
+### 1. F1 scanner and the PLUGIN_RPC gate
+
+**Evasion probes.** Each was run through the committed `sweepSource` and `violations`.
+
+| Input | Result |
+|---|---|
+| `METHODS.del` map lookup | caught |
+| `.svelte` `<script module>` constant | caught |
+| `.svelte.ts` store string | caught |
+| `gatewayCall('agents.delete')` | caught |
+| `fetch('/rpc', …{method:'agents.delete'})` | caught |
+| constant imported from another swept module | caught (its string is swept where it is defined) |
+| `sendRequest('agents.' + 'delete')` | **missed** |
+| `['agents','delete'].join('.')` | **missed** |
+| `` `${ns}.delete` `` | **missed** |
+| `'agents\x2edelete'` | **missed** |
+| `sendRequest('studio.generate')` (namespace not in `NAMESPACES`) | **missed** |
+| `sendRequest('restart')` (single word; A1 `:393` defaults to admin) | **missed** |
+| `rel.load(owner,'sessions.patch',{key,model})` (wrapper; `:249` skips `sessions.patch` strings) | **missed** |
+| `'a//b'; sendRequest('agents.delete')` on one line | **missed** (`stripComments` `:203` treats the `//` inside a string as a comment) |
+| a string containing `/*` | **missed** (same cause) |
+
+**Current tree is complete:**
+- No literal call in `src` needs admin outside `PLATFORM_ADMIN_ONLY`.
+- An independent Python sweep of the 226 A1 method names against the browser files found nothing unclassified.
+- Every string `stripComments` removes from the tree today is inside a real comment. I listed and checked all 30.
+
+**R1 (Low): the new sweep is weaker than the old scanner for future code.**
+- **Where:** `violations()` at `method-inventory.test.ts:246` no longer checks `tree.calls`.
+  - So a literal call to an unknown-namespace or single-word method (both admin on A1) passes.
+  - The old call-shape scan caught it.
+- **The allowlist is abusable.** `NOT_RPC` is file-agnostic, and two of its entries are real A1 admin methods:
+  - `'channels.send'` (`:156`, gw `server-methods/channels.ts:263`);
+  - `'memory.recall'` (`:118`, gw `server-methods/memory.ts:28`).
+  - Executed: `sendRequest('channels.send', {})` in a new file → `[]`.
+- `DYNAMIC_CALL_SITES` (`:173`) and `NOT_RPC_TEMPLATES` are file-wide.
+  - Executed: `getClient()!.request(m)` added to `gateway.svelte.ts` → `[]`.
+  - Executed: `` sendRequest(`agents.${verb}`) `` in `AgentSettingsPanel.svelte` → `[]`.
+- **The `PLUGIN_RPC` assertion is too loose.** At `:341` it only checks that *one* gated call exists per file. A second, ungated dynamic call in `PluginIframe` or `ChannelLinking` would pass.
+- **Minimal fix (executed and confirmed):** in `violations()` add:
+  ```ts
+  for (const c of sweep.calls)
+    if (!['read','write'].includes(requiredScope(c.method, c.args)) && !PLATFORM_ADMIN_ONLY.has(c.method))
+      out.add(`${c.method} literal call needs admin (${c.file})`);
+  ```
+  - The tree stays `[]`.
+  - It now catches the concat, `studio.generate`, `restart`, `channels.send`, `memory.recall` and `sessions.patch {key,model}` probes.
+  - `chat.history` still passes.
+  - Optionally, key `NOT_RPC` by `file value`, as `NOT_RPC_TEMPLATES` is.
+
+**PLUGIN_RPC enforcement is complete.**
+- **Plugin forward paths:**
+  - Every plugin slot host goes through `PluginIframe.forwardRpc`: `PluginSlotHost`, `PluginControlCenter` and `/settings/plugins`. It gates as `PLUGIN_RPC` at `:78`.
+  - The `ChannelLinking` submit gates as `PLUGIN_RPC` at `:176`.
+  - `ArtifactHost.forwardRpc` never reaches the gateway: it answers only `hub.artifact.context.get` from the hub API.
+  - `plugins.users.list` is answered by the hub before any forward.
+- **On the wire (executed):** with `PLUGIN_RPC`, the wire carries the real method (`studio.generate`), never `$PLUGIN_RPC`.
+
+### 2. Guard coverage and inertness (executed with a mocked client)
+
+| Flag | Role | Bootstrap `flows.trigger.register` | Owner transport `reliability.summary` | Plugin RPC | Bootstrap reads |
+|---|---|---|---|---|---|
+| unset | user | 1 | sent | sent | 1,1,1,1,1 |
+| unset | admin | 1 | sent | sent | 1,1,1,1,1 |
+| `false` | user | 0 | `GatewayRoleError` | refused | 1,1,1,1,1 |
+| `false` | admin | 1 | sent | sent | 1,1,1,1,1 |
+
+- Platform admins are unaffected.
+- With the flag unset, `guardedRequest` is identical to `client.request`.
+- For members with the flag `false`: the gateway already refused these calls before this fix, so only the error type changes, not the outcome.
+
+### 3. F2: ChannelLinking (executed, happy-dom)
+
+- **Flag unset, member, empty list:** 1 call, and Refresh is shown.
+  - The old code looped on an empty list even with the flag unset, so this is a fix, not a regression.
+- **Flag unset, member, gateway refusal:** 1 call.
+- **Flag `false`, platform admin:** 1 call.
+- **Reconnect:** 1 → 2 calls.
+- **Host switch through `wsConnect`** (which sets `conn.connected=false`, `gateway.svelte.ts:722`): → 3 calls.
+- **Unmount while a load is in flight, then reconnect:** no further call. Effect cleanup is correct.
+- **Info:** a cutover (`cutoverToHost`) keeps `conn.connected` true, so the list is not reloaded (`calls=1` after the host id changes). The old code behaved the same, because none of its effect dependencies change on a cutover. Not a regression.
+
+### 4. F4: the personal-agent route (read plus the existing tests)
+
+**No intended identity edit can be dropped:**
+- An explicit `name`, `personality` or `personalityText` still applies for an `error` row. The test covers it.
+- The only caller (`personal-agent.svelte.ts:89`) posts `{}`.
+- The route has no role branch, so admins and members behave the same.
+
+**Info: an error-state agent that never reached the gateway is now created without a display name.**
+- `create()` still runs, but there is no `config.patch`. The gateway name defaults to `agent_id`.
+- This matches the layout self-heal path, which already provisions without an identity.
+- The user can rename the agent in `/home/settings`.
+
+### 5. F5: first-connect issuance outage (executed with the real `GatewayClient` and a fake WebSocket, fake timers, 60 s)
+
+**Persistent outage** (issuance 503, 500 or a network error):
+- 9 sockets and 10 JWT fetches in 60 s. The backoff runs 0.8 s × 1.7, up to 15 s; no tight loop.
+- Every handshake closes with 4008.
+- 0 connect frames were sent.
+- `fetchHostToken` was called 0 times.
+- 0 frames contained `"auth"` or the shared-token sentinel.
+- One `gateway-connect-failed` toast and one `revalidateChannel` call per `wsConnect`.
+
+**Other cases:**
+- **503, then 200:** one socket, and the connect frame carries `jwt-ok` with no `auth`.
+- **Flag unset:** the token is fetched, no JWT is fetched, and the frame carries the token, as before.
+
+**No fallback can come back** (`gateway.svelte.ts:766-774`):
+- With the flag `false`, `prefetchGatewayJwt` always sets `prefetchedJwt`, and `fetched` is always `''`, so `auth` is omitted.
+- `onChallenge` throws on any result that is not a string.
+
+### 6. F6: the probe script
+
+**The one write is acceptable and documented.**
+- It is a label-only `sessions.patch` on `agent:<id>:jwt-probe`, documented in the header and in the `probeMatrix` doc.
+- A1's handler upserts that session entry, so a "jwt-probe" session will appear in that member's session list. Members cannot delete it (`sessions.delete` is admin).
+- **Info:** `agentIds(jwt)[0]` (`gateway-jwt-probe-core.ts:182`) is drawn tenant-wide, not per gateway. If that agent lives on another of the org's gateways, the probe writes a stray session store for it there, or reports a false FAIL. It never gives a false pass.
+- **Optional:** pick an agent bound to this gateway (`user_agents.serverId === gatewayId`).
+
+**The signing-key pre-check mirrors issuance exactly.** It does open, then `JSON.parse`, then `importJWK(jwk, row.alg)`, the same as `loadActiveSigningKey` in `gateway-jwt.service.ts:82-90`. The only remaining gap is a key deactivated between the check and the mint, which I consider negligible.
+
+**The foreign-audience check is correct:**
+- It accepts only a 1008 close with reason `jwt_audience_not_allowed` or `jwt_validation_failed` (`:140`).
+- Both reasons are genuine A1 audience refusals, depending on config:
+  - `ws-jwt-auth.ts:213` (`jwtOnlyRefusal`) gives `jwt_audience_not_allowed`;
+  - an issuer `audience` list that excludes `gw:…invalid` fails jose verification first, which gives `jwt_validation_failed` (`ws-jwt-auth.ts:96`, `message-handler.ts:495`).
+- A1's own test expects `{1008, jwt_audience_not_allowed}` (`jwt-only-connect.test.ts:200`).
+- `jwt_validation_failed` could also mean a bad signature or issuer. But the same mint already passed the own-audience connect, and if that connect failed the run is FAIL anyway. So there is no false pass.
+- A timeout, a network error, another reason or a non-1008 close is `error`, which gives FAIL. The tests cover this.
+
+**`TURSO_DB_URL` unset** now makes the script throw.
+
+### 7. F7: `/terminal`
+
+- `+page.server.ts` is byte-identical to the pre-A3 redirect: 307 to `/cloud/terminal${url.search}`.
+- `+page.svelte` is a comment only, with no token fetch and no PTY or terminal import.
+- These files are byte-identical to `0fb2d8ef^`: `route-design-manifest.ts`, `route-design-validation.ts` and `ui-audit-inventory.mjs`.
+- All count sites agree on 163 / 152 / 11. The count suites are green:
+  - `src/lib/routes` (including `route-access-authority`);
+  - `frontend-contract-scanner.test.ts`;
+  - `scripts/ui-audit-inventory.test.ts`.
+
+### F3
+
+- The member `sessions.patch` cases are in the probe matrix.
+- The assignment condition is stated in the probe docs, and the "no agent" case is reported as `skip`.
+
+### Not checked
+
+- Svelte runtime warnings in a real browser.
+- The `createReadFailureMonitor` telemetry volume for members whose reliability panels are refused after the switch. The outcome is the same as before the fix; only the error type changed.
