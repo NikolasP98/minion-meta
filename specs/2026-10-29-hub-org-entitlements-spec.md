@@ -2,12 +2,12 @@
 id: 2026-10-29-hub-org-entitlements-spec
 title: Hub org entitlements — plans gate AI per org
 stage: spec
-status: review
-verdict: pending
+status: approved
+verdict: approved
 type: feature
 pass: 1
 created: 2026-10-29
-updated: 2026-10-29
+updated: 2026-10-30
 repos: [minion_hub, minion, minion-meta]
 tags: [security, data, permissions, ui]
 ---

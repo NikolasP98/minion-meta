@@ -7,7 +7,7 @@
 
 ## Phase 1: Setup
 
-- [ ] T001 **OWNER** Approve `specs/043-hub-org-entitlements/spec.md` (security + data). No code commit in any repo before this.
+- [x] T001 **OWNER** Approve `specs/043-hub-org-entitlements/spec.md` (security + data). No code commit in any repo before this.
 - [ ] T002 Each implementer: `git -C <repo> fetch origin && git worktree add ~/.cache/claude-tmp/<worktree> -b <branch> <base>` per plan.md §Slices; real install (`bun install --frozen-lockfile` / `pnpm install --frozen-lockfile`); read the repo's `AGENTS.md`/`CLAUDE.md`, and for hub UI `.claude/skills/ui-design-governance/SKILL.md`.
 
 ## Phase 2: S1 hub — schema, catalog, evaluator, admin page (`feat/entitlements-s1-model`) · security/data · blocks S2, S3, S5

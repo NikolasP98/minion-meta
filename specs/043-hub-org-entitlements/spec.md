@@ -2,10 +2,10 @@
 id: 043-hub-org-entitlements
 title: Hub org entitlements — plans gate AI per org
 stage: spec
-status: review
-verdict: pending
+status: approved
+verdict: approved
 created: 2026-10-29
-updated: 2026-10-29
+updated: 2026-10-30
 repos: [minion_hub, minion, minion-meta]
 tags: [security, data, permissions, ui]
 ---
