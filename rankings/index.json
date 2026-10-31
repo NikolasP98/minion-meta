@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-31T10:46:56.292Z",
+	"generatedAt": "2026-10-31T11:17:08.183Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6565,20 +6565,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 7,
 				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A merged PR left CRM dashboard rollups unscoped by owner, breaking multi-tenant isolation with a clear, bounded fix direction already identified.",
+			"rationale": "Unscoped CRM rollups break multi-tenant isolation in a merged dashboard service with a clear, bounded fix direction already specified.",
 			"evidence": [
-				"TODO(handoff): scope word-frequency/sentiment/win-index rollups by owner",
-				"Fix direction: Add owner_id grouping ... Filter dashboard results to the authenticated user's scope"
+				"TODO(handoff) marker at crm-insights-dashboard.service.ts:40 for owner-scoped rollups",
+				"Diagnosis states aggregate stats mix across owners, breaking per-owner isolation",
+				"Fix direction specifies owner_id grouping and scope filtering with test verification"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T10:47:05.955Z"
+			"scoredAt": "2026-10-31T11:17:08.035Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-d5d1a8c9d6a9",
@@ -22433,38 +22434,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T05:48:22.744Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This deploy-health entry only contains a feature commit message with status unknown and no indication of an actual deployment problem.",
-			"evidence": [
-				"status: unknown",
-				"summary is a commit message about a whatsapp feature, not a health report"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T10:17:14.357Z"
 		},
 		{
 			"key": "issue:minion-meta#574",
