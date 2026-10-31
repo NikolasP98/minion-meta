@@ -120,7 +120,7 @@ None of these is a person:
 
 ### 3.1 Hub issuance (A2)
 
-- **Audience:** `gatewayAudience(url)` returns `gw:` plus the lower-cased `host[:port]` of the row's URL. No schema change: URLs are unique per row (`gateway_uniq_url`).
+- **Audience:** `gatewayAudience(url)` returns `gw:` plus the lower-cased `host[:port]` of the row's URL. No schema change. URLs are NOT unique per row: `gateway_uniq_url` is `(url, org_id, channel)`, and in prod two orgs share each netcup and protopi URL. That is safe, because `aud` binds the JWT to the gateway process and the `orgId` claim isolates orgs on it (A2 audit). Ops paste the values from `gateway-jwt-probe.ts --list-audiences`; the gateway compares them as exact strings.
 - **Route:** `GET /api/gateway/jwt?gatewayId=<id>`. `gatewayId` is optional while the flag is unset or `true` (absent = today's token), and required when it is `false`.
   - When present, the gateway must belong to the active org (`gatewayBelongsToOrg`).
   - A non-platform-admin also needs a `user_gateway`/`user_servers` link, the same check as the token endpoint (`userHasGatewayAccess`).
