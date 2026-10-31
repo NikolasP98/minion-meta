@@ -41,3 +41,13 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
 - **AS-IS:** every gateway method needing `operator.admin` is platform-admin-only: channel setup and settings (`config.*`), `channels.whatsapp.pair`, `channels.logout`, agent create/update/delete, skill install, cron writes, session reset/delete/compact. The list is pinned by 045 T037 (`PLATFORM_ADMIN_ONLY`).
 - **TO-BE:** an org owner or admin sets up their own org's channels.
 - **DELTA:** each action becomes a hub server route checked with `requireOrgCapability` that calls the gateway with the server-held credential, limited to the org's own rows. Org roles never get gateway `admin`. Spec 042 S3 covers channel config; WhatsApp pairing and logout are added to 042 as T023a. The rest (agents, skills, cron, sessions) has no spec yet. Each route that ships removes its method from `PLATFORM_ADMIN_ONLY`.
+
+## 6. `/mcp` accepts a legacy-audience JWT without the shared token (found in A1)
+- **AS-IS:** the `/mcp` Bearer JWT block (`src/gateway/server.impl.ts`) checks `oidcIssuers` but not `multiTenant.jwtOnlyAudiences`. So any hub JWT with the legacy audience is accepted there without the shared token, on every gateway. This predates 045 and is out of A1, which stays inert. `TODO(handoff)` is at that site.
+- **TO-BE:** `/mcp` applies the same rule as the WS connect: JWT-only only for `aud ∈ jwtOnlyAudiences`.
+- **DELTA:** pending the A1 audit's severity call. Fix before the 045 rotation step at the latest.
+
+## 7. Remove `authToken` from the plugin bridge hello (after A4)
+- **AS-IS:** `packages/plugin-ui-bridge` keeps an optional `authToken`. The 7 plugin UIs read `msg.authToken ?? ""` and pass it to `connectRpc()`, which does nothing.
+- **TO-BE:** the field is gone.
+- **DELTA:** after hub A4 stops sending it, delete it from the bridge and the 7 UIs and republish the package (changeset). `TODO(handoff)` is in `packages/plugin-ui-bridge/src/index.ts`.
