@@ -51,3 +51,8 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
 - **AS-IS:** `packages/plugin-ui-bridge` keeps an optional `authToken`. The 7 plugin UIs read `msg.authToken ?? ""` and pass it to `connectRpc()`, which does nothing.
 - **TO-BE:** the field is gone.
 - **DELTA:** after hub A4 stops sending it, delete it from the bridge and the 7 UIs and republish the package (changeset). `TODO(handoff)` is in `packages/plugin-ui-bridge/src/index.ts`.
+
+## 8. A4 cleanup of the A2 transition paths
+- **AS-IS:** `gateway-jwt.service.ts` `LEGACY_JWT_EXPIRY_SECONDS` (3600 s, used when no `gatewayId` is sent). `organization-provision.service.ts` `mintOrgGatewayJwt` binds the audience only under the flag. Both have a `TODO(handoff)`.
+- **TO-BE:** one TTL (900 s), and the provisioning audience is always bound.
+- **DELTA:** A4 (T054) deletes the legacy branch and the flag condition.

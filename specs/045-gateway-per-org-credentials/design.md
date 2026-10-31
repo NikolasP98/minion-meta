@@ -246,3 +246,10 @@ OQ1 to OQ3 are accepted as recommended. The flag flip does not wait for spec 042
 - **Per-org static API keys stored hashed in the DB.** A long-lived secret in a browser is the same problem at org scope, and the gateway would need DB access or a hub call on every connect.
 - **The gateway introspects with the hub on every connect.** That makes the hub a hard dependency of every connect. TTL plus refresh gets the same bound.
 - **Proxy all browser gateway traffic through the hub server.** That means rewriting the realtime client and adds latency.
+
+## 10. As-built notes (A2, hub PR #622)
+- **TTL:** 900 s only when the request names a `gatewayId`; the legacy path (no `gatewayId`) keeps 3600 s until A4. Reason: today's prefetch can hold a JWT past 15 minutes, and an expired JWT makes the pre-A3 client fall back to token-only for 60 s.
+- **Provisioning audience:** `mintOrgGatewayJwt` binds `gw:<host>` only when `PUBLIC_GATEWAY_BROWSER_SHARED_TOKEN === 'false'`. Gateway `DEV` closes 1008 on an unconfigured `aud` even with the token, so binding it at merge would break provisioning before launch step 1. A4 makes it unconditional.
+- **Errors:** 403 sends `{error:'gateway_forbidden', code:'gateway_forbidden'}`. With the flag `false`, a missing `gatewayId` gets 400 `gateway_id_required`.
+- **Plugin toggle:** gated by `requireOrgCapability(locals, 'settings', 'manage')`. A custom role holding that capability also passes.
+- **Link check:** the JWT route copies the token route's legacy Turso `user_servers` fallback, for parity.
