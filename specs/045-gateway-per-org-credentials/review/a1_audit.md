@@ -166,3 +166,145 @@ The other `sessions.patch` probes behaved correctly. All were confirmed by execu
 - Live gateways: whether `oidcIssuers` is configured in prod, and the default agent id on FACES and netcup. These decide whether F-2 and F-3 are reachable today.
 - Real `ws` socket behaviour on `close` after close (assumed a no-op, as `ws` documents).
 - `pnpm check` (lint) was not run.
+
+---
+
+## Re-audit (d1f131a84ca)
+
+Date: 2026-10-30. One adversarial pass over `git diff b4072205d84 d1f131a84ca`: 5 source files and 4 test files. Draft PR #363.
+
+### Verdict: SHIP
+
+F-1, F-2, F-3 and F-5 are fixed, and I confirmed each fix by execution against real `jose` verification with two Ed25519 issuers. The fix introduced no regressions. The connect matrix C1–C11 and D1–D3 returned exactly what it returned at A1, so moving the check into the shared `jwtOnlyRefusal` did not change connect behaviour. The open items below are LOW or INFO and existed before this fix; none of them blocks the merge.
+
+**Method.** I adapted the A1 probes and ran them inside the worktree:
+- `reaudit-a1-connect.audit.test.ts` covers connect, refresh and `/mcp`.
+- `reaudit-a1-sessions.audit.test.ts` covers `sessions.patch` with a switchable `loadConfig` mock that can also throw.
+- `reaudit-a1-oldtiming.test.ts` is the A1 version of `jwt-only-connect.test.ts`, run against the fix code.
+
+All three files are deleted. `git status` shows only the 20 `node_modules/.bin` entries that were there at the start.
+
+**Gates:**
+- The 4 changed test files pass (79 tests).
+- `jwt-only-connect.test.ts` passed 3 times in a row.
+- `test/ci/` passes (212).
+- `pnpm tsgo` reports 1 error, the same missing `baml_client` module as at A1.
+
+### 1. F-3 `/mcp` Bearer JWT: FIXED
+`resolveMcpJwtIdentity` is in `ws-jwt-auth.ts:222` and is called from `server.impl.ts:1700`.
+
+Executed against the real `resolveMcpJwtIdentity`:
+
+| Input | Result |
+|---|---|
+| M1: legacy `aud` only, list `[A]` | refused (`null`) |
+| M2 / M2b: `aud` A, list `[]` or undefined (`?? []`) | refused (`null`) |
+| M3: no `exp` | refused (`null`) |
+| M4: revoked userId | refused (`null`) |
+| M5: revoked jti | refused (`null`) |
+| M7: `[legacy, GW:A]` (uppercase) | refused (`null`) |
+| M9: garbage token | refused (`null`) |
+| M10: expired 120 s ago | refused (`null`) |
+| M6: `aud` A | admitted with `operator.read,write` |
+| M6b: `aud` A, admin role | admitted with admin scopes, the same as a WS connect |
+
+**Shared-token and OAuth branches (`server.impl.ts:1683-1695`):** the diff does not touch them, so their behaviour is byte-for-byte unchanged. They still run before the JWT branch. Failed JWT validation still returns `null` (401), as before. `scopes: jwt.scopes ?? []` became `result.scopes`, which is always an array on the `ok` branch, so this is a no-op.
+
+**Liveness:**
+- `jwtOnlyAudiences` is read live: `loadConfig()` runs on each request, behind the 200 ms config cache. Emptying the list stops `/mcp` JWT access at once.
+- `oidcIssuers` is still captured as `cfgAtStart` at `server.impl.ts:1697`. That predates this fix. Changes under `gateway.*` are `kind: "restart"` in `config-reload.ts:88`, so a restart refreshes it. Not a finding.
+
+**Other JWT-accepting HTTP paths:** I grepped `resolveJwtAuth`, `validateGatewayJwt`, `jwtVerify`, `verifyJwt` and `oidcIssuers` across `src` and `extensions`. The only callers that verify hub-issuer JWTs are the WS connect (`message-handler.ts:481,963`), `auth.refresh` (`server.impl.ts:1620`) and `/mcp`. The other `jwtVerify` users are separate gateway-secret schemes that hub JWTs cannot satisfy:
+- `users/user-jwt.ts`: free-tier HS256 with `FREE_TIER_JWT_SECRET`, used by `free-tier/users-http.ts` and `middleware/quota.ts`.
+- `auth/delegation-token.ts`.
+
+The other Bearer HTTP endpoints go through `authorizeGatewayBearerRequestOrReply`, which checks the shared token only.
+
+### 2. F-1 refresh audience: FIXED
+`auth-refresh.ts:74` now applies the shared `jwtOnlyRefusal` to JWT-only sockets. Executed:
+
+| Case | Input | Result |
+|---|---|---|
+| R1 | JWT-only socket, refresh with a legacy-only `aud` (the JWT also carried plan and features claims) | **REFUSE** `jwt_audience_not_allowed`. `jwtExp`, `jwtJti`, `userRole`, scopes, `assignedAgentIds`, `plan`, `features` and the timer object are all identical before and after. |
+| R1b | refresh with `[legacy, GW:A]` | REFUSE, state unchanged |
+| R6 | `aud` A, no `exp` | REFUSE `jwt_missing_exp`, state unchanged |
+| R7 | `aud` A | ACCEPT |
+| R2 | token plus legacy-JWT socket (`jwtExp` unset), refresh with legacy `aud` | ACCEPT, no timer (unaffected) |
+| R2b | the same socket, refresh without `exp` | ACCEPT (unaffected) |
+| R3 | issuer audience `[legacy, A, B]`, `jwtOnlyAudiences` `[A, B]`, socket opened with A, refresh with `aud` B | **ACCEPT** |
+| R4 | live JWT-only socket after `jwtOnlyAudiences` was emptied at runtime, refresh with `aud` A | **REFUSE** |
+
+- **R3 note.** This is acceptable only because `jwtOnlyAudiences` is, by definition, this gateway's own list, so every entry names this gateway. If an operator ever lists another host's `gw:` aud there, both connect and refresh would admit it. That is a config-hygiene rule for the A3 runbook, not a code bug.
+- **R4 note.** The rollback gap from A1 is closed: a live socket now stops renewing once the list is emptied.
+- **Wire change.** The missing-`exp` refusal code changed from `INVALID_REQUEST` to `FORBIDDEN`. No client consumes `auth.refresh`, as established in A1, so nothing breaks.
+
+### 3. F-2 `sessions.patch`: FIXED
+`server-methods.ts:263` now resolves the session target the same way the handler does. Executed with a mocked `loadConfig` and compared with the handler's own `resolveGatewaySessionStoreTarget`:
+
+| Assigned | Config | Key | Auth decision | Handler target (agent / key) |
+|---|---|---|---|---|
+| `[main]` | default agent `faces` | `main` | **DENY** | `faces` / `agent:faces:main` |
+| `[main]` | default agent `faces` | `global` | **DENY** | `faces` / `global` |
+| `[main]` | default agent `faces` | `whatsapp:dm:+51` | **DENY** | `faces` / `agent:faces:…` |
+| `[a]` | `session.scope=global` | `agent:a:main` | **DENY** | `faces` / `global` |
+| `[faces]` | default agent `faces` | `main` | **ALLOW** (the A1 false deny is gone) | `faces` / `agent:faces:main` |
+
+Legitimate label patches are still allowed, and in every case the decision matches the handler's target agent:
+- `agent:a:s1`, `agent:A:s1` and the padded `" agent:a:s1 "` → ALLOW for assigned `[a]`.
+- `agent:b:s1` → DENY for assigned `[a]`.
+- `agent:faces:x` → ALLOW for assigned `[faces]`.
+- `agent:main:x` → ALLOW for assigned `[main]`.
+- `agent:a:s1` under `scope=global` → ALLOW for assigned `[a]`.
+- An unconfigured `agent:zzz:s` → ALLOW for assigned `[zzz]`.
+- An empty key → DENY.
+
+**`loadConfig()` cost and failure modes:**
+- It runs only on the label-only path. A non-label patch, an admin-scoped patch or `sessions.list` makes 0 calls (P1).
+- 1000 label patches took 23 ms in total (P2), and the real function sits behind a 200 ms cache.
+- Malformed config: `io.loadConfig` returns `{}` for `INVALID_CONFIG` and for read errors (`config/io.ts:733-743`). The auth check then uses the same `{}` the handler sees, so the two stay consistent and both fall back to `main`.
+- The only error it throws is `DuplicateAgentDirError`. In that case `authorizeGatewayMethod` throws (T1) and `handleGatewayRequest` rejects without responding (T2). The WS caller maps that to `UNAVAILABLE` (`message-handler.ts:1298-1301`), and the `/mcp` dispatcher does the same through `.catch`. The result is a refusal, never a crash and never an allow. The handler calls `loadConfig()` itself, so that config state would break it anyway.
+
+**Side effect (narrowing, fine).** A `global` or `unknown` key is now denied before the admin and unset-assignment shortcuts. U1 (unset assignment, `global`) and U3 (`userRole` admin without the admin scope, `global`) moved from ALLOW to DENY. Real admins still pass through the `operator.admin` bypass. **F-4 remains as accepted:** U2, a write socket with no assignment list, is still ALLOWed on `agent:zzz:s1`, and the fix now documents this with a comment at `:272`.
+
+### 4. F-5 late refresh: FIXED
+`ws-jwt-auth.ts:40` adds a `readyState` guard. Executed:
+
+| Case | Input | Result |
+|---|---|---|
+| R5 | refresh after close, `readyState` 2 (closing) | no timer |
+| R5 | refresh after close, `readyState` 3 (closed) | no timer |
+| R5b | close lands while `resolveJwt` is still in flight | no re-arm |
+
+I checked that the real `ws` WebSocket exposes `OPEN` on the instance through its prototype (`proto OPEN 1`), so the guard works on real sockets and not only on mocks.
+
+Mocks without `readyState` compare `undefined !== undefined`, which is false, so they still arm. The existing tests therefore stay valid. The handler still responds `ACCEPT` and mutates the dead client, which is harmless.
+
+### 5. New regressions: none found
+- **Connect semantics.** C1–C11 and D1–D3 are identical to A1:
+  - Uppercase, padded or `:443` audiences and a legacy-only `aud` → 1008 `jwt_audience_not_allowed`.
+  - No `exp` → `jwt_missing_exp`.
+  - A wrong token → token mismatch.
+  - An empty token treated as JWT-only works.
+  - A token plus legacy JWT is admitted.
+  - With the default config, a JWT-only connect is refused.
+- **The rewritten timing test** (`jwt-only-connect.test.ts`, "closes … at exp + 60 s"):
+  - I ran the A1 version against the fix code, and it passes in isolation (3/3).
+  - Its fixed margins (−1 s, then +2 s) could flake: `nowS()` floors `exp` to the second, and `vi.waitFor` advances the fake clock during connect.
+  - The new version measures `jwtExp*1000 + GRACE − Date.now()` and asserts the socket is not closed at −10 ms and is closed at +10 ms. That is still meaningful, and tighter: a timer without the grace period would already have fired at −10 ms, and an unarmed timer never fires.
+  - The new late-refresh test fails without the guard, because `jwtExpiryTimer` would be set.
+
+### Remaining (non-blocking)
+- **F-6 (LOW, open, now also on `/mcp`).**
+  - Input: issuer 2 is configured with a legacy-only audience and signs `[legacy, A]`.
+  - Observed: `/mcp` ADMIT (M8), and connect ADMIT (C3).
+  - It matters only if a second, less-trusted issuer is ever configured. The fix from A1 still applies: bind the admitted aud to the matching issuer's own list.
+- **INFO (pre-existing, not introduced by the fix).** On `/mcp`, `authorizeGatewayConnect` (`server.impl.ts:1683`) runs first with the Bearer JWT as `token` and `rateLimiter`. Every legitimate JWT request records a shared-secret failure for the caller's IP (`auth/auth.ts:406-434`). The WS path avoids this, as the comment at `message-handler.ts:436` notes.
+  - Inert while `jwtOnlyAudiences` is `[]`.
+  - Once `/mcp` JWT use is enabled, heavy callers could rate-limit their own IP, including for the shared token.
+  - Fix: try `resolveMcpJwtIdentity` before `authorizeGatewayConnect` when the token looks like a JWS, or call `authorizeGatewayConnect` without `rateLimiter` for JWT-shaped tokens.
+- **INFO.** `loadConfig()` is read twice per label patch, once in auth and once in the handler. A config reload between the two calls could change the default agent. The 200 ms cache makes that window tiny, and both reads are fresh.
+
+### Not checked
+- A real-socket `/mcp` HTTP round trip: the resolver function was exercised directly, not through `mcp-http.ts`.
+- `pnpm check` (lint).
+- Live gateway configs: `oidcIssuers`, default agent ids.

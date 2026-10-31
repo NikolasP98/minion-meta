@@ -184,6 +184,7 @@ None of these is a person:
    - confirm `multiTenant.oidcIssuers` and `controlUi.allowInsecureAuth`;
    - set `oidcIssuers[].audience` to `['openclaw-gateway', 'gw:<host>' for every hub row URL that points at it]`;
    - set `jwtOnlyAudiences` to the same `gw:` entries.
+   - list ONLY this gateway's own `gw:` values, pasted from `gateway-jwt-probe.ts --list-audiences`. Refresh accepts any listed audience, so listing another host's value would let that host's JWTs renew here (A1 re-audit).
 2. **Probe each gateway** with `minion_hub/scripts/qa/gateway-jwt-probe.ts <gatewayId> <userId>`, which mints server-side and connects JWT-only. Expect:
    - `health`, a `read` method and a `write` method allowed;
    - the admin method allowed for a platform admin and refused for a member;

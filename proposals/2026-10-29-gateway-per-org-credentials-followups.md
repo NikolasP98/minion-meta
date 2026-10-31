@@ -65,3 +65,8 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
   - Members on a valid JWT already fail all of these today (R2).
 - **TO-BE:** each surface is either hidden for non-platform-admins (owner rule: don't render), or served by a hub route behind `requireOrgCapability`, which takes it off the list.
 - **DELTA:** pick per surface, most-used first (chat titles, flows, agent skills). Spec 042 covers channels and gateway settings; the rest needs its own spec. `TODO(handoff)` is at `platform-admin-methods.ts`.
+
+## 10. `/mcp` counts valid JWT calls as failed shared-secret attempts (A1 re-audit, INFO)
+- **AS-IS:** `/mcp` runs the shared-token check first, passing the JWT and `authRateLimiter` (`server.impl.ts:~1683`). Every valid JWT request therefore records a failed attempt for the caller's IP. It has no effect while `jwtOnlyAudiences` is `[]`.
+- **TO-BE:** a JWT caller never trips the shared-secret lockout.
+- **DELTA:** for JWS-shaped tokens, try the JWT path first, or skip the limiter. This is needed only if `/mcp` gets real JWT traffic. `TODO(handoff)` is at the site.
