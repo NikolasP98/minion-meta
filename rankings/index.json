@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-01T23:17:57.899Z",
+	"generatedAt": "2026-11-01T23:47:41.275Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -531,6 +531,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-07T06:52:29.491Z"
+		},
+		{
+			"key": "pr:minion-meta#904",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#904 docs(spec): 045 — gateway per-org credentials: no shared operator token in any browser",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/904",
+			"sourceUpdatedAt": "2026-11-01T23:46:03Z",
+			"sourceFingerprint": "8a080be195d41adfcbe0045b977025a13e88036b7cc6e8b43fd1a85523babb90",
+			"score": 83,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Removes a shared master gateway token per explicit owner security mandate and the design is fully reviewed, so advancing the spec unblocks a broad, security-critical implementation.",
+			"evidence": [
+				"owner rule: \"no one should really get access to a 'master' key... per-org keys, validated against the db\"",
+				"design.md final plus 3 goldfish reports, re-audit, and 20 decisions recorded",
+				"security-tagged: owner must approve and merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T23:47:41.113Z"
 		},
 		{
 			"key": "proposal:2026-08-23-minion-ai-ci-baseline-debt",
@@ -1156,40 +1189,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T02:35:44.887Z"
-		},
-		{
-			"key": "pr:minion-meta#904",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#904 docs(spec): 045 — gateway per-org credentials: no shared operator token in any browser",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/904",
-			"sourceUpdatedAt": "2026-11-01T22:56:47Z",
-			"sourceFingerprint": "0500fc10df4fd35e3e4fea714b5f29403214981f2466133510537607f4809d7a",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#624"
-			],
-			"rationale": "Finalized, multiply-reviewed design that implements an explicit owner security directive to eliminate the shared gateway master key.",
-			"evidence": [
-				"Owner rule 2026-10-29: no shared master key, per-org keys validated against db",
-				"design.md final with 3 goldfish reports plus a re-audit"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T23:17:57.694Z"
 		},
 		{
 			"key": "proposal:2026-10-02-hub-gateway-production-readiness-recon",
@@ -6890,6 +6889,41 @@
 			"scoredAt": "2026-10-31T03:17:51.939Z"
 		},
 		{
+			"key": "pr:minion-meta#930",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#930 docs(spec): 046/047/048 — nav home + resolved landing page, module SDK + install packages, tenant isolation hardening",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/930",
+			"sourceUpdatedAt": "2026-11-01T23:20:55Z",
+			"sourceFingerprint": "2017bf3b12ed1e7e556434d72be3ebce44dc22116f6cfd79934ee31dbd764968",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"pr:minion_hub#625"
+			],
+			"rationale": "Bundling three largely independent initiatives (nav/landing UX, module SDK, tenant isolation hardening) into one spec PR obscures the security-relevant isolation work and should be split for separate prioritization.",
+			"evidence": [
+				"single PR covers specs 046 (nav/landing), 047 (module SDK), and 048 (tenant isolation hardening)",
+				"048 lists RLS coverage and bypass inventory as later work, i.e. only stubbed so far",
+				"046 S0 duplicate-dialog fix described here is already implemented in hub #625"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T23:47:41.113Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11186,38 +11220,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:19:31.564Z"
-		},
-		{
-			"key": "pr:minion-meta#930",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#930 docs(spec): 046/047/048 — nav home + resolved landing page, module SDK + install packages, tenant isolation hardening",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/930",
-			"sourceUpdatedAt": "2026-11-01T23:13:43Z",
-			"sourceFingerprint": "dfed362aae2e68fefc7ca0fefd54c9eecbcee688594b1f4f0fd219136dd629dc",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Three distinct specs with owner decisions already recorded are ready for review, including security-relevant tenant isolation hardening.",
-			"evidence": [
-				"048 tenant isolation hardening adds RLS coverage test plus bypass inventory/diff test",
-				"owner decisions recorded for base module set and default landing resolution"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T23:17:57.694Z"
 		},
 		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
@@ -24956,6 +24958,40 @@
 			"scoredAt": "2026-10-30T09:50:58.796Z"
 		},
 		{
+			"key": "pr:minion_hub#625",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#625 fix(nav): new-section dialog validates against the snapshot, not the optimistic document",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/625",
+			"sourceUpdatedAt": "2026-11-01T23:24:46Z",
+			"sourceFingerprint": "85ca9e044d6a97d76f4b19c7e1fcfa0d23ed2cb17cd9d5b60709925906a5fe3f",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#930"
+			],
+			"rationale": "Self-contained hotfix with documented cause/fix and all gates/tests passing, so it is ready to merge now with low risk.",
+			"evidence": [
+				"\"Save is still present; resolving the PUT closes the dialog\" with 8 passing tests",
+				"\"bun run check\" 0, \"lint:design\" 0, \"lint:tokens\" 0 gates reported clean"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T23:47:41.113Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-350678014",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30523,38 +30559,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T08:18:11.849Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deployment-health record of an already-merged feature commit with no further actionable goal stated.",
-			"evidence": [
-				"commit merges whatsapp session reset feature (#361)",
-				"status is unknown with no described follow-up action"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T23:17:57.694Z"
 		},
 		{
 			"key": "issue:minion-meta#326",
