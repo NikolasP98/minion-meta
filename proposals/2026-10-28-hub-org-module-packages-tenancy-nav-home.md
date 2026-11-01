@@ -335,6 +335,11 @@ creates no tables (T3b).
 - Route gates: already central (hook `applyModuleAvailabilityGuard`); the `availability.ts`
   comment claiming crm is ungated is stale and is corrected in 047 S4.
 - Proposal index: the two unknown-topic files were local leftovers, not on `dev`; nothing to fix.
+- (hub #626, S2) Section icons: the dialog stores any string in `section.icon`, but the sidebar's
+  `ModuleDef.icon` is a lucide component, so an emoji or unknown key falls back to `LayoutGrid`
+  (`TODO(handoff)` in `src/lib/nav/custom-sections-nav.ts`). Render strings the way page icons
+  are rendered, or restrict the field to known icon keys with a picker.
+- (hub #626, S2) An invalid icon string surfaces as a generic form error, not under the Icon field.
 
 ## Definition of done
 
