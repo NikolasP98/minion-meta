@@ -19,3 +19,5 @@ Creating a sidebar section needs only a name and never shows a false error. The 
 Four hub slices: S0 hotfix (snapshot validation), S1 (name only, auto-suffix), S2 (Advanced settings; stacked on hub #602), S3 (`/chat`, resolver, Inicio first, mobile row). Owner approved 2026-11-01; owner merges.
 
 **Verification:** per-slice gates in plan.md; post-merge: `/home` → 308 in prod, owner opens `/`.
+
+**Out of scope:** marketplace module packages; content pages; a root `+page` for `/` (ledger in the proposal); write-button gating by data roles (`proposals/2026-10-24-hub-nav-sections-data-rbac-followups.md`).
