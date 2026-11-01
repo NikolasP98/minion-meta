@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-01T06:18:14.273Z",
+	"generatedAt": "2026-11-01T06:47:32.652Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14770,19 +14770,23 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 4
+				"implementation": 5
 			},
 			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved gap in WhatsApp logged-out channel handling for inbox rules, though the diagnosis itself notes it may need rerouting to a later-phase proposal if intentionally deferred.",
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-563d320153c1",
+				"proposal:postmerge-minion-hub-8b2d5d528651"
+			],
+			"rationale": "A referenced spec slice (Slice 4) for whatsapp logged-out handling is unimplemented in the core inbox rules dispatcher, but it should be confirmed against the spec and bundled with the other two findings from the same PR rather than worked in isolation.",
 			"evidence": [
-				"marker: 'channel.whatsapp_logged_out (spec Slice 4) is SKIPPED'",
-				"Diagnosis notes 'If this was intentionally deferred to a later phase, move the TODO to a proposal instead'"
+				"channel.whatsapp_logged_out handling explicitly marked SKIPPED against a spec slice",
+				"diagnosis notes it may have been intentionally deferred, requiring spec confirmation",
+				"same merged PR #479 and file family (inbox/rules) as sibling findings"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T06:17:22.001Z"
+			"scoredAt": "2026-11-01T06:47:32.458Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b4c1ff54fd37",
@@ -18600,6 +18604,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T05:18:03.330Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/state/features/notifications.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b2d5d528651.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "9e2774c4d3d8db20a36eaf964c39001db885486059fdcb4d907b1134bf40fe64",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-563d320153c1",
+				"proposal:postmerge-minion-hub-99075985a806"
+			],
+			"rationale": "Timezone-dependent dedup keys are a real correctness bug affecting multi-timezone/multi-org users, and belong in the same inbox-rules hardening goal as the other two findings from this PR.",
+			"evidence": [
+				"guard key uses browser local date instead of org timezone",
+				"diagnosis flags cache misses/duplicates across timezones",
+				"same merged PR #479, same inbox service area as sibling findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T06:47:32.458Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-93789f3a94af",
@@ -24672,38 +24712,6 @@
 			"scoredAt": "2026-11-01T00:47:11.472Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/state/features/notifications.svelte.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b2d5d528651.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "9e2774c4d3d8db20a36eaf964c39001db885486059fdcb4d907b1134bf40fe64",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved timezone-correctness bug in a shared notification dedup key affecting all users across timezones, with a concrete fix direction.",
-			"evidence": [
-				"marker: 'guard key uses the BROWSER's local date, not the org's'",
-				"Fix direction specifies using org TZ or Date.UTC server timestamps"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T06:17:22.001Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-e27dc3b9754c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25824,20 +25832,24 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 7,
 				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, well-specified UX bug with a clear diagnosis and fix direction referencing an existing sibling pattern.",
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-8b2d5d528651",
+				"proposal:postmerge-minion-hub-99075985a806"
+			],
+			"rationale": "A well-specified, bounded deep-link fix that mirrors a known sibling gap, best delivered together with the other two inbox-rules findings from the same merged PR.",
 			"evidence": [
-				"status=approved with explicit Definition of done and Fix direction citing appointment-overdue.ts pattern",
-				"marker: 'same unwired deep-link param'"
+				"TODO(handoff) points to same unwired deep-link gap as appointment-overdue.ts",
+				"fix direction and a concrete test are already outlined",
+				"filed from the same merged PR #479 in minion_hub inbox rules service"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T06:17:22.001Z"
+			"scoredAt": "2026-11-01T06:47:32.458Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-58cff194d6b6",
@@ -37277,6 +37289,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T07:47:15.720Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The entry only restates an already-merged whatsapp session-reset commit with no open problem or health signal attached.",
+			"evidence": [
+				"summary is a commit message for PR #361, already merged",
+				"no incident, metric, or failure described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T06:47:32.458Z"
 		},
 		{
 			"key": "issue:minion-meta#664",
