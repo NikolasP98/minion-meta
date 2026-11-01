@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-01T03:46:55.936Z",
+	"generatedAt": "2026-11-01T04:17:02.167Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2330,39 +2330,6 @@
 			"scoredAt": "2026-10-26T03:33:02.754Z"
 		},
 		{
-			"key": "pr:minion_hub#606",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#606 fix(pos): a calendar charge with consumed products no longer blanks the cart",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/606",
-			"sourceUpdatedAt": "2026-10-25T03:52:13Z",
-			"sourceFingerprint": "accd83b082ef630f216c6d133816f439b69d4c82c552d96ea535a15da6ebe398",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 8,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Root-caused hotfix for an active production bug with direct, measured revenue loss on an affected device, already gate-verified with a regression test.",
-			"evidence": [
-				"0 sales finished in 14 days on affected device",
-				"each_key_duplicate crash root-caused via PostHog replay",
-				"new test fails on master, passes with fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T03:54:40.259Z"
-		},
-		{
 			"key": "pr:minion-factory#199",
 			"kind": "pr",
 			"stage": "development",
@@ -3100,6 +3067,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T17:48:06.041Z"
+		},
+		{
+			"key": "pr:minion_hub#606",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#606 fix(pos): a calendar charge with consumed products no longer blanks the cart",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/606",
+			"sourceUpdatedAt": "2026-10-25T03:52:13Z",
+			"sourceFingerprint": "accd83b082ef630f216c6d133816f439b69d4c82c552d96ea535a15da6ebe398",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 8,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A root-caused one-line key fix unblocks a device stuck with zero completed sales for 14 days, verified by replay and PostHog data.",
+			"evidence": [
+				"0 sales finished on affected device in 14 days, 29/33 throws today",
+				"192 vitest cases green, new regression case fails on master",
+				"hotfix documents bypassed spec stage with root cause"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T04:17:01.933Z"
 		},
 		{
 			"key": "pr:minion_hub#622",
@@ -24942,38 +24942,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:56:58.970Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged feature commit is tracked as a deployment-health goal but has no evidence of an actual deployment problem.",
-			"evidence": [
-				"summary describes a merged feature PR (#361), not a deployment issue",
-				"status unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T03:17:08.182Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
