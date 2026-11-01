@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-10-31T23:19:13.458Z",
+	"generatedAt": "2026-11-01T00:17:28.293Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7457,15 +7457,15 @@
 			"relatedKeys": [
 				"proposal:2026-08-17-factory-workitem-handoff-schema"
 			],
-			"rationale": "Remaining WorkItem trust/admission work is clearly scoped with an ordered Spec Kit plan and tasks, isolating a bounded next slice (S5 gate before S4 backfill) under existing human merge gates.",
+			"rationale": "The spec lists specific unresolved pipeline-trust defects and points to an ordered Spec Kit plan/tasks, giving it bounded, actionable scope.",
 			"evidence": [
-				"Spec Kit feature 104 has plan.md and tasks.md",
-				"AS-IS confirms commit-pinned specs, structured review artifacts, and multi-repo refusal already shipped",
-				"remaining scope limited to WorkItem trust fields in approval gates and legacy monitor intake"
+				"status: review",
+				"references Spec Kit feature 104 plan.md and tasks.md",
+				"enumerates concrete defects: mutable META_BRANCH fetch, free-form REVIEW.md parsing, queue.ts repo resolution"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T23:47:31.374Z"
+			"scoredAt": "2026-11-01T00:17:28.096Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment",
@@ -11457,6 +11457,41 @@
 			"scoredAt": "2026-10-26T13:48:35.859Z"
 		},
 		{
+			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Typed WorkItem + signed handoff bundle across factory stages",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-factory-workitem-handoff-schema.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "ac4ce6783c711b0685ccbf85e84af253e6ed3b47b25ebc8861e02fc008005bbe",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"spec:2026-08-18-factory-workitem-handoff-schema-spec"
+			],
+			"rationale": "Status is already in-spec and the companion spec in this batch carries the current actionable DELTA and plan, making this proposal a superseded historical artifact.",
+			"evidence": [
+				"status: in-spec",
+				"reassessment notes regression boundaries already shipped in production commit 43a174b2",
+				"spec explicitly derives its definition of done from this proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T00:17:28.096Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14494,41 +14529,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:48:35.859Z"
-		},
-		{
-			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Typed WorkItem + signed handoff bundle across factory stages",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-factory-workitem-handoff-schema.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "ac4ce6783c711b0685ccbf85e84af253e6ed3b47b25ebc8861e02fc008005bbe",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"spec:2026-08-18-factory-workitem-handoff-schema-spec"
-			],
-			"rationale": "The proposal's definition of done is now carried forward and reassessed inside its own spec, which explicitly states it remains the single board goal.",
-			"evidence": [
-				"status: in-spec",
-				"spec text: 'This parent remains the single board goal'",
-				"AS-IS reassessment notes commit-pinning and structured review already shipped in production"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-24T23:47:31.374Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
@@ -35038,6 +35038,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T02:44:37.292Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The deployment-health entry's summary is just an already-merged commit message, not a described deployment issue requiring action.",
+			"evidence": [
+				"status: unknown",
+				"summary is the WhatsApp session-reset commit message, not a health report",
+				"tags: deployment only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T00:17:28.096Z"
 		},
 		{
 			"key": "issue:minion-meta#357",
