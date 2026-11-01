@@ -75,3 +75,36 @@ from migrations alone serves the QA seed; the next org is provisioned only after
   first; H3 conversions one service per PR; H4 schema recovery blocked on an owner-provided
   `pg_dump` of the four core tables.
 - Allowlisted `todo` tables from the first coverage run are appended here by H1's PR.
+
+## Ledger
+
+Org-scoped tables (org_id/tenant_id) without forced RLS + a `current_org_id` policy, from `rls-coverage.allowlist.json` (hub H1). Remove each from the allowlist in the PR that fixes it.
+
+- `ai_usage`
+- `bg_jobs`
+- `brain_vector_outbox`
+- `email_ledger`
+- `email_ledger_settings`
+- `fin_dni_reassign_bak_cli`
+- `fin_dni_reassign_bak_inv`
+- `fin_products_bak_insumos2608`
+- `fin_settings`
+- `flow_groups_backup_20260604`
+- `flows_backup_20260604`
+- `flows_backup_20260605_triage`
+- `gateway`
+- `gateway_lease`
+- `pulse_proposals`
+- `pulse_settings`
+- `stk_bins_bak_insumos2608`
+- `stk_consumption_bak_insumos2608`
+- `stk_entries_bak_repair`
+- `stk_entries_reclass_bak`
+- `stk_items_bak_insumos2608`
+- `stk_items_fin_product_bridge_backup`
+- `stk_ledger_bak_repair`
+- `workshop_comparison_runs`
+- `workshop_groupchat_runs`
+- `workshop_prompt_categories`
+
+Reason `platform`: org_provision_runs. Reason `user-scoped`: notes. Local-only QA table `org_plan_events` (no migration in repo) is intentionally not listed.
