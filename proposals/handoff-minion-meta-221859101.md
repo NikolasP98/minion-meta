@@ -103,5 +103,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31710
 - `NikolasP98/minion-meta@dev rankings/index.json:31743` — Wire the exact-ID publisher only once live B2 authority"
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31743
-- `NikolasP98/minion-meta@dev rankings/index.json:33303` — prompt-driven protocol instead of native tool_use",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33303
+- `NikolasP98/minion-meta@dev rankings/index.json:33336` — prompt-driven protocol instead of native tool_use",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33336
