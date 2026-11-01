@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-01T02:02:23.003Z",
+	"generatedAt": "2026-11-01T02:17:09.774Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4844,39 +4844,6 @@
 			"scoredAt": "2026-10-26T03:21:26.603Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c4ef8f310a4a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c4ef8f310a4a.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "68a74454b92b9bbcce90e8a7375c55627a2e4b9377d2262e940f37581171ba40",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Production activation of a notification worker is gated on missing deployment safety controls, but the finding's own history of duplicate/merge churn and reconciliation ambiguity means it needs human triage before execution.",
-			"evidence": [
-				"TODO(handoff) gates NOTIFICATION_WORKER=1 behind artifact publisher, rollback controller, startup qualification, and postflight automation",
-				"Reconciliation note flags this as a possible revival of a closed duplicate with differing marker wording",
-				"Points at separate in-spec ledger 2026-10-09-hub-notification-worker-production-activation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T02:03:35.267Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7116,6 +7083,38 @@
 			"scoredAt": "2026-10-31T07:19:45.767Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c4ef8f310a4a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c4ef8f310a4a.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "68a74454b92b9bbcce90e8a7375c55627a2e4b9377d2262e940f37581171ba40",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring TODO(handoff) gating a production notification worker behind missing deployment/rollback safety, already flagged for human review due to reconciliation ambiguity.",
+			"evidence": [
+				"gates NOTIFICATION_WORKER=1 on missing rollback floor and qualification checks",
+				"explicitly flagged for human rather than auto-merged due to possible stale closure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T02:17:09.541Z"
+		},
+		{
 			"key": "spec:2026-08-13-crm-customers-server-pagination-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8068,38 +8067,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-27T02:18:41.143Z"
-		},
-		{
-			"key": "proposal:2026-09-26-hub-custom-columns-next-phases",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Relations, complete custom-property queries and minimal provisioning",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-26-hub-custom-columns-next-phases.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "0a1c351d5782a1ffe5d626f2195f2f998d15e88f62852ec6f3ba79493879ceeb",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Broad multi-phase data-model proposal with clear TO-BE/DELTA structure but no single bounded slice ready for paid execution yet.",
-			"evidence": [
-				"source audit found 41 production DataTable uses",
-				"scope bundles relation rollups, CRM query planner, and minimal-core provisioning"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T01:48:09.211Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-auto-response",
@@ -9870,6 +9837,39 @@
 			"scoredAt": "2026-10-25T22:17:21.011Z"
 		},
 		{
+			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub evening batch 2026-10-10 — open ends (drop override, per-user shifts, unified sell history, filters across calendar views, DATE property formats)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-pos-sell-history-unified.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "872f2bef387b9cf88ee95f3e633958a139576b379197fd49d6535de8b0c73ad9",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Detailed ledger of 12 concrete open ends from a merged batch, several with real double-booking and permission-widening risk but none flagged as urgent production incidents.",
+			"evidence": [
+				"item 1: drop override can double-book due to unclear error reason code",
+				"item 4: permission widening allows staff to close own register",
+				"12 enumerated open ends with specific TODO(handoff) pointers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T02:17:09.541Z"
+		},
+		{
 			"key": "proposal:2026-10-21-windows-qualification-admission-independence",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10828,20 +10828,20 @@
 			"scoredAt": "2026-10-26T13:50:45.643Z"
 		},
 		{
-			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
+			"key": "proposal:2026-09-26-hub-custom-columns-next-phases",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion_hub",
-			"title": "Hub evening batch 2026-10-10 — open ends (drop override, per-user shifts, unified sell history, filters across calendar views, DATE property formats)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-pos-sell-history-unified.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "872f2bef387b9cf88ee95f3e633958a139576b379197fd49d6535de8b0c73ad9",
+			"title": "Relations, complete custom-property queries and minimal provisioning",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-26-hub-custom-columns-next-phases.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "0a1c351d5782a1ffe5d626f2195f2f998d15e88f62852ec6f3ba79493879ceeb",
 			"score": 50,
 			"band": "medium",
 			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
+				"criticality": 3,
+				"importance": 7,
+				"impact": 6
 			},
 			"readiness": {
 				"specification": 7,
@@ -10850,14 +10850,14 @@
 			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Detailed 12-item open-ends ledger from merged PRs #469-473 including a real double-booking bug, but still bundled rather than sliced into independently actionable goals.",
+			"rationale": "Well-specified multi-slice extension of custom-column infrastructure with clear TO-BE but broad unbounded scope needing slicing before execution.",
 			"evidence": [
-				"drop override can double-book like the tray does (#469)",
-				"no server pagination on /pos/history, limit 500 newest first (#473)"
+				"41 production DataTable uses identified",
+				"four TO-BE items spanning formulas, query planning, provisioning, and migration"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T01:48:09.211Z"
+			"scoredAt": "2026-11-01T02:17:09.541Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-f696097",
@@ -27122,6 +27122,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T19:19:59.087Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged feature commit reported as deploy health has no indication of actual deployment status or failure.",
+			"evidence": [
+				"commit message describes a feature merge, not a health check result",
+				"tagged deployment but summary is a PR description"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T02:17:09.541Z"
 		},
 		{
 			"key": "issue:minion-meta#360",
