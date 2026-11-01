@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-01T21:47:09.874Z",
+	"generatedAt": "2026-11-01T23:17:57.899Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1158,6 +1158,40 @@
 			"scoredAt": "2026-10-31T02:35:44.887Z"
 		},
 		{
+			"key": "pr:minion-meta#904",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#904 docs(spec): 045 — gateway per-org credentials: no shared operator token in any browser",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/904",
+			"sourceUpdatedAt": "2026-11-01T22:56:47Z",
+			"sourceFingerprint": "0500fc10df4fd35e3e4fea714b5f29403214981f2466133510537607f4809d7a",
+			"score": 76,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#624"
+			],
+			"rationale": "Finalized, multiply-reviewed design that implements an explicit owner security directive to eliminate the shared gateway master key.",
+			"evidence": [
+				"Owner rule 2026-10-29: no shared master key, per-org keys validated against db",
+				"design.md final with 3 goldfish reports plus a re-audit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T23:17:57.694Z"
+		},
+		{
 			"key": "proposal:2026-10-02-hub-gateway-production-readiness-recon",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1689,41 +1723,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T17:18:13.699Z"
-		},
-		{
-			"key": "pr:minion-meta#904",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#904 docs(spec): 045 — gateway per-org credentials: no shared operator token in any browser",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/904",
-			"sourceUpdatedAt": "2026-10-31T04:42:12Z",
-			"sourceFingerprint": "3845f1a7c4bb607839e78fd9e92e9e7c771e67cd7a7b51a4073e5d4941ad47f4",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#623"
-			],
-			"rationale": "Finalizes and documents spec 045 removing the shared master gateway token for per-org DB-validated JWTs, directly gating the linked implementation PR.",
-			"evidence": [
-				"Owner rule 2026-10-29: no master key, per-org keys validated against DB",
-				"Supersedes spec 043 decision 4 and task T037",
-				"Security-tagged, owner approves and merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:47:35.095Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-qa-stack-first-pass-defects",
@@ -3175,6 +3174,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T03:47:34.477Z"
+		},
+		{
+			"key": "pr:minion_hub#624",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#624 feat(gateway): staff don't see admin-only controls after the pass switch (inert until switched)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/624",
+			"sourceUpdatedAt": "2026-11-01T23:11:22Z",
+			"sourceFingerprint": "09ba1871a6966ef79e328ae48742276ec7a9a2830f3913c9b34648e35785b6ef",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#904"
+			],
+			"rationale": "Security-tagged UI-gating PR with a detailed AS-IS/TO-BE/DELTA spec and tests already written, ready for owner merge.",
+			"evidence": [
+				"Spec 045 T038, security-tagged, owner merges",
+				"tests cover 14 pages x permission combinations in admin-surfaces.test.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T23:17:57.694Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -9772,38 +9805,6 @@
 			"scoredAt": "2026-10-26T13:51:49.912Z"
 		},
 		{
-			"key": "proposal:2026-09-10-hub-finance-parser-version-binding",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Bind stored statement parser_version to the parser's own exported version",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-finance-parser-version-binding.md",
-			"sourceUpdatedAt": "2026-10-04",
-			"sourceFingerprint": "6c971e974a023e35919b5d7aa955cf52e2c0fa115d1dfff6b6c14a06fa30f51b",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The provenance/version-binding fix is clearly scoped but explicitly blocked until the 10-07 and 10-04 candidates land, so it cannot be executed yet.",
-			"evidence": [
-				"\"once 10-07 + 10-04 land\" gates the proposed change",
-				"service still hardcodes PARSER_VERSION=1 while the parser exports v3, risking stale-cursor row skip/double-count on resume"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T22:17:21.011Z"
-		},
-		{
 			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11185,6 +11186,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:19:31.564Z"
+		},
+		{
+			"key": "pr:minion-meta#930",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#930 docs(spec): 046/047/048 — nav home + resolved landing page, module SDK + install packages, tenant isolation hardening",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/930",
+			"sourceUpdatedAt": "2026-11-01T23:13:43Z",
+			"sourceFingerprint": "dfed362aae2e68fefc7ca0fefd54c9eecbcee688594b1f4f0fd219136dd629dc",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Three distinct specs with owner decisions already recorded are ready for review, including security-relevant tenant isolation hardening.",
+			"evidence": [
+				"048 tenant isolation hardening adds RLS coverage test plus bypass inventory/diff test",
+				"owner decisions recorded for base module set and default landing resolution"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T23:17:57.694Z"
 		},
 		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
@@ -22785,6 +22818,38 @@
 			"scoredAt": "2026-10-26T13:51:49.912Z"
 		},
 		{
+			"key": "proposal:2026-09-10-hub-finance-parser-version-binding",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Bind stored statement parser_version to the parser's own exported version",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-finance-parser-version-binding.md",
+			"sourceUpdatedAt": "2026-10-04",
+			"sourceFingerprint": "6c971e974a023e35919b5d7aa955cf52e2c0fa115d1dfff6b6c14a06fa30f51b",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The integration steps are well specified but explicitly cannot proceed until the frozen prerequisite candidate lands on master.",
+			"evidence": [
+				"service is owned by frozen 10-04 candidate not on origin/master",
+				"proposed change is deferred until 10-07 + 10-04 land"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T23:17:57.694Z"
+		},
+		{
 			"key": "proposal:2026-09-11-hub-telemetry-boundary-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30460,6 +30525,38 @@
 			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health record of an already-merged feature commit with no further actionable goal stated.",
+			"evidence": [
+				"commit merges whatsapp session reset feature (#361)",
+				"status is unknown with no described follow-up action"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T23:17:57.694Z"
+		},
+		{
 			"key": "issue:minion-meta#326",
 			"kind": "issue",
 			"stage": "proposal",
@@ -38071,20 +38168,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 2
+				"specification": 3,
+				"implementation": 1
 			},
-			"confidence": 4,
-			"recommendation": "reframe",
+			"confidence": 3,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Native Swift toolchain qualification is disconnected from the currently authorized Linux gateway deployment and the proposal's heavily padded text needs a clearer bounded restatement before it is actionable.",
+			"rationale": "The reconciliation note marks this proposal as tombstoned/merged with no new content, superseding the original ask.",
 			"evidence": [
-				"\"authorized current deployment targets the Linux Gateway Docker services\"",
-				"SwiftFormat failed on 116 of 208 untouched native files with no pinned toolchain version"
+				"Reconciliation merge 2026-10-04: tombstoned as merged here, no new content",
+				"no concrete, currently actionable qualification scope is defined beyond the archived handoff"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T22:17:21.011Z"
+			"scoredAt": "2026-11-01T23:17:57.694Z"
 		},
 		{
 			"key": "proposal:2026-10-09-gateway-native-formatter-reproducibility",
