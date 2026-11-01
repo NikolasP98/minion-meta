@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-01T05:47:13.276Z",
+	"generatedAt": "2026-11-01T06:18:14.273Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -23027,17 +23027,17 @@
 				"specification": 6,
 				"implementation": 5
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Well-specified refactor to validate inbox items per-booking instead of a groupId-merged visit, which currently can hide stale or status-divergent bookings in the feed.",
+			"rationale": "The diagnosis clearly identifies a feed-correctness defect (groupId coalescing hides per-booking status) with a concrete refactor direction, making it actionable even though it touches shared feed logic.",
 			"evidence": [
-				"TODO notes groupId-merged visit loses per-booking status/notification fidelity",
-				"diagnosis gives a concrete fix direction: iterate per Booking, group only for presentation"
+				"TODO(handoff): per-booking check, not the groupId-merged \"visit\" the...",
+				"Fix direction: iterate over individual Booking records, group only for presentation"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T05:47:43.869Z"
+			"scoredAt": "2026-11-01T06:18:14.087Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bd7700d5dd6a",
@@ -23057,19 +23057,21 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 5
+				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear diagnosis requesting integration tests to prove isStaleCompleted/isVisitFunded compose correctly in the visit-unpaid inbox rule.",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-bb9cd7740cf0"
+			],
+			"rationale": "Diagnosis clearly describes a missing integration-test gap between isStaleCompleted and isVisitFunded with concrete test-writing steps, and this gap is shared with the shift-open-after-hours rule.",
 			"evidence": [
-				"TODO flags unit-only coverage without integration proof of composed behavior",
-				"fix direction specifies concrete boundary test scenarios"
+				"Fix direction: add integration tests exercising full rule against realistic inbox scenarios",
+				"gap affects visit funding/payment correctness, a financial-logic area"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T05:47:43.869Z"
+			"scoredAt": "2026-11-01T06:18:14.087Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ec72b2caa7d2",
@@ -24945,38 +24947,6 @@
 			"scoredAt": "2026-10-26T13:56:58.970Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 109985 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-10-31T06:11:59Z",
-			"sourceFingerprint": "75a07457a37e1cb56136acf364e1d8cb972e6834db381b7ca6385612cb9d436b",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A raw dump of 109985 unreviewed upstream commits has no verifiable scope or bounded execution path as currently framed.",
-			"evidence": [
-				"title: 109985 new commit(s) available",
-				"summary is an unstructured commit log, not a scoped task"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T06:17:15.125Z"
-		},
-		{
 			"key": "issue:minion-meta#354",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26195,6 +26165,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T07:47:24.994Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-e7566401f3cf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/inbox.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e7566401f3cf.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "9467de6406871ec6bf79ccfc63419303a4bebfbf3f8c9f4edcd536c0d78bc802",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The marker flags a real pagination correctness risk (timestamp ties skipping rows affecting all inbox users) but the auto-diagnosis field is empty/corrupted, so the actual fix is not yet specified.",
+			"evidence": [
+				"Marker text: 'ties at identical microsecond timestamps could skip a row'",
+				"Diagnosis section shows only unexecuted read/grep tool-call placeholders, no conclusion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T06:18:14.087Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-server-telemetry-lifecycle-spec",
@@ -29802,38 +29804,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T12:50:14.477Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-e7566401f3cf",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/inbox.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e7566401f3cf.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "9467de6406871ec6bf79ccfc63419303a4bebfbf3f8c9f4edcd536c0d78bc802",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Potential row-skipping bug from identical microsecond timestamps in inbox ordering, but the auto-diagnosis never completed its investigation.",
-			"evidence": [
-				"TODO warns ties at identical microsecond timestamps could skip a row",
-				"Diagnosis (auto) section ends in unexecuted read/grep stubs with no findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T05:47:43.869Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e9b22dc941f6",
@@ -36237,6 +36207,40 @@
 			"scoredAt": "2026-10-30T10:11:01.414Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-bb9cd7740cf0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bb9cd7740cf0.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "a019711d104bc7046796772d1d41d029da9d4c800e6d2865f4892f682e424bc8",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-bd7700d5dd6a"
+			],
+			"rationale": "The auto-diagnosis field is empty/corrupted (leaked tool-call markup, no analysis), but the marker text itself states this is the same integration-test gap already diagnosed in visit-unpaid.ts, so it should become one combined testing goal.",
+			"evidence": [
+				"Marker text: 'same gap as visit-unpaid.ts — proven via the pure'",
+				"Diagnosis section contains only unexecuted tool-call placeholders, no findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T06:18:14.087Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-bcf72948ba44",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36269,38 +36273,6 @@
 			"scoredAt": "2026-10-26T03:21:26.603Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c9369d818ed7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/stock-low.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c9369d818ed7.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "59d23372798ba0d08409537cb470f63858266215560f405d16d294a4c258696c",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, well-scoped refactor to deduplicate the low-stock predicate into a shared helper, reducing drift risk between the two checks.",
-			"evidence": [
-				"TODO notes duplicated b.qty <= i.reorder_level predicate",
-				"fix direction proposes a single isLowStock helper"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T05:47:43.869Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d5e424e20df5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36317,20 +36289,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 8,
+				"implementation": 8
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Clearly scoped UI wiring fix so the inbox rule's deep link actually pre-selects the shift on /pos/shifts.",
+			"rationale": "Very concrete, bounded fix (wire ?shift= query param into /pos/shifts) with an explicit 3-step plan and a small estimated line count, making it immediately actionable.",
 			"evidence": [
-				"TODO notes ?shift= deep-link param unused by /pos/shifts",
-				"diagnosis estimates a small param extraction plus pass-through fix"
+				"Fix direction: extract query param, pre-select/scroll-focus shift, test end-to-end",
+				"Diagnosis: 'Likely a 10–15 line change'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T05:47:43.869Z"
+			"scoredAt": "2026-11-01T06:18:14.087Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e0651859d6e7",
@@ -37305,38 +37277,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T07:47:15.720Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The cited commit (#361) is already merged, so this deployment-health entry tracks already-satisfied work with no further action defined.",
-			"evidence": [
-				"summary describes feat(whatsapp) PR #361 already merged",
-				"status is unknown with no pending deployment task described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T05:47:13.029Z"
 		},
 		{
 			"key": "issue:minion-meta#664",
@@ -38939,38 +38879,6 @@
 			"scoredAt": "2026-10-26T07:47:24.994Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-bb9cd7740cf0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bb9cd7740cf0.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "a019711d104bc7046796772d1d41d029da9d4c800e6d2865f4892f682e424bc8",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The auto-diagnosis never completed, leaving the referenced 'same gap as visit-unpaid.ts' unclear without a rerun of the analysis.",
-			"evidence": [
-				"Diagnosis (auto) section only shows unexecuted read/invoke stubs, no conclusion",
-				"marker references visit-unpaid.ts gap by analogy without restating specifics"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-25T05:47:43.869Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d62428971ed9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39131,6 +39039,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:58:03.340Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 110724 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-11-01T06:09:41Z",
+			"sourceFingerprint": "782d978eb228d056eb8c80d8cc3f5954f18b9996d593cd80450bd19c134940af",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This is a raw dump of ~110k upstream commit subject lines with no selected scope or task, so 'sync upstream' needs to be reframed into specific triage items rather than executed as one goal.",
+			"evidence": [
+				"title: '110724 new commit(s) available'",
+				"summary is an unfiltered commit log, not a scoped task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T06:18:14.087Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
@@ -41483,6 +41423,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T05:18:03.330Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c9369d818ed7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/stock-low.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c9369d818ed7.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "59d23372798ba0d08409537cb470f63858266215560f405d16d294a4c258696c",
+			"score": 19,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-specified maintenance fix: extract the duplicated low-stock predicate into one helper to avoid future drift, with a clear bounded scope.",
+			"evidence": [
+				"Marker: 'duplicates the b.qty <= i.reorder_level predicate'",
+				"Fix direction: extract isLowStock(qty, reorderLevel) helper"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-01T06:18:14.087Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ccea6cbc77f9",
