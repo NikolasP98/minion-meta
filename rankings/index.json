@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-02T14:47:20.522Z",
+	"generatedAt": "2026-11-02T15:17:41.689Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -34599,39 +34599,6 @@
 			"scoredAt": "2026-10-30T09:55:11.350Z"
 		},
 		{
-			"key": "issue:minion-meta#898",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#898 [monitor:unstick] rank run e5bba43a: batch 5 provider exhaustion",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/898",
-			"sourceUpdatedAt": "2026-10-26T14:17:28Z",
-			"sourceFingerprint": "1170646cec5af21b3cd4cb19e571864d3df01e7f5e5c17dd07fc0d280440fd18",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Transient provider exhaustion on one batch of a ranking run, with batches 1-4 persisted cleanly and no corruption, so the fix is an operational retry rather than a trackable engineering goal.",
-			"evidence": [
-				"Batches 1-4 of 5 completed cleanly via shadow provider",
-				"Batch 5 failed due to both bounded providers returning unavailable/invalid JSON, exit_code 1",
-				"Recommendation in the alert itself is to retry the run, not to ship code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T14:47:28.260Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-168406530",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35166,38 +35133,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T13:20:00.977Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a single merged commit note surfaced as a deployment-health candidate with no indication of actual deployment status or issues.",
-			"evidence": [
-				"commit message describes a merged WhatsApp session-reset feature (#361)",
-				"status field is 'unknown' with no deployment health signal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T14:47:20.338Z"
 		},
 		{
 			"key": "issue:minion-meta#357",
@@ -38464,6 +38399,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:56:05.191Z"
+		},
+		{
+			"key": "issue:minion-meta#898",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#898 [monitor:unstick] rank run e5bba43a: batch 5 provider exhaustion",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/898",
+			"sourceUpdatedAt": "2026-10-26T14:17:28Z",
+			"sourceFingerprint": "1170646cec5af21b3cd4cb19e571864d3df01e7f5e5c17dd07fc0d280440fd18",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Self-diagnosed as a transient infra fault with batches 1-4 durable and no corruption, leaving only a conditional 'retry if it recurs' action rather than a standalone actionable goal.",
+			"evidence": [
+				"Diagnosis: transient infra fault, not a task-logic failure",
+				"Batches 1-4 of 5 completed cleanly... catalog and index writes for batches 1-4 succeeded and persisted",
+				"good candidate for a new host classifier signature... if this... recurs across runs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T15:17:41.483Z"
 		},
 		{
 			"key": "issue:minion-meta#906",
