@@ -66,6 +66,11 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
 - **TO-BE:** each surface is either hidden for non-platform-admins (owner rule: don't render), or served by a hub route behind `requireOrgCapability`, which takes it off the list.
 - **DELTA:** pick per surface, most-used first (chat titles, flows, agent skills). Spec 042 covers channels and gateway settings; the rest needs its own spec. `TODO(handoff)` is at `platform-admin-methods.ts`.
 
+- **2026-11-01 update (T038, hub #624):** every member-reachable surface on the list is now hidden once switched (pages through `ADMIN_ONLY_PAGES` + `canViewPath` + the app layout, controls with `gatewayMethodAllowed`, background calls skipped). `/home/settings` moved to the hub route `api/personal-agent/settings`. Still open:
+  - members lose `/cloud` (granted `workspace:view`) and the whole flow list and editor, although only run, register and unregister need admin; move those to hub routes;
+  - after the switch, flow triggers are re-registered only from a platform admin's session;
+  - four gates have no dedicated test (R4, `TODO(handoff)` in `platform-admin-methods.ts`).
+
 ## 10. `/mcp` counts valid JWT calls as failed shared-secret attempts (A1 re-audit, INFO)
 - **AS-IS:** `/mcp` runs the shared-token check first, passing the JWT and `authRateLimiter` (`server.impl.ts:~1683`). Every valid JWT request therefore records a failed attempt for the caller's IP. It has no effect while `jwtOnlyAudiences` is `[]`.
 - **TO-BE:** a JWT caller never trips the shared-secret lockout.

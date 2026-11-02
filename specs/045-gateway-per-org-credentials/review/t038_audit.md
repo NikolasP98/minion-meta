@@ -197,3 +197,89 @@ Coverage is also short of T038's "each gated surface is absent" clause:
 | I1 | INFO | inertness verified; flag parse; no SSR or prerender hazard | none |
 | I2 | INFO | `/cloud` (`workspace:view`) disappears for members; flow triggers only re-register from admin sessions | owner acceptance at T049 and a ledger entry |
 | I3 | INFO | redundant gates (settings Secrets, autonomous edit-flow, BuilderHub tools) | harmless |
+
+---
+
+## Re-audit (6b8e49ca)
+
+Fix commit `6b8e49ca` sits on top of `34e4b3ff`. Same rules as the first pass. Mutations ran in a throwaway copy, which has been deleted. The worktree is clean (`git status` empty, HEAD `6b8e49ca`).
+
+**Verdict: SHIP.** Every HIGH and MEDIUM finding is fixed, and each fix fails its test when reverted. What remains is LOW plus one behaviour change that the PR body must disclose (R0).
+
+### Gates
+
+| Gate | Result |
+|---|---|
+| `vitest run src/lib/services/gateway/` plus the 8 new or changed test files plus `personal-agent-provisioner.test.ts` | 19 files, **139/139 passed** |
+| `PUBLIC_POSTHOG_KEY=x PUBLIC_POSTHOG_HOST=http://localhost bun run check` | exit 0, `12380 FILES 0 ERRORS 0 WARNINGS` |
+
+### Findings H1–L3: fix and mutation evidence
+
+| ID | Fix | Mutation (revert the fix) → test |
+|---|---|---|
+| H1 | `[/^\/channels\/(?!gmail(\/|$))[^/]/, PLUGIN_RPC]` and a `ChannelsNav` filter | removing the regex → admin-surfaces and ChannelsNav **2 fail**; removing the nav filter → ChannelsNav **1 fail** |
+| H2 | `/home/settings` posts to `POST /api/personal-agent/settings`; the browser sends no `config.patch` | page reverted to a no-op save → home-settings mounted test **3 fail**; route 401 removed → **1 fail**; sanitizer passing extra keys → **3 fail** |
+| M1 | regex `^\/flow-editor(\/(?!skills\/|master\/)|$)`; skills grid and "New skill" restored | old regex → **1 fail** (the test now asserts skills/master are not hidden) |
+| M2 | `/tools/` entry and the ToolsGrid gate removed; `tools.reload` gated | re-adding the entry → **1 fail** |
+| M3 | `/users` and `/settings` Bindings tab gated on `config.patch` | **untested** (R4) |
+| M4 | `/settings/plugins` iframe gated on `PLUGIN_RPC` | **untested** (R4) |
+| M5 | `adminOnlyUrlHidden` resolves the spec-037 instance target; the layout and `canViewPath` use it | resolving the URL only → **1 fail** (alias, locale-prefixed alias, admin, and unset cases) |
+| M6 | drone test spies on the component's `sendRequest` | removing the drone gate → **1 fail** (it passed before the fix). Removing the `config.schema` skip, the bootstrap skip, or the AgentDetail files gate → **1 fail** each (new tests) |
+| L1 | `ensureChannelPlugins` returns early | **untested** (R4) |
+| L2 | read-only `StatusDot` (`data-part="skill-status"`) | removing it → **1 fail** |
+| L3 | moot: the cards are `<a>` again | n/a |
+
+### The new `POST /api/personal-agent/settings` route
+
+- **Auth.** No `locals.user` → 401. No core context → 401. Both are tested, and removing the 401 fails a test.
+  - `preparePersonalAgentBinding` also requires `ctx.profileId === userId` and org membership (`personal-agent-binding.ts:83-88`). Otherwise it returns 409.
+  - CSRF: SvelteKit's default origin check is on (no `csrf` override in `svelte.config.js`). A cross-site JSON POST needs a preflight, so it is blocked.
+- **Agent id.** The id comes only from `personal_agents where profile_id = caller` (`readAuthority`, `:67-71`).
+  - `sanitizePersonalAgentSettings` reads exactly four top-level keys and requires each to be a string. Nested objects, `agentId`, `identity`, `contextMode` and `__proto__` are dropped (tested).
+  - No client-supplied id is used anywhere.
+- **Fields.** Only `name`, `conversationName`, `preset` and `text` are accepted. `name` cannot be cleared. Each field has a length cap (80/80/40/5000); an over-length value is dropped. See R2 for the gaps.
+- **Patch shape.** It sends `{agents:{list:[{id, identity?, personality?}]}}`. The gateway merges it with `applyMergePatch(..., {mergeObjectArraysById: true})` (`minion src/gateway/server-methods/config.ts:406`).
+  - Probe on the gateway's real `merge-patch.ts`: patching one agent's id leaves the other agents untouched, and only that entry's named keys change.
+  - Clobbering happens only if some base `agents.list` entry lacks an id; the probe confirms the whole array is then replaced. The gateway schema requires `id: z.string()` on agents, so a valid config can't contain such an entry.
+  - The provisioner's `activatePersonalAgent` already uses this exact shape.
+- **Credential.** It calls `gatewayCallToInstance(target.url, target.token, …)`, the same way as `activatePersonalAgent`. It runs `config.get`, then `config.patch` with that snapshot's hash as `baseHash`. Gateway errors are not returned to the browser (generic 502).
+- **Cross-org.** The target is `resolveOrgChannelTarget(ctx.tenantId, …)`, and `readAuthority` re-checks it:
+  - `gateway.org_id = orgId`
+  - the URL and a timing-safe token match
+  - a single lease for that org pins this gateway
+  - `agent.gateway_id`, when set, must equal the target. An agent bound to org A while the user acts in org B → 409.
+- **Concurrent field saves.** `createAutosave` serializes saves through one shared `SaveStatus`, so two fields never race on `baseHash`.
+
+### Clearing a field: old path vs new
+
+Executed probes: `setField` and `computePatch` in hub vitest, and the gateway's `PersonalitySchema` and `applyMergePatch` via tsx.
+
+- **Old path, member** (`user.role !== 'admin'`, which is almost every user): `setField` returns early (`config.svelte.ts:271-272`, present on the base branch). `isDirty` stays false, so `prepareConfig` returned with nothing saved while the indicator said "saved". **No member edit, set or clear, ever persisted.**
+- **Old path, platform admin, clearing a field:**
+  - `deepSet(..., undefined)` deletes the key.
+  - `computePatch` sends the whole `agents.list` array with the key absent, not `null` (asserted).
+  - Merge-by-id leaves absent keys untouched, so the old value survived (gateway probe: `conversationName: "Bob"` kept). **Clearing was already a silent no-op.**
+- **New path:**
+  - `conversationName: ''` and `text: ''` validate and are stored as `''`, so the field really clears. An empty `text` means no Personality section (`identity.ts:96`). `conversationName` is read only by a migration, where `''` doesn't fall back to the original name; harmless.
+  - **`preset: ''` is invalid**: the gateway enum is `professional|casual|creative|technical`, so the merged config fails validation and the route returns 502. The UI can't send it, because `selectPreset` only sets a real key.
+- **Conclusion:** clearing did not regress. It was a no-op before and now works for `conversationName` and `text`. Clearing `preset` can't be done from the UI (R2).
+
+### Flag-unset behaviour (the route runs in both states)
+
+- Every gate still short-circuits when the flag is unset. The unset branch is asserted in each new test.
+- **R0 (INFO, must disclose): the route changes behaviour today.**
+  - For an ordinary member, the old end state was "nothing written" (the `setField` no-op above). The new end state is "the field is written to their own agent's entry". It is **not** the same end state; it fixes a latent bug that made the UI claim edits had saved.
+  - For a platform admin, setting a field ends in the same state as before. Clearing now clears instead of being ignored.
+  - Write scope is limited to the caller's own agent and four fields on their org's gateway.
+  - **Fix:** say this in the PR body ("members' `/home/settings` edits persist for the first time; clear now clears"), so the owner merges knowing it.
+
+### Remaining findings
+
+| ID | Sev | Finding | Minimal fix |
+|---|---|---|---|
+| R0 | INFO | Route changes behaviour while the flag is unset: member edits persist for the first time (previously a silent no-op), and clearing now clears | disclose in the PR body |
+| R1 | LOW | `updatePersonalAgentSettings` skips the provisioner's roster check. For an `active` row with `gateway_id` null whose agent isn't on the org gateway (the prod "9/10 FACES" state), merge-by-id **appends** a new `agents.list` entry (probe confirmed). Scope is limited to the caller's own agent id on their own org's gateway. The UI can't do this (`agentStructure` must find the agent), but a direct POST can | before the patch, require `snapshot.config.agents.list` to contain `agent.agent_id` (the snapshot is already fetched), or require `agent.gateway_id === target.gatewayId`; otherwise return 409 |
+| R2 | LOW | Server validation is looser than the gateway schema. `preset` is any string of 40 chars or fewer (the test uses `'warm'`, which the gateway rejects). `text` is capped at 5000, but the gateway allows 2000. `preset: ''` → 502. None is reachable from the UI (the textarea is capped at 500; presets are fixed keys) | validate `preset` against the four keys (map `''` to `null` to delete), cap `text` at 2000 |
+| R3 | LOW | The `/channels` index cards (`channels/+page.svelte:70`) still link every plugin to `/channels/<id>`, which is now blank for members. The skill editor's back-nav goes to `/flow-editor`, also blank | filter `data.channels` with `adminOnlyPageHidden` on the index page; send the skill editor back to `/capabilities?tab=skills` |
+| R4 | LOW | No test covers the `/users` and `/settings` Bindings gate, the `/settings/plugins` iframe gate, the `ensureChannelPlugins` skip, or the `tools.reload` gate (I mutated none of them: no test exists) | one mounted or unit test each, same three-case pattern |
+| R5 | INFO | The route never returns 403, so the page's 403 branch is dead code | harmless |
