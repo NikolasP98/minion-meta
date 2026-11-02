@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-02T02:03:55.843Z",
+	"generatedAt": "2026-11-02T02:47:48.929Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5779,6 +5779,38 @@
 			"scoredAt": "2026-10-27T02:18:41.143Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-519a349c5d17",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A shared database schema file changed in a merged PR and needs migration/type-check verification across both consuming projects to avoid cross-project breakage.",
+			"evidence": [
+				"unified-events.ts is consumed by both minion_hub and minion_site via the shared db",
+				"fix direction lists concrete verification steps: migrations, type-check per repo, shared dev-db test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T02:47:48.744Z"
+		},
+		{
 			"key": "spec:2026-09-21-hub-optimistic-interactions-motion-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -9845,39 +9877,6 @@
 			"scoredAt": "2026-10-27T16:17:42.230Z"
 		},
 		{
-			"key": "proposal:ci-minion-site-claude-code",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Claude Code on minion-site dev",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-site-claude-code.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "9566dfbb0987108f66e62f787e2d679e804bcac495ea183f555a688a1e08c354",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A deploy-branch CI failure is worth fixing but the filed log is empty and the check date is three weeks stale, so current status needs confirming before dispatch.",
-			"evidence": [
-				"workflow run https://github.com/NikolasP98/minion-site/actions/runs/31686953430 failed per the report",
-				"checked 2026-10-05, now 21 days old",
-				"log block in the proposal is empty"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T02:18:00.392Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1536014697",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12771,6 +12770,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T05:48:22.744Z"
+		},
+		{
+			"key": "proposal:ci-minion-site-claude-code",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Claude Code on minion-site dev",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-site-claude-code.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "9566dfbb0987108f66e62f787e2d679e804bcac495ea183f555a688a1e08c354",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI is reported red on minion-site dev but the filed proposal carries no actual failure log, so root cause and scope are not yet known.",
+			"evidence": [
+				"latest failure log block is empty",
+				"definition of done requires the workflow run on dev to go green or be deliberately removed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T02:47:48.744Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-2327991570",
@@ -19161,39 +19192,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T07:19:45.767Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-519a349c5d17",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Draft finding flags a shared schema file as blast-radius but only prescribes generic verification steps rather than a confirmed concrete defect.",
-			"evidence": [
-				"status: draft",
-				"file: src/server/db/schema/unified-events.ts, shared via @minion-stack/db",
-				"fix direction: verify migrations and run bun run check in hub and site"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T02:38:22.574Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
@@ -30669,39 +30667,6 @@
 			"scoredAt": "2026-10-26T12:50:14.477Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, narrowly-scoped fix to replace a leftover template TODO(handoff) placeholder in AGENTS.md with concrete detail.",
-			"evidence": [
-				"status: approved",
-				"marker text is template placeholder '<what, why, pointer>'",
-				"fix direction: replace placeholder with specific details and a companion proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T02:38:22.574Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39598,6 +39563,38 @@
 			"scoredAt": "2026-10-26T07:47:24.994Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An already-approved cleanup task to replace a template TODO(handoff) placeholder in AGENTS.md with concrete details, which is small and well-scoped.",
+			"evidence": [
+				"status: approved",
+				"marker text is a template placeholder rather than a concrete handoff detail"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T02:47:48.744Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d62428971ed9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39758,6 +39755,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-26T13:58:03.340Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Entry is a deployment-health record showing a merged whatsapp session-reset commit with no stated problem or actionable goal.",
+			"evidence": [
+				"summary is a merged commit message about whatsapp session reset",
+				"no diagnosis, defect, or outstanding issue noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T02:47:48.744Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
@@ -41061,6 +41090,40 @@
 			"scoredAt": "2026-10-30T09:53:50.698Z"
 		},
 		{
+			"key": "issue:minion-meta#892",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#892 [monitor:unstick] Run 373637f6 (minion-meta rank): batch 11 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/892",
+			"sourceUpdatedAt": "2026-10-26T02:17:26Z",
+			"sourceFingerprint": "30fb37993dd74445c5c37339097c93d1bc26dc8fb9de5ccd7687f96eabec7153",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#932"
+			],
+			"rationale": "Transient dual-provider batch failure recurred across two monitor-intake issues, matching the diagnosis's own suggestion to consolidate into a classifier signature.",
+			"evidence": [
+				"diagnosis: both bounded providers failed on batch 11, recommends retry",
+				"diagnosis flags recurrence as a candidate for a new host classifier signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T02:47:48.744Z"
+		},
+		{
 			"key": "issue:minion-meta#894",
 			"kind": "issue",
 			"stage": "proposal",
@@ -41188,6 +41251,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T07:47:07.738Z"
+		},
+		{
+			"key": "issue:minion-meta#932",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#932 [monitor:unstick] rank run fc6ff2dd: both bounded providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/932",
+			"sourceUpdatedAt": "2026-11-02T02:17:25Z",
+			"sourceFingerprint": "b3b67098104f2d9f6b1e194d8e3dc27ccc585deb27dc3a6c9193819d1997d26b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#892"
+			],
+			"rationale": "Second occurrence of the identical dual-provider transient batch-failure pattern confirms the diagnosis's recommendation to build a dedicated classifier instead of treating each occurrence separately.",
+			"evidence": [
+				"codex fallback hit two logged transient failures before exit_code=1",
+				"diagnosis explicitly flags recurrence as a classifier candidate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T02:47:48.744Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2131986185",
@@ -42260,39 +42357,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T15:47:21.132Z"
-		},
-		{
-			"key": "issue:minion-meta#892",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#892 [monitor:unstick] Run 373637f6 (minion-meta rank): batch 11 provider failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/892",
-			"sourceUpdatedAt": "2026-10-26T02:17:26Z",
-			"sourceFingerprint": "30fb37993dd74445c5c37339097c93d1bc26dc8fb9de5ccd7687f96eabec7153",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake diagnosing a transient dual-provider failure on one checkpointed batch, with a clear low-cost retry fix.",
-			"evidence": [
-				"Batches 1-10 completed cleanly; batch 11 failed on both bounded providers",
-				"progress checkpointed per batch; ~154 of 1225 goals pending",
-				"recommendation: retry the run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T02:38:22.574Z"
 		},
 		{
 			"key": "issue:minion-meta#927",
