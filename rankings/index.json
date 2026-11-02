@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-02T13:20:01.148Z",
+	"generatedAt": "2026-11-02T13:47:48.084Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -24701,6 +24701,38 @@
 			"scoredAt": "2026-10-31T07:18:05.773Z"
 		},
 		{
+			"key": "issue:minion-meta#933",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#933 [monitor:unstick] run 2d63cf70 (minion-meta, rank board goals) failed: ranking catalog source unavailable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/933",
+			"sourceUpdatedAt": "2026-11-02T13:17:25Z",
+			"sourceFingerprint": "fdf54f49edde41ae7c8d3822649b77a34585e54b8a925bdb2d57be7dd36a29b5",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The guard-rail failure in the ranking catalog builder is well-diagnosed but explicitly recommended for retry first since it looks plausibly transient rather than confirmed persistent.",
+			"evidence": [
+				"error: ranking catalog source unavailable for minion (gateway); refusing a partial catalog at board-ranking-catalog.mjs:107",
+				"diagnosis recommends retry before escalating to a config fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T13:47:47.928Z"
+		},
+		{
 			"key": "pr:minion (gateway)#317",
 			"kind": "pr",
 			"stage": "development",
@@ -29847,6 +29879,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T01:58:47.373Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-02",
+			"sourceFingerprint": "126ae0a272f7da92dcb953c2e6c894fa19fb8b29c0785ea42fc2030443df73d3",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The listed markers point into rankings/index.json (a generated data file) and span unrelated domains like CRM/POS and billing, suggesting the handoff-sweep is misclassifying ranking-index text as in-code TODO(handoff) markers rather than describing one resolvable task.",
+			"evidence": [
+				"markers cite rankings/index.json lines, not source files",
+				"marker topics span disparate domains (CRM/POS leave-return, billing instalments, scheduling) inconsistent with a single ledger item"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T13:47:47.928Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
@@ -35090,6 +35154,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T13:20:00.977Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The cited commit (#361, whatsapp session reset authorization) is already merged with no incident described, so this deployment-health entry has no open action.",
+			"evidence": [
+				"commit 191d9a6 merged feat(whatsapp) session reset, spec 035 G3",
+				"tagged deployment with no failure or incident noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T13:47:47.928Z"
 		},
 		{
 			"key": "issue:minion-meta#357",
@@ -41245,39 +41341,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T02:00:56.932Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-02",
-			"sourceFingerprint": "ed3311c1730cb74ba6fc7002fbfd91895c13d68be19242bd7ec4b5fde7492783",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a self-referential handoff-sweep marker scraping its own ranking index file rather than a real, scoped engineering task.",
-			"evidence": [
-				"title: 'Handoff marker — rankings/index.json (minion-meta)'",
-				"summary describes a sweep that quotes fragments from rankings/index.json itself",
-				"definition of done is the sweep closing itself automatically once markers are gone"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T09:47:22.826Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
