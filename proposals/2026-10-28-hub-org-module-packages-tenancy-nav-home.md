@@ -58,9 +58,13 @@ Evidence with file anchors is in the Appendix; page one is the answer.
    that work is the same under either model. Details and the strongest counter-argument in T4;
    the hardening list is its own proposal,
    `2026-10-28-hub-tenant-isolation-hardening-before-org-3`.
-6. **Module SDK.** Tables are already physically connected: cross-module foreign keys live in
-   the shared SQL schema for every org (`sched_bookings`, `pos_tickets`, `crm_contacts`,
-   `stk_items` are each referenced by other modules' tables). What is *not* connected is the
+6. **Module SDK.** Tables share one schema for every org, but the cross-module links are
+   mostly **soft** (corrected 2026-11-01 by hub #629's link test): all 15 foreign keys that
+   touch `stk_*` tables have a stock table on both ends; stock's 7 links to other modules
+   (`parties`, `fin_products`, POS) are plain columns with no constraint. The counts in A7 are
+   intra-module. The SDK's `links` list therefore records each link as `soft: true` or as a
+   real foreign key, and the test fails when the two disagree; adding the missing constraints
+   is a ledger item, not part of this change. What is *not* connected at all is the
    description of a module: it is spread over at least seven hand-kept registries. The SDK is
    one `defineModule()` contract those registries are derived from, plus the install package
    from T3. (T3b, Appendix A7.)
@@ -349,6 +353,16 @@ creates no tables (T3b).
   full-nav roles land on `/chat` (first organisation item) until an owner right-clicks Resumen →
   "Fijar como inicio de la organización" (one click) or spec 047's installer value is backfilled.
 - (hub #628, S3) Hover icon swap and the mobile Inicio row were not checked in a browser.
+- (hub #629, S6) Stock's 7 cross-module links are soft (no FK): `stk_items.fin_product_id`,
+  `parties`, POS references. Decide per link whether to add a constraint (with a backfill of
+  orphans first) or keep it soft; the links test pins today's state either way. The
+  `fin_product_id` link will trip the test when meta #833 drops that column — intended.
+- (hub #629, S6) Availability facts and table defs of a module are two files (`stock/facts.ts`,
+  `stock/index.ts`) because `MODULE_MANIFEST` must not pull the 6 MB message bundle; the SDK
+  type documents this split.
+- (hub #630, S4) `landingPage` was added to the nav document in BOTH #628 and #630; resolve to
+  one definition (`SAFE_PATH` from `src/lib/nav/landing.ts`) when the second one rebases.
+- (hub #630, S4) Settings → Modules has no screenshot yet (SC-003); check it on dev:local.
 
 ## Definition of done
 
