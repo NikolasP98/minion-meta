@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-02T00:17:49.679Z",
+	"generatedAt": "2026-11-02T00:47:32.019Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3286,32 +3286,31 @@
 			"repo": "minion_hub",
 			"title": "#624 feat(gateway): staff don't see admin-only controls after the pass switch (inert until switched)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/624",
-			"sourceUpdatedAt": "2026-11-01T23:11:22Z",
-			"sourceFingerprint": "09ba1871a6966ef79e328ae48742276ec7a9a2830f3913c9b34648e35785b6ef",
+			"sourceUpdatedAt": "2026-11-02T00:25:28Z",
+			"sourceFingerprint": "4f822b000ad44629375a5d62276959485bd6fe7ccf1618c80ea2335333a6f5ea",
 			"score": 66,
 			"band": "medium",
 			"axes": {
 				"criticality": 6,
-				"importance": 8,
-				"impact": 6
+				"importance": 7,
+				"impact": 7
 			},
 			"readiness": {
 				"specification": 9,
-				"implementation": 8
+				"implementation": 7
 			},
 			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#904"
-			],
-			"rationale": "Security-tagged UI-gating PR with a detailed AS-IS/TO-BE/DELTA spec and tests already written, ready for owner merge.",
+			"relatedKeys": [],
+			"rationale": "Security-tagged admin-gating fix with a detailed AS-IS/TO-BE/DELTA surface table, inert until a flag flip but ready to merge ahead of that switch.",
 			"evidence": [
-				"Spec 045 T038, security-tagged, owner merges",
-				"tests cover 14 pages x permission combinations in admin-surfaces.test.ts"
+				"Security-tagged, owner merges; inert until PUBLIC_GATEWAY_BROWSER_SHARED_TOKEN=false",
+				"sendRequest refuses 71 PLATFORM_ADMIN_ONLY entries but most UI still renders for staff and fails on click/mount",
+				"stacked on #623 (feat/045-gateway-jwt-client)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T23:17:57.694Z"
+			"scoredAt": "2026-11-02T00:47:31.823Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -10768,6 +10767,41 @@
 			"scoredAt": "2026-10-29T17:18:13.699Z"
 		},
 		{
+			"key": "pr:minion_hub#629",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#629 feat(modules): module SDK — stock is one definition, registries derived; links checked against foreign keys",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/629",
+			"sourceUpdatedAt": "2026-11-02T00:44:58Z",
+			"sourceFingerprint": "22125e70d116f0f86ce176f2bd4c12a91d51f07ae2f5ee8f67e1e07ab1e03347",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#930"
+			],
+			"rationale": "Foundational module SDK refactor with derived registries and FK-link validation, extensively gated (sharded full test run, native-postgres lane) and documented deviations.",
+			"evidence": [
+				"Spec specs/047-hub-module-sdk-install-packages/ slice S6; data-tagged, owner merges",
+				"full vitest run via 8 shards all exit 0; links.sql.integration.test.ts admitted to qa-native lane",
+				"only stock is migrated so far; stk_items.fin_product_id link flagged as reminder (meta #833)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T00:47:31.823Z"
+		},
+		{
 			"key": "proposal:2026-08-17-gw-whatsapp-cloud-template-fallback",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13392,42 +13426,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:18:24.934Z"
-		},
-		{
-			"key": "pr:minion-meta#930",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#930 docs(spec): 046/047/048 — nav home + resolved landing page, module SDK + install packages, tenant isolation hardening",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/930",
-			"sourceUpdatedAt": "2026-11-01T23:52:53Z",
-			"sourceFingerprint": "ddc640d32be552d7e570b1a0bf0199b57e26e0fc91f6b4fb38f475da2f6fa426",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#626",
-				"pr:minion_hub#627",
-				"pr:minion-meta#931"
-			],
-			"rationale": "Formalizes specs and owner decisions backing the nav, module SDK, and tenant-isolation workstreams, which the related PRs in this batch are already implementing against.",
-			"evidence": [
-				"bundles specs 046/047/048 with owner decisions on base module set and landing resolution",
-				"proposal-index and spec-index regenerated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T00:17:49.490Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
@@ -16065,6 +16063,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T16:47:25.756Z"
+		},
+		{
+			"key": "pr:minion_hub#628",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
+			"sourceUpdatedAt": "2026-11-02T00:33:33Z",
+			"sourceFingerprint": "44aef99dc6435f2b632fdb75c5e8d700de88ba19e38b2a8151b062fd6ed6af55",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#930"
+			],
+			"rationale": "Well-specified nav/landing-page restructuring with route-contract counts and new tests updated, non-urgent but ready to land.",
+			"evidence": [
+				"Spec specs/046-hub-nav-home-landing-sections/ slice S3 (US4, US5, FR-006 to FR-012)",
+				"route contract endpoints 163→165, redirects 11→13",
+				"new tests: landing.test.ts, org-landing-page.test.ts, home/page.server.test.ts, ModuleSwitcher.mounted.test.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T00:47:31.823Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-attention-queue-responsive-runs",
@@ -21467,6 +21500,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:57:07.436Z"
+		},
+		{
+			"key": "pr:minion-meta#930",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#930 docs(spec): 046/047/048 — nav home + resolved landing page, module SDK + install packages, tenant isolation hardening",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/930",
+			"sourceUpdatedAt": "2026-11-02T00:31:37Z",
+			"sourceFingerprint": "ada5353466cac1743f93301c0719db2cac5b925241eed0b9760908ca0edb6961",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#628",
+				"pr:minion_hub#629"
+			],
+			"rationale": "Spec-index PR consolidating three downstream specs (046/047/048) that two in-flight hub PRs already depend on, so merging it is low-risk and unblocking.",
+			"evidence": [
+				"specs/046, 047, 048 directories referenced with owner decisions folded in",
+				"hub #628 cites spec 046 and hub #629 cites spec 047, both already in development",
+				"status open, docs-only change (proposal-index, spec-index regenerated)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T00:47:31.823Z"
 		},
 		{
 			"key": "proposal:2026-08-28-hub-faces-insumos-reconciliation-followups",
@@ -30700,38 +30769,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T08:18:11.849Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The summary is an unrelated commit message about a whatsapp session feature, not deployment-health data, so this candidate carries no verifiable signal.",
-			"evidence": [
-				"title says 'deployment health' but summary is a whatsapp feature commit",
-				"status is unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T00:17:49.490Z"
 		},
 		{
 			"key": "issue:minion-meta#326",
