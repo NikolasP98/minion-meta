@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-02T05:20:00.389Z",
+	"generatedAt": "2026-11-02T05:47:32.285Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9380,6 +9380,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T01:55:22.026Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-02",
+			"sourceFingerprint": "99984729f408e5b3b272870775aca944d92ab8661320e66475d43fda89c7af6c",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The sweep correctly surfaces many open TODO(handoff) markers but bundles 17+ unrelated concerns (auth gating, payments, race windows) into one proposal that cannot be executed as a single scoped outcome.",
+			"evidence": [
+				"lists markers spanning auth, payments, race conditions, schema drops, and UI escape paths across many files",
+				"definition of done requires resolving every listed marker before the file is closed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T05:47:32.067Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-1d40d9a",
@@ -19538,19 +19570,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Two concrete, file-and-line-scoped defects (missing null check, unchecked .find() access) from a deterministic merge scan.",
+			"rationale": "Two concretely located, narrowly scoped defects (unchecked access on a .find() result and a missing input validation present in a sibling function) are specified precisely enough to fix directly.",
 			"evidence": [
-				"validateIdentity immediately accesses identity.repository without checking if identity is an object",
-				"high unchecked-access: formatStep from .find() result may be undefined"
+				"test/ci/ci-workflow.test.ts:320 accesses .run on a possibly-undefined find() result",
+				"scripts/ci/tq016-windows-qualification.mjs:27 lacks the object check that sibling validators already have"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-26T05:18:13.024Z"
+			"scoredAt": "2026-11-02T05:47:32.067Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-670e33d9ad13",
@@ -33319,6 +33351,38 @@
 			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The entry only shows a merged whatsapp session-reset feature commit with no deployment problem or incident described.",
+			"evidence": [
+				"summary is commit message for merged PR #361 adding sessionResetAuthorized",
+				"status: unknown with no reported health issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-02T05:47:32.067Z"
+		},
+		{
 			"key": "issue:minion-meta#614",
 			"kind": "issue",
 			"stage": "proposal",
@@ -43758,38 +43822,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T01:52:17.496Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-02",
-			"sourceFingerprint": "e337e2539b73ffc26e0210668617a0017771aad895498a155a71b1255fa39625",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted 'markers' are fragments of evidence/rationale text already stored inside the rankings catalog's own prior entries, not actual TODO(handoff) code comments.",
-			"evidence": [
-				"quoted markers like 'brain_access alone does not bind a gateway' match ranking evidence phrasing, not code TODOs",
-				"target file rankings/index.json is itself a generated ranking catalog"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T02:00:56.932Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
