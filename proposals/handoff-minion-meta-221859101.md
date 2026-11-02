@@ -43,58 +43,58 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6536
 - `NikolasP98/minion-meta@dev rankings/index.json:6669` — drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6669
-- `NikolasP98/minion-meta@dev rankings/index.json:9443` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9443
-- `NikolasP98/minion-meta@dev rankings/index.json:11123` — Replace raw upstream error messages with an approved safe RPC projection",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11123
-- `NikolasP98/minion-meta@dev rankings/index.json:11723` — HC-028 ... no Escape path at all",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11723
-- `NikolasP98/minion-meta@dev rankings/index.json:12759` — online payment link (Culqi / Mercado Pago) — no credentials yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12759
-- `NikolasP98/minion-meta@dev rankings/index.json:15723` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15723
-- `NikolasP98/minion-meta@dev rankings/index.json:15820` — runs after (not inside) the document write — a failure here leaves...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15820
-- `NikolasP98/minion-meta@dev rankings/index.json:15884` — HC-017 — while a copy is being dragged only THAT copy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15884
-- `NikolasP98/minion-meta@dev rankings/index.json:16261` — HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16261
-- `NikolasP98/minion-meta@dev rankings/index.json:16295` — UUID-only today — part 2 adds a per-org sequence column",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16295
-- `NikolasP98/minion-meta@dev rankings/index.json:18706` — \"Access…\" omitted until S5 ships PageAccessDialog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18706
-- `NikolasP98/minion-meta@dev rankings/index.json:19044` — resourceId is only ever set from the calendar's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19044
-- `NikolasP98/minion-meta@dev rankings/index.json:19247` — Choose receipt retention and indeterminate-provider recovery policy before",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19247
-- `NikolasP98/minion-meta@dev rankings/index.json:20114` — no org business-hours/timezone table exists yet",
+- `NikolasP98/minion-meta@dev rankings/index.json:9411` — spec §3.2b allows a reschedule outside working hours",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L9411
+- `NikolasP98/minion-meta@dev rankings/index.json:11091` — Replace raw upstream error messages with an approved safe RPC projection",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11091
+- `NikolasP98/minion-meta@dev rankings/index.json:11691` — HC-028 ... no Escape path at all",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11691
+- `NikolasP98/minion-meta@dev rankings/index.json:12727` — online payment link (Culqi / Mercado Pago) — no credentials yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12727
+- `NikolasP98/minion-meta@dev rankings/index.json:15691` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15691
+- `NikolasP98/minion-meta@dev rankings/index.json:15788` — runs after (not inside) the document write — a failure here leaves...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15788
+- `NikolasP98/minion-meta@dev rankings/index.json:15852` — HC-017 — while a copy is being dragged only THAT copy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15852
+- `NikolasP98/minion-meta@dev rankings/index.json:16229` — HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16229
+- `NikolasP98/minion-meta@dev rankings/index.json:16263` — UUID-only today — part 2 adds a per-org sequence column",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16263
+- `NikolasP98/minion-meta@dev rankings/index.json:18674` — \"Access…\" omitted until S5 ships PageAccessDialog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18674
+- `NikolasP98/minion-meta@dev rankings/index.json:19012` — resourceId is only ever set from the calendar's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19012
+- `NikolasP98/minion-meta@dev rankings/index.json:19215` — Choose receipt retention and indeterminate-provider recovery policy before",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19215
+- `NikolasP98/minion-meta@dev rankings/index.json:20082` — no org business-hours/timezone table exists yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20082
+- `NikolasP98/minion-meta@dev rankings/index.json:20114` — this hasn't been exercised against a live local Supabase",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20114
-- `NikolasP98/minion-meta@dev rankings/index.json:20146` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L20146
-- `NikolasP98/minion-meta@dev rankings/index.json:22167` — ...are NOT [truncated]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22167
-- `NikolasP98/minion-meta@dev rankings/index.json:22363` — Current-head reset does not archive whole-manifest history.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22363
-- `NikolasP98/minion-meta@dev rankings/index.json:23346` — same as crm.customers — numbered in part 2 in src/lib/tables/defs/index.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23346
-- `NikolasP98/minion-meta@dev rankings/index.json:23410` — per-booking check, not the groupId-merged \"visit\" the...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23410
-- `NikolasP98/minion-meta@dev rankings/index.json:25419` — Indeterminate admissions need an explicit recovery/UI and",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25419
-- `NikolasP98/minion-meta@dev rankings/index.json:26458` — plain limit, newest-first — no server pagination",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26458
-- `NikolasP98/minion-meta@dev rankings/index.json:26588` — clickable filter and legend consumers still need keyboard action",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26588
-- `NikolasP98/minion-meta@dev rankings/index.json:30066` — tagOptions is the FILTER's list",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30066
-- `NikolasP98/minion-meta@dev rankings/index.json:30618` — These bounds start after host source loading. Phase15 must bound source",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30618
-- `NikolasP98/minion-meta@dev rankings/index.json:31226` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31226
-- `NikolasP98/minion-meta@dev rankings/index.json:32399` — reopened mid-exit — cancel the pending close",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32399
-- `NikolasP98/minion-meta@dev rankings/index.json:32432` — Wire the exact-ID publisher only once live B2 authority"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32432
+- `NikolasP98/minion-meta@dev rankings/index.json:22135` — ...are NOT [truncated]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22135
+- `NikolasP98/minion-meta@dev rankings/index.json:22331` — Current-head reset does not archive whole-manifest history.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22331
+- `NikolasP98/minion-meta@dev rankings/index.json:23314` — same as crm.customers — numbered in part 2 in src/lib/tables/defs/index.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23314
+- `NikolasP98/minion-meta@dev rankings/index.json:23378` — per-booking check, not the groupId-merged \"visit\" the...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23378
+- `NikolasP98/minion-meta@dev rankings/index.json:25387` — Indeterminate admissions need an explicit recovery/UI and",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25387
+- `NikolasP98/minion-meta@dev rankings/index.json:26426` — plain limit, newest-first — no server pagination",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26426
+- `NikolasP98/minion-meta@dev rankings/index.json:26556` — clickable filter and legend consumers still need keyboard action",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26556
+- `NikolasP98/minion-meta@dev rankings/index.json:30034` — tagOptions is the FILTER's list",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30034
+- `NikolasP98/minion-meta@dev rankings/index.json:30586` — These bounds start after host source loading. Phase15 must bound source",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30586
+- `NikolasP98/minion-meta@dev rankings/index.json:31194` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31194
+- `NikolasP98/minion-meta@dev rankings/index.json:32367` — reopened mid-exit — cancel the pending close",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32367
+- `NikolasP98/minion-meta@dev rankings/index.json:32400` — Wire the exact-ID publisher only once live B2 authority"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32400
 - `NikolasP98/minion-meta@dev rankings/index.json:33896` — no dedicated unit test for this function's memoisation",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33896
 - `NikolasP98/minion-meta@dev rankings/index.json:33928` — prompt-driven protocol instead of native tool_use",
