@@ -83,20 +83,20 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26228
 - `NikolasP98/minion-meta@dev rankings/index.json:26358` — clickable filter and legend consumers still need keyboard action",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26358
-- `NikolasP98/minion-meta@dev rankings/index.json:30182` — tagOptions is the FILTER's list",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30182
-- `NikolasP98/minion-meta@dev rankings/index.json:30657` — These bounds start after host source loading. Phase15 must bound source",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30657
-- `NikolasP98/minion-meta@dev rankings/index.json:31214` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31214
-- `NikolasP98/minion-meta@dev rankings/index.json:32284` — reopened mid-exit — cancel the pending close",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32284
-- `NikolasP98/minion-meta@dev rankings/index.json:32317` — Wire the exact-ID publisher only once live B2 authority"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32317
-- `NikolasP98/minion-meta@dev rankings/index.json:33660` — no dedicated unit test for this function's memoisation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33660
-- `NikolasP98/minion-meta@dev rankings/index.json:33692` — prompt-driven protocol instead of native tool_use",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33692
+- `NikolasP98/minion-meta@dev rankings/index.json:30150` — tagOptions is the FILTER's list",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30150
+- `NikolasP98/minion-meta@dev rankings/index.json:30625` — These bounds start after host source loading. Phase15 must bound source",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30625
+- `NikolasP98/minion-meta@dev rankings/index.json:31182` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31182
+- `NikolasP98/minion-meta@dev rankings/index.json:32252` — reopened mid-exit — cancel the pending close",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32252
+- `NikolasP98/minion-meta@dev rankings/index.json:32285` — Wire the exact-ID publisher only once live B2 authority"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32285
+- `NikolasP98/minion-meta@dev rankings/index.json:33595` — no dedicated unit test for this function's memoisation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33595
+- `NikolasP98/minion-meta@dev rankings/index.json:33627` — prompt-driven protocol instead of native tool_use",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33627
 - `NikolasP98/minion-meta@dev rankings/index.json:41737` — nothing links here with these params yet",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41737
 - `NikolasP98/minion-meta@dev rankings/index.json:41770` — additional custom fields lose their mailto link"
