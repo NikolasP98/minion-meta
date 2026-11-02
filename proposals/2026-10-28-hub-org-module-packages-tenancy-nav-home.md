@@ -340,6 +340,15 @@ creates no tables (T3b).
   (`TODO(handoff)` in `src/lib/nav/custom-sections-nav.ts`). Render strings the way page icons
   are rendered, or restrict the field to known icon keys with a picker.
 - (hub #626, S2) An invalid icon string surfaces as a generic form error, not under the Icon field.
+- (hub #628, S3) The landing resolver does not consult an explicit per-screen deny rule
+  (`page:<pattern>` rows); a screen an owner denied to a role can still be chosen as that
+  role's landing page and then answers 403 (`TODO(handoff)` in `src/server/nav/landing.server.ts`).
+- (hub #628, S3) `landing-cache.ts` is gone, so every `/` hit reads the user's preferences once;
+  the other inputs stay cached. Re-add a short cache only if `/` shows up in slow-query logs.
+- (hub #628, S3) Existing orgs (FACES, MINION) have no `landingPage` in their nav document, so
+  full-nav roles land on `/chat` (first organisation item) until an owner right-clicks Resumen →
+  "Fijar como inicio de la organización" (one click) or spec 047's installer value is backfilled.
+- (hub #628, S3) Hover icon swap and the mobile Inicio row were not checked in a browser.
 
 ## Definition of done
 
