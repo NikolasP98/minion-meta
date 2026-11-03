@@ -44,6 +44,50 @@ const MAX_REGEX_INPUT = 10_000;
 /** Sanity bound on regex pattern length. */
 const MAX_REGEX_PATTERN = 1_000;
 
+// TODO(handoff): R20 — AI plugin actions are recognised by this named list because plugin
+// manifests carry no AI flag; move it into the manifest (`flowNodes`) when a third AI
+// action appears. The hub palette (FlowSidebar.svelte) carries the same names.
+// See proposals/2026-10-29-hub-org-entitlements-followups.md item 8.
+/** Plugin action methods that call a model, so they need the `ai` entitlement (spec 043). */
+export const AI_PLUGIN_ACTION_METHODS: ReadonlySet<string> = new Set(['alertWatcher.classify', 'alertWatcher.suggest']);
+
+/** Node types that call a model or an agent (spec 043). `router` in llm/hybrid mode is gated on its route instead. */
+const AI_NODE_TYPES: ReadonlySet<string> = new Set(['agent', 'llm', 'structured', 'toolAgent', 'memory']);
+
+export function isAiNode(node: FlowNode): boolean {
+  return (
+    AI_NODE_TYPES.has(node.type) ||
+    (node.type === 'pluginAction' && AI_PLUGIN_ACTION_METHODS.has((node.data as PluginActionNodeData).method))
+  );
+}
+
+/** Log (and stream to the editor console) that a node did not run AI because the org lacks `ai`. */
+function logEntitlementSkip(node: FlowNode, opts: CompileOptions): void {
+  console.warn('[flows] skipped_by_entitlement', {
+    flowId: opts.subflowStack?.at(-1),
+    nodeId: node.id,
+    nodeType: node.type,
+  });
+  opts.emit?.({
+    level: 'warn',
+    kind: 'log',
+    nodeId: node.id,
+    nodeType: node.type,
+    nodeLabel: nodeLabelOf(node),
+    message: `${nodeLabelOf(node)}: AI skipped, not included in this organization's plan.`,
+    ts: Date.now(),
+  });
+}
+
+/**
+ * The reply of a triggered run: the last message, or '' when no node produced
+ * one (only the seed input is in state) — so a cut branch never echoes the
+ * inbound text back through `deliverResponse`.
+ */
+export function triggeredReply(messages: BaseMessage[], seedCount: number): string {
+  return messages.length > seedCount ? String(messages[messages.length - 1]?.content ?? '') : '';
+}
+
 const PROCESSING_TYPES = ['llm', 'agent', 'pluginAction', 'transform', 'structured', 'router', 'toolAgent', 'channel', 'handoff', 'reaction', 'subflow', 'database', 'fileWrite', 'memory'] as const;
 
 /**
@@ -184,7 +228,7 @@ export interface CompileOptions {
    * referenced flow at execution time. Injectable for tests; production wires a
    * hub fetch. A subflow node throws if this is absent.
    */
-  loadFlow?: (flowId: string) => Promise<{ nodes: FlowNode[]; edges: FlowEdge[] }>;
+  loadFlow?: (flowId: string) => Promise<{ nodes: FlowNode[]; edges: FlowEdge[]; aiEnabled?: boolean }>;
   /**
    * Ids of the flows currently on the subflow call stack (outermost → innermost),
    * for cross-flow cycle detection. A subflow node throws if its target is
@@ -193,6 +237,12 @@ export interface CompileOptions {
   subflowStack?: string[];
   /** Max subflow nesting depth (defaults to DEFAULT_MAX_SUBFLOW_DEPTH). */
   maxSubflowDepth?: number;
+  /**
+   * Whether the flow's org has the `ai` entitlement (spec 043). `false` ⇒ every
+   * AI node ends its branch. Absent ⇒ `true`: safe only while the runner binds
+   * loopback and is reached by the co-located gateway alone.
+   */
+  aiEnabled?: boolean;
 }
 
 /** Human label for a node — its editor label, falling back to the type. */
@@ -272,13 +322,21 @@ export function compileFlow(
   );
   const flowEdges = edges.filter((e) => e.type === 'flow');
 
+  const aiOff = opts.aiEnabled === false;
+  // Nodes whose branch ended this run for lack of the `ai` entitlement.
+  const cut = new Set<string>();
+  const endBranch = (node: FlowNode) => {
+    cut.add(node.id);
+    logEntitlementSkip(node, opts);
+  };
+
   const builder = new StateGraph(MessagesAnnotation);
   type AnyGraph = {
     addNode: (name: string, fn: (s: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }>) => void;
     addEdge: (from: string, to: string) => void;
     addConditionalEdges: (
       source: string,
-      path: (s: typeof MessagesAnnotation.State) => Promise<string>,
+      path: (s: typeof MessagesAnnotation.State) => Promise<string | string[]>,
       pathMap: Record<string, string>,
     ) => void;
     compile: () => ReturnType<typeof builder.compile>;
@@ -286,7 +344,11 @@ export function compileFlow(
   const g = builder as unknown as AnyGraph;
 
   for (const node of processing) {
-    g.addNode(node.id, instrumentNode(node, buildNodeRunner(node, opts, runId), opts.emit));
+    // An AI node of an org without `ai` produces no message and never forwards its input.
+    const run = aiOff && isAiNode(node)
+      ? async () => { endBranch(node); return { messages: [] }; }
+      : buildNodeRunner(node, opts, runId, () => cut.add(node.id));
+    g.addNode(node.id, instrumentNode(node, run, opts.emit));
   }
 
   const outgoing = new Map<string, FlowEdge[]>();
@@ -311,9 +373,21 @@ export function compileFlow(
       for (const e of outs) pathMap[e.sourceHandle || 'default'] = e.target;
       if (!pathMap.default) pathMap.default = END;
       const connected = new Set(Object.keys(pathMap));
-      g.addConditionalEdges(node.id, buildBranchRoute(branch, connected, opts), pathMap);
+      const route = buildBranchRoute(branch, connected, opts, () => endBranch(node));
+      if (aiOff) {
+        pathMap[END] = END;
+        g.addConditionalEdges(node.id, async (s) => (cut.has(node.id) ? END : route(s)), pathMap);
+      } else {
+        g.addConditionalEdges(node.id, route, pathMap);
+      }
     } else if (outs.length === 0) {
       g.addEdge(node.id, END);
+    } else if (aiOff || node.type === 'subflow') {
+      // A cut node (or a subflow whose own AI branch was cut) follows none of its edges.
+      const targets = [...new Set(outs.map((e) => e.target))];
+      const pathMap: Record<string, string> = { [END]: END };
+      for (const t of targets) pathMap[t] = t;
+      g.addConditionalEdges(node.id, async () => (cut.has(node.id) ? END : targets), pathMap);
     } else {
       for (const e of outs) g.addEdge(node.id, e.target);
     }
@@ -321,7 +395,7 @@ export function compileFlow(
 
   const graph = g.compile();
   const initialState = { messages: [new HumanMessage(promptValue)] };
-  return { graph, initialState, runId };
+  return { graph, initialState, runId, cut };
 }
 
 /** A processing node's input = the content of the most recent message in state. */
@@ -428,6 +502,8 @@ export function buildBranchRoute(
   data: RouterNodeData,
   connectedHandles: Set<string>,
   opts: CompileOptions,
+  /** Called when `aiEnabled:false` stops an llm/hybrid classification; the route then returns END. */
+  onAiSkip?: () => void,
 ): (state: typeof MessagesAnnotation.State) => Promise<string> {
   return async (state) => {
     const input = lastMessageContent(state);
@@ -442,6 +518,11 @@ export function buildBranchRoute(
     // no rule matched — so a Classify/Route node can combine deterministic
     // overrides with sentiment/rubric judgement in a single node.
     if (chosen === 'default' && (data.mode === 'llm' || data.mode === 'hybrid')) {
+      // Without `ai` an llm router selects nothing and a hybrid one keeps only its rules.
+      if (opts.aiEnabled === false) {
+        onAiSkip?.();
+        return END;
+      }
       chosen = await classifyWithLlm(input, data, opts);
     }
     return connectedHandles.has(chosen) ? chosen : 'default';
@@ -452,6 +533,8 @@ function buildNodeRunner(
   node: FlowNode,
   opts: CompileOptions,
   runId: string,
+  /** Ends this node's branch (a subflow whose AI branch was cut). */
+  markCut: () => void,
 ): (state: typeof MessagesAnnotation.State) => Promise<{ messages: BaseMessage[] }> {
   // pluginAction node — call gateway method contributed by a plugin
   if (node.type === 'pluginAction') {
@@ -486,13 +569,15 @@ function buildNodeRunner(
       if (!originChannel || !originChatId) {
         return { messages: [new AIMessage('Handoff skipped: no origin session (manual run).')] };
       }
+      if (opts.aiEnabled === false) logEntitlementSkip(node, opts);
       const reply = await invoke('flows.relay.open', {
         originChannel,
         originChatId,
         originAccountId,
         destinations: data.destinations ?? [],
         priority: data.priority,
-        suggestionCount: data.suggestionCount ?? 3,
+        // Reply suggestions are generated by a model, so an org without `ai` gets none.
+        suggestionCount: opts.aiEnabled === false ? 0 : (data.suggestionCount ?? 3),
         suggestionModel: data.suggestionModel,
         language: data.language ?? 'es',
         systemPrompt: data.systemPrompt ?? '',
@@ -706,9 +791,16 @@ function buildNodeRunner(
         ...opts,
         initialPrompt: input,
         subflowStack: [...stack, flowId],
+        aiEnabled: sub.aiEnabled === false ? false : opts.aiEnabled,
       };
-      const { graph, initialState } = compileFlow(sub.nodes, sub.edges, childOpts);
+      const { graph, initialState, cut } = compileFlow(sub.nodes, sub.edges, childOpts);
       const result = await graph.invoke(initialState);
+      // The child produced nothing because its AI branch was cut: end ours too,
+      // rather than forward the child's input as if it were its output.
+      if (cut.size > 0 && result.messages.length <= initialState.messages.length) {
+        markCut();
+        return { messages: [] };
+      }
       const last = result.messages[result.messages.length - 1];
       const reply = last ? String(last.content) : '';
       return { messages: [new AIMessage(reply)] };
