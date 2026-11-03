@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T10:17:18.201Z",
+	"generatedAt": "2026-11-03T10:47:18.909Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22094,38 +22094,6 @@
 			"scoredAt": "2026-10-29T05:48:22.744Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a merged feature deployment (JWT binding, org plan gating) that is inert until further configuration, so it's informational health status rather than an open goal needing action.",
-			"evidence": [
-				"Co-Authored-By commit merges spec 043/045 slices",
-				"inert until hub enforces / jwtOnlyAudiences configured"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T10:17:18.017Z"
-		},
-		{
 			"key": "issue:minion-meta#574",
 			"kind": "issue",
 			"stage": "proposal",
@@ -25059,20 +25027,21 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 3
 			},
-			"confidence": 5,
-			"recommendation": "execute",
+			"confidence": 4,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "An approved, auto-filed handoff finding names an exact file/line and gives concrete root-cause-and-remove steps for a production phone-failure workaround.",
+			"rationale": "An approved workaround-removal item tied to an undiagnosed phone-failure root cause in production gateway code, but the actual root cause investigation is unscoped and not yet actionable as paid work.",
 			"evidence": [
-				"TODO(handoff) at src/lib/services/gateway.svelte.ts:309 pending phone-failure root cause",
-				"status approved with a four-step fix direction naming the gateway/voice team to coordinate with"
+				"TODO(handoff) marker at gateway.svelte.ts:309 pending root-cause of a phone failure",
+				"merged PR #239 in minion_hub@master, status approved",
+				"fix direction requires cross-team root-cause investigation before removal is possible"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T10:17:27.743Z"
+			"scoredAt": "2026-11-03T10:47:18.706Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-button-consumer-semantics-spec",
@@ -33276,6 +33245,39 @@
 			"scoredAt": "2026-11-03T08:48:51.275Z"
 		},
 		{
+			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md",
+			"sourceUpdatedAt": "2026-09-08",
+			"sourceFingerprint": "15de14498b82605796fd0293ac88215b2dac9cebf33e75f4cc81aa58602f1697",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Core --check and effort-projection work is done per the summary, leaving only a small open question about auto-triage insertion order that needs owner coordination, not fresh execution.",
+			"evidence": [
+				"generator now recognizes --check and exits non-zero on drift, no write",
+				"effort projection done in scripts/proposal-index.mjs, covered by tests",
+				"row ordering divergence with auto-triage writer remains undecided (TODO(handoff))"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T10:47:18.706Z"
+		},
+		{
 			"key": "proposal:2026-09-27-hub-column-presentation-admission",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38570,38 +38572,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:19:45.204Z"
-		},
-		{
-			"key": "proposal:2026-08-29-proposal-index-check-mode-and-effort-projection",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "proposal-index.mjs — add a read-only --check mode and reconcile projection with the auto-triage index writer",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-proposal-index-check-mode-and-effort-projection.md",
-			"sourceUpdatedAt": "2026-09-08",
-			"sourceFingerprint": "15de14498b82605796fd0293ac88215b2dac9cebf33e75f4cc81aa58602f1697",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Both substantive DELTA items are marked Done with test coverage, leaving only a minor unresolved ordering confirmation that doesn't warrant tracking as an active goal.",
-			"evidence": [
-				"--check mode is implemented and covered by scripts/proposal-index.test.mjs",
-				"effort projection is done for all 40 proposals; remaining item is a TODO(handoff) on sort-order confirmation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T10:17:27.743Z"
 		},
 		{
 			"key": "proposal:2026-09-12-gateway-native-swift-qualification",
