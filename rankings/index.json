@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T07:48:15.645Z",
+	"generatedAt": "2026-11-03T07:56:26.579Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3728,6 +3728,39 @@
 			"scoredAt": "2026-10-31T23:18:32.453Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-96528a1d8ee1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/internal/flows/[id]/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96528a1d8ee1.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "02d79ec46508c6a35dbcf961a095a2f3bf1753eea47908d25a73030e372e0d16",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Flagged tenant-isolation gap is a plausible multi-tenant security risk but needs a proper spec/backfill plan before execution, not a direct fix.",
+			"evidence": [
+				"marker: 'flows with a NULL tenant_id are never gated'",
+				"auto-diagnosis flags data-leakage/privilege-escalation risk",
+				"fix direction requires backfill + constraint + handler changes, not yet scoped"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:56:26.364Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-bf747956e314",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4593,39 +4626,6 @@
 			"scoredAt": "2026-11-02T05:19:34.658Z"
 		},
 		{
-			"key": "pr:minion_hub#631",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#631 fix(pos): calendar hover card stops offering Cobrar on an already-charged booking",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/631",
-			"sourceUpdatedAt": "2026-11-03T07:29:39Z",
-			"sourceFingerprint": "54a169013fa0a1ab96af6cba9eb87063c114f47bdc1f94baab7ebe08df4a9e6f",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, well-evidenced hotfix preventing re-charging an already-paid POS booking.",
-			"evidence": [
-				"hover card offered Cobrar on a booking already charged via POS-2026-00089",
-				"fix gates on !b.paid matching existing menu/drawer logic",
-				"bun run check: 0 errors across 12,366 files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:39:33.124Z"
-		},
-		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -4829,39 +4829,6 @@
 			"scoredAt": "2026-11-03T02:01:53.538Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-96528a1d8ee1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/internal/flows/[id]/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96528a1d8ee1.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "31cb6a4daaff5064f850550659df23dfe299dd2cadddcb5385b6117ecb17027e",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Flags a plausible tenant-isolation gap with real privilege-escalation risk but needs a spec before execution.",
-			"evidence": [
-				"flows with NULL tenant_id are never gated and default aiEnabled true",
-				"diagnosis flags data-leakage and privilege-escalation risk in multi-tenant handler",
-				"still in draft status with no backfill plan committed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:39:33.124Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4963,6 +4930,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T07:47:58.071Z"
+		},
+		{
+			"key": "pr:minion_hub#628",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
+			"sourceUpdatedAt": "2026-11-03T07:51:57Z",
+			"sourceFingerprint": "caacda5408e01551c239a60c6d5faf9adb6e3ede71d17aa104f1fbafeed12dd5",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#626",
+				"pr:minion_hub#630"
+			],
+			"rationale": "Core routing/landing-page refactor touching redirects, nav, and org config is well specified with new tests and route-contract updates.",
+			"evidence": [
+				"route contract endpoints 163→165, redirects 11→13",
+				"new landing.ts resolver + 4 new test files",
+				"expected conflict with #630 on NavConfig.landingPage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:56:26.364Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -6948,6 +6951,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:31:57.261Z"
+		},
+		{
+			"key": "pr:minion_hub#630",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
+			"sourceUpdatedAt": "2026-11-03T07:52:47Z",
+			"sourceFingerprint": "ec831809f8153d9e9b00223f420780b6de5bf45fc06b623725db7a6cf1200fa0",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#628"
+			],
+			"rationale": "Module-provisioning slice is data-tagged and stacked on an unmerged PR with a documented schema conflict against spec 046, so sequencing needs confirmation before merge.",
+			"evidence": [
+				"stacked on #629, must retarget after merge",
+				"deviation section documents landingPage field conflict with spec 046 S3",
+				"no screenshot of Settings → Modules (SC-003) taken"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:56:26.364Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -10982,6 +11020,41 @@
 			"scoredAt": "2026-10-29T17:18:13.699Z"
 		},
 		{
+			"key": "pr:minion_hub#626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#626 feat(nav): sections need only a name, slugs auto-suffix, and the dialog gets Advanced settings (icon, who can view)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/626",
+			"sourceUpdatedAt": "2026-11-03T07:46:42Z",
+			"sourceFingerprint": "9e92eead975fdd5a4a9bca4090ce2b34004e49ed34a589e2817b32e508b9d751",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#628"
+			],
+			"rationale": "Nav section/advanced-settings slice is spec-scoped, tests pass, and rebase makes it supersede #602 cleanly.",
+			"evidence": [
+				"vitest 161 tests pass after rebase",
+				"supersedes #602 per rebase note",
+				"draft but gates (check, lint:design/tokens) all 0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:56:26.364Z"
+		},
+		{
 			"key": "pr:minion-meta#833",
 			"kind": "pr",
 			"stage": "development",
@@ -12882,38 +12955,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T05:17:17.244Z"
-		},
-		{
-			"key": "pr:minion_hub#630",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
-			"sourceUpdatedAt": "2026-11-03T06:27:27Z",
-			"sourceFingerprint": "30c0de734ed92d064fca238697bfc7600f84fa105b5799c4925a10d2370a4872",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Org provisioning/base-module work passes most gates but has documented open ends (no visual screenshot, schema deviation) that should be tracked before full confidence.",
-			"evidence": [
-				"'No screenshot of Settings → Modules (SC-003)'",
-				"'TODO(handoff) to align it with 046's SAFE_PATH'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:48:07.653Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-uiux-consistency-followups",
@@ -15149,40 +15190,6 @@
 			"scoredAt": "2026-11-02T14:27:46.752Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion_hub#622"
-			],
-			"rationale": "Deployment record shows the JWT-binding gateway feature already merged and shipped inert until the hub configures it, leaving no outstanding action.",
-			"evidence": [
-				"feat(gateway): bind browser JWTs to one gateway, expire them on the socket... (#363)",
-				"Inert until hub enforces"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:48:15.447Z"
-		},
-		{
 			"key": "issue:minion_hub#205",
 			"kind": "issue",
 			"stage": "proposal",
@@ -15247,38 +15254,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T16:47:25.756Z"
-		},
-		{
-			"key": "pr:minion_hub#628",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
-			"sourceUpdatedAt": "2026-11-03T06:35:50Z",
-			"sourceFingerprint": "767413fb0e519194f848b73d271eaacd11112706c929594adbcb252041a9844f",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Broad but well-tested route/navigation refactor with explicit route-contract count updates and new test coverage, ready for review.",
-			"evidence": [
-				"route contract counts 163→165, redirects 11→13",
-				"'landing.test.ts', 'org-landing-page.test.ts' new tests added"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:48:07.653Z"
 		},
 		{
 			"key": "pr:minion-meta#930",
@@ -22408,39 +22383,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T18:17:31.652Z"
-		},
-		{
-			"key": "pr:minion_hub#626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#626 feat(nav): sections need only a name, slugs auto-suffix, and the dialog gets Advanced settings (icon, who can view)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/626",
-			"sourceUpdatedAt": "2026-11-03T07:43:19Z",
-			"sourceFingerprint": "221d359276a8d03a9008a1e3ffea2839832aaecd75d892cc43afbdf16a80f4cc",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Draft nav feature PR passes its gates but still carries an unresolved icon-fallback TODO and needs a base-branch retarget before it can merge.",
-			"evidence": [
-				"status: draft",
-				"Open end: emoji section icons fall back to LayoutGrid in the sidebar (TODO(handoff))",
-				"Retarget this PR to master after #602 merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:48:15.447Z"
 		},
 		{
 			"key": "pr:minion-base#41",
@@ -39076,7 +39018,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/modules/availability.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-753e08fe9f5a.md",
 			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "10c7f882fe73ee2eda55165c7045e41c5d6e0c051d0ee8658ce6e55c6c2dc881",
+			"sourceFingerprint": "9bb9862c2e9c956bd0655dedea8e3c450d06390b575d13b4e5d09c80c90a4efc",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -39086,22 +39028,19 @@
 			},
 			"readiness": {
 				"specification": 5,
-				"implementation": 2
+				"implementation": 3
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#622"
-			],
-			"rationale": "Cleanup TODO is explicitly blocked on plugin JWT auth landing and isn't independently actionable yet.",
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Cleanup TODO is explicitly gated on JWT plugin auth landing, which has not happened, so it is not actionable now.",
 			"evidence": [
-				"marker says drop code once plugin UIs get a JWT path per spec 043 R8",
-				"draft status with no spec of its own",
-				"dependency proposal 2026-10-29-hub-org-entitlements-followups not yet resolved"
+				"TODO depends on 'plugin UIs get a JWT path (spec 043 R8)'",
+				"fix direction says convert to proposal if JWT work is deferred"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:39:33.124Z"
+			"scoredAt": "2026-11-03T07:56:26.364Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-948e27d654f8",
@@ -39212,7 +39151,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/flows/ai-nodes.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d371d2661bc2.md",
 			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "cd918ab4d9fe73da5025bb05f840191918fedbbb20ffe42b62ee6ad82c09735d",
+			"sourceFingerprint": "feac23673499c1ea85a271ee4589e954c6016c5a197526fc8e3ff28452a2b9c7",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -39222,20 +39161,19 @@
 			},
 			"readiness": {
 				"specification": 4,
-				"implementation": 2
+				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Architectural cleanup explicitly deferred until a third AI flow-node action exists, so it isn't actionable now.",
+			"rationale": "TODO only becomes relevant once a third AI flow-node action exists, so acting now is premature.",
 			"evidence": [
-				"marker text defers the change until a third AI action is added",
-				"diagnosis proposes a declarative ai flag refactor, not yet triggered",
-				"draft status with no urgency driver cited"
+				"marker: 'move to an ai flag... when a third AI action'",
+				"no third AI action currently indicated"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:39:33.124Z"
+			"scoredAt": "2026-11-03T07:56:26.364Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
@@ -41826,6 +41764,38 @@
 			"scoredAt": "2026-10-28T22:18:15.793Z"
 		},
 		{
+			"key": "run:minion_hub#41599297103",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/41599297103",
+			"sourceUpdatedAt": "2026-11-03T07:53:17Z",
+			"sourceFingerprint": "261be9a6d899ec0270eb463fbd5e4d7ba6cdfb6579a74d6e7151ac233b900caa",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A pending CI run status carries no independent scope or decision content worth tracking as a board goal.",
+			"evidence": [
+				"status: pending",
+				"summary: 'push on master'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:56:26.364Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -44004,38 +43974,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T07:47:58.071Z"
-		},
-		{
-			"key": "run:minion_hub#41597582064",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/41597582064",
-			"sourceUpdatedAt": "2026-11-03T07:39:23Z",
-			"sourceFingerprint": "6a24161dce812831520cd028156db94fe431c9348106f5765d554049ce31dff3",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run on a push to master carries no reported failure or finding requiring action.",
-			"evidence": [
-				"push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:48:15.447Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
