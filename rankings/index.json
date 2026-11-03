@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T19:48:03.068Z",
+	"generatedAt": "2026-11-03T20:18:10.176Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -22093,6 +22093,39 @@
 			"scoredAt": "2026-10-29T05:48:22.744Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
+			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
+			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This tracks already-merged, built, and deployed JWT-binding work that is explicitly inert until hub configuration, leaving no further action to rank as an open goal.",
+			"evidence": [
+				"PR #363 merged with build steps completed",
+				"multiple commits note 'inert until hub enforces/configured'",
+				"default jwtOnlyAudiences=[] means the feature is refused/off by default"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T20:18:09.951Z"
+		},
+		{
 			"key": "issue:minion-meta#574",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34628,38 +34661,6 @@
 			"scoredAt": "2026-10-30T23:17:12.106Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-8b315b355b71",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/calendar-context-menu.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b315b355b71.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "383eb5c1c70620131fc81f689e104709b69fe93e3367ef7296bbe17657096eee",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A single TODO(handoff) marker needs human diagnosis since the auto-diagnosis is truncated and inconclusive about the actual code issue.",
-			"evidence": [
-				"marker text is truncated: \"an open instalment plan with nothing left to sell (the\"",
-				"auto-diagnosis explicitly asks for clarification rather than confirming scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T20:17:15.927Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-94ad6c223964",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39381,6 +39382,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T07:56:26.364Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8b315b355b71",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/calendar-context-menu.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b315b355b71.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "383eb5c1c70620131fc81f689e104709b69fe93e3367ef7296bbe17657096eee",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The auto-generated diagnosis itself states the TODO marker text is truncated and unclear, so the scope of this single-file handoff item is not yet actionable.",
+			"evidence": [
+				"marker text cuts off mid-sentence: 'an open instalment plan with nothing left to sell (the'",
+				"diagnosis explicitly asks for clarification before suggesting a fix",
+				"single TODO(handoff) marker in one file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T20:18:09.951Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-948e27d654f8",
