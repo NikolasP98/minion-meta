@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T05:58:33.604Z",
+	"generatedAt": "2026-11-03T06:17:24.755Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1225,42 +1225,6 @@
 			"scoredAt": "2026-11-02T03:53:30.172Z"
 		},
 		{
-			"key": "pr:minion (gateway)#363",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#363 feat(gateway): bind browser JWTs to one gateway, expire them on the socket, and gate Base-org methods (inert until configured)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/363",
-			"sourceUpdatedAt": "2026-11-03T05:55:58Z",
-			"sourceFingerprint": "880d4acf12590bb5a8caa5968f30658ab4cc7e21fcc6f1d63d0f1a09143a2e1b",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#622",
-				"spec:2026-10-29-gateway-per-org-credentials-spec"
-			],
-			"rationale": "Security-critical JWT-binding and audience-gating work with three commits and audit fixes already landed, but it is explicitly inert until paired with hub A2/A3 and owner-configured.",
-			"evidence": [
-				"three commits implementing spec 043 S4 and spec 045 A1 with audit fixes F-1/F-2/F-3/F-5",
-				"must merge only with hub 045 A2/A3 per PR text",
-				"owner merges security-tagged work"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:58:33.410Z"
-		},
-		{
 			"key": "pr:minion_hub#622",
 			"kind": "pr",
 			"stage": "development",
@@ -1892,6 +1856,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:22:19.446Z"
+		},
+		{
+			"key": "proposal:2026-10-29-gateway-per-org-credentials-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Gateway per-org credentials — open ends deferred from spec 045",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-29-gateway-per-org-credentials-followups.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "59887299ed37d3b46f6d56d148fa69a07a621ed5c0fbf691df091a72b43ba1bc",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#363"
+			],
+			"rationale": "A well-specified security follow-up ledger with confirmed recurring open ends (e.g. members area credential gap) directly tied to the shared-token removal effort.",
+			"evidence": [
+				"confirmed still open at minion-site@c69986f per 2026-11-03 postmerge-discovery recurrence",
+				"six concrete numbered risks (R8, R5, R4, R6, R2, mcp audience) each with AS-IS/TO-BE/DELTA",
+				"directly follows from spec 045 which PR #363 implements"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:17:24.576Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1767155690",
@@ -3224,6 +3223,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:52:25.870Z"
+		},
+		{
+			"key": "pr:minion (gateway)#363",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#363 feat(gateway): bind browser JWTs to one gateway, expire them on the socket, and gate Base-org methods (inert until configured)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/363",
+			"sourceUpdatedAt": "2026-11-03T05:56:20Z",
+			"sourceFingerprint": "bb740ccfe06c8b3d16a3aa4af3df88c602063491fc25b4ab50784921a7123717",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-29-gateway-per-org-credentials-followups"
+			],
+			"rationale": "A large, detailed security PR implementing specs 043/045 that is explicitly inert until configured but ready for owner merge review.",
+			"evidence": [
+				"three commits implementing spec 043 S4 and spec 045 A1, inert until configured",
+				"PR explicitly states 'This is security work: the owner merges'",
+				"size: XL, draft status, detailed audit fixes F-1/F-2/F-3/F-5 referenced"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:17:24.576Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
@@ -11057,41 +11091,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T09:18:43.229Z"
-		},
-		{
-			"key": "proposal:2026-10-29-gateway-per-org-credentials-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Gateway per-org credentials — open ends deferred from spec 045",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-29-gateway-per-org-credentials-followups.md",
-			"sourceUpdatedAt": "2026-10-29",
-			"sourceFingerprint": "6669699574e5ff2bb6d5f479bcf8c0c656f5651337b988085e22fc989c057b53",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-29-gateway-per-org-credentials-spec"
-			],
-			"rationale": "A well-documented ledger of deliberately deferred risks (site JWT gap, no hub-sent revocation, tailscale admin default) that are real but explicitly out of scope until later slices.",
-			"evidence": [
-				"item 6 (/mcp legacy-audience gap) already RESOLVED in gw PR #363",
-				"item 5 (org admins lack gateway-admin power) has no spec yet",
-				"items reference specific risk numbers from spec 045 design.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:58:33.410Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-648930682",
@@ -24343,6 +24342,38 @@
 			"scoredAt": "2026-11-03T01:55:42.683Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-2555247888",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — langgraph-server/src/flow/compile-flow.ts (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-2555247888.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "6e4a23e96586cde8e39ff10c2e582755c79075f6c5ccd78ceef3af2360453029",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single, narrowly-scoped TODO(handoff) marker about plugin action recognition in compile-flow.ts, but the quoted snippet is truncated and lacks enough detail to size the fix.",
+			"evidence": [
+				"single marker at compile-flow.ts:47 referencing 'R20 — AI plugin actions are recognised by this named list'",
+				"marker text is truncated, no further context on scope or risk"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:17:24.576Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3082127154",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26839,6 +26870,38 @@
 			"scoredAt": "2026-10-28T19:19:59.087Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A merged feature commit shown as deploy health has no indication of actual deployment failure or pending risk.",
+			"evidence": [
+				"commit adds sessionResetAuthorized gating for whatsapp reset",
+				"tagged deployment but body describes a feature, not a health issue"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:17:24.576Z"
+		},
+		{
 			"key": "issue:minion-meta#360",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29198,6 +29261,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T01:56:48.670Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "249f12091ecc446d19d05833ad84c70b2d2c9e0a499a7295318be4672123c66e",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This bundles dozens of unrelated TODO(handoff) markers scraped from a single rankings/index.json file into one proposal, which is too broad and heterogeneous to execute as one goal.",
+			"evidence": [
+				"18+ distinct markers spanning auth, billing, CRM, drag-and-drop, and schema topics all in one file",
+				"definition of done requires resolving every marker before the sweep closes the proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:17:24.576Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2278437967",
@@ -37170,39 +37265,6 @@
 			"scoredAt": "2026-10-29T07:47:15.720Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 111201 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-11-02T06:11:14Z",
-			"sourceFingerprint": "6a8f75e4321d6634d763a4ea9393d780cf5488698411eab55b57bd8b19996092",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An automated upstream-sync notification listing 111201 commits is a bulk notification rather than a scoped, actionable goal.",
-			"evidence": [
-				"title: 'Upstream sync: 111201 new commit(s) available'",
-				"tags: upstream-sync",
-				"summary is a raw commit log dump with no defined scope or outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T06:17:12.003Z"
-		},
-		{
 			"key": "issue:minion-meta#664",
 			"kind": "issue",
 			"stage": "proposal",
@@ -38968,6 +39030,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T01:52:11.536Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 111687 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-11-03T06:13:11Z",
+			"sourceFingerprint": "c839beba1d028df34b5dd7e5990dd1a5a57ca0b7fad41a3810fff56a93e5a334",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An automated upstream-sync notification listing commits is informational noise, not an actionable goal.",
+			"evidence": [
+				"title: 'Upstream sync: 111687 new commit(s) available'",
+				"body is a raw commit log dump with no scoped task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:17:24.576Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
@@ -40814,38 +40908,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T01:56:48.670Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "db5ced71083cba0545bbd3ef179a319e46267a58ce6513108c0236762da251c6",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This bundles over a dozen unrelated quoted fragments pulled from the rankings data file itself rather than describing one coherent, actionable fix.",
-			"evidence": [
-				"source: handoff-sweep on rankings/index.json",
-				"15+ disconnected quoted snippets spanning unrelated features/lines"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2972777622",
