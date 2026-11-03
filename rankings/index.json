@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T04:17:11.183Z",
+	"generatedAt": "2026-11-03T04:47:36.707Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5565,6 +5565,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T17:18:13.699Z"
+		},
+		{
+			"key": "pr:minion_hub#628",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
+			"sourceUpdatedAt": "2026-11-03T04:40:29Z",
+			"sourceFingerprint": "ca8045014831df6c32ffcc85bf22dd783be0e656092c6d76231953962a605938",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#630"
+			],
+			"rationale": "Well-specified, heavily-tested routing/landing-page overhaul with broad contract impact, but it adds the same NavConfig.landingPage field as #630 and both PRs explicitly flag the resulting conflict.",
+			"evidence": [
+				"Route contract counts change across multiple suites (endpoints 163→165, redirects 11→13)",
+				"landing.ts/landing.server.ts centralize landing resolution with full test matrix",
+				"#630 body: 'Spec 046 S3 (T034) adds the same field, so expect a small, identical-intent conflict'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T04:47:36.468Z"
 		},
 		{
 			"key": "pr:minion-meta#810",
@@ -11146,8 +11181,8 @@
 			"repo": "minion_hub",
 			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
-			"sourceUpdatedAt": "2026-11-02T01:34:18Z",
-			"sourceFingerprint": "1eac22627fdd4aff3bcc0a20fbb6c9dae4234d8cf929ebf3bf5471e2cba0ea9b",
+			"sourceUpdatedAt": "2026-11-03T04:43:05Z",
+			"sourceFingerprint": "d68980108de74ad279947821fc276020d9a7ae395f39992f32c635f57bcba3b4",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -11156,24 +11191,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 6,
+				"implementation": 5
 			},
 			"confidence": 6,
-			"recommendation": "execute",
+			"recommendation": "group",
 			"relatedKeys": [
-				"pr:minion_hub#629",
-				"pr:minion-meta#930"
+				"pr:minion_hub#628"
 			],
-			"rationale": "Base-module provisioning is idempotent and integration-tested but still needs a visual check of Settings -> Modules before fully done.",
+			"rationale": "Data-tagged provisioning feature with solid gates but an acknowledged schema deviation and an explicit anticipated field conflict with #628 that should be reconciled before either merges.",
 			"evidence": [
-				"module-install integration test: 4/4 passing, idempotent on rerun",
-				"Open end: no screenshot of Settings->Modules (SC-003)",
-				"Stacked on #629, data-tagged"
+				"Data-tagged: owner merges",
+				"Deviation section: adds landingPage? to NavConfig schema, same field as spec 046 S3, expects identical-intent conflict",
+				"Open ends: no screenshot of Settings → Modules (SC-003), stacked on #629 not yet merged"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T01:48:21.814Z"
+			"scoredAt": "2026-11-03T04:47:36.468Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
@@ -15343,42 +15377,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T16:47:25.756Z"
-		},
-		{
-			"key": "pr:minion_hub#628",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
-			"sourceUpdatedAt": "2026-11-02T01:19:24Z",
-			"sourceFingerprint": "8f057e79f30732f1d11282e1a4c4752edb7e66c77f6556e066ad3ca7f4286c2f",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#626",
-				"pr:minion-meta#930"
-			],
-			"rationale": "Route/landing-page refactor is well specified with passing tests and explicit route-contract count updates.",
-			"evidence": [
-				"Route contracts 163->165 endpoints, 11->13 redirects",
-				"New landing.test.ts resolver matrix",
-				"/home and /home/settings get 308 redirects to /chat"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T01:48:21.814Z"
 		},
 		{
 			"key": "pr:minion-meta#930",
@@ -22408,8 +22406,8 @@
 			"repo": "minion_hub",
 			"title": "#626 feat(nav): sections need only a name, slugs auto-suffix, and the dialog gets Advanced settings (icon, who can view)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/626",
-			"sourceUpdatedAt": "2026-11-02T01:32:45Z",
-			"sourceFingerprint": "68f05736f90ee3d27ae3cda525b1e591203bd59e0b62e6d11e1de12c34d46b62",
+			"sourceUpdatedAt": "2026-11-03T04:41:20Z",
+			"sourceFingerprint": "fe2e4609a85a3ada86422705610ebe50e12ebdc073301133bb0c394789f3383e",
 			"score": 39,
 			"band": "low",
 			"axes": {
@@ -22419,22 +22417,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 7
+				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#628",
-				"pr:minion-meta#930"
-			],
-			"rationale": "Nav section UX simplification is scoped, fully tested, and supersedes a prior PR cleanly.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Draft PR that already supersedes #602 and carries an open TODO(handoff), so it needs a merge-order decision before it can proceed as-is.",
 			"evidence": [
-				"bun run vitest: 135 tests pass",
-				"Supersedes #602 via rebase resolving a messages.json conflict"
+				"status: draft",
+				"PR body states it supersedes #602: merge this one and close #602, or merge #602 after rebasing",
+				"Open end: emoji section icons fall back to LayoutGrid (TODO(handoff) in custom-sections-nav.ts)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T01:48:21.814Z"
+			"scoredAt": "2026-11-03T04:47:36.468Z"
 		},
 		{
 			"key": "pr:minion-base#41",
@@ -27194,39 +27190,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T19:19:59.087Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged feature commit about WhatsApp session reset scoping is presented as a deployment-health candidate without any actual health signal (errors, rollout status, incidents).",
-			"evidence": [
-				"summary describes feat(whatsapp) PR #361 merged, not a deployment issue",
-				"tags:[\"deployment\"] but no deploy status/error data present",
-				"status:\"unknown\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T04:17:10.947Z"
 		},
 		{
 			"key": "issue:minion-meta#360",
