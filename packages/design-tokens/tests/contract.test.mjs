@@ -114,6 +114,14 @@ test('Clinic modes cover every token family and readable text on every surface',
         assert.ok(ratio >= 4.5, `${id}: ${role}/${surface} ${ratio.toFixed(2)}:1`);
       }
       assert.ok(contrastRatio(theme.colors.accent, theme.colors[surface]) >= 3, `${id}: accent/${surface}`);
+      // Chat errors paint danger-fg at 15% over their host, then inherit that fg.
+      const danger = contract.statusRecipes[theme.statusRecipe].danger.fg;
+      const channels = (hex) => hex.slice(1).match(/../g).map((v) => parseInt(v, 16));
+      const host = channels(theme.colors[surface]);
+      const tinted = '#' + channels(danger).map((v, i) =>
+        Math.round(v * 0.15 + host[i] * 0.85).toString(16).padStart(2, '0'),
+      ).join('');
+      assert.ok(contrastRatio(danger, tinted) >= 4.5, `${id}: chat error/${surface}`);
     }
     for (const [role, value] of Object.entries(theme.palettes)) {
       for (const surface of ['canvas', 'surface2']) {
