@@ -1,7 +1,8 @@
 ---
 id: postmerge-minion-site-79b093b3ebe5
 title: "Post-merge finding — todo-handoff in src/lib/services/member-gateway.svelte.ts (minion-site)"
-status: draft
+status: merged
+merged_into: 2026-10-29-gateway-per-org-credentials-followups
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-site]

@@ -3,7 +3,7 @@ id: 2026-10-29-gateway-per-org-credentials-followups
 title: Gateway per-org credentials — open ends deferred from spec 045
 status: draft
 created: 2026-10-29
-updated: 2026-10-29
+updated: 2026-11-03
 repos: [minion_hub, minion, minion_site]
 spawned_spec: 2026-10-29-gateway-per-org-credentials-spec
 tags: [security, permissions]
@@ -21,6 +21,7 @@ Spec 045 (`specs/045-gateway-per-org-credentials/design.md` §7 Risks) removes t
 - **AS-IS:** after site PR #39, the members gateway connect sends no `auth` and no `device` and is refused (`minion_site/src/lib/services/member-gateway.svelte.ts`, `TODO(handoff)` at `onChallenge`). It was already refused before, because role `member` is not a gateway role.
 - **TO-BE:** the members area connects with a hub-issued JWT (per user, org and gateway; role `user`), or the area is retired.
 - **DELTA:** the site can run `AUTH_PROVIDER=supabase` (the same GoTrue as the hub), so a site route could call the hub's issuance. That needs a decision on whether the members area is kept at all.
+- **2026-11-03 recurrence (postmerge-discovery, merged proposal `postmerge-minion-site-79b093b3ebe5`):** confirmed still open at `minion-site@c69986f` (PR #40) — marker text: "members have no gateway credential until a per-user pass exists (spec 045 follow-up 1); never send the shared server token from the browser."
 
 ## 2. Hub never sends `hub.token.revoked` (R5)
 - **AS-IS:** the gateway's revocation store is filled only by that RPC. After spec 045 A1 it also closes live sockets.
