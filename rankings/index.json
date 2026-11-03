@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T05:22:45.233Z",
+	"generatedAt": "2026-11-03T05:48:01.304Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -703,6 +703,41 @@
 			"scoredAt": "2026-10-30T10:11:01.414Z"
 		},
 		{
+			"key": "pr:minion_site#40",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_site",
+			"title": "#40 fix(members): the site never sends the gateway token to the browser",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/40",
+			"sourceUpdatedAt": "2026-11-03T05:32:33Z",
+			"sourceFingerprint": "940e3966fc3eb128cc9513cde4644f4190fd4ab54751e7e62c4bba9e13e351de",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#622",
+				"pr:minion (gateway)#363"
+			],
+			"rationale": "Fixes an active security exposure where the gateway's shared admin token is sent to every member's browser, with clear AS-IS/TO-BE and passing tests.",
+			"evidence": [
+				"the gateway's shared admin token is serialized to every member's browser",
+				"Security-tagged: owner merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:48:01.115Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-807f018d50fd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1359,41 +1394,6 @@
 			"scoredAt": "2026-10-31T00:18:16.037Z"
 		},
 		{
-			"key": "pr:minion_hub#623",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#623 feat(gateway): the dashboard connects with its own per-gateway JWT (inert until switched)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/623",
-			"sourceUpdatedAt": "2026-10-31T04:45:02Z",
-			"sourceFingerprint": "4697cd29d19bbbacd83f69a8735e9586ff3fa26ee79104452e7a6cffc78769b5",
-			"score": 74,
-			"band": "high",
-			"axes": {
-				"criticality": 6,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#904"
-			],
-			"rationale": "Well-specified, largely implemented security PR replacing shared gateway tokens with per-org JWTs, stacked and ready pending owner merge.",
-			"evidence": [
-				"Spec 045 design §3.2, §5 step 2a, §6, R9",
-				"F1–F7 fixed in 568a2486, a9a2057d, 817f1ec8",
-				"Security-tagged, owner merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:47:35.095Z"
-		},
-		{
 			"key": "spec:2026-08-17-sdlc-phase-gates-scoring-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1821,41 +1821,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T05:48:22.744Z"
-		},
-		{
-			"key": "pr:minion_hub#624",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#624 feat(gateway): staff don't see admin-only controls after the pass switch (inert until switched)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/624",
-			"sourceUpdatedAt": "2026-11-02T00:51:53Z",
-			"sourceFingerprint": "c1aeb0751c10f6dccdfaf77f1d5ef863344a5fc65918de2e331572dfc9c6d99d",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#904"
-			],
-			"rationale": "Security-tagged UI-gating fix with detailed AS-IS/TO-BE/DELTA tables is ready for owner review and merge.",
-			"evidence": [
-				"Security-tagged, owner merges",
-				"Stacked on #623 feat/045-gateway-jwt-client",
-				"Spec 045 T038"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T01:48:21.814Z"
 		},
 		{
 			"key": "pr:minion-meta#904",
@@ -3263,8 +3228,8 @@
 			"repo": "minion_hub",
 			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
-			"sourceUpdatedAt": "2026-10-31T03:28:19Z",
-			"sourceFingerprint": "f42c5bdf55baa4b644743b6af35e29ce4b831240d233b150a75ac8c03a83f1b9",
+			"sourceUpdatedAt": "2026-11-03T05:42:25Z",
+			"sourceFingerprint": "dcf5e39a1cd76f797608a19857fd01e8ab7d3f93790dc79ece09662c1570dc0e",
 			"score": 66,
 			"band": "medium",
 			"axes": {
@@ -3277,21 +3242,19 @@
 				"implementation": 8
 			},
 			"confidence": 7,
-			"recommendation": "group",
+			"recommendation": "execute",
 			"relatedKeys": [
 				"pr:minion (gateway)#363",
-				"pr:minion_hub#623",
-				"pr:minion-meta#904"
+				"pr:minion_site#40"
 			],
-			"rationale": "Fixes a live authorization gap (members can currently toggle plugins) and is one slice of the per-gateway JWT rollout that only makes sense ranked with its sibling PRs.",
+			"rationale": "Fixes a real access-control gap (members could toggle plugins) and binds gateway JWTs per org, with careful TTL rollout analysis and tests, pending the required security merge.",
 			"evidence": [
-				"POST /api/plugins/[id]/toggle now enforces requireOrgCapability so plain members get 403",
-				"spec 045 slice A2, tasks T020-T024",
-				"security-tagged: owner merges"
+				"a plain member ... gets 403",
+				"Security. Spec 045 slice A2 ... the owner merges"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T03:47:34.477Z"
+			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
@@ -3933,8 +3896,8 @@
 			"repo": "minion (gateway)",
 			"title": "#363 feat(gateway): bind browser JWTs to one gateway, expire them on the socket, and gate Base-org methods (inert until configured)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/363",
-			"sourceUpdatedAt": "2026-10-31T03:46:23Z",
-			"sourceFingerprint": "d95e188183df8b5da20de783ac21498a07463c869ad9d534dc8669c339de957f",
+			"sourceUpdatedAt": "2026-11-03T05:26:43Z",
+			"sourceFingerprint": "041657dfea775774387a83eca8037833c37dc4873dcc181b379ec1c329978632",
 			"score": 64,
 			"band": "medium",
 			"axes": {
@@ -3943,24 +3906,23 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 7,
+				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "group",
+			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#623",
-				"pr:minion-meta#904"
+				"pr:minion_hub#622",
+				"pr:minion_site#40"
 			],
-			"rationale": "Inert-until-configured org-entitlement/JWT gateway slice with detailed audit-fix evidence that must land together with its hub counterpart and governing spec.",
+			"rationale": "Three completed, tested commits implement foundational multi-tenant JWT binding and Base-org gating that stays inert until configured, so the engineering is ready pending the owner's security merge.",
 			"evidence": [
-				"three commits inert until configured, spec 043 S4 + spec 045 A1",
-				"audit fixes F-1,F-2,F-3,F-5 addressed",
-				"must merge only with hub 045 A2/A3 per PR body"
+				"three commits, all inert until configured",
+				"Merge only with hub 045 A2/A3; this is security work: the owner merges"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
+			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "proposal:2026-10-22-agent-decision-and-proactivity-experiments",
@@ -6725,42 +6687,6 @@
 			"scoredAt": "2026-10-28T07:32:06.104Z"
 		},
 		{
-			"key": "pr:minion_hub#619",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#619 feat(ai): refuse AI and marketplace for orgs without the plan (inert until enforced)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/619",
-			"sourceUpdatedAt": "2026-10-29T22:47:17Z",
-			"sourceFingerprint": "a15ae53f8b2504bfb92b004f55f193994f549e9520ed655e988b5e6700365645",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#620",
-				"pr:minion_hub#621"
-			],
-			"rationale": "Core entitlement enforcement across all AI routes is heavily tested and flag-gated, ready for the required owner merge.",
-			"evidence": [
-				"941 targeted tests pass across 71 files",
-				"security-tagged, owner merges",
-				"nothing refused while ENTITLEMENTS_ENFORCED is off"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T09:18:24.934Z"
-		},
-		{
 			"key": "proposal:2026-10-24-hub-collection-points-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6966,42 +6892,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:31:57.261Z"
-		},
-		{
-			"key": "pr:minion_hub#621",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#621 chore(orgs): launch backfill for org plans (owner-run, dry run by default)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/621",
-			"sourceUpdatedAt": "2026-10-29T23:35:23Z",
-			"sourceFingerprint": "79f798a31bee0020122e7ed7c29ab8377463691dedde8dc5f586c904376d6cb5",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#619",
-				"pr:minion_hub#620"
-			],
-			"rationale": "The owner-run backfill needed to actually set org plans for launch is dry-run safe, idempotent, and already validated twice against QA.",
-			"evidence": [
-				"9/9 unit tests pass",
-				"dry run then --apply verified on QA, second apply plans 0 writes",
-				"refuses to run against test DB envs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T09:18:24.934Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -8122,6 +8012,40 @@
 			"scoredAt": "2026-10-28T15:17:52.786Z"
 		},
 		{
+			"key": "pr:minion_hub#618",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#618 feat(admin): track each org's plan, with a platform-admin plans page (inert until enforced)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/618",
+			"sourceUpdatedAt": "2026-11-03T05:45:13Z",
+			"sourceFingerprint": "3835a289196a920f2ce087b117b670a9c7c16826fc1a1389c5a628d0fd564d9e",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#363"
+			],
+			"rationale": "Org-plan tracking is well specified and thoroughly tested, and stays inert until enforcement is flipped, so it is low-risk, ready paid work.",
+			"evidence": [
+				"104 targeted unit tests, 5 SQL tests, seed verify (257 tests)",
+				"Inert: with ENTITLEMENTS_ENFORCED off, every org resolves as entitled"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:48:01.115Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8460,41 +8384,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:18:51.064Z"
-		},
-		{
-			"key": "pr:minion_hub#618",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#618 feat(admin): track each org's plan, with a platform-admin plans page (inert until enforced)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/618",
-			"sourceUpdatedAt": "2026-10-29T21:47:44Z",
-			"sourceFingerprint": "9f7e4ff2efb86d84ec22f2ae5746b77b0c97efa4c9341af677e198dd7c2be2b9",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#903"
-			],
-			"rationale": "Well-specified, fully tested org-plans foundation for billing entitlements is inert until enforced but ready to merge pending the required owner security gate.",
-			"evidence": [
-				"104 unit tests + 5 SQL RLS tests, qa seed 257 tests green",
-				"Inert: ENTITLEMENTS_ENFORCED off means nothing is gated yet",
-				"Security/data-tagged: owner approves and merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T22:17:43.899Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -11037,77 +10926,6 @@
 			"scoredAt": "2026-10-29T17:18:13.699Z"
 		},
 		{
-			"key": "pr:minion_hub#629",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#629 feat(modules): module SDK — stock is one definition, registries derived; links checked against foreign keys",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/629",
-			"sourceUpdatedAt": "2026-11-02T01:32:47Z",
-			"sourceFingerprint": "1a1ff214a184edbb5b689f1865ff200f1a33873846f24211cbde8f32fc3b5824",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#630",
-				"pr:minion-meta#930"
-			],
-			"rationale": "Module SDK consolidation is data-tagged for owner merge but gates pass across all shards and deviations are documented with mutant-verified tests.",
-			"evidence": [
-				"vitest sharded 1-8 all exit 0",
-				"Links test verified by intentional mutant failure",
-				"Data-tagged, owner merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T01:48:21.814Z"
-		},
-		{
-			"key": "pr:minion_hub#630",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
-			"sourceUpdatedAt": "2026-11-03T04:43:05Z",
-			"sourceFingerprint": "d68980108de74ad279947821fc276020d9a7ae395f39992f32c635f57bcba3b4",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#628"
-			],
-			"rationale": "Data-tagged provisioning feature with solid gates but an acknowledged schema deviation and an explicit anticipated field conflict with #628 that should be reconciled before either merges.",
-			"evidence": [
-				"Data-tagged: owner merges",
-				"Deviation section: adds landingPage? to NavConfig schema, same field as spec 046 S3, expects identical-intent conflict",
-				"Open ends: no screenshot of Settings → Modules (SC-003), stacked on #629 not yet merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T04:47:36.468Z"
-		},
-		{
 			"key": "pr:minion-meta#833",
 			"kind": "pr",
 			"stage": "development",
@@ -12972,42 +12790,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T05:17:17.244Z"
-		},
-		{
-			"key": "pr:minion_hub#620",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#620 feat(ui): hide AI for orgs without the plan (inert until enforced)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/620",
-			"sourceUpdatedAt": "2026-10-29T23:41:07Z",
-			"sourceFingerprint": "c4b0bf765e55ae2097b310c11183f3ec7b46baaec130cd0728acd565325fc6de",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#619",
-				"pr:minion_hub#621"
-			],
-			"rationale": "UI-hiding companion to the entitlements enforcement PR is thoroughly tested and gate-clean, ready pending owner audit.",
-			"evidence": [
-				"1548 targeted tests pass across 152 files",
-				"lint:design and lint:tokens clean",
-				"UI identical with flag off"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T09:18:24.934Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-uiux-consistency-followups",
@@ -15307,6 +15089,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T16:47:25.756Z"
+		},
+		{
+			"key": "pr:minion_hub#629",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#629 feat(modules): module SDK — stock is one definition, registries derived; links checked against foreign keys",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/629",
+			"sourceUpdatedAt": "2026-11-03T05:25:04Z",
+			"sourceFingerprint": "e24baceabcaecd919b0122f62e21f3021a5a633702186377cbc03acae5a9260f",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#630"
+			],
+			"rationale": "The module SDK refactor is well tested with documented deviations and unblocks the base-module rollout in #630.",
+			"evidence": [
+				"Full vitest run across 8 shards exited 0",
+				"links test ... I made a mutant ... and the test failed as it should"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:48:01.115Z"
+		},
+		{
+			"key": "pr:minion_hub#630",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
+			"sourceUpdatedAt": "2026-11-03T05:26:49Z",
+			"sourceFingerprint": "da716c81670bfb43528e7de11e0780f387883e06b8d9dbc8b2c4ab77e764b50a",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#629"
+			],
+			"rationale": "Stacked, tested org-provisioning work with a known open end (no UI screenshot) and an expected merge conflict with spec 046, ready once #629 lands.",
+			"evidence": [
+				"Stacked on #629 (S6)",
+				"No screenshot of Settings → Modules (SC-003)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "pr:minion-meta#930",
@@ -25557,38 +25407,6 @@
 			"evidence": [
 				"adding the boolean variant makes DataTable.svelte's",
 				"filters.ts:60"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T01:53:19.600Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2492030615",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/layout/NavContextMenu.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2492030615.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "30fcc2f4fde5e789dbb760f1c56d73357b614c2206c0d701d95cd0ff49823389",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Both markers say the access menu item is intentionally omitted until the S5 PageAccessDialog ships, so the work is not actionable until that prerequisite lands.",
-			"evidence": [
-				"omitted until S5 ships PageAccessDialog",
-				"section \"Access…\" (users:manage) arrives with S5"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -38568,6 +38386,37 @@
 			"scoredAt": "2026-11-03T01:52:11.536Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2492030615",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/layout/NavContextMenu.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2492030615.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "9e8b56f295a1ebdd6b0d2775b8421b2080996e4b695465ec896420d191574ddb",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The missing Access menu item is explicitly deferred until the S5 PageAccessDialog ships, so it isn't actionable on its own yet.",
+			"evidence": [
+				"\"Access…\" (users:manage) is omitted until S5 ships PageAccessDialog"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:48:01.115Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-3061540938",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39149,6 +38998,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T01:52:11.536Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
+			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
+			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health tracker whose summary is just a merged commit message, not an actionable goal.",
+			"evidence": [
+				"status: unknown",
+				"summary is a commit log entry (#361), not a stated deployment problem"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
@@ -41004,7 +40885,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "02dbbfc71c38653349d4aca58b6d1176de92154281db26add12b79a7de7b16ca",
+			"sourceFingerprint": "db5ced71083cba0545bbd3ef179a319e46267a58ce6513108c0236762da251c6",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -41016,17 +40897,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 2,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed 'markers' are quoted summary text from other repos embedded inside the rankings/index.json data file itself, not actual TODO(handoff) comments in source code needing resolution.",
+			"rationale": "This bundles over a dozen unrelated quoted fragments pulled from the rankings data file itself rather than describing one coherent, actionable fix.",
 			"evidence": [
-				"Markers cite line numbers inside rankings/index.json, the ranking output file, not a code file",
-				"Each quoted marker is itself a summary excerpt from unrelated proposals rather than a literal TODO(handoff) comment"
+				"source: handoff-sweep on rankings/index.json",
+				"15+ disconnected quoted snippets spanning unrelated features/lines"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:22:45.039Z"
+			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2972777622",
@@ -41612,6 +41493,38 @@
 			"scoredAt": "2026-10-28T22:18:15.793Z"
 		},
 		{
+			"key": "run:minion_hub#41583346389",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/41583346389",
+			"sourceUpdatedAt": "2026-11-03T05:22:09Z",
+			"sourceFingerprint": "a7eea9db808928266184b2bca344c597bea097a6fd0cf6cdc61827b361b6d6d4",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status, not a work goal.",
+			"evidence": [
+				"push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:48:01.115Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -42090,38 +42003,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:20:41.611Z"
-		},
-		{
-			"key": "run:minion_hub#41583346389",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/41583346389",
-			"sourceUpdatedAt": "2026-11-03T05:20:32Z",
-			"sourceFingerprint": "d6edda784bfedb8150ab74cd3da66efa650593d65e5328f867119809e7cbd8f5",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine pending CI run on master with no indication of failure or blocking issue.",
-			"evidence": [
-				"status: pending",
-				"push on master, CI workflow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:22:45.039Z"
 		},
 		{
 			"key": "issue:minion-meta#340",
