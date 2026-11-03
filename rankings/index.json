@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T07:56:26.579Z",
+	"generatedAt": "2026-11-03T08:12:01.727Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3189,40 +3189,6 @@
 			"scoredAt": "2026-11-02T03:52:25.870Z"
 		},
 		{
-			"key": "pr:minion_hub#622",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
-			"sourceUpdatedAt": "2026-11-03T07:40:37Z",
-			"sourceFingerprint": "8d3d20d666003e7b5130b826ef1efd3dc940ddce22de3b06e8af6179c26f3b67",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"deploy:minion (gateway)"
-			],
-			"rationale": "Well-specified security PR fixing per-gateway JWT scoping and plugin-toggle authorization with tests run and a named human merge gate.",
-			"evidence": [
-				"role claim now admin only when profiles.role === 'admin'",
-				"POST /api/plugins/[id]/toggle checks requireOrgCapability(locals,'settings','manage')"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:48:15.447Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5527,6 +5493,39 @@
 			"scoredAt": "2026-10-29T17:18:13.699Z"
 		},
 		{
+			"key": "pr:minion_hub#630",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
+			"sourceUpdatedAt": "2026-11-03T07:56:37Z",
+			"sourceFingerprint": "31c9db2701956f6898b04e46e9df69e3d1540430e84aceb532aed8c407cab1a7",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A stacked, spec-backed provisioning slice with passing gates and a clear owner-merge gate is ready to move forward once #629 lands.",
+			"evidence": [
+				"\"Stacked on #629 (S6)\"",
+				"vitest shards and SQL integration test passed (8 rows written)",
+				"\"Data-tagged: owner merges\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
+		},
+		{
 			"key": "pr:minion-meta#810",
 			"kind": "pr",
 			"stage": "development",
@@ -6951,41 +6950,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:31:57.261Z"
-		},
-		{
-			"key": "pr:minion_hub#630",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
-			"sourceUpdatedAt": "2026-11-03T07:52:47Z",
-			"sourceFingerprint": "ec831809f8153d9e9b00223f420780b6de5bf45fc06b623725db7a6cf1200fa0",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#628"
-			],
-			"rationale": "Module-provisioning slice is data-tagged and stacked on an unmerged PR with a documented schema conflict against spec 046, so sequencing needs confirmation before merge.",
-			"evidence": [
-				"stacked on #629, must retarget after merge",
-				"deviation section documents landingPage field conflict with spec 046 S3",
-				"no screenshot of Settings → Modules (SC-003) taken"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:56:26.364Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -12394,6 +12358,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T10:18:24.977Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-3c702b25845f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/services/gateway/platform-admin-methods.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3c702b25845f.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "57733a0798195144c1392c7fa50877187c35513b25ca2567cefec99616d3fb9b",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An unguarded admin-only surface is a privilege-exposure gap distinct from the other A4 cleanup items and warrants its own fix.",
+			"evidence": [
+				"\"hide (not lock) every surface behind this list\"",
+				"diagnosis flags \"unauthorized users can still see ... UI elements that should only be available to admins\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-40a4a290126b",
@@ -17900,6 +17896,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-01T02:47:27.993Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-0bdce2ded97b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/organization-provision.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0bdce2ded97b.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "d0bf2245c7212583fbd3f9786b02fab6b08e51565db42558e9a9cfa38a5d7b6b",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-4f60d3413457",
+				"proposal:postmerge-minion-hub-f0206dc8b63e"
+			],
+			"rationale": "This is one of several scattered spec-045-A4/T054 legacy-audience cleanup markers across the same merged PR and should become one consolidated cleanup goal.",
+			"evidence": [
+				"\"spec 045 A4 deletes the flag — make the audience unconditional there (tasks T054)\"",
+				"same merged PR #622 as the related markers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1a2ef603c0aa",
@@ -25251,6 +25282,41 @@
 			"scoredAt": "2026-10-30T10:18:24.977Z"
 		},
 		{
+			"key": "pr:minion_hub#632",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#632 feat(appearance): choose Clinic Light or Clinic Dark",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/632",
+			"sourceUpdatedAt": "2026-11-03T08:03:48Z",
+			"sourceFingerprint": "4987eba15a4095b6cd73a9b71d6b17036aaa0c93d773202d5754756bffc5caa8",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion-meta#934"
+			],
+			"rationale": "This consumer PR and its token-source companion PR are two halves of one Clinic theme feature and should be tracked as a single goal.",
+			"evidence": [
+				"\"Consumes the qualified shared token archive from minion-meta #934\"",
+				"\"Token source is pinned to 4bf8bb55...\"",
+				"synthetic fixture only, no authenticated routing proof"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
+		},
+		{
 			"key": "pr:minion-meta#815",
 			"kind": "pr",
 			"stage": "development",
@@ -25348,6 +25414,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:20:43.973Z"
+		},
+		{
+			"key": "pr:minion-meta#934",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#934 feat(design-tokens): add Clinic Light and Clinic Dark themes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/934",
+			"sourceUpdatedAt": "2026-11-03T07:58:44Z",
+			"sourceFingerprint": "7c461c84313acfc4f2d0865b5fe75f2cb259f8ee552fd6140cdb0c50ba8a3e27",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#632"
+			],
+			"rationale": "This design-tokens package PR exists solely to supply hub PR #632, so the two should be combined into one tracked goal rather than scored separately.",
+			"evidence": [
+				"\"Companion Hub PR #632 pins the qualified token archive\"",
+				"\"Implementation was directly requested; the spec records the bypassed pre-development approval stages\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
 		},
 		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
@@ -30012,6 +30112,41 @@
 			"scoredAt": "2026-11-02T06:48:11.818Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f0206dc8b63e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/gateway-jwt.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f0206dc8b63e.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "380d8511938eb9ffb31d301b26ed75509b9af6fad45e8f88825336b9ca945bdb",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-0bdce2ded97b",
+				"proposal:postmerge-minion-hub-4f60d3413457"
+			],
+			"rationale": "Removing the legacy JWT audience is the same spec-045-A4/T054 cleanup theme as the other markers from the same merged PR, so these should be one goal.",
+			"evidence": [
+				"\"drop with the legacy audience in spec 045 A4 (tasks T054)\"",
+				"same merged PR #622"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-site-ce10a6641861",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30078,6 +30213,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T13:47:10.407Z"
+		},
+		{
+			"key": "run:minion_hub#41601045594",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/41601045594",
+			"sourceUpdatedAt": "2026-11-03T08:08:50Z",
+			"sourceFingerprint": "65e789ef75d9633ce0ea96e3e5e16db9ece3897bd92785dde95ec737cce3c260",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single in-progress CI run on master is routine automated activity with no evidence of failure or blocking impact.",
+			"evidence": [
+				"status: in_progress",
+				"push on master",
+				"tags: ci"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:12:01.459Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
@@ -30270,38 +30438,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T00:18:16.037Z"
-		},
-		{
-			"key": "pr:minion-meta#934",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#934 feat(design-tokens): add Clinic Light and Clinic Dark themes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/934",
-			"sourceUpdatedAt": "2026-11-03T07:44:17Z",
-			"sourceFingerprint": "9cbc633520d6c9b15b17a4d5915a339590118e499f516e1d6abd3ceddf8e9b4c",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Cosmetic design-token theme addition is fully validated with extensive contrast and archive testing and carries no deployment risk.",
-			"evidence": [
-				"17 contract/audit/inventory tests; the 330-pair normal-text contrast matrix",
-				"Implementation was directly requested; the spec records the bypassed pre-development approval stages"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:48:15.447Z"
 		},
 		{
 			"key": "proposal:2026-08-28-gateway-plugin-effect-disposers",
@@ -35812,6 +35948,37 @@
 			"scoredAt": "2026-11-03T01:53:19.600Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2632898496",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/tables/defs/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2632898496.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "c035c48343bcc1555132c8f7d59f63b568d1fd32791ec34178c52840abfad90a",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "All three markers defer the same UUID-sequence-column work to an explicitly named future \"part 2\", so there is nothing to execute yet.",
+			"evidence": [
+				"\"numbered in part 2\" (x3 occurrences across customers/related tables)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2729736154",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38590,6 +38757,37 @@
 			"scoredAt": "2026-11-03T01:52:11.536Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2152030568",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/modules/availability.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2152030568.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "0625fb01fb33792b1e1ec712b885390360be7ac807862e9382568028a5409a6c",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The fix is explicitly blocked on plugin UIs gaining a JWT path that does not yet exist, so it is not actionable now.",
+			"evidence": [
+				"\"drop these two once plugin UIs get a JWT path (spec 043 R8)\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2492030615",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38977,6 +39175,41 @@
 			"scoredAt": "2026-11-03T02:48:14.855Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-4f60d3413457",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/PluginIframe.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4f60d3413457.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "aeb79200bda601fe4e100e726a046087f3bcacf9386a83279763890cf2ecb12b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-0bdce2ded97b",
+				"proposal:postmerge-minion-hub-f0206dc8b63e"
+			],
+			"rationale": "A small dead-code-removal marker tied to the same spec-045-A4/T054 cleanup as other markers from merged PR #622; best consolidated into one goal.",
+			"evidence": [
+				"\"drop with A4 (T054)\"",
+				"same merged PR #622"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-66cd0246e677",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39238,6 +39471,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T07:19:45.767Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f19b0bbe4d0b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/token/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f19b0bbe4d0b.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "d1713ad8618b0cc97f5f6a30cd50d4133c9c3ceed387e0c47decb85b9b54359b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-0bdce2ded97b",
+				"proposal:postmerge-minion-hub-4f60d3413457"
+			],
+			"rationale": "A route marked for deletion under the same spec-045-A4/T054 phase as the other scattered cleanup markers from merged PR #622.",
+			"evidence": [
+				"\"delete this route in A4 (T054)\"",
+				"same merged PR #622"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T08:11:54.498Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-a357d1f6520e",
@@ -41764,38 +42032,6 @@
 			"scoredAt": "2026-10-28T22:18:15.793Z"
 		},
 		{
-			"key": "run:minion_hub#41599297103",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/41599297103",
-			"sourceUpdatedAt": "2026-11-03T07:53:17Z",
-			"sourceFingerprint": "261be9a6d899ec0270eb463fbd5e4d7ba6cdfb6579a74d6e7151ac233b900caa",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A pending CI run status carries no independent scope or decision content worth tracking as a board goal.",
-			"evidence": [
-				"status: pending",
-				"summary: 'push on master'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:56:26.364Z"
-		},
-		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -41827,69 +42063,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T16:17:22.552Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2152030568",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/modules/availability.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2152030568.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "5f5012ba5bbd9120dbcd9a025dc45794c83e607a1000fb21ba02e7bd8b7bb9d9",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Cleanup is explicitly conditioned on plugin UIs first gaining a JWT path, a prerequisite that has not yet landed.",
-			"evidence": [
-				"drop these two once plugin UIs get a JWT path (spec 043 R8, proposals/2026-10-29-hub-org-entitlements-followups.md)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:48:15.447Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2632898496",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/tables/defs/index.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2632898496.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "08b17005935d2e5c3c51f1b1ef2c3da54f4ca9a46bdb59bad3decd088d87ace1",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "All three markers explicitly defer the UUID-to-sequence schema change to an unstarted \"part 2,\" so it is not actionable now.",
-			"evidence": [
-				"UUID-only today — part 2 adds a per-org sequence column",
-				"numbered in part 2"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T01:53:19.600Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-04976b77c87e",
@@ -43712,7 +43885,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "16fbe21c48146f5bd02e65402bb5dc76f89d703fb1dfca368338b616fc81321e",
+			"sourceFingerprint": "c682a9ae5986d3f41d5937ecc06ffc4efb745638f61207169bdb1037cfb60292",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -43724,17 +43897,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The quoted markers are disjoint rationale/evidence fragments from the rankings data file itself rather than genuine code TODO(handoff) comments, indicating a sweep artifact rather than real work.",
+			"rationale": "The flagged \"markers\" are quoted rationale strings from the ranking system's own generated rankings/index.json data file, not real code TODOs.",
 			"evidence": [
-				"markers quoted include unrelated fragments like 'brain_access alone does not bind a gateway' and 'HC-028 ... no Escape path at all'",
-				"source file is rankings/index.json, a generated data file, not application source"
+				"file is \"rankings/index.json\", a generated ranking-data artifact, not source code",
+				"quoted fragments are mid-sentence rationale text (e.g. \"brain_access alone does not bind a gateway\")"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:48:15.447Z"
+			"scoredAt": "2026-11-03T08:11:54.498Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
