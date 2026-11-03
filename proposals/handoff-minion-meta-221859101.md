@@ -83,33 +83,33 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22907
 - `NikolasP98/minion-meta@dev rankings/index.json:25006` — Indeterminate admissions need an explicit recovery/UI and",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25006
-- `NikolasP98/minion-meta@dev rankings/index.json:25977` — plain limit, newest-first — no server pagination",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25977
-- `NikolasP98/minion-meta@dev rankings/index.json:26075` — clickable filter and legend consumers still need keyboard action",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26075
-- `NikolasP98/minion-meta@dev rankings/index.json:29733` — tagOptions is the FILTER's list",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29733
-- `NikolasP98/minion-meta@dev rankings/index.json:29837` — drop with A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29837
-- `NikolasP98/minion-meta@dev rankings/index.json:30142` — These bounds start after host source loading. Phase15 must bound source",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30142
-- `NikolasP98/minion-meta@dev rankings/index.json:30732` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30732
-- `NikolasP98/minion-meta@dev rankings/index.json:31987` — reopened mid-exit — cancel the pending close",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31987
-- `NikolasP98/minion-meta@dev rankings/index.json:32020` — Wire the exact-ID publisher only once live B2 authority"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32020
-- `NikolasP98/minion-meta@dev rankings/index.json:32718` — delete this route in A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32718
-- `NikolasP98/minion-meta@dev rankings/index.json:33461` — no dedicated unit test for this function's memoisation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33461
-- `NikolasP98/minion-meta@dev rankings/index.json:33493` — prompt-driven protocol instead of native tool_use",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33493
-- `NikolasP98/minion-meta@dev rankings/index.json:41765` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41765
-- `NikolasP98/minion-meta@dev rankings/index.json:41798` — additional custom fields lose their mailto link"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41798
-- `NikolasP98/minion-meta@dev rankings/index.json:41830` — FilterValue (component) ⇄ TableFilterValue (kit) is a generic"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41830
-- `NikolasP98/minion-meta@dev rankings/index.json:43232` — brief-debloat-c §3 asked for this to be wrapped in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43232
+- `NikolasP98/minion-meta@dev rankings/index.json:25978` — plain limit, newest-first — no server pagination",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25978
+- `NikolasP98/minion-meta@dev rankings/index.json:26076` — clickable filter and legend consumers still need keyboard action",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26076
+- `NikolasP98/minion-meta@dev rankings/index.json:29734` — tagOptions is the FILTER's list",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29734
+- `NikolasP98/minion-meta@dev rankings/index.json:29838` — drop with A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29838
+- `NikolasP98/minion-meta@dev rankings/index.json:30143` — These bounds start after host source loading. Phase15 must bound source",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30143
+- `NikolasP98/minion-meta@dev rankings/index.json:30733` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30733
+- `NikolasP98/minion-meta@dev rankings/index.json:31988` — reopened mid-exit — cancel the pending close",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31988
+- `NikolasP98/minion-meta@dev rankings/index.json:32021` — Wire the exact-ID publisher only once live B2 authority"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32021
+- `NikolasP98/minion-meta@dev rankings/index.json:32719` — delete this route in A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32719
+- `NikolasP98/minion-meta@dev rankings/index.json:33527` — no dedicated unit test for this function's memoisation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33527
+- `NikolasP98/minion-meta@dev rankings/index.json:33559` — prompt-driven protocol instead of native tool_use",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33559
+- `NikolasP98/minion-meta@dev rankings/index.json:41863` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41863
+- `NikolasP98/minion-meta@dev rankings/index.json:41896` — additional custom fields lose their mailto link"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41896
+- `NikolasP98/minion-meta@dev rankings/index.json:41928` — FilterValue (component) ⇄ TableFilterValue (kit) is a generic"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41928
+- `NikolasP98/minion-meta@dev rankings/index.json:43330` — brief-debloat-c §3 asked for this to be wrapped in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43330
