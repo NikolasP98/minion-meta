@@ -27,9 +27,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-03)
 
-- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:73` — UUID-only today — part 2 adds a per-org sequence column +
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L73
-- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:151` — UUID-only like crm.customers — numbered in part 2.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L151
-- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:165` — same as crm.customers — numbered in part 2.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L165
+- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:41` — UUID-only today — part 2 adds a per-org sequence column +
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L41
+- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:119` — UUID-only like crm.customers — numbered in part 2.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L119
+- `NikolasP98/minion_hub@master src/lib/tables/defs/index.ts:133` — same as crm.customers — numbered in part 2.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/tables/defs/index.ts#L133

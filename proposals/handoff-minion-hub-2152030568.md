@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-03)
 
-- `NikolasP98/minion_hub@master src/lib/modules/availability.ts:174` — drop these two once plugin UIs get a JWT path (spec 043 R8, proposals/2026-10-29-hub-org-entitlements-followups.md).
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/modules/availability.ts#L174
+- `NikolasP98/minion_hub@master src/lib/modules/availability.ts:173` — drop these two once plugin UIs get a JWT path (spec 043 R8, proposals/2026-10-29-hub-org-entitlements-followups.md).
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/modules/availability.ts#L173
