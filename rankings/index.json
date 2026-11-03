@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T16:47:49.624Z",
+	"generatedAt": "2026-11-03T17:17:54.589Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3256,39 +3256,6 @@
 			"scoredAt": "2026-10-29T08:17:22.892Z"
 		},
 		{
-			"key": "proposal:2026-10-13-hub-first-paint-performance",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A well-measured, approved proposal pinpoints a concrete, high-impact fix (dual-locale Paraglide bundle) for hub's slow first paint but no code has been written yet.",
-			"evidence": [
-				"FCP measured at 3.2-7.7s while server responds in 5ms",
-				"Paraglide chunk ships both en and es (246.5KB, 59% of first-paint JS)",
-				"status: approved, no code change made yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T16:47:28.428Z"
-		},
-		{
 			"key": "spec:2026-08-18-factory-capability-separation-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3885,6 +3852,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:52:25.870Z"
+		},
+		{
+			"key": "proposal:2026-10-13-hub-first-paint-performance",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved proposal with precise measured AS-IS data pinpoints that both-locale Paraglide shipping and render-blocking CSS dominate a 3.2-7.7s FCP across all pages, giving a clear, bounded, high-impact fix target.",
+			"evidence": [
+				"FCP ≈3.2s on login, up to 7.7s on appointments while server TTFB is 0.42s",
+				"Paraglide messages barrel is 246.5KB br / 59% of first-paint JS, shipping both en and es to every visitor",
+				"status: approved; ssr=false identified as root cause with exact file/line"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T17:17:54.374Z"
 		},
 		{
 			"key": "proposal:2026-10-22-agent-decision-and-proactivity-experiments",
@@ -32789,6 +32789,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T08:18:11.849Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
+			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
+			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 9
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This tracks an already-merged commit whose auth/JWT changes are explicitly inert until further configuration, leaving no outstanding actionable work.",
+			"evidence": [
+				"commit #363 merged",
+				"\"inert until configured\" / \"inert until hub enforces\" stated repeatedly",
+				"jwtOnlyAudiences defaults to [] so JWT-only connect is refused by default"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T17:17:54.374Z"
 		},
 		{
 			"key": "issue:minion-meta#614",
