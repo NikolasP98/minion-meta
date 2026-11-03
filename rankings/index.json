@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T05:48:01.304Z",
+	"generatedAt": "2026-11-03T05:58:33.604Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -703,41 +703,6 @@
 			"scoredAt": "2026-10-30T10:11:01.414Z"
 		},
 		{
-			"key": "pr:minion_site#40",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_site",
-			"title": "#40 fix(members): the site never sends the gateway token to the browser",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/40",
-			"sourceUpdatedAt": "2026-11-03T05:32:33Z",
-			"sourceFingerprint": "940e3966fc3eb128cc9513cde4644f4190fd4ab54751e7e62c4bba9e13e351de",
-			"score": 82,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#622",
-				"pr:minion (gateway)#363"
-			],
-			"rationale": "Fixes an active security exposure where the gateway's shared admin token is sent to every member's browser, with clear AS-IS/TO-BE and passing tests.",
-			"evidence": [
-				"the gateway's shared admin token is serialized to every member's browser",
-				"Security-tagged: owner merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:48:01.115Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-807f018d50fd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1260,6 +1225,78 @@
 			"scoredAt": "2026-11-02T03:53:30.172Z"
 		},
 		{
+			"key": "pr:minion (gateway)#363",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#363 feat(gateway): bind browser JWTs to one gateway, expire them on the socket, and gate Base-org methods (inert until configured)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/363",
+			"sourceUpdatedAt": "2026-11-03T05:55:58Z",
+			"sourceFingerprint": "880d4acf12590bb5a8caa5968f30658ab4cc7e21fcc6f1d63d0f1a09143a2e1b",
+			"score": 76,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#622",
+				"spec:2026-10-29-gateway-per-org-credentials-spec"
+			],
+			"rationale": "Security-critical JWT-binding and audience-gating work with three commits and audit fixes already landed, but it is explicitly inert until paired with hub A2/A3 and owner-configured.",
+			"evidence": [
+				"three commits implementing spec 043 S4 and spec 045 A1 with audit fixes F-1/F-2/F-3/F-5",
+				"must merge only with hub 045 A2/A3 per PR text",
+				"owner merges security-tagged work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:58:33.410Z"
+		},
+		{
+			"key": "pr:minion_hub#622",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
+			"sourceUpdatedAt": "2026-11-03T05:46:20Z",
+			"sourceFingerprint": "8f72069c5cf04b8cf7d6efa73bb3331fceade0196c5070290c2b0825002f7721",
+			"score": 76,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 9,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#363",
+				"spec:2026-10-29-gateway-per-org-credentials-spec"
+			],
+			"rationale": "Completes the hub side (role claim fix, plugin-toggle permission fix) of the same per-org-credentials security slice that gateway PR #363 implements, with tests run and TTL impact analyzed.",
+			"evidence": [
+				"fixes plugin toggle 403 for members and role claim leak",
+				"analyzed TTL/outage tradeoffs before shipping",
+				"spec 045 slice A2 tasks T020-T024, owner merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:58:33.410Z"
+		},
+		{
 			"key": "pr:minion-meta#887",
 			"kind": "pr",
 			"stage": "development",
@@ -1292,39 +1329,40 @@
 			"scoredAt": "2026-10-31T02:35:44.887Z"
 		},
 		{
-			"key": "pr:minion_site#39",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_site",
-			"title": "#39 fix(members): stop sending the gateway token to the browser",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/39",
-			"sourceUpdatedAt": "2026-10-29T22:08:15Z",
-			"sourceFingerprint": "c931dc59aeb3e3abd988e48d8861de756167e44d28d1be0a9173fd6e4d5dd295",
-			"score": 75,
+			"key": "spec:2026-10-29-gateway-per-org-credentials-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Gateway per-org credentials — no shared operator token in any browser",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-29-gateway-per-org-credentials-spec.md",
+			"sourceUpdatedAt": "2026-10-30",
+			"sourceFingerprint": "56023e57cdf7353fb0ccf2549878af450e139b41f2080489798031e14b7bab75",
+			"score": 76,
 			"band": "high",
 			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 6
+				"criticality": 7,
+				"importance": 9,
+				"impact": 7
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 9
+				"specification": 9,
+				"implementation": 7
 			},
 			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion-meta#903"
+				"pr:minion (gateway)#363",
+				"pr:minion_hub#622"
 			],
-			"rationale": "Security fix removes a leaked gateway master-key surface per explicit 2026-10-29 owner ruling, is fully tested, and only needs the required owner merge.",
+			"rationale": "Owner-mandated spec removing the shared gateway token from every browser, approved, with its A1 and A2 slices already in active PRs.",
 			"evidence": [
-				"Owner rule 2026-10-29: no one holds the gateway's master key",
-				"Removed SSR token selection and device-identity signing endpoint",
-				"bun run test passes 71/71 including new no-credential-sent test"
+				"owner rule: no one holds the gateway's master key",
+				"slices A0-A4 defined with A1 (gw #363) and A2 (hub #622) already in development",
+				"security-tagged, owner approves and merges"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T22:17:43.899Z"
+			"scoredAt": "2026-11-03T05:58:33.410Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
@@ -1823,41 +1861,6 @@
 			"scoredAt": "2026-10-29T05:48:22.744Z"
 		},
 		{
-			"key": "pr:minion-meta#904",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#904 docs(spec): 045 — gateway per-org credentials: no shared operator token in any browser",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/904",
-			"sourceUpdatedAt": "2026-11-02T00:47:55Z",
-			"sourceFingerprint": "249b45d88a124684286f06dbf633672c28b3c0c7ff02d2bd36ed566ff5f1640d",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#624"
-			],
-			"rationale": "Implements an explicit owner security directive to eliminate shared master gateway tokens, with slices and a cross-repo dependency already mapped.",
-			"evidence": [
-				"Owner rule 2026-10-29 quoted directly: no shared master key",
-				"Supersedes spec 043 decision 4 / T037",
-				"Slice A1 must land with or before minion-ai #363"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T01:48:21.814Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-supervised-release-defense-in-depth",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2154,40 +2157,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:18:24.934Z"
-		},
-		{
-			"key": "pr:minion-meta#905",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#905 feat(flows): AI nodes end their branch for orgs without the plan",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/905",
-			"sourceUpdatedAt": "2026-10-29T23:25:01Z",
-			"sourceFingerprint": "dde6697660101884d9a706d8886a8fa38c687d2fb453251e7378586f27b53b2a",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#903"
-			],
-			"rationale": "Direct implementation of the entitlement spec with passing tests, but includes a behavior change affecting all orgs that raises review stakes.",
-			"evidence": [
-				"130/130 vitest flow tests passing including 10 new T080 tests",
-				"reply:'' change to /flows/run-triggered applies to every org, not just gated ones"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T09:20:43.973Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -2492,6 +2461,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-01T10:47:50.922Z"
+		},
+		{
+			"key": "spec:2026-10-29-hub-org-entitlements-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Hub org entitlements — plans gate AI per org",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-29-hub-org-entitlements-spec.md",
+			"sourceUpdatedAt": "2026-10-30",
+			"sourceFingerprint": "c65c51e1ce50d71efd5cf4453d51fd67a5cc01cf0bb5aea9159028d78066f420",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-29-hub-org-entitlements-followups"
+			],
+			"rationale": "Approved spec gating AI access per org plan across hub, gateway and flows runner, with the gateway/flows slice already merged per recent repo history.",
+			"evidence": [
+				"recent commit 90fd915 'feat(flows): AI nodes end their branch for orgs without the plan' matches slice S4",
+				"five slices defined, inert until ENTITLEMENTS_ENFORCED=true after backfill",
+				"security and data tagged, owner approves and merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:58:33.410Z"
 		},
 		{
 			"key": "pr:minion-meta#882",
@@ -3222,41 +3226,6 @@
 			"scoredAt": "2026-11-02T03:52:25.870Z"
 		},
 		{
-			"key": "pr:minion_hub#622",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
-			"sourceUpdatedAt": "2026-11-03T05:42:25Z",
-			"sourceFingerprint": "dcf5e39a1cd76f797608a19857fd01e8ab7d3f93790dc79ece09662c1570dc0e",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#363",
-				"pr:minion_site#40"
-			],
-			"rationale": "Fixes a real access-control gap (members could toggle plugins) and binds gateway JWTs per org, with careful TTL rollout analysis and tests, pending the required security merge.",
-			"evidence": [
-				"a plain member ... gets 403",
-				"Security. Spec 045 slice A2 ... the owner merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:48:01.115Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3888,41 +3857,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:52:25.870Z"
-		},
-		{
-			"key": "pr:minion (gateway)#363",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#363 feat(gateway): bind browser JWTs to one gateway, expire them on the socket, and gate Base-org methods (inert until configured)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/363",
-			"sourceUpdatedAt": "2026-11-03T05:26:43Z",
-			"sourceFingerprint": "041657dfea775774387a83eca8037833c37dc4873dcc181b379ec1c329978632",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#622",
-				"pr:minion_site#40"
-			],
-			"rationale": "Three completed, tested commits implement foundational multi-tenant JWT binding and Base-org gating that stays inert until configured, so the engineering is ready pending the owner's security merge.",
-			"evidence": [
-				"three commits, all inert until configured",
-				"Merge only with hub 045 A2/A3; this is security work: the owner merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "proposal:2026-10-22-agent-decision-and-proactivity-experiments",
@@ -6927,42 +6861,6 @@
 			"scoredAt": "2026-10-30T09:19:31.564Z"
 		},
 		{
-			"key": "pr:minion-meta#903",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#903 docs(spec): 043 — hub org entitlements: plans gate AI per org",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/903",
-			"sourceUpdatedAt": "2026-10-31T02:55:02Z",
-			"sourceFingerprint": "3036b0a39b9c3ce711cf7c2ebcf4310a0c579fa7466f8b6113144bd57509c443",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#363",
-				"pr:minion_hub#622",
-				"pr:minion-meta#904"
-			],
-			"rationale": "Foundational spec doc for org entitlements is thorough but is documentation only; actual execution readiness lives in the linked code PRs.",
-			"evidence": [
-				"Implementation: hub S1 (draft, minion_hub) and gateway S4 (draft #363, minion-ai)",
-				"board stub, follow-ups proposal, both indexes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T03:17:51.939Z"
-		},
-		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7091,6 +6989,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:58:26.152Z"
+		},
+		{
+			"key": "proposal:2026-10-29-hub-org-entitlements-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Org entitlements — open ends deferred from spec 043",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-29-hub-org-entitlements-followups.md",
+			"sourceUpdatedAt": "2026-10-29",
+			"sourceFingerprint": "c2066c909785926421591a04195b75f1869996964106a3c309ec7071ae90c060",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-29-hub-org-entitlements-spec"
+			],
+			"rationale": "Lists several High-severity deferred gaps (background AI not gated, non-mirror channels never gated) that depend on unshipped spec 042 work, so they are real but not independently actionable yet.",
+			"evidence": [
+				"R1 and R2 rated Severity High but blocked on spec 042 S1",
+				"R6 describes a pre-existing shared-token exposure predating this spec",
+				"item 6 plugin-UI gap partially resolved by spec 045 A3"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:58:33.410Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5e6d2717c59c",
@@ -11124,6 +11057,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T09:18:43.229Z"
+		},
+		{
+			"key": "proposal:2026-10-29-gateway-per-org-credentials-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Gateway per-org credentials — open ends deferred from spec 045",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-29-gateway-per-org-credentials-followups.md",
+			"sourceUpdatedAt": "2026-10-29",
+			"sourceFingerprint": "6669699574e5ff2bb6d5f479bcf8c0c656f5651337b988085e22fc989c057b53",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-29-gateway-per-org-credentials-spec"
+			],
+			"rationale": "A well-documented ledger of deliberately deferred risks (site JWT gap, no hub-sent revocation, tailscale admin default) that are real but explicitly out of scope until later slices.",
+			"evidence": [
+				"item 6 (/mcp legacy-audience gap) already RESOLVED in gw PR #363",
+				"item 5 (org admins lack gateway-admin power) has no spec yet",
+				"items reference specific risk numbers from spec 045 design.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:58:33.410Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-648930682",
@@ -15330,40 +15298,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T11:17:40.465Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-bdc3ef8ab34d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bdc3ef8ab34d.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "fc4eadc605943befdf0eafe7056df1bedff1fb004051dc216d830bf60ee025c4",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-948e27d654f8"
-			],
-			"rationale": "Concrete schema change (per-org sequence column plus migration, query, and UI updates) that is explicitly labeled part 2 of the same table-defs numbering work as the sibling marker.",
-			"evidence": [
-				"TODO(handoff): UUID-only today — part 2 adds a per-org sequence column",
-				"diagnosis specifies migration, per-org increment logic, query layer, and UI display updates needed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T05:47:22.526Z"
 		},
 		{
 			"key": "spec:2026-09-29-hub-table-toolbar-notion-filters-spec",
@@ -22603,40 +22537,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T07:19:45.767Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-948e27d654f8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-948e27d654f8.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "90325fb24db15ab491f8b4262e1840ee73e5c847b12b910e080aa74c13e8af31",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-bdc3ef8ab34d"
-			],
-			"rationale": "A specific but loosely-scoped TODO about applying a numbering pattern from crm.customers to other table defs in the same merged PR and file as a related 'part 2' marker.",
-			"evidence": [
-				"TODO(handoff): same as crm.customers — numbered in part 2 in src/lib/tables/defs/index.ts",
-				"same merged PR #357 and file as the sibling per-org sequence marker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T05:47:22.526Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-96f1290718f8",
@@ -36263,6 +36163,41 @@
 			"scoredAt": "2026-11-02T03:49:50.455Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-bdc3ef8ab34d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bdc3ef8ab34d.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "fc4eadc605943befdf0eafe7056df1bedff1fb004051dc216d830bf60ee025c4",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-948e27d654f8"
+			],
+			"rationale": "Describes the concrete 'part 2' work (per-org sequence column) implied by the companion TODO in the same file, so the two findings should become one scoped goal rather than two.",
+			"evidence": [
+				"TODO calls for a per-org sequence column plus migration, query, and UI changes",
+				"same file and merged PR (#357) as the companion finding",
+				"filed by automated post-merge scan on 2026-09-22"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:58:33.410Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d5e424e20df5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38807,6 +38742,41 @@
 			"scoredAt": "2026-10-28T03:47:36.860Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-948e27d654f8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-948e27d654f8.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "90325fb24db15ab491f8b4262e1840ee73e5c847b12b910e080aa74c13e8af31",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-bdc3ef8ab34d"
+			],
+			"rationale": "A single-line leftover TODO referencing a deferred numbering scheme in the same file as the companion UUID-sequence finding, best handled together as one schema follow-up.",
+			"evidence": [
+				"marker text only says 'same as crm.customers — numbered in part 2'",
+				"same file (src/lib/tables/defs/index.ts) and same merged PR #357 as the UUID finding",
+				"filed by automated post-merge scan, not a user request"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T05:58:33.410Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9e9d069dc1bc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38998,38 +38968,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T01:52:11.536Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deployment-health tracker whose summary is just a merged commit message, not an actionable goal.",
-			"evidence": [
-				"status: unknown",
-				"summary is a commit log entry (#361), not a stated deployment problem"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
@@ -41491,38 +41429,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T22:18:15.793Z"
-		},
-		{
-			"key": "run:minion_hub#41583346389",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/41583346389",
-			"sourceUpdatedAt": "2026-11-03T05:22:09Z",
-			"sourceFingerprint": "a7eea9db808928266184b2bca344c597bea097a6fd0cf6cdc61827b361b6d6d4",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status, not a work goal.",
-			"evidence": [
-				"push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:48:01.115Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
