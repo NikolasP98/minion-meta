@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T16:17:31.195Z",
+	"generatedAt": "2026-11-03T16:47:49.624Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5554,6 +5554,39 @@
 			"scoredAt": "2026-11-03T08:11:54.498Z"
 		},
 		{
+			"key": "pr:minion-base#43",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-base",
+			"title": "#43 factory: SDLC scoring G1 consumer: evidence-bound proposal action gate",
+			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/43",
+			"sourceUpdatedAt": "2026-08-31T03:01:13Z",
+			"sourceFingerprint": "e0bb0205d0dc859fb00e1d2c1449fa87a1663dee2a36a63307e5fdc5011cd665",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clearly specified fail-closed evidence gate for proposal approval with explicit test cases, so it strengthens SDLC governance integrity across all proposals.",
+			"evidence": [
+				"fail-closed on missing/stale/malformed/below-threshold evidence",
+				"explicit test list: valid, below threshold, stale commit, malformed, missing sidecar",
+				"scoped only to consumer half of Slice 3, excludes producer/override/G3/G4"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T16:47:49.436Z"
+		},
+		{
 			"key": "pr:minion-meta#810",
 			"kind": "pr",
 			"stage": "development",
@@ -9513,38 +9546,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T17:48:06.041Z"
-		},
-		{
-			"key": "pr:minion-base#43",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-base",
-			"title": "#43 factory: SDLC scoring G1 consumer: evidence-bound proposal action gate",
-			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/43",
-			"sourceUpdatedAt": "2026-08-31T03:01:13Z",
-			"sourceFingerprint": "e0bb0205d0dc859fb00e1d2c1449fa87a1663dee2a36a63307e5fdc5011cd665",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified, fail-closed evidence-binding consumer for the SDLC proposal gate with explicit test cases and exclusions, making it both strategically central and ready to execute.",
-			"evidence": [
-				"\"Missing, stale, malformed, below-threshold, or unavailable sidecar evidence MUST fail closed... never write score authority to the DB\"",
-				"\"Add server/detail/action tests for valid score, below threshold, stale commit, malformed values, missing sidecar, and unavailable GitHub evidence\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T16:17:42.230Z"
 		},
 		{
 			"key": "proposal:2026-09-20-hub-component-service-centralization",
@@ -14129,6 +14130,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:49:03.077Z"
+		},
+		{
+			"key": "pr:minion-base#45",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-base",
+			"title": "#45 factory: auto: base-attention-queue-responsive-runs-spec S2",
+			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/45",
+			"sourceUpdatedAt": "2026-08-31T04:06:16Z",
+			"sourceFingerprint": "567283fd797c277b2a567aae8382bc676d088bd6b5f802d80aab47641a13945a",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 4
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Summary gives no inline description of what Slice 2 actually delivers, only a pointer to FACTORY_SPEC.md, so readiness can't be verified from catalog facts alone.",
+			"evidence": [
+				"summary says only 'Implement ONLY Slice 2 of the approved spec in FACTORY_SPEC.md'",
+				"risk:high tag with auth,board,logic,test,ui topics but no scope detail given",
+				"earlier slices noted as shipped but not described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T16:47:49.436Z"
 		},
 		{
 			"key": "proposal:2026-09-10-hub-calendar-utc-offset-dropped",
@@ -22538,19 +22572,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A clearly bounded Slice 5 of an already-partially-shipped maintenance-lane spec with an exact spec commit and design-governance step, but it's internal tooling, not urgent.",
+			"rationale": "Bounded slice of an already-partially-shipped spec with an exact commit reference and required gates, making it actionable dev-tooling work.",
 			"evidence": [
-				"\"Implement ONLY Slice 5 of minion-meta spec 2026-08-17-maintenance-lane-monitors-spec at exact spec commit\"",
-				"\"S1-S4 already shipped through meta PR #32... do not start Slice 6\""
+				"references exact spec commit 23981dc42807...",
+				"S1-S4 already shipped per summary",
+				"draft until design/token/type/test gates pass"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T16:17:42.230Z"
+			"scoredAt": "2026-11-03T16:47:49.436Z"
 		},
 		{
 			"key": "pr:minion-meta#808",
@@ -28562,38 +28597,6 @@
 			"scoredAt": "2026-10-29T17:18:13.699Z"
 		},
 		{
-			"key": "pr:minion-base#45",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-base",
-			"title": "#45 factory: auto: base-attention-queue-responsive-runs-spec S2",
-			"sourceUrl": "https://github.com/NikolasP98/minion-base/pull/45",
-			"sourceUpdatedAt": "2026-08-31T04:06:16Z",
-			"sourceFingerprint": "567283fd797c277b2a567aae8382bc676d088bd6b5f802d80aab47641a13945a",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 4
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The catalog entry gives no description of what Slice 2 actually delivers beyond a pointer to an external FACTORY_SPEC.md, so readiness and value can't be confidently assessed from available facts.",
-			"evidence": [
-				"\"Implement ONLY Slice 2 of the approved spec in FACTORY_SPEC.md. Earlier slices are recorded as shipped\"",
-				"tags include risk:high with no topic detail beyond auth,board,logic,test,ui"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T16:17:42.230Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-brain-org-all-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32786,38 +32789,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T08:18:11.849Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 7
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a completed, merged deployment commit (JWT-only connect binding) that is inert until configured, not an open goal needing ranking.",
-			"evidence": [
-				"PR #363 merged, inert until hub enforces",
-				"JWT-only audiences default to empty list, refusing connects"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T11:17:18.103Z"
 		},
 		{
 			"key": "issue:minion-meta#614",
