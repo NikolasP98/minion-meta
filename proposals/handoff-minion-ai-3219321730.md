@@ -27,7 +27,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-03)
 
-- `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:710` — production enablement of gateway.shells.durability, the
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L710
-- `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:945` — bind pi-agent.orchestration-progress task metadata to an
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L945
+- `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:708` — production enablement of gateway.shells.durability, the
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L708
+- `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:943` — bind pi-agent.orchestration-progress task metadata to an
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L943
+- `NikolasP98/minion-ai@DEV src/gateway/server.impl.ts:1683` — a valid hub JWT first fails this shared-secret check and counts against the
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/gateway/server.impl.ts#L1683
