@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T06:17:24.755Z",
+	"generatedAt": "2026-11-03T06:49:07.988Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1223,42 +1223,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
-		},
-		{
-			"key": "pr:minion_hub#622",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
-			"sourceUpdatedAt": "2026-11-03T05:46:20Z",
-			"sourceFingerprint": "8f72069c5cf04b8cf7d6efa73bb3331fceade0196c5070290c2b0825002f7721",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 9,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#363",
-				"spec:2026-10-29-gateway-per-org-credentials-spec"
-			],
-			"rationale": "Completes the hub side (role claim fix, plugin-toggle permission fix) of the same per-org-credentials security slice that gateway PR #363 implements, with tests run and TTL impact analyzed.",
-			"evidence": [
-				"fixes plugin toggle 403 for members and role claim leak",
-				"analyzed TTL/outage tradeoffs before shipping",
-				"spec 045 slice A2 tasks T020-T024, owner merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:58:33.410Z"
 		},
 		{
 			"key": "pr:minion-meta#887",
@@ -3225,41 +3189,6 @@
 			"scoredAt": "2026-11-02T03:52:25.870Z"
 		},
 		{
-			"key": "pr:minion (gateway)#363",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#363 feat(gateway): bind browser JWTs to one gateway, expire them on the socket, and gate Base-org methods (inert until configured)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/363",
-			"sourceUpdatedAt": "2026-11-03T05:56:20Z",
-			"sourceFingerprint": "bb740ccfe06c8b3d16a3aa4af3df88c602063491fc25b4ab50784921a7123717",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-29-gateway-per-org-credentials-followups"
-			],
-			"rationale": "A large, detailed security PR implementing specs 043/045 that is explicitly inert until configured but ready for owner merge review.",
-			"evidence": [
-				"three commits implementing spec 043 S4 and spec 045 A1, inert until configured",
-				"PR explicitly states 'This is security work: the owner merges'",
-				"size: XL, draft status, detailed audit fixes F-1/F-2/F-3/F-5 referenced"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:17:24.576Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3990,6 +3919,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T06:47:43.090Z"
+		},
+		{
+			"key": "pr:minion_hub#622",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
+			"sourceUpdatedAt": "2026-11-03T06:39:03Z",
+			"sourceFingerprint": "e84817faa1eabe6082e08c9003cec0030c74426551793500fa11bbe32a5d95d9",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a live privilege-escalation bug (members could toggle plugins) alongside security-tagged JWT scoping work, with the fix already enforced at merge, not gated behind a flag.",
+			"evidence": [
+				"'a plain member ... gets 403'",
+				"'Security. Spec 045 slice A2'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
 		},
 		{
 			"key": "pr:minion-meta#884",
@@ -5232,6 +5193,39 @@
 			"scoredAt": "2026-11-02T14:26:05.227Z"
 		},
 		{
+			"key": "spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Tables — configurable open mode (page/modal/tray), floating bulk bar; stock entries provenance + item detail restructure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "247add6b861c7ebd99c69cd5d7a6b3aa14fc0a092fb769e60d7e66de3135baa3",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Broad, detailed AS-IS/TO-BE spec with verification plan is already partially merged (core commit 781a53b6) and actively implementing across multiple hub table surfaces.",
+			"evidence": [
+				"status: implementing",
+				"'Core (DONE, commit 781a53b6 on feat/table-open-modes-bulk-bar)'",
+				"verification via Playwright record-peek.spec.ts plus vitest/svelte-check/lint:design"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:49:07.727Z"
+		},
+		{
 			"key": "spec:2026-10-03-gw022a-native-syscall-executor",
 			"kind": "spec",
 			"stage": "spec",
@@ -5903,7 +5897,7 @@
 			"title": "Handoff marker — src/gateway/server.impl.ts (minion-ai)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3219321730.md",
 			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "9b9a852ff0fcd62bbcf6f778bb4062aea79ca262420767a024802eaf4809502a",
+			"sourceFingerprint": "b403a7efbd7f7b580718fbb70346e9a9ba31524b0176267aa26e9b659f0affc9",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -5912,23 +5906,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 3,
 				"implementation": 3
 			},
 			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-3174605053",
-				"proposal:handoff-minion-ai-3701397223",
-				"proposal:handoff-minion-ai-3159127524"
-			],
-			"rationale": "Production enablement of gateway.shells.durability is directly coupled to the same durability gaps tracked in sibling files.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Three unrelated handoff markers (shells durability, task metadata binding, a JWT shared-secret fallback bug) are bundled with too little detail to size or sequence as one goal.",
 			"evidence": [
-				"production enablement of gateway.shells.durability"
+				"server.impl.ts:1683 'a valid hub JWT first fails this shared-secret check'",
+				"server.impl.ts:708 'production enablement of gateway.shells.durability'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T01:49:12.536Z"
+			"scoredAt": "2026-11-03T06:49:07.727Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-984565429",
@@ -6222,6 +6213,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T02:01:53.538Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-3de77b1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 3de77b1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-3de77b1.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "58c8ee993ac7187ad44a298426ef5d08af135d234c27563d747b4aff64622a47",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concise, well-specified unvalidated-input fix for the JWT aud claim with an exact existing pattern (parseFeaturesClaim) to mirror.",
+			"evidence": [
+				"auth-jwt.ts:133 'aud claim is not validated ... assigned as-is to a field typed as string[] | undefined'",
+				"fix direction: 'fail-closed to []' following parseFeaturesClaim"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:49:07.727Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-f97efb2",
@@ -6754,41 +6777,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T21:17:29.570Z"
-		},
-		{
-			"key": "spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Tables — configurable open mode (page/modal/tray), floating bulk bar; stock entries provenance + item detail restructure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "247add6b861c7ebd99c69cd5d7a6b3aa14fc0a092fb769e60d7e66de3135baa3",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-09-28-hub-stock-receipt-purchase-link"
-			],
-			"rationale": "Large, detailed spec actively implementing with core work already merged and concrete Playwright/lint verification defined for remaining slices.",
-			"evidence": [
-				"status: implementing",
-				"Core (DONE, commit 781a53b6 on feat/table-open-modes-bulk-bar)",
-				"Verification: slice 1 = Playwright tests/e2e/ui-audit/record-peek.spec.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T06:17:33.461Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-platform-spec",
@@ -7985,8 +7973,8 @@
 			"repo": "minion_hub",
 			"title": "#618 feat(admin): track each org's plan, with a platform-admin plans page (inert until enforced)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/618",
-			"sourceUpdatedAt": "2026-11-03T05:45:13Z",
-			"sourceFingerprint": "3835a289196a920f2ce087b117b670a9c7c16826fc1a1389c5a628d0fd564d9e",
+			"sourceUpdatedAt": "2026-11-03T06:39:19Z",
+			"sourceFingerprint": "76da801cb294d91547dab5c3d4997c89c150d32153abc4e0b8fef9e10011a205",
 			"score": 54,
 			"band": "medium",
 			"axes": {
@@ -7995,22 +7983,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 7,
 				"implementation": 8
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#363"
-			],
-			"rationale": "Org-plan tracking is well specified and thoroughly tested, and stays inert until enforcement is flipped, so it is low-risk, ready paid work.",
+			"relatedKeys": [],
+			"rationale": "Well-tested, spec-backed entitlements foundation (104 unit + 5 SQL tests) that is inert until enforced, so it is safe and ready for the required owner merge.",
 			"evidence": [
-				"104 targeted unit tests, 5 SQL tests, seed verify (257 tests)",
-				"Inert: with ENTITLEMENTS_ENFORCED off, every org resolves as entitled"
+				"'104 targeted unit tests' and '5 SQL tests'",
+				"'Inert: with ENTITLEMENTS_ENFORCED off, every org resolves as entitled'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:48:01.115Z"
+			"scoredAt": "2026-11-03T06:48:07.653Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
@@ -10534,6 +10520,40 @@
 			"scoredAt": "2026-11-01T02:17:09.541Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-453435597",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/web/auto-reply/heartbeat-runner.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-453435597.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "66c89934056a3158b72f1dcfbe0b0d87b03b2d536dfdcd2e79bbb2137d06bc7d",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-3527154209",
+				"proposal:handoff-minion-ai-3902168194"
+			],
+			"rationale": "Ungated WhatsApp heartbeat agent turns is a recurring entitlement-bypass risk flagged under the same spec 043 Risks family as the other two markers.",
+			"evidence": [
+				"heartbeat-runner.ts:29 'WhatsApp heartbeat agent turns are not gated by org ai entitlement. See spec 043'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:49:07.727Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2900193194",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11091,6 +11111,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T09:18:43.229Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3040143936",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/gateway/capability-api.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3040143936.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "47492209e477c81bf85d852c4369bae128b7289f131162f2b4324bddd65850a4",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-2144854174",
+				"proposal:handoff-minion-ai-2934814273",
+				"proposal:handoff-minion-ai-3147696229"
+			],
+			"rationale": "Capability flags not yet driven by the hub org plan is the most central piece of the same entitlement-enforcement gap spanning multiple trigger paths, warranting one combined goal.",
+			"evidence": [
+				"'capability flags are not yet driven by the hub org plan; reconcile with features claims'",
+				"references 'spec 043 (org entitlements) Risks'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-648930682",
@@ -12757,6 +12813,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T05:17:17.244Z"
+		},
+		{
+			"key": "pr:minion_hub#630",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
+			"sourceUpdatedAt": "2026-11-03T06:27:27Z",
+			"sourceFingerprint": "30c0de734ed92d064fca238697bfc7600f84fa105b5799c4925a10d2370a4872",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Org provisioning/base-module work passes most gates but has documented open ends (no visual screenshot, schema deviation) that should be tracked before full confidence.",
+			"evidence": [
+				"'No screenshot of Settings → Modules (SC-003)'",
+				"'TODO(handoff) to align it with 046's SAFE_PATH'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-uiux-consistency-followups",
@@ -15058,6 +15146,38 @@
 			"scoredAt": "2026-10-30T16:47:25.756Z"
 		},
 		{
+			"key": "pr:minion_hub#628",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
+			"sourceUpdatedAt": "2026-11-03T06:35:50Z",
+			"sourceFingerprint": "767413fb0e519194f848b73d271eaacd11112706c929594adbcb252041a9844f",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Broad but well-tested route/navigation refactor with explicit route-contract count updates and new test coverage, ready for review.",
+			"evidence": [
+				"route contract counts 163→165, redirects 11→13",
+				"'landing.test.ts', 'org-landing-page.test.ts' new tests added"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
+		},
+		{
 			"key": "pr:minion_hub#629",
 			"kind": "pr",
 			"stage": "development",
@@ -15086,40 +15206,6 @@
 			"evidence": [
 				"Full vitest run across 8 shards exited 0",
 				"links test ... I made a mutant ... and the test failed as it should"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:48:01.115Z"
-		},
-		{
-			"key": "pr:minion_hub#630",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#630 feat(org): provisioning installs the base modules and the org landing page; Settings lists every toggle",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/630",
-			"sourceUpdatedAt": "2026-11-03T05:26:49Z",
-			"sourceFingerprint": "da716c81670bfb43528e7de11e0780f387883e06b8d9dbc8b2c4ab77e764b50a",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#629"
-			],
-			"rationale": "Stacked, tested org-provisioning work with a known open end (no UI screenshot) and an expected merge conflict with spec 046, ready once #629 lands.",
-			"evidence": [
-				"Stacked on #629 (S6)",
-				"No screenshot of Settings → Modules (SC-003)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -17279,6 +17365,114 @@
 			"scoredAt": "2026-10-30T09:58:26.152Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-2144854174",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/gateway/server-core/server-cron.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2144854174.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "4e515f1d19af800c90355d12407fbb7b88876932163f011dbcdc7fa5344dbe24",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-2934814273",
+				"proposal:handoff-minion-ai-3040143936",
+				"proposal:handoff-minion-ai-3147696229"
+			],
+			"rationale": "One of several handoff markers describing the same unresolved gap — AI entitlement not enforced on a non-chat trigger path — that should be consolidated into one spec-043 follow-up goal.",
+			"evidence": [
+				"'cron-driven agent turns are AI work but are not gated by org ai entitlement'",
+				"references 'spec 043 (org entitlements) Risks'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-2934814273",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/gateway/server/hooks.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2934814273.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "f6670bae64dc15cf84b6a1c990e9b4591df58947937261aad72b236bfd6717cd",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-2144854174",
+				"proposal:handoff-minion-ai-3040143936",
+				"proposal:handoff-minion-ai-3147696229"
+			],
+			"rationale": "Same entitlement-gating gap as the other markers, this time on the webhook trigger path, best resolved as one consolidated fix across trigger paths.",
+			"evidence": [
+				"'webhook-triggered agent runs are not gated by org ai entitlement'",
+				"references 'spec 043 (org entitlements) Risks'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3147696229",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/infra/heartbeat-runner.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3147696229.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "fde1cfce4cf7ea72d21bba75d1a18ed97ddb2f0f47941a75a739b569a137d371",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-2144854174",
+				"proposal:handoff-minion-ai-2934814273",
+				"proposal:handoff-minion-ai-3040143936"
+			],
+			"rationale": "Heartbeat-triggered agent turns share the identical unresolved entitlement-gating gap as the cron, webhook, and capability-api markers.",
+			"evidence": [
+				"'heartbeat agent turns are not gated by org ai entitlement'",
+				"references 'spec 043 (org entitlements) Risks'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-3154969482",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18481,39 +18675,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
-		},
-		{
-			"key": "pr:minion_hub#628",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
-			"sourceUpdatedAt": "2026-11-03T04:50:04Z",
-			"sourceFingerprint": "f295612434a7274f566fd6d76fe09bdb72b7fff336d0bddf501a3ee1494bfaa3",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A large, spec-backed, well-tested nav/routing refactor (spec 046 slice S3) with concrete route-contract updates is ready to merge and unblocks downstream nav consistency.",
-			"evidence": [
-				"Spec: specs/046-hub-nav-home-landing-sections, slice S3, no stage skipped",
-				"new tests added: landing.test.ts, org-landing-page.test.ts, home/page.server.test.ts, ModuleSwitcher.mounted.test.ts",
-				"route contract counts updated consistently (endpoints 163→165, redirects 11→13)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T05:17:17.244Z"
 		},
 		{
 			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
@@ -20968,6 +21129,40 @@
 			"scoredAt": "2026-10-27T21:17:36.033Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-3902168194",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/gateway/channel-hydrate.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3902168194.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "337ff07122abeb303b09d179dbd2f466a65b2217e56278ea18716d786350e3e5",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-3527154209",
+				"proposal:handoff-minion-ai-453435597"
+			],
+			"rationale": "Channel-hydrate scope limitation marker cites the same spec 043 entitlement-gating risk family as the gmail and heartbeat markers.",
+			"evidence": [
+				"channel-hydrate.ts:29 'R2 (spec 043) - only whatsapp/telegram/discord'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:49:07.727Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1649151658",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22146,39 +22341,6 @@
 			"scoredAt": "2026-10-28T18:17:31.652Z"
 		},
 		{
-			"key": "pr:minion_hub#626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#626 feat(nav): sections need only a name, slugs auto-suffix, and the dialog gets Advanced settings (icon, who can view)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/626",
-			"sourceUpdatedAt": "2026-11-03T04:41:20Z",
-			"sourceFingerprint": "fe2e4609a85a3ada86422705610ebe50e12ebdc073301133bb0c394789f3383e",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Draft PR that already supersedes #602 and carries an open TODO(handoff), so it needs a merge-order decision before it can proceed as-is.",
-			"evidence": [
-				"status: draft",
-				"PR body states it supersedes #602: merge this one and close #602, or merge #602 after rebasing",
-				"Open end: emoji section icons fall back to LayoutGrid (TODO(handoff) in custom-sections-nav.ts)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T04:47:36.468Z"
-		},
-		{
 			"key": "pr:minion-base#41",
 			"kind": "pr",
 			"stage": "development",
@@ -22670,6 +22832,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T06:48:11.818Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dc247fbe1f2a.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "2e8b0bdf7e426640a28d72151975fba59eea744540de959c43de485d96e3a3cf",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, clearly diagnosed duplicate-UI cleanup with a concrete fix direction to remove redundant search/filter code in favor of DataTable's built-in filtering.",
+			"evidence": [
+				"status: approved",
+				"diagnosis: 'Remove the search/category UI from AgentMemoryPanel and rely entirely on DataTable's built-in filtering'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:49:07.727Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ec72b2caa7d2",
@@ -25045,6 +25239,38 @@
 			"scoredAt": "2026-10-30T10:18:24.977Z"
 		},
 		{
+			"key": "pr:minion_hub#626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#626 feat(nav): sections need only a name, slugs auto-suffix, and the dialog gets Advanced settings (icon, who can view)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/626",
+			"sourceUpdatedAt": "2026-11-03T06:33:17Z",
+			"sourceFingerprint": "4d3b2c277607f16068ed302b4498688a41878534be36051c16290306044b5733",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "UX-scoped nav dialog change with passing gates and tests, moderate scope, ready to proceed.",
+			"evidence": [
+				"'bun run vitest ... 135 tests' passing",
+				"'lint:design: 0; lint:tokens: 0'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
+		},
+		{
 			"key": "pr:minion-meta#815",
 			"kind": "pr",
 			"stage": "development",
@@ -26408,40 +26634,6 @@
 			"scoredAt": "2026-10-30T09:18:24.934Z"
 		},
 		{
-			"key": "proposal:2026-09-28-hub-stock-receipt-purchase-link",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Stock receipts have no purchase-record link — Document column is blind for receipts",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-stock-receipt-purchase-link.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "d7a85a734e1ef6d7db941fa1f57df286ced0392c7bdabd939f7ad227f91668ce",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec"
-			],
-			"rationale": "The AS-IS/TO-BE/DELTA is well documented but explicitly blocked on an unresolved data-model decision before a spec can even be written.",
-			"evidence": [
-				"DELTA step 1: 'decide where purchase lives ... needs a call before a spec is written'",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T06:17:33.461Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-0f6b2d0e3194",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26868,38 +27060,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T19:19:59.087Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/191d9a69d8aeda69f1a982ae030f75870139280f",
-			"sourceUpdatedAt": "2026-10-24T01:11:49Z",
-			"sourceFingerprint": "54964c0480c1653feaedfa9d0bd7e0d6f11a3461c7f45a520646db696c0c2430",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged feature commit shown as deploy health has no indication of actual deployment failure or pending risk.",
-			"evidence": [
-				"commit adds sessionResetAuthorized gating for whatsapp reset",
-				"tagged deployment but body describes a feature, not a health issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:17:24.576Z"
 		},
 		{
 			"key": "issue:minion-meta#360",
@@ -28847,37 +29007,6 @@
 			"scoredAt": "2026-11-03T01:47:54.137Z"
 		},
 		{
-			"key": "proposal:handoff-minion-ai-2691848448",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/auto-reply/reply/dispatch-from-config.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2691848448.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "638704b8aa768f66c783b4151efd37db468cf85c83d9a70430b4c824e824c16e",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Single vague marker about slice ordering lacks a concrete scope or verifiable outcome.",
-			"evidence": [
-				"Slice11 must consume these original units before watcher matching"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T01:49:12.536Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3567637939",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29261,38 +29390,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T01:56:48.670Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "249f12091ecc446d19d05833ad84c70b2d2c9e0a499a7295318be4672123c66e",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This bundles dozens of unrelated TODO(handoff) markers scraped from a single rankings/index.json file into one proposal, which is too broad and heterogeneous to execute as one goal.",
-			"evidence": [
-				"18+ distinct markers spanning auth, billing, CRM, drag-and-drop, and schema topics all in one file",
-				"definition of done requires resolving every marker before the sweep closes the proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:17:24.576Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2278437967",
@@ -29895,38 +29992,6 @@
 			"scoredAt": "2026-10-28T21:47:22.865Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dc247fbe1f2a.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "2e8b0bdf7e426640a28d72151975fba59eea744540de959c43de485d96e3a3cf",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding with a clear, bounded fix direction that is actionable without further decisions.",
-			"evidence": [
-				"status: approved",
-				"Fix direction: remove the search/category UI from AgentMemoryPanel and rely entirely on DataTable's built-in filtering"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T06:17:33.461Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-e9b22dc941f6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30322,6 +30387,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T19:19:59.087Z"
+		},
+		{
+			"key": "proposal:2026-09-28-hub-stock-receipt-purchase-link",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Stock receipts have no purchase-record link — Document column is blind for receipts",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-stock-receipt-purchase-link.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "d7a85a734e1ef6d7db941fa1f57df286ced0392c7bdabd939f7ad227f91668ce",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A real but low-urgency UX gap with a working tooltip fallback, blocked on an undecided data-model choice before a spec can even be written.",
+			"evidence": [
+				"'needs a call before a spec is written'",
+				"'existing receipts with no purchaseId keep rendering the attachments-tooltip fallback'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a5a65f6d6dac",
@@ -31230,6 +31327,71 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T01:47:54.137Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-2691848448",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/auto-reply/reply/dispatch-from-config.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2691848448.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "41e172d8a201017c6a3e89650cdf12b9de097dcac1c69dddee1ecbbf001aee81",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The marker text is too terse to determine scope or risk, so it needs clarification before it can be actioned or grouped.",
+			"evidence": [
+				"'Slice11 must consume these original units before watcher matching;' is the entire marker text"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:48:07.653Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3527154209",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/hooks/gmail-auto-label.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3527154209.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "229fbc09d793fca4a7d50ffff67b33f767372cebc39149f4962d03d4a4163564",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-3902168194",
+				"proposal:handoff-minion-ai-453435597"
+			],
+			"rationale": "Gmail auto-label entitlement gating gap is explicitly tied to spec 043's org-entitlement Risks, the same family as the other two channel-gating markers.",
+			"evidence": [
+				"gmail-auto-label.ts:29 'operator-configured per mailbox, so it is outside the automatic gate. See spec 043'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:49:07.727Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-168406530",
@@ -41493,6 +41655,38 @@
 			"scoredAt": "2026-10-28T22:18:15.793Z"
 		},
 		{
+			"key": "run:minion (gateway)#41589258292",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/41589258292",
+			"sourceUpdatedAt": "2026-11-03T06:31:54Z",
+			"sourceFingerprint": "b738477c85c95e5388d59513d34be4a0de86b82876d92aecc44a077e7d65b02b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status for a push to DEV, not an actionable or schedulable board goal.",
+			"evidence": [
+				"summary: 'push on DEV'",
+				"status: in_progress, kind: run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:49:07.727Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -43338,6 +43532,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T01:50:16.582Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "6331f416220a1324b53c5b8e1631ad277f87586787933af85a39dbee8f4160b5",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged file is rankings/index.json itself, and the quoted 'markers' are prior rationale/evidence text stored as JSON data, not real code TODOs, making this a sweep false positive.",
+			"evidence": [
+				"target file is 'rankings/index.json' — the ranking output artifact, not source logic",
+				"quoted marker text reads as ranking rationale, e.g. 'brain_access alone does not bind a gateway'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T06:49:07.727Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
