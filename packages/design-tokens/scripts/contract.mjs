@@ -42,7 +42,7 @@ export function resolveTheme(contract, themeId) {
   const status = statusNames.flatMap((name) =>
     statusParts.map((part) => [
       `--color-${name}-${part}`,
-      contract.statusRecipes[theme.mode][name][part],
+      contract.statusRecipes[theme.statusRecipe ?? theme.mode][name][part],
     ]),
   );
 
@@ -52,6 +52,8 @@ export function resolveTheme(contract, themeId) {
     ...Object.entries(contract.radiusScales[theme.radiusScale]),
     ...Object.entries(contract.shadowStyles[theme.shadowStyle]),
     ...Object.entries(contract.typographyStyles[theme.typographyStyle]),
+    // Reset the complete categorical palette on every theme transition.
+    ...Object.entries({ ...contract.palettes, ...theme.palettes }),
   ];
 }
 

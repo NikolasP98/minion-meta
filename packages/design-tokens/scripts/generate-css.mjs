@@ -32,7 +32,6 @@ export function generateCss(contract) {
   const foundationDeclarations = flattenFoundations(contract);
   const sharedDeclarations = [
     ...foundationDeclarations,
-    ...Object.entries(contract.palettes),
     ...defaultTheme,
     ...aliasDeclarations(contract),
   ];

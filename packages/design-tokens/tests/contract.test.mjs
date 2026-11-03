@@ -38,14 +38,16 @@ test('contract is valid JSON and declares every required foundation family', asy
 
 test('every theme is a complete, resolvable semantic mode', async () => {
   const contract = await readContract();
-  assert.equal(Object.keys(contract.themes).length, 20);
+  assert.equal(Object.keys(contract.themes).length, 22);
   for (const [themeId, theme] of Object.entries(contract.themes)) {
     assert.ok(['light', 'dark'].includes(theme.mode), `${themeId}: mode`);
     assert.ok(contract.radiusScales[theme.radiusScale], `${themeId}: radiusScale`);
     assert.ok(contract.shadowStyles[theme.shadowStyle], `${themeId}: shadowStyle`);
     assert.ok(contract.typographyStyles[theme.typographyStyle], `${themeId}: typographyStyle`);
+    assert.ok(contract.statusRecipes[theme.statusRecipe ?? theme.mode], `${themeId}: statusRecipe`);
+    if (theme.palettes) assert.deepEqual(Object.keys(theme.palettes).sort(), Object.keys(contract.palettes).sort());
     assert.deepEqual(Object.keys(theme.colors).sort(), Object.keys(semanticColorMap).sort(), `${themeId}: colors`);
-    assert.equal(new Map(resolveTheme(contract, themeId)).size, 43, `${themeId}: resolved tokens`);
+    assert.equal(new Map(resolveTheme(contract, themeId)).size, 48, `${themeId}: resolved tokens`);
   }
 });
 
@@ -56,7 +58,7 @@ test('normal text meets AA across every supported base surface', async () => {
     backgrounds: ['canvas', 'surface1', 'surface2', 'surface3', 'overlay'],
     minimumRatio: 4.5,
   });
-  assert.equal(Object.keys(contract.themes).length * 3 * 5, 300);
+  assert.equal(Object.keys(contract.themes).length * 3 * 5, 330);
   assert.deepEqual(normalTextContrastFailures(contract), []);
   for (const [id, theme] of Object.entries(contract.themes)) {
     const levels = ['textPrimary', 'textSecondary', 'textTertiary'].map((role) =>
@@ -83,7 +85,7 @@ test('accent and status pairs meet WCAG AA contrast', async () => {
     const accentRatio = contrastRatio(theme.colors.onAccent, theme.colors.accent);
     assert.ok(accentRatio >= 4.5, `${themeId}: onAccent/accent ${accentRatio.toFixed(2)}:1`);
     for (const status of statusNames) {
-      const recipe = contract.statusRecipes[theme.mode][status];
+      const recipe = contract.statusRecipes[theme.statusRecipe ?? theme.mode][status];
       const ratio = contrastRatio(recipe.fg, recipe.surface);
       assert.ok(ratio >= 4.5, `${themeId}: ${status} fg/surface ${ratio.toFixed(2)}:1`);
       assert.deepEqual(Object.keys(recipe).sort(), [...statusParts].sort());
@@ -93,6 +95,45 @@ test('accent and status pairs meet WCAG AA contrast', async () => {
   for (const [accentId, accent] of Object.entries(contract.accentOptions)) {
     const ratio = contrastRatio(accent.onAccent, accent.accent);
     assert.ok(ratio >= 4.5, `${accentId}: onAccent/accent ${ratio.toFixed(2)}:1`);
+  }
+});
+
+test('Clinic modes cover every token family and readable text on every surface', async () => {
+  const contract = await readContract();
+  const baselineKeys = resolveTheme(contract, contract.defaultTheme).map(([key]) => key).sort();
+  for (const mode of ['light', 'dark']) {
+    const id = `clinic-${mode}`;
+    const theme = contract.themes[id];
+    assert.ok(theme, id);
+    assert.equal(theme.mode, mode);
+    assert.deepEqual(resolveTheme(contract, id).map(([key]) => key).sort(), baselineKeys);
+    assert.deepEqual(Object.keys(theme.palettes).sort(), Object.keys(contract.palettes).sort());
+    for (const surface of ['canvas', 'surface1', 'surface2', 'surface3', 'overlay']) {
+      for (const role of ['textPrimary', 'textSecondary', 'textTertiary']) {
+        const ratio = contrastRatio(theme.colors[role], theme.colors[surface]);
+        assert.ok(ratio >= 4.5, `${id}: ${role}/${surface} ${ratio.toFixed(2)}:1`);
+      }
+      assert.ok(contrastRatio(theme.colors.accent, theme.colors[surface]) >= 3, `${id}: accent/${surface}`);
+    }
+    for (const [role, value] of Object.entries(theme.palettes)) {
+      for (const surface of ['canvas', 'surface2']) {
+        assert.ok(contrastRatio(value, theme.colors[surface]) >= 3, `${id}: ${role}/${surface}`);
+      }
+    }
+  }
+});
+
+test('switching away from Clinic restores the categorical palette for every preset', async () => {
+  const contract = await readContract();
+  const css = generateCss(contract);
+  for (const [id, theme] of Object.entries(contract.themes)) {
+    const resolved = new Map(resolveTheme(contract, id));
+    for (const [token, fallback] of Object.entries(contract.palettes)) {
+      assert.equal(resolved.get(token), theme.palettes?.[token] ?? fallback, `${id}: ${token}`);
+    }
+    if (id === contract.defaultTheme) continue;
+    const block = css.split(`:root[data-minion-theme='${id}'],`)[1]?.split('}')[0];
+    for (const token of Object.keys(contract.palettes)) assert.ok(block?.includes(`${token}:`), `${id}: ${token}`);
   }
 });
 

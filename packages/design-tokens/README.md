@@ -26,6 +26,28 @@ The build fails when generated CSS is stale, a theme is incomplete, an alias
 points to an unknown token, or an essential text/action/status pair falls below
 WCAG AA contrast. Normal text uses the full primary/secondary/tertiary × canvas/surface1/surface2/surface3/overlay matrix; disabled text is separate.
 
+## Clinic themes
+
+`clinic-light` and `clinic-dark` provide a paired clinical workspace style:
+blue-tinted canvas and panels, cobalt actions, lilac branding, cyan/rose/mint
+chart colors, soft elevation, and a complete rounded radius scale. Select them
+in Hub under Settings → Appearance as **Clinic Light** and **Clinic Dark**.
+The independent accent preference continues to override the action pair.
+
+Each mode resolves 48 tokens: 15 semantic colors, 12 status roles, six radii,
+seven shadows, three typography settings, and five categorical colors. The
+71 foundation tokens remain shared, including fonts, type sizes, spacing,
+control and icon sizes, motion, layers, and shell dimensions. Responsive gutters,
+reduced motion, 34 compatibility aliases, and 16 domain aliases retain their
+existing behavior. These are 169 distinct CSS custom properties in total.
+
+Themes may select `statusRecipe` from `statusRecipes` (default: their `mode`)
+and supply `palettes` with all five categorical keys. Every generated selector
+emits all five categorical colors, including defaults for older presets, so
+theme switching cannot retain another theme's chart palette. Components still
+consume the same semantic token names.
+
+
 ## Install and import
 
 ```bash
