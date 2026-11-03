@@ -38,7 +38,7 @@ test('contract is valid JSON and declares every required foundation family', asy
 
 test('every theme is a complete, resolvable semantic mode', async () => {
   const contract = await readContract();
-  assert.equal(Object.keys(contract.themes).length, 18);
+  assert.equal(Object.keys(contract.themes).length, 20);
   for (const [themeId, theme] of Object.entries(contract.themes)) {
     assert.ok(['light', 'dark'].includes(theme.mode), `${themeId}: mode`);
     assert.ok(contract.radiusScales[theme.radiusScale], `${themeId}: radiusScale`);
@@ -56,7 +56,7 @@ test('normal text meets AA across every supported base surface', async () => {
     backgrounds: ['canvas', 'surface1', 'surface2', 'surface3', 'overlay'],
     minimumRatio: 4.5,
   });
-  assert.equal(Object.keys(contract.themes).length * 3 * 5, 270);
+  assert.equal(Object.keys(contract.themes).length * 3 * 5, 300);
   assert.deepEqual(normalTextContrastFailures(contract), []);
   for (const [id, theme] of Object.entries(contract.themes)) {
     const levels = ['textPrimary', 'textSecondary', 'textTertiary'].map((role) =>

@@ -3,7 +3,7 @@ id: postmerge-minion-site-52385ddaa6f6
 title: "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz (minion-site)"
 status: review
 created: 2026-10-16
-updated: 2026-10-16
+updated: 2026-10-31
 repos: [minion-site]
 tags: [infra]
 source: postmerge-discovery
@@ -35,24 +35,10 @@ The file is a tarball snapshot of `@minion-stack/design-tokens` with an integrit
 **Fix**: Verify the file is in `.gitignore`, then revert it from the commit. Regenerate lockfiles locally with `bun install` or `pnpm install` (depending on minion-site's package manager—it's `bun` per the Project Map). If it's intentionally committed, audit why and document it.
 
 
+
 ## Latest occurrence
 
-- repo: `NikolasP98/minion-site@cd21151`
-- merged PR: https://github.com/NikolasP98/minion-site/pull/35
+- repo: `NikolasP98/minion-site@46c212f`
+- merged PR: https://github.com/NikolasP98/minion-site/pull/38
 - file: `deps/minion-stack-design-tokens-0.1.1-durability.h3bfd6bda4307905e96ae4bea7aa8777d6e5e87b247c72de1763d155aa366749d.tgz`
-- checked: 2026-10-16
-
-## Reconciliation note (2026-10-16, proposal-sweep)
-
-Same class of finding already tracked under `2026-09-08-platform-qc-remediation`'s
-"Dependency/release provenance (UI-06)" priority item (no blanket version
-bump; publish distinct package versions/digests before adoption), and the
-same `deps/minion-stack-design-tokens-*.tgz` class already flagged once
-before (see `postmerge-minion-hub-0f6b2d0e3194`). That doc's packaging work
-so far is scoped to `@minion-stack/shared`, not `design-tokens`. Flagged
-`duplicate_candidate` rather than merged — a human should confirm this
-specific package/version is covered by the same remediation slice before
-folding it in or closing it separately. Not cross-linked to the sibling hub
-finding (`postmerge-minion-hub-eb28a2fabfb9`, same tarball hash) —
-established precedent for this finding class points each repo's instance at
-the umbrella proposal individually rather than at each other.
+- checked: 2026-10-31
