@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-03)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/PageBody.svelte:826` — additional custom fields lose their mailto link
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/PageBody.svelte#L826
-- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/PageBody.svelte:952` — spec 2026-09-28 Bundle F asks for tags LAST inside
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/PageBody.svelte#L952
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/PageBody.svelte:827` — additional custom fields lose their mailto link
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/PageBody.svelte#L827
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/PageBody.svelte:953` — spec 2026-09-28 Bundle F asks for tags LAST inside
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/PageBody.svelte#L953
