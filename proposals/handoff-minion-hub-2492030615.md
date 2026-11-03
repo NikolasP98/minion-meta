@@ -26,7 +26,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-03)
 
-- `NikolasP98/minion_hub@master src/lib/components/layout/NavContextMenu.svelte:187` — "Access…" (users:manage) is omitted until S5 ships PageAccessDialog — add access here.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/layout/NavContextMenu.svelte#L187
-- `NikolasP98/minion_hub@master src/lib/components/layout/NavContextMenu.svelte:205` — section "Access…" (users:manage) arrives with S5.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/layout/NavContextMenu.svelte#L205
+- `NikolasP98/minion_hub@master src/lib/components/layout/NavContextMenu.svelte:188` — "Access…" (users:manage) is omitted until S5 ships PageAccessDialog — add access here.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/layout/NavContextMenu.svelte#L188
+- `NikolasP98/minion_hub@master src/lib/components/layout/NavContextMenu.svelte:206` — section "Access…" (users:manage) arrives with S5.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/layout/NavContextMenu.svelte#L206
