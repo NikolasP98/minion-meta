@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-03T07:17:18.458Z",
+	"generatedAt": "2026-11-03T07:39:33.329Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1291,6 +1291,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T05:58:33.410Z"
+		},
+		{
+			"key": "pr:minion_hub#622",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
+			"sourceUpdatedAt": "2026-11-03T07:37:17Z",
+			"sourceFingerprint": "91521bd1fdedf94029bfe002bda693c403a419dcded1bd75dd04174c23391c2d",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-753e08fe9f5a"
+			],
+			"rationale": "A merge-ready security fix closing a real plugin-toggle privilege gap with explicit tests run.",
+			"evidence": [
+				"role claim now strictly gated to admin/user by profiles.role",
+				"plugin toggle route enforces settings:manage, 403s plain members",
+				"ran with env -u SUPABASE_DB_URL -u DATABASE_URL, no integration tests skipped silently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
@@ -3921,38 +3956,6 @@
 			"scoredAt": "2026-10-28T06:47:43.090Z"
 		},
 		{
-			"key": "pr:minion_hub#622",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#622 fix(gateway): per-gateway JWTs from org membership; members can't toggle plugins",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/622",
-			"sourceUpdatedAt": "2026-11-03T06:39:03Z",
-			"sourceFingerprint": "e84817faa1eabe6082e08c9003cec0030c74426551793500fa11bbe32a5d95d9",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a live privilege-escalation bug (members could toggle plugins) alongside security-tagged JWT scoping work, with the fix already enforced at merge, not gated behind a flag.",
-			"evidence": [
-				"'a plain member ... gets 403'",
-				"'Security. Spec 045 slice A2'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:48:07.653Z"
-		},
-		{
 			"key": "pr:minion-meta#884",
 			"kind": "pr",
 			"stage": "development",
@@ -4591,6 +4594,39 @@
 			"scoredAt": "2026-11-02T05:19:34.658Z"
 		},
 		{
+			"key": "pr:minion_hub#631",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#631 fix(pos): calendar hover card stops offering Cobrar on an already-charged booking",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/631",
+			"sourceUpdatedAt": "2026-11-03T07:29:39Z",
+			"sourceFingerprint": "54a169013fa0a1ab96af6cba9eb87063c114f47bdc1f94baab7ebe08df4a9e6f",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-evidenced hotfix preventing re-charging an already-paid POS booking.",
+			"evidence": [
+				"hover card offered Cobrar on a booking already charged via POS-2026-00089",
+				"fix gates on !b.paid matching existing menu/drawer logic",
+				"bun run check: 0 errors across 12,366 files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
+		},
+		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -4792,6 +4828,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T02:01:53.538Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-96528a1d8ee1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/internal/flows/[id]/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96528a1d8ee1.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "31cb6a4daaff5064f850550659df23dfe299dd2cadddcb5385b6117ecb17027e",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Flags a plausible tenant-isolation gap with real privilege-escalation risk but needs a spec before execution.",
+			"evidence": [
+				"flows with NULL tenant_id are never gated and default aiEnabled true",
+				"diagnosis flags data-leakage and privilege-escalation risk in multi-tenant handler",
+				"still in draft status with no backfill plan committed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
@@ -7836,38 +7905,6 @@
 			"scoredAt": "2026-10-30T10:11:01.414Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/repair-verified-customer-metadata.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ab7a33dc7fa6.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "9eef569f85e26c08a0b8db01e2bacf73e8e05a29d881064a26f9c63f19c8dbe4",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Auto-filed compliance-adjacent data-integrity finding (missing DOB for seven verified customers) is real but the fix direction is undecided between two divergent approaches needing a team/privacy decision before actionable work.",
-			"evidence": [
-				"TODO(handoff) marker: 'Seven production-verified customers still have no DOB'",
-				"Diagnosis proposes two mutually exclusive remediation paths and says to document which the team prefers before proceeding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T07:17:13.926Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7965,38 +8002,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T15:17:52.786Z"
-		},
-		{
-			"key": "pr:minion_hub#618",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#618 feat(admin): track each org's plan, with a platform-admin plans page (inert until enforced)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/618",
-			"sourceUpdatedAt": "2026-11-03T06:39:19Z",
-			"sourceFingerprint": "76da801cb294d91547dab5c3d4997c89c150d32153abc4e0b8fef9e10011a205",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-tested, spec-backed entitlements foundation (104 unit + 5 SQL tests) that is inert until enforced, so it is safe and ready for the required owner merge.",
-			"evidence": [
-				"'104 targeted unit tests' and '5 SQL tests'",
-				"'Inert: with ENTITLEMENTS_ENFORCED off, every org resolves as entitled'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:48:07.653Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
@@ -9458,6 +9463,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T08:47:37.365Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/repair-verified-customer-metadata.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ab7a33dc7fa6.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "9eef569f85e26c08a0b8db01e2bacf73e8e05a29d881064a26f9c63f19c8dbe4",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already-approved compliance gap affecting verified customer records with a concrete, bounded fix path.",
+			"evidence": [
+				"seven production-verified customers missing DOB, a KYC/compliance gap",
+				"proposal status is approved",
+				"fix direction specifies backfill vs re-verification tradeoff to decide"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
 			"key": "issue:minion-meta#399",
@@ -21948,39 +21986,6 @@
 			"scoredAt": "2026-10-29T05:48:22.744Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a merged, inert-until-configured auth/JWT feature deploy with no indication of current failure or urgency, so it should be reevaluated rather than treated as active work.",
-			"evidence": [
-				"feat(gateway): bind browser JWTs... (inert until hub enforces)",
-				"JWT-only connect refused (1008), so 043 S4 is inert",
-				"status: unknown"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:17:18.252Z"
-		},
-		{
 			"key": "issue:minion-meta#574",
 			"kind": "issue",
 			"stage": "proposal",
@@ -22533,38 +22538,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T09:58:26.152Z"
-		},
-		{
-			"key": "proposal:2026-09-28-hub-table-open-modes-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Table open modes + bulk bar + stock detail — open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-table-open-modes-followups.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "0af9d8885eede8b1d874ccfc81409e9553fc6fa4c97dc854dd5421f74ec1af92",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A detailed open-ends ledger with most items already addressed in a branch, but remaining items (§5, §9 QA seed bug) are a mix of low-urgency UX polish and an actual 500 error that should be split out.",
-			"evidence": [
-				"Slice 2 status notes most sections already addressed by hub branch feat/table-open-gaps",
-				"§9 describes a reproducible 500 error on /pos/catalog on master, distinct severity from UX items like §4/§5"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-27T07:17:13.926Z"
 		},
 		{
 			"key": "proposal:2026-10-14-hub-daily-dashboard",
@@ -30357,6 +30330,39 @@
 			"scoredAt": "2026-10-31T00:18:16.037Z"
 		},
 		{
+			"key": "pr:minion-meta#934",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#934 feat(design-tokens): add Clinic Light and Clinic Dark themes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/934",
+			"sourceUpdatedAt": "2026-11-03T07:32:07Z",
+			"sourceFingerprint": "aba633907b6f4a2cf3d61aa15cee965edf0c47553ffe4249cd97d7ad65e3d69c",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Well-tested design-token feature addition but non-urgent and not yet deployed or merged.",
+			"evidence": [
+				"draft PR adding Clinic Light/Dark resolving all 169 contract tokens",
+				"17 contract/audit/inventory tests plus 330-pair contrast matrix passed",
+				"no npm publish, production preference writes, merge, or deployment included"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
+		},
+		{
 			"key": "proposal:2026-08-28-gateway-plugin-effect-disposers",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30452,6 +30458,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T06:48:07.653Z"
+		},
+		{
+			"key": "proposal:2026-09-28-hub-table-open-modes-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Table open modes + bulk bar + stock detail — open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-table-open-modes-followups.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "0af9d8885eede8b1d874ccfc81409e9553fc6fa4c97dc854dd5421f74ec1af92",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A multi-item ledger mixing already-addressed work and unrelated items should be split into separate scoped goals.",
+			"evidence": [
+				"status note says §1-§4,6-9 are already addressed by branch feat/table-open-gaps",
+				"remaining §5, §10-11 are unrelated UX/view-transition and permission edge cases",
+				"§9 QA seed bug reproduces on untouched master, unrelated to this branch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a5a65f6d6dac",
@@ -38999,6 +39038,41 @@
 			"scoredAt": "2026-10-28T03:47:36.860Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-753e08fe9f5a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/modules/availability.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-753e08fe9f5a.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "10c7f882fe73ee2eda55165c7045e41c5d6e0c051d0ee8658ce6e55c6c2dc881",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#622"
+			],
+			"rationale": "Cleanup TODO is explicitly blocked on plugin JWT auth landing and isn't independently actionable yet.",
+			"evidence": [
+				"marker says drop code once plugin UIs get a JWT path per spec 043 R8",
+				"draft status with no spec of its own",
+				"dependency proposal 2026-10-29-hub-org-entitlements-followups not yet resolved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-948e27d654f8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39098,6 +39172,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T02:48:14.855Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d371d2661bc2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/flows/ai-nodes.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d371d2661bc2.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "cd918ab4d9fe73da5025bb05f840191918fedbbb20ffe42b62ee6ad82c09735d",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Architectural cleanup explicitly deferred until a third AI flow-node action exists, so it isn't actionable now.",
+			"evidence": [
+				"marker text defers the change until a third AI action is added",
+				"diagnosis proposes a declarative ai flag refactor, not yet triggered",
+				"draft status with no urgency driver cited"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
@@ -43804,6 +43911,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T07:47:58.071Z"
+		},
+		{
+			"key": "run:minion_hub#41597413734",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/41597413734",
+			"sourceUpdatedAt": "2026-11-03T07:36:27Z",
+			"sourceFingerprint": "d008daaa37f4704751c3970f4b85c2ffe3d825d00df353179de89967375f5627",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on master is a pipeline status snapshot, not a decidable work item.",
+			"evidence": [
+				"kind is run, stage testing, status in_progress",
+				"summary is just push on master with no finding or defect described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3652542388",
