@@ -14,9 +14,8 @@ spawned_spec: 2026-11-03-hub-clinic-theme-spec
 
 The user supplied Cliniko scheduling, Clinic landing/dashboard, and Cosmasol
 billing references and requested a new Hub theme covering every design token in
-light and dark modes. `packages/design-tokens/contract.json` has 18 theme modes;
-Hub's `src/lib/themes/presets.ts` lists 16 and installs an older pinned tarball.
-Categorical colors are global; status recipes vary only by mode.
+light and dark modes. The pre-change baseline and historical Hub checkpoint are
+recorded in the [specification](../specs/2026-11-03-hub-clinic-theme-spec.md#1-as-is).
 
 ## TO-BE
 
@@ -28,7 +27,8 @@ readable text, preference persistence, accent customization, and older themes.
 ## DELTA
 
 1. Extend the shared contract with a complete Clinic pair, optional status recipe
-   selection, and complete categorical overrides with reset behavior.
+   selection, and complete categorical overrides with reset behavior, as defined
+   in the [package reference](../packages/design-tokens/README.md#clinic-themes).
 2. Generate and package CSS; update Hub's pinned artifact and expose the modes.
 3. Verify contrast, installed-artifact parity, theme switching, and rendered
    production components at desktop and mobile widths.

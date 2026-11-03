@@ -28,20 +28,26 @@ the session instructions forbid changing branches/worktrees without a request.
 
 ## 1. AS-IS
 
-- `packages/design-tokens/scripts/contract.mjs:resolveTheme` resolves 43
+- At the meta candidate's parent `071ff5ae`,
+  `packages/design-tokens/scripts/contract.mjs:resolveTheme` resolves 43
   per-mode tokens. Five categorical tokens are emitted globally by the CSS
-  generator. Seventy foundation tokens and 50 aliases complete the vocabulary.
-- `contract.json` declares 18 modes; Hub's explicit preset order exposes 16.
-- Hub pins a bundled token dependency in `package.json` and `bun.lock`.
-- `src/lib/themes/runtime.ts:applyTheme` selects `data-minion-theme` and keeps
+  generator; status recipes are selected by mode. The contract declares 20
+  modes, 71 foundation tokens, and 50 aliases.
+- The initial local Hub checkpoint (section 6) recorded 16 exposed presets and a
+  bundled token dependency in `package.json` and `bun.lock`.
+- That checkpoint's `src/lib/themes/runtime.ts:applyTheme` selects
+  `data-minion-theme` and keeps
   the user's independent accent pair. Theme preferences already persist locally
   and synchronize through the existing server preference API.
 
 ## 2. TO-BE and invariants
 
 - Add `clinic-light` / Clinic Light and `clinic-dark` / Clinic Dark.
-- Each mode resolves 48 theme tokens, including all five chart colors, with the
-  same 70 foundation tokens and 50 aliases: 168 properties, none undefined.
+- Each mode resolves every theme token, including all chart colors, with the
+  same shared foundations and aliases; no property is undefined. The
+  [generated inventory](../packages/design-tokens/inventory.json) owns theme IDs
+  and resolved counts; the [contract](../packages/design-tokens/contract.json)
+  owns foundation and alias definitions.
 - Three readable text levels meet 4.5:1 on all five surfaces; accent/on-accent
   and status foreground/surface pairs meet 4.5:1. Accent controls and categorical
   chart marks meet 3:1 on their checked surfaces. Disabled text is exempt.
@@ -84,7 +90,9 @@ merge, deployment, package publication, and editing unrelated concurrent work.
 
 ## 6. Validation record
 
-Verified locally on 2026-11-03:
+Historical initial-checkout qualification recorded on 2026-11-03, before the
+current remote-base candidate in section 7. Counts, archive identities, and
+outcomes below describe that earlier checkout:
 
 - Shared token package build and eight contract tests pass. JSON Schema validation
   passes. All 18 prior themes resolve to exactly their previous values; shared
@@ -119,15 +127,15 @@ Local requirements review: both selectable modes cover every contract token,
 with the existing preference and accent paths retained. These are self-reviews,
 not an independent approval or release claim.
 
-Repository-wide metadata checks remain blocked by earlier files. Proposal
-indexing rejects unknown `custom-columns` / `filesystem` tags in
+At that checkpoint, repository-wide metadata checks were blocked by earlier
+files. Proposal indexing rejected unknown `custom-columns` / `filesystem` tags in
 `2026-09-30-hub-custom-property-select-picker.md` and
-`2026-10-03-gateway-managed-writer-generation-leases.md`. Spec checks report
+`2026-10-03-gateway-managed-writer-generation-leases.md`. Spec checks reported
 earlier heading/topic errors and the existing `verdict: partial` in
 `2026-09-21-hub-customer-identity-guardians-spec.md`. The new proposal validates
 in an isolated corpus; its generated entry was added without rewriting other
-proposal entries. The spec index regenerates successfully; its full check still
-reports those earlier errors. No unrelated document was changed to clear them.
+proposal entries. The spec index regenerated successfully; its full check still
+reported those earlier errors. No unrelated document was changed to clear them.
 
 At initial local qualification no commit, pull request, npm publication, merge,
 production preference write, or deployment was performed.
@@ -140,11 +148,13 @@ the Hub candidate starts at `f407d05b` on `master`. The registry PR bases are
 `dev` and `master` respectively. The local no-mistakes project setting records
 the meta PR base so the gate follows that registry role.
 
-The current shared contract already has 20 themes, including the distinct
-warm-teal `clinic` / `clinic-night` pair used by the Site, and 71 foundation
-tokens including `--page-max`. Preserve those existing themes and foundations.
-This candidate adds only `clinic-light` / `clinic-dark`: 22 shared modes, 48
-resolved roles per mode, and 169 total CSS properties. Hub keeps its curated
+The pre-change contract in section 1 already includes the distinct warm-teal
+`clinic` / `clinic-night` pair used by the Site and the `--page-max` foundation.
+Preserve those existing themes and foundations.
+This candidate adds only the blue pair documented in the
+[package reference](../packages/design-tokens/README.md#clinic-themes); generated
+theme IDs and resolved counts live in
+[inventory.json](../packages/design-tokens/inventory.json). Hub keeps its curated
 catalog and adds only the two new blue modes; Site-specific Concourse entries
 remain outside the Hub picker.
 
@@ -154,5 +164,8 @@ eight token-package members, including the audit API and source inventory.
 Hub retains its existing UI archive; its token dependency, immutable archive,
 provenance receipts, and receipt pin change together. Initial-checkout evidence
 above is historical; clean-candidate qualification and hosted CI determine
-whether this branch is ready to merge. Push authorization does not assert that
+whether this branch is ready to merge. The documentation-phase checks of this
+candidate pass `node scripts/spec-index.mjs --check` and
+`node scripts/proposal-index.mjs --check`; the historical metadata blockers in
+section 6 do not apply to this candidate. Push authorization does not assert that
 a production deployment has happened.
