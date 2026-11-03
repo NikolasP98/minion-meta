@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1167132208
 title: Handoff marker — src/routes/api/internal/flows/[id]/+server.ts (minion_hub)
-status: draft
+status: review
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-96528a1d8ee1
 ---
 
 # Handoff marker — src/routes/api/internal/flows/[id]/+server.ts

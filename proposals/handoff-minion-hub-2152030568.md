@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2152030568
 title: Handoff marker — src/lib/modules/availability.ts (minion_hub)
-status: draft
+status: review
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-753e08fe9f5a
 ---
 
 # Handoff marker — src/lib/modules/availability.ts
