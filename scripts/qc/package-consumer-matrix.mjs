@@ -23,7 +23,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-import { packPackage } from './package-provenance.mjs';
+import { assertNoVersionDigestConflict, packPackage, sha256 } from './package-provenance.mjs';
 
 const FIXTURES_DIR = path.join(import.meta.dirname, 'fixtures', 'consumer-matrix');
 
@@ -133,7 +133,7 @@ export function resolveRealCombination(repoRoot, combo) {
   const consumerRoot = mkdtempSync(path.join(tmpdir(), 'minion-consumer-'));
   try {
     writeFileSync(path.join(consumerRoot, 'package.json'), JSON.stringify({ name: 'consumer-fixture', version: '0.0.0', private: true }, null, 2));
-    const tarballPath = findTarball(repoRoot, combo.pkgDir, entry);
+    const tarballPath = findTarball(repoRoot, combo.pkgDir, entry, consumerRoot);
     // --legacy-peer-deps: npm >=7 otherwise auto-installs peers from the
     // network by default, which would silently mask exactly the missing-peer
     // case this matrix exists to catch (and would be an unwanted network
@@ -198,12 +198,7 @@ export function resolveRealCombination(repoRoot, combo) {
   }
 }
 
-function findTarball(repoRoot, pkgDir, entry) {
-  // packPackage already deleted its own scratch tarball; repack once more
-  // into a dir we control for the install step (still the same tooling,
-  // same source — a second pack of unchanged source is byte-identical, see
-  // package-provenance.test.mjs's repack-identity case).
-  const outDir = mkdtempSync(path.join(tmpdir(), 'minion-consumer-src-'));
+function findTarball(repoRoot, pkgDir, entry, outDir) {
   const raw = execFileSync('pnpm', ['pack', '--pack-destination', outDir, '--json'], {
     cwd: path.join(repoRoot, pkgDir),
     encoding: 'utf8',
@@ -211,6 +206,7 @@ function findTarball(repoRoot, pkgDir, entry) {
   const lines = raw.split('\n');
   const jsonStart = lines.findIndex((l) => l.trim() === '{');
   const parsed = JSON.parse((jsonStart === -1 ? raw : lines.slice(jsonStart).join('\n')));
+  assertNoVersionDigestConflict(entry, sha256(readFileSync(parsed.filename)), 'consumer install archive');
   return parsed.filename;
 }
 
