@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-f0206dc8b63e
 title: "Post-merge finding — todo-handoff in src/server/services/gateway-jwt.service.ts (minion_hub)"
-status: draft
+status: review
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+duplicate_candidate: 2026-10-29-gateway-per-org-credentials-followups
 ---
 
 # Post-merge finding — todo-handoff in `src/server/services/gateway-jwt.service.ts`

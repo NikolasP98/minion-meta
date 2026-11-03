@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3527154209
 title: Handoff marker — src/hooks/gmail-auto-label.ts (minion-ai)
-status: draft
+status: review
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-29-hub-org-entitlements-followups
 ---
 
 # Handoff marker — src/hooks/gmail-auto-label.ts

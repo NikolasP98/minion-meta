@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-453435597
 title: Handoff marker — src/web/auto-reply/heartbeat-runner.ts (minion-ai)
-status: draft
+status: review
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-29-hub-org-entitlements-followups
 ---
 
 # Handoff marker — src/web/auto-reply/heartbeat-runner.ts

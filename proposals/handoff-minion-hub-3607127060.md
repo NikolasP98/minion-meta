@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-3607127060
 title: Handoff marker — src/lib/plugins/PluginIframe.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-4f60d3413457
+merged_into: postmerge-minion-hub-4f60d3413457
 ---
 
 # Handoff marker — src/lib/plugins/PluginIframe.svelte

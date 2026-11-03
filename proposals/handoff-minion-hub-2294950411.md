@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2294950411
 title: Handoff marker — src/lib/services/gateway/platform-admin-methods.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-3c702b25845f
+merged_into: postmerge-minion-hub-3c702b25845f
 ---
 
 # Handoff marker — src/lib/services/gateway/platform-admin-methods.ts

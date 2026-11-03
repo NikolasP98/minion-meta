@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-f19b0bbe4d0b
 title: "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/token/+server.ts (minion_hub)"
-status: draft
+status: review
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+duplicate_candidate: 2026-10-29-hub-org-entitlements-followups
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/api/servers/[id]/token/+server.ts`

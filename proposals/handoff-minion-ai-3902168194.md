@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3902168194
 title: Handoff marker — src/gateway/channel-hydrate.ts (minion-ai)
-status: draft
+status: review
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-10-29-hub-org-entitlements-followups
 ---
 
 # Handoff marker — src/gateway/channel-hydrate.ts

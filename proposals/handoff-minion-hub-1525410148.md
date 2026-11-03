@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-1525410148
 title: Handoff marker — src/server/services/gateway-jwt.service.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-11-03
 updated: 2026-11-03
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-f0206dc8b63e
+merged_into: postmerge-minion-hub-f0206dc8b63e
 ---
 
 # Handoff marker — src/server/services/gateway-jwt.service.ts
