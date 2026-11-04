@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T09:48:49.132Z",
+	"generatedAt": "2026-11-04T10:18:13.951Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9591,6 +9591,38 @@
 			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
+			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
+			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a record of an already-merged commit whose new behavior is explicitly inert until further configuration, leaving no outstanding actionable task.",
+			"evidence": [
+				"commit merged to DEV implementing JWT-only gateway binding and Base-org allowlist",
+				"description states features are 'inert until hub enforces' or configures them"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T10:18:13.789Z"
+		},
+		{
 			"key": "issue:minion-meta#399",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14371,20 +14403,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "A design-token bug where accent color is hardcoded as link styling spans hub, site, and the shared package with potential a11y contrast fallout, but the fix direction still needs scoping against HC-043 before it is execution-ready.",
+			"rationale": "A real design-token defect but its scope and duplicate status hinge on an HC-043 occurrence outside this batch, so it needs scoping before execution.",
 			"evidence": [
-				"accent color directly mapped to link styling instead of semantic link.* tokens",
-				"cross-project fix touching hub, site, and possibly @minion-stack/design-tokens"
+				"accent color mapped directly to link styling in src/app.css instead of a semantic link token",
+				"diagnosis notes this is cross-project (hub, site, shared package) and echoes an HC-043 occurrence not present in this batch"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T09:47:42.121Z"
+			"scoredAt": "2026-11-04T10:18:13.789Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-pos-appointments-fork-spec",
@@ -18488,6 +18520,40 @@
 			"scoredAt": "2026-11-02T13:18:17.864Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-66d88ed81830",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/my-agent/ZenMode.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66d88ed81830.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "bb7878c4ea2b0f764017c0cebb01007039da23f3b67c4a466bdfec795f5154d8",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-93789f3a94af"
+			],
+			"rationale": "Shares the HC-028 overlay/dialog contract with the AgentSettingsPanel finding, so the two should become one migration goal.",
+			"evidence": [
+				"aria-modal=true claimed without native modal behavior, breaking WCAG 4.1.2",
+				"references spec-hc028-overlay-dialog-contract.md DELTA 3, same contract document as the related drawer finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T10:18:13.789Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18572,22 +18638,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 6,
+				"implementation": 4
 			},
 			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-66d88ed81830"
 			],
-			"rationale": "Migrating the hand-rolled AgentSettingsPanel drawer to the shared Sheet is blocked by two concrete layout/keyboard issues under the same HC-028 overlay-dialog-contract spec as the ZenMode finding, making a combined overlay-contract goal more effective than two separate ones.",
+			"rationale": "Same HC-028 overlay/dialog contract as the ZenMode aria-modal finding, best unified into one migration goal given the noted layout/keyboard blockers.",
 			"evidence": [
-				"680px two-column layout exceeds Sheet's fixed 28rem width",
-				"cites spec-hc028-overlay-dialog-contract.md DELTA 2, same spec as ZenMode finding's DELTA 3"
+				"hand-rolled drawer should migrate to shared Sheet per spec-hc028-overlay-dialog-contract.md DELTA 2",
+				"blockers noted: 680px two-column layout vs Sheet's 28rem width, and window-level Escape conflicting with nested Zag menus"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T09:47:42.121Z"
+			"scoredAt": "2026-11-04T10:18:13.789Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b252c0822c83",
@@ -21603,40 +21669,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T07:18:05.773Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-66d88ed81830",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/my-agent/ZenMode.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66d88ed81830.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "bb7878c4ea2b0f764017c0cebb01007039da23f3b67c4a466bdfec795f5154d8",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-93789f3a94af"
-			],
-			"rationale": "An approved WCAG a11y defect in ZenMode's false aria-modal claim shares the HC-028 overlay-dialog-contract spec with the AgentSettingsPanel drawer finding and should be resolved as one overlay-contract goal.",
-			"evidence": [
-				"aria-modal=true without focus trap/inert background violates WCAG 2.1 4.1.2",
-				"cites spec-hc028-overlay-dialog-contract.md DELTA 3, same spec as AgentSettingsPanel finding's DELTA 2"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T09:47:42.121Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-749c9f202140",
@@ -26297,38 +26329,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T02:01:03.179Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-59d7c8f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 59d7c8f",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-59d7c8f.md",
-			"sourceUpdatedAt": "2026-10-14",
-			"sourceFingerprint": "dcbe07fdf6720f2e1e6f9026b3c728b9b13d1f8fd6a74c29e72e9aaba1a86b8c",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A single, precisely located medium-severity unchecked-array-access bug in an OAuth CLI flow is small, well-specified, and actionable now.",
-			"evidence": [
-				"src/cli/commands/oauth/openai-codex-oauth.ts:64 unchecked options[0] access",
-				"medium severity, single finding from merge-scan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T09:47:42.121Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-e8cac06",
@@ -34301,6 +34301,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-01T02:47:27.993Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-59d7c8f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 59d7c8f",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-59d7c8f.md",
+			"sourceUpdatedAt": "2026-10-14",
+			"sourceFingerprint": "dcbe07fdf6720f2e1e6f9026b3c728b9b13d1f8fd6a74c29e72e9aaba1a86b8c",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A clearly located, bounded null-check fix in a single CLI file with low blast radius.",
+			"evidence": [
+				"medium unchecked-access finding at openai-codex-oauth.ts:64 for prompt.options[0]",
+				"reconciliation note flags a possible duplicate with a separate handoff marker pending human confirmation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T10:18:13.789Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-648f095",
