@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T05:17:32.159Z",
+	"generatedAt": "2026-11-04T05:48:39.511Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9487,38 +9487,6 @@
 			"scoredAt": "2026-11-02T06:48:11.818Z"
 		},
 		{
-			"key": "pr:minion (gateway)#341",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#341 docs(ci): track the failed DEV rollback image alias",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/341",
-			"sourceUpdatedAt": "2026-10-21T04:41:44Z",
-			"sourceFingerprint": "7d0ad275710d28c5bb514317e0240982d9ce53666d446de2f9944aa7b2bad9b5",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This draft PR is a comment-only ledger for a real DEV rollback-alias casing defect, but the actual fix is explicitly deferred to a separate reviewed spec/proposal.",
-			"evidence": [
-				"Docker rejected ghcr.io/.../minion-ai:dev-rollback-protopi due to mixed-case repository owner",
-				"PR states: 'The defect remains open; implementation requires a reviewed spec and separate approval'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
-		},
-		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14148,6 +14116,38 @@
 			"scoredAt": "2026-10-31T10:17:14.357Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-763d076153d2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src-tauri/Cargo.lock (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-763d076153d2.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "e2d2246a804866161544179f00859dca79b123c97c2724053f0205ac18478dee",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The surface issue is a scanner binary-diff gap, but the substantive concern is an unreviewed 4918-line Cargo.lock implying a new Tauri integration with unaudited transitive Rust dependencies, which needs its own architecture/security review rather than a scanner patch.",
+			"evidence": [
+				"4918-line Cargo.lock added, suggesting a new Tauri desktop integration",
+				"Diagnosis itself recommends confirming the Tauri addition was spec'd and auditing high-risk dependencies like tokio/actix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9068ad039a31",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15078,6 +15078,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:27:46.752Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
+			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
+			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This deploy entry records already-merged JWT/org-plan gateway work that remains inert until the hub sends features claims, so the merged deploy itself needs no action but the follow-on hub wiring isn't tracked as a goal here.",
+			"evidence": [
+				"Commit states BASE_PLAN_GATEWAY_METHODS allowlist is inert until hub enforces",
+				"JWT-only connect refusal defaults to empty jwtOnlyAudiences, making 043 S4 inert"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
 		},
 		{
 			"key": "issue:minion_hub#205",
@@ -18282,38 +18314,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T13:18:17.864Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-763d076153d2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src-tauri/Cargo.lock (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-763d076153d2.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "e2d2246a804866161544179f00859dca79b123c97c2724053f0205ac18478dee",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A 4918-line unscanned Cargo.lock implies a possibly unspecced Tauri desktop integration with unaudited transitive Rust dependencies, a distinct and higher-stakes supply-chain concern than the sibling screenshot scan-gaps.",
-			"evidence": [
-				"'A massive Cargo.lock being added with 4918 lines suggests a new Tauri (desktop) integration ... significant architectural shift'",
-				"fix direction calls for confirming intentionality and auditing high-risk deps (tokio, actix, FFI)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
@@ -28083,6 +28083,38 @@
 			"scoredAt": "2026-10-28T18:17:31.652Z"
 		},
 		{
+			"key": "pr:minion (gateway)#341",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#341 docs(ci): track the failed DEV rollback image alias",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/341",
+			"sourceUpdatedAt": "2026-10-21T04:41:44Z",
+			"sourceFingerprint": "7d0ad275710d28c5bb514317e0240982d9ce53666d446de2f9944aa7b2bad9b5",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Comment-only ledger entry documenting a real DEV-only rollback alias casing defect with no fix included, explicitly deferring repair to a separate reviewed spec.",
+			"evidence": [
+				"Docker rejected ghcr.io/.../minion-ai:dev-rollback-protopi for mixed-case owner spelling",
+				"PR body states the defect remains open and implementation requires separate approval"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
+		},
+		{
 			"key": "pr:minion_site#28",
 			"kind": "pr",
 			"stage": "development",
@@ -36003,6 +36035,42 @@
 			"scoredAt": "2026-11-02T06:48:11.818Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-04976b77c87e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/mobile-drop.png (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-04976b77c87e.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "300e7f4f0bd9539adb99bd1e6b204983439c4f3e4a20fad8d10bb5c1fca936d8",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-41eba18c0861",
+				"proposal:postmerge-minion-hub-7b502b4b31cf",
+				"proposal:postmerge-minion-hub-b429bb5e2383"
+			],
+			"rationale": "Duplicate binary-scan-gap finding for PR #575's screenshots; should consolidate with the six sibling PNG findings into one scanner-fix goal.",
+			"evidence": [
+				"GitHub's patch API returns no diff for the added PNG mobile-drop.png",
+				"Six other findings in this same batch report the identical binary-scan gap for the same merged PR"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-152748b32645",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36131,6 +36199,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T10:17:44.911Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-41eba18c0861",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/initial.png (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-41eba18c0861.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "bc1374ede4ac0a47a4d2e63a815ac9b58058a5951d732721a729f4868c0cd4b9",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-04976b77c87e",
+				"proposal:postmerge-minion-hub-7b502b4b31cf",
+				"proposal:postmerge-minion-hub-b429bb5e2383"
+			],
+			"rationale": "Same binary-scan-gap root cause as the other screenshot findings from PR #575; should be consolidated into a single scanner-fix goal rather than tracked per-file.",
+			"evidence": [
+				"No text patch for added PNG initial.png",
+				"Identical diagnosis and fix direction as six sibling findings in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-489bd42e8ffa",
@@ -36298,6 +36402,42 @@
 			"scoredAt": "2026-11-02T03:49:50.455Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-7b502b4b31cf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/pending.png (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7b502b4b31cf.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "b5376b63f77a8f9075f41465c4e511a3c2ced366eb94d77068fd3ef52f3a33d0",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-04976b77c87e",
+				"proposal:postmerge-minion-hub-41eba18c0861",
+				"proposal:postmerge-minion-hub-b429bb5e2383"
+			],
+			"rationale": "Same binary-scan-gap finding pattern for pending.png in PR #575; belongs in the consolidated scanner-fix group rather than its own goal.",
+			"evidence": [
+				"No patch generated for added PNG pending.png",
+				"Diagnosis matches the other six screenshot scan-gap findings in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9388338cb205",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36402,6 +36542,42 @@
 			"scoredAt": "2026-11-02T06:48:11.818Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-b429bb5e2383",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/mobile.png (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b429bb5e2383.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "c61af120a82086712209399861e8e6fde93e0f277bb32506ebd33ddf0b558bca",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-04976b77c87e",
+				"proposal:postmerge-minion-hub-41eba18c0861",
+				"proposal:postmerge-minion-hub-7b502b4b31cf"
+			],
+			"rationale": "Same binary-scan-gap finding pattern for mobile.png in PR #575; belongs in the consolidated scanner-fix group rather than its own goal.",
+			"evidence": [
+				"No patch generated for added PNG mobile.png",
+				"Diagnosis matches the other six screenshot scan-gap findings in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-bb9cd7740cf0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36503,6 +36679,42 @@
 			"scoredAt": "2026-11-03T05:58:33.410Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-ccea6cbc77f9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/context.png (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ccea6cbc77f9.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "ffec9569671f01ce0b1031f273a260218e0f6f96c13bbc3467e0c869bcf44c58",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dafb18c94e96",
+				"proposal:postmerge-minion-hub-ff94cf386ea4",
+				"proposal:postmerge-minion-hub-04976b77c87e"
+			],
+			"rationale": "Same binary-scan-gap finding pattern for context.png in PR #575; belongs in the consolidated scanner-fix group rather than its own goal.",
+			"evidence": [
+				"No patch generated for added PNG context.png",
+				"Diagnosis matches the other six screenshot scan-gap findings in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d5e424e20df5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36533,6 +36745,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-01T06:18:14.087Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-dafb18c94e96",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/drop.png (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dafb18c94e96.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "a212ab11c4df1098587bc810aa60159287315a99d7de9e923eff7019070fe274",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ccea6cbc77f9",
+				"proposal:postmerge-minion-hub-ff94cf386ea4",
+				"proposal:postmerge-minion-hub-04976b77c87e"
+			],
+			"rationale": "Same binary-scan-gap finding pattern for drop.png in PR #575; belongs in the consolidated scanner-fix group rather than its own goal.",
+			"evidence": [
+				"No patch generated for added PNG drop.png",
+				"Diagnosis matches the other six screenshot scan-gap findings in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e0651859d6e7",
@@ -36665,6 +36913,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T04:17:41.273Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ff94cf386ea4",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/retained.png (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ff94cf386ea4.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "eccc5a74e3ea0b46271eeb8c2214c66dbcdea30399cf085a0522d9a7c22ab563",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ccea6cbc77f9",
+				"proposal:postmerge-minion-hub-dafb18c94e96",
+				"proposal:postmerge-minion-hub-04976b77c87e"
+			],
+			"rationale": "Same binary-scan-gap finding pattern for retained.png in PR #575; belongs in the consolidated scanner-fix group rather than its own goal.",
+			"evidence": [
+				"No patch generated for added PNG retained.png",
+				"Diagnosis matches the other six screenshot scan-gap findings in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T05:48:39.288Z"
 		},
 		{
 			"key": "spec:2026-10-03-site-alternate-metadata-spec",
@@ -42124,150 +42408,6 @@
 			"scoredAt": "2026-10-29T16:17:22.552Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-04976b77c87e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/mobile-drop.png (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-04976b77c87e.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "300e7f4f0bd9539adb99bd1e6b204983439c4f3e4a20fad8d10bb5c1fca936d8",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-41eba18c0861",
-				"proposal:postmerge-minion-hub-7b502b4b31cf",
-				"proposal:postmerge-minion-hub-b429bb5e2383"
-			],
-			"rationale": "Identical scan-gap-on-binary-file finding from the same merged PR #575 as six sibling proposals, all solvable by one binary-file scan-handling fix.",
-			"evidence": [
-				"same merged PR https://github.com/NikolasP98/minion_hub/pull/575",
-				"diagnosis: 'Binary files ... don't generate text diffs ... patch-based scan coverage can't verify them'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-41eba18c0861",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/initial.png (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-41eba18c0861.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "bc1374ede4ac0a47a4d2e63a815ac9b58058a5951d732721a729f4868c0cd4b9",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-04976b77c87e",
-				"proposal:postmerge-minion-hub-ccea6cbc77f9",
-				"proposal:postmerge-minion-hub-dafb18c94e96"
-			],
-			"rationale": "Same scan-gap-on-PNG pattern from PR #575 as multiple sibling proposals; one scan-logic fix resolves all of them.",
-			"evidence": [
-				"merged PR https://github.com/NikolasP98/minion_hub/pull/575",
-				"diagnosis: scan 'recorded no patch instead of intentionally skipped binary'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-7b502b4b31cf",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/pending.png (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7b502b4b31cf.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "b5376b63f77a8f9075f41465c4e511a3c2ced366eb94d77068fd3ef52f3a33d0",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-04976b77c87e",
-				"proposal:postmerge-minion-hub-b429bb5e2383",
-				"proposal:postmerge-minion-hub-ccea6cbc77f9"
-			],
-			"rationale": "Same PNG scan-gap pattern and PR #575 as several sibling proposals; belongs in one consolidated scan-handling fix rather than separate goals.",
-			"evidence": [
-				"merged PR https://github.com/NikolasP98/minion_hub/pull/575",
-				"diagnosis: 'the scan tool encountered a binary file (PNG) it couldn't parse a diff for'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b429bb5e2383",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/mobile.png (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b429bb5e2383.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "c61af120a82086712209399861e8e6fde93e0f277bb32506ebd33ddf0b558bca",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-04976b77c87e",
-				"proposal:postmerge-minion-hub-41eba18c0861",
-				"proposal:postmerge-minion-hub-dafb18c94e96"
-			],
-			"rationale": "Same PNG scan-gap pattern and PR #575 as the other six screenshot findings, suited to a single consolidated fix.",
-			"evidence": [
-				"merged PR https://github.com/NikolasP98/minion_hub/pull/575",
-				"diagnosis: 'Binary files ... don't produce text diffs, so the scan pipeline couldn't analyze what was actually added'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-c9369d818ed7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42298,114 +42438,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-01T06:18:14.087Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ccea6cbc77f9",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/context.png (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ccea6cbc77f9.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "ffec9569671f01ce0b1031f273a260218e0f6f96c13bbc3467e0c869bcf44c58",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-04976b77c87e",
-				"proposal:postmerge-minion-hub-7b502b4b31cf",
-				"proposal:postmerge-minion-hub-ff94cf386ea4"
-			],
-			"rationale": "Same PNG scan-gap pattern and PR #575 as the other screenshot findings; one scan-handling fix covers all of them.",
-			"evidence": [
-				"merged PR https://github.com/NikolasP98/minion_hub/pull/575",
-				"diagnosis: 'Binary files like .png have no textual diff, so automated scans can't verify their contents'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-dafb18c94e96",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/drop.png (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dafb18c94e96.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "a212ab11c4df1098587bc810aa60159287315a99d7de9e923eff7019070fe274",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-04976b77c87e",
-				"proposal:postmerge-minion-hub-b429bb5e2383",
-				"proposal:postmerge-minion-hub-ff94cf386ea4"
-			],
-			"rationale": "Same PNG scan-gap pattern and PR #575 as the other screenshot findings; should consolidate into a single scan-tooling fix.",
-			"evidence": [
-				"merged PR https://github.com/NikolasP98/minion_hub/pull/575",
-				"diagnosis: 'Binary files (screenshots) can't be diffed as text, so the scan couldn't verify the content was intentional'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ff94cf386ea4",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in docs/verification/2026-10-20-app-backlog/screenshots/retained.png (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ff94cf386ea4.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "eccc5a74e3ea0b46271eeb8c2214c66dbcdea30399cf085a0522d9a7c22ab563",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-04976b77c87e",
-				"proposal:postmerge-minion-hub-ccea6cbc77f9",
-				"proposal:postmerge-minion-hub-dafb18c94e96"
-			],
-			"rationale": "Same PNG scan-gap pattern and PR #575 as the other screenshot findings; a single fix for binary-file scan handling resolves all.",
-			"evidence": [
-				"merged PR https://github.com/NikolasP98/minion_hub/pull/575",
-				"diagnosis: 'GitHub doesn't return text patches for binary files (like .png), so the scan tool hit a blind spot'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:18:03.330Z"
 		},
 		{
 			"key": "issue:minion-meta#880",
@@ -44043,7 +44075,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-04",
-			"sourceFingerprint": "a5c6d6163fed601e673da122f7e4fa890e394cde80f5879847d9bb6b461253c0",
+			"sourceFingerprint": "2fcc8c8c935e6e525826f500c8fcd7c124ba111a20f0e0d08abcdf39fc2bc07f",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -44052,20 +44084,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 2,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The 'markers' are text quoted from within the rankings file's own prior entries, a self-referential sweep artifact rather than an actual code TODO.",
+			"rationale": "The listed markers are quoted rationale fragments scraped from the rankings file itself rather than genuine source-code TODO(handoff) comments, making this a non-actionable sweep artifact.",
 			"evidence": [
-				"file flagged is rankings/index.json itself",
-				"quoted fragments are ranking-entry prose, e.g. 'this narrows the race window, it does not close it'"
+				"All markers point to lines inside rankings/index.json, the ranking tool's own output file",
+				"Definition of done asks to remove TODO(handoff) comments that aren't actually code comments"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T01:58:01.399Z"
+			"scoredAt": "2026-11-04T05:48:39.288Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
