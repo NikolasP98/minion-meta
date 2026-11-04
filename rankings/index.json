@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T07:49:32.999Z",
+	"generatedAt": "2026-11-04T08:18:13.318Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -701,6 +701,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T10:11:01.414Z"
+		},
+		{
+			"key": "pr:minion_hub#633",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#633 fix(backups): restore route no longer passes client input into a root shell command (MIN-12)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/633",
+			"sourceUpdatedAt": "2026-11-04T07:51:25Z",
+			"sourceFingerprint": "f5caa3e02c9f77acdab2cb2580f030e86d5b6318c05b94b382cf1772abcab6ef",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#936"
+			],
+			"rationale": "Open PR fixes an admin-exploitable root shell command injection in the backup restore route with tests, so it should be merged promptly.",
+			"evidence": [
+				"org admin could run arbitrary commands on the gateway host",
+				"28 tests pass; bun run check/build not verified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T08:18:13.127Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-807f018d50fd",
@@ -4615,23 +4649,22 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 6
+				"specification": 7,
+				"implementation": 4
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [
 				"proposal:2026-10-24-hub-collection-points-followups"
 			],
-			"rationale": "A well-structured, slice-scoped Spec Kit feature with clear plan/tasks that replaces a patient-data-losing FACES intake form, making it the highest-readiness, highest-stakes candidate in this batch.",
+			"rationale": "Security/data-tagged CRM feature spec whose first real use case replaces a form that is currently losing patient data, giving it genuine urgency despite still being in draft.",
 			"evidence": [
-				"FACES intake form 'loses patient data today'",
-				"Security and data tagged: owner approves and merges every slice",
-				"Seven hub slices with only S0 as serial gate, S3 independent"
+				"the FACES intake form, which loses patient data today",
+				"Security and data tagged: the owner approves the spec and merges every slice"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:48:03.299Z"
+			"scoredAt": "2026-11-04T08:18:13.127Z"
 		},
 		{
 			"key": "issue:minion-meta#895",
@@ -6809,41 +6842,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T07:49:32.808Z"
-		},
-		{
-			"key": "proposal:2026-10-24-hub-collection-points-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Collection points — open ends deferred from spec 041",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-24-hub-collection-points-followups.md",
-			"sourceUpdatedAt": "2026-10-24",
-			"sourceFingerprint": "34809541c6ce91ec3ef64bb355c5e1adf14ca5449bebc116a41c042dfe1224e9",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"spec:2026-10-24-hub-collection-points-spec"
-			],
-			"rationale": "A 15-item grab-bag of deferred follow-ups spanning payments, consent, SSR, and a clinical-data access gate should be split into individually scoped goals rather than tracked as one bundle.",
-			"evidence": [
-				"item 11: clinical free text in submissions gated to crm:manage per owner decision",
-				"item 9: ssr=false makes /d/ pages invisible to crawlers",
-				"15 distinct deferred items across security, SEO, and i18n"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:48:03.299Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-de95880",
@@ -10621,6 +10619,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T19:48:02.841Z"
+		},
+		{
+			"key": "proposal:2026-10-24-hub-collection-points-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Collection points — open ends deferred from spec 041",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-24-hub-collection-points-followups.md",
+			"sourceUpdatedAt": "2026-10-24",
+			"sourceFingerprint": "34809541c6ce91ec3ef64bb355c5e1adf14ca5449bebc116a41c042dfe1224e9",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-24-hub-collection-points-spec"
+			],
+			"rationale": "A long ledger of mostly small deferred items, one of which (unrestricted read of clinical free text) is a real data-exposure risk, but most items need an owner decision before they are actionable.",
+			"evidence": [
+				"any crm:view holder can read free text",
+				"owner decision for item 4 ... flagged to the owner 2026-10-24"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T08:18:13.127Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-1d40d9a",
@@ -25274,6 +25306,40 @@
 			"scoredAt": "2026-10-30T09:20:43.973Z"
 		},
 		{
+			"key": "pr:minion-meta#936",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#936 proposal: roll out off-server gateway volume backups and prove the restore (MIN-12)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/936",
+			"sourceUpdatedAt": "2026-11-04T07:48:12Z",
+			"sourceFingerprint": "135c520e1098dacf1c1747472bb8a1eb859f247865e5602487f7a2e1fc05d6ff",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#633"
+			],
+			"rationale": "Low-effort docs-only ledger PR that tracks required follow-up work for the backup rollout and can be merged alongside #633.",
+			"evidence": [
+				"Docs only",
+				"Lists what is not done: host install, production timing and drill"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T08:18:13.127Z"
+		},
+		{
 			"key": "proposal:2026-08-30-site-page-max-shared-token",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25372,42 +25438,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T03:47:17.504Z"
-		},
-		{
-			"key": "proposal:2026-10-24-site-stay-in-touch-updates",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_site",
-			"title": "minion_site: open ends from spec 040 (stay-in-touch list, light-theme mascot, real proof)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-24-site-stay-in-touch-updates.md",
-			"sourceUpdatedAt": "2026-10-24",
-			"sourceFingerprint": "0465d10ec4ccf00f76927d497287569033664f97b85beedfe968c9d76ffe0ba3",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-site-b0b6fc0066d7",
-				"proposal:postmerge-minion-site-ca055449de0c"
-			],
-			"rationale": "Marketing-site follow-ups bundle several owner-decision-gated items (newsletter channel, pricing anchor, proof) that duplicate two separate post-merge findings in this same batch and should be consolidated.",
-			"evidence": [
-				"item 1 needs owner to pick email vs WhatsApp opt-in channel",
-				"item 4 pricing shows no amount, needs owner-set anchor",
-				"overlaps items 1 and 4 with postmerge findings b0b6fc0066d7 and ca055449de0c"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T07:48:03.299Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1816477971",
@@ -32360,6 +32390,38 @@
 			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
+			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
+			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 10
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a changelog record of an already-merged, inert-until-configured commit, not a forward-looking goal.",
+			"evidence": [
+				"feat(gateway): ... (inert until hub enforces)",
+				"merged via #363"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T08:18:13.127Z"
+		},
+		{
 			"key": "issue:minion-meta#614",
 			"kind": "issue",
 			"stage": "proposal",
@@ -35595,6 +35657,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T05:48:22.744Z"
+		},
+		{
+			"key": "proposal:2026-10-24-site-stay-in-touch-updates",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_site",
+			"title": "minion_site: open ends from spec 040 (stay-in-touch list, light-theme mascot, real proof)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-24-site-stay-in-touch-updates.md",
+			"sourceUpdatedAt": "2026-10-24",
+			"sourceFingerprint": "0465d10ec4ccf00f76927d497287569033664f97b85beedfe968c9d76ffe0ba3",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Mostly cosmetic/marketing deferrals with no security or outage exposure, several blocked on owner pricing/channel decisions.",
+			"evidence": [
+				"no real testimonials, logos, metrics or case studies",
+				"items 1, 3 and 4 need an owner decision first"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T08:18:13.127Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1509650200",
