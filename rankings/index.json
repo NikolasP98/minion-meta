@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T23:17:17.126Z",
+	"generatedAt": "2026-11-04T23:47:28.697Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -21579,38 +21579,6 @@
 			"scoredAt": "2026-11-04T07:48:56.644Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 9d8d4a8",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-9d8d4a8.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "953cf0a82ddb9e967405609c3658be44a15dbeab6ee88862c90f582a6cda313c",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-localized null-check bug in a chat rendering component with a clear fix path, but limited blast radius and no urgency signal.",
-			"evidence": [
-				"src/lib/components/chat/MarkdownMessage.svelte:41 unchecked-access on c.input.options",
-				"finding severity rated medium by merge-scan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T23:17:12.161Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-e98422b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22039,38 +22007,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T05:48:22.744Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a merged, inert-until-configured feature deployment with no indication of current production issues requiring urgent action.",
-			"evidence": [
-				"JWT-only connect, plan/features claims ... Inert until the hub sends features claims",
-				"PR already merged (#363)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T23:17:16.913Z"
 		},
 		{
 			"key": "issue:minion-meta#574",
@@ -34639,6 +34575,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T17:48:01.796Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 9d8d4a8",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-9d8d4a8.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "953cf0a82ddb9e967405609c3658be44a15dbeab6ee88862c90f582a6cda313c",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single medium-severity null-check finding in a chat markdown component is low-urgency but has a concrete file/line pointer worth triaging.",
+			"evidence": [
+				"medium unchecked-access at MarkdownMessage.svelte:41",
+				"c.input accessed without null check could throw TypeError"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T23:47:28.457Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2b39bb2c6fb1",
