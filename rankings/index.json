@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T14:17:32.595Z",
+	"generatedAt": "2026-11-04T14:47:42.742Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -367,6 +367,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:10.731Z"
+		},
+		{
+			"key": "proposal:2026-09-08-platform-qc-remediation",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Platform QC follow-ups — authorization, durable execution, compatibility and release evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-08-platform-qc-remediation.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "c6b1a9c74cb1c88501bdf7cab7136f69c4f6057e6b6f07a64a4b9388c23ac9de",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Broad security/durability remediation across authorization, logging, flow execution, job effects, and shells is high-stakes but spans five large slices with only private, unaligned evidence and no implementation yet.",
+			"evidence": [
+				"private audit only, local working trees not aligned to audited revisions",
+				"covers 5 priority slices (HDS-01..07, A1-A9) across hub, gateway, langgraph-server, shells-bridge",
+				"draft status, authorizes no production action"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T14:47:42.523Z"
 		},
 		{
 			"key": "proposal:2026-10-11-hub-corpus-pipeline-scaling",
@@ -1424,39 +1457,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:26:05.227Z"
-		},
-		{
-			"key": "proposal:2026-09-08-platform-qc-remediation",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Platform QC follow-ups — authorization, durable execution, compatibility and release evidence",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-08-platform-qc-remediation.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "c6b1a9c74cb1c88501bdf7cab7136f69c4f6057e6b6f07a64a4b9388c23ac9de",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Draft proposal covering multiple high-severity security/durability gaps (authorization, secret logging, SQL injection, durable job races) with slice-level definitions of done but no implementation evidence yet.",
-			"evidence": [
-				"status: draft",
-				"Replace raw caller-authored analytics SQL with server-owned... authorized operations",
-				"Replace input-to-SQL interpolation in compile-flow.ts with bindings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T14:17:20.856Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1961730030",
@@ -26731,39 +26731,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:52:25.870Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a merged, deployed commit describing JWT-binding and Base-org gating that is explicitly inert until further hub configuration, so there is no pending action here.",
-			"evidence": [
-				"PR #363 merged commit message",
-				"\"inert until hub enforces\" / \"inert until configured\" stated repeatedly",
-				"status field is unknown with no open follow-up described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T14:17:32.329Z"
 		},
 		{
 			"key": "issue:minion-meta#409",
