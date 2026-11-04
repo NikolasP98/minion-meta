@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T08:48:31.026Z",
+	"generatedAt": "2026-11-04T09:17:55.232Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3787,15 +3787,14 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Merge scan surfaces a high-severity cross-tenant data access gap alongside several unchecked-access crash risks in merged production code, each pinned to exact file:line.",
+			"rationale": "A high-severity finding shows missing org isolation risking cross-tenant data access, alongside several unchecked-access bugs in scheduling services.",
 			"evidence": [
-				"tag-links.service.ts:117 missing org isolation filter, risking cross-tenant data access",
-				"scheduling.service.ts:261/476 destructure .returning() without checking row exists",
-				"SellableWizard.svelte:361 accesses sellable.productId without validating response"
+				"Missing org isolation in getContactTagsBulk query risking cross-tenant data access",
+				"multiple high unchecked-access findings in scheduling.service.ts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T08:47:37.365Z"
+			"scoredAt": "2026-11-04T09:17:55.014Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5accda62ce08",
@@ -8262,39 +8261,6 @@
 			"scoredAt": "2026-11-01T18:47:07.155Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-auto-response",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Auto response on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "CI on minion-ai main is red with a clear, bounded root cause (missing private-key input to create-github-app-token) and an explicit DoD.",
-			"evidence": [
-				"Error: Input required and not supplied: private-key",
-				"latest completed run on main failed per auto-response job log",
-				"DoD: workflow green on main or deliberately disabled with rationale"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T08:47:37.365Z"
-		},
-		{
 			"key": "spec:2026-08-03-crm-icp-score-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -9394,6 +9360,38 @@
 			"scoredAt": "2026-10-30T17:48:06.041Z"
 		},
 		{
+			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Detailed AS-IS analysis shows the review-sidecar pipeline silently produces no gate chips because the G2 reviewer scores only 4 of 6 axes and no G1 producer exists.",
+			"evidence": [
+				"G2 reviewer only scores 4 of 6 required rubric axes, deriving no chip",
+				"No G1 producer exists for proposals/*.review.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T09:17:55.014Z"
+		},
+		{
 			"key": "proposal:2026-09-20-hub-component-service-centralization",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9424,6 +9422,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T02:48:14.855Z"
+		},
+		{
+			"key": "proposal:ci-minion-ai-auto-response",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Auto response on minion-ai main",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-auto-response.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "488a8f89387aba404437491c63fbd64b79e5b6c7f82fc020938085743abfaf4f",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The minion-ai auto-response workflow fails every run on main due to a missing private-key input, a simple config fix with a clear definition of done.",
+			"evidence": [
+				"Error: Input required and not supplied: private-key",
+				"latest completed run on main failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T09:17:55.014Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1536014697",
@@ -9488,39 +9518,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T01:52:07.037Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-183fe9a77973",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/crm-contact-ensure.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-183fe9a77973.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "e25ce76fbe4e9cf21194a087dabdbcd76499141fedfa92c12d0d553aa56f9e69",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Already approved post-merge finding describing a tx-abort bug with a concrete fix direction, ready to move into dev.",
-			"evidence": [
-				"catch inside caller's tx leaves the tx aborted (flaw F2)",
-				"status: approved, updatedAt 2026-10-28",
-				"fix direction given: let errors bubble, re-throw after cleanup, or use a savepoint"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T08:47:37.365Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
@@ -14955,6 +14952,38 @@
 			"scoredAt": "2026-10-31T07:18:05.773Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-183fe9a77973",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/crm-contact-ensure.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-183fe9a77973.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "e25ce76fbe4e9cf21194a087dabdbcd76499141fedfa92c12d0d553aa56f9e69",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved TODO(handoff) marker flags that catching errors inside a caller's transaction leaves it aborted, with a clear diagnosis and fix direction already provided.",
+			"evidence": [
+				"catch leaves tx aborted (same flaw F2)",
+				"status approved with definition of done specified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T09:17:55.014Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-249dc0b349bf",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18823,39 +18852,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
-		},
-		{
-			"key": "proposal:2026-08-29-review-sidecar-producer-gaps",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Close the producer-side gaps the review-sidecar contract now exposes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-29-review-sidecar-producer-gaps.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "ccd90c11b47f13a79ae85314b6e457461bf0834bcbfa50d1cc2da7944016aef8",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Well-documented review-pipeline gaps but bundles four distinct producer fixes (reviewed_commit writer, G2 axis completeness, missing G1 scorer, index coverage) that should be split before execution.",
-			"evidence": [
-				"G2 reviewer only emits 4 of 6 required RUBRICS.spec axes, so sidecars validate but derive no score",
-				"no G1 producer exists for proposals/*.review.md",
-				"129 of 198 specs have no sidecar at all"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T08:47:37.365Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-3c21d7c",
@@ -37893,6 +37889,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T07:47:15.720Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
+			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
+			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a changelog entry for an already-merged, inert-until-configured feature with no open deployment issue to act on.",
+			"evidence": [
+				"feature is inert until hub enforces it",
+				"status unknown with no described failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T09:17:55.014Z"
 		},
 		{
 			"key": "issue:minion-meta#664",
