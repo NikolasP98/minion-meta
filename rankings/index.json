@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T03:47:19.305Z",
+	"generatedAt": "2026-11-04T04:17:41.526Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10710,38 +10710,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A merged, inert-until-configured auth/JWT feature for the gateway has no indicated production issue requiring urgent action.",
-			"evidence": [
-				"JWT-only connect, plan/features claims... Inert until the hub sends features claims",
-				"PR #363 merged with multiple audit fixes already applied"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T02:17:14.910Z"
 		},
 		{
 			"key": "pr:minion (gateway)#255",
@@ -21630,38 +21598,6 @@
 			"scoredAt": "2026-11-02T05:19:34.658Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/data-table/GroupByPicker.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bbd5a8516623.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "ef3687412ce81b8b9a5e917359cec02489f4b7677962e6741c4c9f760812f133",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear accessibility defect (close button as DOM sibling rather than child of dropdown trigger) with a specific, bounded fix direction in a shared data-table component.",
-			"evidence": [
-				"TODO: '× is a Button SIBLING of the Dropdown trigger (never...'",
-				"Fix direction: nest the close control inside the trigger/wrapper to preserve focus semantics"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T03:47:36.860Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25483,14 +25419,15 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Five concrete file:line findings (empty catches, unchecked array/file access) in factory runner/scripts are small, bounded robustness fixes with no urgency.",
+			"rationale": "Bundle of five concrete, file:line-scoped robustness findings (empty catches, unchecked access, hardcoded path) in factory tooling with clear, bounded fixes.",
 			"evidence": [
-				"medium empty-catch in runner/src/jev-sites.ts:149 swallows shadow path errors",
-				"medium unchecked-access in scripts/jev-shadow-report.mjs:147 accesses tuple indices without validation"
+				"runner/src/jev-sites.ts:149 empty-catch swallows shadow path failures",
+				"scripts/jev-shadow-report.mjs:147 unchecked tuple access",
+				"agent/hooks/claude-settings.json:9 hardcoded hook path"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T03:47:36.860Z"
+			"scoredAt": "2026-11-04T04:17:41.273Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-355769a",
@@ -25821,6 +25758,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T23:18:32.453Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/data-table/GroupByPicker.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bbd5a8516623.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "ef3687412ce81b8b9a5e917359cec02489f4b7677962e6741c4c9f760812f133",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clear accessibility defect (close button as DOM sibling rather than child of dropdown trigger) with a specific, bounded fix direction already stated.",
+			"evidence": [
+				"GroupByPicker.svelte: close button × is sibling of Dropdown trigger",
+				"fix direction: nest × inside trigger or shared wrapper to preserve focus semantics"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T04:17:41.273Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cff27fef4e3c",
@@ -36260,6 +36229,40 @@
 			"scoredAt": "2026-10-28T08:18:11.849Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-66cd0246e677",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellableWizard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66cd0246e677.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "6a933ebc251d1219840fbda37f8722a88fb0ad406fab1876c859edac8da227e9",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-f173c4e5b58a"
+			],
+			"rationale": "A vague, truncated TODO marker in SellableWizard.svelte with no concrete fix direction is better consolidated with the other SellableWizard finding from the same PR than executed alone.",
+			"evidence": [
+				"marker text truncated: 'other consumption-mapping surfaces (e.g.'",
+				"same repo@636c222 PR #412 as the other SellableWizard finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T04:17:41.273Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-67652157c786",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36643,22 +36646,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 5,
+				"implementation": 4
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-66cd0246e677"
 			],
-			"rationale": "An unwired modal in SellableWizard.svelte needs a product decision (wire it up vs delete) before any bounded execution can start.",
+			"rationale": "Dead/unintegrated modal in the same SellableWizard.svelte file from the same merged PR as another open TODO finding, warranting a single consolidated cleanup goal rather than two separate small tasks.",
 			"evidence": [
-				"TODO: 'modal presentation has no consumer today (page...'",
-				"Fix direction itself calls for creating a follow-up proposal with AS-IS/TO-BE before action"
+				"marker: 'modal presentation has no consumer today (page'",
+				"same repo@636c222 PR #412 file as the consumption-mapping TODO finding"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T03:47:36.860Z"
+			"scoredAt": "2026-11-04T04:17:41.273Z"
 		},
 		{
 			"key": "spec:2026-10-03-site-alternate-metadata-spec",
@@ -39108,40 +39111,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T22:48:31.479Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-66cd0246e677",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellableWizard.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66cd0246e677.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "6a933ebc251d1219840fbda37f8722a88fb0ad406fab1876c859edac8da227e9",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-f173c4e5b58a"
-			],
-			"rationale": "The TODO marker text and the auto-diagnosis are both truncated/malformed (diagnosis shows raw unexecuted tool-call syntax instead of findings), leaving the actual scope unclear.",
-			"evidence": [
-				"Marker text cuts off mid-sentence: 'other consumption-mapping surfaces (e.g.'",
-				"Diagnosis section contains unresolved function_calls blocks rather than a conclusion"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T03:47:36.860Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-753e08fe9f5a",
