@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T05:48:39.511Z",
+	"generatedAt": "2026-11-04T06:17:38.751Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4759,76 +4759,6 @@
 			"scoredAt": "2026-11-03T08:49:47.645Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dca03692bd9a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "18db0e81e8ba91005973f4902d9e28a45bc7b08860635e24dce0e13544efb6b6",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-dd764fd1df5e",
-				"proposal:postmerge-minion-hub-d4a019b21d9a"
-			],
-			"rationale": "Non-atomic multi-transaction cancel risks real data inconsistency (orphaned bookings) in the POS/scheduling flow, a correctness bug worth fixing promptly.",
-			"evidence": [
-				"N independent transactions for a 'following' cancel instead of one atomic transaction",
-				"Fix direction: wrap all cancels in a single db.transaction()"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:47:16.680Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dd764fd1df5e.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "dc133844c054182ce72c917ac47150b5d2200b7e43ae60a8689d844b136c499b",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-dca03692bd9a",
-				"proposal:postmerge-minion-hub-f25d9dc6080e"
-			],
-			"rationale": "Voiding an installment ticket without reversing paid-to-date creates real financial/reconciliation inconsistency in the POS system.",
-			"evidence": [
-				"Voiding an instalment ticket un-pays its plan without decrementing paid-to-date",
-				"Fix direction requires transactional reversal plus audit log"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:47:16.680Z"
-		},
-		{
 			"key": "pr:minion (gateway)#297",
 			"kind": "pr",
 			"stage": "development",
@@ -5752,6 +5682,40 @@
 			"scoredAt": "2026-11-02T02:47:48.744Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f25d9dc6080e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/personal-agent-binding.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f25d9dc6080e.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "90453afb4a27618d336f2a0b5d17782fa804151d5c149fadb45a714b53c208f2",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dd764fd1df5e"
+			],
+			"rationale": "Immutable single-org gateway binding blocks multi-tenant use but the proposed schema migration is a larger architectural change needing more scoping.",
+			"evidence": [
+				"A profile has one immutable gateway binding; concurrent multi-org",
+				"store (profile_id, org_id) -> gateway_binding instead of immutable"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T06:17:38.539Z"
+		},
+		{
 			"key": "spec:2026-08-18-factory-orchestration-round7-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -6476,6 +6440,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-28T07:31:42.991Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-dca03692bd9a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dca03692bd9a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "18db0e81e8ba91005973f4902d9e28a45bc7b08860635e24dce0e13544efb6b6",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d4a019b21d9a",
+				"proposal:postmerge-minion-hub-dd764fd1df5e"
+			],
+			"rationale": "Multi-transaction cancellation without atomicity risks real data inconsistency and has a concrete transactional fix.",
+			"evidence": [
+				"a `following` cancel is N independent transactions, not one",
+				"wrap N cancel operations in a single database transaction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T06:17:38.539Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dd764fd1df5e.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "dc133844c054182ce72c917ac47150b5d2200b7e43ae60a8689d844b136c499b",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dca03692bd9a",
+				"proposal:postmerge-minion-hub-f25d9dc6080e"
+			],
+			"rationale": "Unreversed payment state on ticket void breaks financial consistency (paid-to-date) and has a clear transactional fix.",
+			"evidence": [
+				"voiding an instalment ticket un-pays its plan (paid-to-date",
+				"should be transactional with the void itself"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T06:17:38.539Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
@@ -11013,38 +11047,6 @@
 			"scoredAt": "2026-10-28T11:17:40.465Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-f25d9dc6080e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/personal-agent-binding.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f25d9dc6080e.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "90453afb4a27618d336f2a0b5d17782fa804151d5c149fadb45a714b53c208f2",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Immutable single-org gateway binding is a real multi-tenant architectural limitation but the fix requires a schema migration that needs more scoping before execution.",
-			"evidence": [
-				"Profile has one immutable gateway binding, blocking concurrent multi-org use",
-				"Fix direction proposes org-scoped binding table plus migration of existing profiles"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:47:16.680Z"
-		},
-		{
 			"key": "spec:2026-08-18-base-attention-queue-responsive-runs-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -15080,38 +15082,6 @@
 			"scoredAt": "2026-11-02T14:27:46.752Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This deploy entry records already-merged JWT/org-plan gateway work that remains inert until the hub sends features claims, so the merged deploy itself needs no action but the follow-on hub wiring isn't tracked as a goal here.",
-			"evidence": [
-				"Commit states BASE_PLAN_GATEWAY_METHODS allowlist is inert until hub enforces",
-				"JWT-only connect refusal defaults to empty jwtOnlyAudiences, making 043 S4 inert"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T05:48:39.288Z"
-		},
-		{
 			"key": "issue:minion_hub#205",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18516,41 +18486,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-30T10:18:24.977Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d4a019b21d9a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "126a0dbd641e4078fe0512c08f46e715f03dac2c7bdc7e303d378da599811128",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-dca03692bd9a",
-				"proposal:postmerge-minion-hub-dd764fd1df5e"
-			],
-			"rationale": "UI permission gating gap causes confusing UX but is not a correctness/data-integrity bug, with a clear fix direction already identified.",
-			"evidence": [
-				"Button gated server-side only on pos:create, no client-side check",
-				"Fix direction specifies adding client-side capability check in BookingDetailDrawer.svelte"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-28T05:47:16.680Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d57706ece661",
@@ -24718,6 +24653,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:49:50.455Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d4a019b21d9a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "126a0dbd641e4078fe0512c08f46e715f03dac2c7bdc7e303d378da599811128",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-dca03692bd9a",
+				"proposal:postmerge-minion-hub-dd764fd1df5e"
+			],
+			"rationale": "A clear client-side permission-gating UX bug with a well-defined fix direction in a single merged PR's file.",
+			"evidence": [
+				"TODO(handoff): plan button gated on pos:create, but server-side",
+				"Fix direction: add client-side permission checks"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T06:17:38.539Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e41a33a864a1",
@@ -34601,6 +34571,38 @@
 			"scoredAt": "2026-11-02T13:20:00.977Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 112250 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-11-04T06:12:27Z",
+			"sourceFingerprint": "8ce10f081761112ec26c59116c8f4054ffd119139a037c35a80ccf6dba1ae3ca",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An automated upstream-sync notice listing thousands of commits is not an actionable, scoped goal.",
+			"evidence": [
+				"112250 new commit(s) available",
+				"tags: upstream-sync"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T06:17:38.539Z"
+		},
+		{
 			"key": "issue:minion-meta#357",
 			"kind": "issue",
 			"stage": "proposal",
@@ -39976,38 +39978,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T01:53:55.543Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 111687 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-11-03T06:13:11Z",
-			"sourceFingerprint": "c839beba1d028df34b5dd7e5990dd1a5a57ca0b7fad41a3810fff56a93e5a334",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An automated upstream-sync notification listing commits is informational noise, not an actionable goal.",
-			"evidence": [
-				"title: 'Upstream sync: 111687 new commit(s) available'",
-				"body is a raw commit log dump with no scoped task"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:17:24.576Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
