@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-04T13:17:19.304Z",
+	"generatedAt": "2026-11-04T13:47:27.615Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10917,38 +10917,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Security-relevant JWT/auth gateway changes merged but described as inert until further configuration, so impact is currently gated rather than active.",
-			"evidence": [
-				"JWT-only connect, plan/features claims, inert until hub enforces",
-				"jwtOnlyAudiences default [] so JWT-only connect refused, 043 S4 is inert"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T12:47:21.517Z"
 		},
 		{
 			"key": "pr:minion (gateway)#255",
@@ -41964,38 +41932,6 @@
 			"scoredAt": "2026-11-04T01:58:01.399Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-04",
-			"sourceFingerprint": "8212eaf86ae55063f4c2aaa0bdb10a85cd25c0f1c25c8ab9291793f25554df9d",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This bundles dozens of unrelated markers scraped from the ranking system's own data file into one proposal with no single verifiable outcome.",
-			"evidence": [
-				"lists 16+ disparate markers spanning auth, payments, schema, UI from unrelated files/lines",
-				"definition of done requires removing a TODO that doesn't correspond to one coherent fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -44271,6 +44207,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T01:54:43.087Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-04",
+			"sourceFingerprint": "dfad67449d7d94317725e977797d0a1db35650061bd5350af608f2848769dada",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 0
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted strings sitting inside rankings/index.json itself (the ranking output file), not real TODO(handoff) comments in source code, making this a self-referential sweep artifact rather than actionable work.",
+			"evidence": [
+				"All 'marker' lines point to rankings/index.json, the ranking data file, not application source",
+				"Summary explicitly says markers are 'text copied out of repository source this sweep did not write' yet all paths are the same generated JSON file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-04T13:47:27.380Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
