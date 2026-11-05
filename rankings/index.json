@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-05T09:47:36.458Z",
+	"generatedAt": "2026-11-05T10:17:42.531Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7028,41 +7028,6 @@
 			"scoredAt": "2026-11-01T02:47:27.993Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-7c314d7486da",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7c314d7486da.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "68e812ad226c969a85e77e597fff050f9d31f669e449650e2bc0f2abde5c64d2",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-15-hub-pos-shift-scoped-edits-followups"
-			],
-			"rationale": "Already-approved, narrowly scoped fix for a POS period-unlock that deletes its audit row with no trace, with a clear diagnosis and fix direction.",
-			"evidence": [
-				"TODO(handoff): an unlock deletes the row and leaves no audit trace",
-				"status: approved",
-				"fix direction: write audit record before delete, then soft-delete or archive"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T09:47:49.570Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-bb9baf1f3156",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10516,6 +10481,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T13:18:17.864Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7c314d7486da",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7c314d7486da.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "68e812ad226c969a85e77e597fff050f9d31f669e449650e2bc0f2abde5c64d2",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-15-hub-pos-shift-scoped-edits-followups"
+			],
+			"rationale": "Approved, single-file finding with a clear compliance rationale and fix direction for an audit-trail gap on POS period unlock.",
+			"evidence": [
+				"status: approved, exact file src/server/services/pos.service.ts",
+				"diagnosis cites compliance risk (SOX/PCI-DSS) and gives a concrete fix direction (audit record + soft-delete/archive)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T10:17:42.368Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ccb2014a7cbb",
@@ -14510,41 +14509,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T20:47:06.300Z"
-		},
-		{
-			"key": "proposal:2026-10-15-hub-pos-shift-scoped-edits-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "POS shift-scoped edits — open ends left by S1–S3 (hub #534, #535, #536)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-hub-pos-shift-scoped-edits-followups.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "e1bd77fdeceda84a562806630791c53470d02e77c16a923c60f495789ffbaa75",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-7c314d7486da"
-			],
-			"rationale": "A detailed open-items ledger for shipped POS edit slices, but item 1 (unlock audit trail) duplicates a separately approved, more specific proposal, and several entries are manual FACES-prod verification steps rather than code changes.",
-			"evidence": [
-				"item 1: unlocking a period leaves no audit row, same gap as the postmerge proposal",
-				"items 'Verification still owed on FACES prod' are manual checks, not engineering tasks",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T09:47:49.570Z"
 		},
 		{
 			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
@@ -20097,6 +20061,38 @@
 			"scoredAt": "2026-11-04T07:48:56.644Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-5e55396",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 5e55396",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5e55396.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "8b787c59d4aac4cd6c5c281d0251610de50252d13a52260b7d3f16a545deaf23",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated scan yielded concrete, file-and-line-scoped medium-severity issues (unchecked access, empty catches) that are small bounded fixes across tests and source.",
+			"evidence": [
+				"8 findings each with exact file:line and issue type",
+				"spans both test assertions and production error-handling code (message-ledger.ts, bridge-ws.ts)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T10:17:42.368Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-7012cd5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22857,6 +22853,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T19:50:05.729Z"
+		},
+		{
+			"key": "proposal:2026-10-15-hub-pos-shift-scoped-edits-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "POS shift-scoped edits — open ends left by S1–S3 (hub #534, #535, #536)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-hub-pos-shift-scoped-edits-followups.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "e1bd77fdeceda84a562806630791c53470d02e77c16a923c60f495789ffbaa75",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-7c314d7486da"
+			],
+			"rationale": "A multi-item ledger with mixed readiness — some items need owner product decisions and prod verification, so it isn't a single bounded executable task yet.",
+			"evidence": [
+				"bundles 8 distinct open items plus 3 unverified FACES-prod checks",
+				"item 1 (unlock audit gap) duplicates the dedicated finding in postmerge-minion-hub-7c314d7486da"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T10:17:42.368Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-111011530",
@@ -26005,38 +26035,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T03:00:53.796Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-5e55396",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 5e55396",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5e55396.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "8b787c59d4aac4cd6c5c281d0251610de50252d13a52260b7d3f16a545deaf23",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A bounded set of medium-severity findings with exact file:line locations and straightforward fixes (null guards, logging in empty catches), mostly in test files plus two source-level empty-catch swallows.",
-			"evidence": [
-				"empty-catch at src/shells/bridge-ws.ts:118 swallows malformed-frame JSON parse errors with no logging",
-				"4 of 8 findings are unchecked .at(-1)! access in plugin-ui-bridge test files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T09:47:49.570Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-86254ea",
@@ -32903,39 +32901,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T03:17:51.939Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a health snapshot of an already-merged PR whose new auth features are explicitly inert until further hub configuration, leaving no actionable task.",
-			"evidence": [
-				"PR #363 merged",
-				"inert until hub enforces",
-				"JWT-only audience list defaults to [] (feature off)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T09:47:36.263Z"
 		},
 		{
 			"key": "issue:minion-meta#614",
