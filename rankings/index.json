@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-05T20:17:15.193Z",
+	"generatedAt": "2026-11-05T20:48:12.414Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2636,40 +2636,6 @@
 			"scoredAt": "2026-11-04T07:48:56.644Z"
 		},
 		{
-			"key": "pr:minion (gateway)#366",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#366 Deploy: off-server gateway volume backups every 30 min + timed restore drill (MIN-12)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/366",
-			"sourceUpdatedAt": "2026-11-04T07:44:12Z",
-			"sourceFingerprint": "9878a3f7e9314989b3c0ea83d80dfa303a25d1f34f251be48eb8c24c38e7e6e8",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#365"
-			],
-			"rationale": "Same MIN-12 off-server backup problem and solution shape as #365, submitted ~30 minutes later — these should be reconciled into one goal/PR.",
-			"evidence": [
-				"\"Related: Paperclip MIN-12 (Rec #1 of MIN-5)\"",
-				"restic 0.19.1 round-trip tested, drill passes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T07:48:56.644Z"
-		},
-		{
 			"key": "pr:minion_hub#340",
 			"kind": "pr",
 			"stage": "development",
@@ -4226,6 +4192,40 @@
 			"scoredAt": "2026-11-02T14:26:05.227Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
+			"sourceUpdatedAt": "2026-11-05T20:40:14Z",
+			"sourceFingerprint": "ba1c2616e4f5e866ffa073aa76e97721470e39aacead9f35ddcd2b4c633663b8",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-4232272992"
+			],
+			"rationale": "The restic backup/restore-drill code for MIN-12 merged and passed CI, but a same-batch handoff marker shows the production install step is still pending, so these track one unfinished rollout.",
+			"evidence": [
+				"commit implements 'off-server gateway volume backups every 30 min + timed restore drill (MIN-12)'",
+				"CI runs shellcheck and a real restic round trip per summary"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T20:48:12.168Z"
+		},
+		{
 			"key": "pr:minion (gateway)#255",
 			"kind": "pr",
 			"stage": "development",
@@ -4641,6 +4641,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T02:50:46.279Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-4232272992",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — deploy/backup/minion-volume-backup.sh (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-4232272992.md",
+			"sourceUpdatedAt": "2026-11-05",
+			"sourceFingerprint": "05ead0e86fb851efc0690d90822375c42dc5c6f6bb615976e9c6d17b90a5a750",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "This marker states the new backup script is 'not installed on the production host yet,' meaning the merged backup work in this same batch isn't actually protecting production until an operator installs it.",
+			"evidence": [
+				"marker: 'not installed on the production host yet. Needs the host operator'",
+				"same repo/file family as the merged MIN-12 backup commit in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T20:48:12.168Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-0290030",
@@ -22230,38 +22264,6 @@
 			"scoredAt": "2026-10-31T03:18:10.825Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a merged feature commit (JWT-only gateway binding, Base-org method gating) that is explicitly inert until further hub configuration, so it is informational rather than an actionable pending goal.",
-			"evidence": [
-				"commit message states features are 'inert until configured'",
-				"PR #363 already merged per commit log"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T18:17:20.804Z"
-		},
-		{
 			"key": "issue:minion-meta#574",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24798,6 +24800,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T02:49:25.803Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-3165588122",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/backup/remote-sync.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-3165588122.md",
+			"sourceUpdatedAt": "2026-11-05",
+			"sourceFingerprint": "cc900b0c60fab8a69c6017010d8d016d40712351872637a5e116fbc10bfa10e7",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 4
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A single truncated marker flags that remote-sync.ts has no non-test callers yet mirrors deletions remotely, which is a plausible data-loss risk but too underspecified to action directly.",
+			"evidence": [
+				"marker: 'no non-test callers, and rclone sync mirrors deletions to the...'",
+				"status: draft, single marker"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T20:48:12.168Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2582471367",
@@ -29114,6 +29148,39 @@
 			"scoredAt": "2026-11-05T02:49:25.803Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-2877399286",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
+			"sourceUpdatedAt": "2026-11-05",
+			"sourceFingerprint": "df8c7c7ab0465a766db90d4b497db37f242b618714e2cac39117d5167c632119",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The single proposal bundles three unrelated CI concerns (Bun 1.4 parity, an owner-paused macOS lane, and an unspecified lane-flags gate check) that need to be split before any can be actioned.",
+			"evidence": [
+				"marker 1: 'Reach Bun 1.4 parity before promoting it from shadow evidence'",
+				"marker 2: 'macOS PAUSED (owner, 2026-10-21) while Mac releases are on hold'",
+				"marker 3: 'Check the lane-flags resolver result in this named gate'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T20:48:12.168Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-3238987400",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31819,38 +31886,6 @@
 			"rationale": "References an ordering dependency ('Slice11') before watcher matching but the marker text is incomplete.",
 			"evidence": [
 				"marker: 'Slice11 must consume these original units before watcher matching;'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T02:49:25.803Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-2877399286",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
-			"sourceUpdatedAt": "2026-11-05",
-			"sourceFingerprint": "e35dfba149b723714bc6e527b246ab6cfdf66363accf0d6505bc34df066bf487",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Bundles three CI markers, one of which (macOS) is an explicit owner-approved pause rather than an open defect, making the batch mixed and not uniformly actionable.",
-			"evidence": [
-				"marker: 'macOS PAUSED (owner, 2026-10-21) while Mac releases are on hold'",
-				"marker: 'Reach Bun 1.4 parity before promoting it from shadow evidence'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -44309,7 +44344,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-05",
-			"sourceFingerprint": "60a5c3d3bbd5291336addb024bcd6dcc9704fe8fd4ea076c533ac27e6b4dcedc",
+			"sourceFingerprint": "eec18f5b3adb530cb020ce369807073b9c866111225855171901904aa814cd30",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -44321,17 +44356,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 2,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a self-referential artifact where the handoff sweep scanned the ranking system's own output file (rankings/index.json) and flagged quoted TODO fragments from unrelated past entries as if they were new open items in that file.",
+			"rationale": "The listed 'markers' are quoted rationale fragments from the ranking index data file itself (e.g. prior spec/HC references), not real unresolved code TODOs, indicating the sweep matched its own historical output rather than an actionable handoff.",
 			"evidence": [
-				"target file is rankings/index.json itself, the ranking pipeline's own data artifact",
-				"listed 'markers' are disjointed quoted fragments spanning unrelated specs (payments, DB columns, auth) rather than a coherent open item in this file"
+				"markers quote prior ranking rationale text like 'spec 045 T037/T038 hide (not lock)...' and 'HC-017 — while a copy is being dragged...'",
+				"file is rankings/index.json, a generated data file, not source code"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T13:47:31.656Z"
+			"scoredAt": "2026-11-05T20:48:12.168Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
@@ -44540,6 +44575,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T07:47:58.071Z"
+		},
+		{
+			"key": "run:minion (gateway)#42105534753",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/42105534753",
+			"sourceUpdatedAt": "2026-11-05T20:40:36Z",
+			"sourceFingerprint": "af50deaa3cf5bf342bed19fee433ef4cdf71eb8b58edbdb0b1c688318f6bb391",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run with no reported failure, so there is nothing actionable to track as a board goal.",
+			"evidence": [
+				"status: in_progress",
+				"summary: 'push on DEV', title: 'Docker Release'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T20:48:12.168Z"
+		},
+		{
+			"key": "run:minion (gateway)#42105534840",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/42105534840",
+			"sourceUpdatedAt": "2026-11-05T20:44:43Z",
+			"sourceFingerprint": "6cb2e5a6b09e0c6fc7cc25c0ab5d6e58bcb957a2a9c6f4ad2a117dd4cfe57725",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run with no reported failure, so there is nothing actionable to track as a board goal.",
+			"evidence": [
+				"status: in_progress",
+				"summary: 'push on DEV', title: 'CI'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T20:48:12.168Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
