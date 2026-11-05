@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-05T09:17:37.981Z",
+	"generatedAt": "2026-11-05T09:47:36.458Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -32905,6 +32905,39 @@
 			"scoredAt": "2026-10-31T03:17:51.939Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
+			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
+			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a health snapshot of an already-merged PR whose new auth features are explicitly inert until further hub configuration, leaving no actionable task.",
+			"evidence": [
+				"PR #363 merged",
+				"inert until hub enforces",
+				"JWT-only audience list defaults to [] (feature off)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T09:47:36.263Z"
+		},
+		{
 			"key": "issue:minion-meta#614",
 			"kind": "issue",
 			"stage": "proposal",
@@ -44281,7 +44314,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-05",
-			"sourceFingerprint": "e54e3726ea7cea301446c4ef24a24e703fe4fd45e6f245203024fd63e2ec30eb",
+			"sourceFingerprint": "940c459c164f031065bfda5e4f238e96fbd0977f760d9d3d617eefab94e215dc",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -44293,17 +44326,18 @@
 				"specification": 1,
 				"implementation": 0
 			},
-			"confidence": 7,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This proposal is a handoff-sweep artifact listing text fragments extracted from rankings/index.json itself, not real source-code TODOs, making it self-referential and non-actionable.",
+			"rationale": "The listed 'markers' are quoted text fragments from other candidates' summaries inside the rankings data file itself, not real TODO(handoff) comments in source code, so there is no genuine open end to resolve.",
 			"evidence": [
 				"source: handoff-sweep",
-				"markers point to rankings/index.json lines, a generated ranking artifact, not application source"
+				"markers point to rankings/index.json line numbers quoting unrelated summary text",
+				"repo: NikolasP98/minion-meta"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T05:47:14.947Z"
+			"scoredAt": "2026-11-05T09:47:36.263Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
