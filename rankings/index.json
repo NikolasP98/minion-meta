@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-05T00:47:03.561Z",
+	"generatedAt": "2026-11-05T01:17:26.454Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4471,6 +4471,39 @@
 			"scoredAt": "2026-11-04T01:49:23.570Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-factory-0290030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A 14-finding scan spanning rank.sh, discovery.sh, reconcile.sh, cost.sh, and test files is too scattered to execute as one goal and should be split into per-file fixes.",
+			"evidence": [
+				"agent/rank.sh:74 FACTORY_RANK_BATCH_SIZE unvalidated risks infinite loop",
+				"agent/lib/unslop.test.sh:63 bare grep lacks error handling, masking test failures",
+				"14 findings across 14+ files in one proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T01:17:26.215Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8043,38 +8076,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T07:18:05.773Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-factory-0290030",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Multiple high-severity findings (unvalidated infinite-loop risk in rank.sh, silent test-masking in unslop.test.sh) are concrete, file-anchored, and actionable fixes.",
-			"evidence": [
-				"rank.sh:74 non-numeric FACTORY_RANK_BATCH_SIZE causes infinite loop",
-				"unslop.test.sh:63 bare grep lacks error handling, masking failed assertions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T00:47:10.799Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-309dbe0",
@@ -31736,14 +31737,15 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small, well-scoped fix for localStorage failures silently breaking chat session persistence in a specific component.",
+			"rationale": "Three localStorage empty-catch findings are confined to one component and form a small, clearly scoped, directly actionable fix.",
 			"evidence": [
-				"FloatingAssistant.svelte:119 getItem silently fails during session restoration",
-				"FloatingAssistant.svelte:142 setItem silently fails during persistence"
+				"src/lib/components/layout/FloatingAssistant.svelte:119 getItem silently fails on restore",
+				"src/lib/components/layout/FloatingAssistant.svelte:142 setItem silently fails on persist",
+				"all three findings in the same single file"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T00:47:10.799Z"
+			"scoredAt": "2026-11-05T01:17:26.215Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e3c8ec8",
@@ -32538,38 +32540,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T03:17:51.939Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deployment record of a merged PR whose new auth features are explicitly inert until hub configuration, leaving no immediate actionable task.",
-			"evidence": [
-				"Summary states features are 'inert until hub enforces'",
-				"jwtOnlyAudiences defaults to [] so JWT-only connect is refused by default"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T00:17:29.797Z"
 		},
 		{
 			"key": "issue:minion-meta#614",
