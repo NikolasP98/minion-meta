@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-05T03:03:54.543Z",
+	"generatedAt": "2026-11-05T03:17:43.759Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -433,6 +433,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-11T23:51:43.724Z"
+		},
+		{
+			"key": "proposal:2026-10-15-agent-harness-restoration",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Agent harness — restore the dead hub tool bridge, fix the JEV gate, then widen the agent surface",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-agent-harness-restoration.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "94e2e56f5278001a41a48fa6b19e4f1ce1d3daaa6df73397324e93f892abd1c7",
+			"score": 88,
+			"band": "critical",
+			"axes": {
+				"criticality": 9,
+				"importance": 9,
+				"impact": 8
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Every gateway-to-hub tool call is a production 403 and named security gaps expose cross-org Google tokens and channel identities, making this high-criticality and well-specified work.",
+			"evidence": [
+				"resolveGatewayPrincipal requires gateway_id; 11/11 personal_agents rows are NULL causing 403s",
+				"google-adc branch has no ownership check, letting any org's gateway token fetch any user's Google refresh token",
+				"JEV gate ignores decision.mode, starving 2 of 5 production turns"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T03:17:43.502Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-igv-rate-from-org-config-spec",
@@ -1127,39 +1160,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T23:18:32.453Z"
-		},
-		{
-			"key": "proposal:2026-10-15-agent-harness-restoration",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Agent harness — restore the dead hub tool bridge, fix the JEV gate, then widen the agent surface",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-agent-harness-restoration.md",
-			"sourceUpdatedAt": "2026-10-22",
-			"sourceFingerprint": "94e2e56f5278001a41a48fa6b19e4f1ce1d3daaa6df73397324e93f892abd1c7",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Serious production/security findings (403s, token exposure) but explicitly flagged as needing human reconciliation with an overlapping in-spec item before work proceeds.",
-			"evidence": [
-				"Every gateway→hub tool call is a 403 in production ... 11/11 rows are NULL.",
-				"gateway/google-adc hands any platform user's decrypted Google refresh token to any org's gateway token (no ownership check).",
-				"Flagged duplicate_candidate for a human to confirm whether S0a/S0b is superseded by that spec."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T02:47:43.765Z"
 		},
 		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
@@ -3898,39 +3898,6 @@
 			"scoredAt": "2026-11-04T09:17:55.014Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-5accda62ce08",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5accda62ce08.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "50abf52f2d4317588f727a19799056f598544222eb26f33e11e78d2accd95c70",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding on a POS transaction race condition with a clear diagnosis and fix direction, carrying real double-charge/inventory-desync risk.",
-			"evidence": [
-				"TODO(handoff): this narrows the race window, it does not close it —",
-				"Why it matters: Race conditions in POS transaction services can cause double-charges, lost transactions, or inventory desync.",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T02:47:43.765Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-7440051c7752",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5732,6 +5699,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T03:02:09.540Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-5accda62ce08",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5accda62ce08.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "50abf52f2d4317588f727a19799056f598544222eb26f33e11e78d2accd95c70",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved finding documents an acknowledged-incomplete race-condition mitigation in the POS transaction service that risks double-charges or inventory desync under load.",
+			"evidence": [
+				"TODO(handoff) states the fix narrows the race window but does not close it",
+				"finding status is approved",
+				"diagnosis names double-charge and inventory-desync risk"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T03:17:43.502Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-77b26984c8ea",
@@ -32843,6 +32843,38 @@
 			"scoredAt": "2026-10-31T03:17:51.939Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
+			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
+			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 9
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This deploy record documents already-merged, inert-until-configured functionality, so there is no outstanding work to execute.",
+			"evidence": [
+				"jwtOnlyAudiences defaults to [] so JWT-only connects are refused",
+				"changes described as inert until hub sends features claims"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T03:17:43.502Z"
+		},
+		{
 			"key": "issue:minion-meta#614",
 			"kind": "issue",
 			"stage": "proposal",
@@ -34689,37 +34721,6 @@
 			"scoredAt": "2026-11-04T10:18:13.789Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-648f095",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 648f095",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-648f095.md",
-			"sourceUpdatedAt": "2026-10-22",
-			"sourceFingerprint": "26c80fe0c5d67e2baae11354c08cd87b77056f4c28965e4ce9b8bd81603d3bfa",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, bounded fix: validate an unchecked value before it's passed to a destructive secret-removal command.",
-			"evidence": [
-				"medium deploy/swarm/set-runtime-env.sh:68 (unchecked-access) — current from docker service inspect could be empty if no runtime_env secret is found; passed to --secret-rm without validation."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T02:47:43.765Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-f2de5e0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36116,6 +36117,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-29T05:48:22.744Z"
+		},
+		{
+			"key": "proposal:2026-10-21-gateway-macos-ci-pause",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Resume the gateway macOS and Windows CI lanes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-gateway-macos-ci-pause.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "c1bba18f6743873c795dab4dea0d832a211b455f6c318e292e687a8c946f9bc4",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The CI pause is a deliberate owner decision tied to paused Mac/Windows releases, so resuming is a trivial command gated on an external release decision rather than actionable work now.",
+			"evidence": [
+				"CI_MACOS/CI_WINDOWS default off per owner decision 2026-10-21",
+				"resume is a single gh variable set command once releases resume"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T03:17:43.502Z"
 		},
 		{
 			"key": "proposal:2026-10-24-site-stay-in-touch-updates",
@@ -38915,39 +38948,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T04:17:56.360Z"
-		},
-		{
-			"key": "proposal:2026-10-21-gateway-macos-ci-pause",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Resume the gateway macOS and Windows CI lanes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-gateway-macos-ci-pause.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "c1bba18f6743873c795dab4dea0d832a211b455f6c318e292e687a8c946f9bc4",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deliberately paused by the owner pending an unspecified future resumption of Mac/Windows releases, so there is no action to execute now.",
-			"evidence": [
-				"The owner paused it on 2026-10-21 because Mac releases are on hold.",
-				"TO-BE: when Mac releases resume, run `gh variable set CI_MACOS ...`. No commit is needed.",
-				"CI_WINDOWS defaults off (minion-ai #349)."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-29T02:47:43.765Z"
 		},
 		{
 			"key": "proposal:2026-10-21-windows-aggregate-placeholder-scope",
@@ -42404,6 +42404,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T05:19:34.658Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-648f095",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 648f095",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-648f095.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "26c80fe0c5d67e2baae11354c08cd87b77056f4c28965e4ce9b8bd81603d3bfa",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A single medium-severity unchecked-value finding in a deploy script is narrow in scope but precisely located and cheap to fix.",
+			"evidence": [
+				"set-runtime-env.sh:68 passes a possibly-empty value to --secret-rm without validation",
+				"severity marked medium"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-05T03:17:43.502Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
