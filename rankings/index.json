@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-05T13:17:17.410Z",
+	"generatedAt": "2026-11-05T13:47:31.910Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -27133,38 +27133,6 @@
 			"scoredAt": "2026-11-02T03:52:25.870Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/3de77b1a47fddd657ecaa71cac5f65ca6de1e498",
-			"sourceUpdatedAt": "2026-11-03T06:20:25Z",
-			"sourceFingerprint": "4603fb9c51b02d40a04be9ea0c43d5cbf1927a084139a118a640d0c213ea0e60",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a merged, already-shipped JWT/org-plan gating feature described as inert until further configuration, so there is no pending deployment action beyond routine monitoring.",
-			"evidence": [
-				"PR #363 merged with JWT-only connect and Base-org allowlist changes",
-				"Feature is explicitly 'inert until configured' per commit message"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T11:47:16.733Z"
-		},
-		{
 			"key": "issue:minion-meta#409",
 			"kind": "issue",
 			"stage": "proposal",
@@ -44310,7 +44278,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-05",
-			"sourceFingerprint": "940c459c164f031065bfda5e4f238e96fbd0977f760d9d3d617eefab94e215dc",
+			"sourceFingerprint": "60a5c3d3bbd5291336addb024bcd6dcc9704fe8fd4ea076c533ac27e6b4dcedc",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -44320,20 +44288,19 @@
 			},
 			"readiness": {
 				"specification": 1,
-				"implementation": 0
+				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed 'markers' are quoted text fragments from other candidates' summaries inside the rankings data file itself, not real TODO(handoff) comments in source code, so there is no genuine open end to resolve.",
+			"rationale": "This is a self-referential artifact where the handoff sweep scanned the ranking system's own output file (rankings/index.json) and flagged quoted TODO fragments from unrelated past entries as if they were new open items in that file.",
 			"evidence": [
-				"source: handoff-sweep",
-				"markers point to rankings/index.json line numbers quoting unrelated summary text",
-				"repo: NikolasP98/minion-meta"
+				"target file is rankings/index.json itself, the ranking pipeline's own data artifact",
+				"listed 'markers' are disjointed quoted fragments spanning unrelated specs (payments, DB columns, auth) rather than a coherent open item in this file"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T09:47:36.263Z"
+			"scoredAt": "2026-11-05T13:47:31.656Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
