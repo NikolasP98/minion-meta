@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-05T21:17:11.406Z",
+	"generatedAt": "2026-11-05T21:47:22.364Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4190,40 +4190,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:26:05.227Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
-			"sourceUpdatedAt": "2026-11-05T20:40:14Z",
-			"sourceFingerprint": "ba1c2616e4f5e866ffa073aa76e97721470e39aacead9f35ddcd2b4c633663b8",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-4232272992"
-			],
-			"rationale": "The restic backup/restore-drill code for MIN-12 merged and passed CI, but a same-batch handoff marker shows the production install step is still pending, so these track one unfinished rollout.",
-			"evidence": [
-				"commit implements 'off-server gateway volume backups every 30 min + timed restore drill (MIN-12)'",
-				"CI runs shellcheck and a real restic round trip per summary"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T20:48:12.168Z"
 		},
 		{
 			"key": "pr:minion (gateway)#255",
@@ -44344,7 +44310,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-05",
-			"sourceFingerprint": "eec18f5b3adb530cb020ce369807073b9c866111225855171901904aa814cd30",
+			"sourceFingerprint": "098fae23bf896ceb1ff302863e430dcded8f0a6b6c94bd761e848bda544c89f8",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -44354,19 +44320,19 @@
 			},
 			"readiness": {
 				"specification": 1,
-				"implementation": 1
+				"implementation": 0
 			},
-			"confidence": 2,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed 'markers' are quoted rationale fragments from the ranking index data file itself (e.g. prior spec/HC references), not real unresolved code TODOs, indicating the sweep matched its own historical output rather than an actionable handoff.",
+			"rationale": "This is a self-referential artifact where the handoff-sweep tool scraped quoted strings from rankings/index.json itself (the ranking tool's own output/evidence text) and mistook them for TODO(handoff) markers in real source code.",
 			"evidence": [
-				"markers quote prior ranking rationale text like 'spec 045 T037/T038 hide (not lock)...' and 'HC-017 — while a copy is being dragged...'",
-				"file is rankings/index.json, a generated data file, not source code"
+				"all 'markers' point to rankings/index.json, the ranking data file, not actual source code",
+				"summary explicitly states markers are 'text copied out of repository source' but the cited lines are JSON data strings, not comments"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T20:48:12.168Z"
+			"scoredAt": "2026-11-05T21:47:22.117Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
