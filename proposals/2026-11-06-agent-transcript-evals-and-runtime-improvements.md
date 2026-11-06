@@ -105,3 +105,11 @@ The current-layout [Spec Kit draft](../specs/111-agent-transcript-guardrails/spe
 ### Owner correction decision
 
 On 6 November 2026 the owner answered “Fix all four and retest,” then “Fix F1–F4 and F6; retest.” The five targeted Gateway corrections are explicitly approved before their corrective implementation; backup findings remain separate. The decision and implementation tasks are recorded in Spec Kit feature111. Source corrections, exact-head checks, human merge and deployment verification remain incomplete.
+
+### Interrupted release recovery — 6 November 2026
+
+The previous Gateway gate stopped with `daemon shutting down`; Hub stopped while signing the document phase. Restored invoking clones preserve the retained signed source and both prior Hub review fixes. All ten failed Hub phase files were recovered byte-for-byte from tree `3056f5786a6601c94c34db10da82a5ae6fad0973` and signed as `ad8a6cef`. Gateway custody was recovered through `no-mistakes axi sync --recover`; ancestry-only merges preserve its submitted candidate, rebased candidate and canonical `DEV` base without changing the qualified source tree.
+
+The owner-approved F1–F4 and F6 corrections are implemented in signed Gateway commit `7dcd7c207`. Boundary, native session-file/reopen, speech and old-admission negative-control results are recorded in `release-status.json`; overlapping runs are identified rather than summed. Current Gateway build/check pass; its full configured tests and independent release review continue. The recovered Hub review and API-to-SQL tests pass; final static checks, full CI and production proof remain pending. Durable private recovery bundles and a manifest are retained under `.local/agent-release-recovery-20261106/`.
+
+This recovery does not change the remaining human security/data merge gate or declare production live. Backup findings remain excluded. The existing exact-site handoff ledger still applies.
