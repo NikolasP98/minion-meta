@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-06T05:17:40.469Z",
+	"generatedAt": "2026-11-06T05:47:18.635Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4822,6 +4822,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T08:18:13.127Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
+			"sourceUpdatedAt": "2026-11-05T20:40:14Z",
+			"sourceFingerprint": "ba1c2616e4f5e866ffa073aa76e97721470e39aacead9f35ddcd2b4c633663b8",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated off-server backup/restore drill for the gateway volume is a concrete, already-implemented reliability safeguard reducing data-loss risk.",
+			"evidence": [
+				"adds restic job every 30 min with restore drill (MIN-12)",
+				"CI runs shellcheck and a real restic round trip"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T05:47:18.400Z"
 		},
 		{
 			"key": "issue:minion-meta#895",
@@ -31970,6 +32002,38 @@
 			"scoredAt": "2026-11-02T14:24:50.163Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-06",
+			"sourceFingerprint": "85f6d207a9ed340529a5e0261fe21dd8a332e5b18930c0998a4fbe5560e4a610",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a meta-sweep marker aggregating 17+ unrelated TODO/handoff snippets from rankings/index.json itself rather than a single actionable goal.",
+			"evidence": [
+				"filed automatically by the factory handoff-ledger sweep",
+				"markers are self-referential citations of rankings/index.json lines, not a coherent scoped task"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T05:47:18.400Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-5ff1c51",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -44263,38 +44327,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T01:59:03.701Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-06",
-			"sourceFingerprint": "aebffa71f54067acecfe83ca801f065e80a8710f76ecc0bfd177af37a0968763",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted 'markers' are substrings of historical rationale/evidence text embedded in the ranking data file itself, not genuine code TODOs to resolve.",
-			"evidence": [
-				"marker text like 'spec 045 T037/T038 hide (not lock) every surface behind this list' is clearly a quoted rationale fragment, not a comment",
-				"file is rankings/index.json, the ranking board's own data file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T02:00:50.753Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
