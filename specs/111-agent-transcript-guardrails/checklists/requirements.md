@@ -9,7 +9,7 @@
 - [x] Functional requirements have measurable acceptance criteria.
 - [x] Current behavior and transitions link to exact retained source evidence.
 - [x] Prototype, repository, review and deployment proof remain separate.
-- [x] The historical ordering exception and incomplete approvals are explicit.
+- [x] The historical ordering transition and incomplete approvals are explicit.
 - [ ] No clarification remains: Gateway F1–F4 decision is pending in the existing owner question.
 - [ ] Security/data owner approval and two-pass review are complete.
 - [ ] The agreed outcomes are implemented, regression-tested and verified in production.

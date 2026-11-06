@@ -1,5 +1,5 @@
 {
-  "state": "signed-local-commits; release validation in progress; not-live",
+  "state": "not-live: source-review decisions and release routing unresolved",
   "signing": "unblocked: required 1Password signer produced signed Gateway/Hub commits; verified using configured public key and a temporary allowed-signers file",
   "gateway": {
     "source": "/tmp/minion-agent-release-20261106-9s5u0m7u/gateway",
@@ -35,7 +35,14 @@
       }
     },
     "submitted_commit": "ee927a1eba75ac68504879a3e9e6aabcf3d8f226",
-    "pipeline": "no-mistakes AXI started; independent review/checks/PR/CI pending; pipeline owns branch"
+    "pipeline": "01M6RV4WHPP21ESMHDKPFACZW1 parked at review fix_review. F1-F4 and F6 remain unresolved owner decisions; routing-only phase made no source changes. Wrong main range still needs correction; no PR/push/deployment.",
+    "pending_findings": [
+      "F1: JWT node admission from unrelated history; scope decision pending",
+      "F2: earlier extraction hides malformed protocol evidence",
+      "F3: LINE controls erased before normalization",
+      "F4: truncation precedes supported secret redaction",
+      "F6: clean spoken override bypasses whole-response invalidity"
+    ]
   },
   "hub": {
     "source": "/tmp/minion-agent-release-20261106-9s5u0m7u/hub",
@@ -55,17 +62,25 @@
     },
     "architecture": "passed on supported Node22",
     "submitted_commit": "80df1d34c926bf20f6e18e7806cee171fc10b086",
-    "pipeline": "no-mistakes AXI started; independent review/checks/PR/CI pending; pipeline owns branch"
+    "pipeline": "01M6RV7HF0FRBZJDZDXW9MEC8Z owns branch; reviewed fix head42b9803663b81ec34e18545d7dbd613ec9bfe1df; independent re-review clean, test phase running",
+    "later_review_fixes": "HR closures replace competing dated hours at both slot callers; business timezone reaches revenue/cost buckets and cache identity; manifest tests use real discovery. Focused fix verification91cases/5files passes Node22; final head checks/CI remain pending."
   },
   "meta": {
     "source": "/tmp/minion-agent-release-20261106-9s5u0m7u/meta",
-    "proposal_index": "468 entries validated",
-    "spec_index": "212 entries validated",
+    "proposal_index": "1075entries validated after canonical dev sync",
+    "spec_index": "306entries validated after canonical dev sync",
     "human_approval": "pending",
     "merge": "not authorized/performed",
-    "gate_configuration": "Initialized, canonical PR base dev; evidence signed commit preparation in progress"
+    "gate_configuration": "Initialized, canonical PR base dev; evidence signed commit preparation in progress",
+    "commit_created": true,
+    "submitted_commit": "669210c95c375fe8df27253afdeea501f3a50775",
+    "synchronized_commit": "d7e8d7de361e4356771a62a17a956120bdcc53dc",
+    "draft_pr": "https://github.com/NikolasP98/minion-meta/pull/954",
+    "ci": "verify and claude-review checks passed for d7e8d7de3; separate from owner approval",
+    "spec_kit": "specs/111-agent-transcript-guardrails/spec.md draft; existing owner clarification and security/data approval remain open"
   },
   "original_EGM_proof": "253 distinct focused tests on frozen original patches; superseded by release integration, not full repository/live qualification",
   "reconstruction": "27 Gateway and13 Hub files reconstruct from exact clean base pins and byte-match. Additional release changes beyond the8 original Hub files are test-only. See release-reconstruction.json.",
-  "release_gate": "Independent checks, exact committed-head remote CI, human security/data approval and merge, and deployed identity/runtime verification remain pending. No deployment."
+  "release_gate": "Gateway owner decisions, canonical validation range, final source checks/CI, human security/data approval and merge, and exact deployed identity/runtime proof remain open. Production unchanged.",
+  "patch_snapshot_note": "Exported patches reconstruct the submitted signed candidates ee927a/80df1d, not later gate-owned fix heads. Updated final artifacts require custody synchronization and qualification."
 }

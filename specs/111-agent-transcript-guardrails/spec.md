@@ -52,7 +52,7 @@ An authorized personal-agent task proceeds without an optional setup interview. 
 1. **Given** an unconfigured personal assistant and an authorized task, **When** context is assembled, **Then** optional style/name setup does not displace the task or invent an unknown fact. Real permissions remain enforced.
 2. **Given** two eligible settled exchanges, **When** extraction is considered, **Then** the accumulated window becomes eligible once, unchanged replay is skipped, and concurrent admission cannot exceed five attempts per retained generation.
 3. **Given** a successful reset/delete or a failed cleanup, **When** old work settles, **Then** successful cleanup fences stale writes and clears old state; failed cleanup preserves its budget.
-4. **Given** continuous session activity after budget exhaustion, **When** idle expiry is considered, **Then** active use cannot be misclassified as idle and silently reopen the budget. True idle retirement/restart remains a disclosed generation boundary.
+4. **Given** a retired generation or process restart, **When** a new generation begins, **Then** its separate budget is disclosed; no conversation-lifetime budget guarantee is inferred.
 
 ### Edge Cases
 
@@ -62,7 +62,7 @@ An authorized personal-agent task proceeds without an optional setup interview. 
 - Reversed or impossible dates, daylight-saving boundaries and a missing organization timezone.
 - Stale preview availability, approved leave, holidays and optional resource reassignment at confirmation.
 - Count/list agreement, stable ties, empty results and sensitive-field masking.
-- Overlap, replay, cancellation, sink failures, reset races, retention capacity and continuously active exhausted sessions.
+- Overlap, replay, cancellation, sink failures, reset races, retention capacity and generation retirement while other chat activity continues.
 
 ## Requirements *(mandatory)*
 
@@ -75,7 +75,7 @@ An authorized personal-agent task proceeds without an optional setup interview. 
 - **FR-005**: Bounded appointment reads MUST expose exact total, returned count, limit, truncation and read mode. Continuation/full enumeration is outside this slice.
 - **FR-006**: Accepted finance periods MUST preserve business-calendar meaning; invalid explicit input MUST fail instead of silently selecting a default period.
 - **FR-007**: Personal setup MUST remain optional for authorized tasks; unknown facts, non-personal onboarding and real permissions MUST remain protected.
-- **FR-008**: Memory admission MUST accumulate actual eligible exchanges, deduplicate replay, reserve attempts before overlapping work and bound retained generations. Active session requests MUST count as activity for idle retention.
+- **FR-008**: Memory admission MUST accumulate actual eligible exchanges, deduplicate replay, reserve attempts before overlapping work and bound retained generations.
 - **FR-009**: Session cleanup MUST fence stale work after successful lifecycle operations while preserving state when cleanup fails.
 - **FR-010**: Production readiness MUST require exact approved source/deployed identity, passing required checks and safe runtime proof. A local build, prototype test count or draft PR MUST NOT be reported as live.
 - **FR-011**: Raw transcripts, tenant/session identifiers and historical credentials MUST remain private; public fixtures MUST be synthetic or sanitized.
@@ -104,7 +104,7 @@ An authorized personal-agent task proceeds without an optional setup interview. 
 ## Assumptions
 
 - Existing organization/permission rules remain authoritative. Tests of generated task context do not prove live-model interpretation.
-- Process restart and genuine idle retirement can create a new memory generation; lifetime budgets are outside scope.
+- Process restart and retained-generation retirement can create a new budget. Other chat activity is not a conversation-lifetime budget guarantee; lifetime/global limits remain outside this slice.
 - Explicit memory tools, other persistence/export paths, direct telephony/audio and unsupported credential families retain separate handoff items.
 - Provider timeout/abort and acknowledged/idempotent sink delivery are not completed by this bounded draft.
 - Native role/GUC/RLS and concurrent-exclusion proof remain separate release checks; local synthetic SQL is not production authority proof.
@@ -116,7 +116,7 @@ An authorized personal-agent task proceeds without an optional setup interview. 
 
 ## Governance and current blockers
 
-This Spec Kit artifact ports the already retained EGM design and candidate evidence into the current upstream artifact layout. It does not claim Spec Kit preceded the exploratory code, retroactively certify owner approval, or mark the two-pass review complete. The exploratory candidate sequence did not complete Spec Kit specify/plan/tasks before code. That historical process deviation is recorded here for owner review; it is not an approved exception or evidence that the required ordering was satisfied. Production adoption remains blocked under Constitution I/V until the owner approves the security/data spec and required review/checks pass. No new runtime adoption is authorized by this retrospective document.
+This Spec Kit artifact ports the already retained EGM design and candidate evidence into the current upstream artifact layout. It does not claim Spec Kit preceded the exploratory code, retroactively certify owner approval, or mark the two-pass review complete. The exploratory candidates and legacy-layout release spec were prepared before the newer upstream Spec Kit scaffolding was merged into this isolated branch; the prior signed snapshot does not contain `.specify/memory/constitution.md`. This record names that ordering transition for owner review and does not claim Spec Kit was executed retroactively or that an exception was approved. Production adoption remains blocked under Constitution I/V until the owner approves the security/data spec and required review/checks pass. No new runtime adoption is authorized by this retrospective document.
 
 [NEEDS CLARIFICATION: The owner decision requested for Gateway findings F1–F4 remains pending; decide whether the unrelated JWT finding is included or tracked separately, and authorize the guardrail corrections before their gate advances. Additional formal review findings must be resolved under the same process.]
 
