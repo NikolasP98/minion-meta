@@ -101,3 +101,7 @@ Hub review R1/R2 led to a signed gate fix for HR availability and real Vitest di
 The no-mistakes v1.57 default-branch rebase ignores the intended non-default validation base even when `pr.base_branch` is correct. Meta's phase agent stopped instead of replaying unrelated history onto `main`; the terminal run returned unchanged user custody. The documentation draft therefore follows the canonical standard `dev` PR route with all normal review/CI/approval requirements retained. Gateway's wrong-base range must be corrected before publication. See the `TODO(handoff)` comment at `.no-mistakes.yaml`; no global default, daemon database or policy was changed as a workaround.
 
 The current-layout [Spec Kit draft](../specs/111-agent-transcript-guardrails/spec.md) records the historical exploratory-code ordering and remains blocked on the existing behavior/scope decision, security/data owner approval and two-pass review. It does not retrospectively approve code or mark deployment complete.
+
+### Owner correction decision
+
+On 6 November 2026 the owner answered “Fix all four and retest,” then “Fix F1–F4 and F6; retest.” The five targeted Gateway corrections are explicitly approved before their corrective implementation; backup findings remain separate. The decision and implementation tasks are recorded in Spec Kit feature111. Source corrections, exact-head checks, human merge and deployment verification remain incomplete.

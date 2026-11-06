@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-06
 
-**Status**: Draft — adoption blocked on review findings and owner approval
+**Status**: Draft — targeted corrections approved; adoption blocked on verification and merge review
 
 **Input**: Inspect agent transcripts for skipped checks and assumptions, choose EGM approaches, test corrections, and report when the changes are live on production and testable.
 
@@ -118,6 +118,6 @@ An authorized personal-agent task proceeds without an optional setup interview. 
 
 This Spec Kit artifact ports the already retained EGM design and candidate evidence into the current upstream artifact layout. It does not claim Spec Kit preceded the exploratory code, retroactively certify owner approval, or mark the two-pass review complete. The exploratory candidates and legacy-layout release spec were prepared before the newer upstream Spec Kit scaffolding was merged into this isolated branch; the prior signed snapshot does not contain `.specify/memory/constitution.md`. This record names that ordering transition for owner review and does not claim Spec Kit was executed retroactively or that an exception was approved. Production adoption remains blocked under Constitution I/V until the owner approves the security/data spec and required review/checks pass. No new runtime adoption is authorized by this retrospective document.
 
-[NEEDS CLARIFICATION: The owner decision requested for Gateway findings F1–F4 remains pending; decide whether the unrelated JWT finding is included or tracked separately, and authorize the guardrail corrections before their gate advances. Additional formal review findings must be resolved under the same process.]
+Owner decision, 2026-11-06: “Fix all four and retest,” followed by “Fix F1–F4 and F6; retest.” This explicitly authorizes the targeted JWT admission, earlier protocol extraction, channel-control preservation, pre-cap redaction and whole-response speech corrections before corrective implementation. Backup findings remain separate. This decision does not approve merging or deploying an unreviewed head.
 
 The release tool also selected the wrong default branch for Gateway/meta. The documentation run stopped safely and this draft PR uses canonical `dev`; the Gateway source range must be corrected before publication. Human merge remains mandatory, and no changes are live.

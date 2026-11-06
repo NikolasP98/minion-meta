@@ -10,10 +10,10 @@
 - [x] Current behavior and transitions link to exact retained source evidence.
 - [x] Prototype, repository, review and deployment proof remain separate.
 - [x] The historical ordering transition and incomplete approvals are explicit.
-- [ ] No clarification remains: Gateway F1–F4 decision is pending in the existing owner question.
+- [x] Targeted scope/behavior clarification resolved: owner explicitly approved F1–F4 and F6 and retesting.
 - [ ] Security/data owner approval and two-pass review are complete.
 - [ ] The agreed outcomes are implemented, regression-tested and verified in production.
 
 ## Validation result
 
-Draft content is reviewable. Planning/adoption is blocked on the existing scope/behavior decision and Constitution I/V approval gate. No second clarification request or completed implementation is fabricated.
+Draft content is reviewable. Planning the approved corrections may proceed. Production adoption remains blocked on completed verification, source-scope review and human merge approval. No second clarification request or completed implementation is fabricated.
