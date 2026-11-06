@@ -143,6 +143,7 @@ export class GatewayClient {
 
     const gen = ++this.generation;
     this.closed = false;
+    this.maxPayload = undefined;
     if (this.reconnectTimer) {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;

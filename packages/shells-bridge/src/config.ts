@@ -99,6 +99,8 @@ function loadDurable(env: NodeJS.ProcessEnv, harnessWorkDir: string): BridgeDura
   }
   // The journal must survive a restore that replaces the harness tree wholesale.
   // The journal's own trusted-parent/single-link/0600 checks remain the real boundary.
+  // TODO(handoff): normalize workdir/journal aliases before containment checks so
+  // restores cannot overwrite the journal. See proposals/2026-11-03-hub-clinic-theme.md#inherited-validation-findings.
   const workDir = harnessWorkDir.replace(/\/+$/, '');
   if (journalPath === workDir || journalPath.startsWith(`${workDir}/`)) {
     throw new ConfigError('SHELLS_DURABLE_JOURNAL_PATH must be outside SHELLS_HARNESS_WORKDIR');

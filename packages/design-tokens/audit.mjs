@@ -214,6 +214,8 @@ export function auditTokenSources({
   const forbidden = forbiddenTokens instanceof Set ? forbiddenTokens : new Set(forbiddenTokens);
   const declarationOrigins = new Map();
   const forbiddenDefinitions = [];
+  // TODO(handoff): verify shared tokens have emitted CSS producers; JSON keys alone
+  // can mask missing declarations. See proposals/2026-11-03-hub-clinic-theme.md#inherited-validation-findings.
   for (const token of contractTokens) declarationOrigins.set(token, new Set(['shared-contract']));
 
   for (const source of sources) {
