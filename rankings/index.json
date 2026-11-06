@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-06T04:47:10.790Z",
+	"generatedAt": "2026-11-06T05:17:40.469Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9859,6 +9859,39 @@
 			"scoredAt": "2026-11-02T06:48:11.818Z"
 		},
 		{
+			"key": "pr:minion (gateway)#367",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#367 Gateway: time-bound Hub fetches in ledger flusher and memory sink (MIN-25)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/367",
+			"sourceUpdatedAt": "2026-11-06T05:07:18Z",
+			"sourceFingerprint": "9c5282cb28a971893e175fe374fe361ed1f172b2fbd6fd76d92e5e5dac730134",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Adds bounded timeouts and an in-flight guard to two previously-unbounded gateway→Hub fetch paths, with targeted unit tests and clean lint/format, though full test suite wasn't confirmed green.",
+			"evidence": [
+				"AbortSignal.timeout(15s/10s) added to ledger flusher and memory sink fetches that previously had no timeout",
+				"26 new/targeted unit tests passed; pnpm format:check and lint clean",
+				"author notes unrelated tsgo error and some unrelated failing tests, and could not complete a full pnpm test run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T05:17:40.191Z"
+		},
+		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11213,38 +11246,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
-			"sourceUpdatedAt": "2026-11-05T20:40:14Z",
-			"sourceFingerprint": "ba1c2616e4f5e866ffa073aa76e97721470e39aacead9f35ddcd2b4c633663b8",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A backup/restore-drill deployment for the gateway improves reliability but this entry reports a merged commit rather than an open action item.",
-			"evidence": [
-				"Deploy: off-server gateway volume backups every 30 min + timed restore drill (MIN-12) (#366)",
-				"CI runs shellcheck and a real restic round trip"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T04:17:18.082Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
