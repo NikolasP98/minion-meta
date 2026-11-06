@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-06T08:17:20.978Z",
+	"generatedAt": "2026-11-06T08:47:35.405Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -803,6 +803,39 @@
 			"scoredAt": "2026-11-04T08:18:13.127Z"
 		},
 		{
+			"key": "pr:minion_hub#634",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#634 fix(scheduling): one bookings visit no longer fills the database connection slots",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/634",
+			"sourceUpdatedAt": "2026-11-06T08:20:03Z",
+			"sourceFingerprint": "be51b96f8c8119296444f2c1e7e2c36c3e96af3caee0978e3c85776659acbb07",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a recurring production outage (three outages, DB pool exhaustion) with a clear root cause, targeted fix, and tests, ready to merge.",
+			"evidence": [
+				"three outages 2026-11-03/05 with EMAXCONN pooler exhaustion",
+				"AttachmentList fan-out caused ~750 parallel requests per visit",
+				"pg-pool.test.ts and bookings-routes.characterization.test.ts added"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T08:47:35.139Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-807f018d50fd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1063,38 +1096,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:27:16.894Z"
-		},
-		{
-			"key": "pr:minion_hub#634",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#634 fix(scheduling): one bookings visit no longer fills the database connection slots",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/634",
-			"sourceUpdatedAt": "2026-11-06T08:15:40Z",
-			"sourceFingerprint": "239a2981cfeaa2c6b1e7d65360f38ab5ff1168e10a31104a8b1f75566fd5af45",
-			"score": 79,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Open PR with tests that fixes a confirmed repeated production outage caused by connection-pool exhaustion.",
-			"evidence": [
-				"three production outages on 2026-11-03 and 2026-11-05 with EMAXCONN pooler errors",
-				"fix adds attachmentCounts grouped query and holdUntilPoolIdle with accompanying tests"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T08:17:20.740Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-gateway-lifecycle-spec",
@@ -11278,6 +11279,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
+			"sourceUpdatedAt": "2026-11-05T20:40:14Z",
+			"sourceFingerprint": "ba1c2616e4f5e866ffa073aa76e97721470e39aacead9f35ddcd2b4c633663b8",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Backup/restore drill automation for gateway volumes reduces data-loss risk but is already merged infrastructure work, not an open task.",
+			"evidence": [
+				"restic job every 30 min with restore drill (MIN-12)",
+				"CI runs shellcheck and real restic round trip"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T08:47:35.139Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
