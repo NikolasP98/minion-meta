@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-06T07:47:10.605Z",
+	"generatedAt": "2026-11-06T08:17:20.978Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1063,6 +1063,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:27:16.894Z"
+		},
+		{
+			"key": "pr:minion_hub#634",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#634 fix(scheduling): one bookings visit no longer fills the database connection slots",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/634",
+			"sourceUpdatedAt": "2026-11-06T08:15:40Z",
+			"sourceFingerprint": "239a2981cfeaa2c6b1e7d65360f38ab5ff1168e10a31104a8b1f75566fd5af45",
+			"score": 79,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Open PR with tests that fixes a confirmed repeated production outage caused by connection-pool exhaustion.",
+			"evidence": [
+				"three production outages on 2026-11-03 and 2026-11-05 with EMAXCONN pooler errors",
+				"fix adds attachmentCounts grouped query and holdUntilPoolIdle with accompanying tests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T08:17:20.740Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-gateway-lifecycle-spec",
@@ -11246,38 +11278,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
-			"sourceUpdatedAt": "2026-11-05T20:40:14Z",
-			"sourceFingerprint": "ba1c2616e4f5e866ffa073aa76e97721470e39aacead9f35ddcd2b4c633663b8",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A completed deployment of off-server backups with restore drills improves resilience but is a routine infra hardening task, not urgent or strategic enough to prioritize as a board goal now.",
-			"evidence": [
-				"restic job every 30 min with restore drill (MIN-12)",
-				"CI runs shellcheck and a real restic round trip"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T06:47:12.315Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
