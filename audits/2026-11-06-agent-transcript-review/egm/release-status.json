@@ -1,5 +1,5 @@
 {
-  "state": "not-live: Hub follow-up published, fresh CI pending; Gateway owner decision and source fix pending",
+  "state": "not-live: owner-authorized Gateway corrections under re-review; Hub CI harness correction under rebase/review",
   "signing": "working: required 1Password signing produced recovered Hub commit ad8a6cef and Gateway correction commit 7dcd7c207; signing remains enabled",
   "gateway": {
     "source": "/tmp/minion-agent-release-20261106-9s5u0m7u/gateway",
@@ -35,13 +35,12 @@
       }
     },
     "submitted_commit": "ee927a1eba75ac68504879a3e9e6aabcf3d8f226",
-    "pipeline": "01M6RYR0BGPT22FGPJJ26RXF2R parked at review awaiting owner decision for R1 and R2",
+    "pipeline": "01M6RYR0BGPT22FGPJJ26RXF2R: authorized R2 and recovery assertions fixed as7b9bca00;177 focused tests across12files pass; independent re-review active",
     "pending_findings": [
-      "R1: gate-intent correction or new quoted-DSML terminal policy. Existing EGM report rejects literal DSML examples; extraction-only documentation controls are preserved.",
-      "R2: preserving LINE controls moves their text into metadata before supported-secret redaction; current candidate must not ship until this is corrected.",
-      "Two real-SDK recovery assertions still expect TOOL_RECOVERY_FALLBACK for nonempty malformed output rather than the approved protocol-status warning."
+      "R1 terminal policy resolved: retain the original terminal rejection, including quoted examples.",
+      "R2 correction and recovery assertion alignment pass177focused cases; independent re-review and remaining pipeline/CI qualification are not yet complete."
     ],
-    "owner_decision": "Owner explicitly approved: Fix all four and retest; then Fix F1-F4 and F6; retest. Backup work remains outside scope.",
+    "owner_decision": "Owner approved keeping terminal DSML rejection, correcting LINE credential redaction while preserving controls, aligning recovery tests and continuing validation: ok, proceed.",
     "recovered_head": "bc6da6ed55a148beb3ac29194931be0c1737c64e",
     "source_correction_commit": "7dcd7c207ec8f19d192c19ea9ecec97289505034",
     "approved_corrections": "F1-F4 and F6 implemented. JWT-only unpaired nodes rejected; extracted/streamed malformed protocol yields uncertainty; LINE controls parsed before sanitization; invalid whole responses cannot use clean success speech; supported secrets redacted before cap and again after hooks.",
@@ -105,7 +104,8 @@
       "qualifier": "Executed before late ratchet correction; sole failure was the direct Intl formatter-bypass count. Changed source was subsequently fixed, and content-contract plus finance SQL suites passed22/22. Full final-head CI remains required."
     },
     "late_correction": "Signed393b8966 reuses existing bounded instantParts timezone validation instead of adding direct Intl formatting. No baseline exception or policy relaxation. Both independent review and focused requalification passed.",
-    "ci": "Fresh workflow42265711034 pending for393b8966; prior c2f77bc4 test job failed and is superseded. Do not equate intermediate check/build success with a green final candidate."
+    "ci": "At393b8966 GitHub reports12success/1failure: all8967tests passed,289skipped, but one unhandled Undici stream rejection in the join-page fixture made the test job fail. Vercel preview actually succeeded; gh-axi misclassified its commit status as pending.",
+    "current_followup": "Signedcb4d4b93 serializes synthetic multipart fixture bytes before bounded-request tests;19join/input cases pass locally, but the CI-only unhandled rejection is not locally reproduced. New gate01M6S7YYTPQ6ASCTEZ6488S2SX is resolving upstream native-manifest conflict before review."
   },
   "meta": {
     "source": "/tmp/minion-agent-release-20261106-9s5u0m7u/meta",
@@ -126,7 +126,7 @@
   "release_gate": "Complete current exact-source review/checks/CI, present scoped product PRs for human merge and production promotion, then execute the production verification plan. Changes are not yet live.",
   "patch_snapshot_note": "Exported patches reconstruct the submitted signed candidates ee927a/80df1d, not later gate-owned fix heads. Updated final artifacts require custody synchronization and qualification.",
   "recovery": {
-    "updated_at": "2026-11-06T17:54:20.371973+00:00",
+    "updated_at": "2026-11-06T20:16:56.105457+00:00",
     "cause": "Gateway gate failed with daemon shutting down; Hub failed document signing; original temporary clones and gate worktrees were absent at resume.",
     "preservation": "Reconstructed invoking clones from retained gate objects; supported Gateway custody recovery; preserved original submitted and rebased heads in ancestry; failed Hub tree recovered exactly. Durable private bundles and recovery-checkpoint.json under .local/agent-release-recovery-20261106.",
     "production": "No product PR was open at resume. No product deployment or production runtime check has occurred in this recovery session."

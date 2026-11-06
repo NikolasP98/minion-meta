@@ -10,4 +10,4 @@ Qualitative analysis inspected targeted sequences, screened 74 recent conversati
 
 [The code review](code-review/README.md) links eight concrete defects to current pinned source, distinguishing direct transcript matches from adjacent findings. [The EGM report](egm/consolidated_review_report.md) records proposed approaches, fresh reviewers, executable proof and remaining boundaries. Its 253-test prototype proof is separate from the [superseding release drafts and current qualification](egm/release-status.json).
 
-Fine-tuning and live per-request model judging are not prerequisites for these deterministic corrections. This audit does not establish current production behavior. Changes are not live; signing, final qualification, independent review, human security/data approval and merge, and deployment/runtime verification remain open.
+Fine-tuning and live per-request model judging are not prerequisites for these deterministic corrections. This audit does not establish current production behavior. [Current release qualification](egm/release-status.json) owns the delivery state, active gates and remaining deployment/runtime verification.
