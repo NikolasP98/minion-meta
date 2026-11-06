@@ -1,0 +1,36 @@
+[verify-image-pins] ok: agent/Dockerfile FROM is digest-pinned
+[verify-image-pins] ok: runner/Dockerfile FROM is digest-pinned
+[verify-image-pins] ok: agent/Dockerfile global CLI installs are version-pinned
+[verify-image-pins] ok: agent/Dockerfile Bun install is version-pinned
+[verify-image-pins] ok: runner/Dockerfile does not start via npx
+[verify-image-pins] ok: agent/Dockerfile binds the build revision into OCI provenance
+[verify-image-pins] ok: runner/Dockerfile binds the build revision into OCI provenance
+[verify-image-pins] ok: runner/Dockerfile installs from the lockfile (npm ci)
+[verify-image-pins] ok: agent/runner Dockerfiles share the same NODE_BASE_DIGEST (sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5)
+[verify-image-pins] ok: negative fixture correctly rejected: tag-only FROM
+[verify-image-pins] ok: negative fixture correctly rejected: FROM ARG without a sha256 default
+[verify-image-pins] ok: negative fixture correctly rejected: unversioned global install
+[verify-image-pins] ok: negative fixture correctly rejected: @latest global install
+[verify-image-pins] ok: negative fixture correctly rejected: unversioned Bun install
+[verify-image-pins] ok: negative fixture correctly rejected: npx startup
+[verify-image-pins] ok: negative fixture correctly rejected: missing OCI candidate-revision label
+[verify-image-pins] ok: tag/local-ID production ref correctly rejected: minion-factory-agent
+[verify-image-pins] ok: tag/local-ID production ref correctly rejected: minion-factory-runner:latest
+[verify-image-pins] ok: tag/local-ID production ref correctly rejected: registry.example.com/minion-factory-agent
+[verify-image-pins] ok: tag/local-ID production ref correctly rejected: registry.example.com/minion-factory-agent:v1
+[verify-image-pins] ok: tag/local-ID production ref correctly rejected: sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5
+[verify-image-pins] ok: immutable digest production ref accepted: registry.example.com/minion-factory/agent@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5
+[verify-image-pins] ok: deploy.sh sources the shared image-pins grammar
+[verify-image-pins] ok: setup.sh sources the shared image-pins grammar
+[verify-image-pins] ok: scripts/promotion/deploy-exact.sh reaches the shared image-pins grammar through promotion/lib.sh
+[verify-image-pins] ok: deploy.sh enforces digest refs before containment activation
+[verify-image-pins] ok: setup.sh enforces digest refs before containment activation
+[verify-image-pins] ok: deploy-exact.sh enforces digest refs before containment activation
+[verify-image-pins] ok: deploy-exact.sh aligns the rollback runner tag with the selected digest
+[verify-image-pins] ok: docker-compose.yml: runner image is wired to FACTORY_RUNNER_IMAGE with the local dev default
+[verify-image-pins] ok: docker-compose.yml: worker image is wired to FACTORY_AGENT_IMAGE with the local dev default
+[verify-image-pins] ok: deploy/stack.yml: runner image is wired to FACTORY_RUNNER_IMAGE with the local dev default
+[verify-image-pins] ok: deploy/stack.yml: worker image is wired to FACTORY_AGENT_IMAGE with the local dev default
+[verify-image-pins] ok: deploy/k8s.yml: both FACTORY_AGENT_IMAGE and FACTORY_RUNNER_IMAGE render
+[verify-image-pins] ok: deploy/k8s.yml: unexported agent/runner refs render unpinned, never as a silent mutable fallback
+[verify-image-pins] PASS

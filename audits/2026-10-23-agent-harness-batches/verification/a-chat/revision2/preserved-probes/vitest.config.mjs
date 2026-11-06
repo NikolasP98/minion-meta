@@ -1,0 +1,2 @@
+import base from '/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat/vitest.config.ts';
+export default {...base, test: {...base.test, alias: {...base.test.alias, '@minion-stack/shared': '/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat/node_modules/@minion-stack/shared/dist/index.js'}, include: ['/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/a-chat/probes/*.test.ts'], maxWorkers:1, fileParallelism:false}};

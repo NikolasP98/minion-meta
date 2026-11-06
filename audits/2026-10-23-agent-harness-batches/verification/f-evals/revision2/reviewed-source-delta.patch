@@ -1,0 +1,1059 @@
+--- revision1/scripts/agent-evals/lib/run-evidence.mjs
++++ revision2/scripts/agent-evals/lib/run-evidence.mjs
+@@ -1,14 +1,26 @@
+-import path from 'node:path';
+-import { assert, readJSON, jsonl, digest, canonical } from './common.mjs';
+-import { validateRecord, validatePayload, dedupe } from './receipts.mjs';
+-const lineage = ['runId', 'episodeId', 'clusterId', 'arm', 'rootId', 'submissionId', 'parentId'];
++import path from "node:path";
++import { assert, readJSON, jsonl, digest, canonical } from "./common.mjs";
++import { loadManifest } from "./manifest.mjs";
++import { validateRecord, validatePayload, dedupe } from "./receipts.mjs";
++const lineage = [
++  "runId",
++  "episodeId",
++  "clusterId",
++  "arm",
++  "rootId",
++  "submissionId",
++  "parentId",
++];
+ const sameLineage = (a, b) => lineage.every((key) => a[key] === b[key]);
+ export function reconcileRunEvidence(root) {
+-  const result = readJSON(path.join(root, 'result.json')),
+-    manifest = readJSON(path.join(root, 'manifest.json'));
+-  assert(digest(manifest) === result.manifestSha256, 'run manifest hash changed');
+-  const rawEvents = jsonl(path.join(root, 'events.jsonl')).map(validateRecord),
+-    rawReceipts = jsonl(path.join(root, 'receipts.jsonl')).map(validateRecord);
++  const result = readJSON(path.join(root, "result.json")),
++    { manifest } = loadManifest(path.join(root, "manifest.json"));
++  assert(
++    digest(manifest) === result.manifestSha256,
++    "run manifest hash changed",
++  );
++  const rawEvents = jsonl(path.join(root, "events.jsonl")).map(validateRecord),
++    rawReceipts = jsonl(path.join(root, "receipts.jsonl")).map(validateRecord);
+   const all = dedupe([...rawEvents, ...rawReceipts]),
+     invalid = new Set(),
+     invalidFinancial = new Set();
+@@ -16,11 +28,16 @@
+     try {
+       validatePayload(r);
+       assert(
+-        r.runId === result.runId && digest(r.revisions) === digest(manifest.provenance),
+-        'run source binding',
++        r.runId === result.runId &&
++          digest(r.revisions) === digest(manifest.provenance),
++        "run source binding",
+       );
+     } catch {
+-      if (['provider_settled', 'provider_failed', 'provider_received'].includes(r.kind))
++      if (
++        ["provider_settled", "provider_failed", "provider_received"].includes(
++          r.kind,
++        )
++      )
+         invalidFinancial.add(r.id);
+       else invalid.add(r.id);
+     }
+@@ -29,48 +46,108 @@
+     receipts = dedupe(rawReceipts),
+     analysis = structuredClone(result.analysis);
+   analysis.expectedEpisodes = manifest.corpus.episodeIds;
++  const globalProblems = [];
++  const global = (kind, records) => {
++    const matches = records.filter((r) => r.kind === kind);
++    if (matches.length !== 1)
++      globalProblems.push(`missing_or_conflicting_${kind}`);
++    const record = matches[0];
++    if (
++      record &&
++      (invalid.has(record.id) ||
++        record.episodeId !== "run" ||
++        record.clusterId !== "run" ||
++        record.arm !== "run" ||
++        record.rootId !== result.runId ||
++        record.submissionId !== result.runId ||
++        record.parentId !== null ||
++        record.attemptId !== null)
++    )
++      globalProblems.push(`invalid_global_${kind}`);
++    return record;
++  };
++  const identity = global("adapter_identity", receipts.records),
++    prepared = global("prepared", events.records),
++    hub = manifest.provenance.hub;
++  if (
++    identity &&
++    (identity.payload.protocol !== "minion-agent-eval-fixture/v1" ||
++      identity.payload.disposable !== true ||
++      identity.payload.sourceSha !== hub.commit ||
++      identity.payload.sourceHash !== hub.sourceSha256 ||
++      identity.payload.lockHash !== hub.lockSha256 ||
++      identity.payload.buildHash !== hub.buildSha256 ||
++      identity.payload.adapterHash !== hub.adapterSha256)
++  )
++    globalProblems.push("adapter_provenance_mismatch");
++  if (
++    identity?.payload.sources !== undefined &&
++    (!Array.isArray(identity.payload.sources) ||
++      digest(JSON.stringify(identity.payload.sources)) !== hub.sourceSha256)
++  )
++    globalProblems.push("adapter_source_inventory_mismatch");
++  if (
++    prepared &&
++    (prepared.payload.manifestSha256 !== digest(manifest) ||
++      prepared.payload.approvalSha256 !== result.approvalSha256 ||
++      prepared.payload.mode !== manifest.mode)
++  )
++    globalProblems.push("prepared_manifest_mismatch");
+   for (const row of analysis.observations) {
+     const relevant = receipts.records.filter(
+         (r) => r.episodeId === row.episodeId && r.arm === row.arm,
+       ),
+-      related = events.records.filter((r) => r.episodeId === row.episodeId && r.arm === row.arm);
+-    const reset = relevant.find((r) => r.kind === 'reset'),
+-      collection = relevant.find((r) => r.kind === 'collection'),
+-      problems = [],
++      related = events.records.filter(
++        (r) => r.episodeId === row.episodeId && r.arm === row.arm,
++      );
++    const reset = relevant.find((r) => r.kind === "reset"),
++      collection = relevant.find((r) => r.kind === "collection"),
++      problems = [...globalProblems],
+       billingProblems = [];
+-    if (invalidFinancial.size) billingProblems.push('invalid_typed_financial_evidence');
+-    const requests = related.filter((r) => r.kind === 'provider_requested'),
+-      steps = related.filter((r) => r.kind === 'step');
++    if (invalidFinancial.size)
++      billingProblems.push("invalid_typed_financial_evidence");
++    const requests = related.filter((r) => r.kind === "provider_requested"),
++      steps = related.filter((r) => r.kind === "step");
+     for (const request of requests) {
+       const model =
+-        request.payload.kind === 'classifier'
++        request.payload.kind === "classifier"
+           ? manifest.provenance.model.classifier
+           : manifest.provenance.model;
+       if (request.payload.requestedModel !== model?.requested)
+-        problems.push('unapproved_request_model');
++        problems.push("unapproved_request_model");
+       const peers = requests.filter((r) => r.attemptId === request.attemptId);
+       if (
+         peers.some(
+-          (r) => !sameLineage(r, request) || canonical(r.payload) !== canonical(request.payload),
+-        )
+-      )
+-        problems.push('conflicting_attempt_requests');
+-    }
+-    if (!reset || !collection) problems.push('missing_reset_or_collection');
+-    if (all.quarantine.length || events.quarantine.length || receipts.quarantine.length)
+-      problems.push('conflicting_record_ids');
+-    if (invalid.size || [...relevant, ...related].some((r) => invalid.has(r.id)))
+-      problems.push('invalid_typed_evidence');
++          (r) =>
++            !sameLineage(r, request) ||
++            canonical(r.payload) !== canonical(request.payload),
++        )
++      )
++        problems.push("conflicting_attempt_requests");
++    }
++    if (!reset || !collection) problems.push("missing_reset_or_collection");
++    if (
++      all.quarantine.length ||
++      events.quarantine.length ||
++      receipts.quarantine.length
++    )
++      problems.push("conflicting_record_ids");
++    if (
++      invalid.size ||
++      [...relevant, ...related].some((r) => invalid.has(r.id))
++    )
++      problems.push("invalid_typed_evidence");
+     if (reset) {
+       if (
+         reset.clusterId !== row.clusterId ||
+         (collection &&
+-          (collection.rootId !== reset.rootId || collection.clusterId !== reset.clusterId))
+-      )
+-        problems.push('foreign_root_or_cluster');
++          (collection.rootId !== reset.rootId ||
++            collection.clusterId !== reset.clusterId))
++      )
++        problems.push("foreign_root_or_cluster");
+       for (const r of [...relevant, ...related])
+         if (r.rootId !== reset.rootId || r.clusterId !== reset.clusterId)
+-          problems.push('foreign_root_or_cluster');
++          problems.push("foreign_root_or_cluster");
+       const submissions = new Set([reset.submissionId]);
+       for (const step of steps) {
+         if (
+@@ -78,39 +155,51 @@
+           !submissions.has(step.parentId) ||
+           submissions.has(step.submissionId)
+         )
+-          problems.push('broken_step_parent_chain');
++          problems.push("broken_step_parent_chain");
+         submissions.add(step.submissionId);
+       }
+       for (const request of requests)
+         if (!steps.some((step) => sameLineage(step, request)))
+-          problems.push('foreign_request_lineage');
++          problems.push("foreign_request_lineage");
+       const finalStep = steps.at(-1) ?? reset;
+       if (collection && !sameLineage(collection, finalStep))
+-        problems.push('foreign_collection_lineage');
+-    }
+-    const expected = manifest.evidence.expectedKinds.filter((k) => k !== 'adapter_identity');
++        problems.push("foreign_collection_lineage");
++    }
++    const expected = manifest.evidence.expectedKinds.filter(
++      (k) => k !== "adapter_identity",
++    );
+     for (const kind of expected)
+       if (!relevant.some((r) => r.kind === kind && !invalid.has(r.id)))
+-        (kind.startsWith('provider_') ? billingProblems : problems).push(
+-          'missing_expected_receipt',
++        (kind.startsWith("provider_") ? billingProblems : problems).push(
++          "missing_expected_receipt",
+         );
+     const attemptIds = new Set(requests.map((r) => r.attemptId));
+-    const terminalKinds = ['provider_settled', 'provider_failed'];
+-    const providerRecords = relevant.filter((r) => r.kind.startsWith('provider_'));
++    const terminalKinds = ["provider_settled", "provider_failed"];
++    const providerRecords = relevant.filter((r) =>
++      r.kind.startsWith("provider_"),
++    );
+     for (const r of providerRecords) {
+       const request = requests.find((q) => q.attemptId === r.attemptId);
+-      if (!request || !sameLineage(request, r) || r.payload.attemptId !== r.attemptId) {
+-        problems.push('foreign_provider_lineage');
+-        if (['provider_received', 'provider_settled', 'provider_failed'].includes(r.kind)) {
++      if (
++        !request ||
++        !sameLineage(request, r) ||
++        r.payload.attemptId !== r.attemptId
++      ) {
++        problems.push("foreign_provider_lineage");
++        if (
++          ["provider_received", "provider_settled", "provider_failed"].includes(
++            r.kind,
++          )
++        ) {
+           invalidFinancial.add(r.id);
+-          billingProblems.push('unjoined_financial_lineage');
++          billingProblems.push("unjoined_financial_lineage");
+         }
+       }
+       if (
+-        r.kind === 'provider_settled' &&
++        r.kind === "provider_settled" &&
+         (r.payload.episodeId !== r.episodeId || r.payload.arm !== r.arm)
+       )
+-        problems.push('foreign_provider_payload_scope');
++        problems.push("foreign_provider_payload_scope");
+     }
+     let knownLower = 0,
+       upper = 0,
+@@ -118,19 +207,27 @@
+       allBounded = true,
+       knownAttempts = 0;
+     const drift = [];
+-    for (const id of new Set([...attemptIds, ...providerRecords.map((r) => r.attemptId)])) {
++    for (const id of new Set([
++      ...attemptIds,
++      ...providerRecords.map((r) => r.attemptId),
++    ])) {
+       const request = requests.find((r) => r.attemptId === id),
+         records = providerRecords.filter((r) => r.attemptId === id),
+         terminals = records.filter((r) => terminalKinds.includes(r.kind));
+-      if (terminals.length !== 1) billingProblems.push('missing_or_conflicting_attempt_terminal');
++      if (terminals.length !== 1)
++        billingProblems.push("missing_or_conflicting_attempt_terminal");
+       const financial = records.filter((r) =>
+-        ['provider_received', ...terminalKinds].includes(r.kind),
++        ["provider_received", ...terminalKinds].includes(r.kind),
+       );
+-      const malformed = financial.some((r) => invalid.has(r.id) || invalidFinancial.has(r.id));
++      const malformed = financial.some(
++        (r) => invalid.has(r.id) || invalidFinancial.has(r.id),
++      );
+       const known = financial
+         .filter(
+           (r) =>
+-            !invalid.has(r.id) && !invalidFinancial.has(r.id) && r.payload.costStatus === 'known',
++            !invalid.has(r.id) &&
++            !invalidFinancial.has(r.id) &&
++            r.payload.costStatus === "known",
+         )
+         .map((r) =>
+           r.payload.exactCostUsd !== undefined
+@@ -142,11 +239,12 @@
+       const knownBill =
+         !malformed &&
+         terminals.length === 1 &&
+-        terminal.payload.costStatus === 'known' &&
++        terminal.payload.costStatus === "known" &&
+         financial.every(
+           (r) =>
+-            r.payload.costStatus === 'known' &&
+-            (r.kind !== 'provider_received' || r.payload.billingComplete === true),
++            r.payload.costStatus === "known" &&
++            (r.kind !== "provider_received" ||
++              r.payload.billingComplete === true),
+         ) &&
+         known.every((n) => n === lower);
+       if (knownBill) {
+@@ -156,10 +254,10 @@
+       } else {
+         knownLower += lower;
+         allKnown = false;
+-        billingProblems.push('incomplete_or_conflicting_bill');
++        billingProblems.push("incomplete_or_conflicting_bill");
+         const ceiling = terminal?.payload.upperMicroUsd;
+         if (
+-          typeof ceiling === 'number' &&
++          typeof ceiling === "number" &&
+           Number.isFinite(ceiling) &&
+           ceiling >= lower &&
+           !malformed
+@@ -169,27 +267,38 @@
+       }
+       for (const record of records) {
+         if (
+-          record.kind === 'provider_settled' &&
++          record.kind === "provider_settled" &&
+           request &&
+           (record.payload.kind !== request.payload.kind ||
+             record.payload.requestedModel !== request.payload.requestedModel)
+         )
+-          problems.push('provider_model_binding');
++          problems.push("provider_model_binding");
+         const model =
+-          request?.payload.kind === 'classifier'
++          request?.payload.kind === "classifier"
+             ? manifest.provenance.model.classifier
+             : manifest.provenance.model;
+-        if (record.payload.resolvedModel && !model?.resolved.includes(record.payload.resolvedModel))
++        if (
++          record.payload.resolvedModel &&
++          !model?.resolved.includes(record.payload.resolvedModel)
++        )
+           drift.push({
+-            kind: request?.payload.kind ?? 'unknown',
++            kind: request?.payload.kind ?? "unknown",
+             requested: request?.payload.requestedModel ?? null,
+             resolved: record.payload.resolvedModel,
+           });
+       }
+     }
+     if (collection) {
+-      if (!collection.payload.complete || collection.payload.network.externalRequests !== 0)
+-        problems.push('incomplete_collection');
++      if (
++        !collection.payload.complete ||
++        collection.payload.missing.length ||
++        collection.payload.quarantine.length ||
++        collection.payload.network.externalRequests !== 0 ||
++        (collection.payload.network.violations?.length ?? 0) > 0 ||
++        (collection.payload.outcome === "success" &&
++          collection.payload.critical.length)
++      )
++        problems.push("incomplete_collection");
+       for (const domain of collection.payload.domainReceipts) {
+         const main = requests.find(
+           (r) =>
+@@ -203,10 +312,13 @@
+           domain.actorId !== manifest.scope.actor ||
+           domain.orgId !== manifest.scope.org
+         )
+-          problems.push('foreign_domain_lineage');
+-      }
+-    }
+-    assert(digest(row.cohort) === digest(manifest.provenance), 'cohort binding mismatch');
++          problems.push("foreign_domain_lineage");
++      }
++    }
++    assert(
++      digest(row.cohort) === digest(manifest.provenance),
++      "cohort binding mismatch",
++    );
+     row.cohort = drift.length
+       ? { ...manifest.provenance, observedModelDrift: drift }
+       : manifest.provenance;
+@@ -216,13 +328,26 @@
+     row.executionComplete = problems.length === 0;
+     row.billingComplete = billingProblems.length === 0 && allKnown;
+     row.complete = row.executionComplete;
+-    row.outcome = row.complete ? collection.payload.outcome : 'indeterminate';
++    row.outcome = row.complete ? collection.payload.outcome : "indeterminate";
+     row.critical = collection?.payload.critical ?? [];
+     row.costMicroUsd = knownLower;
+     row.upperMicroUsd = allBounded ? upper : null;
+-    row.costStatus = allKnown ? 'known' : allBounded ? 'bounded_unknown' : 'unbounded';
+-    row.attempts = new Set([...attemptIds, ...providerRecords.map((r) => r.attemptId)]).size;
++    row.costStatus = allKnown
++      ? "known"
++      : allBounded
++        ? "bounded_unknown"
++        : "unbounded";
++    row.attempts = new Set([
++      ...attemptIds,
++      ...providerRecords.map((r) => r.attemptId),
++    ]).size;
+     row.knownAttempts = knownAttempts;
+   }
+-  return { manifest, result, events: events.records, receipts: receipts.records, analysis };
++  return {
++    manifest,
++    result,
++    events: events.records,
++    receipts: receipts.records,
++    analysis,
++  };
+ }
+--- revision1/scripts/agent-evals/complaint.mjs
++++ revision2/scripts/agent-evals/complaint.mjs
+@@ -1,6 +1,6 @@
+-import fs from 'node:fs';
+-import path from 'node:path';
+-import Ajv from 'ajv';
++import fs from "node:fs";
++import path from "node:path";
++import Ajv from "ajv";
+ import {
+   assert,
+   object,
+@@ -11,51 +11,54 @@
+   direct,
+   main,
+   safePath,
+-} from './lib/common.mjs';
+-import { verifyCheckout, loadManifest } from './lib/manifest.mjs';
++} from "./lib/common.mjs";
++import { verifyCheckout, loadManifest } from "./lib/manifest.mjs";
+ const immutable = [
+-  'version',
+-  'schemaRevision',
+-  'recordId',
+-  'logicalSourceId',
+-  'authorityNamespaceHash',
+-  'admissionId',
+-  'inputHash',
+-  'sourceCertification',
+-  'sourceCertificationRevision',
+-  'policyId',
+-  'policyHash',
+-  'defaultPolicyHash',
+-  'policyRevision',
+-  'policyMode',
+-  'classifierSchemaRevision',
+-  'mode',
+-  'requestedClassifierModel',
+-  'severityLabelRevision',
++  "version",
++  "schemaRevision",
++  "recordId",
++  "logicalSourceId",
++  "authorityNamespaceHash",
++  "admissionId",
++  "inputHash",
++  "sourceCertification",
++  "sourceCertificationRevision",
++  "policyId",
++  "policyHash",
++  "defaultPolicyHash",
++  "policyRevision",
++  "policyMode",
++  "classifierSchemaRevision",
++  "mode",
++  "requestedClassifierModel",
++  "severityLabelRevision",
+ ];
+ function references(record) {
+   const ids = new Map();
+   for (const a of record.attempts) {
+-    assert(!ids.has(a.attemptId), 'duplicate attempt in complaint');
++    assert(!ids.has(a.attemptId), "duplicate attempt in complaint");
+     ids.set(a.attemptId, a);
+   }
+   for (const [list, purpose] of [
+-    [record.baseline.attemptIds, 'baseline'],
+-    [record.gate?.attemptIds ?? [], 'gate'],
+-    [record.suggestionAttemptIds, 'suggestion'],
+-    [record.forwardedBaselineAttemptIds, 'baseline'],
++    [record.baseline.attemptIds, "baseline"],
++    [record.gate?.attemptIds ?? [], "gate"],
++    [record.suggestionAttemptIds, "suggestion"],
++    [record.forwardedBaselineAttemptIds, "baseline"],
+   ])
+     for (const id of list)
+-      assert(ids.get(id)?.purpose === purpose, 'complaint attempt purpose/reference mismatch');
++      assert(
++        ids.get(id)?.purpose === purpose,
++        "complaint attempt purpose/reference mismatch",
++      );
+   for (const a of record.attempts)
+     assert(
+-      (a.purpose === 'baseline'
++      (a.purpose === "baseline"
+         ? record.baseline.attemptIds
+-        : a.purpose === 'gate'
++        : a.purpose === "gate"
+           ? (record.gate?.attemptIds ?? [])
+           : record.suggestionAttemptIds
+       ).includes(a.attemptId),
+-      'unreferenced complaint attempt',
++      "unreferenced complaint attempt",
+     );
+ }
+ function extendsAttempt(old, next) {
+@@ -63,88 +66,113 @@
+     old.attemptId === next.attemptId &&
+       old.purpose === next.purpose &&
+       canonical(old.requestedModel) === canonical(next.requestedModel),
+-    'immutable attempt binding',
++    "immutable attempt binding",
+   );
+   if (old.resolvedModel !== null)
+     assert(
+       canonical(old.resolvedModel) === canonical(next.resolvedModel),
+-      'resolved attempt model changed',
+-    );
+-  if (old.costStatus === 'known')
+-    assert(next.costStatus === 'known' && old.costUsd === next.costUsd, 'known bill replacement');
+-  if (old.costCoverage === 'complete')
+-    assert(next.costCoverage === 'complete', 'cost coverage regressed');
+-  if (old.disposition !== 'admitted')
+-    assert(old.disposition === next.disposition, 'terminal attempt replacement');
+-  if (old.disposition !== 'admitted')
+-    assert(
+-      canonical(old.usage) === canonical(next.usage) && old.elapsedMs === next.elapsedMs,
+-      'terminal usage replacement',
++      "resolved attempt model changed",
++    );
++  if (old.costStatus === "known")
++    assert(
++      next.costStatus === "known" && old.costUsd === next.costUsd,
++      "known bill replacement",
++    );
++  if (old.costCoverage === "complete")
++    assert(next.costCoverage === "complete", "cost coverage regressed");
++  if (old.disposition !== "admitted")
++    assert(
++      old.disposition === next.disposition,
++      "terminal attempt replacement",
++    );
++  if (old.disposition !== "admitted")
++    assert(
++      canonical(old.usage) === canonical(next.usage) &&
++        old.elapsedMs === next.elapsedMs,
++      "terminal usage replacement",
+     );
+ }
+ function extendsRecord(old, next) {
+   for (const k of immutable)
+-    assert(canonical(old[k]) === canonical(next[k]), `immutable complaint ${k}`);
+-  if (old.resultId !== null) assert(old.resultId === next.resultId, 'result replacement');
++    assert(
++      canonical(old[k]) === canonical(next[k]),
++      `immutable complaint ${k}`,
++    );
++  if (old.resultId !== null)
++    assert(old.resultId === next.resultId, "result replacement");
+   if (old.resolvedClassifierModel !== null)
+     assert(
+-      canonical(old.resolvedClassifierModel) === canonical(next.resolvedClassifierModel),
+-      'resolved classifier replacement',
+-    );
+-  if (old.baseline.disposition !== 'unknown')
++      canonical(old.resolvedClassifierModel) ===
++        canonical(next.resolvedClassifierModel),
++      "resolved classifier replacement",
++    );
++  if (old.baseline.disposition !== "unknown")
+     assert(
+       old.baseline.disposition === next.baseline.disposition &&
+         old.baseline.severity === next.baseline.severity,
+-      'terminal baseline replacement',
++      "terminal baseline replacement",
+     );
+   if (old.gate) {
+     assert(
+       next.gate &&
+         old.gate.revision === next.gate.revision &&
+-        canonical(old.gate.requestedModel) === canonical(next.gate.requestedModel),
+-      'gate binding changed',
++        canonical(old.gate.requestedModel) ===
++          canonical(next.gate.requestedModel),
++      "gate binding changed",
+     );
+     if (old.gate.resolvedModel !== null)
+       assert(
+-        canonical(old.gate.resolvedModel) === canonical(next.gate.resolvedModel),
+-        'resolved gate replacement',
++        canonical(old.gate.resolvedModel) ===
++          canonical(next.gate.resolvedModel),
++        "resolved gate replacement",
+       );
+     if (!old.gate.attemptIds.length)
+-      assert(canonical(old.gate) === canonical(next.gate), 'unadmitted terminal gate replacement');
++      assert(
++        canonical(old.gate) === canonical(next.gate),
++        "unadmitted terminal gate replacement",
++      );
+     if (
+       old.gate.attemptIds.some(
+-        (id) => old.attempts.find((a) => a.attemptId === id)?.disposition !== 'admitted',
++        (id) =>
++          old.attempts.find((a) => a.attemptId === id)?.disposition !==
++          "admitted",
+       )
+     )
+-      assert(old.gate.disposition === next.gate.disposition, 'terminal gate replacement');
++      assert(
++        old.gate.disposition === next.gate.disposition,
++        "terminal gate replacement",
++      );
+   }
+   for (const a of old.attempts) {
+     const n = next.attempts.find((x) => x.attemptId === a.attemptId);
+-    assert(n, 'removed attempt');
++    assert(n, "removed attempt");
+     extendsAttempt(a, n);
+   }
+-  if (old.costCoverage === 'complete')
+-    assert(next.costCoverage === 'complete', 'record cost coverage regression');
++  if (old.costCoverage === "complete")
++    assert(next.costCoverage === "complete", "record cost coverage regression");
+ }
+ export function loadComplaintInput(file, pin) {
+   safePath(path.resolve(file));
+   const raw = fs.readFileSync(file);
+-  assert(digest(raw) === pin.fixtureSha256, 'C complaint producer snapshot mismatch');
++  assert(
++    digest(raw) === pin.fixtureSha256,
++    "C complaint producer snapshot mismatch",
++  );
+   return readJSON(file);
+ }
+ export function compileComplaintSchema(root, pin) {
+   let schemaFile, exporterFile;
+-  if (fs.existsSync(path.join(root, 'artifact.json'))) {
+-    const artifact = readJSON(path.join(root, 'artifact.json'));
++  if (fs.existsSync(path.join(root, "artifact.json"))) {
++    const artifact = readJSON(path.join(root, "artifact.json"));
+     object(artifact, [
+-      'version',
+-      'sourceCommit',
+-      'lockSha256',
+-      'schemaSha256',
+-      'exporterSha256',
+-      'fixtureSha256',
+-      'producer',
+-      'qualification',
++      "version",
++      "sourceCommit",
++      "lockSha256",
++      "schemaSha256",
++      "exporterSha256",
++      "fixtureSha256",
++      "producer",
++      "qualification",
+     ]);
+     assert(
+       artifact.version === 1 &&
+@@ -153,38 +181,51 @@
+         artifact.schemaSha256 === pin.schemaSha256 &&
+         artifact.exporterSha256 === pin.exporterSha256 &&
+         artifact.fixtureSha256 === pin.fixtureSha256,
+-      'C artifact source pin mismatch',
+-    );
+-    assert(
+-      artifact.producer === 'gateway-complaint-evaluation-v1' &&
+-        artifact.qualification === 'producer_emitted',
+-      'uncertified C artifact',
+-    );
+-    schemaFile = path.join(root, 'complaint-evaluation.schema.json');
+-    exporterFile = path.join(root, 'complaint-evaluation.ts');
+-    assert(
+-      digest(fs.readFileSync(path.join(root, 'complaint-evaluation-v1.json'))) ===
+-        artifact.fixtureSha256,
+-      'C producer fixture mismatch',
++      "C artifact source pin mismatch",
++    );
++    assert(
++      artifact.producer === "gateway-complaint-evaluation-v1" &&
++        artifact.qualification === "producer_emitted",
++      "uncertified C artifact",
++    );
++    schemaFile = path.join(root, "complaint-evaluation.schema.json");
++    exporterFile = path.join(root, "complaint-evaluation.ts");
++    assert(
++      digest(
++        fs.readFileSync(path.join(root, "complaint-evaluation-v1.json")),
++      ) === artifact.fixtureSha256,
++      "C producer fixture mismatch",
+     );
+   } else {
+     verifyCheckout(root, pin);
+-    schemaFile = path.join(root, 'extensions/alert-watcher/src/complaint-evaluation.schema.json');
+-    exporterFile = path.join(root, 'extensions/alert-watcher/src/complaint-evaluation.ts');
++    schemaFile = path.join(
++      root,
++      "extensions/alert-watcher/src/complaint-evaluation.schema.json",
++    );
++    exporterFile = path.join(
++      root,
++      "extensions/alert-watcher/src/complaint-evaluation.ts",
++    );
+   }
+   safePath(schemaFile);
+   safePath(exporterFile);
+   assert(
+     digest(fs.readFileSync(exporterFile)) === pin.exporterSha256,
+-    'C exporter source pin mismatch',
++    "C exporter source pin mismatch",
+   );
+   const raw = fs.readFileSync(schemaFile);
+-  assert(digest(raw) === pin.schemaSha256, 'C complaint schema pin mismatch');
++  assert(digest(raw) === pin.schemaSha256, "C complaint schema pin mismatch");
+   const ajv = new Ajv({ allErrors: true, strict: true });
+-  ajv.addFormat('uuid', /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i);
++  ajv.addFormat(
++    "uuid",
++    /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i,
++  );
+   const validate = ajv.compile(JSON.parse(raw));
+   return (record) => {
+-    assert(validate(record), `C complaint schema: ${ajv.errorsText(validate.errors)}`);
++    assert(
++      validate(record),
++      `C complaint schema: ${ajv.errorsText(validate.errors)}`,
++    );
+     references(record);
+   };
+ }
+@@ -192,25 +233,40 @@
+   const map = new Map(),
+     quarantine = [],
+     history = [];
+-  for (const record of [...records].sort((a, b) => a.receiptRevision - b.receiptRevision)) {
++  for (const record of [...records].sort(
++    (a, b) => a.receiptRevision - b.receiptRevision,
++  )) {
+     validate(record);
+     const old = map.get(record.recordId);
+     try {
+       if (old) {
+         if (old.receiptRevision === record.receiptRevision)
+-          assert(canonical(old) === canonical(record), 'conflicting same receipt revision');
++          assert(
++            canonical(old) === canonical(record),
++            "conflicting same receipt revision",
++          );
+         else extendsRecord(old, record);
+       }
+-      if (!old || old.receiptRevision !== record.receiptRevision) history.push(record);
++      if (!old || old.receiptRevision !== record.receiptRevision)
++        history.push(record);
+       map.set(record.recordId, record);
+     } catch (error) {
+       quarantine.push({ recordId: record.recordId, reason: error.message });
+     }
+   }
+   const bad = new Set(quarantine.map((x) => x.recordId));
+-  return { records: [...map.values()].filter((r) => !bad.has(r.recordId)), quarantine, history };
+-}
+-export function complaintReport(records, validate, registration = null, labels = []) {
++  return {
++    records: [...map.values()].filter((r) => !bad.has(r.recordId)),
++    quarantine,
++    history,
++  };
++}
++export function complaintReport(
++  records,
++  validate,
++  registration = null,
++  labels = [],
++) {
+   const reconciled = reconcileComplaints(records, validate),
+     sources = new Map(),
+     attempts = new Map(),
+@@ -219,14 +275,20 @@
+     const key = `${r.logicalSourceId}:${r.authorityNamespaceHash}:${r.inputHash}:${r.policyHash}`;
+     const prior = sources.get(key);
+     if (prior && canonical(prior) !== canonical(r)) {
+-      quarantine.push({ recordId: r.recordId, reason: 'conflicting logical source' });
++      quarantine.push({
++        recordId: r.recordId,
++        reason: "conflicting logical source",
++      });
+       continue;
+     }
+     sources.set(key, r);
+     for (const a of r.attempts) {
+       const old = attempts.get(a.attemptId);
+       if (old && canonical(old) !== canonical(a))
+-        quarantine.push({ recordId: r.recordId, reason: 'conflicting shared attempt' });
++        quarantine.push({
++          recordId: r.recordId,
++          reason: "conflicting shared attempt",
++        });
+       else attempts.set(a.attemptId, a);
+     }
+   }
+@@ -234,31 +296,92 @@
+   const sourceKey = (r) =>
+     `${r.logicalSourceId}:${r.authorityNamespaceHash}:${r.inputHash}:${r.policyHash}`;
+   const historicallyEligible = new Set(
+-    reconciled.history.filter((r) => r.eligibility.status === 'eligible').map(sourceKey),
+-  );
+-  const eligible = [...sources.values()].filter((r) => historicallyEligible.has(sourceKey(r))),
++    reconciled.history
++      .filter((r) => r.eligibility.status === "eligible")
++      .map(sourceKey),
++  );
++  const eligible = [...sources.values()].filter((r) =>
++      historicallyEligible.has(sourceKey(r)),
++    ),
+     eligibleKeys = new Set(eligible.map((r) => r.recordId)),
+     eligibleAttempts = new Map();
+-  for (const r of eligible) for (const a of r.attempts) eligibleAttempts.set(a.attemptId, a);
+-  const costs = (items) => ({
+-    knownUsd: items.reduce((n, a) => n + (a.costUsd ?? 0), 0),
+-    unknownAttempts: items
+-      .filter((a) => a.costStatus === 'unknown' || a.costCoverage !== 'complete')
+-      .map((a) => a.attemptId),
+-    attempts: items.length,
+-  });
++  for (const r of eligible)
++    for (const a of r.attempts) eligibleAttempts.set(a.attemptId, a);
++  const costs = (items) => {
++    const ordered = [...items].sort((a, b) =>
++      a.attemptId.localeCompare(b.attemptId),
++    );
++    return {
++      knownUsd: ordered.reduce((n, a) => n + (a.costUsd ?? 0), 0),
++      unknownAttempts: ordered
++        .filter(
++          (a) => a.costStatus === "unknown" || a.costCoverage !== "complete",
++        )
++        .map((a) => a.attemptId),
++      attempts: ordered.length,
++    };
++  };
+   // Quarantined facts remain visible as billed evidence; ambiguity blocks conclusions.
+   const billed = new Map();
++  // Accepted final revisions are authoritative for monotonic coverage refinement.
++  for (const r of reconciled.records)
++    for (const a of r.attempts) billed.set(a.attemptId, a);
++  const rawAttempts = new Map();
+   for (const r of records)
+     for (const a of r.attempts) {
+-      const prior = billed.get(a.attemptId);
++      const versions = rawAttempts.get(a.attemptId) ?? [];
++      versions.push({
++        revision: r.receiptRevision,
++        recordId: r.recordId,
++        attempt: a,
++      });
++      rawAttempts.set(a.attemptId, versions);
++    }
++  for (const [id, versions] of rawAttempts) {
++    versions.sort(
++      (a, b) =>
++        a.revision - b.revision ||
++        canonical(a.attempt).localeCompare(canonical(b.attempt)),
++    );
++    let latest,
++      conflict = false;
++    for (const { revision, attempt } of versions) {
++      if (latest) {
++        try {
++          if (latest.revision === revision)
++            assert(
++              canonical(latest.attempt) === canonical(attempt),
++              "conflicting attempt revision",
++            );
++          else extendsAttempt(latest.attempt, attempt);
++        } catch {
++          conflict = true;
++        }
++      }
++      latest = { revision, attempt };
++    }
++    if (!conflict) billed.set(id, latest.attempt);
++    else {
++      // Conflicts cannot erase paid evidence or manufacture complete billing.
++      const known = versions
++        .map((v) => v.attempt)
++        .filter((a) => a.costStatus === "known");
++      const conservative =
++        known.sort((a, b) => b.costUsd - a.costUsd)[0] ?? latest.attempt;
++      billed.set(id, { ...conservative, costCoverage: "incomplete" });
+       if (
+-        !prior ||
+-        (a.costStatus === 'known' &&
+-          (prior.costStatus !== 'known' || (prior.costUsd ?? 0) < a.costUsd))
++        !quarantine.some(
++          (q) =>
++            q.attemptId === id ||
++            versions.some((v) => v.recordId === q.recordId),
++        )
+       )
+-        billed.set(a.attemptId, a);
+-    }
++        quarantine.push({
++          attemptId: id,
++          reason: "conflicting billed attempt history",
++        });
++    }
++  }
+   const actual = costs([...billed.values()]),
+     eligibleActual = costs([...eligibleAttempts.values()]);
+   const cfIds = new Set(
+@@ -272,7 +395,7 @@
+     [...eligibleAttempts.values()].filter((a) => cfIds.has(a.attemptId)),
+   );
+   const baselineCost = costs(
+-    [...eligibleAttempts.values()].filter((a) => a.purpose === 'baseline'),
++    [...eligibleAttempts.values()].filter((a) => a.purpose === "baseline"),
+   );
+   const costRatio =
+     baselineCost.knownUsd > 0 &&
+@@ -282,21 +405,21 @@
+       : null;
+   const incomplete = eligible.filter(
+     (r) =>
+-      (r.mode === 'shadow' &&
++      (r.mode === "shadow" &&
+         (!r.baseline.attemptIds.length ||
+-          !['positive', 'negative'].includes(r.baseline.disposition))) ||
+-      r.costCoverage !== 'complete' ||
+-      r.deadlineStatus !== 'within',
++          !["positive", "negative"].includes(r.baseline.disposition))) ||
++      r.costCoverage !== "complete" ||
++      r.deadlineStatus !== "within",
+   );
+   const reasons = [];
+-  if (eligible.some((r) => r.eligibility.status !== 'eligible'))
+-    reasons.push('current_authority_ineligible');
+-  if (!eligible.length) reasons.push('no_eligible_traffic');
++  if (eligible.some((r) => r.eligibility.status !== "eligible"))
++    reasons.push("current_authority_ineligible");
++  if (!eligible.length) reasons.push("no_eligible_traffic");
+   if (incomplete.length || eligibleActual.unknownAttempts.length)
+-    reasons.push('incomplete_baseline_or_cost');
+-  if (quarantine.length) reasons.push('quarantined_records');
++    reasons.push("incomplete_baseline_or_cost");
++  if (quarantine.length) reasons.push("quarantined_records");
+   if (costRatio === null || costRatio >= 1)
+-    reasons.push('counterfactual_cost_superiority_unproven');
++    reasons.push("counterfactual_cost_superiority_unproven");
+   if (
+     !registration?.thresholdRevision ||
+     !registration?.developmentEvidenceSha256 ||
+@@ -304,7 +427,7 @@
+     !registration?.controlSample ||
+     registration?.labelRevision === undefined
+   )
+-    reasons.push('missing_frozen_threshold_or_severity_registration');
++    reasons.push("missing_frozen_threshold_or_severity_registration");
+   const miss = { urgent: 0, critical: 0 },
+     n = { urgent: 0, critical: 0 };
+   for (const r of eligible) {
+@@ -315,39 +438,42 @@
+         l.policyHash === r.policyHash &&
+         l.revision === r.severityLabelRevision &&
+         l.revision === registration?.labelRevision &&
+-        l.method === 'human_adjudicated' &&
++        l.method === "human_adjudicated" &&
+         l.blindToGate === true,
+     );
+     if (!l) {
+-      reasons.push('missing_independent_severity_label');
++      reasons.push("missing_independent_severity_label");
+       continue;
+     }
+-    if (['urgent', 'critical'].includes(l.severity)) {
++    if (["urgent", "critical"].includes(l.severity)) {
+       n[l.severity]++;
+-      if (r.gate?.disposition === 'negative') miss[l.severity]++;
++      if (r.gate?.disposition === "negative") miss[l.severity]++;
+     }
+   }
+   const bounds = {};
+-  for (const severity of ['urgent', 'critical']) {
++  for (const severity of ["urgent", "critical"]) {
+     bounds[severity] = n[severity] ? 1 - Math.pow(0.05, 1 / n[severity]) : 1;
+-    if (miss[severity]) reasons.push('additional_urgent_critical_miss');
+-    if (!registration?.severityBounds || bounds[severity] > registration.severityBounds[severity])
+-      reasons.push('severity_miss_bound_unproven');
++    if (miss[severity]) reasons.push("additional_urgent_critical_miss");
++    if (
++      !registration?.severityBounds ||
++      bounds[severity] > registration.severityBounds[severity]
++    )
++      reasons.push("severity_miss_bound_unproven");
+   }
+   return {
+     version: 1,
+     status: !eligible.length
+-      ? 'do_not_pilot:no_eligible_traffic'
++      ? "do_not_pilot:no_eligible_traffic"
+       : reasons.length
+-        ? 'inconclusive'
+-        : 'eligible_for_human_review',
++        ? "inconclusive"
++        : "eligible_for_human_review",
+     reasons: [...new Set(reasons)],
+     logicalSources: sources.size,
+     eligibleLogicalSources: eligible.length,
+     currentEligibleLogicalSources: [...sources.values()].filter(
+-      (r) => r.eligibility.status === 'eligible',
++      (r) => r.eligibility.status === "eligible",
+     ).length,
+-    eligibilityBasis: 'ever_eligible_accepted_revision',
++    eligibilityBasis: "ever_eligible_accepted_revision",
+     eligibilityHistory: [...sources.values()].map((r) => ({
+       logicalSourceId: r.logicalSourceId,
+       current: r.eligibility,
+@@ -369,7 +495,7 @@
+     counterfactualActiveCosts: {
+       ...counterfactual,
+       assumptions:
+-        'hypothetical gate + forwarded baseline + suggestion; shadow baseline bills remain in actual costs',
++        "hypothetical gate + forwarded baseline + suggestion; shadow baseline bills remain in actual costs",
+     },
+     costPerEligibleLogicalSource: eligible.length
+       ? eligibleActual.knownUsd / eligible.length
+@@ -378,16 +504,16 @@
+     missRateUpper: bounds,
+     quarantine,
+     incomplete: incomplete.map((r) => r.recordId),
+-    authority: 'analysis_only_no_activation',
++    authority: "analysis_only_no_activation",
+   };
+ }
+ if (direct(import.meta.url))
+   main(async () => {
+     const a = args(process.argv.slice(2));
+     const { manifest } = loadManifest(a.manifest);
+-    assert(manifest.provenance.gateway, 'pinned C source required');
++    assert(manifest.provenance.gateway, "pinned C source required");
+     const validate = compileComplaintSchema(
+-      path.resolve(a['gateway-root']),
++      path.resolve(a["gateway-root"]),
+       manifest.provenance.gateway,
+     );
+     console.log(
+--- revision1/scripts/agent-evals/README.md
++++ revision2/scripts/agent-evals/README.md
+@@ -80,3 +80,5 @@
+ Raw collection filenames hash opaque episode/arm identities; external IDs never form path components. Every created raw destination is checked against the private raw directory and appears in the retention inventory.
+ 
+ C's enabled/matched/current eligibility observations can evolve at a higher receipt revision. Original source, input, policy, model, attempt and known-bill bindings stay immutable. Accepted historical eligibility fixes the census cohort; current eligibility is reported separately, and current ineligibility blocks a pilot recommendation. Revocation cannot erase the historical logical-source denominator or paid evidence. A known zero bill supersedes an admitted unknown bill without adding a second attempt.
++
++Revision 2 requires pinned global adapter/prepared evidence before execution qualification and rejects contradictory collection completeness. Known billing stays separate from execution. Complaint billing follows monotonic coverage revisions, including equal known amounts and zero, with conservative accounting for conflicts. See `CORRECTIONS-REVISION-2.md` for public CLI red/green evidence and qualification limits.

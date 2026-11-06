@@ -1,0 +1,105 @@
+TAP version 13
+# [jev] run=account-known-error-run site=guard ok=false ms=29
+# {"worker":"run","cost":0.000001,"shellRevision":"9af7d176ae74a12ce770d45018964f832d3cea7fe3fac787e1508d3057367795","runnerRevision":"1349743c70686525ce30a061c43d1b94615f178350b88eef51e459a5b54dc50d","reservation":{"settled_at":null,"actual_usd":null}}
+# [jev] run=account-known-error-spec site=guard ok=false ms=6
+# {"worker":"spec","cost":0.000001,"shellRevision":"c01e34c210830ffab2e46e46e8fdf22f8fc58917affd807440c70a67e5e49691","runnerRevision":"38e221004d8acb86f0557b5d4ee295dbe01f49570a492bcad2983cf0f38621c9","reservation":{"settled_at":null,"actual_usd":null}}
+# [jev] run=account-known-error-reconcile site=guard ok=false ms=5
+# {"worker":"reconcile","cost":0.000001,"shellRevision":"39fa501f76a67efe5ff936fd880e7de10784b80030f95192c9a4b6fc27242544","runnerRevision":"199f8b1a080951786e7e2ce142260fde16b4804cb629c12553d977cf2428893c","reservation":{"settled_at":null,"actual_usd":null}}
+# Subtest: A08 actual guard cleanup → all worker emitters → queue settlement (known-error)
+not ok 1 - A08 actual guard cleanup → all worker emitters → queue settlement (known-error)
+  ---
+  duration_ms: 1557.367578
+  type: 'test'
+  location: '/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/b-factory/tiny-cost-chain.mts:1:3005'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + [
+    +   {
+    +     issue: 'known reservation not settled',
+    +     reservation: {
+    +       actual_usd: null,
+    +       settled_at: null
+    +     },
+    +     worker: 'run'
+    +   },
+    +   {
+    +     issue: 'revision mismatch',
+    +     worker: 'run'
+    +   },
+    +   {
+    +     issue: 'known reservation not settled',
+    +     reservation: {
+    +       actual_usd: null,
+    +       settled_at: null
+    +     },
+    +     worker: 'spec'
+    +   },
+    +   {
+    +     issue: 'revision mismatch',
+    +     worker: 'spec'
+    +   },
+    +   {
+    +     issue: 'known reservation not settled',
+    +     reservation: {
+    +       actual_usd: null,
+    +       settled_at: null
+    +     },
+    +     worker: 'reconcile'
+    +   },
+    +   {
+    +     issue: 'revision mismatch',
+    +     worker: 'reconcile'
+    +   }
+    + ]
+    - []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual:
+    0:
+      worker: 'run'
+      issue: 'known reservation not settled'
+      reservation:
+        settled_at: ~
+        actual_usd: ~
+    1:
+      worker: 'run'
+      issue: 'revision mismatch'
+    2:
+      worker: 'spec'
+      issue: 'known reservation not settled'
+      reservation:
+        settled_at: ~
+        actual_usd: ~
+    3:
+      worker: 'spec'
+      issue: 'revision mismatch'
+    4:
+      worker: 'reconcile'
+      issue: 'known reservation not settled'
+      reservation:
+        settled_at: ~
+        actual_usd: ~
+    5:
+      worker: 'reconcile'
+      issue: 'revision mismatch'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/b-factory/tiny-cost-chain.mts:144:35)
+    process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2160.396515

@@ -1,0 +1,69 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat
+
+ ❯ src/lib/assistant/pending-submission.mounted.test.ts (50 tests | 2 failed | 46 skipped) 1000ms
+     × artifact remains available with exact lineage and full context at five; typed text starts a new root 179ms
+     × artifact remains available with exact lineage and full context at five; typed text starts a new root 130ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/assistant/pending-submission.mounted.test.ts > Home explicit callbacks at the automatic follow-up cap > artifact remains available with exact lineage and full context at five; typed text starts a new root
+AssertionError: expected { actorId: 'actor-a', …(18) } to match object { origin: 'artifact', …(3) }
+(26 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "followUpCount": 5,
++   "followUpCount": 0,
+    "origin": "artifact",
+-   "parentRunId": "ea76fcd4-e67c-4d27-af37-8b6fa36f6582",
+-   "taskRootId": "96dc556b-76f2-4465-9e97-a2bc49fa6241",
++   "parentRunId": null,
++   "taskRootId": "fb5d3827-58af-410a-9fd2-09f5707a8151",
+  }
+
+ ❯ src/lib/assistant/pending-submission.mounted.test.ts:671:26
+    669|         await waitFor(() => expect(sends()).toHaveLength(before + 1));
+    670|         const explicit = latest();
+    671|         expect(explicit).toMatchObject({
+       |                          ^
+    672|           origin,
+    673|           taskRootId: root,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/lib/assistant/pending-submission.mounted.test.ts > Floating explicit callbacks at the automatic follow-up cap > artifact remains available with exact lineage and full context at five; typed text starts a new root
+AssertionError: expected { actorId: 'actor-a', …(18) } to match object { origin: 'artifact', …(3) }
+(26 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "followUpCount": 5,
++   "followUpCount": 0,
+    "origin": "artifact",
+-   "parentRunId": "b4a21b06-efcd-410e-9d8f-9d680f000f50",
+-   "taskRootId": "c64d6187-43dd-4a2a-a10a-402a68cc8ded",
++   "parentRunId": null,
++   "taskRootId": "6a5b4bdf-58e2-4de2-b9cb-9734e0278951",
+  }
+
+ ❯ src/lib/assistant/pending-submission.mounted.test.ts:671:26
+    669|         await waitFor(() => expect(sends()).toHaveLength(before + 1));
+    670|         const explicit = latest();
+    671|         expect(explicit).toMatchObject({
+       |                          ^
+    672|           origin,
+    673|           taskRootId: root,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  2 failed | 5 passed | 59 skipped (66)
+   Start at  01:52:50
+   Duration  51.72s (transform 42.07s, setup 78ms, import 49.66s, tests 1.04s, environment 563ms)
+

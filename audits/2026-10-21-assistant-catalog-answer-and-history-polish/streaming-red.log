@@ -1,0 +1,31 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-answer-history-polish-20261021
+
+ ❯ src/lib/chat/history-notice.mounted.test.ts (11 tests | 2 failed) 97ms
+     × preserves explicit real or empty streaming overrides: "A fresh real reply." 7ms
+     × preserves explicit real or empty streaming overrides: "" 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/chat/history-notice.mounted.test.ts > oversized history display across actual chat consumers > preserves explicit real or empty streaming overrides: "A fresh real reply."
+ FAIL  src/lib/chat/history-notice.mounted.test.ts > oversized history display across actual chat consumers > preserves explicit real or empty streaming overrides: ""
+AssertionError: expected '  This earlier message is too large t…' not to contain 'This earlier message is too large to …'
+
+Expected: "This earlier message is too large to display here."
+Received: "  This earlier message is too large to display here.     "
+
+ ❯ src/lib/chat/history-notice.mounted.test.ts:65:44
+     63|   it.each(['A fresh real reply.', ''])('preserves explicit real or emp…
+     64|     const view = render(ChatTurn, { message: { role: 'assistant', cont…
+     65|     expect(view.container.textContent).not.toContain(notice.en);
+       |                                            ^
+     66|     expect(view.container.textContent).not.toContain(marker);
+     67|     if (textOverride) expect(view.container.textContent).toContain(tex…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 9 passed (11)
+   Start at  23:25:48
+   Duration  76.19s (transform 61.98s, setup 88ms, import 75.09s, tests 97ms, environment 520ms)

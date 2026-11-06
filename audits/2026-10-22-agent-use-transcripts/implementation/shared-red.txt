@@ -1,0 +1,86 @@
+
+ RUN  v2.1.9 /home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/packages/shared
+
+stderr | src/gateway/client.test.ts > GatewayClient > socket "error" events are reported, never silently discarded > ws "error" does not close the socket, flush pending requests, or schedule a reconnect
+[GatewayClient] socket error: Error: boom
+    at /home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/packages/shared/src/gateway/client.test.ts:791:30
+    at file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:533:5
+    at runTest (file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1056:11)
+    at runSuite (file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runSuite (file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1205:15)
+    at runFiles (file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1262:5)
+    at startTests (file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/@vitest+runner@2.1.9/node_modules/@vitest/runner/dist/index.js:1271:3)
+    at file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/vitest@2.1.9_@types+node@22.19.17/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:126:11
+    at withEnv (file:///home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/node_modules/.pnpm/vitest@2.1.9_@types+node@22.19.17/node_modules/vitest/dist/chunks/runBaseTests.3qpJUEJM.js:90:5)
+
+ ❯ src/gateway/client.test.ts (90 tests | 3 failed) 1047ms
+   ✓ GatewayClient > reconnect-attempt failures are reported, never discarded > onReconnectError that rejects (async reporter) → contained, no unhandled rejection, console.error not called 854ms
+   × GatewayClient synchronous submission boundary > rejects an unopened or closing socket before returning a response promise 6ms
+     → expected [Function] to throw error including 'not connected' but got 'client.beginRequest is not a function'
+   × GatewayClient synchronous submission boundary > rejects unserializable payload synchronously without sending a frame 2ms
+     → expected [Function] to throw error including 'not serializable' but got 'client.beginRequest is not a function'
+   × GatewayClient synchronous submission boundary > sends before returning and leaves accepted-then-throw as an unknown promise outcome 2ms
+     → expected [Function] to not throw an error but 'TypeError: client.beginRequest is not…' was thrown
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/gateway/client.test.ts > GatewayClient synchronous submission boundary > rejects an unopened or closing socket before returning a response promise
+AssertionError: expected [Function] to throw error including 'not connected' but got 'client.beginRequest is not a function'
+
+Expected: "not connected"
+Received: "client.beginRequest is not a function"
+
+ ❯ src/gateway/client.test.ts:1376:52
+    1374|     const socket = new MockWebSocket();
+    1375|     const client = makeClient(socket, { autoReconnect: false });
+    1376|     expect(() => client.beginRequest('chat.send')).toThrow('not connec…
+       |                                                    ^
+    1377|     await performConnect(client, socket);
+    1378|     const sent = socket.sentMessages.length;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/gateway/client.test.ts > GatewayClient synchronous submission boundary > rejects unserializable payload synchronously without sending a frame
+AssertionError: expected [Function] to throw error including 'not serializable' but got 'client.beginRequest is not a function'
+
+Expected: "not serializable"
+Received: "client.beginRequest is not a function"
+
+ ❯ src/gateway/client.test.ts:1393:60
+    1391|     const sent = socket.sentMessages.length;
+    1392|     const cyclic: { self?: unknown } = {}; cyclic.self = cyclic;
+    1393|     expect(() => client.beginRequest('chat.send', cyclic)).toThrow('no…
+       |                                                            ^
+    1394|     expect(socket.sentMessages).toHaveLength(sent);
+    1395|     client.close();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/gateway/client.test.ts > GatewayClient synchronous submission boundary > sends before returning and leaves accepted-then-throw as an unknown promise outcome
+AssertionError: expected [Function] to not throw an error but 'TypeError: client.beginRequest is not…' was thrown
+
+- Expected: 
+undefined
+
++ Received: 
+"TypeError: client.beginRequest is not a function"
+
+ ❯ src/gateway/client.test.ts:1405:94
+    1403|     vi.spyOn(socket, 'send').mockImplementation((wire) => { send(wire)…
+    1404|     let response!: Promise<unknown>;
+    1405|     expect(() => { response = client.beginRequest('chat.send', { messa…
+       |                                                                                              ^
+    1406|     expect(JSON.parse(socket.sentMessages.at(-1)!).method).toBe('chat.…
+    1407|     await expect(response).rejects.toMatchObject({ code: 'SEND_FAILED'…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 87 passed (90)
+   Start at  16:24:27
+   Duration  1.86s (transform 313ms, setup 0ms, collect 331ms, tests 1.05s, environment 0ms, prepare 105ms)
+
+undefined
+/home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion-meta/packages/shared:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command failed with exit code 1: vitest run src/gateway/client.test.ts

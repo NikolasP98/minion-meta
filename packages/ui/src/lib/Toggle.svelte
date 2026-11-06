@@ -43,18 +43,23 @@
   aria-label={label}
   {disabled}
   onclick={toggle}
-  class={`inline-flex shrink-0 items-center rounded-[var(--radius-full)] border p-0.5 outline-none transition-[background-color,border-color,box-shadow] duration-[var(--duration-fast)]
-    focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed disabled:opacity-50
-    ${pressed ? 'bg-[var(--color-accent)] border-[var(--color-accent)]' : 'bg-[var(--color-surface-3)] border-[var(--color-border-strong)]'} ${SIZE[size].track} ${cls}`}
+  class={`inline-flex shrink-0 items-center justify-center border-0 bg-transparent p-0 outline-none
+    focus-visible:shadow-[var(--shadow-focus)] disabled:cursor-not-allowed disabled:opacity-50 ${cls}`}
   data-part="toggle"
   data-state={pressed ? 'on' : 'off'}
   data-size={size}
 >
   <span
-    class={`block rounded-[var(--radius-full)] shadow-[var(--shadow-elevation-1)] transition-[transform,background-color] duration-[var(--duration-fast)] ease-[var(--ease-standard)]
-      ${pressed ? 'bg-[var(--color-on-accent)]' : 'bg-[var(--color-text-secondary)]'}
-      ${SIZE[size].thumb} ${pressed ? SIZE[size].translate : 'translate-x-0'}`}
+    class={`inline-flex shrink-0 items-center rounded-[var(--radius-full)] border p-0.5 transition-[background-color,border-color] duration-[var(--duration-fast)]
+      ${pressed ? 'bg-[var(--color-accent)] border-[var(--color-accent)]' : 'bg-[var(--color-surface-3)] border-[var(--color-border-strong)]'} ${SIZE[size].track}`}
     aria-hidden="true"
-    data-part="toggle-thumb"
-  ></span>
+    data-part="toggle-track"
+  >
+    <span
+      class={`block rounded-[var(--radius-full)] shadow-[var(--shadow-elevation-1)] transition-[transform,background-color] duration-[var(--duration-fast)] ease-[var(--ease-standard)]
+        ${pressed ? 'bg-[var(--color-on-accent)]' : 'bg-[var(--color-text-secondary)]'}
+        ${SIZE[size].thumb} ${pressed ? SIZE[size].translate : 'translate-x-0'}`}
+      data-part="toggle-thumb"
+    ></span>
+  </span>
 </button>

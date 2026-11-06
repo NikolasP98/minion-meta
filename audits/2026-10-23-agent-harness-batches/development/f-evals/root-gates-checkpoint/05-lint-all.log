@@ -1,0 +1,80 @@
+
+> @minion-stack/root@0.0.0 lint-all /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/f-evals
+> pnpm -r --parallel --if-present run lint
+
+Scope: 13 of 14 workspace projects
+packages/auth lint$ oxlint src
+packages/cache lint$ oxlint src
+packages/cli lint$ oxlint src test
+packages/crm-sdk lint$ oxlint src
+packages/db lint$ oxlint src
+packages/env lint$ oxlint src test
+packages/shared lint$ oxlint src
+packages/shells-bridge lint$ oxlint src
+packages/db lint:   [38;2;244;191;117;1m⚠[0m [38;2;244;191;117;1meslint(no-unused-vars): Identifier 'uniqueIndex' is imported but never used.[0m
+packages/db lint:    ╭─[[38;2;92;157;255;1msrc/schema/auth/index.ts[0m:6:45]
+packages/db lint:  [2m5[0m │  */
+packages/db lint:  [2m6[0m │ import { sqliteTable, text, integer, index, uniqueIndex } from 'drizzle-orm/sqlite-core';
+packages/db lint:    · [38;2;246;87;248m                                            ─────┬─────[0m
+packages/db lint:    ·                                                  [38;2;246;87;248m╰── [38;2;246;87;248m'uniqueIndex' is imported here[0m[0m
+packages/db lint:  [2m7[0m │ 
+packages/db lint:    ╰────
+packages/db lint: [38;2;106;159;181m  help: [0mConsider removing this import.
+packages/db lint: Found 1 warning and 0 errors.
+packages/db lint: Finished in 83ms on 63 files with 95 rules using 4 threads.
+packages/crm-sdk lint: Found 0 warnings and 0 errors.
+packages/crm-sdk lint: Finished in 20ms on 4 files with 95 rules using 4 threads.
+packages/cli lint: Found 0 warnings and 0 errors.
+packages/cli lint: Finished in 84ms on 31 files with 95 rules using 4 threads.
+packages/cache lint:   [38;2;244;191;117;1m⚠[0m [38;2;244;191;117;1meslint(no-unsafe-optional-chaining): Unsafe usage of optional chaining[0m
+packages/cache lint:     ╭─[[38;2;92;157;255;1msrc/broadcaster.test.ts[0m:39:13]
+packages/cache lint:  [2m38[0m │     const [, init] = fetchMock.mock.calls[0]!;
+packages/cache lint:  [2m39[0m │     expect((init?.headers as Record<string, string>).authorization).toBeUndefined();
+packages/cache lint:     · [38;2;246;87;248m            ─────────────[0m
+packages/cache lint:  [2m40[0m │   });
+packages/cache lint:     ╰────
+packages/cache lint: [38;2;106;159;181m  help: [0mIf this short-circuits with 'undefined' the evaluation will throw TypeError
+packages/cache lint: Found 1 warning and 0 errors.
+packages/cache lint: Finished in 87ms on 28 files with 95 rules using 4 threads.
+packages/auth lint: Found 0 warnings and 0 errors.
+packages/auth lint: Finished in 30ms on 5 files with 95 rules using 4 threads.
+packages/shells-bridge lint:   [38;2;244;191;117;1m⚠[0m [38;2;244;191;117;1meslint(no-unused-vars): Parameter 'params' is declared but never used. Unused parameters should start with a '_'.[0m
+packages/shells-bridge lint:      ╭─[[38;2;92;157;255;1msrc/bridge.ts[0m:572:30]
+packages/shells-bridge lint:  [2m571[0m │ 
+packages/shells-bridge lint:  [2m572[0m │   private async handleBackup(params: ShellsBackupNowParams): Promise<ShellsBackupNowResponse> {
+packages/shells-bridge lint:      · [38;2;246;87;248m                             ───┬──[0m
+packages/shells-bridge lint:      ·                                 [38;2;246;87;248m╰── [38;2;246;87;248m'params' is declared here[0m[0m
+packages/shells-bridge lint:  [2m573[0m │     if (!this.config.backupTarget) throw new Error('no backup target configured');
+packages/shells-bridge lint:      ╰────
+packages/shells-bridge lint: [38;2;106;159;181m  help: [0mConsider removing this parameter.
+packages/shells-bridge lint: Found 1 warning and 0 errors.
+packages/shells-bridge lint: Finished in 20ms on 9 files with 95 rules using 4 threads.
+packages/env lint: Found 0 warnings and 0 errors.
+packages/env lint: Finished in 87ms on 21 files with 95 rules using 4 threads.
+packages/shared lint:   [38;2;244;191;117;1m⚠[0m [38;2;244;191;117;1meslint(no-useless-escape): Unnecessary escape character '['[0m
+packages/shared lint:     ╭─[[38;2;92;157;255;1msrc/utils/text.ts[0m:45:23]
+packages/shared lint:  [2m44[0m │   let clean = text.replace(metaRe, '');
+packages/shared lint:  [2m45[0m │   const tsRe = /^\[([^\[\]]+)\]\s*/;
+packages/shared lint:     · [38;2;246;87;248m                      ──[0m
+packages/shared lint:  [2m46[0m │   let isoTs: string | undefined;
+packages/shared lint:     ╰────
+packages/shared lint: [38;2;106;159;181m  help: [0mReplace `\[` with `[`.
+packages/shared lint:   [38;2;244;191;117;1m⚠[0m [38;2;244;191;117;1meslint(no-unused-vars): Identifier 'PROTOCOL_VERSION' is imported but never used.[0m
+packages/shared lint:    ╭─[[38;2;92;157;255;1msrc/node/index.ts[0m:7:52]
+packages/shared lint:  [2m6[0m │ import { WebSocket } from 'ws';
+packages/shared lint:  [2m7[0m │ import { GatewayClient, type GatewayClientOptions, PROTOCOL_VERSION } from '../gateway/client.js';
+packages/shared lint:    · [38;2;246;87;248m                                                   ────────┬───────[0m
+packages/shared lint:    ·                                                            [38;2;246;87;248m╰── [38;2;246;87;248m'PROTOCOL_VERSION' is imported here[0m[0m
+packages/shared lint:  [2m8[0m │ 
+packages/shared lint:    ╰────
+packages/shared lint: [38;2;106;159;181m  help: [0mConsider removing this import.
+packages/shared lint: Found 2 warnings and 0 errors.
+packages/shared lint: Finished in 30ms on 35 files with 95 rules using 4 threads.
+packages/db lint: Done
+packages/shared lint: Done
+packages/env lint: Done
+packages/shells-bridge lint: Done
+packages/auth lint: Done
+packages/cache lint: Done
+packages/cli lint: Done
+packages/crm-sdk lint: Done

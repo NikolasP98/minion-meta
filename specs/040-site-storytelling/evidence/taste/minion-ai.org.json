@@ -1,0 +1,103 @@
+{
+  "source": "https://www.minion-ai.org/",
+  "capture": {
+    "date": "2026-10-24",
+    "viewports": ["1440x900", "390x844"],
+    "locale": "es",
+    "color_scheme": "dark (site default; a light theme exists behind the sun toggle and was not captured)",
+    "page_height": { "1440": "5389px (~6 screens)", "390": "7342px (~8.7 screens)" },
+    "caveats": [
+      "DOM h1 reports 16px/400 because the visible 70.4px split-flap glyphs live in per-letter tiles inside the h1; the tile size is the real display size.",
+      "Section gaps were not reported by the extractor (sectionGaps: []); vertical rhythm values are read from the screenshots (~approx).",
+      "Baseline capture of the current production site, analysed for a redesign (spec 040). The Taste DNA describes what the current site chose, not what it should choose."
+    ]
+  },
+  "tokens": {
+    "spacing": {
+      "scale": [2, 4, 8, 12, 16, 24, 32, 48, 80],
+      "base_unit": 4,
+      "note": "4px base: 8 (127 uses) and 16 (86) dominate; 24 = panel/row padding, 32 = nav padding, 48 = hero column gap, 80 = page side margin at 1440 (content 80-1360). Non-grid values are letter-spacing: 1.2px (0.1em on 12px labels, 136 uses), 7.04px (0.1em on 70.4px flap tiles), 3.584px (0.08em on 44.8px h2). Section-to-section: ~30px from a panel caption to the 1px hairline, ~30px from hairline to the next h2 (~60px total, ~approx)."
+    },
+    "typography": {
+      "families": ["Barlow Condensed", "Barlow Semi Condensed"],
+      "scale": [
+        { "role": "hero split-flap tile glyph", "size": "70.4px", "weight": "700", "letter_spacing": "7.04px", "transform": "uppercase", "family": "Barlow Condensed" },
+        { "role": "final CTA heading", "size": "51.2px", "weight": "700", "transform": "uppercase", "family": "Barlow Condensed" },
+        { "role": "h2 section heading", "size": "44.8px", "weight": "700", "line_height": "41.216px", "letter_spacing": "3.584px", "transform": "uppercase", "family": "Barlow Condensed" },
+        { "role": "price headline (GRATIS / A MEDIDA)", "size": "41.6px", "weight": "700", "transform": "uppercase", "family": "Barlow Condensed" },
+        { "role": "step body / pricing intro", "size": "16px", "weight": "400", "line_height": "~25px", "family": "Barlow Semi Condensed" },
+        { "role": "body paragraph", "size": "14px", "weight": "400", "line_height": "19.6px", "max_width": "324.575px", "family": "Barlow Semi Condensed" },
+        { "role": "h3 / board row / button / nav / caption", "size": "12-14px", "weight": "600", "letter_spacing": "1.2-1.4px", "transform": "uppercase", "family": "Barlow Condensed" }
+      ],
+      "distribution": { "12px": 116, "14px": 93, "16px": 27, "70.4px": 27, "44.8px": 6, "41.6px": 3, "51.2px": 1 },
+      "note": "Bimodal: nothing between 16px and 41.6px (2.6x jump). 12px is the most frequent size on the page."
+    },
+    "colors": [
+      { "role": "page background / outer band", "value": "#0D0D0F" },
+      { "role": "section surface (95.8% of painted area)", "value": "#141417" },
+      { "role": "board panel / flap tile surface (2.3%)", "value": "#1B1B1E" },
+      { "role": "text-primary (16.4:1 on #141417)", "value": "#F2F2F2" },
+      { "role": "text-secondary, body paragraphs (9.5:1)", "value": "#B6BBC2" },
+      { "role": "text-tertiary, labels/captions (5.9:1)", "value": "#8D939B" },
+      { "role": "amber lamp: needs a human / primary CTA (1.9% area)", "value": "#FFB400" },
+      { "role": "text on amber (10.9:1)", "value": "#0D0D0F" },
+      { "role": "status LISTO, check marks", "value": "#4ADE80" },
+      { "role": "status ANULADO", "value": "#FCA5A5" }
+    ],
+    "radius": ["2px", "4px"],
+    "shadows": ["0 4px 12px 0 rgba(0,0,0,0.4)"],
+    "image_ratios": [
+      { "usage": "mascot logo, the only image (rendered 24px)", "ratio": "0.95:1" },
+      { "usage": "hero board panel (card, no image)", "ratio": "2.03:1" }
+    ],
+    "grid": { "max_width": "1280px (80px side margins at 1440)", "columns": 2, "gutter": "48px", "hero_template": "601px 631px", "pricing": "3 equal cards, ~16px gap" },
+    "motion": { "duration": "150ms", "easing": "cubic-bezier(0.2, 0, 0, 1)", "properties": ["color", "border-color", "background", "transform", "all (one rule)"], "reduced_motion": true, "focus_visible": true },
+    "buttons": { "font": "12px / 600 / uppercase / 1.2px tracking", "radius": "2px (most), 4px (hero pair)", "height": "~36px at 1440 and at 390 (~approx from screenshots)" }
+  },
+  "taste": [
+    {
+      "name": "Departure-board voice over shop-counter voice",
+      "trigger": "When choosing how every label, heading, row and button should sound and look",
+      "decision": "Chose one condensed family (Barlow Condensed + Semi Condensed) set in uppercase with 0.08-0.1em tracking for every non-paragraph role over a sentence-case pairing where headings and actions read like normal speech",
+      "reason": "Uppercase tracked condensed type reads as signage: it makes the page feel like an operations board that is already running. The cost is that a person scanning on a phone reads uppercase tracked text letter by letter, so the voice sounds like a machine announcing rather than someone explaining",
+      "evidence": ["h2 44.8px/700 uppercase, letter-spacing 3.584px", "12px/600 uppercase 1.2px on buttons, nav, board rows, captions (12px = 116 uses, most frequent size)", "70.4px flap tiles with 7.04px tracking", "only body paragraphs (14px #B6BBC2) and pricing bullets are sentence case"]
+    },
+    {
+      "name": "One board component carries the whole story",
+      "trigger": "When each section needed something to show next to its heading",
+      "decision": "Chose to reuse the same bordered board panel (#1B1B1E, 4px radius, hairline rows, status cell flush right) for the method, the flow, the approval and the onboarding sections over a different visual per section (product screenshots, diagrams, photos of a real shop)",
+      "reason": "Repeating the board teaches the product's core object once and keeps the metaphor intact from top to bottom. It also means every section has the same silhouette (uppercase heading, small gray paragraph, full-width table), so after the second section the eye stops finding anything new",
+      "evidence": ["4 of 6 content sections end in a full-width board panel (method 3 rows, flow 6 rows, approval 1 row, onboarding 3 rows)", "FAQ is a 9-row bordered list of the same shape", "single shadow 0 4px 12px rgba(0,0,0,0.4) on board panels only", "radius set is 2px/4px only"]
+    },
+    {
+      "name": "Amber is the lamp for a human decision",
+      "trigger": "When deciding where the only warm color on a near-black page goes",
+      "decision": "Chose to reserve #FFB400 for the moments that need a person (the TU DECIDES line, the FALTA TU OK status, the Aprobar button, the primary CTA, the EMPEZAMOS AQUI step) and give machine-finished work a small green LISTO over spreading the accent across headings, icons and section backgrounds",
+      "reason": "When a single warm color appears only where the owner has to act, the page can say 'you stay in control' without a sentence: the eye goes to the amber, and the amber always means you. The rule breaks where amber also outlines date badges (LANZA Q3 2026, BAJO ACUERDO) that ask nothing of the reader",
+      "evidence": ["#FFB400 = 1.9% of painted area vs #141417 at 95.8%", "#4ADE80 only on LISTO cells and check marks", "#FCA5A5 only on ANULADO", "amber outline also on three pricing badges and the Negocio card border"]
+    },
+    {
+      "name": "No pictures, no people, no numbers",
+      "trigger": "When the page needed proof that the product is real and for someone like the reader",
+      "decision": "Chose simulated board rows, each captioned as an example, as the only proof over product screenshots, photos of businesses, customer logos or metric counters",
+      "reason": "With no real testimonials or metrics yet, invented ones would be a lie, and the captions say so openly. The trade is that a small-business owner never sees a face, a shop, a phone screen or a price, so nothing on the page looks like their own day",
+      "evidence": ["only image: mascot.png rendered at 24px", "captions 'Tablero de ejemplo. Tus filas son las tuyas.' and 'Un ejemplo funcional. Nada aquí es un registro de cliente.'", "price headlines are GRATIS (beta) and A MEDIDA twice, no currency amount", "no photo, illustration or screenshot anywhere in 5389px"]
+    }
+  ],
+  "baseline_friction": [
+    "Mobile first screen leads with 'LOS AGENTES TRABAJAN': the subject is the machine, not the owner's business; the method sentence that explains the value is 14px #B6BBC2 below it",
+    "Uppercase tracked condensed type on almost every non-paragraph element; 12px is the most used size (116) and buttons are 12px caps",
+    "Jargon on a page for non-technical owners: ERP, CRM, RPA, agentes, lead, back office, embudo, atribución, Workforce, Brains, Pulse, Gateway dedicado o self-hosted, módulos, conectores, GitHub/Contribuir; the <title> says 'El ERP nativo para agentes'",
+    "Section monotony: every section is left-aligned uppercase h2 + ~440px gray paragraph + full-width bordered table; right ~55-65% of the 1280px container is empty beside each heading",
+    "Primary action has six names: Empezar, Recibe tu plan, Consigue tu plan gratis, Entrar a la beta, Hablemos, Escríbenos por WhatsApp; four middle sections have no real CTA while the approval demo shows fake Aprobar/Rechazar buttons",
+    "Pricing does not answer 'how much': GRATIS (Lanza Q3 2026, stale on 2026-10-24) and A MEDIDA twice; FAQ asks about 'plan empresarial' and 'plan miembros', names that match no card",
+    "Touch targets ~36px tall at 390px for both hero CTAs, below the 44px common minimum",
+    "Split-flap seam line crosses the FALTA TU OK cell, so at a glance it resembles the struck-through ANULADO row",
+    "8.7 phone screens long with ~60px between sections and no image to rest the eye"
+  ],
+  "keep": [
+    "Method section: plain-language step titles (Ordena el negocio / Ordena tus clientes / Automatiza lo que ya funciona) with ERP/CRM/RPA demoted to 12px right-aligned tags and EMPEZAMOS AQUI / DESPUÉS / LUEGO chips",
+    "Nada toca el dinero sin ti: one concrete approval card in local currency (S/ 240 against a S/ 200 limit) where amber = your decision",
+    "Honest example captions, AA-passing contrast (tertiary #8D939B at 5.9:1), focus-visible and prefers-reduced-motion respected"
+  ]
+}

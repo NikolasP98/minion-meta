@@ -1,0 +1,22 @@
+{
+  "Name": "/minion-s5-migration-pg17-20261003",
+  "Image": "sha256:9ff6402f578a9b0d4f2aa31f660bd398b8e378761d61d31efda6ff9ad92408e5",
+  "RepoDigest": "public.ecr.aws/supabase/postgres@sha256:21ab971149317ea9cd12a8126fe4ebb34def08c8972956b0958cba0924409dab",
+  "Ports": {
+    "5432/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "55472"
+      }
+    ]
+  },
+  "Mounts": [
+    {
+      "Type": "bind",
+      "Destination": "/docker-entrypoint-initdb.d"
+    }
+  ],
+  "Labels": {
+    "minion.fixture": "notification-slice5-pg17:v1"
+  }
+}

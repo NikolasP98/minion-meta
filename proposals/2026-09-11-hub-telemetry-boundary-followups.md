@@ -1,10 +1,11 @@
 ---
 id: 2026-09-11-hub-telemetry-boundary-followups
 title: Qualify telemetry delivery and remaining host log boundaries
-status: draft
+status: review
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-10-08
 repos: [minion_hub, minion, minion_site]
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Telemetry delivery and remaining log boundaries

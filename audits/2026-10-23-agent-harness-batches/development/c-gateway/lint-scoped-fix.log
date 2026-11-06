@@ -1,0 +1,354 @@
+
+  ! eslint(no-unused-vars): Identifier 'admitSource' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:12:3]
+ 11 | import {
+ 12 |   admitSource,
+    :   ^^^^^|^^^^^
+    :        `-- 'admitSource' is imported here
+ 13 |   claimWork,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'claimWork' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:13:3]
+ 12 |   admitSource,
+ 13 |   claimWork,
+    :   ^^^^|^^^^
+    :       `-- 'claimWork' is imported here
+ 14 |   admitInvocation,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'admitInvocation' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:14:3]
+ 13 |   claimWork,
+ 14 |   admitInvocation,
+    :   ^^^^^^^|^^^^^^^
+    :          `-- 'admitInvocation' is imported here
+ 15 |   receiveInvocation,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'receiveInvocation' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:15:3]
+ 14 |   admitInvocation,
+ 15 |   receiveInvocation,
+    :   ^^^^^^^^|^^^^^^^^
+    :           `-- 'receiveInvocation' is imported here
+ 16 |   materializePositive,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'materializePositive' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:16:3]
+ 15 |   receiveInvocation,
+ 16 |   materializePositive,
+    :   ^^^^^^^^^|^^^^^^^^^
+    :            `-- 'materializePositive' is imported here
+ 17 |   finishWork,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'finishWork' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:17:3]
+ 16 |   materializePositive,
+ 17 |   finishWork,
+    :   ^^^^^|^^^^
+    :        `-- 'finishWork' is imported here
+ 18 |   type DeliveryRow,
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'testDb' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:22:10]
+ 21 | import { positiveFixture } from "./work-test-fixtures.js";
+ 22 | import { testDb, workFixture } from "./work-test-fixtures.js";
+    :          ^^^|^^
+    :             `-- 'testDb' is imported here
+ 23 | const dirs: string[] = [];
+    `----
+  help: Consider removing this import.
+
+  ! eslint(no-unused-vars): Identifier 'workFixture' is imported but never used.
+    ,-[extensions/alert-watcher/src/delivery-bridge.test.ts:22:18]
+ 21 | import { positiveFixture } from "./work-test-fixtures.js";
+ 22 | import { testDb, workFixture } from "./work-test-fixtures.js";
+    :                  ^^^^^|^^^^^
+    :                       `-- 'workFixture' is imported here
+ 23 | const dirs: string[] = [];
+    `----
+  help: Consider removing this import.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[extensions/alert-watcher/src/jev-shadow-eligibility.ts:46:16]
+ 45 |   ] as const)
+ 46 |     if (!pass) return { status: "bypass", reason };
+    :                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 47 |   return { status: "eligible", reason: "eligible" };
+    `----
+  help: Replace `return { status: "bypass", reason };` with `{return { status: "bypass", reason };}`.
+
+  ! eslint(no-unused-vars): Parameter 'api' is declared but never used. Unused parameters should start with a '_'.
+    ,-[extensions/alert-watcher/index.ts:92:25]
+ 91 | const STATE_SYMBOL = "__minion_alert_watcher_state__";
+ 92 | function getSharedState(api: MinionPluginApi): AlertWatcherState {
+    :                         ^|^
+    :                          `-- 'api' is declared here
+ 93 |   const g = globalThis as unknown as Record<string, AlertWatcherState | undefined>;
+    `----
+  help: Consider removing this parameter.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+    ,-[extensions/alert-watcher/index.test.ts:45:26]
+ 44 | });
+ 45 | function makeApi(config: any = {}, manualStart = false) {
+    :                          ^^^
+ 46 |   delete (globalThis as unknown as Record<string, unknown>).__minion_alert_watcher_state__;
+    `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+    ,-[extensions/alert-watcher/index.test.ts:48:20]
+ 47 |   const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "watcher-legacy-"));
+ 48 |   let capturedSvc: any = null;
+    :                    ^^^
+ 49 |   const ledger = { all: vi.fn(() => []) };
+    `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+    ,-[extensions/alert-watcher/index.test.ts:64:47]
+ 63 |       },
+ 64 |       messageLedger: { getDb: () => ledger as any },
+    :                                               ^^^
+ 65 |     },
+    `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+    ,-[extensions/alert-watcher/index.test.ts:98:25]
+ 97 |     process.env.ANTHROPIC_API_KEY = "k";
+ 98 |     (insertComplaint as any).mockReturnValue(42);
+    :                         ^^^
+ 99 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 1, perDestination: [] });
+    `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:99:20]
+  98 |     (insertComplaint as any).mockReturnValue(42);
+  99 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 1, perDestination: [] });
+     :                    ^^^
+ 100 |   });
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:103:30]
+ 102 |   it("registers both hooks + service", () => {
+ 103 |     const api = makeApi() as any;
+     :                              ^^^
+ 104 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:111:25]
+ 110 |   it("channel sub: message_inbound matches and classifies", async () => {
+ 111 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+     :                         ^^^
+ 112 |     const api = makeApi() as any;
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:112:30]
+ 111 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+ 112 |     const api = makeApi() as any;
+     :                              ^^^
+ 113 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:114:55]
+ 113 |     plugin.register(api);
+ 114 |     const inboundHandler = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                                       ^^^
+ 115 |     await inboundHandler(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:123:25]
+ 122 |   it("uncertified hooks keep fresh baseline invocations without claiming canonical dedup", async () => {
+ 123 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+     :                         ^^^
+ 124 |     const api = makeApi({
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:129:11]
+ 128 |       ],
+ 129 |     }) as any;
+     :           ^^^
+ 130 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:131:55]
+ 130 |     plugin.register(api);
+ 131 |     const inboundHandler = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                                       ^^^
+ 132 |     const receivedHandler = api.on.mock.calls.find((c: any) => c[0] === "message_received")[1];
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:132:56]
+ 131 |     const inboundHandler = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+ 132 |     const receivedHandler = api.on.mock.calls.find((c: any) => c[0] === "message_received")[1];
+     :                                                        ^^^
+ 133 |     // Use a messageId unique to this test — the dedup store persists across tests
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:146:25]
+ 145 |   it("agent sub: message_received matches if no channel sub matched", async () => {
+ 146 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+     :                         ^^^
+ 147 |     const api = makeApi({
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:149:11]
+ 148 |       subscriptions: [{ kind: "agent", agentId: "panik" }],
+ 149 |     }) as any;
+     :           ^^^
+ 150 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:151:56]
+ 150 |     plugin.register(api);
+ 151 |     const receivedHandler = api.on.mock.calls.find((c: any) => c[0] === "message_received")[1];
+     :                                                        ^^^
+ 152 |     await receivedHandler(
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:160:25]
+ 159 |   it("non-complaint: no insert, no alert", async () => {
+ 160 |     (classifyMessage as any).mockResolvedValue({
+     :                         ^^^
+ 161 |       is_complaint: false,
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:166:30]
+ 165 |     });
+ 166 |     const api = makeApi() as any;
+     :                              ^^^
+ 167 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:168:42]
+ 167 |     plugin.register(api);
+ 168 |     const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                          ^^^
+ 169 |     await h(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:175:25]
+ 174 |   it("all destinations fail → no markNotified", async () => {
+ 175 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+     :                         ^^^
+ 176 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 0, perDestination: [] });
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:176:20]
+ 175 |     (classifyMessage as any).mockResolvedValue(complaintResult);
+ 176 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 0, perDestination: [] });
+     :                    ^^^
+ 177 |     const api = makeApi() as any;
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:177:30]
+ 176 |     (sendAlerts as any).mockResolvedValue({ total: 1, successCount: 0, perDestination: [] });
+ 177 |     const api = makeApi() as any;
+     :                              ^^^
+ 178 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:179:42]
+ 178 |     plugin.register(api);
+ 179 |     const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                          ^^^
+ 180 |     await h(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:185:25]
+ 184 |   it("ledger disabled: warns and classifies the synthetic current-message context", async () => {
+ 185 |     (classifyMessage as any).mockResolvedValue({
+     :                         ^^^
+ 186 |       is_complaint: false,
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:191:30]
+ 190 |     });
+ 191 |     const api = makeApi() as any;
+     :                              ^^^
+ 192 |     api.runtime.messageLedger.getDb = () => null;
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:194:42]
+ 193 |     plugin.register(api);
+ 194 |     const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                          ^^^
+ 195 |     await h(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:209:51]
+ 208 |   it("empty subscriptions: skips all classification", async () => {
+ 209 |     const api = makeApi({ subscriptions: [] }) as any;
+     :                                                   ^^^
+ 210 |     plugin.register(api);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+  x typescript-eslint(no-explicit-any): Unexpected `any`. Specify a different type.
+     ,-[extensions/alert-watcher/index.test.ts:211:42]
+ 210 |     plugin.register(api);
+ 211 |     const h = api.on.mock.calls.find((c: any) => c[0] === "message_inbound")[1];
+     :                                          ^^^
+ 212 |     await h(inboundEvent);
+     `----
+  help: Use `unknown` instead, this will force you to explicitly, and safely, assert the type is correct.
+
+Found 9 warnings and 29 errors.
+Finished in 2.9s on 52 files with 119 rules using 3 threads.

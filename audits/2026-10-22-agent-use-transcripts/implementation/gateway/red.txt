@@ -1,0 +1,226 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion
+
+ ❯ |unit| src/channels/impl/telegram/inbound-provenance.test.ts (5 tests | 4 failed) 100ms
+     × carries the same exact source through raw and dispatched hooks, ignoring message extras 37ms
+     × keeps ordered debounce constituents and does not alias merged text to the last ID 5ms
+     × preserves original near-limit fragments through their separate coalescer 5ms
+     × keeps media-group captions and empty source text as separate original units 5ms
+ ❯ |unit| src/auto-reply/reply/dispatch-provenance.test.ts (2 tests | 1 failed) 31ms
+     × preserves adapter identity/revision and exact text rather than deriving it from envelopes 24ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |unit| src/auto-reply/reply/dispatch-provenance.test.ts > message_received provenance carrier > preserves adapter identity/revision and exact text rather than deriving it from envelopes
+AssertionError: expected "vi.fn()" to be called with arguments: [ ObjectContaining{…}, Anything ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   ObjectContaining {
+-     "metadata": ObjectContaining {
+-       "sourceProvenance": {
+-         "sources": [
+    {
+-             "accountId": "second-account",
+-             "channel": "telegram",
+-             "conversationId": "-1007",
++     "content": "normalized",
++     "from": "telegram:-1007:topic:9",
++     "metadata": {
+        "messageId": "41",
+-             "providerRevision": "1700000001",
+-             "senderId": "42",
+-             "text": "  /command@fixture_bot exact  ",
+-             "timestamp": 1700000000000,
+-           },
+-         ],
+-         "version": 1,
++       "originatingChannel": undefined,
++       "originatingTo": undefined,
++       "provider": "telegram",
++       "senderE164": undefined,
++       "senderId": undefined,
++       "senderName": undefined,
++       "senderUsername": undefined,
++       "surface": "telegram",
++       "threadId": undefined,
++       "to": "telegram:-1007:topic:9",
+      },
++     "timestamp": undefined,
+    },
++   {
++     "accountId": "second-account",
++     "agentId": undefined,
++     "channelId": "telegram",
++     "conversationId": "telegram:-1007:topic:9",
++     "orgIds": undefined,
++     "sessionKey": undefined,
+    },
+-   Anything,
+  ]
+
+
+Number of calls: 1
+
+ ❯ src/auto-reply/reply/dispatch-provenance.test.ts:38:38
+     36|     await dispatchReplyFromConfig({ ctx, cfg: {} as MinionConfig,
+     37|       dispatcher: dispatcher(), replyResolver: async () => undefined }…
+     38|     expect(hooks.runMessageReceived).toHaveBeenCalledWith(expect.objec…
+       |                                      ^
+     39|       metadata: expect.objectContaining({ sourceProvenance }) }), expe…
+     40|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  |unit| src/channels/impl/telegram/inbound-provenance.test.ts > Telegram authenticated source provenance > carries the same exact source through raw and dispatched hooks, ignoring message extras
+AssertionError: expected [ undefined ] to deeply equal [ { version: 1, …(1) } ]
+
+- Expected
++ Received
+
+  [
+-   {
+-     "sources": [
+-       {
+-         "accountId": "fixture-account",
+-         "channel": "telegram",
+-         "conversationId": "-100777111222",
+-         "messageId": "101",
+-         "senderId": "42",
+-         "text": "  exact
+- text  ",
+-         "timestamp": 1736380800000,
+-       },
+-     ],
+-     "version": 1,
+-   },
++   undefined,
+  ]
+
+ ❯ src/channels/impl/telegram/inbound-provenance.test.ts:66:29
+     64|     await vi.advanceTimersByTimeAsync(100);
+     65|     const expected = { version: 1, sources: [expectedSource(101, "  ex…
+     66|     expect(rawProvenance()).toEqual([expected]);
+       |                             ^
+     67|     expect(receivedProvenance()).toEqual([expected]);
+     68|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  |unit| src/channels/impl/telegram/inbound-provenance.test.ts > Telegram authenticated source provenance > keeps ordered debounce constituents and does not alias merged text to the last ID
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ src/channels/impl/telegram/inbound-provenance.test.ts:76:22
+     74|     expect(replySpy).not.toHaveBeenCalled();
+     75|     await vi.advanceTimersByTimeAsync(100);
+     76|     expect(replySpy).toHaveBeenCalledTimes(1);
+       |                      ^
+     77|     expect(rawProvenance()).toEqual([
+     78|       { version: 1, sources: [expectedSource(201, "first  ")] },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  |unit| src/channels/impl/telegram/inbound-provenance.test.ts > Telegram authenticated source provenance > preserves original near-limit fragments through their separate coalescer
+AssertionError: expected [] to deeply equal [ …(2) ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "sources": [
+-       {
+-         "accountId": "fixture-account",
+-         "channel": "telegram",
+-         "conversationId": "-100777111222",
+-         "messageId": "301",
+-         "senderId": "42",
+-         "text": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+-         "timestamp": 1736380800000,
+-       },
+-     ],
+-     "version": 1,
+-   },
+-   {
+-     "sources": [
+-       {
+-         "accountId": "fixture-account",
+-         "channel": "telegram",
+-         "conversationId": "-100777111222",
+-         "messageId": "302",
+-         "senderId": "42",
+-         "text": "last  ",
+-         "timestamp": 1736380800000,
+-       },
+-     ],
+-     "version": 1,
+-   },
+- ]
++ []
+
+ ❯ src/channels/impl/telegram/inbound-provenance.test.ts:94:29
+     92|     await handler(incoming(302, "last  "));
+     93|     await vi.advanceTimersByTimeAsync(100);
+     94|     expect(rawProvenance()).toEqual([
+       |                             ^
+     95|       { version: 1, sources: [expectedSource(301, first)] },
+     96|       { version: 1, sources: [expectedSource(302, "last  ")] },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  |unit| src/channels/impl/telegram/inbound-provenance.test.ts > Telegram authenticated source provenance > keeps media-group captions and empty source text as separate original units
+AssertionError: expected [] to deeply equal [ …(2) ]
+
+- Expected
++ Received
+
+- [
+-   {
+-     "sources": [
+-       {
+-         "accountId": "fixture-account",
+-         "channel": "telegram",
+-         "conversationId": "-100777111222",
+-         "messageId": "401",
+-         "senderId": "42",
+-         "text": "  caption  ",
+-         "timestamp": 1736380800000,
+-       },
+-     ],
+-     "version": 1,
+-   },
+-   {
+-     "sources": [
+-       {
+-         "accountId": "fixture-account",
+-         "channel": "telegram",
+-         "conversationId": "-100777111222",
+-         "messageId": "402",
+-         "senderId": "42",
+-         "text": "",
+-         "timestamp": 1736380800000,
+-       },
+-     ],
+-     "version": 1,
+-   },
+- ]
++ []
+
+ ❯ src/channels/impl/telegram/inbound-provenance.test.ts:110:29
+    108|     }
+    109|     await vi.advanceTimersByTimeAsync(100);
+    110|     expect(rawProvenance()).toEqual([
+       |                             ^
+    111|       { version: 1, sources: [expectedSource(401, "  caption  ")] },
+    112|       { version: 1, sources: [expectedSource(402, "")] },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  5 failed | 2 passed (7)
+   Start at  16:22:38
+   Duration  14.42s (transform 16.17s, setup 128ms, import 27.80s, tests 131ms, environment 53ms)
+

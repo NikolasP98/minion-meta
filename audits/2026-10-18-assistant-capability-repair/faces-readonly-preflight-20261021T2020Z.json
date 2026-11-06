@@ -1,0 +1,91 @@
+{
+  "observedAt": "2026-10-21T20:20:24Z",
+  "recordedAt": "2026-10-21T20:21:28.782777+00:00",
+  "mode": "read-only",
+  "productionWrites": false,
+  "restarts": false,
+  "runtimeAcceptancePerformed": false,
+  "services": [
+    {
+      "service": "minion_gateway-default",
+      "desiredReplicas": 1,
+      "runningReplicas": 1,
+      "image": "ghcr.io/nikolasp98/minion-ai@sha256:a4a0f66662d4d23cac2d08e81f1366bf2bfe2f2478fca58d4b3e9618fd085cb0",
+      "ociRevision": "12e03f7de6c110dfcef9bfb63d433c60bf1c189a",
+      "containerId": "d4186b3358b3",
+      "startedAt": "2026-10-18T17:57:50.8353886Z",
+      "health": "healthy"
+    },
+    {
+      "service": "minion_gateway-default-b",
+      "desiredReplicas": 0,
+      "runningReplicas": 0,
+      "image": "ghcr.io/nikolasp98/minion-ai@sha256:a5e5ad64dabd82a3894076a66e4609dc336f7d9bfbdea31cdad0b1b5d3b08aa4",
+      "ociRevision": "79943fd162429c5760edc7afcdd684eccce99dee"
+    },
+    {
+      "service": "minion_gateway-faces",
+      "desiredReplicas": 1,
+      "runningReplicas": 1,
+      "image": "ghcr.io/nikolasp98/minion-ai@sha256:a4a0f66662d4d23cac2d08e81f1366bf2bfe2f2478fca58d4b3e9618fd085cb0",
+      "ociRevision": "12e03f7de6c110dfcef9bfb63d433c60bf1c189a",
+      "containerId": "98139d0bb172",
+      "startedAt": "2026-10-18T18:00:41.074740163Z",
+      "health": "healthy"
+    },
+    {
+      "service": "minion_gateway-faces-b",
+      "desiredReplicas": 0,
+      "runningReplicas": 0,
+      "image": "ghcr.io/nikolasp98/minion-ai@sha256:a5e5ad64dabd82a3894076a66e4609dc336f7d9bfbdea31cdad0b1b5d3b08aa4",
+      "ociRevision": "79943fd162429c5760edc7afcdd684eccce99dee"
+    }
+  ],
+  "faces": {
+    "orgId": "21e0601b-f632-43fd-8414-d644af4271f4",
+    "profileId": "3ab72ffb-6cac-4933-b35e-cd12aa7ccbd6",
+    "personalAgentRowId": "jdrqie3tudz0n2pg27l2tggy",
+    "persistedRuntimeAgentId": "personal-nk7uyyafrbl4ngdrtbfmznvnk17xvwk0",
+    "gatewayId": "a64274a8-5803-418c-b92e-527e23f4a005",
+    "provisioningStatus": "active",
+    "membershipPresent": true,
+    "leaseChannel": "prd",
+    "leaseGatewayId": "a64274a8-5803-418c-b92e-527e23f4a005",
+    "gatewayUrl": "wss://netcup.donkey-agama.ts.net:10000",
+    "gatewayAuthMode": "token",
+    "legacyServerId": null,
+    "exactPersistedAgentRosterMatches": 1,
+    "callback": {
+      "serverId": "1cf319d2-cad0-42d9-9bb5-151cef48c347",
+      "enabled": true,
+      "hubUrl": "https://hub.minion-ai.org"
+    },
+    "buildInfo": {
+      "path": "/app/dist/build-info.json",
+      "commit": null,
+      "version": "2026.8.7-dev",
+      "builtAt": "2026-10-18T17:51:59.064Z"
+    },
+    "configuredCallbackReads": [
+      {
+        "endpoint": "query/tool-catalog",
+        "httpStatus": 403,
+        "code": "ASSISTANT_GATEWAY_ASSIGNMENT_REQUIRED",
+        "catalogQuery": false
+      },
+      {
+        "endpoint": "query/tool-permissions",
+        "httpStatus": 403,
+        "code": "ASSISTANT_GATEWAY_ASSIGNMENT_REQUIRED",
+        "catalogQuery": false
+      }
+    ]
+  },
+  "releaseImplications": [
+    "Existing personal-agent assignment is already canonical: verify and skip assignment write.",
+    "FACES callback hint still mismatches canonical assignment and actual configured callback reads are denied.",
+    "Current deployed OCI revision remains12e03f7; no repaired Gateway release has been established by this preflight.",
+    "Refresh exact preconditions immediately before any owner-authorized gated production action.",
+    "Container health/roster proof is not authenticated chat acceptance."
+  ]
+}

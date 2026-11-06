@@ -1,0 +1,24 @@
+172.17.0.1 2026-10-03 20:04:24.667 UTC [295] postgres@postgres LOG:  statement: create role notification_projection_grant_probe nologin nosuperuser nobypassrls noinherit nocreatedb nocreaterole noreplication;
+172.17.0.1 2026-10-03 20:04:24.683 UTC [295] postgres@postgres LOG:  statement: grant notification_projection_grant_probe to current_user
+	  with admin false, inherit false, set true
+	  granted by current_user;
+ 2026-10-03 20:04:25.322 UTC [1] LOG:  server process (PID 295) was terminated by signal 11: Segmentation fault
+ 2026-10-03 20:04:25.322 UTC [1] DETAIL:  Failed process was running: grant notification_projection_grant_probe to current_user
+	  with admin false, inherit false, set true
+	  granted by current_user;
+ 2026-10-03 20:04:25.322 UTC [1] LOG:  terminating any other active server processes
+ 2026-10-03 20:04:25.323 UTC [1] LOG:  all server processes terminated; reinitializing
+ 2026-10-03 20:04:25.373 UTC [303] LOG:  database system was interrupted; last known up at 2026-10-03 20:04:02 UTC
+172.17.0.1 2026-10-03 20:06:22.303 UTC [716] postgres@postgres LOG:  statement: create role notification_projection_create_probe2
+	  nologin nosuperuser nobypassrls noinherit nocreatedb nocreaterole noreplication
+	  role postgres;
+172.17.0.1 2026-10-03 20:06:22.309 UTC [716] postgres@postgres LOG:  statement: create function public.notification_projection_create_probe2_fn() returns integer language sql immutable as 'select 1';
+172.17.0.1 2026-10-03 20:06:22.313 UTC [716] postgres@postgres LOG:  statement: grant create on schema public to notification_projection_create_probe2;
+172.17.0.1 2026-10-03 20:06:22.315 UTC [716] postgres@postgres LOG:  statement: alter function public.notification_projection_create_probe2_fn() owner to notification_projection_create_probe2;
+172.17.0.1 2026-10-03 20:06:22.315 UTC [716] postgres@postgres LOG:  statement: revoke create on schema public from notification_projection_create_probe2;
+172.17.0.1 2026-10-03 20:06:22.316 UTC [716] postgres@postgres LOG:  statement: revoke notification_projection_create_probe2 from current_user granted by current_user;
+ 2026-10-03 20:06:22.821 UTC [1] LOG:  server process (PID 716) was terminated by signal 11: Segmentation fault
+ 2026-10-03 20:06:22.821 UTC [1] DETAIL:  Failed process was running: revoke notification_projection_create_probe2 from current_user granted by current_user;
+ 2026-10-03 20:06:22.821 UTC [1] LOG:  terminating any other active server processes
+ 2026-10-03 20:06:22.823 UTC [1] LOG:  all server processes terminated; reinitializing
+ 2026-10-03 20:06:22.872 UTC [724] LOG:  database system was interrupted; last known up at 2026-10-03 20:05:34 UTC

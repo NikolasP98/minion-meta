@@ -1,0 +1,35 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat
+
+ ❯ src/lib/assistant/runner.test.ts (5 tests | 1 failed) 31ms
+     × suppresses all other calls before and after navigation, including invalid destinations 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/assistant/runner.test.ts > terminal navigation batches > suppresses all other calls before and after navigation, including invalid destinations
+AssertionError: expected [ 'hub.navigate: invalid path' ] to deeply equal []
+
+- Expected
++ Received
+
+- []
++ [
++   "hub.navigate: invalid path",
++ ]
+
+ ❯ src/lib/assistant/runner.test.ts:110:33
+    108|         needsFollowUp([{ tool: 'test.read', result: '{}', readOnly: tr…
+    109|       ).toBe(false);
+    110|       expect(guide.lastActions).toEqual([]);
+       |                                 ^
+    111|     } finally {
+    112|       off();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 19 passed (20)
+      Tests  1 failed | 180 passed (181)
+   Start at  01:25:21
+   Duration  89.12s (transform 57.51s, setup 417ms, import 77.57s, tests 5.14s, environment 1.86s)
+

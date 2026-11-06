@@ -2,18 +2,26 @@
 id: 2026-08-18-factory-workitem-handoff-schema-spec
 title: Typed WorkItem fields + commit-pinned, structured handoffs across the factory pipeline
 stage: spec
-status: approved
-pass: 2
+status: review
+pass: 3
+next_slice: 5
 created: 2026-08-18
-updated: 2026-08-28
+updated: 2026-10-17
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-17-factory-workitem-handoff-schema
-verdict: approved
-tags: [logic, infra]
+verdict: pending
+review_reason: "Consumer-first correction awaits renewed review and owner security approval; do not repeat the stale whole-spec task or deploy producer retrofit before strict trust checks."
+tags: [logic, infra, security, test, docs]
 type: infra
 ---
 
 # Typed WorkItem fields + commit-pinned, structured handoffs
+
+The remaining trust/admission work is specified in
+[Spec Kit feature 104](104-workitem-consumer-first/spec.md), with its
+[implementation plan](104-workitem-consumer-first/plan.md) and
+[ordered tasks](104-workitem-consumer-first/tasks.md). This parent remains the
+single board goal. Security approval and merge remain human gates.
 
 ## 0. Product
 
@@ -37,7 +45,10 @@ This correction also follows these existing contracts:
 - `/memory/MINION/factory/2026-08-17-c5f12e0e.md`: the dev container has no Docker or SSH, so production-box checks are operator verification, never a silently skipped PR gate.
 - `specs/2026-08-17-sdlc-phase-gates-scoring-spec.md` §2/§3-G4/§4: review evidence is artifact-derived, and G4 uses the common score/verdict/reviewer/reviewed-commit shape.
 
-## 1. Confirmed defects and impact zones
+## 1. Historical defects and impact zones
+
+The following list records the original August audit, not current completion.
+The October reassessment below controls new dispatch.
 
 1. `runner/src/github.ts:fetchMetaFile()` and a duplicate in `runner/src/index.ts` always read `META_BRANCH`. The mutable fetch is used by manual spec runs, spec→dev auto-queue, and `automerge.ts`; therefore pinning only the container content would still leave merge policy reading mutable tags.
 2. `agent/run.sh` parses the first `VERDICT: PASS|FAIL` occurrence from `REVIEW.md`. There is no schema validation, structured finding list, or script-stamped reviewed commit.
@@ -47,6 +58,54 @@ This correction also follows these existing contracts:
 6. `lifecycle.ts` and `automerge.ts` have different high-stakes tag sets. Untagged work is also semantically distinct from low risk and must remain `unclassified`, not be coerced to `low`.
 7. Both the automatic fix path in `queue.ts` and `POST /runs/:id/requeue` in `index.ts` copy `spec_id`/`spec.md` but would drop a newly added `spec_sha` unless every insert is updated.
 8. `POST /hooks/monitor` currently deduplicates repeat events in SQLite without a GitHub write. Updating a proposal on every repeat would undo the flood-control contract and create commit spam.
+
+### AS-IS — reassessment on 2026-10-17
+
+Evidence: Factory production commit `43a174b2e87c4d572ffd2ba030269db22a0b7bd2`,
+meta source snapshot `6ba120cea916d5065f3d53cd6aefb8727fa32843`, and the prior
+[S4 review on PR #273](https://github.com/NikolasP98/minion-meta/pull/273).
+
+- `runner/src/github.ts:fetchMetaFile` accepts an explicit ref and strict spec
+  parsing exists; queue admission carries separate spec byte and commit
+  identities. S1 is a regression boundary, not a fresh implementation request.
+- Structured review artifacts and commit binding exist in `agent/run.sh` and
+  `agent/lib/review-artifact.sh`. Preserve S2 behavior and tests.
+- Multi-repo automatic dispatch is refused by
+  `runner/src/queue.ts:queueDevForSpecCore`; typed monitor-proposal delivery
+  remains part of S6. Refusal alone is not completion of that operator DoD.
+- `runner/src/lifecycle.ts:proposalAutoApproveEligible` still treats a nonempty
+  `source` as automatic provenance. `queueApprovedProposalRuns` admits approved
+  index rows without validating the WorkItem trust fields. The explicit spec
+  intake and proposal approval transition also need the same strict contract.
+- Topic risk is already centralized in the validated `specs/topics.json` policy
+  and execution manifests. The historical static high-stakes union below is
+  superseded by that policy; no new local tag list may replace it.
+- Meta's proposal index still requires only its legacy core fields. Its lack of
+  WorkItem fields must cause new automatic approvals/admissions to fail closed
+  until a reviewed producer/backfill release supplies them.
+
+### TO-BE
+
+Only validated, explicitly trusted low-risk automation can cross automatic
+proposal approval. Every new proposal approval and proposal-to-spec admission
+validates the full WorkItem contract and canonical source identity. Existing
+human approval, execution-manifest, score/readiness and queue-order gates remain
+additional conditions. Already queued/running work keeps its stored authority.
+
+### DELTA
+
+1. Review and deploy the Factory S5 consumer gate first; prove human/external
+   provenance and unclassified risk cannot acquire automatic approval, and
+   invalid metadata cannot acquire any new approval/admission. Valid explicitly
+   approved human/external/unclassified work may enter spec subject to its
+   existing manifest requirements.
+2. Refresh the producer inventory at a pinned meta revision, excluding review
+   sidecars, then deliver S4's schema, writers and deterministic backfill in its
+   own repo-scoped release. Historical file counts are not migration input.
+3. Prove the complete corpus validates and trusted low-risk fixtures can pass
+   the gate before enabling S6 typed monitor intake.
+4. Recheck S1/S2 and the S3 refusal boundary instead of recreating shipped code.
+   Preserve remaining S3/S6 operator acceptance work explicitly.
 
 ## 2. Canonical contracts
 
@@ -65,7 +124,14 @@ Each object emitted in `proposals/index.json.proposals` is the canonical WorkIte
 
 The priority enum reuses the existing severity/priority vocabulary documented in `specs/2026-07-10-bug-triage-workforce-agents-plan.md`; this spec does not map it to dequeue order. `value` remains an independent, backward-compatible proposal field and is not a priority alias.
 
-`risk_class` is explicit on proposal frontmatter so the WorkItem is self-contained. Factory consumers use one `classifyRisk()` helper for spec tags and validate any declared WorkItem risk. `HIGH_STAKES_TAGS` is the conservative union already used by `automerge.ts`: `security`, `data`, `infra`, `auth`, `perms`, `permissions`, `migration`, `migrations`, `billing`. Tag-derived risk is `unclassified` for no tags, `high` if any high-stakes tag is present, otherwise `low`. Proposal validation rejects a declared `risk_class` that disagrees with this derivation; intake writers therefore cannot label `[infra]` as low risk.
+`risk_class` is explicit on proposal frontmatter so the WorkItem is self-contained.
+Derive it from the validated canonical topic policy: `high` if any resolved topic
+is high, otherwise `unclassified` for empty tags or any unclassified topic,
+otherwise `low`. Unknown tags or malformed policy are validation failures.
+Reject declared risk that disagrees with that derivation. Share or reuse the
+existing manifest risk aggregation; do not restore historical static tag lists.
+Automerge continues to use the immutable execution manifest and its existing
+review evidence, never a mutable WorkItem to relax merge authority.
 
 Only `source_trust: trusted-automation` plus `risk_class: low` may satisfy the source/risk portion of `promoteSweep()` auto-approval. `human` and `untrusted-external` always keep human gate 1 regardless of tags.
 
@@ -97,6 +163,8 @@ Each numbered slice is a separate factory dev run and edits one repository. Loca
 
 ### Slice 1 — Commit-pinned spec handoff (minion-factory, 6–8h)
 
+**Topics:** `logic`, `infra`, `test`
+
 **Files:** `runner/src/github.ts`, `runner/src/index.ts`, `runner/src/queue.ts`, `runner/src/db.ts`, `runner/src/automerge.ts`, `agent/spec.sh`, `agent/run.sh`, focused tests.
 
 - Add nullable `runs.spec_sha TEXT` to both the additive migration block, fresh-table DDL, and `Run` type.
@@ -113,6 +181,8 @@ Each numbered slice is a separate factory dev run and edits one repository. Loca
 
 ### Slice 2 — Structured, commit-bound review artifact (minion-factory, 6–8h)
 
+**Topics:** `logic`, `infra`, `test`
+
 **Files:** `agent/run.sh`, a reusable jq schema/helper under `agent/`, shell fixture tests, `runner/src/repos.ts` if needed to include them in self-test.
 
 - Extend the review prompt to require `REVIEW.md` and schema-versioned `review.json`, but do not ask the model for `reviewedCommit` or `runId`.
@@ -127,6 +197,8 @@ Each numbered slice is a separate factory dev run and edits one repository. Loca
 **Operator E2E:** with `FACTORY_REVIEW_FIX_LOOP=0`, one clean and one deliberately broken scratch PR leave valid final artifacts; the clean artifact is `pass` with no findings, the broken artifact is `fail` or `error`, and `reviewedCommit` equals the PR head immediately after the review iteration.
 
 ### Slice 3 — Multi-repo specs fail loudly until slice routing is explicit (minion-factory, 4–6h)
+
+**Topics:** `logic`, `infra`, `test`
 
 **Files:** `runner/src/queue.ts`, focused resolver/queue tests.
 
@@ -144,28 +216,49 @@ This deliberately selects the proposal's allowed **fail loudly** outcome. It is 
 
 ### Slice 4 — Typed WorkItem schema and retrofit (minion-meta, 6–8h)
 
+**Topics:** `logic`, `infra`, `security`, `test`
+
+**Prerequisite:** S5 consumer gate is deployed and its refusal cases are proven.
+Before the strict meta schema/backfill release, ship controlled Factory producer
+updates as a separate Factory PR: CI-watch/reconciler and request-agent writers
+must emit complete metadata. Then land meta projection/schema plus reviewed
+backfill atomically. Consumer discovery uses index identity/status hints and
+validates full canonical source, so temporarily unprojected new fields do not
+become invented authority. Producer and meta changes never share one dev branch.
+
 **Files:** `proposals/TEMPLATE.md`, `scripts/proposal-index.mjs`, a pure WorkItem validation/classification module + tests, one-time retrofit script, `proposals/*.md`.
 
 - Document and enforce the §2.1 fields. `proposal-index.mjs` must reject missing/invalid values and project every field into each index entry.
 - Centralize tag-derived risk in the pure module and reject declared risk/tag disagreement. The validator, retrofit, and tests use the same function.
-- Retrofit every historical proposal deterministically from the current corpus: the seven source-less `ci-*.md` files become `source: ci-watch`, `source_trust: trusted-automation`, `owner: factory`; the other four source-less files become `source: human`, `source_trust: human`, `owner: human`; existing `audit-*`, `debt-sweep-*`, and `factory-review-*` sources become `trusted-automation`, `owner: factory`. Any source outside those explicit rules makes the script fail and name the file instead of guessing. Derive `risk_class` from tags and set `priority: medium` without changing `value`.
+- Inventory the then-current pinned corpus and approved producer origins before authoring retrofit rules; exclude `TEMPLATE.md` and every `*.review.md` sidecar. The old seven/four file counts are historical evidence only. Produce a reviewable manifest of each proposed source, trust, risk, priority and owner assignment. Recognize trusted automation only through explicit reviewed origin rules; a source string alone is not proof. Missing or unknown origins fail with a filename until resolved, rather than being guessed trusted. Source-less human items receive human trust/ownership under the reviewed inventory. Derive risk from the canonical topic policy and default priority to medium without changing ranking scores or value. Apply only the approved manifest and rerun idempotently.
 - Add tests for all enums, untagged=`unclassified`, every high-stakes alias, mismatch rejection, and a complete valid record. Run the retrofit and validator in the same commit so no intermediate revision breaks factory meta pushes.
 
 **Definition of done:** pure tests pass; `node scripts/proposal-index.mjs` exits 0 over the full retrofitted directory; a temporary fixture missing each required field or containing a risk/tag mismatch exits non-zero with its filename and field. The generated index contains the complete WorkItem fields for every proposal. No `index.json` is hand-edited.
 
 ### Slice 5 — WorkItem-aware factory consumers (minion-factory, 4–6h)
 
-**Files:** `runner/src/lifecycle.ts`, `runner/src/automerge.ts`, shared risk helper + tests, `agent/reconcile.sh`, `playbooks/request-agent.md`.
+**Topics:** `logic`, `infra`, `security`, `test`, `docs`
 
-- Model the §2.1 index entry as a TypeScript `WorkItem`; validate untrusted index JSON before using it.
-- Replace both local high-stakes sets with one `classifyRisk()` helper. Untagged input returns `unclassified`.
+**Execution order:** this consumer slice precedes S4. Feature 104 contains the
+current narrow implementation plan. Producer and backfill edits ship separately.
+
+**Files:** `runner/src/workitem.ts` + tests, `runner/src/lifecycle.ts`,
+`runner/src/index.ts`, existing manifest risk aggregation + focused tests.
+`runner/src/automerge.ts` is a regression boundary. Producer files
+`agent/reconcile.sh` and `playbooks/request-agent.md` ship separately before S4's
+strict meta schema, after this consumer release.
+
+- Model and strictly validate the complete §2.1 WorkItem at every new approval/admission edge: automatic eligibility, approved-index spec enqueue, explicit `/pipeline/spec`, and proposal approval transitions. Canonical body parsing must reject duplicate control keys and path/id mismatch. Report invalid entries individually and continue safe unrelated reconciliation; preserve queued/running rows and stored retry manifests.
+- Derive risk through the current validated topic policy and shared manifest aggregation. Untagged or recognized-unclassified topics remain unclassified; unknown topics fail validation.
 - Change `promoteSweep()` to require `source_trust === 'trusted-automation' && risk_class === 'low'` in addition to its existing status/duplicate/reopen guards. It must not infer trust from non-empty `source`.
-- Keep `automerge.ts`'s existing low-stakes/double-pass behavior, but use the shared risk helper for the high-stakes decision.
-- New CI-watch proposals include `source: ci-watch`, `source_trust: trusted-automation`, derived `risk_class`, `priority: medium`, and `owner: factory`. The request-agent playbook writes human trust/ownership unless the user explicitly supplies another owner.
+- Keep `automerge.ts`'s existing pinned-manifest and independent-review behavior. This slice adds no mutable WorkItem bypass to merge policy.
+- Treat legacy records missing required fields as ineligible for NEW approval/admission, with a bounded reason. They remain visible and can be enriched through S4. Existing queue records continue to use their stored authority. Coordinate CI-watch, reconciler and request-agent producer changes with S4, after the consumer gate is deployed.
 
-**Definition of done:** tests prove a low-risk trusted automation may auto-approve, while otherwise-identical `human` and `untrusted-external` items may not; unclassified and high-risk work remain gated. Lifecycle and automerge have zero local high-stakes set declarations. Existing lifecycle transition tests remain green.
+**Definition of done:** real approval/admission tests prove trusted low-risk automation may auto-approve, while human, external, legacy, malformed, duplicate-key, id-mismatched, unknown-topic and unclassified records cannot bypass the appropriate gate. Human-approved valid human/external records may enter the spec stage through the existing approval contract; trust is not an alternative to human approval. Queued/running rows and stored manifests are unchanged across repeated sweeps/restart. Existing lifecycle, ordering and manifest/automerge tests remain green. S4 is blocked until deployed runtime evidence confirms these outcomes.
 
 ### Slice 6 — Monitor intake writes a typed proposal (minion-factory, 6–8h)
+
+**Topics:** `logic`, `infra`, `security`, `test`
 
 **Files:** `runner/src/index.ts`, `runner/src/github.ts` or a small shared meta-write helper, `runner/src/db.ts` only if its TypeScript row naming is clarified, focused tests.
 
@@ -183,15 +276,15 @@ This deliberately selects the proposal's allowed **fail loudly** outcome. It is 
 ## 4. Cross-repo ordering and impact
 
 1. Slice 1 lands before any spec-backed run relies on `spec_sha`.
-2. Slice 4 (meta schema + complete retrofit) lands atomically before Slice 5 enables factory consumers that require the new fields.
-3. Slice 5 lands before Slice 6, so monitor-created records are interpreted with the new trust gate from their first release.
+2. Slice 5 deploys strict consumers first. Legacy missing-field records stay visible but cannot acquire new automatic approval/admission. This temporary refusal is the intended safe migration state.
+3. After S5 runtime proof, release the controlled Factory producer updates in their own PR, then Slice 4's meta projection/schema and reviewed current-corpus backfill atomically. Slice 6 follows only after S4's complete corpus validates, so monitor records meet the already-deployed trust gate from their first release.
 4. Slice 6 should precede Slice 3 in deployment if fail-loud dispatch alerts must be typed proposals immediately; reversing those two temporarily produces a legacy issue but never silently dispatches work.
 
 No minion-base code is required: it already reads `proposals/index.json`. Adding fields is backward-compatible. Board rendering of trust/risk/priority and `review.json` scores remains outside this spec; data availability is covered here, UI presentation by the phase-gates spec.
 
 ## 5. Out of scope
 
-- priority-based scheduling or changing FIFO dequeue order;
+- changing the established score/readiness eligibility or phase-descending, oldest-first queue order;
 - automatic multi-repo fan-out before specs carry explicit per-slice repo metadata;
 - G4 board score chips and historical score reconciliation;
 - using review severity/score to change automerge policy;

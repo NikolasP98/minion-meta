@@ -1,0 +1,43 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway
+
+ ❯ |e2e| src/gateway/server.cron.e2e.test.ts (3 tests | 1 failed) 15386ms
+     × posts webhooks for delivery mode and legacy notify fallback only when summary exists 5063ms
+ ❯ |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts (17 tests | 1 failed) 2081ms
+     × starts a fresh session id for each cron run 103ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |e2e| src/gateway/server.cron.e2e.test.ts > gateway server cron > posts webhooks for delivery mode and legacy notify fallback only when summary exists
+Error: timeout waiting for condition
+ ❯ waitForCondition src/gateway/server.cron.e2e.test.ts:62:13
+     60|     const elapsedMs = Number(process.hrtime.bigint() - startedAt) / 1e…
+     61|     if (elapsedMs >= timeoutMs) {
+     62|       throw new Error("timeout waiting for condition");
+       |             ^
+     63|     }
+     64|     await yieldToEventLoop();
+ ❯ src/gateway/server.cron.e2e.test.ts:552:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > starts a fresh session id for each cron run
+AssertionError: expected '9ba3b51b-6f72-4a34-a2d0-a83c022883cf' not to be '9ba3b51b-6f72-4a34-a2d0-a83c022883cf' // Object.is equality
+ ❯ src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts:491:36
+    489|       expect(first.sessionId).toBeDefined();
+    490|       expect(second.sessionId).toBeDefined();
+    491|       expect(second.sessionId).not.toBe(first.sessionId);
+       |                                    ^
+    492|       expect(first.sessionKey).toMatch(/^agent:main:cron:job-1:run:/);
+    493|       expect(second.sessionKey).toMatch(/^agent:main:cron:job-1:run:/);
+ ❯ withTempHome test/helpers/temp-home.ts:112:12
+ ❯ src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts:465:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  2 failed | 18 passed (20)
+   Start at  01:11:56
+   Duration  34.97s (transform 15.83s, setup 1.06s, import 16.01s, tests 17.47s, environment 0ms)
+

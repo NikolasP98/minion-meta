@@ -1,0 +1,48 @@
+---
+id: 2026-10-18-assistant-capability-failure-recovery
+title: Restore assigned assistant tools and contain malformed model output
+status: in-spec
+created: 2026-10-18
+updated: 2026-10-21
+repos: [minion, minion_hub]
+spawned_spec: 2026-10-18-assistant-capability-failure-recovery-spec
+---
+
+# Restore assigned assistant tools and contain malformed model output
+
+## AS-IS
+
+The deployed agent advertises current search/load schemas but cannot discover catalog_query. Read-only production diagnostics establish that both discovery and permission endpoints return403 ASSISTANT_GATEWAY_ASSIGNMENT_REQUIRED. Its personal-agent row is active with gateway_idNULL. The FACES runtime also advertises a server hint resolving to a different organization; the correct FACES canonical row authenticates with the existing credential but still rejects the missing assignment. No production mutation occurred.
+
+Gateway loader silently turns this403 into an empty remote catalog. Repeated search/load calls then consume six discovery calls, invoking answer-only recovery. The model's textual DSML control markup escapes through stream/final delivery instead of an answer. Earlier local proof used a directly provisioned actor and restricted allowlist, so it did not cover the hosted provisioning seam.
+
+## TO-BE
+
+A hosted personal agent is active for business tools only with a persisted, verified assignment to the selected canonical organization gateway. Discovery reports unavailable capabilities truthfully and stops retrying permanent failures. User-visible output never executes or leaks malformed control markup; one bounded recovery yields a grounded answer or an honest inability response. Valid quoted syntax examples remain readable.
+
+## DELTA
+
+Implement the matching spec with independent behavior and authority reviews. Prove real loopback provisioning, principal, manifest, normal factory policy, service-price ranking and response egress. Production pointer/config repair is a separate exact-target reviewed mutation requiring owner approval; do not infer permission from a model's orgId or from gateway possession.
+
+## Retained boundaries
+
+A personal_agents row currently has one gateway binding per profile. This repair must not silently move an existing binding on organization switches; broader concurrent multi-organization delegation requires its own scoped contract. Brain authority remains unchanged. Full Windows qualification debt is tracked in2026-08-23-minion-ai-ci-baseline-debt. No model upgrade or permission bypass is included.
+
+Implementation review also confirmed that `tool-mutation.ts` fingerprints target
+fields and display metadata rather than the complete request payload. Different
+same-length file contents can therefore share a fingerprint. The qualification
+fixture now respects the existing comparison contract, but this does not prove
+full request equivalence. A separate change must bind mutation recovery to a
+canonical request identity and test equal-display/different-payload collisions.
+The exact implementation site carries a matching TODO(handoff). This catalog
+read/output repair does not change mutation replay semantics.
+
+
+## Production checkpoint, 2026-10-21
+
+The owner-selected credit-efficient release is deployed: Gateway source `97ccd699eac4dcc75194714d2a9c8a92053e535a`, successful exact DEV qualification, immutable Docker receipt and successful production controller convergence. Both canonical services are healthy. The approved FACES callback correction is applied with exactly one persistent field changed; assignment was already canonical and was not rewritten. Configured catalog/permission authority and bounded typed service reads now pass. No model turn was used for operator verification. Authenticated Hub chat acceptance remains pending, so this artifact is not marked complete. See [production adoption receipt](../audits/2026-10-18-assistant-capability-repair/credit-efficient-production-adoption.json) for exact source/run/operation evidence and retained limits.
+
+
+## Owner smoke checkpoint, 2026-10-21
+
+The owner has now supplied the production product and service answers. Both include named prices and catalog references; the service response explicitly discloses its maximum-price tie. No DSML or navigation command appears in the excerpt. This records a successful owner-reported core answering smoke. Copied text does not establish rendered source hrefs, actual browser navigation or per-run tool count, so full UX acceptance is not claimed. See [owner smoke receipt](../audits/2026-10-18-assistant-capability-repair/owner-hub-acceptance-20261021.json) and [separate polish candidate](../proposals/2026-10-21-assistant-catalog-answer-and-history-polish.md). No new runtime release or model turn was performed for this record.

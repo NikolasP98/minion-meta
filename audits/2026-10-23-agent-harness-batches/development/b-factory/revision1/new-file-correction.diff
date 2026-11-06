@@ -1,0 +1,223 @@
+--- prior/agent/lib/jev-accounting.py
++++ revision1/agent/lib/jev-accounting.py
+@@ -10,6 +10,7 @@
+ import math
+ import os
+ import sys
++import struct
+ from pathlib import Path
+ 
+ MAX_CALLS = 10000
+@@ -23,6 +24,31 @@
+ 
+ def known(value):
+     return isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and value >= 0
++
++def receipt_revision(rows, incomplete):
++    # Hash the exact binary64 value, not a language's decimal JSON spelling.
++    # Typed objects cannot collide with the fixed tuple/string/null row fields.
++    def canonical(value):
++        if isinstance(value, (int, float)) and not isinstance(value, bool):
++            number = float(value)
++            if not math.isfinite(number):
++                raise ValueError('non-finite accounting number')
++            return {'$f64': struct.pack('>d', number).hex()}
++        if isinstance(value, list):
++            return [canonical(v) for v in value]
++        return value
++    encoded = json.dumps(canonical([rows, incomplete]), separators=(',', ':'), ensure_ascii=False)
++    return hashlib.sha256(encoded.encode()).hexdigest()
++
++def accounting_json(text):
++    # JavaScript parses every JSON number as binary64, including integer tokens.
++    # Matching that boundary also keeps summation and hash inputs consistent.
++    return json.loads(text, parse_int=float, parse_float=float)
++
++def subtotal_text(value):
++    # Keep the old six-decimal presentation only when it preserves the bill.
++    fixed = format(value, '.6f')
++    return fixed if float(fixed) == value else json.dumps(value)
+ 
+ def append(out, record):
+     out.mkdir(parents=True, exist_ok=True)
+@@ -63,7 +89,7 @@
+             with target.open(encoding='utf-8') as journal:
+                 for line in journal:
+                     try:
+-                        r = json.loads(line)
++                        r = accounting_json(line)
+                         if r.get('version') != 2:
+                             raise ValueError('legacy')
+                         decision = r.get('decisionId')
+@@ -107,7 +133,7 @@
+         if not (file.name.endswith('-result.json') or file.name.endswith('-error.json')):
+             continue
+         try:
+-            r = json.loads(file.read_text())
++            r = accounting_json(file.read_text())
+             if file.name.startswith('jev-'):
+                 if r.get('attemptId') not in attempts:
+                     cost = r.get('total_cost_usd')
+@@ -129,20 +155,16 @@
+         except (ValueError, OSError, AttributeError):
+             incomplete = True
+     incomplete |= unknown > 0 or (out / '.jev-accounting-incomplete').exists()
+-    def canonical(value):
+-        if isinstance(value, float) and value.is_integer():
+-            return int(value)
+-        if isinstance(value, list):
+-            return [canonical(v) for v in value]
+-        return value
+-    revision = hashlib.sha256(json.dumps(canonical([rows, incomplete]), separators=(',', ':'), ensure_ascii=False).encode()).hexdigest()
+-    return dict(dispatchedAttemptCount=sum(a['admitted'] and (a['settled'] or {}).get('dispatchState') != 'not_dispatched' for a in attempts.values()), knownCostUsd=round(worker_cost+jev_cost, 6), knownJevCostUsd=round(jev_cost, 6), unknownAttemptCount=unknown, costCoverage='incomplete' if incomplete else 'complete', receiptRevision=revision)
++    revision = receipt_revision(rows, incomplete)
++    return dict(dispatchedAttemptCount=sum(a['admitted'] and (a['settled'] or {}).get('dispatchState') != 'not_dispatched' for a in attempts.values()), knownCostUsd=worker_cost+jev_cost, knownJevCostUsd=jev_cost, unknownAttemptCount=unknown, costCoverage='incomplete' if incomplete else 'complete', receiptRevision=revision)
+ 
+ if __name__ == '__main__':
+     directory = Path(os.environ.get('FACTORY_OUT_DIR', '/out'))
+     try:
+         if sys.argv[1] == 'append':
+             append(directory, json.load(sys.stdin))
++        elif sys.argv[1] == 'subtotal':
++            print(subtotal_text(snapshot(directory)['knownCostUsd']))
+         else:
+             print(json.dumps(snapshot(directory), separators=(',', ':')))
+     except (OSError, ValueError, TypeError):
+--- prior/runner/src/jev-accounting.test.ts
++++ revision1/runner/src/jev-accounting.test.ts
+@@ -28,8 +28,19 @@
+ 		"INSERT INTO runs(id,repo_id,task,title,status,max_turns,kind,created_at) VALUES (?,'minion-factory','fixture','fixture','running',2,'dev',?)"
+ 	).run(id, new Date().toISOString());
+ }
+-for (const mode of ['known-error', 'unknown', 'denied'] as const) {
+-	test(`A08 actual guard cleanup → all worker emitters → queue settlement (${mode})`, async () => {
++const costScenarios: Array<{ mode: 'known-error' | 'unknown' | 'denied'; label: string; cost: number }> = [
++	{ mode: 'known-error', label: 'ordinary', cost: 0.01 },
++	{ mode: 'known-error', label: 'tiny-threshold', cost: 0.000001 },
++	{ mode: 'known-error', label: 'small-exponent', cost: 1e-7 },
++	{ mode: 'known-error', label: 'fine-precision', cost: 1.2345678901234567e-7 },
++	{ mode: 'known-error', label: 'known-zero', cost: 0 },
++	{ mode: 'known-error', label: 'subnormal', cost: Number.MIN_VALUE },
++	{ mode: 'known-error', label: 'binary-fraction', cost: 0.1 + 0.2 },
++	{ mode: 'unknown', label: 'unknown', cost: 0 },
++	{ mode: 'denied', label: 'denied', cost: 0 }
++];
++for (const { mode, label, cost } of costScenarios) {
++	test(`A08 actual guard cleanup → all worker emitters → queue settlement (${label})`, async () => {
+ 		resetJevCapabilitiesForTests();
+ 		let calls = 0;
+ 		process.env.FACTORY_OPENROUTER_API_KEY = 'loopback-only';
+@@ -42,7 +53,7 @@
+ 				JSON.stringify({
+ 					model: 'fixture',
+ 					answers: Object.fromEntries(Object.keys(q).map((k) => [k, { type: 'noul', noul: mode === 'known-error' ? 2 : 0 }])),
+-					usage: { input_tokens: 2, output_tokens: 1, ...(mode === 'known-error' ? { cost: 0.01 } : {}) }
++					usage: { input_tokens: 2, output_tokens: 1, ...(mode === 'known-error' ? { cost } : {}) }
+ 				})
+ 			);
+ 		});
+@@ -70,7 +81,7 @@
+ 		assert.ok(sa && typeof sa === 'object');
+ 		try {
+ 			for (const worker of ['run', 'spec', 'reconcile']) {
+-				const id = `account-${mode}-${worker}`,
++				const id = `account-${label}-${worker}`,
+ 					out = join(root, 'runs', id);
+ 				mkdirSync(out, { recursive: true });
+ 				seed(id);
+@@ -120,7 +131,7 @@
+ 					env: { ...process.env, FACTORY_OUT_DIR: out, FACTORY_RUN_ID: id }
+ 				});
+ 				const result = parseFinishResult(JSON.parse(readFileSync(join(out, 'result.json'), 'utf8')));
+-				assert.equal(result.costUsd, mode === 'known-error' ? 0.01 : 0);
++				assert.equal(result.costUsd, mode === 'known-error' ? cost : 0);
+ 				assert.equal(result.knownCostUsd, result.costUsd);
+ 				assert.equal(result.unknownAttemptCount, mode === 'unknown' ? 1 : 0);
+ 				assert.equal(result.costCoverage, mode === 'unknown' ? 'incomplete' : 'complete');
+@@ -300,3 +311,42 @@
+ 	assert.equal(receipt.costCoverage, 'incomplete');
+ 	assert.equal(receipt.receiptRevision, runner.receiptRevision);
+ });
++
++test('A08 receipt hashes preserve binary64 values across Python and JavaScript JSON number spellings', async () => {
++	const lexemes = [
++		'-0.0',
++		'0',
++		'5e-324',
++		'2.2250738585072014e-308',
++		'1e-7',
++		'1e-6',
++		'0.0001',
++		'0.01',
++		'0.30000000000000004',
++		'1.0000000000000002',
++		'9007199254740993',
++		'1000000000000000100',
++		'1e20',
++		'1e21',
++		'1.7976931348623157e308',
++		'null'
++	];
++	const input = '[' + lexemes.join(',') + ']';
++	const rows = JSON.parse(input) as unknown[];
++	const { jevReceiptRevision } = await import('./jev-accounting.js');
++	const python = exec('/usr/bin/python3', [
++		'-B',
++		'-c',
++		`import importlib.util,sys
++spec=importlib.util.spec_from_file_location('accounting',sys.argv[1]);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
++rows=module.accounting_json(sys.stdin.read());print(module.receipt_revision(rows,False));print(module.receipt_revision(rows,True))`,
++		resolve('../agent/lib/jev-accounting.py')
++	]);
++	python.child.stdin?.end(input);
++	const hashes = (await python).stdout.trim().split('\n');
++	assert.equal(hashes[0], jevReceiptRevision(rows, false));
++	assert.equal(hashes[1], jevReceiptRevision(rows, true));
++	assert.notEqual(hashes[0], hashes[1]);
++	assert.notEqual(jevReceiptRevision([null], false), jevReceiptRevision([0], false));
++	assert.notEqual(jevReceiptRevision([1e-7], false), jevReceiptRevision([1.0000000000000001e-7], false));
++});
+--- prior/runner/src/jev-accounting.ts
++++ revision1/runner/src/jev-accounting.ts
+@@ -291,6 +291,23 @@
+ 		r.resolvedModel ?? null
+ 	]);
+ }
++/** Exact binary64 encoding makes receipt numbers independent of Python/JS
++ * decimal JSON formatting. The persisted bill itself is never quantized. */
++export function jevReceiptRevision(rows: unknown[], incomplete: boolean): string {
++	const canonical = (value: unknown): unknown => {
++		if (typeof value === 'number') {
++			if (!Number.isFinite(value)) throw new Error('non-finite accounting number');
++			const bytes = Buffer.allocUnsafe(8);
++			bytes.writeDoubleBE(value);
++			return { $f64: bytes.toString('hex') };
++		}
++		return Array.isArray(value) ? value.map(canonical) : value;
++	};
++	return createHash('sha256')
++		.update(JSON.stringify(canonical([rows, incomplete])))
++		.digest('hex');
++}
++
+ /** Authoritative journal overrides mirrors only on matching decision/attempt
+  * bindings. Conflicts quarantine the bill instead of choosing the largest. */
+ export function readJevRunAccounting(
+@@ -415,14 +432,12 @@
+ 	}
+ 	incomplete ||= unknown > 0;
+ 	return {
+-		knownCostUsd: Number((workerCost + jevCost).toFixed(6)),
+-		knownJevCostUsd: Number(jevCost.toFixed(6)),
++		knownCostUsd: workerCost + jevCost,
++		knownJevCostUsd: jevCost,
+ 		unknownAttemptCount: unknown,
+ 		admittedAttemptCount: [...attempts.values()].filter((a) => a.admitted).length,
+ 		dispatchedAttemptCount: [...attempts.values()].filter((a) => a.admitted && a.settled?.dispatchState !== 'not_dispatched').length,
+ 		costCoverage: incomplete ? 'incomplete' : 'complete',
+-		receiptRevision: createHash('sha256')
+-			.update(JSON.stringify([canonicalRows, incomplete]))
+-			.digest('hex')
++		receiptRevision: jevReceiptRevision(canonicalRows, incomplete)
+ 	};
+ }

@@ -1,0 +1,132 @@
+{
+  "createdAt": "2026-10-23T10:32:27.016083+00:00",
+  "ownedCwdProcesses": [
+    {
+      "pid": 2749168,
+      "parent": 2024679,
+      "state": "S",
+      "userTicks": 0,
+      "systemTicks": 1,
+      "command": "/usr/bin/bash -lc python3 - <<'PY'\nimport os,subprocess\nfrom pathlib import Path\nroot=Path('/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/development/d-pulse')\nenv=os.environ.copy();env.update(PUBLIC_POSTHOG_KEY='phc_local_fixture',PUBLIC_POSTHOG_HOST='http://127.0.0.1:0',GIT_CONFIG_GLOBAL='/dev/null',GIT_CONFIG_NOSYSTEM='1',GIT_CONFIG_COUNT='1',GIT_CONFIG_KEY_0='commit.gpgsign',GIT_CONFIG_VALUE_0='false',VITEST_MAX_WORKERS='2')\nfor key in ['MINION_QC_DISPOSABLE','MINION_QC_DATABASE_URL','HUB_TEST_DB_URL','SUPABASE_DB_URL','CI','GITHUB_ACTIONS']:\n env.pop(key,None)\nassert not any(key.startswith('REQUIRE_') for key in env)\ngates=[('i18n-final',['bun','run','i18n:compile']),('check-final',['bun','run','check']),('unit-final',['bun','run','test']),('build',['bun','run','build']),('design',['bun','run','lint:design']),('design-ci',['bun','run','lint:design:ci']),('tokens',['bun','run','lint:tokens']),('notifications',['bun','run','lint:notifications']),('optimistic',['bun','run','lint:optimistic']),('test-format',['bunx','prettier','--check','src/routes/api/pulse/proposals/[id]/server.test.ts'])]\nfor name,args in gates:\n p=subprocess.run(['python3',str(root/'run-gate.py'),'final-root-gates/'+name,*args],env=env)\n if p.returncode:raise SystemExit(p.returncode)\nPY"
+    },
+    {
+      "pid": 2749178,
+      "parent": 2749168,
+      "state": "S",
+      "userTicks": 4,
+      "systemTicks": 3,
+      "command": "/usr/bin/python3 -"
+    },
+    {
+      "pid": 2785976,
+      "parent": 2749178,
+      "state": "S",
+      "userTicks": 3,
+      "systemTicks": 2,
+      "command": "/usr/bin/python3 /home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/development/d-pulse/run-gate.py final-root-gates/build bun run build"
+    },
+    {
+      "pid": 2785987,
+      "parent": 2785976,
+      "state": "S",
+      "userTicks": 0,
+      "systemTicks": 0,
+      "command": "bun run build"
+    },
+    {
+      "pid": 2785988,
+      "parent": 2785987,
+      "state": "S",
+      "userTicks": 0,
+      "systemTicks": 0,
+      "command": "/usr/bin/bash -c paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide && vite build && bun run test:client-build-boundary && bun run test:client-build-boundary-canary"
+    },
+    {
+      "pid": 2786118,
+      "parent": 2785988,
+      "state": "S",
+      "userTicks": 25486,
+      "systemTicks": 3146,
+      "command": "/usr/bin/node /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/.bin/vite build"
+    }
+  ],
+  "receipts": [
+    {
+      "name": "final-root-gates/build",
+      "status": "running",
+      "exitCode": null,
+      "startedAt": "2026-10-23T10:28:35.880356+00:00",
+      "finishedAt": null
+    },
+    {
+      "name": "final-root-gates/check-final",
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-10-23T10:15:13.549645+00:00",
+      "finishedAt": "2026-10-23T10:17:31.116297+00:00"
+    },
+    {
+      "name": "final-root-gates/check",
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-10-23T09:57:02.001128+00:00",
+      "finishedAt": "2026-10-23T09:59:23.031454+00:00"
+    },
+    {
+      "name": "final-root-gates/i18n-final",
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-10-23T10:15:10.373174+00:00",
+      "finishedAt": "2026-10-23T10:15:13.484185+00:00"
+    },
+    {
+      "name": "final-root-gates/i18n",
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-10-23T09:56:53.851471+00:00",
+      "finishedAt": "2026-10-23T09:56:57.295083+00:00"
+    },
+    {
+      "name": "final-root-gates/native55",
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-10-23T10:14:17.771093+00:00",
+      "finishedAt": "2026-10-23T10:14:45.965417+00:00"
+    },
+    {
+      "name": "final-root-gates/route-current-green-02",
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-10-23T10:13:31.718040+00:00",
+      "finishedAt": "2026-10-23T10:13:33.571827+00:00"
+    },
+    {
+      "name": "final-root-gates/route-current-green",
+      "status": "failed",
+      "exitCode": 1,
+      "startedAt": "2026-10-23T10:13:14.695088+00:00",
+      "finishedAt": "2026-10-23T10:13:16.724765+00:00"
+    },
+    {
+      "name": "final-root-gates/route-stale-red",
+      "status": "failed",
+      "exitCode": 1,
+      "startedAt": "2026-10-23T10:11:31.569415+00:00",
+      "finishedAt": "2026-10-23T10:11:33.964870+00:00"
+    },
+    {
+      "name": "final-root-gates/unit-final",
+      "status": "passed",
+      "exitCode": 0,
+      "startedAt": "2026-10-23T10:17:31.242058+00:00",
+      "finishedAt": "2026-10-23T10:28:35.773619+00:00"
+    },
+    {
+      "name": "final-root-gates/unit",
+      "status": "failed",
+      "exitCode": 1,
+      "startedAt": "2026-10-23T09:59:28.593094+00:00",
+      "finishedAt": "2026-10-23T10:11:12.234637+00:00"
+    }
+  ]
+}

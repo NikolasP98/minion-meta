@@ -1,0 +1,55 @@
+{
+  "fullLocalCi": {
+    "command": "pnpm run ci",
+    "exit": 1,
+    "log": "meta-ci-local.log",
+    "failure": "unchanged packages/shells-bridge/src/bridge.test.ts retry-count assertion under parallel run; expected >2, observed2"
+  },
+  "isolatedFailureRerun": {
+    "command": "pnpm --filter @minion-stack/shells-bridge exec vitest run src/bridge.test.ts --maxWorkers=1 --minWorkers=1",
+    "exit": 0,
+    "passed": 66,
+    "log": "meta-shells-isolated.log"
+  },
+  "completedGates": {
+    "build-all": "pass",
+    "typecheck-all": "pass",
+    "lint-all": "pass",
+    "shared-tests": 392,
+    "test-scripts": 163,
+    "index-check": "pass:294specs/891proposals/729rankings",
+    "repo-policy-validate": "pass",
+    "repo-policy-test": "pass",
+    "changeset-status": "pass"
+  },
+  "postFailureContinuation": {
+    "command": "pnpm run test:scripts && pnpm run index:check && pnpm run repo-policy:validate && pnpm run repo-policy:test && pnpm run changeset:status",
+    "exit": 0,
+    "evidence": "completion-aware exec session89086; canonical final documentation checks retained separately"
+  },
+  "scope": "No shell bridge code changed. Parallel local CI is not relabeled green by an isolated rerun; exact-head hosted CI will be recorded separately.",
+  "failureScopeSourceCheck": "packages/shells-bridge and pnpm-lock.yaml byte-unchanged from pinned base ce62073904c0a725ebb9e2591473e57873e79c4f; no SDK dependency in the failing test path was claimed",
+  "remainingPackageFollowthrough": {
+    "package": "@minion-stack/workforce-client",
+    "exit": 0,
+    "passed": 98,
+    "files": 28,
+    "log": "meta-workforce-followthrough.log"
+  },
+  "packageTestsObserved": {
+    "crm-sdk": 10,
+    "auth": 13,
+    "cli": 46,
+    "ui": 30,
+    "db": 32,
+    "shared": 392,
+    "env": 161,
+    "cache": 77,
+    "design-tokens": 15,
+    "shells-bridge": {
+      "initial": "156pass/1timingfailure",
+      "correctionEvidence": "66passinunchangedfailingfile; other3filespassedinitial"
+    },
+    "workforce-client": 98
+  }
+}

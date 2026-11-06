@@ -1,0 +1,15 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index b07e17d5495..7460a862883 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -15,6 +15,10 @@ Docs: https://docs.openclaw.ai
+ 
+ ### Fixes
+ 
++- Alert watcher: recover persisted classification and suggestion results after restart, retain per-call billing, and prevent automatic retries of uncertain sends.
++- Alert watcher: expire retained source, reply and queue payloads before recovery delivery while preserving duplicate-prevention records.
++- Cron: validate explicit agent and session bindings when jobs are added, updated and executed so invalid targets cannot fall back to another agent.
++
+ - Agents: explain unavailable Hub tools, stop discovery loops with bounded recovery, and keep malformed model control markup out of chat and reasoning. Preserve browser and canvas action labels in tool summaries. (#338) Thanks @NikolasP98.
+ 
+ - Agents: discover current authorized Hub queries, load tools within the same run, and stop repeated unproductive calls with a final explanation. Preserve SDK prompt rules and report Hub failures accurately. (#333) Thanks @NikolasP98.

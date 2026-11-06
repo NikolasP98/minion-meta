@@ -49,7 +49,7 @@
     data-part="radio"
   />
   <div class="min-w-0">
-    <label for={controlId} class="block text-[length:var(--font-size-body)] leading-[var(--line-height-body)] text-[var(--color-text-primary)]">
+    <label for={controlId} data-part="radio-label" class="block text-[length:var(--font-size-body)] leading-[var(--line-height-body)] text-[var(--color-text-primary)]">
       {label}{#if required}<span class="text-[var(--color-danger-fg)]" aria-hidden="true"> *</span>{/if}
     </label>
     {#if helper}

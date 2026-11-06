@@ -1,0 +1,32 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-03-hub-gw/hub
+
+ ❯ src/server/services/notifications/audience-projection.sql.integration.test.ts (7 tests | 1 failed) 4154ms
+     × uses the command tag for exact claim-role quarantine while terminal SELECT remains denied 139ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/notifications/audience-projection.sql.integration.test.ts > native notification audience projection > uses the command tag for exact claim-role quarantine while terminal SELECT remains denied
+PostgresError: new row violates row-level security policy for table "notification_outbox"
+ ❯ ErrorResponse node_modules/postgres/src/connection.js:815:30
+ ❯ handle node_modules/postgres/src/connection.js:489:6
+ ❯ Socket.data node_modules/postgres/src/connection.js:324:9
+ ❯ cachedError node_modules/postgres/src/query.js:170:23
+ ❯ new Query node_modules/postgres/src/query.js:36:24
+ ❯ sql node_modules/postgres/src/index.js:112:11
+ ❯ settleNotificationEventInTransaction src/server/services/notifications/outbox-settlement.ts:35:13
+     33|   await tx`select set_config('app.notification_generation',${lease.gen…
+     34|   const rows =
+     35|     await tx`update public.notification_outbox set state=${outcome ===…
+       |             ^
+     36|     completed_at=clock_timestamp(),quarantine_reason=${outcome === "pr…
+     37|     lease_owner=null,claimed_at=null,hard_deadline=null,lease_expires_…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 8 passed (9)
+   Start at  16:49:27
+   Duration  5.44s (transform 622ms, setup 99ms, import 1.24s, tests 4.24s, environment 0ms)
+

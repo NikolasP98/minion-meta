@@ -1,0 +1,37 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-03-hub-gw/hub
+
+ ❯ src/server/services/finance-summary.correctness.test.ts (8 tests | 1 failed) 3832ms
+     × excludes void-only customers and products from every economic ranking 45ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > excludes void-only customers and products from every economic ranking
+AssertionError: expected { revenue: 900, invoices: 1, …(5) } to match object { revenue: +0, invoices: +0, …(3) }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "invoices": 0,
++   "invoices": 1,
+    "loyal": false,
+-   "purchased": false,
++   "purchased": true,
+    "reservedOnly": false,
+-   "revenue": 0,
++   "revenue": 900,
+  }
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:123:20
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  21:37:35
+   Duration  5.12s (transform 311ms, setup 50ms, import 1.04s, tests 3.83s, environment 0ms)
+

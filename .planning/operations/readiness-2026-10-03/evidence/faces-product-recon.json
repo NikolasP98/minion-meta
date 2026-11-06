@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "reportId": "faces-product-recon-2026-10-03",
+  "generatedAt": "2026-10-03T03:35:00Z",
+  "verdict": "action_required",
+  "environment": "FACES production Hub Meta/Socials",
+  "mode": "read_only",
+  "mutationCount": 0,
+  "perspectives": ["clueless_user", "power_user", "product", "ux"],
+  "evidence": {
+    "databaseReceipt": "faces-product-probes.json",
+    "httpReceipt": "faces-http-probes.json",
+    "deploymentReceipt": "faces-deployment-inspect.json",
+    "jobDeltaReceipt": "faces-ad-job-delta.json",
+    "backendDossier": "../backend/faces-backend-recon.json",
+    "productionSourceRevisionAttested": false,
+    "sourceCausality": "high_confidence_inference_from_matching_live_state_and_current_source"
+  },
+  "findings": [
+    {
+      "id": "FACES-PROD-001",
+      "priority": "P1",
+      "title": "The Ads sync deterministically replays one completed 90-day window instead of advancing",
+      "productionEvidence": {
+        "jobStatus": "queued",
+        "jobCreatedAt": "2026-09-13T00:34:41.477Z",
+        "jobSince": "2026-06-15",
+        "businessDateFrontier": "2026-09-12",
+        "cumulativeRowsBefore": 284634,
+        "cumulativeRowsAfter": 284734,
+        "cumulativeDelta": 100,
+        "latestFetchBefore": "2026-10-03T03:20:32.356Z",
+        "latestFetchAfter": "2026-10-03T03:30:52.094Z",
+        "frontierAdvanced": false,
+        "factsRefetchedLast24h": 1693,
+        "refetchedDateRange": ["2026-06-15", "2026-09-12"]
+      },
+      "sourceEvidence": [
+        "src/server/services/meta/meta-sync.service.ts:912-979",
+        "src/server/services/meta/meta-sync-jobs.service.ts:215-258"
+      ],
+      "cause": "The per-slice cap returns a resume cursor before checking whether the current page has a next cursor. When the terminal page crosses the cap, the serialized resume has a window start but no next page. The next slice starts that window from page one again.",
+      "impact": "Paid KPIs and campaign reporting stop at September 12 while scheduled provider work continues every ten minutes.",
+      "repair": "On a terminal page, advance to the next window or target before returning a resume cursor; finish when no successor exists. Add a regression where a terminal page crosses the row cap and prove the first page is never replayed."
+    },
+    {
+      "id": "FACES-PROD-002",
+      "priority": "P1",
+      "title": "The UI reports connection and sync activity without exposing the stale paid-data boundary",
+      "productionEvidence": {
+        "connections": ["flb:active", "ig_login:active"],
+        "latestPaidFactDate": "2026-09-12",
+        "latestOrganicPostDate": "2026-10-02",
+        "latestInstagramMessageAt": "2026-10-03T03:29:46.000Z",
+        "newest20History": {"messages_tail_succeeded": 19, "posts_succeeded": 1},
+        "stuckAdsJobVisibleInNewest20": false
+      },
+      "sourceEvidence": [
+        "src/routes/(app)/socials/settings/+page.svelte:101-143",
+        "src/routes/(app)/socials/settings/+page.svelte:164-201",
+        "src/server/services/meta/meta-insights.service.ts:662-769",
+        "src/routes/(app)/socials/+page.server.ts:9-55",
+        "src/routes/(app)/socials/+page.svelte:172-203"
+      ],
+      "impact": "A user sees Active, receives Sync started after any 2xx response, and cannot see the old queued Ads job because high-frequency tail jobs displace it from the newest-20 table. Dashboard widgets combine data with different freshness dates and provide no as-of label.",
+      "repair": "Show active jobs ahead of recent terminal history, parse per-kind sync results, poll or refresh until terminal, and display the paid, post, and message freshness boundaries on the relevant surfaces."
+    },
+    {
+      "id": "FACES-PROD-003",
+      "priority": "P1",
+      "title": "Campaign lead attribution is a July heuristic snapshot, while the UI presents it as an ongoing lead feed",
+      "productionEvidence": {
+        "attributionRows": 5299,
+        "latestCaptureAt": "2026-07-17T19:29:47.547Z",
+        "provenanceValues": ["heuristic-icebreaker"],
+        "exactWebhookRows": 0,
+        "latestInstagramInboundAt": "2026-10-03T03:26:46.000Z",
+        "gatewayMetaMessagingChannelConfigured": false
+      },
+      "sourceEvidence": [
+        "src/routes/api/meta/attribution/+server.ts:10-68",
+        "src/server/services/meta/attribution.service.ts:175-217",
+        "src/routes/(app)/socials/campaigns/[campaignId]/+page.svelte:172-214",
+        "src/routes/(app)/socials/campaigns/[campaignId]/+page.svelte:301-331"
+      ],
+      "impact": "Campaign pages label the rows as leads from this campaign and show confidence, but omit provenance and capture freshness. Operators can treat a one-time model-derived backfill as current exact attribution.",
+      "repair": "Either qualify and wire the exact gateway referral relay, or explicitly label the current rows as a July heuristic snapshot. Display provenance and data-through time before using these counts for campaign decisions."
+    },
+    {
+      "id": "FACES-PROD-004",
+      "priority": "P2",
+      "title": "Successful post and message jobs conceal partial collection",
+      "productionEvidence": {
+        "latestPostJob": {"status": "succeeded", "postsProcessed": 245, "metricsDenied": 1, "metricsSkipped": 244},
+        "postMetricKeys": ["fb:shares_total", "ig:comments_total", "ig:reactions_total"],
+        "latestMessageTail": {"status": "succeeded", "instagramSkipped": 1},
+        "topFivePostPlatforms": {"ig": 5}
+      },
+      "sourceEvidence": [
+        "src/server/services/meta/meta-sync.service.ts:982-1110",
+        "src/server/services/meta/meta-insights.service.ts:407-454",
+        "src/server/services/meta/meta-insights.service.ts:476-495",
+        "src/routes/(app)/socials/+page.svelte:111-168"
+      ],
+      "impact": "Green job status does not mean all targets or metrics were collected. The top-post score sums whatever metrics happen to exist, so FACES ranks Instagram reactions/comments against Facebook shares and the current top five are all Instagram.",
+      "repair": "Introduce complete, partial, and failed outcome states per target and metric family. Define a comparable ranking metric or separate platform leaderboards, and show missing-permission coverage in the UI."
+    },
+    {
+      "id": "FACES-PROD-005",
+      "priority": "P2",
+      "title": "Sync failures retain and expose unbounded provider error payloads",
+      "productionEvidence": {
+        "largestAdsErrorBytes": 122491,
+        "largestPostsErrorBytes": 3823,
+        "sensitiveMarkersObserved": false
+      },
+      "sourceEvidence": [
+        "src/server/services/meta/meta-sync-jobs.service.ts:261-272",
+        "src/server/services/meta/meta-insights.service.ts:732-769",
+        "src/routes/(app)/socials/settings/+page.svelte:125-143",
+        "src/routes/(app)/socials/settings/+page.svelte:347-371"
+      ],
+      "impact": "A future failure can add a very large raw provider string to the page payload, search index, rendered table, and export. The current retained errors had no access-token, authorization, app-secret-proof, URL, or HTML markers, but size remains uncontrolled.",
+      "repair": "Persist a bounded operator-safe summary and error class with a correlation id. Keep full diagnostics only in a size-bounded restricted log."
+    }
+  ],
+  "strengths": [
+    "All nine expected Meta and message read-model tables exist in production.",
+    "Four assets are enabled: one ad account, two Instagram assets, and one page; paid currency resolves consistently to PEN.",
+    "All 1084 observed post-media rows are mirrored with zero retained media errors.",
+    "Instagram message ingestion was current within minutes of the probe.",
+    "Unauthenticated Socials routes redirect to login and the read API rejects missing authentication.",
+    "The dashboard grid has a source-defined single-column container fallback below 620px."
+  ],
+  "limitations": [
+    "No authenticated browser session was used; rendered visual behavior is not certified.",
+    "No provider-side token introspection or Meta API call was made.",
+    "Vercel inspection confirmed a READY production deployment but did not expose its source revision. Source causality is therefore an inference supported by the matching live job progression, not a deployment-SHA attestation.",
+    "The timeout-aborted aggregate attempt wrote nothing because the transaction was read only; the final receipt completed all 21 bounded probes."
+  ]
+}

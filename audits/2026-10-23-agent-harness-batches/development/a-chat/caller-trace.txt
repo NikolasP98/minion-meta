@@ -1,0 +1,124 @@
+src/lib/components/layout/FloatingAssistant.svelte:9:  import { observePreparation } from '$lib/assistant/decision-events';
+src/lib/components/layout/FloatingAssistant.svelte:11:    createAcceptedSurface,
+src/lib/components/layout/FloatingAssistant.svelte:12:    sourceMessageRun,
+src/lib/components/layout/FloatingAssistant.svelte:67:    requestRouteDecisionWithEvidence,
+src/lib/components/layout/FloatingAssistant.svelte:312:  const acceptedSurface = createAcceptedSurface({
+src/lib/components/layout/FloatingAssistant.svelte:314:    followUp: async (parent, results) => sendCallback('', 'ui_followup', parent, results),
+src/lib/components/layout/FloatingAssistant.svelte:350:    const observation = observePreparation(pending, 'user');
+src/lib/components/layout/FloatingAssistant.svelte:360:      const evidence = await requestRouteDecisionWithEvidence(
+src/lib/components/layout/FloatingAssistant.svelte:375:          binding: { pending, surface: acceptedSurface, origin: 'user' },
+src/lib/components/layout/FloatingAssistant.svelte:415:    const observation = observePreparation(pending, origin, parent);
+src/lib/components/layout/FloatingAssistant.svelte:422:          binding: { pending, surface: acceptedSurface, origin, parent },
+src/lib/components/layout/FloatingAssistant.svelte:545:  function stopReply() {
+src/lib/components/layout/FloatingAssistant.svelte:1199:                      sendCallback(text, 'artifact', sourceMessageRun(msg))}
+src/lib/components/layout/FloatingAssistant.svelte:1200:                    onChoice={(text) => sendCallback(text, 'ui_choice', sourceMessageRun(msg))}
+src/routes/(app)/home/+page.svelte:2:  import { observePreparation } from '$lib/assistant/decision-events';
+src/routes/(app)/home/+page.svelte:4:    createAcceptedSurface,
+src/routes/(app)/home/+page.svelte:5:    sourceMessageRun,
+src/routes/(app)/home/+page.svelte:56:    requestRouteDecisionWithEvidence,
+src/routes/(app)/home/+page.svelte:692:  const acceptedSurface = createAcceptedSurface({
+src/routes/(app)/home/+page.svelte:694:    followUp: (parent, results) =>
+src/routes/(app)/home/+page.svelte:716:  function stopReply() {
+src/routes/(app)/home/+page.svelte:744:    const observation = observePreparation(pending, relation.origin ?? 'user', relation.parent);
+src/routes/(app)/home/+page.svelte:749:        const evidence = await requestRouteDecisionWithEvidence(text, languageTag(), '/home', {
+src/routes/(app)/home/+page.svelte:764:          binding: {
+src/routes/(app)/home/+page.svelte:1163:                            parent: sourceMessageRun(row.msg),
+src/routes/(app)/home/+page.svelte:1168:                            parent: sourceMessageRun(row.msg),
+src/routes/(app)/home/+page.svelte:1274:                          parent: sourceMessageRun(streamTurnMessage),
+src/routes/(app)/home/+page.svelte:1279:                          parent: sourceMessageRun(streamTurnMessage),
+src/lib/services/gateway.svelte.ts:2:  claimRunFinal,
+src/lib/services/gateway.svelte.ts:4:  associateRunMessage,
+src/lib/services/gateway.svelte.ts:91:import { runAssistantUiCalls } from '$lib/assistant/dispatch';
+src/lib/services/gateway.svelte.ts:1338:    const binding = claimRunFinal(payload.runId, sk);
+src/lib/services/gateway.svelte.ts:1339:    if (binding) associateRunMessage(finalMsg, binding);
+src/lib/services/gateway.svelte.ts:1342:      if (binding) associateRunMessage(committed, binding);
+src/lib/services/gateway.svelte.ts:1356:      void runAssistantUiCalls(agentId, extractText(finalMsg) ?? '', sk, binding);
+src/lib/services/gateway.svelte.ts:1358:    if (binding && chat.streamMessage) associateRunMessage(chat.streamMessage, binding);
+src/lib/services/gateway/chat-rpc.ts:2:  registerSubmittedRun,
+src/lib/services/gateway/chat-rpc.ts:3:  observeRunTransport,
+src/lib/services/gateway/chat-rpc.ts:4:  submittedRun,
+src/lib/services/gateway/chat-rpc.ts:319:  const binding = opts.binding ? registerSubmittedRun(runId, opts.binding) : null;
+src/lib/services/gateway/chat-rpc.ts:330:    if (binding) observeRunTransport(binding, 'rejected');
+src/lib/services/gateway/chat-rpc.ts:334:  if (binding) submittedRun(binding);
+src/lib/services/gateway/chat-rpc.ts:372:        observeRunTransport(binding, 'accepted');
+src/lib/services/gateway/chat-rpc.ts:375:      if (binding) observeRunTransport(binding, 'unknown');
+src/lib/assistant/forms.ts:57:    context?: { signal: AbortSignal },
+src/lib/assistant/forms.ts:104:        const signal = AbortSignal.any([context.signal, ac.signal]);
+src/lib/assistant/forms.ts:105:        if (signal.aborted) return { error: 'canceled' };
+src/lib/assistant/forms.ts:106:        const r = await binding.set(input, { signal });
+src/lib/assistant/forms.ts:107:        if (signal.aborted) return { error: 'canceled' };
+src/lib/assistant/forms.ts:123:    { signal: ac.signal },
+src/routes/(app)/sandbox/+page.svelte:14:  import { createPageContextLease } from '$lib/assistant/page-context';
+src/routes/(app)/sandbox/+page.svelte:23:  const pageLease = createPageContextLease(
+src/routes/(app)/sandbox/+page.svelte:29:    publish: (elements, capability) => pageLease.update(canvasSummary(elements), capability),
+src/routes/(app)/sandbox/+page.svelte:86:                signal: AbortSignal;
+src/routes/(app)/sandbox/+page.svelte:87:                acknowledge: typeof host.load;
+src/routes/(app)/sandbox/+page.svelte:90:          ).registerSandboxTools?.({ signal: ac.signal, acknowledge: host.load }),
+src/lib/sandbox/host.svelte.ts:23:  published: boolean;
+src/lib/sandbox/host.svelte.ts:65:    publish: (elements: SandboxElementRecord[], capability?: InvocationCapability) => boolean;
+src/lib/sandbox/host.svelte.ts:118:  async function load(capability?: InvocationCapability, signal?: AbortSignal): Promise<boolean> {
+src/lib/sandbox/host.svelte.ts:120:    if (!capability) publication?.begin();
+src/lib/sandbox/host.svelte.ts:123:      const res = await fetch(ELEMENTS_URL, { headers: { accept: 'application/json' }, signal });
+src/lib/sandbox/host.svelte.ts:128:      // Snapshot and model summary are published in the same synchronous turn.
+src/lib/sandbox/host.svelte.ts:129:      const acknowledged = publication?.publish(next, capability) ?? !capability;
+src/lib/sandbox/host.svelte.ts:130:      if (capability && !acknowledged) return false;
+src/routes/(app)/stock/entries/new/+page.svelte:363:      set: async (v, ctx = { signal: new AbortController().signal }) => {
+src/routes/(app)/stock/entries/new/+page.svelte:372:          if (ctx.signal.aborted) return { rejected };
+src/routes/(app)/stock/entries/new/+page.svelte:381:            { signal: ctx.signal },
+src/routes/(app)/stock/entries/new/+page.svelte:383:          if (ctx.signal.aborted) return { rejected };
+src/routes/(app)/stock/entries/new/+page.svelte:385:          if (ctx.signal.aborted) return { rejected };
+src/lib/sandbox/tools.ts:123:  acknowledge?: (capability?: InvocationCapability, signal?: AbortSignal) => Promise<boolean>,
+src/lib/sandbox/tools.ts:125:  const refresh = async (id: string, capability?: InvocationCapability, signal?: AbortSignal) => {
+src/lib/sandbox/tools.ts:126:    if (acknowledge) {
+src/lib/sandbox/tools.ts:127:      const refreshed = await acknowledge(capability, signal);
+src/lib/sandbox/tools.ts:145:          await fetchJson<unknown>('/api/sandbox/datasets', { signal: ctx.signal }),
+src/lib/sandbox/tools.ts:174:          signal: ctx.signal,
+src/lib/sandbox/tools.ts:220:            signal: ctx.signal,
+src/lib/sandbox/tools.ts:224:        return { id: savedId, ...(await refresh(savedId, ctx.capability, ctx.signal)) };
+src/lib/sandbox/tools.ts:242:          signal: ctx.signal,
+src/lib/sandbox/tools.ts:244:        return { ok: true, id, ...(await refresh(id, ctx.capability, ctx.signal)) };
+src/lib/sandbox/tools.ts:257:          await fetchJson<unknown>('/api/sandbox/elements', { signal: ctx.signal }),
+src/lib/sandbox/tools.ts:309:          if (ctx.signal.aborted) {
+src/lib/sandbox/tools.ts:318:              signal: ctx.signal,
+src/lib/sandbox/tools.ts:325:        return { updated, failed, ...(await refresh('*', ctx.capability, ctx.signal)) };
+src/lib/sandbox/tools.ts:333: * Register the sandbox tools for the page's lifetime. Abort `signal` (on
+src/lib/sandbox/tools.ts:338:  signal: AbortSignal;
+src/lib/sandbox/tools.ts:339:  acknowledge?: (capability?: InvocationCapability, signal?: AbortSignal) => Promise<boolean>;
+src/lib/sandbox/tools.ts:341:  for (const tool of sandboxTools(opts.acknowledge)) registerTool(tool, { signal: opts.signal });
+src/lib/assistant/global-tools.ts:87:        if (ctx.signal.aborted) return { error: 'canceled' };
+src/lib/assistant/global-tools.ts:93:            ctx.signal.removeEventListener('abort', finish);
+src/lib/assistant/global-tools.ts:97:          ctx.signal.addEventListener('abort', finish, { once: true });
+src/lib/assistant/global-tools.ts:99:        if (ctx.signal.aborted) return { error: 'canceled' };
+src/routes/(app)/pos/sell/+page.svelte:527:  // acknowledged only after its cart/customer bytes pass current-scope
+src/routes/(app)/pos/sell/+page.svelte:714:      set: async (v, ctx = { signal: new AbortController().signal }) => {
+src/routes/(app)/pos/sell/+page.svelte:728:              signal: ctx.signal,
+src/routes/(app)/pos/sell/+page.svelte:730:            if (ctx.signal.aborted) return { filled, rejected };
+src/routes/(app)/pos/sell/+page.svelte:735:          if (ctx.signal.aborted) return { filled, rejected };
+src/lib/components/pos/CustomerPicker.svelte:143:    // the signal behind the "leyla rondon" report. Shape only, never the term.
+src/lib/components/pos/CustomerPicker.svelte:173:    options: { signal?: AbortSignal } = {},
+src/lib/components/pos/CustomerPicker.svelte:175:    if (options.signal?.aborted) return;
+src/lib/components/pos/CustomerPicker.svelte:185:        signal: options.signal,
+src/lib/components/pos/CustomerPicker.svelte:187:      if (options.signal?.aborted) return;
+src/lib/components/pos/CustomerPicker.svelte:193:        if (options.signal?.aborted) return;
+src/lib/components/pos/CustomerPicker.svelte:205:      if (options.signal?.aborted) return;
+src/lib/components/pos/CustomerPicker.svelte:210:      if (!options.signal?.aborted) {
+src/lib/components/pos/CustomerPicker.svelte:407:           the same `crm:edit` capability, so the affordance is absent for a role
+src/lib/components/scheduling/BookingCreateForm.svelte:163:  async function loadSlots(_event?: unknown, signal?: AbortSignal) {
+src/lib/components/scheduling/BookingCreateForm.svelte:188:        { signal },
+src/lib/components/scheduling/BookingCreateForm.svelte:190:      if (signal?.aborted) return;
+src/lib/components/scheduling/BookingCreateForm.svelte:194:        signal?.aborted ||
+src/lib/components/scheduling/BookingCreateForm.svelte:213:        signal?.aborted ||
+src/lib/components/scheduling/BookingCreateForm.svelte:240:      set: async (v, ctx = { signal: new AbortController().signal }) => {
+src/lib/components/scheduling/BookingCreateForm.svelte:266:          await loadSlots(undefined, ctx.signal);
+src/lib/components/scheduling/BookingCreateForm.svelte:267:          if (ctx.signal.aborted) return { filled, rejected };
+src/lib/components/scheduling/BookingCreateForm.svelte:292:              signal: ctx.signal,
+src/lib/components/scheduling/BookingCreateForm.svelte:294:            if (ctx.signal.aborted) return { filled, rejected };
+src/lib/components/scheduling/BookingCreateForm.svelte:299:          if (ctx.signal.aborted) return { filled, rejected };
+src/lib/components/scheduling/BookingCreateForm.svelte:310:              { signal: ctx.signal },
+src/lib/components/scheduling/BookingCreateForm.svelte:312:            if (ctx.signal.aborted) return { filled, rejected };
+src/lib/components/scheduling/BookingCreateForm.svelte:325:            { signal: ctx.signal },
+src/lib/components/scheduling/BookingCreateForm.svelte:327:          if (ctx.signal.aborted) return { filled, rejected };
+src/lib/components/scheduling/BookingCreateForm.svelte:389:          primary: async (signal) => {
+src/lib/components/scheduling/BookingCreateForm.svelte:394:              signal,
+src/lib/components/scheduling/BookingCreateForm.svelte:400:          followup: async (bookingId, signal) => {
+src/lib/components/scheduling/BookingCreateForm.svelte:406:              signal,

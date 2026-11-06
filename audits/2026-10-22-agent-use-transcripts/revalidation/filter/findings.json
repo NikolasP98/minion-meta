@@ -1,0 +1,76 @@
+{
+  "source": {
+    "gateway": "6d1cd8836ff7b82d21668c50cc20b9b6d1e79c18",
+    "hub": "b677a5d91a2b653211a1655465b2b5fd398efc2a"
+  },
+  "findings": [
+    {
+      "id": "F-01",
+      "severity": "high",
+      "status": "reproduced-offline",
+      "finding": "Unscoped message ID dedup drops unrelated chat/account events",
+      "source": [
+        "extensions/alert-watcher/src/dedup.ts:46-48",
+        "extensions/alert-watcher/index.ts:641-642",
+        "src/channels/impl/telegram/bot-handlers.ts:140-151"
+      ],
+      "proof": "revalidation.filter.test.ts: drops a different chat with same message ID before classification",
+      "impact": "Two distinct chat messages sharing raw ID produce only one classifier call and alert."
+    },
+    {
+      "id": "F-02",
+      "severity": "high",
+      "status": "reproduced-offline",
+      "finding": "Agent-subscription adapter discards actual message and conversation identity",
+      "source": [
+        "src/auto-reply/reply/dispatch-from-config.ts:265-289",
+        "extensions/alert-watcher/index.ts:864-871"
+      ],
+      "proof": "revalidation.filter.test.ts: classifies duplicate inbound and actual dispatch-shaped received events twice",
+      "impact": "Channel+agent subscription produces two classifier calls/two sends; agent-origin chat becomes unknown."
+    },
+    {
+      "id": "F-03",
+      "severity": "medium",
+      "status": "reproduced-offline",
+      "finding": "Classification failure consumes in-memory dedup key without retryable work record",
+      "source": [
+        "extensions/alert-watcher/index.ts:641-642",
+        "extensions/alert-watcher/index.ts:715-717",
+        "extensions/alert-watcher/index.ts:743-750"
+      ],
+      "proof": "revalidation.filter.test.ts: marks failed classification seen, so redelivery does not retry it",
+      "impact": "Provider outage loses alert classification until dedup eviction/restart; existing boot retry covers only already-inserted positive notifications."
+    },
+    {
+      "id": "F-04",
+      "severity": "medium",
+      "status": "reproduced-offline",
+      "finding": "Shared DroneHost model attribution race undermines per-model cost baseline",
+      "source": [
+        "src/drones/host.ts:27-39",
+        "src/drones/host.ts:83-105",
+        "extensions/alert-watcher/index.ts:103-107",
+        "extensions/alert-watcher/index.ts:341-344"
+      ],
+      "proof": "revalidation.host.test.ts",
+      "impact": "Earlier model-a run completion priced/tagged model-b after overlapping resolve; risk requires different configured concurrent models."
+    },
+    {
+      "id": "F-05",
+      "severity": "proposal-correction",
+      "status": "source-and-offline-confirmed",
+      "finding": "Best-new-pilot ranking unsubstantiated; matcher is optional and rubric-configurable",
+      "source": [
+        "src/plugins/config-state.ts:17-21",
+        "src/plugins/config-state.ts:165-195",
+        "extensions/alert-watcher/index.ts:113-142",
+        "extensions/alert-watcher/src/classifier.ts:42-57",
+        "extensions/alert-watcher/index.ts:379-398"
+      ],
+      "impact": "No current activation/volume observed. Complaint-only gate cannot suppress arbitrary custom alert rules. Preserve as conditional experiment only."
+    }
+  ],
+  "no_live_calls": true,
+  "product_code_modified": false
+}

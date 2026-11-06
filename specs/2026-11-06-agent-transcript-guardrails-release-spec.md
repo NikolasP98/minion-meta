@@ -15,6 +15,10 @@ type: fix
 
 # Agent transcript corrections and release qualification
 
+## Spec Kit adoption record
+
+The current-layout [Spec Kit draft](111-agent-transcript-guardrails/spec.md) and [quality checklist](111-agent-transcript-guardrails/checklists/requirements.md) preserve the proposed outcomes and disclose the historical ordering exception. Owner decisions and security/data approval remain open; this is not retrospective approval or production adoption.
+
 ## 0. Product
 
 The user asked to inspect real agent chats for skipped checks or assumptions, find EGM approaches to each code finding, test them, and report when the changes are live. The source audit and tested-candidate exercise are complete. Release preparation now ports those candidates into isolated feature branches with fresh lockfile installs and repository checks. This artifact remains in review; human security/data approval and merge gates remain open. No production release is claimed.

@@ -1,0 +1,43 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway
+
+ ❯ |extensions| extensions/alert-watcher/suggestion-recovery.test.ts (3 tests | 3 failed) 87703ms
+   × actual watcher suggestion kill after admitted never recalls and recovers locally 30026ms
+   × actual watcher suggestion kill after received never recalls and recovers locally 27577ms
+   × actual watcher suggestion kill after materialized never recalls and recovers locally 30013ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |extensions| extensions/alert-watcher/suggestion-recovery.test.ts > actual watcher suggestion kill after admitted never recalls and recovers locally
+ FAIL  |extensions| extensions/alert-watcher/suggestion-recovery.test.ts > actual watcher suggestion kill after materialized never recalls and recovers locally
+Error: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ extensions/alert-watcher/suggestion-recovery.test.ts:65:3
+     63| }
+     64| for (const stage of ["admitted", "received", "materialized"]) {
+     65|   it(`actual watcher suggestion kill after ${stage} never recalls and …
+       |   ^
+     66|     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "suggestio…
+     67|     directories.push(directory);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/suggestion-recovery.test.ts > actual watcher suggestion kill after received never recalls and recovers locally
+Error: barrier timeout: 
+ ❯ barrier extensions/alert-watcher/suggestion-recovery.test.ts:58:9
+     56|     await new Promise((resolve) => setTimeout(resolve, 25));
+     57|   }
+     58|   throw Error(`barrier timeout: ${process.stderr()}`);
+       |         ^
+     59| }
+     60| function calls(directory: string, name: string) {
+ ❯ extensions/alert-watcher/suggestion-recovery.test.ts:69:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  3 failed | 20 passed (23)
+   Start at  09:45:24
+   Duration  166.53s (transform 50.12s, setup 490ms, import 76.80s, tests 88.50s, environment 72ms)
+

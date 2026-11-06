@@ -134,6 +134,20 @@ Each subproject remains its own git repo with its own remote, branch, package ma
 
 Design spec: [`specs/2026-04-19-minion-meta-repo-design.md`](specs/2026-04-19-minion-meta-repo-design.md).
 
+### Release notes
+
+`minion_hub`'s in-app `/changelog` is generated, not hand-written:
+`.github/workflows/release-notes.yml` runs on every push to hub `master`, groups merged PR
+titles since the last `hub-v*` tag by conventional prefix (`feat`→Nuevo, `fix`→Arreglado,
+else→Interno) and scope, tags the release (`hub-vYYYY.MM.DD[-n]`), and POSTs it to
+`/api/releases` (`app_releases` row + one global `app.update` notification). hub `master`
+is PR-only, so no `CHANGELOG.md` commit is pushed — the tag and the `app_releases` row are
+the artifacts; a push with no merged PR since the last tag creates nothing. The Action
+authenticates with the `RELEASES_SECRET` repo secret (same value as the Vercel production
+env of that name). **PR titles are the changelog** —
+write them as a user-facing sentence with a conventional prefix and scope
+(`feat(pos): one open shift per user`), not an internal implementation note.
+
 ## Architecture Overview
 
 ### Cross-Project Data Flow
@@ -151,7 +165,7 @@ minion/ (gateway)
   └── REST API + CLI
 
 minion_hub/ ←──shared DB──→ minion_site/
-  (@minion-stack/db schema + @minion-stack/auth factory — identical config both sides)
+  (shared schema packages; Hub uses Supabase Auth, Site uses Better Auth)
 ```
 
 ### Gateway Protocol
@@ -162,9 +176,9 @@ Connection flow: WS connect → `connect.challenge` event → `connect` request 
 
 ### Multi-Tenant Database
 
-`minion_hub` and `minion_site` share a database (Drizzle ORM + LibSQL/Turso). Local dev: SQLite file (`file:./data/minion_hub.db`). Production: Turso. Auth: `minion_hub` uses Supabase Auth (GoTrue); `minion_site` uses Better Auth 1.4.19.
+The Hub uses canonical PostgreSQL domain data through Drizzle and org-scoped `CoreCtx`/`withOrgCore` access. Legacy LibSQL/Turso tables remain compatibility surfaces; do not assume a SQLite-only fixture exercises production behavior. Read each subproject's database setup and migrations before changing shared schema. The Hub authenticates with Supabase Auth (GoTrue); the Site uses Better Auth and has a separate session.
 
-Hub DB has 35+ schema tables covering: agents, sessions, chat-messages, servers, channels, skills, reliability-events, missions, tasks, marketplace, workshop-saves, users, settings, and more. Schema files: `minion_hub/src/server/db/schema/`.
+Hub schema definitions live in `minion_hub/src/server/db/`, including PostgreSQL domain files and legacy compatibility schemas. Canonical shared definitions are published through `@minion-stack/db`; inspect consumers and migrations before changing them.
 
 ## Subproject Details
 
@@ -332,6 +346,25 @@ non-trivial) → deploy (branch-triggered) → post-merge verification
   anchors/evidence), TO-BE (desired observable behavior + invariants), and the
   DELTA (exact transitions, tests proving each) — see the templates.
 - Security/data-tagged work always keeps human gates at approval AND merge.
+
+## Spec-driven workflow (Spec Kit) — normative
+
+Owner directive (2026-10-15): every implementation — feature, change, or fix, in any
+subproject — is specified with [GitHub Spec Kit](https://speckit.org/) before code is written.
+The toolkit is installed at the meta root (`.specify/` + `.claude/skills/speckit-*`; CLI
+`specify`, installed with `uv tool install specify-cli`). Its constitution,
+`.specify/memory/constitution.md`, binds Spec Kit artifacts to the SDLC contract below.
+
+- Order: `/speckit-specify` → (`/speckit-clarify`) → `/speckit-plan` → `/speckit-tasks` →
+  (`/speckit-analyze`) → `/speckit-implement` → `/speckit-converge`. A hotfix may compress the
+  cycle but still produces a `spec.md` naming what it bypassed and why.
+- Artifacts live in `specs/<NNN>-<slug>/` (`spec.md`, `plan.md`, `tasks.md`, …).
+  `scripts/spec-index.mjs` reads only top-level `specs/*.md`, so a feature that must appear on
+  the board also gets a top-level stub spec with `TEMPLATE.md` frontmatter pointing at its
+  Spec Kit directory. Subproject code still ships from that repository's own worktree and
+  branch per the Project Map.
+- Start sessions from the meta root: the `/speckit-*` skills and `.specify/` scripts are not
+  visible from a subproject directory.
 
 ## Orchestration Guide
 

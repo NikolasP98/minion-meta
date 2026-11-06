@@ -1,0 +1,12 @@
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[src/gateway/server-core/server-cron.binding.test.ts:163:77]
+ 162 |  expect(capture.version).toBe(1);expect(capture.requests).toHaveLength(2);expect(new Set(capture.requests.map((request)=>request.params.agentId)).size).toBe(2);
+ 163 |  const schedule=capture.requests[0].params.schedule;if(schedule.kind!=="at")throw Error("expected captured one-shot schedule");
+     :                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 164 |  const clock=vi.spyOn(Date,"now").mockReturnValue(Date.parse(schedule.at)-1000),f=fixture();
+     `----
+  help: Replace `throw Error("expected captured one-shot schedule");` with `{throw Error("expected captured one-shot schedule");}`.
+
+Found 0 warnings and 1 error.
+Finished in 5.9s on 56 files with 134 rules using 4 threads.

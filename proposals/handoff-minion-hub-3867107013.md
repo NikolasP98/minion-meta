@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-3867107013
 title: Handoff marker — src/lib/components/workshop/WorkshopCanvas.svelte (minion_hub)
-status: draft
+status: review
 created: 2026-09-12
-updated: 2026-09-17
+updated: 2026-11-06
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-e2abba73de07
 ---
 
 # Handoff marker — src/lib/components/workshop/WorkshopCanvas.svelte
@@ -24,7 +25,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-09-17)
+## Markers (as of 2026-11-06)
 
 - `NikolasP98/minion_hub@master src/lib/components/workshop/WorkshopCanvas.svelte:1724` — Full Workshop composition/camera and keyboard relationship/element
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/workshop/WorkshopCanvas.svelte#L1724

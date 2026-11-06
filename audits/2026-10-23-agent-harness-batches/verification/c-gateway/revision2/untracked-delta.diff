@@ -1,0 +1,1564 @@
+--- revision1/extensions/alert-watcher/src/authority.test.ts
++++ revision2/extensions/alert-watcher/src/authority.test.ts
+@@ -114,6 +114,13 @@
+   } as unknown as MinionPluginApi;
+   plugin.register(api);
+   await service!.start({ stateDir: dir, config: cfg, logger: api.logger });
++  // Service start launches a bounded tick without awaiting it. Quiesce that
++  // existing tick before each case changes authority and admits its first source.
++  await (
++    globalThis as unknown as {
++      __minion_alert_watcher_state__: { certified: { tick: () => Promise<void> } };
++    }
++  ).__minion_alert_watcher_state__.certified.tick();
+   stops.push(() => service.stop());
+   const db = new DatabaseSync(path.join(dir, "plugins/alert-watcher/alerts.db"));
+   stops.push(async () => db.close());
+--- revision1/extensions/alert-watcher/src/classification-work.test.ts
++++ revision2/extensions/alert-watcher/src/classification-work.test.ts
+@@ -1,6 +1,7 @@
+ import fs from "node:fs";
+ import os from "node:os";
+ import path from "node:path";
++import { DatabaseSync } from "node:sqlite";
+ import { describe, it, expect } from "vitest";
+ import {
+   admitSource,
+@@ -18,7 +19,7 @@
+ import { exportComplaintEvaluation } from "./complaint-evaluation.js";
+ import { snapshotHash } from "./provenance.js";
+ import { initReplySchema } from "./reply-flow/store.js";
+-import { initSchema } from "./store.js";
++import { initSchema, getRetryablePendingNotifications } from "./store.js";
+ import { testDb, workFixture } from "./work-test-fixtures.js";
+ const negative = {
+   ok: true as const,
+@@ -135,16 +136,48 @@
+   it("migrates old schema twice and never cascades tombstones when complaint rows are removed", () => {
+     const directory = fs.mkdtempSync(path.join(os.tmpdir(), "watcher-migrate-"));
+     const file = path.join(directory, "alerts.db");
+-    const db = testDb(file);
+-    initSchema(db);
+-    initReplySchema(db);
++    const db = new DatabaseSync(file);
++    db.exec(`CREATE TABLE complaints(id INTEGER PRIMARY KEY AUTOINCREMENT,agent_id TEXT,channel_id TEXT NOT NULL,chat_id TEXT NOT NULL,from_sender TEXT NOT NULL,content TEXT NOT NULL,is_complaint INTEGER NOT NULL DEFAULT 0,severity TEXT NOT NULL DEFAULT 'low',category TEXT NOT NULL DEFAULT 'other',summary TEXT NOT NULL DEFAULT '',created_at INTEGER NOT NULL,notified_at INTEGER,notify_attempts INTEGER NOT NULL DEFAULT 0);
++      CREATE TABLE pending_replies(id INTEGER PRIMARY KEY AUTOINCREMENT,alert_id INTEGER NOT NULL REFERENCES complaints(id),origin_channel TEXT NOT NULL,origin_account_id TEXT,origin_chat_id TEXT NOT NULL,destinations_json TEXT NOT NULL,suggestions_json TEXT NOT NULL,language TEXT,expires_at INTEGER NOT NULL,claimed_by TEXT,claimed_at INTEGER,reply_text TEXT,reply_kind TEXT,forwarded_ok INTEGER,created_at INTEGER NOT NULL);
++      INSERT INTO complaints(channel_id,chat_id,from_sender,content,is_complaint,summary,created_at) VALUES('telegram','legacy-chat','legacy-sender','legacy-body',1,'legacy-summary',1);
++      INSERT INTO pending_replies(alert_id,origin_channel,origin_chat_id,destinations_json,suggestions_json,expires_at,created_at) VALUES(1,'telegram','legacy-chat','["owner"]','["reply"]',9999999999999,1);`);
++    expect(
++      db.prepare("SELECT count(*) n FROM sqlite_master WHERE name='classification_work'").get(),
++    ).toEqual({ n: 0 });
++    for (let pass = 0; pass < 2; pass++) {
++      initSchema(db);
++      initReplySchema(db);
++    }
++    expect(
++      db.prepare("SELECT id,content,summary,delivery_disposition FROM complaints").get(),
++    ).toEqual({
++      id: 1,
++      content: "legacy-body",
++      summary: "legacy-summary",
++      delivery_disposition: "legacy_unreconciled",
++    });
++    expect(
++      db
++        .prepare(
++          "SELECT id,destinations_json,suggestions_json,receipt_binding FROM pending_replies",
++        )
++        .get(),
++    ).toEqual({
++      id: 1,
++      destinations_json: '["owner"]',
++      suggestions_json: '["reply"]',
++      receipt_binding: null,
++    });
++    expect(getRetryablePendingNotifications(db, 3)).toEqual([]);
++    expect(db.prepare("SELECT count(*) n FROM classification_work").get()).toEqual({ n: 0 });
++    expect(db.prepare("SELECT count(*) n FROM alert_delivery_receipts").get()).toEqual({ n: 0 });
+     const row = admitSource(db, "n", workFixture());
+     expect(row.kind).toBe("admitted");
+     const columns = db.prepare("PRAGMA table_info(pending_replies)").all() as Array<{
+       name: string;
+     }>;
+     expect(columns.map((c) => c.name)).toContain("receipt_binding");
+-    db.exec("DELETE FROM complaints");
++    db.exec("DELETE FROM pending_replies; DELETE FROM complaints");
+     expect(db.prepare("SELECT count(*) n FROM classification_work").get()).toEqual({ n: 1 });
+     retireNamespace(db, "n");
+     expect(
+--- revision1/extensions/alert-watcher/src/classification-work.ts
++++ revision2/extensions/alert-watcher/src/classification-work.ts
+@@ -6,6 +6,7 @@
+ import { type BoundAuthority, type WatcherAuthority, sameAuthority } from "./authority.js";
+ import type { ClassifierOverrides } from "./classifier.js";
+ import type { CooldownConfig } from "./cooldown.js";
++import { redactDeliveryEvidence } from "./delivery-evidence.js";
+ import type { Destination } from "./destinations.js";
+ import type { ExperimentMode } from "./jev-shadow-eligibility.js";
+ import {
+@@ -723,7 +724,7 @@
+         .all(row.id) as Array<{ id: string; provider_receipts: string }>;
+       for (const delivery of deliveries) {
+         db.prepare("UPDATE alert_delivery_receipts SET provider_receipts=? WHERE id=?").run(
+-          boundedJson({ receiptHash: snapshotHash(JSON.parse(delivery.provider_receipts)) }),
++          redactDeliveryEvidence(delivery.provider_receipts),
+           delivery.id,
+         );
+       }
+--- revision1/extensions/alert-watcher/src/delivery-bridge.test.ts
++++ revision2/extensions/alert-watcher/src/delivery-bridge.test.ts
+@@ -3,6 +3,10 @@
+ import path from "node:path";
+ import { afterEach, it, expect, vi } from "vitest";
+ import { readDeliveryTombstone } from "../../../src/infra/outbound/delivery-queue-files.js";
++import {
++  initializeGlobalHookRunner,
++  resetGlobalHookRunner,
++} from "../../../src/plugins/hook-runner-global.js";
+ import { setActivePluginRegistry } from "../../../src/plugins/runtime.js";
+ import {
+   createTestRegistry,
+@@ -15,6 +19,8 @@
+ import { positiveFixture } from "./work-test-fixtures.js";
+ const dirs: string[] = [];
+ afterEach(() => {
++  resetGlobalHookRunner();
++  vi.restoreAllMocks();
+   for (const d of dirs.splice(0)) {
+     fs.rmSync(d, { recursive: true, force: true });
+   }
+@@ -283,3 +289,183 @@
+   expect(record.attempts[0].costStatus).toBe("unknown");
+   f.db.close();
+ });
++
++it("actual message_sending cancellation durably cancels then acknowledges on the next tick without sent effects", async () => {
++  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "watcher-suppression-"));
++  dirs.push(dir);
++  const f = positiveFixture(dir),
++    send = vi.fn(async () => ({ channel: "telegram" as const, messageId: "must-not-send" }));
++  const registry = createTestRegistry([
++    {
++      pluginId: "telegram",
++      source: "test",
++      plugin: createOutboundTestPlugin({
++        id: "telegram",
++        outbound: { deliveryMode: "direct", sendText: send, sendMedia: send },
++      }),
++    },
++  ]);
++  const hook = vi.fn(async () => ({ cancel: true }));
++  registry.typedHooks.push({
++    pluginId: "fixture",
++    hookName: "message_sending",
++    source: "test",
++    handler: hook,
++  });
++  setActivePluginRegistry(registry);
++  initializeGlobalHookRunner(registry);
++  const first = vi.fn(),
++    deps = {
++      stateDir: dir,
++      config: () => ({}),
++      authority: async () => f.snapshot.authority,
++      destinations: () => f.snapshot.destinations,
++      onFirstSent: first,
++    };
++  const id = String(f.db.prepare("SELECT id FROM alert_delivery_receipts").get()!.id);
++  await drainDeliveryReceipts(f.db, deps);
++  const settled = f.db
++    .prepare("SELECT state,safe_reason,settled_at FROM alert_delivery_receipts")
++    .get();
++  expect(settled).toMatchObject({ state: "canceled", safe_reason: "payload_suppressed" });
++  const { readQueuedDelivery, resolveEntryPath } =
++    await import("../../../src/infra/outbound/delivery-queue-files.js");
++  expect((await readQueuedDelivery(id, dir)).payloads[0].state).toBe("suppressed");
++  const unlink = fs.promises.unlink.bind(fs.promises);
++  let commitObserved = false;
++  vi.spyOn(fs.promises, "unlink").mockImplementation(async (file) => {
++    if (String(file) === resolveEntryPath(id, dir)) {
++      commitObserved = true;
++      expect(
++        f.db.prepare("SELECT state,safe_reason,settled_at FROM alert_delivery_receipts").get(),
++      ).toEqual(settled);
++    }
++    return unlink(file);
++  });
++  await drainDeliveryReceipts(f.db, deps);
++  await drainDeliveryReceipts(f.db, deps);
++  expect(commitObserved).toBe(true);
++  expect(fs.existsSync(resolveEntryPath(id, dir))).toBe(false);
++  expect((await readDeliveryTombstone(id, dir))?.payloads[0].state).toBe("suppressed");
++  expect(
++    f.db.prepare("SELECT state,safe_reason,settled_at FROM alert_delivery_receipts").get(),
++  ).toEqual(settled);
++  expect(f.db.prepare("SELECT queue_generation FROM alert_delivery_receipts").get()).toEqual({
++    queue_generation: -1,
++  });
++  expect(send).not.toHaveBeenCalled();
++  expect(hook).toHaveBeenCalledTimes(1);
++  expect(first).not.toHaveBeenCalled();
++  expect(f.db.prepare("SELECT first_sent_at FROM classification_work").get()).toEqual({
++    first_sent_at: null,
++  });
++  expect(f.db.prepare("SELECT notified_at FROM complaints").get()).toEqual({ notified_at: null });
++  expect(f.db.prepare("SELECT count(*) n FROM pending_replies").get()).toEqual({ n: 0 });
++  f.db.close();
++});
++for (const mixed of ["suppressed", "uncertain"] as const) {
++  it(`recovered accepted plus ${mixed} preserves partial acceptance without first-sent effects`, async () => {
++    const dir = fs.mkdtempSync(path.join(os.tmpdir(), "watcher-mixed-"));
++    dirs.push(dir);
++    const f = positiveFixture(dir);
++    const { enqueueDelivery, checkpointQueuedPayload } =
++      await import("../../../src/infra/outbound/delivery-queue-store.js");
++    const { acquireDeliveryEntryLease, releaseDeliveryQueueLease, readQueuedDelivery } =
++      await import("../../../src/infra/outbound/delivery-queue-files.js");
++    const row = f.db.prepare("SELECT * FROM alert_delivery_receipts").get() as DeliveryRow;
++    const payloads = [{ text: "first" }, { text: "second" }],
++      hash = snapshotHash(payloads);
++    f.db
++      .prepare(
++        "UPDATE alert_delivery_receipts SET state='admitted',admitted_at=1,payload_json=?,payload_hash=? WHERE id=?",
++      )
++      .run(JSON.stringify(payloads), hash, row.id);
++    await enqueueDelivery(
++      {
++        id: row.id,
++        channel: "telegram",
++        accountId: "default",
++        to: "owner",
++        payloads,
++        completionPolicy: "caller",
++        callerRetention: {
++          version: 1,
++          owner: "alert-watcher",
++          namespaceHash: snapshotHash("namespace"),
++          receiptId: row.id,
++          payloadHash: hash,
++          recipientHash: row.recipient_hash,
++          expiresAt: row.payload_expires_at,
++        },
++      },
++      dir,
++    );
++    const lease = await acquireDeliveryEntryLease(row.id, dir);
++    let entry = await readQueuedDelivery(row.id, dir);
++    entry = await checkpointQueuedPayload({
++      id: row.id,
++      payloadId: entry.payloads[0].id,
++      expectedGeneration: entry.generation,
++      nextState: "in-flight",
++      lease,
++      stateDir: dir,
++    });
++    entry = await checkpointQueuedPayload({
++      id: row.id,
++      payloadId: entry.payloads[0].id,
++      expectedGeneration: entry.generation,
++      nextState: "accepted",
++      providerMessageIds: ["known-accepted"],
++      lease,
++      stateDir: dir,
++    });
++    if (mixed === "uncertain") {
++      entry = await checkpointQueuedPayload({
++        id: row.id,
++        payloadId: entry.payloads[1].id,
++        expectedGeneration: entry.generation,
++        nextState: "in-flight",
++        lease,
++        stateDir: dir,
++      });
++    }
++    entry = await checkpointQueuedPayload({
++      id: row.id,
++      payloadId: entry.payloads[1].id,
++      expectedGeneration: entry.generation,
++      nextState: mixed,
++      lease,
++      stateDir: dir,
++    });
++    await releaseDeliveryQueueLease(lease);
++    const send = vi.fn(),
++      deps = {
++        stateDir: dir,
++        config: () => ({}),
++        authority: async () => f.snapshot.authority,
++        destinations: () => f.snapshot.destinations,
++        send,
++      };
++    await drainDeliveryReceipts(f.db, deps);
++    await drainDeliveryReceipts(f.db, deps);
++    const result = f.db
++      .prepare("SELECT state,provider_receipts FROM alert_delivery_receipts")
++      .get()!;
++    expect(result.state).toBe(mixed === "suppressed" ? "canceled" : "indeterminate");
++    expect(JSON.parse(String(result.provider_receipts))[0].receipt.providerMessageIds).toEqual([
++      "known-accepted",
++    ]);
++    expect(send).not.toHaveBeenCalled();
++    expect(f.db.prepare("SELECT first_sent_at FROM classification_work").get()).toEqual({
++      first_sent_at: null,
++    });
++    expect(f.db.prepare("SELECT count(*) n FROM pending_replies").get()).toEqual({ n: 0 });
++    if (mixed === "suppressed") {
++      expect((await readDeliveryTombstone(row.id, dir))?.payloads.map((p) => p.state)).toEqual([
++        "accepted",
++        "suppressed",
++      ]);
++    }
++    f.db.close();
++  });
++}
+--- revision1/extensions/alert-watcher/src/delivery-bridge.ts
++++ revision2/extensions/alert-watcher/src/delivery-bridge.ts
+@@ -8,6 +8,7 @@
+   readQueuedDelivery,
+   readDeliveryTombstone,
+   enforceDeliveryRetention,
++  retireExpiredCallerDelivery,
+   type DeliveryTombstone,
+ } from "../../../src/infra/outbound/delivery-queue-files.js";
+ import {
+@@ -26,6 +27,7 @@
+   type WorkSnapshot,
+   type SuggestionReceipt,
+ } from "./classification-work.js";
++import { deliveryAcceptances } from "./delivery-evidence.js";
+ import type { Destination } from "./destinations.js";
+ import { snapshotHash } from "./provenance.js";
+ import { insertBoundPending } from "./reply-flow/store.js";
+@@ -60,6 +62,7 @@
+     acceptedAt?: number;
+     queueGeneration?: number;
+     receipts?: unknown;
++    receiptsHashed?: boolean;
+     reason?: string;
+     authorizedReplyDestinations?: Destination[];
+   },
+@@ -89,7 +92,13 @@
+       state,
+       now,
+       evidence.queueGeneration ?? null,
+-      evidence.receipts ? boundedJson(evidence.receipts) : null,
++      evidence.receipts
++        ? boundedJson(
++            evidence.receiptsHashed
++              ? { receiptHash: snapshotHash(evidence.receipts), acceptances: evidence.receipts }
++              : evidence.receipts,
++          )
++        : null,
+       evidence.reason ?? null,
+       id,
+       generation,
+@@ -199,11 +208,60 @@
+   }
+   return permitted.filter((recipient) => destinationAllowed(recipient, deps.destinations()));
+ }
++/** Bounded live housekeeping is independent of terminal send eligibility. */
++async function cleanupExpiredReceipts(db: DatabaseSync, deps: DeliveryBridgeDeps): Promise<void> {
++  const rows = db
++    .prepare(
++      "SELECT r.* FROM alert_delivery_receipts r WHERE r.state IN ('sent','failed','canceled','indeterminate') AND r.payload_expires_at<=? AND COALESCE(r.queue_generation,0)>=0 AND r.next_attempt_at<=? AND (r.lease_owner IS NULL OR r.lease_expires_at<=?) ORDER BY r.next_attempt_at,r.rowid LIMIT 10",
++    )
++    .all(Date.now(), Date.now(), Date.now()) as DeliveryRow[];
++  for (const row of rows) {
++    if (deps.signal?.aborted) {
++      break;
++    }
++    const work = getWork(db, row.work_id);
++    if (!work) {
++      continue;
++    }
++    try {
++      const lease = await acquireDeliveryEntryLease(row.id, deps.stateDir);
++      try {
++        await retireExpiredCallerDelivery(
++          {
++            version: 1,
++            owner: "alert-watcher",
++            namespaceHash: snapshotHash(work.namespace),
++            receiptId: row.id,
++            payloadHash: row.payload_hash,
++            recipientHash: row.recipient_hash,
++            expiresAt: row.payload_expires_at,
++          },
++          lease,
++          deps.stateDir,
++          {
++            generation: row.queue_generation ?? 0,
++            ...deliveryAcceptances(row.provider_receipts),
++          },
++        );
++        db.prepare(
++          "UPDATE alert_delivery_receipts SET queue_generation=-1 WHERE id=? AND generation=?",
++        ).run(row.id, row.generation);
++      } finally {
++        await releaseDeliveryQueueLease(lease);
++      }
++    } catch {
++      db.prepare(
++        "UPDATE alert_delivery_receipts SET next_attempt_at=? WHERE id=? AND generation=?",
++      ).run(Date.now() + 5000, row.id, row.generation);
++    }
++  }
++}
+ /** Reconcile the original queue identity; absence is never permission to enqueue again. */
+ export async function drainDeliveryReceipts(
+   db: DatabaseSync,
+   deps: DeliveryBridgeDeps,
+ ): Promise<void> {
++  await cleanupExpiredReceipts(db, deps);
+   const owner = crypto.randomUUID();
+   const sendBound = async (params: Parameters<typeof deliverOutboundPayloadsWithOutcome>[0]) => {
+     const timeout = new AbortController();
+@@ -229,7 +287,7 @@
+   };
+   const rows = db
+     .prepare(
+-      "SELECT * FROM alert_delivery_receipts WHERE (state IN ('queued','admitted') OR (state='sent' AND queue_generation>=0)) AND next_attempt_at<=? AND (lease_owner IS NULL OR lease_expires_at<=?) ORDER BY next_attempt_at,rowid LIMIT 10",
++      "SELECT * FROM alert_delivery_receipts WHERE (state IN ('queued','admitted') OR (state IN ('sent','canceled') AND queue_generation>=0 AND (state='sent' OR safe_reason='payload_suppressed'))) AND next_attempt_at<=? AND (lease_owner IS NULL OR lease_expires_at<=?) ORDER BY next_attempt_at,rowid LIMIT 10",
+     )
+     .all(Date.now(), Date.now()) as DeliveryRow[];
+   for (const scanned of rows) {
+@@ -250,15 +308,15 @@
+       !!recipient &&
+       destinationAllowed(recipient, deps.destinations()) &&
+       (!deps.recipientAllowed || (await deps.recipientAllowed(snapshot, recipient)));
+-    if (scanned.state === "sent") {
++    if (scanned.state === "sent" || scanned.state === "canceled") {
+       try {
+         await acknowledgeCallerManagedDelivery(scanned.id, deps.stateDir);
+         db.prepare(
+-          "UPDATE alert_delivery_receipts SET queue_generation=-1 WHERE id=? AND state='sent'",
++          "UPDATE alert_delivery_receipts SET queue_generation=-1 WHERE id=? AND state IN ('sent','canceled')",
+         ).run(scanned.id);
+       } catch {
+         db.prepare(
+-          "UPDATE alert_delivery_receipts SET next_attempt_at=? WHERE id=? AND state='sent'",
++          "UPDATE alert_delivery_receipts SET next_attempt_at=? WHERE id=? AND state IN ('sent','canceled')",
+         ).run(Date.now() + 5000, scanned.id);
+       }
+       continue;
+@@ -398,12 +456,17 @@
+         (p) => p.state === "accepted" && p.acceptedAt !== undefined,
+       );
+       // Preserve known external effects even after authority revocation; closed reply only.
+-      if (accepted.length === terminal.payloads.length && accepted.length) {
++      if (
++        accepted.length === terminal.payloads.length &&
++        accepted.length &&
++        !("outcomeUncertain" in terminal && terminal.outcomeUncertain)
++      ) {
+         const replyRecipients = await authorizedReplyRecipients(db, work.id, snapshot, deps);
+         settle("sent", {
+           acceptedAt: Math.min(...accepted.map((p) => p.acceptedAt!)),
+           queueGeneration: terminal.generation,
+           authorizedReplyDestinations: replyRecipients,
++          receiptsHashed: "retiredAt" in terminal,
+           receipts: accepted.map((p) => ({
+             id: p.id,
+             acceptedAt: p.acceptedAt,
+@@ -412,11 +475,36 @@
+         });
+         await acknowledgeCallerManagedDelivery(scanned.id, deps.stateDir).catch(() => {});
+       } else if (
++        ("outcomeUncertain" in terminal && terminal.outcomeUncertain) ||
+         terminal.payloads.some((p) => p.state === "uncertain" || p.state === "in-flight")
+       ) {
+-        settle("indeterminate", { reason: "uncertain_provider" });
++        settle("indeterminate", {
++          reason: "uncertain_provider",
++          queueGeneration: terminal.generation,
++          receiptsHashed: "retiredAt" in terminal,
++          receipts: accepted.map((p) => ({
++            id: p.id,
++            acceptedAt: p.acceptedAt,
++            receipt: p.receipt,
++          })),
++        });
+       } else if ("retiredAt" in terminal) {
+         settle("failed", { reason: "payload_expired" });
++      } else if (
++        terminal.payloads.length &&
++        terminal.payloads.every((p) => p.state === "accepted" || p.state === "suppressed")
++      ) {
++        settle("canceled", {
++          reason: "payload_suppressed",
++          queueGeneration: terminal.generation,
++          receiptsHashed: "retiredAt" in terminal,
++          receipts: accepted.map((p) => ({
++            id: p.id,
++            acceptedAt: p.acceptedAt,
++            receipt: p.receipt,
++          })),
++        });
++        // The next bounded tick acknowledges only after this durable local settlement.
+       } else if (!authorized) {
+         settle("indeterminate", { reason: "authority_changed_after_admission" });
+       } else {
+--- revision1/extensions/alert-watcher/src/delivery-evidence.ts
++++ revision2/extensions/alert-watcher/src/delivery-evidence.ts
+@@ -0,0 +1,87 @@
++import crypto from "node:crypto";
++import type { DeliveryTombstone } from "../../../src/infra/outbound/delivery-queue-files.js";
++import { snapshotHash } from "./provenance.js";
++const record = (value: unknown): value is Record<string, unknown> =>
++  value !== null && typeof value === "object" && !Array.isArray(value);
++/** Read both original acceptance arrays and additive, already-redacted evidence.
++ * Historical hash-only rows remain valid and cannot invent payload acceptance. */
++export function deliveryAcceptances(serialized: string | null): {
++  payloads: DeliveryTombstone["payloads"];
++  receiptsHashed: boolean;
++} {
++  const value: unknown = serialized ? JSON.parse(serialized) : null;
++  const receiptsHashed = record(value),
++    candidates = Array.isArray(value)
++      ? value
++      : record(value) && Array.isArray(value.acceptances)
++        ? value.acceptances
++        : [];
++  const payloads: DeliveryTombstone["payloads"] = [];
++  for (const item of candidates.slice(0, 256)) {
++    if (
++      !record(item) ||
++      typeof item.id !== "string" ||
++      !/^[A-Za-z0-9_-]{1,128}$/.test(item.id) ||
++      !Number.isSafeInteger(item.acceptedAt) ||
++      Number(item.acceptedAt) <= 0 ||
++      !record(item.receipt)
++    ) {
++      continue;
++    }
++    const receipt = item.receipt;
++    if (
++      !Number.isSafeInteger(receipt.providerMessageIdCount) ||
++      Number(receipt.providerMessageIdCount) < 0 ||
++      !Array.isArray(receipt.providerMessageIds) ||
++      receipt.providerMessageIds.length > 32 ||
++      !receipt.providerMessageIds.every(
++        (id: unknown) => typeof id === "string" && id.length <= 2048,
++      )
++    ) {
++      continue;
++    }
++    if (
++      receiptsHashed &&
++      !receipt.providerMessageIds.every(
++        (id: unknown) => typeof id === "string" && /^[a-f0-9]{64}$/.test(id),
++      )
++    ) {
++      continue;
++    }
++    payloads.push({
++      id: item.id,
++      state: "accepted",
++      acceptedAt: Number(item.acceptedAt),
++      receipt: {
++        providerMessageIdCount: Number(receipt.providerMessageIdCount),
++        providerMessageIds: receipt.providerMessageIds as string[],
++        truncated: receipt.truncated === true,
++      },
++    });
++  }
++  return { payloads, receiptsHashed };
++}
++export function redactDeliveryEvidence(serialized: string): string {
++  const { payloads, receiptsHashed } = deliveryAcceptances(serialized);
++  const value: unknown = JSON.parse(serialized);
++  const receiptHash =
++    record(value) &&
++    typeof value.receiptHash === "string" &&
++    /^[a-f0-9]{64}$/.test(value.receiptHash)
++      ? value.receiptHash
++      : snapshotHash(value);
++  return JSON.stringify({
++    receiptHash,
++    acceptances: payloads.map((payload) => ({
++      ...payload,
++      receipt: payload.receipt
++        ? {
++            ...payload.receipt,
++            providerMessageIds: payload.receipt.providerMessageIds.map((id) =>
++              receiptsHashed ? id : crypto.createHash("sha256").update(id).digest("hex"),
++            ),
++          }
++        : undefined,
++    })),
++  });
++}
+--- revision1/extensions/alert-watcher/src/live-retention.test.ts
++++ revision2/extensions/alert-watcher/src/live-retention.test.ts
+@@ -0,0 +1,546 @@
++import crypto from "node:crypto";
++import fs from "node:fs";
++import os from "node:os";
++import path from "node:path";
++import { afterEach, it, expect, vi } from "vitest";
++import {
++  acquireDeliveryEntryLease,
++  releaseDeliveryQueueLease,
++  readQueuedDelivery,
++  readDeliveryTombstone,
++  resolveEntryPath,
++  resolveFailedDir,
++} from "../../../src/infra/outbound/delivery-queue-files.js";
++import {
++  enqueueDelivery,
++  checkpointQueuedPayload,
++} from "../../../src/infra/outbound/delivery-queue-store.js";
++import type { MinionPluginApi } from "../../../src/plugins/types.js";
++import type { ResolvedConfig } from "../index.js";
++import { createCertifiedWatcher } from "./certified-runtime.js";
++import { redactExpiredWork, type DeliveryRow } from "./classification-work.js";
++import { drainDeliveryReceipts } from "./delivery-bridge.js";
++import { snapshotHash } from "./provenance.js";
++import { positiveFixture } from "./work-test-fixtures.js";
++const dirs: string[] = [];
++afterEach(() => {
++  vi.restoreAllMocks();
++  for (const dir of dirs.splice(0)) {
++    fs.rmSync(dir, { recursive: true, force: true });
++  }
++});
++function fixture(count = 1) {
++  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "live-retention-"));
++  dirs.push(dir);
++  return {
++    dir,
++    ...positiveFixture(
++      dir,
++      Array.from({ length: count }, (_, i) => ({
++        channel: "telegram",
++        accountId: "default",
++        to: `owner-${i}`,
++      })),
++    ),
++  };
++}
++async function enqueue(f: ReturnType<typeof fixture>, row: DeliveryRow) {
++  await enqueueDelivery(
++    {
++      id: row.id,
++      channel: "telegram",
++      accountId: "default",
++      to: JSON.parse(row.recipient_json!).to,
++      payloads: JSON.parse(row.payload_json!),
++      completionPolicy: "caller",
++      callerRetention: {
++        version: 1,
++        owner: "alert-watcher",
++        namespaceHash: snapshotHash("namespace"),
++        receiptId: row.id,
++        payloadHash: row.payload_hash,
++        recipientHash: row.recipient_hash,
++        expiresAt: row.payload_expires_at,
++      },
++    },
++    f.dir,
++  );
++}
++function watcher(f: ReturnType<typeof fixture>) {
++  const api = {
++    config: {},
++    runtime: { config: { loadConfig: () => ({}) } },
++    logger: { warn: vi.fn() },
++  } as unknown as MinionPluginApi;
++  return createCertifiedWatcher(
++    api,
++    f.db,
++    f.dir,
++    () => ({ subscriptions: [], destinations: [] }) as unknown as ResolvedConfig,
++    () => {
++      throw Error("must not classify");
++    },
++  );
++}
++for (const state of ["indeterminate", "failed", "canceled", "sent"] as const) {
++  it(`live tick expires ${state} raw/failed copies without changing external-effect truth`, async () => {
++    const f = fixture(),
++      row = f.db.prepare("SELECT * FROM alert_delivery_receipts").get() as DeliveryRow;
++    await enqueue(f, row);
++    let acceptedAt: number | undefined;
++    if (state === "indeterminate" || state === "sent") {
++      const lease = await acquireDeliveryEntryLease(row.id, f.dir);
++      let entry = await readQueuedDelivery(row.id, f.dir);
++      entry = await checkpointQueuedPayload({
++        id: row.id,
++        payloadId: entry.payloads[0].id,
++        expectedGeneration: entry.generation,
++        nextState: "in-flight",
++        lease,
++        stateDir: f.dir,
++      });
++      if (state === "sent") {
++        entry = await checkpointQueuedPayload({
++          id: row.id,
++          payloadId: entry.payloads[0].id,
++          expectedGeneration: entry.generation,
++          nextState: "accepted",
++          providerMessageIds: ["private-provider-id"],
++          lease,
++          stateDir: f.dir,
++        });
++        acceptedAt = entry.payloads[0].acceptedAt;
++      }
++      await releaseDeliveryQueueLease(lease);
++    }
++    f.db
++      .prepare(
++        "UPDATE alert_delivery_receipts SET state=?,queue_generation=0,admitted_at=?,safe_reason='fixture_terminal',provider_receipts='[]' WHERE id=?",
++      )
++      .run(state, Date.now(), row.id);
++    // Failed-directory copies carry the same body, mirror and errors; expiry
++    // cannot depend on the normal executable root file still existing.
++    const raw = resolveEntryPath(row.id, f.dir),
++      failed = path.join(resolveFailedDir(f.dir), `${row.id}.json`);
++    if (state === "failed") {
++      fs.renameSync(raw, failed);
++    } else {
++      fs.copyFileSync(raw, raw + `.bak-${process.pid}-${crypto.randomUUID()}`);
++    }
++    vi.spyOn(Date, "now").mockReturnValue(row.payload_expires_at + 1);
++    const w = watcher(f);
++    await w.tick();
++    await w.stop();
++    expect(fs.existsSync(raw)).toBe(false);
++    expect(fs.existsSync(failed)).toBe(false);
++    const tombstone = await readDeliveryTombstone(row.id, f.dir);
++    expect(tombstone?.reason).toBe("expired");
++    expect(tombstone?.payloads[0].state).toBe(
++      state === "sent" ? "accepted" : state === "indeterminate" ? "uncertain" : "pending",
++    );
++    if (state === "sent") {
++      expect(tombstone?.payloads[0].acceptedAt).toBe(acceptedAt);
++    }
++    expect(
++      f.db.prepare("SELECT state,queue_generation FROM alert_delivery_receipts").get(),
++    ).toEqual({ state, queue_generation: -1 });
++    expect(f.db.prepare("SELECT snapshot FROM classification_work").get()).toEqual({
++      snapshot: null,
++    });
++    expect(f.db.prepare("SELECT count(*) n FROM pending_replies").get()).toEqual({ n: 0 });
++    f.db.close();
++  });
++}
++it("live terminal housekeeping retries unlink failures behind tombstone and bounds each tick to ten receipts", async () => {
++  const f = fixture(11),
++    rows = f.db
++      .prepare("SELECT * FROM alert_delivery_receipts ORDER BY rowid")
++      .all() as DeliveryRow[];
++  for (const row of rows) {
++    await enqueue(f, row);
++  }
++  f.db
++    .prepare(
++      "UPDATE alert_delivery_receipts SET state='indeterminate',admitted_at=1,safe_reason='fixture_terminal'",
++    )
++    .run();
++  let clock = rows[0].payload_expires_at + 1;
++  vi.spyOn(Date, "now").mockImplementation(() => clock);
++  const original = fs.promises.unlink.bind(fs.promises),
++    fault = vi.spyOn(fs.promises, "unlink").mockImplementation(async (file) => {
++      if (String(file) === resolveEntryPath(rows[0].id, f.dir)) {
++        throw Error("unlink fault");
++      }
++      return original(file);
++    });
++  const w = watcher(f);
++  await w.tick();
++  expect(await readDeliveryTombstone(rows[0].id, f.dir)).toBeDefined();
++  await expect(readQueuedDelivery(rows[0].id, f.dir)).rejects.toThrow("tombstone");
++  expect(
++    f.db.prepare("SELECT count(*) n FROM alert_delivery_receipts WHERE queue_generation=-1").get(),
++  ).toEqual({ n: 9 });
++  expect(fs.existsSync(resolveEntryPath(rows[10].id, f.dir))).toBe(true);
++  fault.mockRestore();
++  clock += 5001;
++  await w.tick();
++  await w.stop();
++  expect(
++    f.db.prepare("SELECT count(*) n FROM alert_delivery_receipts WHERE queue_generation=-1").get(),
++  ).toEqual({ n: 11 });
++  for (const row of rows) {
++    expect(fs.existsSync(resolveEntryPath(row.id, f.dir))).toBe(false);
++  }
++  expect(f.db.prepare("SELECT count(*) n FROM pending_replies").get()).toEqual({ n: 0 });
++  f.db.close();
++});
++
++it("actual recovered uncertain bridge outcome is cleaned by later watcher tick without restart", async () => {
++  const f = fixture(),
++    row = f.db.prepare("SELECT * FROM alert_delivery_receipts").get() as DeliveryRow;
++  await enqueue(f, row);
++  const lease = await acquireDeliveryEntryLease(row.id, f.dir),
++    entry = await readQueuedDelivery(row.id, f.dir);
++  await checkpointQueuedPayload({
++    id: row.id,
++    payloadId: entry.payloads[0].id,
++    expectedGeneration: entry.generation,
++    nextState: "in-flight",
++    lease,
++    stateDir: f.dir,
++  });
++  await releaseDeliveryQueueLease(lease);
++  f.db.prepare("UPDATE alert_delivery_receipts SET state='admitted',admitted_at=1").run();
++  const send = vi.fn();
++  await drainDeliveryReceipts(f.db, {
++    stateDir: f.dir,
++    config: () => ({}),
++    authority: async () => f.snapshot.authority,
++    destinations: () => f.snapshot.destinations,
++    send,
++  });
++  expect(f.db.prepare("SELECT state FROM alert_delivery_receipts").get()).toEqual({
++    state: "indeterminate",
++  });
++  vi.spyOn(Date, "now").mockReturnValue(row.payload_expires_at + 1);
++  const w = watcher(f);
++  await w.tick();
++  await w.stop();
++  expect(send).not.toHaveBeenCalled();
++  expect(fs.existsSync(resolveEntryPath(row.id, f.dir))).toBe(false);
++  expect((await readDeliveryTombstone(row.id, f.dir))?.payloads[0].state).toBe("uncertain");
++  f.db.close();
++});
++
++for (const mode of ["unknown", "accepted", "legacy-hash"] as const) {
++  const known = mode === "accepted",
++    wasSent = mode !== "unknown";
++  it(`partial-temp-only terminal cleanup preserves ${mode} across fsync/unlink faults and a fresh disabled process`, async () => {
++    const { spawn } = await import("node:child_process"),
++      { fileURLToPath } = await import("node:url");
++    const f = fixture(),
++      row = f.db.prepare("SELECT * FROM alert_delivery_receipts").get() as DeliveryRow;
++    const copy = resolveEntryPath(row.id, f.dir) + `.tmp-${process.pid}-${crypto.randomUUID()}`;
++    fs.mkdirSync(path.dirname(copy), { recursive: true });
++    fs.writeFileSync(copy, '{"private":"incomplete private alert');
++    const acceptedAt = Date.now(),
++      payloadId = crypto.randomUUID(),
++      receipts = known
++        ? [
++            {
++              id: payloadId,
++              acceptedAt,
++              receipt: {
++                providerMessageIdCount: 1,
++                providerMessageIds: ["private-accepted-id"],
++                truncated: false,
++              },
++            },
++          ]
++        : [];
++    f.db
++      .prepare(
++        "UPDATE alert_delivery_receipts SET state=?,admitted_at=1,safe_reason='checkpoint_missing',queue_generation=13,provider_receipts=? WHERE id=?",
++      )
++      .run(
++        wasSent ? "sent" : "indeterminate",
++        mode === "legacy-hash"
++          ? JSON.stringify({ receiptHash: snapshotHash("legacy-evidence") })
++          : JSON.stringify(receipts),
++        row.id,
++      );
++    if (wasSent) {
++      f.db.prepare("UPDATE classification_work SET first_sent_at=?").run(acceptedAt);
++    }
++    let clock = row.payload_expires_at + 1;
++    vi.spyOn(Date, "now").mockImplementation(() => clock);
++    const open = fs.promises.open.bind(fs.promises),
++      fault = vi.spyOn(fs.promises, "open").mockImplementation(async (...args) => {
++        const handle = await open(...args);
++        if (String(args[0]).includes(".retained") && String(args[0]).includes(".tmp-")) {
++          handle.sync = async () => {
++            throw Error("fsync fault");
++          };
++        }
++        return handle;
++      });
++    const w = watcher(f);
++    await w.tick();
++    expect(await readDeliveryTombstone(row.id, f.dir)).toBeUndefined();
++    expect(fs.existsSync(copy)).toBe(true);
++    fault.mockRestore();
++    clock += 5001;
++    const unlink = fs.promises.unlink.bind(fs.promises),
++      removeFault = vi.spyOn(fs.promises, "unlink").mockImplementation(async (file) => {
++        if (String(file) === copy) {
++          throw Error("unlink fault");
++        }
++        return unlink(file);
++      });
++    await w.tick();
++    await w.stop();
++    removeFault.mockRestore();
++    const tombstone = await readDeliveryTombstone(row.id, f.dir);
++    expect(tombstone).toMatchObject({
++      id: row.id,
++      generation: 13,
++      namespaceHash: snapshotHash("namespace"),
++      payloadHash: row.payload_hash,
++      recipientHash: row.recipient_hash,
++      reason: "expired",
++      outcomeUncertain: true,
++    });
++    expect(tombstone?.payloads).toHaveLength(known ? 1 : 0);
++    if (known) {
++      expect(tombstone?.payloads[0]).toMatchObject({
++        id: payloadId,
++        state: "accepted",
++        acceptedAt,
++      });
++      expect(tombstone?.payloads[0].receipt?.providerMessageIds[0]).toMatch(/^[a-f0-9]{64}$/);
++    }
++    const minimal = JSON.parse(
++      String(
++        f.db.prepare("SELECT provider_receipts FROM alert_delivery_receipts").get()!
++          .provider_receipts,
++      ),
++    );
++    expect(JSON.stringify(minimal)).not.toContain("private");
++    if (mode === "legacy-hash") {
++      expect(minimal.receiptHash).toBe(snapshotHash("legacy-evidence"));
++    }
++    if (known) {
++      expect(tombstone?.payloads[0].receipt?.providerMessageIds[0]).toBe(
++        crypto.createHash("sha256").update("private-accepted-id").digest("hex"),
++      );
++    }
++    expect(fs.existsSync(copy)).toBe(true);
++    await expect(readQueuedDelivery(row.id, f.dir)).rejects.toThrow("tombstone");
++    const child = spawn(
++      process.execPath,
++      [
++        "--import",
++        "tsx",
++        fileURLToPath(new URL("../test-support/retention-process.ts", import.meta.url)),
++        f.dir,
++      ],
++      {
++        stdio: ["ignore", "pipe", "pipe"],
++        env: {
++          ...process.env,
++          MINION_STATE_DIR: f.dir,
++          OPENCLAW_STATE_DIR: f.dir,
++          MINION_CONFIG_PATH: path.join(f.dir, "config.json"),
++          OPENCLAW_CONFIG_PATH: path.join(f.dir, "config.json"),
++        },
++      },
++    );
++    let stderr = "";
++    child.stderr?.on("data", (chunk) => {
++      stderr += String(chunk);
++    });
++    const code = await new Promise((resolve) => child.once("exit", resolve));
++    expect(code, stderr).toBe(0);
++    expect(fs.existsSync(copy)).toBe(false);
++    expect(fs.existsSync(path.join(f.dir, "unexpected-recovery-send"))).toBe(false);
++    expect(await readDeliveryTombstone(row.id, f.dir)).toEqual(tombstone);
++    expect(f.db.prepare("SELECT state FROM alert_delivery_receipts").get()).toEqual({
++      state: wasSent ? "sent" : "indeterminate",
++    });
++    expect(f.db.prepare("SELECT first_sent_at FROM classification_work").get()).toEqual({
++      first_sent_at: wasSent ? acceptedAt : null,
++    });
++    f.db.close();
++  }, 20000);
++}
++
++it("an existing tombstone without the additive uncertainty field survives fresh-process cleanup unchanged", async () => {
++  const { enforceDeliveryRetention } =
++    await import("../../../src/infra/outbound/delivery-queue-files.js");
++  const { spawn } = await import("node:child_process"),
++    { fileURLToPath } = await import("node:url");
++  const f = fixture(),
++    row = f.db.prepare("SELECT * FROM alert_delivery_receipts").get() as DeliveryRow;
++  await enqueue(f, row);
++  const raw = fs.readFileSync(resolveEntryPath(row.id, f.dir), "utf8");
++  const lease = await acquireDeliveryEntryLease(row.id, f.dir),
++    entry = await readQueuedDelivery(row.id, f.dir);
++  vi.spyOn(Date, "now").mockReturnValue(row.payload_expires_at + 1);
++  try {
++    await enforceDeliveryRetention(entry, lease, f.dir);
++  } finally {
++    await releaseDeliveryQueueLease(lease);
++  }
++  const original = await readDeliveryTombstone(row.id, f.dir);
++  expect(original).toBeDefined();
++  expect(original?.outcomeUncertain).toBeUndefined();
++  const copy = resolveEntryPath(row.id, f.dir) + `.bak-${process.pid}-${crypto.randomUUID()}`;
++  fs.writeFileSync(copy, raw);
++  const child = spawn(
++    process.execPath,
++    [
++      "--import",
++      "tsx",
++      fileURLToPath(new URL("../test-support/retention-process.ts", import.meta.url)),
++      f.dir,
++    ],
++    {
++      stdio: ["ignore", "pipe", "pipe"],
++      env: {
++        ...process.env,
++        MINION_STATE_DIR: f.dir,
++        OPENCLAW_STATE_DIR: f.dir,
++        MINION_CONFIG_PATH: path.join(f.dir, "config.json"),
++        OPENCLAW_CONFIG_PATH: path.join(f.dir, "config.json"),
++      },
++    },
++  );
++  let stderr = "";
++  child.stderr?.on("data", (chunk) => {
++    stderr += String(chunk);
++  });
++  const code = await new Promise((resolve) => child.once("exit", resolve));
++  expect(code, stderr).toBe(0);
++  expect(fs.existsSync(copy)).toBe(false);
++  expect(await readDeliveryTombstone(row.id, f.dir)).toEqual(original);
++  expect(fs.existsSync(path.join(f.dir, "unexpected-recovery-send"))).toBe(false);
++  f.db.close();
++}, 20000);
++
++it("backup-only cleanup preserves newer authoritative accepted evidence without double hashing", async () => {
++  const f = fixture(),
++    row = f.db.prepare("SELECT * FROM alert_delivery_receipts").get() as DeliveryRow;
++  await enqueue(f, row);
++  const entry = await readQueuedDelivery(row.id, f.dir),
++    acceptedAt = Date.now(),
++    payloadId = entry.payloads[0].id;
++  const hash = crypto.createHash("sha256").update("private-accepted-id").digest("hex");
++  const evidence = {
++    receiptHash: snapshotHash("accepted evidence"),
++    acceptances: [
++      {
++        id: payloadId,
++        state: "accepted",
++        acceptedAt,
++        receipt: { providerMessageIdCount: 1, providerMessageIds: [hash], truncated: false },
++      },
++    ],
++  };
++  f.db
++    .prepare(
++      "UPDATE alert_delivery_receipts SET state='sent',admitted_at=1,queue_generation=17,provider_receipts=? WHERE id=?",
++    )
++    .run(JSON.stringify(evidence), row.id);
++  f.db.prepare("UPDATE classification_work SET first_sent_at=?").run(acceptedAt);
++  const raw = resolveEntryPath(row.id, f.dir),
++    copy = raw + `.bak-${process.pid}-${crypto.randomUUID()}`;
++  fs.renameSync(raw, copy);
++  vi.spyOn(Date, "now").mockReturnValue(row.payload_expires_at + 1);
++  const w = watcher(f);
++  await w.tick();
++  await w.stop();
++  const tombstone = await readDeliveryTombstone(row.id, f.dir);
++  expect(tombstone?.generation).toBe(17);
++  expect(tombstone?.payloads).toEqual(evidence.acceptances);
++  expect(fs.existsSync(copy)).toBe(false);
++  expect(f.db.prepare("SELECT first_sent_at FROM classification_work").get()).toEqual({
++    first_sent_at: acceptedAt,
++  });
++  expect(f.db.prepare("SELECT state FROM alert_delivery_receipts").get()).toEqual({
++    state: "sent",
++  });
++  expect(JSON.stringify(tombstone)).not.toContain("private");
++  f.db.close();
++});
++
++it("acceptance settled from a tombstone before the next work-redaction batch is never hashed twice", async () => {
++  const f = fixture(),
++    row = f.db.prepare("SELECT * FROM alert_delivery_receipts").get() as DeliveryRow;
++  await enqueue(f, row);
++  const lease = await acquireDeliveryEntryLease(row.id, f.dir);
++  let entry = await readQueuedDelivery(row.id, f.dir);
++  entry = await checkpointQueuedPayload({
++    id: row.id,
++    payloadId: entry.payloads[0].id,
++    expectedGeneration: entry.generation,
++    nextState: "in-flight",
++    lease,
++    stateDir: f.dir,
++  });
++  entry = await checkpointQueuedPayload({
++    id: row.id,
++    payloadId: entry.payloads[0].id,
++    expectedGeneration: entry.generation,
++    nextState: "accepted",
++    providerMessageIds: ["private-provider-id"],
++    lease,
++    stateDir: f.dir,
++  });
++  await releaseDeliveryQueueLease(lease);
++  f.db
++    .prepare("UPDATE alert_delivery_receipts SET state='admitted',admitted_at=1 WHERE id=?")
++    .run(row.id);
++  vi.spyOn(Date, "now").mockReturnValue(row.payload_expires_at + 1);
++  const send = vi.fn();
++  // Simulate a later work's expired recipient settling before the bounded
++  // ten-work compaction batch reaches its classification row.
++  await drainDeliveryReceipts(f.db, {
++    stateDir: f.dir,
++    config: () => ({}),
++    authority: async () => f.snapshot.authority,
++    destinations: () => f.snapshot.destinations,
++    send,
++  });
++  const before = JSON.parse(
++    String(
++      f.db.prepare("SELECT provider_receipts FROM alert_delivery_receipts").get()!
++        .provider_receipts,
++    ),
++  );
++  const digest = crypto.createHash("sha256").update("private-provider-id").digest("hex");
++  expect(before.acceptances[0].receipt.providerMessageIds).toEqual([digest]);
++  expect(f.db.prepare("SELECT state FROM alert_delivery_receipts").get()).toEqual({
++    state: "sent",
++  });
++  expect(f.db.prepare("SELECT redacted_at FROM classification_work").get()).toEqual({
++    redacted_at: null,
++  });
++  redactExpiredWork(f.db);
++  const after = JSON.parse(
++    String(
++      f.db.prepare("SELECT provider_receipts FROM alert_delivery_receipts").get()!
++        .provider_receipts,
++    ),
++  );
++  expect(after.receiptHash).toBe(before.receiptHash);
++  expect(after.acceptances[0].receipt.providerMessageIds).toEqual([digest]);
++  expect(
++    (await readDeliveryTombstone(row.id, f.dir))?.payloads[0].receipt?.providerMessageIds,
++  ).toEqual([digest]);
++  expect(f.db.prepare("SELECT first_sent_at FROM classification_work").get()).toEqual({
++    first_sent_at: entry.payloads[0].acceptedAt,
++  });
++  expect(send).not.toHaveBeenCalled();
++  expect(JSON.stringify(after)).not.toContain("private");
++  f.db.close();
++});
+--- revision1/extensions/alert-watcher/suggestion-recovery.test.ts
++++ revision2/extensions/alert-watcher/suggestion-recovery.test.ts
+@@ -0,0 +1,107 @@
++import { spawn, type ChildProcess } from "node:child_process";
++import fs from "node:fs";
++import os from "node:os";
++import path from "node:path";
++import { fileURLToPath } from "node:url";
++import { afterEach, it, expect } from "vitest";
++import { testDb } from "./src/work-test-fixtures.js";
++const children: ChildProcess[] = [],
++  directories: string[] = [];
++afterEach(() => {
++  for (const child of children.splice(0)) {
++    child.kill("SIGKILL");
++  }
++  for (const directory of directories.splice(0)) {
++    fs.rmSync(directory, { recursive: true, force: true });
++  }
++});
++function launch(directory: string, stage: string) {
++  const child = spawn(
++    process.execPath,
++    [
++      "--import",
++      "tsx",
++      fileURLToPath(new URL("./test-support/suggestion-process.ts", import.meta.url)),
++      directory,
++      stage,
++    ],
++    {
++      stdio: ["ignore", "pipe", "pipe"],
++      env: {
++        ...process.env,
++        MINION_STATE_DIR: directory,
++        OPENCLAW_STATE_DIR: directory,
++        MINION_CONFIG_PATH: path.join(directory, "config.json"),
++        OPENCLAW_CONFIG_PATH: path.join(directory, "config.json"),
++        ANTHROPIC_API_KEY: "",
++        OPENAI_API_KEY: "",
++      },
++    },
++  );
++  children.push(child);
++  let stderr = "";
++  child.stderr?.on("data", (chunk) => {
++    stderr += String(chunk);
++  });
++  return { child, stderr: () => stderr };
++}
++async function barrier(directory: string, process: ReturnType<typeof launch>) {
++  for (let i = 0; i < 800; i++) {
++    if (fs.existsSync(path.join(directory, "barrier"))) {
++      return fs.readFileSync(path.join(directory, "barrier"), "utf8");
++    }
++    if (process.child.exitCode !== null) {
++      throw Error(process.stderr());
++    }
++    await new Promise((resolve) => setTimeout(resolve, 25));
++  }
++  throw Error(`barrier timeout: ${process.stderr()}`);
++}
++function calls(directory: string, name: string) {
++  const file = path.join(directory, name);
++  return fs.existsSync(file) ? fs.readFileSync(file, "utf8").trim().split("\n").length : 0;
++}
++for (const stage of ["admitted", "received", "materialized"]) {
++  it(`actual watcher suggestion kill after ${stage} never recalls and recovers locally`, async () => {
++    const directory = fs.mkdtempSync(path.join(os.tmpdir(), "suggestion-process-"));
++    directories.push(directory);
++    const running = launch(directory, stage);
++    expect(await barrier(directory, running)).toBe(stage);
++    const exit = new Promise((resolve) => running.child.once("exit", resolve));
++    running.child.kill("SIGKILL");
++    await exit;
++    const db = testDb(path.join(directory, "alerts.db"));
++    const before = db
++      .prepare("SELECT suggestion_json,complaint_id FROM classification_work")
++      .get()!;
++    const suggestion = JSON.parse(String(before.suggestion_json));
++    expect(suggestion.state).toBe(stage === "admitted" ? "admitted" : "received");
++    expect(calls(directory, "provider-calls")).toBe(stage === "admitted" ? 0 : 1);
++    expect(calls(directory, "send-calls")).toBe(0);
++    if (stage === "materialized") {
++      expect(db.prepare("SELECT count(*) n FROM alert_delivery_receipts").get()).toEqual({ n: 1 });
++    }
++    db.close();
++    const recovery = launch(directory, "recover");
++    const code = await new Promise((resolve) => recovery.child.once("exit", resolve));
++    expect(code, recovery.stderr()).toBe(0);
++    const recovered = testDb(path.join(directory, "alerts.db"));
++    const row = recovered.prepare("SELECT state,suggestion_json FROM classification_work").get()!;
++    expect(row.state).toBe("completed");
++    const after = JSON.parse(String(row.suggestion_json));
++    expect(after.attemptId).toBe(suggestion.attemptId);
++    expect(after.state).toBe(stage === "admitted" ? "indeterminate" : "received");
++    if (stage !== "admitted") {
++      expect(after.suggestions).toEqual(["alpha", "beta", "gamma"]);
++      expect(after.usage).toEqual(suggestion.usage);
++    }
++    expect(recovered.prepare("SELECT count(*) n FROM complaints").get()).toEqual({ n: 1 });
++    expect(
++      recovered.prepare("SELECT count(*) n FROM alert_delivery_receipts WHERE state='sent'").get(),
++    ).toEqual({ n: 1 });
++    expect(recovered.prepare("SELECT count(*) n FROM pending_replies").get()).toEqual({ n: 1 });
++    expect(calls(directory, "provider-calls")).toBe(stage === "admitted" ? 0 : 1);
++    expect(calls(directory, "send-calls")).toBe(1);
++    recovered.close();
++  }, 30000);
++}
+--- revision1/extensions/alert-watcher/test-support/retention-process.ts
++++ revision2/extensions/alert-watcher/test-support/retention-process.ts
+@@ -0,0 +1,32 @@
++import fs from "node:fs";
++import path from "node:path";
++import { setActivePluginRegistry } from "../../../src/plugins/runtime.js";
++// Preserve the supported native bootstrap before importing outbound recovery.
++setActivePluginRegistry({
++  plugins: [],
++  tools: [],
++  hooks: [],
++  typedHooks: [],
++  channels: [],
++  providers: [],
++  gatewayHandlers: {},
++  httpHandlers: {},
++  httpRoutes: [],
++  cliRegistrars: [],
++  services: [],
++  commands: [],
++  diagnostics: [],
++});
++const { recoverPendingDeliveries } =
++  await import("../../../src/infra/outbound/delivery-queue-recovery.js");
++const [stateDir] = process.argv.slice(2);
++await recoverPendingDeliveries({
++  stateDir,
++  cfg: { plugins: { entries: { "alert-watcher": { enabled: false } } } },
++  log: { info: () => {}, warn: () => {}, error: () => {} },
++  deliver: async () => {
++    fs.appendFileSync(path.join(stateDir, "unexpected-recovery-send"), "sent\n");
++    throw Error("expired bytes must not dispatch");
++  },
++  delay: async () => {},
++});
+--- revision1/extensions/alert-watcher/test-support/suggestion-process.ts
++++ revision2/extensions/alert-watcher/test-support/suggestion-process.ts
+@@ -0,0 +1,207 @@
++import fs from "node:fs";
++import { registerHooks } from "node:module";
++import path from "node:path";
++import { setActivePluginRegistry } from "../../../src/plugins/runtime.js";
++import type { MinionPluginApi } from "../../../src/plugins/types.js";
++import type { ResolvedConfig } from "../index.js";
++
++// Only the external model transport is replaced. SDK, watcher, observer, SQLite,
++// lease recovery, materialization, and outbound queue all execute their real code.
++const [directory, stage] = process.argv.slice(2);
++const compat = await import("@earendil-works/pi-ai/compat");
++const transportKey = Symbol.for("minion.suggestion.process.transport");
++(globalThis as unknown as Record<symbol, unknown>)[transportKey] = {
++  ...compat,
++  complete: async () => {
++    fs.appendFileSync(path.join(directory, "provider-calls"), "suggestion\n");
++    return {
++      role: "assistant",
++      content: [
++        {
++          type: "toolCall",
++          id: "r",
++          name: "result",
++          arguments: { replies: ["alpha", "beta", "gamma"] },
++        },
++      ],
++      usage: { input: 4, output: 1, cacheRead: 0, cacheWrite: 0 },
++      stopReason: "toolUse",
++      timestamp: Date.now(),
++    };
++  },
++};
++registerHooks({
++  resolve(specifier, context, next) {
++    return specifier === "@earendil-works/pi-ai/compat"
++      ? { url: "minion-suggestion-transport:stub", shortCircuit: true }
++      : next(specifier, context);
++  },
++  load(url, context, next) {
++    return url === "minion-suggestion-transport:stub"
++      ? {
++          format: "module",
++          source:
++            'const s=globalThis[Symbol.for("minion.suggestion.process.transport")];' +
++            Object.keys(compat)
++              .filter((name) => /^[A-Za-z_$][A-Za-z0-9_$]*$/.test(name) && name !== "default")
++              .map((name) => `export const ${name}=s[${JSON.stringify(name)}];`)
++              .join("\n"),
++          shortCircuit: true,
++        }
++      : next(url, context);
++  },
++});
++const [
++  { createCertifiedWatcher },
++  { testDb, workFixture },
++  { resolveWatcherAuthority },
++  { createTestRegistry, createOutboundTestPlugin },
++  work,
++] = await Promise.all([
++  import("../src/certified-runtime.js"),
++  import("../src/work-test-fixtures.js"),
++  import("../src/authority.js"),
++  import("../../../src/test-support/channel-plugins.js"),
++  import("../src/classification-work.js"),
++]);
++const plugin = createOutboundTestPlugin({
++  id: "telegram",
++  outbound: {
++    deliveryMode: "direct",
++    sendText: async () => {
++      fs.appendFileSync(path.join(directory, "send-calls"), "sent\n");
++      return { channel: "telegram", messageId: "accepted" };
++    },
++    sendMedia: async () => {
++      throw Error("unexpected media");
++    },
++  },
++});
++plugin.config = {
++  listAccountIds: () => ["default"],
++  resolveAccount: () => ({ enabled: true }),
++  isEnabled: () => true,
++  isConfigured: async () => true,
++};
++setActivePluginRegistry(createTestRegistry([{ pluginId: "telegram", plugin, source: "test" }]));
++const cfg = {
++  channels: { telegram: { botToken: "fixture" }, accountOrgs: { telegram: { default: [] } } },
++  plugins: { entries: { "alert-watcher": { enabled: true } } },
++  models: {
++    providers: {
++      anthropic: { baseUrl: "https://provider.invalid", models: [], apiKey: "fixture" },
++    },
++  },
++};
++const authority = await resolveWatcherAuthority(cfg, "telegram", "default");
++if (authority.kind === "unavailable") {
++  throw Error(authority.reason);
++}
++const db = testDb(path.join(directory, "alerts.db"));
++if (stage !== "recover") {
++  const snapshot = workFixture({
++    authority,
++    replyFlow: {
++      enabled: true,
++      windowMs: 3600000,
++      notifyLoser: false,
++      suggestions: { enabled: true, count: 3, maxChars: 140 },
++    },
++  });
++  const admission = work.admitSource(db, "suggestion-process", snapshot);
++  if (admission.kind !== "admitted") {
++    throw Error("seed admission");
++  }
++  const lease = work.claimWork(db, admission.work.id, "seed")!,
++    attemptId = work.admitInvocation(db, lease);
++  const model = { provider: "anthropic", model: snapshot.model };
++  work.receiveInvocation(
++    db,
++    lease,
++    {
++      ok: true,
++      data: { is_complaint: true, severity: "high", category: "other", summary: "broken" },
++      usage: {},
++      durationMs: 1,
++      resolvedModel: model,
++    },
++    {
++      attemptId,
++      purpose: "classification",
++      requestedModel: model,
++      resolvedModel: model,
++      usage: {},
++      costStatus: "unknown",
++      costUsd: null,
++      costCoverage: "incomplete",
++      elapsedMs: 1,
++    },
++  );
++  db.prepare(
++    "UPDATE classification_work SET lease_owner=NULL,lease_expires_at=NULL WHERE id=?",
++  ).run(admission.work.id);
++} else {
++  const realNow = Date.now;
++  const future = realNow() + 31000;
++  Date.now = () => future;
++}
++const pause = (at: string) => {
++  fs.writeFileSync(path.join(directory, "barrier"), at);
++  Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0);
++};
++// Per-instance write observation pauses only AFTER SQLite's actual commit. No
++// persisted state is fabricated to simulate a crash.
++const prepare = db.prepare.bind(db);
++db.prepare = (sql) => {
++  const statement = prepare(sql),
++    run = statement.run.bind(statement);
++  statement.run = (...args) => {
++    const result = run(...args);
++    if (sql.startsWith("UPDATE classification_work SET suggestion_json=")) {
++      if (typeof args[0] !== "string") {
++        throw Error("expected serialized suggestion");
++      }
++      const value = JSON.parse(args[0]) as { state: string };
++      if (stage === "admitted" && value.state === "admitted") {
++        pause(stage);
++      }
++      if (stage === "received" && value.state === "received") {
++        pause(stage);
++      }
++    }
++    return result;
++  };
++  return statement;
++};
++const exec = db.exec.bind(db);
++db.exec = (sql) => {
++  exec(sql);
++  if (
++    stage === "materialized" &&
++    sql === "COMMIT" &&
++    Number(prepare("SELECT count(*) n FROM alert_delivery_receipts").get()?.n) > 0
++  ) {
++    pause(stage);
++  }
++};
++const api = {
++  config: cfg,
++  runtime: { config: { loadConfig: () => cfg } },
++  logger: { warn: () => {}, info: () => {}, error: () => {} },
++} as unknown as MinionPluginApi;
++const watcher = createCertifiedWatcher(
++  api,
++  db,
++  directory,
++  () =>
++    ({
++      subscriptions: [{ kind: "channel", channel: "telegram", accountId: "default" }],
++      destinations: [{ channel: "telegram", accountId: "default", to: "owner" }],
++    }) as ResolvedConfig,
++  () => "private alert",
++);
++await watcher.tick();
++await watcher.tick();
++await watcher.stop();
++fs.writeFileSync(path.join(directory, "recovered"), "done");
++db.close();
+--- revision1/src/infra/outbound/delivery-queue-retention.test.ts
++++ revision2/src/infra/outbound/delivery-queue-retention.test.ts
+@@ -280,3 +280,67 @@
+   expect(send).not.toHaveBeenCalled();
+   expect(await readDeliveryTombstone(p.id, stateDir)).toMatchObject({ reason: "expired" });
+ });
++
++it("tombstones erase exact atomic backup/temp, failed mirror/error copies and preserve unrelated payloads", async () => {
++  const { enforceDeliveryRetention, cleanupRetainedQueueFiles, resolveFailedDir } =
++    await import("./delivery-queue-files.js");
++  const stateDir = dir(),
++    p = params(Date.now() - 1);
++  await enqueueDelivery(p, stateDir);
++  const raw = JSON.parse(fs.readFileSync(resolveEntryPath(p.id, stateDir), "utf8"));
++  raw.mirror = { sessionKey: "private-session", text: "private mirror" };
++  raw.lastError = "private error";
++  const bytes = JSON.stringify(raw),
++    canonical = resolveEntryPath(p.id, stateDir);
++  fs.writeFileSync(canonical, bytes);
++  const copies = [
++    canonical + `.bak-${process.pid}-${crypto.randomUUID()}`,
++    canonical + `.tmp-${process.pid}-${crypto.randomUUID()}`,
++    path.join(resolveFailedDir(stateDir), `${p.id}.json`),
++    path.join(resolveFailedDir(stateDir), `${p.id}.json.tmp-${process.pid}-${crypto.randomUUID()}`),
++  ];
++  for (const file of copies) {
++    fs.writeFileSync(file, bytes);
++  }
++  const unrelated = [
++    canonical + ".bak-not-a-writer",
++    canonical + ".tmp-other",
++    path.join(path.dirname(canonical), `${crypto.randomUUID()}.json`),
++  ];
++  for (const file of unrelated) {
++    fs.writeFileSync(file, "unrelated live legacy bytes");
++  }
++  const lease = await acquireDeliveryEntryLease(p.id, stateDir);
++  try {
++    expect(
++      await enforceDeliveryRetention(await readQueuedDelivery(p.id, stateDir), lease, stateDir),
++    ).toBe(false);
++  } finally {
++    await releaseDeliveryQueueLease(lease);
++  }
++  for (const file of [canonical, ...copies]) {
++    expect(fs.existsSync(file)).toBe(false);
++  }
++  for (const file of unrelated) {
++    expect(fs.readFileSync(file, "utf8")).toBe("unrelated live legacy bytes");
++  }
++  expect(JSON.stringify(await readDeliveryTombstone(p.id, stateDir))).not.toContain("private");
++  // A new exact-format leftover after a failed cleanup is retried using the
++  // authoritative tombstone even when no canonical queue file remains.
++  fs.writeFileSync(copies[0], bytes);
++  const unlink = fs.promises.unlink.bind(fs.promises);
++  const fault = vi.spyOn(fs.promises, "unlink").mockImplementation(async (file) => {
++    if (String(file) === copies[0]) {
++      throw Error("cleanup fault");
++    }
++    return unlink(file);
++  });
++  await expect(cleanupRetainedQueueFiles(stateDir)).rejects.toThrow("cleanup fault");
++  await expect(readQueuedDelivery(p.id, stateDir)).rejects.toThrow("tombstone");
++  fault.mockRestore();
++  await cleanupRetainedQueueFiles(stateDir);
++  expect(fs.existsSync(copies[0])).toBe(false);
++  for (const file of unrelated) {
++    expect(fs.existsSync(file)).toBe(true);
++  }
++});

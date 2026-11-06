@@ -1,0 +1,537 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-22-agent-harness-wave1-7k23gajh/minion
+
+ ❯ |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts (10 tests | 8 failed) 17132ms
+     × downloads media via file_path (no file.download) 16496ms
+     × buffers messages with same media_group_id and processes them together 166ms
+     × processes separate media groups independently 168ms
+     × downloads static sticker (WEBP) and includes sticker metadata 8ms
+     × refreshes cached sticker metadata on cache hit 9ms
+     × skips animated stickers (TGS format) 9ms
+     × skips video stickers (WEBM format) 5ms
+     × buffers near-limit text and processes sequential parts as one message 225ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts > telegram inbound media > downloads media via file_path (no file.download)
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts:134:24
+    132|         expect.objectContaining({ redirect: "manual" }),
+    133|       );
+    134|       expect(replySpy).toHaveBeenCalledTimes(1);
+       |                        ^
+    135|       const payload = replySpy.mock.calls[0][0];
+    136|       expect(payload.Body).toContain("<media:image>");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts > telegram media groups > buffers messages with same media_group_id and processes them together
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ vi.waitFor.timeout src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts:258:28
+    256|       await vi.waitFor(
+    257|         () => {
+    258|           expect(replySpy).toHaveBeenCalledTimes(1);
+       |                            ^
+    259|         },
+    260|         { timeout: MEDIA_GROUP_FLUSH_MS * 2, interval: 10 },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts > telegram media groups > processes separate media groups independently
+AssertionError: expected "vi.fn()" to be called 2 times, but got 0 times
+ ❯ vi.waitFor.timeout src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts:310:28
+    308|       await vi.waitFor(
+    309|         () => {
+    310|           expect(replySpy).toHaveBeenCalledTimes(2);
+       |                            ^
+    311|         },
+    312|         { timeout: MEDIA_GROUP_FLUSH_MS * 2, interval: 10 },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts > telegram stickers > downloads static sticker (WEBP) and includes sticker metadata
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts:365:24
+    363|         expect.objectContaining({ redirect: "manual" }),
+    364|       );
+    365|       expect(replySpy).toHaveBeenCalledTimes(1);
+       |                        ^
+    366|       const payload = replySpy.mock.calls[0][0];
+    367|       expect(payload.Body).toContain("<media:sticker>");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts > telegram stickers > refreshes cached sticker metadata on cache hit
+TypeError: Cannot read properties of undefined (reading '0')
+ ❯ src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts:428:45
+    426|         }),
+    427|       );
+    428|       const payload = replySpy.mock.calls[0][0];
+       |                                             ^
+    429|       expect(payload.Sticker?.fileId).toBe("new_file_id");
+    430|       expect(payload.Sticker?.cachedDescription).toBe("Cached descript…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts > telegram stickers > skips animated stickers (TGS format)
+AssertionError: expected "Mock" to not be called at all, but actually been called 6 times
+
+Received:
+
+  1st Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/photos/photo1.jpg",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  2nd Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/photos/photo2.jpg",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  3rd Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/photos/photoA1.jpg",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  4th Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/photos/photoB1.jpg",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  5th Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/stickers/sticker.webp",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  6th Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/stickers/sticker.webp",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+
+Number of calls: 6
+
+ ❯ src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts:465:28
+    463|
+    464|       // Should not attempt to download animated stickers
+    465|       expect(fetchSpy).not.toHaveBeenCalled();
+       |                            ^
+    466|       // Should still process the message (as text-only, no media)
+    467|       expect(replySpy).not.toHaveBeenCalled(); // No text content, so …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts > telegram stickers > skips video stickers (WEBM format)
+AssertionError: expected "Mock" to not be called at all, but actually been called 6 times
+
+Received:
+
+  1st Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/photos/photo1.jpg",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  2nd Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/photos/photo2.jpg",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  3rd Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/photos/photoA1.jpg",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  4th Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/photos/photoB1.jpg",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  5th Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/stickers/sticker.webp",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+  6th Mock call:
+
+    Array [
+      "https://api.telegram.org/file/bottok/stickers/sticker.webp",
+      Object {
+        "dispatcher": Agent {
+          "_events": Object {},
+          "_eventsCount": 0,
+          "_maxListeners": undefined,
+          Symbol(shapeMode): false,
+          Symbol(kCapture): false,
+          Symbol(nodejs.stream.destroyed): true,
+          Symbol(onDestroyed): null,
+          Symbol(closed): true,
+          Symbol(onClosed): null,
+          Symbol(webSocketOptions): Object {},
+          Symbol(options): Object {
+            "connect": Object {
+              "lookup": [Function anonymous],
+            },
+            "maxOrigins": Infinity,
+          },
+          Symbol(factory): [Function defaultFactory],
+          Symbol(clients): Map {},
+          Symbol(origins): Set {},
+          Symbol(onDrain): [Function anonymous],
+          Symbol(onConnect): [Function anonymous],
+          Symbol(onDisconnect): [Function anonymous],
+          Symbol(onConnectionError): [Function anonymous],
+        },
+        "redirect": "manual",
+      },
+    ]
+
+
+Number of calls: 6
+
+ ❯ src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts:503:28
+    501|
+    502|       // Should not attempt to download video stickers
+    503|       expect(fetchSpy).not.toHaveBeenCalled();
+       |                            ^
+    504|       expect(replySpy).not.toHaveBeenCalled();
+    505|       expect(runtimeError).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  |e2e| src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts > telegram text fragments > buffers near-limit text and processes sequential parts as one message
+AssertionError: expected "vi.fn()" to be called 1 times, but got 0 times
+ ❯ vi.waitFor.timeout src/channels/impl/telegram/bot.media.downloads-media-file-path-no-file-download.e2e.test.ts:566:28
+    564|       await vi.waitFor(
+    565|         () => {
+    566|           expect(replySpy).toHaveBeenCalledTimes(1);
+       |                            ^
+    567|         },
+    568|         { timeout: TEXT_FRAGMENT_FLUSH_MS * 2, interval: 10 },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed | 2 passed (10)
+   Start at  16:27:57
+   Duration  18.06s (transform 11.63s, setup 475ms, import 179ms, tests 17.13s, environment 31ms)
+

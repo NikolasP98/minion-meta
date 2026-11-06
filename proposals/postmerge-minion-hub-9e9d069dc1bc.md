@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-9e9d069dc1bc
 title: "Post-merge finding — scan-gap in supabase/qa/baseline/schema.sql (minion_hub)"
-status: draft
+status: review
 created: 2026-09-16
-updated: 2026-09-16
+updated: 2026-10-07
 repos: [minion-hub]
 tags: [infra]
 source: postmerge-discovery
+duplicate_candidate: 2026-09-08-platform-qc-remediation
 ---
 
 # Post-merge finding — scan-gap in `supabase/qa/baseline/schema.sql`

@@ -1,0 +1,5 @@
+# Qualification quickstart
+
+Use isolated clones and repository-declared package manager. Meta: `pnpm install --frozen-lockfile`, then `pnpm run build-all`, `pnpm run typecheck-all`, `pnpm run lint-all`, `pnpm run test-all`, `pnpm run test:scripts`, index and repository-policy checks. Hub/Site: `bun install --frozen-lockfile`, `bun run i18n:compile` where declared, `bun run lint:design`, `bun run lint:tokens`, focused regressions, `bun run check`, declared full tests, `bun run build`.
+
+Run new archive identity/negative lint tests and installed-component fixtures after packing. Browser interaction uses browser-harness; one named isolated browser owner. Fixtures contain synthetic data and local servers; no production business-data writes. Capture viewport, locale, theme/input and package identity with each result. Review source diff and exact checked revision before merge. After production deploy, verify actual alias/source identity and read-only locale/login/affected pages separately from CI.

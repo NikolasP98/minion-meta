@@ -1,0 +1,178 @@
+{
+  "committedSuccess": {
+    "commonAssertions": {
+      "bridgeAbsent": true,
+      "cleanupRolesAndFunctionAbsent": true,
+      "functionOwnerExact": true,
+      "restrictedRuntimeSetDenied": true,
+      "restrictedRuntimeUsageDenied": true,
+      "schemaCreateAbsent": true
+    },
+    "mechanism": "initial-membership NOINHERIT bridge; temporary schema CREATE; exact owner transfer; immediate schema CREATE revoke; bridge drop",
+    "persistentSubset": "pre-drop graph excluding every edge whose exact member or target is the bridge",
+    "postDropComparison": "complete finalizer graph byte-equivalent to persistent subset before and after commit",
+    "postgres17PersistentEdges": [
+      {
+        "admin": true,
+        "grantor": "supabase_admin",
+        "inherit": false,
+        "member": "postgres",
+        "set": false,
+        "target": "notification_projection_final_receipt_v10"
+      }
+    ],
+    "postgres18PersistentEdges": [],
+    "temporaryGraphAdmission": "exact row count, target, member, grantor, ADMIN, INHERIT and SET options; zero extras"
+  },
+  "environments": {
+    "postgres17": {
+      "actor": {
+        "createRole": true,
+        "role": "postgres",
+        "superuser": false
+      },
+      "container": {
+        "bind": "127.0.0.1:55472",
+        "hostMounts": 0,
+        "name": "minion-s5-role-pg17-v10-20261003",
+        "removed": true
+      },
+      "image": "public.ecr.aws/supabase/postgres:17.6.1.106",
+      "imageId": "sha256:9ff6402f578a9b0d4f2aa31f660bd398b8e378761d61d31efda6ff9ad92408e5",
+      "repositoryDigest": "public.ecr.aws/supabase/postgres@sha256:21ab971149317ea9cd12a8126fe4ebb34def08c8972956b0958cba0924409dab",
+      "temporaryGraph": [
+        {
+          "admin": false,
+          "grantor": "postgres",
+          "inherit": true,
+          "member": "postgres",
+          "set": true,
+          "target": "notification_projection_bridge_receipt_v10"
+        },
+        {
+          "admin": true,
+          "grantor": "supabase_admin",
+          "inherit": false,
+          "member": "postgres",
+          "set": false,
+          "target": "notification_projection_bridge_receipt_v10"
+        },
+        {
+          "admin": false,
+          "grantor": "postgres",
+          "inherit": false,
+          "member": "notification_projection_bridge_receipt_v10",
+          "set": true,
+          "target": "notification_projection_final_receipt_v10"
+        },
+        {
+          "admin": true,
+          "grantor": "supabase_admin",
+          "inherit": false,
+          "member": "postgres",
+          "set": false,
+          "target": "notification_projection_final_receipt_v10"
+        }
+      ],
+      "version": "PostgreSQL 17.6"
+    },
+    "postgres18": {
+      "actor": {
+        "role": "minion_qc",
+        "superuser": true
+      },
+      "database": "marked disposable loopback qualification database",
+      "temporaryGraph": [
+        {
+          "admin": false,
+          "grantor": "minion_qc",
+          "inherit": true,
+          "member": "minion_qc",
+          "set": true,
+          "target": "notification_projection_bridge_receipt_v10"
+        },
+        {
+          "admin": false,
+          "grantor": "minion_qc",
+          "inherit": false,
+          "member": "notification_projection_bridge_receipt_v10",
+          "set": true,
+          "target": "notification_projection_final_receipt_v10"
+        }
+      ],
+      "version": "PostgreSQL 18.6"
+    }
+  },
+  "files": {
+    "notification-slice5-pg17-role-crash-excerpt.log": {
+      "bytes": 2676,
+      "sha256": "f8122e9f62d18d0a2ec5492b80a71cdb5f659ea88660c1e08de8ccffc560549e"
+    },
+    "notification-slice5-pg17-unsafe-grant-repro.sql": {
+      "bytes": 690,
+      "sha256": "be938917eafb8dd4a781223612426a74c29fbbba615bb8f35ec1e4c6989a7c06"
+    },
+    "notification-slice5-v10-owner-transfer-evidence.md": {
+      "bytes": 4047,
+      "sha256": "ded2e014eab3d649c31c7970393e87e4b144063200fc2460fdc13eee455617c5"
+    },
+    "notification-slice5-v10-pg17-container-cleanup.log": {
+      "bytes": 27,
+      "sha256": "469deaba20391d6fa9fb48cc66066e80e30b806d417ba20949a504d3679c9cca"
+    },
+    "notification-slice5-v10-pg17-container.log": {
+      "bytes": 71998,
+      "sha256": "949a54285a28ebd8f641e20298da339d1248c5ff57c3a32f762bb1dc3a244328"
+    },
+    "notification-slice5-v10-pg17-failure.log": {
+      "bytes": 387,
+      "sha256": "c96b2dc5c51691a58075dd7cea49ec04125ddb110daccbb24df678aa68b37d5f"
+    },
+    "notification-slice5-v10-pg17-image.txt": {
+      "bytes": 347,
+      "sha256": "3186e1a5a7293f397c5ddfb06bfd05344251385b286afa01f762bd8d895dd913"
+    },
+    "notification-slice5-v10-pg17-post-cleanup.log": {
+      "bytes": 79,
+      "sha256": "9a4c8a719902f955b2e35ba7e24d5521be2129fbb178fd0b51e98a5fa5c5f8a5"
+    },
+    "notification-slice5-v10-pg17-success.log": {
+      "bytes": 2053,
+      "sha256": "3e4fae653102bea8c1be3e70de8d681e1362ec3bd1f0ee0f7497986baff59f78"
+    },
+    "notification-slice5-v10-pg18-failure.log": {
+      "bytes": 450,
+      "sha256": "5f94a6eac34cca625c48d1b5d383a0c68df23943e89f4d4347ea822e1c997cd9"
+    },
+    "notification-slice5-v10-pg18-post-cleanup.log": {
+      "bytes": 117,
+      "sha256": "7cc326d9e7fbc11dd9a061ed05bbd92018e3ed3caa7acd5aef8c52fdf3bebb06"
+    },
+    "notification-slice5-v10-pg18-success.log": {
+      "bytes": 1493,
+      "sha256": "507dcc994617a1b387d16942420a95b97ab253c8dcb54969549bd7aa56d4b536"
+    },
+    "notification-slice5-v10-role-bridge-failure-proof.sql": {
+      "bytes": 1343,
+      "sha256": "19a83bba89572c257cfbd5b05712155033eb27f63b0a27bac6e92fc0fe574e24"
+    },
+    "notification-slice5-v10-role-bridge-proof.sql": {
+      "bytes": 9919,
+      "sha256": "737f2d7b201dbc1c6d4e7b45d59cf291e1afec958e15f51c03142e1ced1b402f"
+    }
+  },
+  "injectedFailure": {
+    "error": "notification_projection_injected_failure",
+    "point": "after function owner transfer and schema CREATE revoke, before bridge drop",
+    "postgres17RollbackClean": true,
+    "postgres18RollbackClean": true
+  },
+  "observedAt": "2026-10-03",
+  "scope": "notification Slice5 finalizer ownership transfer, disposable PostgreSQL only",
+  "supersedes": {
+    "evidence": "notification-slice5-pg17-owner-transfer-evidence.json",
+    "reason": "adds committed success, exact temporary graphs, complete persistent-graph comparison, post-drop authority checks, and injected partial-failure rollback",
+    "sha256": "5b2ab3fc9da0ad28fd61829b6aec737b5c0099c77e9defb190ea3bb7b4f20439"
+  },
+  "version": 2
+}

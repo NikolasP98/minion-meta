@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+const root=process.argv[2];
+const at=(p:string)=>pathToFileURL(path.join(root,p)).href;
+const {setActivePluginRegistry}=await import(at('src/plugins/runtime.ts'));
+const {createTestRegistry,createOutboundTestPlugin}=await import(at('src/test-support/channel-plugins.ts'));
+const {positiveFixture}=await import(at('extensions/alert-watcher/src/work-test-fixtures.ts'));
+const {drainDeliveryReceipts}=await import(at('extensions/alert-watcher/src/delivery-bridge.ts'));
+const {handleOwnerReply}=await import(at('extensions/alert-watcher/src/reply-flow/handle-reply.ts'));
+const dir=fs.mkdtempSync(path.join(os.tmpdir(),'astra-revoked-reply-'));
+const f=positiveFixture(dir,[{channel:'telegram',to:'still-authorized'},{channel:'telegram',to:'revoked-owner'}]);
+let sends=0,forwards=0;
+try {
+ const provider=async()=>({channel:'telegram',messageId:`stub-${++sends}`});
+ setActivePluginRegistry(createTestRegistry([{pluginId:'telegram',source:'test',plugin:createOutboundTestPlugin({id:'telegram',outbound:{deliveryMode:'direct',sendText:provider,sendMedia:provider}})}]));
+ await drainDeliveryReceipts(f.db,{stateDir:dir,config:()=>({}),authority:async()=>f.snapshot.authority,destinations:()=>[{channel:'telegram',to:'still-authorized'}]});
+ const receipts=f.db.prepare('SELECT state,recipient_json FROM alert_delivery_receipts ORDER BY rowid').all();
+ const pending=f.db.prepare('SELECT destinations_json FROM pending_replies').get();
+ assert.equal(sends,1);
+ assert.equal(receipts[1].state,'canceled');
+ const forward=async()=>{forwards++;return {ok:true};};
+ const api={runtime:{channel:{telegram:{sendMessageTelegram:forward},whatsapp:{sendMessageWhatsApp:async()=>({ok:true})}}},logger:{info:()=>{},warn:()=>{},error:()=>{}}};
+ const reply=await handleOwnerReply(f.db,api,{...f.snapshot.replyFlow,notifyLoser:false},{sender:'revoked-owner',message:'unapproved reply'});
+ console.log(JSON.stringify({providerCalls:sends,receipts,pending,revokedOwnerReply:reply,forwardCalls:forwards},null,2));
+ assert.equal(reply.status,'ignored','revoked destination must not be given a fresh owner-reply grant by settlement of another recipient');
+ assert.equal(forwards,0);
+} finally {f.db.close();fs.rmSync(dir,{recursive:true,force:true});}

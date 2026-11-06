@@ -1,0 +1,262 @@
+--- approved-v6-author-body
++++ pending-v8-author-body
+@@ -17,6 +17,8 @@
+ | v4       | author response, pending renewed two-pass review                                | Preserves existing browser RLS with exact role-specific restrictive projection fences, adds bounded exact-operation terminal reconciliation after an ambiguous commit, and corrects finalizer races so same-generation renewals can remain valid while release/replacement/reclaim invalidates scope.                             |
+ | v5       | author response, pending renewed two-pass review                                | Makes terminal operation identity durable: finalizer-attested receipts survive authorized candidate cancellation/erasure, terminal outbox rows retain owner/generation attribution, and historical unattributed terminals never masquerade as this operation.                                                                     |
+ | v6       | author response, pending renewed two-pass review                                | Makes the deferred commit guard executable under forced RLS: one receipt-scoped trigger-only definer reselects current finalized evidence, no per-candidate trigger runs, and the exact function/policy/budget catalog is falsifiable.                                                                                            |
++| v7       | author response, pending renewed two-pass review                                | Replaces the infeasible keep-`PUBLIC` source-policy design after an executable baseline reproduction found recursive RLS. Existing policies are retargeted to exact effective roles, the projection role receives one complete policy per source relation, and browser/service/application parity is mandatory.                   |
++| v8       | author response, pending renewed two-pass review                                | Admits only the observed platform-owned PostgreSQL creator edge for the inaccessible finalizer role: no edge on the plain-superuser PostgreSQL 18 fixture, or the exact Supabase `postgres`/`supabase_admin` ADMIN-only edge with no SET/USAGE on PostgreSQL 17; every runtime edge remains forbidden.                            |
+ 
+ The v6 transaction model deliberately does not use `REPEATABLE READ`. A long-lived repeatable-read
+ snapshot could hide a runtime or organization lease replacement that commits while projection is in
+@@ -49,6 +51,13 @@
+ `506d53ddaa50f224e9952ef9c32dd0e40174b1c5`; individually reviewed worktree files are identified by
+ individual SHA-256 because HEAD alone does not name their reviewed bytes.
+ 
++The v7 source-policy adoption addendum is separately frozen in
++`notification-slice5-v7-policy-inventory.json`. It inventories the supported QA baseline at SHA-256
++`90422f4b78a0d28a0b9b455b17c5cd1dc95f822e312b589382fd0627d301512c`, including exact relation
++owners, table/column ACL consumers and policy commands. Its executable reproduction and cleanup
++receipt are `notification-slice5-v7-rls-repro.sh`, `notification-slice5-v7-rls-repro.json`, and
++`notification-slice5-v7-rls-recursive.log`.
++
+ ### AS-IS
+ 
+ 1. `src/lib/notifications/catalog.ts` registers 16 kinds under catalog revision
+@@ -105,6 +114,12 @@
+     projection-mode scope exposes only a live processing row. A lost commit response therefore
+     needs a separate exact-operation terminal observation path; retrying the projection transaction
+     is not reconciliation.
++15. Applying the v6 keep-`PUBLIC` design to the actual baseline is not executable. Under
++    `app_notification_worker`, `organization_members_admin_all` expands through `profiles`, while the
++    worker profile predicate expands back through `organization_members`; PostgreSQL rejects the
++    query with `42P17 infinite recursion detected in policy for relation organization_members`. A
++    restrictive policy does not repair recursive expansion of another applicable policy. The v7
++    child-database reproduction proves both that failure and the nonrecursive exact-role adoption.
+ 
+ ### Required correction before a real adapter can run
+ 
+@@ -205,15 +220,30 @@
+ 
+ Create a second role, `notification_projection_finalizer`, with the same non-login, non-superuser,
+ non-bypass, no-inherit and no-create attributes; any pre-existing role of that name makes adoption
+-fail closed. It is never granted to the backend owner or another role and cannot be reached with
+-`SET ROLE`; any temporary migration-owner membership needed to
+-transfer function ownership is revoked and verified before commit. It owns exactly the fixed
+-`notification_finalize_audience(text)`, `notification_observe_audience()`, and
+-`notification_projection_commit_guard()` functions and no relation, schema, policy, trigger or
+-other function. It receives no source-table or event-payload access. This role exists only so the
+-finalizer and observer can obtain the narrow row-lock or terminal receipt-read privileges that must
+-not be granted directly to `app_notification_worker`, and so the trigger-only commit guard can
+-reselect current terminal evidence after the caller role resumes.
++fail closed. No application, backend runtime or ordinary caller receives membership, ADMIN OPTION,
++`SET` or `USAGE` on it. Any temporary migration-actor membership needed to transfer function
++ownership is granted by that actor, then revoked by the same grantor and verified before commit.
++
++PostgreSQL's platform role-creation semantics have one narrow installation exception. The supported
++plain-superuser PostgreSQL 18 fixture has no `pg_auth_members` row targeting the finalizer. The
++supported Supabase PostgreSQL 17 fixture may retain exactly one platform-created row: member
++`postgres`, target `notification_projection_finalizer`, grantor `supabase_admin`,
++`admin_option=true`, `inherit_option=false`, and `set_option=false`. In that mode
++`pg_has_role('postgres', 'notification_projection_finalizer', 'USAGE')` and `... 'SET'` must both be
++false. The migration records which of those two exact modes was observed before adding temporary
++ownership authority; every later migration and worker admission requires the same member/grantor
++inventory. It does not revoke the Supabase platform-owned ADMIN-only edge. Any other member,
++grantor, ADMIN, inheritance or SET edge fails closed. In particular, neither worker role nor any
++browser, service, assistant, ledger, coordinator or health role may hold an ADMIN edge even if SET
++and USAGE are false.
++
++The finalizer owns exactly the fixed `notification_finalize_audience(text)`,
++`notification_observe_audience()`, and `notification_projection_commit_guard()` functions and no
++relation, schema, policy, trigger or other function. It receives no source-table or event-payload
++access. This role exists only so the finalizer and observer can obtain the narrow row-lock or
++terminal receipt-read privileges that must not be granted directly to `app_notification_worker`,
++and so the trigger-only commit guard can reselect current terminal evidence after the caller role
++resumes.
+ 
+ `notification_worker` retains claim, renewal, integrity quarantine, and the existing general Slice3
+ tests, but Slice5 revokes its ability to settle `processing -> projected`. The worker role can still
+@@ -251,40 +281,66 @@
+ `notification_events` expose only the exact processing event receipt whose organization, event,
+ tuple, owner, generation and live expiry equal that scope.
+ 
+-The migration preserves the current browser policies rather than dropping or retargeting them. The
+-reviewed baseline policy inventory is:
+-
+-| Relation               | Existing policy names applicable to this decision                                                                                            |
+-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+-| `organizations`        | `organizations_admin_all`, `organizations_member_select` (`PUBLIC`, permissive)                                                              |
+-| `organization_members` | `organization_members_admin_all`, `organization_members_self_select` (`PUBLIC`, permissive); `organization_members_org_guc` (`app_ledger`)   |
+-| `profiles`             | `profiles_self_select`, `profiles_self_update` (`PUBLIC`, permissive; update does not apply to a `SELECT`)                                   |
+-| `member_roles`         | `member_roles_org_guc` (`app_ledger`)                                                                                                        |
+-| `permission_rules`     | `permission_rules_org_guc` (`PUBLIC`, permissive)                                                                                            |
+-| `join_request`         | `join_request_admin_all`, `join_request_self_insert`, `join_request_self_select` (`PUBLIC`, permissive; insert does not apply to a `SELECT`) |
+-
+-For each of those six source relations, add exactly one named `AS PERMISSIVE FOR SELECT TO
+-app_notification_worker` policy and one named `AS RESTRICTIVE FOR SELECT TO
+-app_notification_worker` policy. Both new policies contain the complete row-specific constraint for
+-that relation: exact event organization; exact current member/role/rule rows where relevant; and,
+-for applicant/profile access, the exact event-bound request and applicant. The restrictive policy
+-also repeats the complete live projection fence or exact revalidation-candidate fence. It is not a
+-scope-only predicate. PostgreSQL therefore evaluates the applicable permissive policy union,
+-including a browser policy that a caller makes true through `auth.uid()`, and then ANDs that union
+-with the exact row-and-fence restrictive policy. A forged JWT subject cannot widen the final row set.
+-The projection-specific permissive policy supplies the legitimate worker path on relations whose
+-browser policies are false for a server transaction; the restrictive policy remains authoritative
+-against every applicable permissive branch.
+-
+-Migration admission inventories `pg_policy.polpermissive`, command, roles, exact canonical
+-`USING`/`WITH CHECK` expressions and effective role membership for every listed existing and new
+-policy. The exact reviewed browser policies above are accepted unchanged; an unknown extra policy,
+-a missing restrictive policy, a permissive replacement for it, a role/command change, or a broader
+-restrictive expression fails before role/grant creation. Native direct-role tests set both
+-`request.jwt.claim.sub` and `request.jwt.claims` to a real foreign/global-admin UUID and prove the
+-restrictive source policies still expose zero foreign rows. Projection and revalidation setup also
+-set those two request-JWT settings locally to the exact values that make the installed `auth.uid()`
+-return null, but correctness never relies on that clearing.
++The migration preserves the behavior of every effective existing source consumer while removing
++`PUBLIC` from these six relations. `relation_owner` below is not a literal role: the migration reads
++the exact owner OID from `pg_class`, rejects either Slice5 worker as owner, and binds that exact role
++into the policy. The supported baseline adoption is:
++
++| Relation               | Existing policies                                                                                    | Exact post-v7 roles                                                           |
++| ---------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
++| `organizations`        | `organizations_admin_all`, `organizations_member_select`                                             | `anon`, `authenticated`, `service_role`, exact `relation_owner`               |
++| `organization_members` | `organization_members_admin_all`, `organization_members_self_select`; `organization_members_org_guc` | first two: browser/service, `app_ledger`, owner; org-GUC remains `app_ledger` |
++| `profiles`             | `profiles_self_select`, `profiles_self_update`                                                       | select: browser/service, `app_ledger`, owner; update: browser/service, owner  |
++| `member_roles`         | `member_roles_org_guc`                                                                               | unchanged `app_ledger`; add the exact worker SELECT policy                    |
++| `permission_rules`     | `permission_rules_org_guc`                                                                           | browser/service, `app_ledger`, exact owner                                    |
++| `join_request`         | `join_request_admin_all`, `join_request_self_insert`, `join_request_self_select`                     | `anon`, `authenticated`, `service_role`, exact `relation_owner`               |
++
++Here, browser/service means exactly `anon`, `authenticated`, and `service_role`. `app_ledger` is
++listed only where it has the relevant table command in the frozen baseline. `app_assistant_ro` and
++`brain_vector_worker` have schema usage but no table or column privilege on these relations, so they
++remain unable to read them and are not named by a policy. The migration/current operator is a DDL
++authority, not an invented runtime reader; data access is retained only through exact relation
++ownership or an inventoried grant. A future grantee does not inherit former `PUBLIC` policy access:
++adding it requires a reviewed ACL-and-policy migration.
++
++The migration atomically retargets only the inventoried policies, without changing their command or
++`USING`/`WITH CHECK` expression. It leaves the two already role-specific `app_ledger` policies
++unchanged. It then adds exactly one named `AS PERMISSIVE FOR SELECT TO app_notification_worker`
++policy to each source relation. Each worker policy contains the complete relation-specific predicate:
++exact event organization; exact current member/role/rule rows where relevant; exact event-bound
++request/applicant evidence; and either the complete live projection fence or exact revalidation
++candidate fence. No source policy remains `TO PUBLIC`, no legacy policy applies to the projection
++role through membership, and the projection role is not a member of a browser, service,
++application, owner or migration role.
++
++Keeping the `PUBLIC` policies and adding a restrictive worker policy is explicitly rejected. The
++baseline `organization_members` policy reads `profiles`; the worker `profiles` predicate must read
++`organization_members`; PostgreSQL expands both policies for the projection role and raises `42P17`
++before a restrictive predicate can bound the result. SQL short-circuiting is not an authority
++contract. A source-reading definer would add a fourth broad definer and bypass the reviewed
++per-relation RLS surface, while a bypass role or caller-provided recipient list is forbidden.
++
++Migration admission inventories table and column ACLs, relation owners, transitive `MEMBER`/`USAGE`/
++`SET` closure, and `pg_policy.polpermissive`, command, roles and canonical expressions before any
++mutation. `notification-slice5-v8-command-role-inventory.sql` is the executable enumeration: it
++combines table and column privileges for each policy command, adds the exact relation owner, and
++compares the result with the frozen role array instead of treating schema usage as data authority.
++After migration it proves the exact retargeted role arrays, unchanged expressions, the six worker
++policies, and that no policy applicable to `app_notification_worker` is unknown or broader.
++
++The runtime admission fingerprint is the canonical ordered tuple of: source relation owner and RLS
++flags; normalized table and column ACLs; exact policy name, command, permissiveness, role array and
++canonical `USING`/`WITH CHECK`; both Slice5 role attributes; all direct and transitive membership
++edges; the exact finalizer creator-edge mode described above; the three definer owners, signatures,
++ACLs and fixed empty search paths; and the commit-guard trigger identity/definition. Worker build
++admission recomputes and compares every field before acquiring a runtime lease. There is no
++partial-field or digest-only fallback. Later `PUBLIC`, inherited, creator-edge, function, trigger or
++ACL drift fails closed. Native parity tests exercise browser self and
++admin branches, service-role access, exact app-ledger org-GUC and historical JWT branches,
++relation-owner/migration access, and the existing denials for `app_assistant_ro` and
++`brain_vector_worker`. Projection-role tests set both request-JWT settings to a real foreign/global
++admin and still see only exact worker rows. Projection and revalidation setup also clear those
++settings, but correctness does not rely on clearing them.
+ 
+ The finalizer role receives schema `USAGE` and `SELECT` only for the same scoped runtime,
+ organization and outbox columns already listed plus outbox state/terminal owner/terminal generation,
+@@ -373,7 +429,7 @@
+ and do not trust a subject GUC. Pool release tests prove every scope key is empty after commit,
+ rollback, timeout and cancellation.
+ 
+-Every projection-mode operational policy and every source relation's restrictive
++Every projection-mode operational policy and every source relation's role-specific
+ `FOR SELECT TO app_notification_worker` policy includes the following exact shape; a fixed helper may
+ remove repetition only if its source is statically ratcheted and each caller still binds the
+ row-specific predicate:
+@@ -399,14 +455,14 @@
+ 
+ The fence helper validates every UUID, bigint and digest string before casting, reads only the
+ listed operational columns, and returns false on missing/malformed scope. It is not a generic
+-`current_setting` equality shortcut. Native catalog checks require the exact operational policies
+-and the exact source-table permissive-plus-restrictive pairs, with no additional projection-role
+-policy on a broader command or table. The catalog proof computes the effective source rule as
+-`(OR every applicable permissive policy) AND (AND every applicable restrictive policy)` for
+-`app_notification_worker`; each accepted browser policy is part of the recorded permissive union,
+-and the exact restrictive row-and-fence predicate bounds it. Operational-table policies inline
+-their own finite scope predicates; only source-table policies may call the fence helper, preventing
+-recursive RLS evaluation.
++`current_setting` equality shortcut. Native catalog checks require the exact operational policies, exact legacy-policy retarget role
++arrays and one exact source policy per relation, with no `PUBLIC`, inherited, extra or broader policy
++applicable to `app_notification_worker`. The worker's effective source rule is therefore exactly its
++one complete row-and-fence policy, while browser/service/application policies retain their frozen
++expressions for their exact roles. Operational-table policies inline their finite scope predicates;
++only source-table worker policies may call the fence helper. The organization-members worker policy
++does not read `profiles`; the profiles worker policy may read organization members, making the
++source-policy dependency graph one-way and nonrecursive.
+ 
+ For event claim admission, `notification_worker` receives only the corresponding runtime and
+ organization fence columns and exact policies; the claim SQL must prove the captured live runtime
+@@ -997,10 +1053,12 @@
+ 1. **Migration and adoption.** Fresh and exact Slice3/Slice4 child databases apply the real migration
+    runner; routing columns backfill exactly and rerun reports zero pending. Orphan/mismatched rows,
+    extra constraints/triggers/policies, unsafe pre-existing roles, grants, membership closure, table
+-   ownership, or RLS drift fail transactionally. The exact existing browser-policy inventory is
+-   adopted unchanged; each source table gains the one exact permissive and one exact restrictive
+-   worker policy. Removing/changing the restrictive policy or adding an unknown applicable policy
+-   fails before any role/grant creation. Existing terminal outbox rows retain null/null operation
++   ownership, or RLS drift fail transactionally. The exact existing policy expressions and commands
++   are retained while `PUBLIC` is atomically retargeted to each relation's exact effective role set;
++   each source table gains one complete role-specific worker policy. Missing/extra policy roles,
++   changed expressions, unexpected ACL/member closure, a new `PUBLIC` policy or any unknown policy
++   applicable to the worker fails before mutation or runtime lease acquisition. Existing terminal
++   outbox rows retain null/null operation
+    attribution; every new projected/quarantined transition captures exact owner/generation and a
+    partial, forged or mutable attribution fails. Catalog adoption requires the exact receipt
+    constraint-trigger definition, trigger-function owner/body/search path, three-function owner
+@@ -1084,18 +1142,26 @@
+     digest cannot project, and quarantine fails if any receipt/candidate exists. Static catalog tests
+     prove every definer has a fixed empty search path, no dynamic SQL or generic identifier argument,
+     exactly one owner role and exactly three fixed functions, exact grants and paired exact
+-    SELECT/UPDATE RLS policies. The commit guard is trigger-only: direct execution is denied, wrong
+-    `TG_RELID`/operation/name/arguments fail, and an application-set commit-guard GUC exposes no row.
++    SELECT/UPDATE RLS policies. PostgreSQL 17 Supabase adoption proves the exact
++    `postgres`/`supabase_admin` ADMIN-only creator edge, `INHERIT=false`, `SET=false`, and
++    `pg_has_role` USAGE/SET false after the migration-actor edge is revoked; PostgreSQL 18 plain
++    superuser adoption proves zero target membership rows. Both versions reject an extra grantor,
++    member, ADMIN edge, inherited edge, SET edge, or any worker/ordinary-caller edge. The commit
++    guard is trigger-only: direct execution is denied, wrong `TG_RELID`/operation/name/arguments
++    fail, and an application-set commit-guard GUC exposes no row.
+     A real finalizer call fails if either required control UPDATE policy
+-    is removed; an unknown/broader operational policy, unknown source policy, or missing/changed
+-    restrictive source policy fails migration admission, while the exact inventoried browser
+-    policies remain accepted. Revalidation succeeds after
++    is removed; an unknown/broader operational policy, unknown source policy, changed legacy-policy
++    role array or missing/changed worker source policy fails migration and runtime admission, while
++    the exact inventoried browser/service/application behavior remains accepted. Revalidation succeeds after
+     the scheduler lease is terminal only with the exact frozen candidate receipt; wrong
+     organization/candidate/recipient/digest or mixed projection scope reads no row. Pool role/GUC
+     state restores after success, callback error, SQL timeout, cancellation, finalizer failure and
+     terminal observation. A forged `request.jwt.claim.sub`/`request.jwt.claims` for a real
+-    foreign/global admin cannot widen any source-table read; removing any restrictive worker policy
+-    makes the named native negative fail. Application-supplied `finalized_at`, a second finalization,
++    foreign/global admin cannot widen any source-table read. A real baseline migration first proves
++    the old `PUBLIC` plus worker-policy graph raises `42P17`, then proves exact retargeting is
++    nonrecursive; browser self/admin, service role, app-ledger org-GUC/JWT, owner/migration and denied
++    assistant/brain-role matrices remain equivalent. Removing a worker policy or restoring `PUBLIC`
++    makes a named native negative fail. Application-supplied `finalized_at`, a second finalization,
+     a changed receipt field, a caller-supplied terminal identity or one-sided terminal attribution
+     fails at the trigger/constraint boundary. Removing the receipt trigger, trigger function,
+     current-row reselect, or either commit-guard RLS branch makes a named native mutation fail; a

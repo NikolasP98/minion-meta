@@ -1,0 +1,48 @@
+diff --git a/src/routes/api/gateway/whatsapp/member/+server.ts b/src/routes/api/gateway/whatsapp/member/+server.ts
+index c23cc85d..4e643877 100644
+--- a/src/routes/api/gateway/whatsapp/member/+server.ts
++++ b/src/routes/api/gateway/whatsapp/member/+server.ts
+@@ -70,13 +70,16 @@ export const POST: RequestHandler = async ({ locals, request }) => {
+   if (channel.length !== 1) return no('account_not_found');
+ 
+   const members = await db.execute<{ user_id: string }>(sql`
+-    select ui.user_id from user_identities ui
++    select distinct ui.user_id from user_identities ui
+     join organization_members om
+       on om.profile_id = ui.user_id and om.organization_id = ${orgId}::uuid
+-    where ui.provider = 'whatsapp' and ui.external_id = ${digits} and ui.verified_at is not null
+-    limit 1
++    -- Older claims stored E.164 with '+' (1 of 3 verified rows in prod); compare digits.
++    where ui.provider = 'whatsapp' and regexp_replace(ui.external_id, '[^0-9]', '', 'g') = ${digits}
++      and ui.verified_at is not null
++    limit 2
+   `);
+-  const profileId = members[0]?.user_id;
++  // The unique index is on the raw external_id, so '+N' and 'N' could be two owners: fail closed.
++  const profileId = members.length === 1 ? members[0].user_id : undefined;
+   if (!profileId) return no('not_member');
+ 
+   const agents = await db.execute<{
+diff --git a/src/routes/api/gateway/whatsapp/member/server.test.ts b/src/routes/api/gateway/whatsapp/member/server.test.ts
+index 9731cc84..69ffb358 100644
+--- a/src/routes/api/gateway/whatsapp/member/server.test.ts
++++ b/src/routes/api/gateway/whatsapp/member/server.test.ts
+@@ -72,6 +72,18 @@ describe('POST /api/gateway/whatsapp/member', () => {
+     expect(mocks.limit).toHaveBeenCalledWith('wa-member:srv-1:51999888777', 30, 60_000);
+   });
+ 
++  it('matches an identity stored with a leading +', async () => {
++    await db.exec(`update user_identities set external_id = '+51999888777'`);
++    expect(await result()).toEqual({ member: true, profileId: profile, agentId });
++  });
++
++  it('not_member when the + and digits forms belong to two different users', async () => {
++    const other = '20000000-0000-4000-8000-000000000009';
++    await db.exec(`insert into user_identities values ('${other}','whatsapp','+51999888777',1);
++      insert into organization_members values ('${org}','${other}');`);
++    expect(await result()).toEqual({ member: false, reason: 'not_member' });
++  });
++
+   it('401 without a server token, or with an ambiguous or foreign gateway', async () => {
+     await expect(call(undefined, { tenantCtx: { tenantId: org } })).rejects.toMatchObject({
+       status: 401,

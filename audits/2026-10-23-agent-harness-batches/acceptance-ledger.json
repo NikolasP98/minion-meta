@@ -1,0 +1,379 @@
+{
+  "generatedAt": "2026-10-23T05:12:06.995836+00:00",
+  "scope": "27 approved remaining slices; cross-repository support follows program.json",
+  "note": "Planned acceptance is copied from the approved parent. Evidence is appended only after executed checks and independent review; source prose is not runtime proof.",
+  "slices": [
+    {
+      "slice": 3,
+      "title": "Accepted-run callbacks and lineage lifetime",
+      "group": "a-chat",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-3",
+      "acceptance": "**Topics:** `logic`, `permissions`, `test`\n\n**Dependencies:** 2. **Owner/files:** Hub: bounded accepted-run map, gateway.svelte.ts final handling, dispatch.ts and choice/artifact callers.\n\n**DoD A03:** Duplicate/delayed final, reload, expired record, owner switch and awaited tool cannot execute stale page actions. Full-context callback bypass remains. Context-changing action ends its old batch; a fresh validated follow-up carries completed results and preserves five-follow-up cap.\n\n**Verification:** `bunx vitest run src/lib/assistant/dispatch.ownership.test.ts; bun run test:critical-journeys`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": [
+        "verification/a-chat/revision2/convergence.json",
+        "development/a-chat/revision2/source-commit.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 4,
+      "title": "Router attempt provenance",
+      "group": "a-chat",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-4",
+      "acceptance": "**Topics:** `logic`, `data`, `test`\n\n**Dependencies:** 1. **Owner/files:** Hub: route endpoint/service, turn-router request helper, observability-context.ts.\n\n**DoD A04:** Early submission UUID is propagated; requested/resolved model, rubric revision, actual elapsed errors and nullable unknown cost pass the real sanitizer. p_sandbox survives. off/bypass has no invented provider attempt; existing off/shadow/enforce vocabulary stays.\n\n**Verification:** `bunx vitest run src/server/services/assistant-router.provenance.test.ts src/lib/server/observability-context.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": [
+        "verification/a-chat/revision2/convergence.json",
+        "development/a-chat/revision2/source-commit.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 5,
+      "title": "Client observation ingestion and task joins",
+      "group": "a-chat",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-5",
+      "acceptance": "**Topics:** `logic`, `data`, `security`, `test`\n\n**Dependencies:** 3, 4. **Owner/files:** Hub: new api/assistant/decision-events endpoint, bounded client buffer, captureServerEvent allowlist and explicit run relations.\n\n**DoD A05:** Server identity overrides forged actor/org; limits and event enum enforced; buffer abandoned on owner switch; server success/client discard not applied; repeated event IDs dedupe in analysis; missing events lower coverage. Explicit follow-up joins; free text never guesses lineage.\n\n**Verification:** `bunx vitest run src/lib/assistant/decision-lineage.test.ts src/routes/api/assistant/decision-events/decision-events.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": [
+        "verification/a-chat/revision2/convergence.json",
+        "development/a-chat/revision2/source-commit.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 8,
+      "title": "Factory run-keyed admission ledger",
+      "group": "b-factory",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-8",
+      "acceptance": "**Topics:** `logic`, `security`, `test`\n\n**Dependencies:** 6. **Owner/files:** Factory: runner/src/jev-proxy.ts and capability lifecycle callers; serialize after Slice 6.\n\n**DoD A08:** One inflight per run across token remint; concurrent max_calls=1 admits one; busy consumes no extra inference; malformed debit remains capped; revoked request settles once; unknown spend fences; expiry never frees unresolved exposure.\n\n**Verification:** `(cd runner && node --import tsx --test src/jev-proxy.test.ts)`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "development/b-factory/revision1/source-manifest.json",
+        "verification/b-factory/revision1/review.md",
+        "development/b-factory/revision1/github-checks.json",
+        "https://github.com/NikolasP98/minion-factory/pull/201"
+      ],
+      "stage": "PR-ready-human-merge-pending"
+    },
+    {
+      "slice": 9,
+      "title": "Factory HTTP and hook deadline",
+      "group": "b-factory",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-9",
+      "acceptance": "**Topics:** `logic`, `security`, `test`\n\n**Dependencies:** 8. **Owner/files:** Factory: runner/src/index.ts Express Jev route, jev-proxy.ts, jev.ts, agent/lib/jev.sh and hook.\n\n**DoD A09:** Signal/remaining budget reaches fetch/body; delayed headers/body and client disconnect are bounded/unknown; hook wait stays within 6s with max4s semantic budget; local floor denies immediately. Actual installed harness version/proxy-delay proof required.\n\n**Verification:** `(cd runner && node --import tsx --test src/jev-deadline.test.ts); bash agent/lib/jev.test.sh; bash agent/hooks/jev-guard.deadline.test.sh`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "development/b-factory/revision1/source-manifest.json",
+        "verification/b-factory/revision1/review.md",
+        "development/b-factory/revision1/github-checks.json",
+        "https://github.com/NikolasP98/minion-factory/pull/201"
+      ],
+      "stage": "PR-ready-human-merge-pending"
+    },
+    {
+      "slice": 11,
+      "title": "Watcher adapters and stable admission identity",
+      "group": "c-gateway",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-11",
+      "acceptance": "**Topics:** `logic`, `data`, `test`\n\n**Dependencies:** 10. **Owner/files:** Gateway: watcher index.ts, dedup.ts, envelope.ts; no external langgraph-server changes.\n\n**DoD A11:** Cross-chat equal IDs stay distinct; dual hooks bind one source; policy revision changes resume old admission; same immutable ID/different bytes conflicts; verified edit/new explicit reevaluation is distinct; legacy flow/manual calls stay fresh and cannot assert trusted origin.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/provenance.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 12,
+      "title": "Classification receipt store and state machine",
+      "group": "c-gateway",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-12",
+      "acceptance": "**Topics:** `logic`, `data`, `migrations`, `test`\n\n**Dependencies:** 11. **Owner/files:** Gateway watcher: store.ts, migrate.ts, new classification-work.ts, real temporary alerts.db.\n\n**DoD A12:** Atomic unique claim, lease generation, capped attempt history, nextAttemptAt and all terminal states; known invalid result records usage then fails; negative completed state survives; raw payload retention leaves replay tombstones; concurrent/process-restart claims use real SQLite.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/classification-work.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 13,
+      "title": "Classification dispatcher and handler integration",
+      "group": "c-gateway",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-13",
+      "acceptance": "**Topics:** `logic`, `data`, `test`\n\n**Dependencies:** 12. **Owner/files:** Gateway watcher: bounded lifecycle dispatcher plus hook/classifier and legacy RPC adapters.\n\n**DoD A13:** 5s poll/30s lease/10s renew, one active classifier, safe retry5s/30s cap3; admitted crash unknown; received restart no recall; revoked policy cannot dispatch; receipt refs scope/input checked. Hook custom policies remain supported; flow origin remains uncertified.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/classification-recovery.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 14,
+      "title": "Caller-managed delivery bridge",
+      "group": "c-gateway",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-14",
+      "acceptance": "**Topics:** `logic`, `data`, `test`\n\n**Dependencies:** 12. **Owner/files:** Gateway watcher recipient receipt store and bridge to deliver.ts, delivery-queue-store/files/recovery; reuse queueId and caller completion.\n\n**DoD A14:** SQLite admission precedes queue; existing matching queue reconciles under lease; terminal queue survives until SQLite settlement then acknowledgeCallerManagedDelivery; missing/mismatched admitted evidence never re-enqueues; crash at each cross-store boundary is injected.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/delivery-bridge.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 15,
+      "title": "Watcher recipient dispatcher and legacy cutover",
+      "group": "c-gateway",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-15",
+      "acceptance": "**Topics:** `logic`, `data`, `migrations`, `test`\n\n**Dependencies:** 13, 14. **Owner/files:** Gateway watcher: destinations.ts, index.ts, positive/suggestion result publication and old pending boot retry.\n\n**DoD A15:** Success recipient never repeats when another fails; first confirmed send stamps hook cooldown once; source count once; current recipient authorization checked before queue admission; old pending rows migrate legacy-unreconciled and cannot fan out. Recovery after admission has documented revocation limit. Kill after suggestion admission/result/recipient materialization: no second suggestion call, unknown uses explicit empty fallback. Expired queue copies are redacted with tombstones preserved; expired queued input cancels.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/delivery-recovery.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 16,
+      "title": "Per-invocation resolved-model usage",
+      "group": "c-gateway",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-16",
+      "acceptance": "**Topics:** `logic`, `test`\n\n**Dependencies:** 13. **Owner/files:** Gateway: opt-in DroneHost wrapper, classifier.ts and reply-flow/suggestions-drone.ts, both hook and flow callers.\n\n**DoD A16:** One priced record from returned resolvedModel; overlapping classifier/suggestion A/B and fallback A\u2192B correct; missing result or unreported retry bill preserves unknown/incomplete coverage; inferred host price suppressed only for opted-in runs. SDK signature unchanged and exact installed result seam qualified.\n\n**Verification:** `pnpm exec vitest run src/drones/host.test.ts; pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/usage-finalization.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 17,
+      "title": "Pulse revisions and dispatch storage",
+      "group": "d-pulse",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-17",
+      "acceptance": "**Topics:** `data`, `migrations`, `security`, `test`\n\n**Dependencies:** none. **Owner/files:** Hub: Pulse schema/service/migrations/seed and new dispatch store.\n\n**DoD A17:** Real PG concurrent transaction yields one dispatch per proposal revision; payload frozen; org/owner constraints; edit/version conflict; state-dependent fields/FKs; legacy informational data preserved. Deletion cannot cascade away admission tombstones.\n\n**Verification:** `bunx vitest run src/server/services/pulse-dispatch.store.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/d-pulse/final/REVIEW.md",
+        "development/d-pulse/final-root-gates/final-summary.json",
+        "development/d-pulse/upstream-wa-integration/merge-receipt.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 18,
+      "title": "Pulse atomic approval and authoritative receipts",
+      "group": "d-pulse",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-18",
+      "acceptance": "**Topics:** `logic`, `permissions`, `ui`, `test`\n\n**Dependencies:** 17. **Owner/files:** Hub: POST/PATCH, receipt GET, recent-decision service/query and existing Pulse cards.\n\n**DoD A18:** Concurrent approve/edit/dismiss has one winner; executable stale/missing revision refreshes; duplicate approve returns receipt; informational kind no dispatch. Approve\u2192refresh/reconnect still shows queued/unknown state under owner-only receipt access; business pilot rejected. Keyboard/save-refresh proof and UI lints.\n\n**Verification:** `bunx vitest run src/routes/api/pulse/proposals/pulse-approval.test.ts; bun run test:critical-journeys`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/d-pulse/final/REVIEW.md",
+        "development/d-pulse/final-root-gates/final-summary.json",
+        "development/d-pulse/upstream-wa-integration/merge-receipt.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 19,
+      "title": "Selected due-job worker primitive",
+      "group": "d-pulse",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-19",
+      "acceptance": "**Topics:** `infra`, `logic`, `test`\n\n**Dependencies:** none. **Owner/files:** Hub: bg-runtime candidate query, narrow postponeUntil result, authenticated scoped tick handler and handler registration.\n\n**DoD A19:** Filter type/org/dueAt before LIMIT and repeat due-time predicate in atomic claim; stale snapshot/direct advance after another worker postpones is rejected and not counted; unrelated oldest backlog never claimed; skipped rows not advanced; future bounded postpone releases current lease; only registered Pulse families use new retry contract; default jobs tick unchanged.\n\n**Verification:** `bunx vitest run src/server/services/bg-runtime.test.ts src/server/services/bg-runtime.selection.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/d-pulse/final/REVIEW.md",
+        "development/d-pulse/final-root-gates/final-summary.json",
+        "development/d-pulse/upstream-wa-integration/merge-receipt.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 20,
+      "title": "Strict Pulse dispatch execution",
+      "group": "d-pulse",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-20",
+      "acceptance": "**Topics:** `security`, `logic`, `infra`, `test`\n\n**Dependencies:** 18, 19. **Owner/files:** Hub: strict credentials/personal-agent/session resolver and dispatch handler. Gateway: cron explicit-agent/session admission and execution validation in server-cron and cron handlers.\n\n**DoD A20:** Two profiles on one gateway target exact agent/session; omitted general-cron ID still defaults, explicit unknown/deleted ID never does; no ambient credentials/external announcement. Lost RPC/post-RPC failure stays indeterminate with no retry; valid remote ID scheduled only. Qualification gates Hub activation on compatible gateway.\n\n**Verification:** Hub: `bunx vitest run src/server/services/pulse-dispatch.worker.test.ts`. Gateway: `pnpm exec vitest run src/gateway/server-core/server-cron.binding.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/d-pulse/final/REVIEW.md",
+        "development/d-pulse/final-root-gates/final-summary.json",
+        "development/d-pulse/upstream-wa-integration/merge-receipt.json"
+      ],
+      "sourceReview": "independently source-converged; complete implementation acceptance remains pending final joint/gate evidence"
+    },
+    {
+      "slice": 21,
+      "title": "Bounded digest policy and source snapshots",
+      "group": "e-digest",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-21",
+      "acceptance": "**Topics:** `logic`, `security`, `data`, `test`\n\n**Dependencies:** none. **Owner/files:** Hub: new narrow pulse-digest policy/source modules and official-source/dependency fixtures.\n\n**DoD A21:** Verified personal owner; <=5 sources/20items/48KiB evidence; deterministic unchanged content no reasoning; safe destination/body/time checks; pinned dependency/file anchors; failed fetch no cursor advance; disabled/zero spend default.\n\n**Verification:** `bunx vitest run src/server/services/pulse-digest.sources.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": []
+    },
+    {
+      "slice": 22,
+      "title": "Digest admission and budget storage",
+      "group": "e-digest",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-22",
+      "acceptance": "**Topics:** `data`, `migrations`, `infra`, `test`\n\n**Dependencies:** 17, 19, 21. **Owner/files:** Hub: digest run/source/admission tables; transaction-taking enqueue and namespace budget lock.\n\n**DoD A22:** Duplicate input one run/job; distinct snapshots compete for one owner slot and last daily allowance; UTC rollover/policy change cannot reset unknown fence; reservation+reasoning admission atomic; stale settlement cannot release successor; current policy/owner required.\n\n**Verification:** `bunx vitest run src/server/services/pulse-digest.admission.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": []
+    },
+    {
+      "slice": 23,
+      "title": "One-request reasoning and recovery",
+      "group": "e-digest",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-23",
+      "acceptance": "**Topics:** `logic`, `data`, `security`, `test`\n\n**Dependencies:** 22. **Owner/files:** Hub: typed no-tool reasoning handler, result/usage settlement and explicit retry/error transitions.\n\n**DoD A23:** SDK retry/fallback disabled; one admitted external request; unknown response/bill fences namespace; known invalid response records bill then fails; received restart no recall; lease/authority loss blocks later commit; no live calls in tests.\n\n**Verification:** `bunx vitest run src/server/services/pulse-digest.reasoning.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": []
+    },
+    {
+      "slice": 24,
+      "title": "Atomic digest publication",
+      "group": "e-digest",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-24",
+      "acceptance": "**Topics:** `data`, `logic`, `test`\n\n**Dependencies:** 23. **Owner/files:** Hub: transaction-taking internal Pulse insert/readback helper, reserved-key ingress validation, digest cursor/job finalization.\n\n**DoD A24:** Same owner/run/content conflict returns same card; mismatched binding rolls back; reserved public key rejected; decided card immutable; cursor CAS cannot regress; one card/cursor/job transaction after crash; no-signal no card; claim support separately evaluated.\n\n**Verification:** `bunx vitest run src/server/services/pulse-digest.publication.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": []
+    },
+    {
+      "slice": 25,
+      "title": "Reasoned Pulse feedback and export",
+      "group": "e-digest",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-25",
+      "acceptance": "**Topics:** `data`, `ui`, `test`\n\n**Dependencies:** 18, 24. **Owner/files:** Hub: feedback schema/API, existing card controls and scoped export adapter.\n\n**DoD A25:** Reason independent from approve/dismiss; versioned actor/content/policy/source reference; repeated action idempotent; correction supersedes same-owner record; old content/cross-owner denied; committed-refresh-failed never replays. Export separates preference from factual error, no automatic learning.\n\n**Verification:** `bunx vitest run src/server/services/pulse-feedback.test.ts; bun run test:critical-journeys`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": []
+    },
+    {
+      "slice": 26,
+      "title": "Fixture trajectory runner and receipts",
+      "group": "f-evals",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-26",
+      "acceptance": "**Topics:** `test`, `logic`, `data`\n\n**Dependencies:** 3, 5. **Owner/files:** Meta: scripts/agent-evals/run.mjs, lib/manifest.mjs and tests; Hub existing critical-journeys synthetic HTTP/WS adapters.\n\n**DoD A26:** Default fixture mode denies network; three arms reset identical data and capture append-only events/receipts; small synthetic episodes cover joins/missing receipts/zero budget. Explicit live approval parser rejects missing permission/cost bound. No Factory/digest prerequisite.\n\n**Verification:** `node --test scripts/agent-evals/run.test.mjs; node scripts/agent-evals/run.mjs --mode fixture --manifest audits/2026-10-22-agent-use-transcripts/spec/fixtures/smoke-manifest.json`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
+    },
+    {
+      "slice": 27,
+      "title": "Corpus schema and labeling workflow",
+      "group": "f-evals",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-27",
+      "acceptance": "**Topics:** `test`, `data`\n\n**Dependencies:** 26. **Owner/files:** Meta: scripts/agent-evals/corpus.mjs, fixture schema, small validated example set and labeling/holdout protocol.\n\n**DoD A27:** Reject missing truth/permissions/receipt expectations, duplicate episode leakage and exposed holdout in dev mode; bilingual strata/compaction represented by fixtures; import and readiness report count human-adjudicated labels. Creating/adjudicating 300 episodes is a separate governed operation, not claimed inside this 4\u20138h software slice.\n\n**Verification:** `node --test scripts/agent-evals/corpus.test.mjs; node scripts/agent-evals/corpus.mjs validate --input audits/2026-10-22-agent-use-transcripts/spec/fixtures/corpus`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
+    },
+    {
+      "slice": 28,
+      "title": "Deterministic outcome/economics report",
+      "group": "f-evals",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-28",
+      "acceptance": "**Topics:** `test`, `logic`, `data`\n\n**Dependencies:** 26, 27. **Owner/files:** Meta: scripts/agent-evals/report.mjs and seeded synthetic outcomes; no provider calls.\n\n**DoD A28:** Cluster-paired bootstrap reproducible; cheaper but less-successful arm can fail cost-per-success gate; critical violation veto; missing/unbounded cost and zero success nonpromotable; drift-separated cohorts; correct expansion/stopping metadata. Small fixtures prove tool, full holdout remains separately operated.\n\n**Verification:** `node --test scripts/agent-evals/report.test.mjs; node scripts/agent-evals/report.mjs --run <fixture-run-directory>`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
+    },
+    {
+      "slice": 29,
+      "title": "Trace screening fixture experiment",
+      "group": "f-evals",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-29",
+      "acceptance": "**Topics:** `test`, `data`, `logic`\n\n**Dependencies:** 5, 28. **Owner/files:** Meta: scripts/agent-evals/screen.mjs plus seeded trace faults and independently versioned labels.\n\n**DoD A29:** Deterministic receipt faults first; semantic abstain preserved; random apparently-good controls retained with weighting; fixed-review-budget yield/miss estimates; no billing/release authority. Fixture proof independent of digest UI; optional Pulse feedback import uses Slice25 only when enabled.\n\n**Verification:** `node --test scripts/agent-evals/screen.test.mjs`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": false,
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
+    },
+    {
+      "slice": 30,
+      "title": "Conditional complaint census and shadow seam",
+      "group": "f-evals",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-30",
+      "acceptance": "**Topics:** `test`, `logic`, `data`\n\n**Dependencies:** 11, 13, 15, 16, 28. **Owner/files:** Gateway watcher eligibility/census/shadow adapter; meta evaluation fixtures/report; no live activation.\n\n**DoD A30:** Default-policy+certified source only; custom/idless/model-drift bypass; census no eligible traffic stops; shadow baseline always runs; timeout never negative; gate+forwarded+retry/unknown costs use logical source denominator. Frozen threshold/severity miss bounds required before paid holdout or active promotion.\n\n**Verification:** `pnpm exec vitest run --config vitest.extensions.config.ts extensions/alert-watcher/src/jev-shadow-eligibility.test.ts`. Apply the affected repository gates in \u00a711; UI slices also require design/token lint and mounted/browser evidence.",
+      "implementationVerified": true,
+      "evidence": [
+        "verification/c-gateway/final/REVIEW.md",
+        "verification/c-gateway/security-fixture-correction/REVIEW.md",
+        "verification/f-evals/feedback-delta/REVIEW.md",
+        "verification/d-pulse/final/REVIEW.md",
+        "verification/c-gateway/current-pr-ci/snapshot.json"
+      ]
+    },
+    {
+      "slice": 31,
+      "title": "Explicit live inference adapter with fixture-only tools",
+      "group": "f-evals",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-31",
+      "acceptance": "**Topics:** `test`, `security`, `logic`, `data`\n\n**Dependencies:** 26, 27, 28. **Owner/files:** Meta: scripts/agent-evals/lib/live-provider.mjs, runner transport selection and stub transport tests; reuse Slice26 disposable tool/HTTP/WS fixtures.\n\n**DoD A31:** A valid approved manifest exercises the complete live-mode path with stub transport; missing/expired approval, unknown exposure, exhausted budget or model/fixture drift dispatches zero requests. Allowlisted provider endpoint only; every actual attempt reserves exposure before dispatch and persists terminal/unknown receipt. Disable automatic SDK retry/fallback; no automatic replay of ambiguous requests. Live mode changes inference transport only: tools still operate marked disposable fixture state, never production business endpoints. Production credentials are neither discovered nor inferred. Actual paid execution remains a separate approved operation.\n\n**Verification:** `node --test scripts/agent-evals/live-provider.test.mjs scripts/agent-evals/run.test.mjs`. Tests use stub providers and deny external network, including valid-manifest and budget-exhaustion cases. Apply the affected repository gates in \u00a711.",
+      "implementationVerified": false,
+      "evidence": [
+        "development/f-evals/final-root-gates/results.json"
+      ]
+    },
+    {
+      "slice": 32,
+      "title": "Scheduled digest source collection and cold-start wiring",
+      "group": "e-digest",
+      "source": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+      "anchor": "slice-32",
+      "acceptance": "**Topics:** `infra`, `logic`, `security`, `test`\n\n**Dependencies:** 19, 21, 22, 24. **Owner/files:** Hub: pulse-digest collection helper, admission-row poll fields, GET api/pulse/tick, hooks auth allowlist; deployment cron template/runbook using existing secret management.\n\n**DoD A32:** Configured personal-owner only, default disabled; authenticated minute tick collects initially then every15min with durable30s generation lease, <=15s aggregate fetch and no cursor advance. Two simultaneous ticks and restart/expired lease enqueue one logical run; failed/partial fetch records failure and waits5min; revoked owner/policy cannot enqueue. With browser/CLI clients closed and initially empty queue, scheduled stub source change produces a visible card through selected worker; unrelated backlog untouched. Missing schedule means unqualified activation. Real cron installation is a separately authorized deployment operation.\n\n**Verification:** `bunx vitest run src/server/services/pulse-digest.collection.test.ts src/routes/api/pulse/tick/tick.test.ts; bun run test:critical-journeys`. Apply the affected repository gates in \u00a711; retain cron installation/cold-start evidence at deployment.",
+      "implementationVerified": false,
+      "evidence": []
+    }
+  ]
+}

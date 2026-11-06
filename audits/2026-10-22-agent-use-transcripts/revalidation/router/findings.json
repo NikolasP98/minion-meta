@@ -1,0 +1,99 @@
+{
+  "hub_sha": "b677a5d91a2b653211a1655465b2b5fd398efc2a",
+  "gateway_sha": "6d1cd8836ff7b82d21668c50cc20b9b6d1e79c18",
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "high",
+      "status": "confirmed-source-and-probe",
+      "title": "Pending classifier result sends original request into changed conversation or agent",
+      "evidence": [
+        "minion_hub:src/routes/(app)/home/+page.svelte:658-694",
+        "minion_hub:src/lib/services/gateway/chat-rpc.ts:12-24",
+        "minion_hub:src/lib/components/layout/FloatingAssistant.svelte:293-331"
+      ],
+      "proof": "probes.mjs: actual extracted handlers; deferred route + changed state; wrong send destination asserted",
+      "delta": "Capture pending-send identity and generation before first await; invalidate after scope, thread, page or lifecycle transition",
+      "old_recommendation": "Prioritize deterministic send fidelity before stateful semantic routing"
+    },
+    {
+      "id": "R2",
+      "severity": "high",
+      "status": "confirmed-source-and-probe",
+      "title": "Floating Stop during classification does not cancel pending send",
+      "evidence": [
+        "minion_hub:src/lib/components/layout/FloatingAssistant.svelte:434-438",
+        "minion_hub:src/lib/components/layout/FloatingAssistant.svelte:307-331",
+        "minion_hub:src/lib/services/gateway/chat-rpc.ts:68-74"
+      ],
+      "proof": "probes.mjs: extracted send/stopReply; Stop before route resolves; send still occurs",
+      "delta": "Cancel/fence pending route with generation and AbortSignal, retain abort for accepted run",
+      "old_recommendation": "Add this deterministic failure to task correctness corpus"
+    },
+    {
+      "id": "R3",
+      "severity": "medium",
+      "status": "confirmed-source-and-probe",
+      "title": "p_sandbox silently removed by telemetry sanitizer",
+      "evidence": [
+        "minion_hub:src/routes/api/assistant/route/+server.ts:66",
+        "minion_hub:src/lib/server/observability-context.ts:300-305",
+        "minion_hub:src/lib/server/observability-context.ts:367-380",
+        "minion_hub:src/lib/server/posthog.ts:51"
+      ],
+      "proof": "probes.mjs: actual sanitizer keeps p_pages but omits p_sandbox",
+      "delta": "Add probability validator and event allowlist field, producer-through-sanitizer regression test",
+      "old_recommendation": "Repair calibration observability before collecting more samples"
+    },
+    {
+      "id": "R4",
+      "severity": "medium",
+      "status": "confirmed-source-gap",
+      "title": "Router events cannot join agent task outcomes and represent unknown failure cost/latency as zero",
+      "evidence": [
+        "minion_hub:src/lib/assistant/turn-router.ts:254-259",
+        "minion_hub:src/lib/services/gateway/chat-rpc.ts:287",
+        "minion_hub:src/routes/api/assistant/route/+server.ts:53-68",
+        "minion_hub:src/server/services/assistant-router.service.ts:195"
+      ],
+      "delta": "Allocate opaque turn correlation before classifier; map to run/task; record applied gate version/model/unknown cost/failure duration",
+      "old_recommendation": "Strengthen outcome evaluation before threshold calibration"
+    },
+    {
+      "id": "R5",
+      "severity": "research",
+      "status": "source-counterevidence",
+      "title": "Isolated short-reply classifier does not establish lost agent context",
+      "evidence": [
+        "minion_hub:src/lib/assistant/briefing.ts:32-45",
+        "minion_hub:src/lib/assistant/global-tools.ts:42-71",
+        "minion_hub:src/routes/(app)/home/+page.svelte:658-673",
+        "minion:src/agents/pi-embedded-runner/run/attempt.ts:128-167",
+        "minion:src/agents/tool-search/apply-selection.ts:29-31",
+        "minion:src/agents/pi-embedded-runner/run/attempt-session.ts:194-210"
+      ],
+      "delta": "Evaluate whole trajectories incl history and discovery; defer new task state until actual task failures",
+      "old_recommendation": "Revise/defer bounded server task-continuation record"
+    },
+    {
+      "id": "R6",
+      "severity": "research",
+      "status": "hypothesis-needs-measurement",
+      "title": "Composed envelope also affects JIT and semantic recall; cache/billing effect unmeasured",
+      "evidence": [
+        "minion:src/agents/pi-embedded-runner/run/attempt-env.ts:162-167",
+        "minion:src/agents/pi-embedded-runner/run/attempt.ts:467",
+        "minion:src/agents/pi-embedded-runner/run/attempt.ts:716"
+      ],
+      "delta": "Probe clean-text versus composed-context relevance while preserving essential page/entity cues; measure full billed multi-turn trajectories",
+      "old_recommendation": "Do not infer dollar savings from removed characters or cache invalidation from variable appended context"
+    }
+  ],
+  "validation": {
+    "unit_suites": 6,
+    "unit_tests_passed": 92,
+    "probe": "actual extracted production functions with stubbed boundaries; not E2E",
+    "live_models": false,
+    "production": false
+  }
+}

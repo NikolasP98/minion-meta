@@ -1,0 +1,89 @@
+{
+  "source": "https://basecamp.com/",
+  "capture": {
+    "date": "2026-10-24",
+    "viewports": ["1440x900", "390x844"],
+    "color_scheme": "dark (capture default; site honors prefers-color-scheme, light variant not captured)",
+    "caveats": [
+      "Sizes are fluid (vw-scaled); values below are as rendered at 1440px wide.",
+      "The 'Big numbers' section shows a ~570px empty dark block in headless capture, most likely a live map/canvas that did not render.",
+      "Many sub-10px sizes in the DOM extract belong to the scaled-down product mockup in the hero, not to page typography."
+    ]
+  },
+  "tokens": {
+    "spacing": {
+      "scale": [2.42, 4.84, 9.57, 15.32, 30.64, 42.89, 61.28, 76.6, 122.56, 184],
+      "base_unit": 30.64,
+      "note": "Fluid unit u = 30.64px at 1440. Layout spacing is u multiples: 1.4u (42.89 footer gap), 2u (61.28 footer padding), 2.5u (76.6 letter padding), 4u (122.56 footer margin), ~6u (184 between section panels). Panel-to-panel gutter in 2-col grids = 30px (1u)."
+    },
+    "typography": {
+      "families": ["Graphik"],
+      "scale": [
+        { "role": "h1 / section heading", "size": "42.13px", "weight": "800", "line_height": "46.34px", "letter_spacing": "-1.11px", "family": "Graphik" },
+        { "role": "hero subhead / h2", "size": "30.64px", "weight": "400", "line_height": "39.83px", "letter_spacing": "-0.80px", "family": "Graphik" },
+        { "role": "h3 card title", "size": "22.98px", "weight": "800", "line_height": "34.47px", "letter_spacing": "-0.32px", "family": "Graphik" },
+        { "role": "letter body / stat pills / link index", "size": "19.15px", "weight": "400 (500 on buttons, 700 on stat numbers)", "family": "Graphik" },
+        { "role": "card body", "size": "17.23px", "weight": "400", "family": "Graphik" },
+        { "role": "testimonial quote (italic) / attribution", "size": "15.32px", "weight": "400 italic / 700", "family": "Graphik" }
+      ]
+    },
+    "colors": [
+      { "role": "page background (outer frame)", "value": "#0B151B" },
+      { "role": "section panel surface (28.5% + 15.7% of area)", "value": "#1B2930" },
+      { "role": "raised chip / stat pill", "value": "#27353E" },
+      { "role": "text primary", "value": "#E1E5E8" },
+      { "role": "text secondary", "value": "#A8AFB3" },
+      { "role": "text tertiary", "value": "#828B8F" },
+      { "role": "hairline / inset border", "value": "#475257" },
+      { "role": "link (underlined, bold)", "value": "#68A8F4" },
+      { "role": "filled action (Sign up, Subscribe, staff name tags)", "value": "#117AF3" },
+      { "role": "testimonial highlight wash", "value": "#117AF3 @ 10% alpha" },
+      { "role": "incidental: rating stars, calendar date headers, NEW! tags", "value": "yellow / red / green (each <1% area)" }
+    ],
+    "radius": ["0px (section panels, primary buttons, email input)", "4.84px (small controls in mockup)", "9.57px (hero browser frame)", "42.13px (stat pills, full-round)", "50% (avatars, play buttons)"],
+    "shadows": [
+      "4-layer ambient on hero browser: oklch(0 0 0/0.02) 0 0 0 1px, oklch(0 0 0/0.1) 0 6.1px 61.3px -36.8px, oklch(0 0 0/0.2) 0 12.3px 85.8px -42.9px, ...",
+      "inset hairline: rgba(225,229,232,0.1) -0.6px 0 0 0 inset, rgba(225,229,232,0.1) 0 0.6px 0 0 inset",
+      "1px ring: #475257 0 0 0 0.6px (inset and outset variants)"
+    ],
+    "image_ratios": [
+      { "usage": "full-width customer / demo video poster", "ratio": "16:9 (1194x672)" },
+      { "usage": "staff video card", "ratio": "16:9 (582x328)" },
+      { "usage": "hero product mockup frame", "ratio": "1.04:1 (659x636)" },
+      { "usage": "logo tiles inside mockup", "ratio": "1:1" },
+      { "usage": "tour thumbnail", "ratio": "16:9 (89px wide)" }
+    ],
+    "grid": { "max_width": "1194px inner panel (1378px outer frame at 1440, 31px side inset)", "columns": "2 (hero 689+689; staff cards 582+582) / 3 (testimonials) / flex-wrap centered (stat pills, footer link wall)", "gutter": "30px" },
+    "interaction": { "focus_visible": true, "reduced_motion_respected": true, "transitions": ["color 0.15s", "opacity 0.15s", "scale 0.15s cubic-bezier(0.34,1.2,0.64,1)", "width 0.3s"] }
+  },
+  "taste": [
+    {
+      "name": "Annotated link index instead of a navigation bar",
+      "trigger": "When the designers had to route first-time visitors to pricing, features, migration stories, reliability and developer docs",
+      "decision": "Chose seven bold underlined links in the hero column, each followed by an em-dash gloss in plain words ('Pricing & sign up - A free plan + paid upgrades'), over a horizontal nav bar with Product / Solutions / Resources dropdowns",
+      "reason": "Because a visitor who does not know the vendor's vocabulary can only choose a destination when told what is behind it; a gloss answers 'what is this?' before the click instead of after",
+      "evidence": ["header holds only 3 items: 'Have an account? Sign in', logo, 'Want an account? Sign up free'", "7 links at 19.15px, #68A8F4 bold underline + #E1E5E8 gloss", "no nav menu at 1440; 390 collapses to hamburger", "footer repeats the pattern as a 36-chip link wall of sentence-titled pages"]
+    },
+    {
+      "name": "A signed founder letter carries the pitch",
+      "trigger": "When the page had to explain why the product exists right after the hero",
+      "decision": "Chose a ~660px-wide letter in 19.15px body on a stacked, slightly rotated paper card, opening 'Hey there- Tell me if this sounds about right.' and closing with a handwritten signature, headshot and the CEO's real email, over a three-icon benefit row or feature grid",
+      "reason": "Because a reader recognizes their own problem faster in second-person prose than in feature labels, and a named person with a reachable address reads as accountable in a way an icon grid cannot",
+      "evidence": ["section 2 has no headline, only 'Hey there-'", "padding 71.8px x 76.6px (2.5u) on the letter", "3 offset paper layers behind the card", "signature + 'jason@basecamp.com' + 'Co-founder & CEO' in 15.32px italic"]
+    },
+    {
+      "name": "One family, hierarchy by weight jump",
+      "trigger": "When the page needed loud section headings and calm supporting copy without a display typeface",
+      "decision": "Chose Graphik alone, pairing 800-weight headings at -1.11px tracking with 400-weight subheads only 1.375x smaller, over a display/serif + sans pairing",
+      "reason": "Because the 800-to-400 contrast reads as 'headline, then plain explanation' at a glance, and a single family keeps the conversational letter and the bold claims in the same voice",
+      "evidence": ["uniqueFamilies = Graphik only (1606 nodes)", "h1 42.13px/800 vs h2 30.64px/400", "weights used: 400 (293), 500 (141), 600 (114), 700 (92), 800 (11) - 800 reserved for ~11 headings", "sentence-case headings phrased as questions"]
+    },
+    {
+      "name": "Flat square panels; blue fill reserved for the two commitments",
+      "trigger": "When separating ten stacked sections on a long dark page",
+      "decision": "Chose 0px-radius #1B2930 panels on a #0B151B frame, separated by ~184px gaps and a wavy hand-drawn line with the logo glyph, with filled #117AF3 used only on 'Sign up free' and 'Subscribe', over rounded gradient cards and a colored CTA in every section",
+      "reason": "Because when only two controls are filled, the reader never wonders which button is the real one; every other ask is an underlined link or a play button that costs nothing to try",
+      "evidence": ["section panels, buttons, email input all 0px radius", "panel area 28.5% + 15.7%; blue fill ~1.2% of area", "links #68A8F4 underlined, video asks as white 0px-radius chips with a play triangle", "divider: ~400px wavy line + 30px mountain glyph centered between panels"]
+    }
+  ]
+}
