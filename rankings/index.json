@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-06T03:17:08.132Z",
+	"generatedAt": "2026-11-06T03:47:20.249Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11213,38 +11213,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:53:30.172Z"
-		},
-		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
-			"sourceUpdatedAt": "2026-11-05T20:40:14Z",
-			"sourceFingerprint": "ba1c2616e4f5e866ffa073aa76e97721470e39aacead9f35ddcd2b4c633663b8",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is a merged deployment improvement (off-server backups + restore drill) rather than an open goal needing prioritization.",
-			"evidence": [
-				"commit message describes completed backup/restore drill feature (MIN-12)",
-				"CI runs shellcheck and a real restic round trip per summary"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T02:47:20.510Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
@@ -24493,6 +24461,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T13:47:47.928Z"
+		},
+		{
+			"key": "issue:minion-meta#940",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#940 [monitor:unstick] rank board goals run 625195b4 failed: ranking catalog source unavailable for pixel-agents",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/940",
+			"sourceUpdatedAt": "2026-11-06T03:17:20Z",
+			"sourceFingerprint": "81e0e8a0cb4da1c60b4e6c6b7fdb7d4e8a0b1fc486924afd1cb37f37eec07c6e",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A deterministic guard-rail abort in board-ranking-catalog.mjs over missing pixel-agents ranking source data needs a human check of whether the repo was recently renamed/removed before any fix is applied.",
+			"evidence": [
+				"script throws 'ranking catalog source unavailable for pixel-agents; refusing a partial catalog' at line 107, exit code 1",
+				"clean error with no hang, recommends checking pixel-agents board/ranking registration or a transient feed outage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T03:47:19.987Z"
 		},
 		{
 			"key": "pr:minion (gateway)#317",
