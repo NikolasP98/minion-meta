@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-06T21:18:33.027Z",
+	"generatedAt": "2026-11-06T21:47:35.861Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13457,6 +13457,38 @@
 			"scoredAt": "2026-11-02T14:20:41.611Z"
 		},
 		{
+			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A deprecated i18n adapter has a demonstrated latent locale-bleed defect under concurrency, but the migration touches sensitive auth-adjacent hook ordering and needs its v2 API approach re-verified before execution.",
+			"evidence": [
+				"npm deprecation notice: use paraglide-js v2 directly",
+				"test demonstrates ambient setLanguageTag locale bleed across concurrent requests"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T21:47:35.706Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-531a2204dc23",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17457,38 +17489,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:16:44.492Z"
-		},
-		{
-			"key": "proposal:2026-09-10-hub-paraglide-adapter-migration-followup",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Migrate Hub off the deprecated @inlang/paraglide-sveltekit adapter",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-10-hub-paraglide-adapter-migration-followup.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "e6401cb36d95f9c85e2c2b8d23a3183c9790d69d757891cd5811b002ffbc5f70",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Deprecated i18n adapter has a characterized concurrency locale-bleed defect and a clear, well-scoped migration sketch naming exact files to change.",
-			"evidence": [
-				"locale-parity.test.ts shows ambient setLanguageTag bleeds under concurrent requests",
-				"sketch names exact files: i18n.ts, hooks.server.ts, hooks.ts, canonical-path.ts, svelte.config.js"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T21:17:15.459Z"
 		},
 		{
 			"key": "proposal:2026-09-12-360-continuation-review-followups",
@@ -35002,38 +35002,6 @@
 			"scoredAt": "2026-11-02T14:24:50.163Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-06",
-			"sourceFingerprint": "c938cb78eab76ea0613873e0f75ad088d865754bb27c4e194275d9624db8b404",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Mechanical aggregation of dozens of unrelated TODO(handoff) markers across many different features and files, not one coherent executable goal.",
-			"evidence": [
-				"markers span payment links, schema drops, spec 045 audience flags, and UI drag HC-017 — unrelated domains",
-				"sweep auto-closes once markers are removed, so it has no independent scope of its own"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T21:00:42.893Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -37210,6 +37178,38 @@
 			"scoredAt": "2026-11-02T13:20:00.977Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-site-a357d1f6520e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-a357d1f6520e.md",
+			"sourceUpdatedAt": "2026-09-11",
+			"sourceFingerprint": "9abeac3886f680e8a31999037164fb185b99b6eef4b1b019b50cfbc66c8aa2b9",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The committed tarball issue is already flagged as a duplicate_candidate pending confirmation that the shared package is actually published before the suggested fix can apply.",
+			"evidence": [
+				"reconciliation note flags duplicate_candidate pending license text and immutable version",
+				"package remains unpublished so the bun install fix may not apply yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T21:47:35.706Z"
+		},
+		{
 			"key": "issue:minion (gateway)#264",
 			"kind": "issue",
 			"stage": "proposal",
@@ -37660,6 +37660,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:56:55.368Z"
+		},
+		{
+			"key": "pr:minion_hub#638",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#638 fix(pos): calendar event blocks get sharper corners and deeper status colours",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/638",
+			"sourceUpdatedAt": "2026-11-06T21:18:21Z",
+			"sourceFingerprint": "173e84ec84b5e739146ec50af35f480b8375b911dfb7814ca2dcdfd94b7fe598",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already-implemented cosmetic UI fix with design-token gates green and owner-reviewed swatches, ready to merge.",
+			"evidence": [
+				"lint:design and lint:tokens gates green",
+				"token-faithful before/after swatch reviewed by owner in session"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T21:47:35.706Z"
 		},
 		{
 			"key": "pr:minion-meta#834",
@@ -40914,38 +40946,6 @@
 			"scoredAt": "2026-11-03T22:48:31.479Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-site-a357d1f6520e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-shared-0.9.0-qc-d01a528579e7.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-a357d1f6520e.md",
-			"sourceUpdatedAt": "2026-09-11",
-			"sourceFingerprint": "9abeac3886f680e8a31999037164fb185b99b6eef4b1b019b50cfbc66c8aa2b9",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A committed unpublished-package tarball is a minor repo-hygiene issue but the suggested bun-install fix may not apply until the package is actually published, per the reconciliation note.",
-			"evidence": [
-				"reconciliation note says package remains unpublished so the auto-diagnosis fix may not apply",
-				"flagged duplicate_candidate against 2026-09-08-platform-qc-remediation.md rather than merged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-30T21:17:15.459Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-site-c268d8c264ba",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -43887,39 +43887,6 @@
 			"scoredAt": "2026-11-06T01:53:21.207Z"
 		},
 		{
-			"key": "pr:minion_hub#638",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#638 fix(pos): calendar event blocks get sharper corners and deeper status colours",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/638",
-			"sourceUpdatedAt": "2026-11-06T21:14:44Z",
-			"sourceFingerprint": "34ba440f491db78141bb3aedb4ea1337d2518f80e7d60972527ad184d01821b4",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, owner-requested cosmetic token change to calendar event styling with passing design/token gates and low risk.",
-			"evidence": [
-				"owner directive quoted for Clinic theme radius/saturation",
-				"lint:design and lint:tokens both green",
-				"PR text: 'No test pins these selectors'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T21:18:27.228Z"
-		},
-		{
 			"key": "pr:minion-meta#555",
 			"kind": "pr",
 			"stage": "development",
@@ -45284,6 +45251,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T01:59:03.701Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-06",
+			"sourceFingerprint": "e479682b2dd38e153e32a342c12dd5dbe3b71769ab6859b89e714d48b8d4ee9d",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers are quoted text fragments from other findings embedded inside rankings/index.json itself, not real code TODOs, so there is no single coherent fix to specify.",
+			"evidence": [
+				"all 17 markers point to lines inside rankings/index.json quoting unrelated prior findings",
+				"no shared scope ties the disparate line references into one actionable change"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-06T21:47:35.706Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
