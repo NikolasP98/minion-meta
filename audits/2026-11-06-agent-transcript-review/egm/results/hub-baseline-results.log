@@ -1,0 +1,1960 @@
+
+ RUN  v4.1.10 /tmp/minion-agent-egm-20261106-971jwsz3
+
+ × tests/hub-route-candidate.test.ts > C03 real POST authority/preflight adapter > routes preview through native preflight interface with strict identity and masks returned PII 56ms
+   → expected "vi.fn()" to be called with arguments: [ ObjectContaining{…}, …(1) ]
+
+Number of calls: 0
+
+ × tests/hub-route-candidate.test.ts > C03 real POST authority/preflight adapter > passes the strict identity contract on actual commit 7ms
+   → expected "vi.fn()" to be called with arguments: [ Anything, ObjectContaining{…} ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   Anything,
+-   ObjectContaining {
++   {
++     "profileId": "synthetic-profile",
++     "tenantId": "synthetic-org",
++   },
++   {
++     "attendeeEmail": "fixture@example.invalid",
++     "attendeeName": null,
++     "attendeePhone": "+15550000000",
++     "bypassRules": true,
+      "crmContactId": "synthetic-contact",
+-     "strictContactReference": true,
++     "eventTypeId": "synthetic-service",
++     "notes": null,
++     "preferredResourceId": "synthetic-staff",
++     "source": "internal",
++     "start": 2030-01-07T14:00:00.000Z,
+    },
+  ]
+
+
+Number of calls: 1
+
+ ✓ tests/hub-route-candidate.test.ts > C03 real POST authority/preflight adapter > stops all preflight and create calls on denied authority 4ms
+ × tests/hub-route-candidate.test.ts > C04 real list route > preserves completeness metadata and trusted masking context 16ms
+   → expected { bookings: [ …(500) ] } to match object { total: 501, returned: 500, …(1) }
+(1 matching property omitted from actual)
+ × tests/hub-route-candidate.test.ts > C04 real list route > exposes exact count and bounded user limit 2ms
+   → expected "vi.fn()" to be called with arguments: [ Anything, ObjectContaining{…} ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   Anything,
+-   ObjectContaining {
+-     "countOnly": true,
+-     "limit": 20,
++   {
++     "profileId": "synthetic-profile",
++     "tenantId": "synthetic-org",
++   },
++   {
++     "crmContactId": undefined,
++     "from": undefined,
++     "maskAttendeePii": true,
++     "status": undefined,
++     "to": undefined,
+    },
+  ]
+
+
+Number of calls: 1
+
+ × tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=501 4ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '15', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=0 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '15', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=x 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '15', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter mode=whatever 3ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '15', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter from=invalid 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '15', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter from=2030-01-08&to=2030-01-07 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '15', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > stops denied lists before service entry 0ms
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=not-a-date 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '160', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input to=2030-02-30 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '138', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from= 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '160', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=2030-01-08&to=2030-01-07 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '160', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input range=all&from=2030-01-07 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '116', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input bucket=invalid 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '160', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=2030-01-07T00:00:00Z 1ms
+   → promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '138', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > uses inclusive local calendar days with exclusive next midnight in Lima, and discloses it 1ms
+   → expected { …(3) } to deeply equal { …(3) }
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > handles DST day boundaries using the native timezone helper 20ms
+ × tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > exposes explicit all time with open bounds 1ms
+   → Cannot read properties of undefined (reading 'mode')
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > retains dashboard absent/default parser and discloses the agent default in the business day 3ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > denies finance before data queries 1ms
+ × tests/hub-tools-candidate.test.ts > C04/C05 actual gateway adapter contract > forwards bounded list/count options and signal 12ms
+   → expected "vi.fn()" to be called with arguments: [ 'query/bookings', …(3) ]
+
+Received:
+
+  1st vi.fn() call:
+
+@@ -1,13 +1,14 @@
+  [
+    "query/bookings",
+    "personal-synthetic",
+-   ObjectContaining {
++   {
++     "contact": undefined,
+      "from": "2030-01-07T00:00:00Z",
+-     "limit": "20",
+-     "mode": "count",
+      "orgId": "synthetic-org",
++     "status": undefined,
++     "to": undefined,
+    },
+    AbortSignal {
+      Symbol(kEvents): undefined,
+      Symbol(events.maxEventTargetListeners): 0,
+      Symbol(events.maxEventTargetListenersWarned): false,
+
+
+Number of calls: 1
+
+ × tests/hub-tools-candidate.test.ts > C04/C05 actual gateway adapter contract > forwards explicit all-time without dates, uses provider compatible enum schemas 1ms
+   → expected "vi.fn()" to be called with arguments: [ 'query/finance', …(3) ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+    "query/finance",
+    "personal-synthetic",
+-   ObjectContaining {
++   {
++     "bucket": "month",
+      "from": undefined,
+-     "range": "all",
++     "orgId": undefined,
+      "to": undefined,
+    },
+    undefined,
+  ]
+
+
+Number of calls: 1
+
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 21 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C03 real POST authority/preflight adapter > routes preview through native preflight interface with strict identity and masks returned PII
+AssertionError: expected "vi.fn()" to be called with arguments: [ ObjectContaining{…}, …(1) ]
+
+Number of calls: 0
+
+ ❯ tests/hub-route-candidate.test.ts:30:29
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C03 real POST authority/preflight adapter > passes the strict identity contract on actual commit
+AssertionError: expected "vi.fn()" to be called with arguments: [ Anything, ObjectContaining{…} ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   Anything,
+-   ObjectContaining {
++   {
++     "profileId": "synthetic-profile",
++     "tenantId": "synthetic-org",
++   },
++   {
++     "attendeeEmail": "fixture@example.invalid",
++     "attendeeName": null,
++     "attendeePhone": "+15550000000",
++     "bypassRules": true,
+      "crmContactId": "synthetic-contact",
+-     "strictContactReference": true,
++     "eventTypeId": "synthetic-service",
++     "notes": null,
++     "preferredResourceId": "synthetic-staff",
++     "source": "internal",
++     "start": 2030-01-07T14:00:00.000Z,
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ tests/hub-route-candidate.test.ts:36:102
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C04 real list route > preserves completeness metadata and trusted masking context
+AssertionError: expected { bookings: [ …(500) ] } to match object { total: 501, returned: 500, …(1) }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "returned": 500,
+-   "total": 501,
+-   "truncated": true,
++   "bookings": [
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++     {
++       "id": "synthetic",
++     },
++   ],
+  }
+
+ ❯ tests/hub-route-candidate.test.ts:47:22
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C04 real list route > exposes exact count and bounded user limit
+AssertionError: expected "vi.fn()" to be called with arguments: [ Anything, ObjectContaining{…} ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   Anything,
+-   ObjectContaining {
+-     "countOnly": true,
+-     "limit": 20,
++   {
++     "profileId": "synthetic-profile",
++     "tenantId": "synthetic-org",
++   },
++   {
++     "crmContactId": undefined,
++     "from": undefined,
++     "maskAttendeePii": true,
++     "status": undefined,
++     "to": undefined,
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ tests/hub-route-candidate.test.ts:50:71
+     48|   });
+     49|   it('exposes exact count and bounded user limit',async()=>{
+     50|     await bookings(event('mode=count&limit=20'));expect(fixture.list).…
+       |                                                                       ^
+     51|   });
+     52|   it.each(['limit=501','limit=0','limit=x','mode=whatever','from=inval…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=501
+ FAIL  tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=0
+ FAIL  tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=x
+ FAIL  tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter mode=whatever
+ FAIL  tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter from=invalid
+ FAIL  tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter from=2030-01-08&to=2030-01-07
+AssertionError: promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '15', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
+- }
++ Response {}
+
+ ❯ tests/hub-route-candidate.test.ts:53:42
+     51|   });
+     52|   it.each(['limit=501','limit=0','limit=x','mode=whatever','from=inval…
+     53|     await expect(bookings(event(params))).rejects.toMatchObject({statu…
+       |                                          ^
+     54|   });
+     55|   it('stops denied lists before service entry',async()=>{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=not-a-date
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=2030-01-08&to=2030-01-07
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input bucket=invalid
+AssertionError: promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '160', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
+- }
++ Response {}
+
+ ❯ tests/hub-route-candidate.test.ts:62:41
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input to=2030-02-30
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=2030-01-07T00:00:00Z
+AssertionError: promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '138', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
+- }
++ Response {}
+
+ ❯ tests/hub-route-candidate.test.ts:62:41
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input range=all&from=2030-01-07
+AssertionError: promise resolved "Response { status: 200, statusText: '', headers: Headers { 'content-length': '116', 'content-type': 'application/json' }, body: ReadableStream { locked: false, state: 'readable', supportsBYOB: true }, bodyUsed: false, ok: true, redirected: false, type: 'default', url: '' }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
+- }
++ Response {}
+
+ ❯ tests/hub-route-candidate.test.ts:62:41
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > uses inclusive local calendar days with exclusive next midnight in Lima, and discloses it
+AssertionError: expected { …(3) } to deeply equal { …(3) }
+
+- Expected
++ Received
+
+  {
+    "bucket": "month",
+-   "from": "2030-01-07T05:00:00.000Z",
+-   "to": "2030-01-08T05:00:00.000Z",
++   "from": "2030-01-07T00:00:00.000Z",
++   "to": "2030-01-07T00:00:00.000Z",
+  }
+
+ ❯ tests/hub-route-candidate.test.ts:66:27
+     64|   it('uses inclusive local calendar days with exclusive next midnight …
+     65|     const result=await (await finance(event('from=2030-01-07&to=2030-0…
+     66|     expect(result.period).toEqual({from:'2030-01-07T05:00:00.000Z',to:…
+       |                           ^
+     67|     expect(result.periodSemantics).toMatchObject({timezone:'America/Li…
+     68|     expect(fixture.summary.mock.calls[0][1]).toEqual(result.period);ex…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/21]⎯
+
+ FAIL  tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > exposes explicit all time with open bounds
+TypeError: Cannot read properties of undefined (reading 'mode')
+ ❯ tests/hub-route-candidate.test.ts:74:163
+     72|   });
+     73|   it('exposes explicit all time with open bounds',async()=>{
+     74|     const result=await (await finance(event('range=all'))).json();expe…
+       |                                                                                                                                                                   ^
+     75|   });
+     76|   it('retains dashboard absent/default parser and discloses the agent …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/21]⎯
+
+ FAIL  tests/hub-tools-candidate.test.ts > C04/C05 actual gateway adapter contract > forwards bounded list/count options and signal
+AssertionError: expected "vi.fn()" to be called with arguments: [ 'query/bookings', …(3) ]
+
+Received:
+
+  1st vi.fn() call:
+
+@@ -1,13 +1,14 @@
+  [
+    "query/bookings",
+    "personal-synthetic",
+-   ObjectContaining {
++   {
++     "contact": undefined,
+      "from": "2030-01-07T00:00:00Z",
+-     "limit": "20",
+-     "mode": "count",
+      "orgId": "synthetic-org",
++     "status": undefined,
++     "to": undefined,
+    },
+    AbortSignal {
+      Symbol(kEvents): undefined,
+      Symbol(events.maxEventTargetListeners): 0,
+      Symbol(events.maxEventTargetListenersWarned): false,
+
+
+Number of calls: 1
+
+ ❯ tests/hub-tools-candidate.test.ts:12:23
+     10|   const tool=createBookingsQueryTool({agentId:'personal-synthetic'})!;…
+     11|   await tool.execute('synthetic',{limit:20,mode:'count',dateFrom:'2030…
+     12|   expect(fixture.get).toHaveBeenCalledWith('query/bookings','personal-…
+       |                       ^
+     13|   expect(tool.parameters).toMatchObject({properties:{limit:{maximum:50…
+     14|  });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/21]⎯
+
+ FAIL  tests/hub-tools-candidate.test.ts > C04/C05 actual gateway adapter contract > forwards explicit all-time without dates, uses provider compatible enum schemas
+AssertionError: expected "vi.fn()" to be called with arguments: [ 'query/finance', …(3) ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+    "query/finance",
+    "personal-synthetic",
+-   ObjectContaining {
++   {
++     "bucket": "month",
+      "from": undefined,
+-     "range": "all",
++     "orgId": undefined,
+      "to": undefined,
+    },
+    undefined,
+  ]
+
+
+Number of calls: 1
+
+ ❯ tests/hub-tools-candidate.test.ts:18:23
+     16|   const tool=createFinanceQueryTool({agentId:'personal-synthetic'})!;
+     17|   await tool.execute('synthetic',{range:'all',bucket:'month'});
+     18|   expect(fixture.get).toHaveBeenCalledWith('query/finance','personal-s…
+       |                       ^
+     19|   expect(tool.parameters).toMatchObject({properties:{range:{enum:['all…
+     20|   expect(JSON.stringify(tool.parameters)).not.toContain('anyOf');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/21]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  21 failed | 5 passed (26)
+   Start at  02:40:29
+   Duration  1.46s (transform 497ms, setup 0ms, import 903ms, tests 148ms, environment 0ms)
+

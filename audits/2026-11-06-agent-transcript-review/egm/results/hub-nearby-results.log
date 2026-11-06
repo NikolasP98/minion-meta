@@ -1,0 +1,81 @@
+
+ RUN  v4.1.10 /tmp/minion-agent-egm-20261106-971jwsz3
+
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > resolves identities and timezone without mutating any table or invoking effects 73ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects unknown/foreign reference {"eventTypeId":"40000000-0000-4000-8000-000000000002"} 16ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects unknown/foreign reference {"preferredResourceId":"40000000-0000-4000-8000-000000000002"} 14ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects unknown/foreign reference {"crmContactId":"40000000-0000-4000-8000-000000000002"} 17ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects a foreign service, contact and resource even when their ids exist 32ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects an inactive event type before preview without writes or effects 23ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects an inactive assigned resource before preview without writes or effects 26ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects an existing same-tenant unassigned resource before preview without writes or effects 22ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects a soft-deleted explicit contact before preview without writes or effects 30ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > rejects an already occupied slot before preview without writes or effects 26ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > revalidates availability at commit after another booking takes the previewed slot 22ms
+ ✓ tests/hub-service-candidate.test.ts > C03 native shared slot preflight > revalidates strict contact at commit; shared UI fallback remains optional 24ms
+ ✓ tests/hub-service-candidate.test.ts > C04 actual SQL completeness and masking > reports 501 with 500 bounded rows, ties ordered stably, and exact count mode 53ms
+ ✓ tests/hub-service-candidate.test.ts > C04 actual SQL completeness and masking > proves complete narrow/empty ranges and keeps inclusive instant boundaries 17ms
+ ✓ tests/hub-route-candidate.test.ts > C03 real POST authority/preflight adapter > routes preview through native preflight interface with strict identity and masks returned PII 41ms
+ ✓ tests/hub-route-candidate.test.ts > C03 real POST authority/preflight adapter > passes the strict identity contract on actual commit 1ms
+ ✓ tests/hub-route-candidate.test.ts > C03 real POST authority/preflight adapter > stops all preflight and create calls on denied authority 3ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > preserves completeness metadata and trusted masking context 1ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > exposes exact count and bounded user limit 1ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=501 1ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=0 0ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter limit=x 0ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter mode=whatever 0ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter from=invalid 0ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > rejects explicit invalid filter from=2030-01-08&to=2030-01-07 0ms
+ ✓ tests/hub-route-candidate.test.ts > C04 real list route > stops denied lists before service entry 0ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=not-a-date 1ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input to=2030-02-30 0ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from= 0ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=2030-01-08&to=2030-01-07 0ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input range=all&from=2030-01-07 0ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input bucket=invalid 0ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > strictly rejects explicit invalid or contradictory input from=2030-01-07T00:00:00Z 0ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > uses inclusive local calendar days with exclusive next midnight in Lima, and discloses it 19ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > handles DST day boundaries using the native timezone helper 1ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > exposes explicit all time with open bounds 1ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > retains dashboard absent/default parser and discloses the agent default in the business day 3ms
+ ✓ tests/hub-route-candidate.test.ts > C05 actual agent parser and finance route > denies finance before data queries 0ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > slices a single weekday into back-to-back slots 22ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > does not produce slots on a non-working day 1ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > uses slotInterval to step independently of length 1ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > subtracts an existing booking 1ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > pads bookings with before/after buffers 1ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > honors minimum booking notice 0ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > honors a rolling period window 0ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > applies a single-date override over the weekly rule 0ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > treats an empty-range override as a day off 0ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > round-robin: unions slots across staff and tags who is free 1ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > collective: only offers slots where ALL staff are free 1ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > returns nothing when the window is empty 0ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > serviceRules intersect with resource availability (morning-only service) 0ms
+ ✓ hub/src/server/scheduling/slots.test.ts > computeSlots > serviceRules exclude a day the resource works 0ms
+ ✓ hub/src/lib/finance/period.test.ts > parsePeriod > defaults to bucket=month and a rolling 12-month window 2ms
+ ✓ hub/src/lib/finance/period.test.ts > parsePeriod > range=all opts out of the rolling default (open window) 0ms
+ ✓ hub/src/lib/finance/period.test.ts > parsePeriod > accepts valid bucket values 0ms
+ ✓ hub/src/lib/finance/period.test.ts > parsePeriod > falls back to month for invalid bucket 0ms
+ ✓ hub/src/lib/finance/period.test.ts > parsePeriod > parses valid ISO dates 0ms
+ ✓ hub/src/lib/finance/period.test.ts > parsePeriod > falls back to the rolling default when both dates are unparseable 0ms
+ ✓ hub/src/lib/finance/period.test.ts > parsePeriod > swaps from and to when from > to 0ms
+ ✓ hub/src/lib/finance/period.test.ts > parsePeriod > does not swap when from === to 0ms
+ ✓ hub/src/lib/finance/period.test.ts > resolvePeriodWindow (business timezone) > brackets a single Lima day, including its evening sales 18ms
+ ✓ hub/src/lib/finance/period.test.ts > resolvePeriodWindow (business timezone) > keeps an open window open 0ms
+ ✓ hub/src/server/services/scheduling-bookings-group-create.test.ts > createBookingGroup > books every procedure on the SHARED window, stamped groupId/Seq/Length in pick order 13ms
+ ✓ hub/src/server/services/scheduling-bookings-group-create.test.ts > createBookingGroup > 409s when a non-member (e.g. a COMPLETED booking) clashes with the window 3ms
+ ✓ hub/src/server/services/scheduling-bookings-group-create.test.ts > createBookingGroup > refuses a visit of one procedure, and an unknown/inactive procedure 3ms
+ ✓ hub/src/server/services/scheduling-bookings-override.test.ts > createBooking — forceResourceId / overrideConflicts > forcing a resource that is NOT an assignee of the service names the reason (prod 2026-09-17: Consulta + Martin) 5ms
+ ✓ hub/src/server/services/scheduling-bookings-override.test.ts > createBooking — forceResourceId / overrideConflicts > forceResourceId busy at the slot rejects, even though another assignee is free 3ms
+ ✓ hub/src/server/services/scheduling-bookings-override.test.ts > createBooking — forceResourceId / overrideConflicts > overrideConflicts books an off-hours time (no slots) with the forced resource, skipping slot computation 1ms
+ ✓ hub/src/server/services/scheduling-bookings-override.test.ts > createBooking — forceResourceId / overrideConflicts > overrideConflicts without forceResourceId throws before touching the db 1ms
+ ✓ hub/src/server/services/scheduling-bookings-override.test.ts > createBooking — forceResourceId / overrideConflicts > default path (no forceResourceId/overrideConflicts) is unchanged: still runs slot computation 1ms
+ ✓ tests/hub-tools-candidate.test.ts > C04/C05 actual gateway adapter contract > forwards bounded list/count options and signal 6ms
+ ✓ tests/hub-tools-candidate.test.ts > C04/C05 actual gateway adapter contract > forwards explicit all-time without dates, uses provider compatible enum schemas 1ms
+
+ Test Files  7 passed (7)
+      Tests  72 passed (72)
+   Start at  02:51:20
+   Duration  9.63s (transform 1.77s, setup 136ms, import 5.60s, tests 2.78s, environment 1ms)
+
