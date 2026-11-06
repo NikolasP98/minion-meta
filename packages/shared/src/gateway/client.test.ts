@@ -968,6 +968,35 @@ describe.each(['node', 'browser'] as const)('authenticated sessions (%s socket d
     client.close(); expect(vi.getTimerCount()).toBe(0);
   });
 
+  it.each([undefined, 4096])('replaces payload policy before a larger handshake (new limit=%s)', async (newLimit) => {
+    const params = { minProtocol: 3, maxProtocol: 3, token: 'x'.repeat(512) };
+    const { client, sockets } = setup({
+      onChallenge: vi.fn().mockResolvedValueOnce({ minProtocol: 3, maxProtocol: 3 }).mockResolvedValue(params),
+    });
+    const first = startSession(client);
+    challenge(sockets[0]!); await flushMicrotasks();
+    helloReply(sockets[0]!, { policy: { maxPayload: 256 } });
+    await first;
+    await expect(client.request('large', { text: 'x'.repeat(512) })).rejects.toMatchObject({ code: 'PAYLOAD_TOO_LARGE' });
+
+    const second = startSession(client);
+    const next = sockets[1]!;
+    challenge(next); await flushMicrotasks();
+    expect(requests(next)).toHaveLength(1);
+    helloReply(next, newLimit === undefined ? {} : { policy: { maxPayload: newLimit } });
+    await second;
+    const result = client.request('large', { text: 'x'.repeat(512) });
+    const sent = requests(next, 'large');
+    expect(sent).toHaveLength(1);
+    next.__simulateMessage(JSON.stringify({ type: 'res', id: sent[0]!.id, ok: true, payload: 'accepted' }));
+    await expect(result).resolves.toBe('accepted');
+    if (newLimit !== undefined) {
+      await expect(client.request('oversized', { text: 'x'.repeat(newLimit) })).rejects.toMatchObject({ code: 'PAYLOAD_TOO_LARGE', details: { maxPayload: newLimit } });
+      expect(requests(next, 'oversized')).toHaveLength(0);
+    }
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it.each(['resolve', 'reject'] as const)('fences delayed old challenge %s and settles superseded promise', async (outcome) => {
     const auth = deferred<Record<string, unknown>>();
     const onChallenge = vi.fn().mockImplementationOnce(() => auth.promise).mockResolvedValue({ fresh: true });

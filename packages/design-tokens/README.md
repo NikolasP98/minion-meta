@@ -9,7 +9,7 @@ typography, layers, and motion predictable.
 `contract.json` is the machine-readable authority. It contains:
 
 - the complete semantic color vocabulary for all current theme modes listed in [inventory.json](inventory.json);
-- mode-aware success, warning, danger, and information triples;
+- theme-selected success, warning, danger, and information triples;
 - ten selectable accent/on-accent pairs that pass contrast as inseparable pairs;
 - typography, spacing, radius, control, shadow, motion, layer, and layout scales;
 - responsive page gutters and the compact/medium/wide boundaries;
@@ -25,6 +25,26 @@ pnpm --filter @minion-stack/design-tokens build
 The build fails when generated CSS is stale, a theme is incomplete, an alias
 points to an unknown token, or an essential text/action/status pair falls below
 WCAG AA contrast. Normal text uses the full primary/secondary/tertiary × canvas/surface1/surface2/surface3/overlay matrix; disabled text is separate.
+
+## Clinic themes
+
+`clinic-light` and `clinic-dark` provide a paired clinical workspace style:
+blue-tinted canvas and panels, cobalt actions, lilac branding, cyan/rose/mint
+chart colors, soft elevation, and a complete rounded radius scale. Select them
+in Hub under Settings → Appearance as **Clinic Light** and **Clinic Dark**.
+The independent accent preference continues to override the action pair.
+
+Both modes cover the complete semantic color, status, radius, shadow, typography,
+and categorical palette families. Foundations, responsive gutters, reduced motion,
+and aliases remain shared. See [inventory.json](inventory.json) for generated
+theme IDs and resolved token counts, and [contract.json](contract.json) for the
+foundation and alias definitions.
+
+Themes may select `statusRecipe` from `statusRecipes` (default: their `mode`)
+and supply `palettes` with all five categorical keys. Every generated selector
+emits all five categorical colors, including defaults for older presets, so
+theme switching cannot retain another theme's chart palette. Components still
+consume the same semantic token names.
 
 ## Install and import
 

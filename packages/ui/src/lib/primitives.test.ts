@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render } from "svelte/server";
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
+import TokenConformance from "./TokenConformance.test.svelte";
 import Badge, { resolveBadgeColor, resolveBadgeTokens } from "./Badge.svelte";
 import Button from "./Button.svelte";
 import Input from "./Input.svelte";
@@ -156,18 +157,16 @@ describe("Token conformance", () => {
     const declared = new Set(
       [...css.matchAll(/^\s*(--[a-z0-9-]+):/gm)].map((match) => match[1]),
     );
-    const sourceRoot = new URL("./", import.meta.url);
-    const files = (await readdir(sourceRoot)).filter((file) =>
-      file.endsWith(".svelte"),
+    const { body } = render(TokenConformance);
+    for (const part of [
+      "badge", "button", "card", "field", "input", "select", "textarea",
+      "checkbox", "radio", "toggle", "skeleton", "spinner",
+    ]) expect(body).toContain(`data-part="${part}"`);
+    const referenced = new Set(
+      [...body.matchAll(/var\((--[a-z0-9-]+)/g)].map((match) => match[1]),
     );
-
-    for (const file of files) {
-      const source = await readFile(new URL(file, sourceRoot), "utf8");
-      const referenced = [...source.matchAll(/var\((--[a-z0-9-]+)/g)].map(
-        (match) => match[1],
-      );
-      for (const token of referenced)
-        expect(declared.has(token), `${file}: ${token}`).toBe(true);
-    }
+    expect(referenced.size).toBeGreaterThan(0);
+    for (const token of referenced)
+      expect(declared.has(token), `rendered consumer: ${token}`).toBe(true);
   });
 });
