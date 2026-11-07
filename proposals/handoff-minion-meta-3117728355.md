@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-3117728355
 title: Handoff marker — packages/design-tokens/audit.mjs (minion-meta)
-status: draft
+status: merged
 created: 2026-11-06
 updated: 2026-11-07
 repos: [minion-meta]
 tags: [handoff-sweep]
+merged_into: 2026-11-03-hub-clinic-theme
 ---
 
 # Handoff marker — packages/design-tokens/audit.mjs
