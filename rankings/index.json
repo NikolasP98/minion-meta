@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T01:47:08.046Z",
+	"generatedAt": "2026-11-07T02:17:32.080Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1558,38 +1558,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T00:59:46.943Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-6250f8862fa6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.assistant.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6250f8862fa6.md",
-			"sourceUpdatedAt": "2026-11-07",
-			"sourceFingerprint": "76be2cb50c5f7b088b7298d1bdcb6b1dfbad6246c15fbe6ed6b3cda495bea79f",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A concrete multi-tenant RLS verification gap in merged booking code, with a clear risk statement and fix direction, is actionable now.",
-			"evidence": [
-				"If RLS is broken or misconfigured, users could see other tenants' booking data in production.",
-				"Spin up a disposable PostgreSQL instance ... assert that queries return only that tenant's rows."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T01:47:07.887Z"
 		},
 		{
 			"key": "spec:2026-08-22-hub-load-nav-performance-spec",
@@ -4388,40 +4356,6 @@
 			"scoredAt": "2026-11-04T18:48:13.348Z"
 		},
 		{
-			"key": "pr:minion_hub#639",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#639 feat(nav): personalize your sidebar and discover every permitted section",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/639",
-			"sourceUpdatedAt": "2026-11-07T01:43:45Z",
-			"sourceFingerprint": "c1b292ca5d7aca58de22323e765becc0aaa563ee30f8549a8278c33bf2300781",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#963"
-			],
-			"rationale": "Owner-requested nav feature with a cross-checked spec but still draft pending full tests, build, and QA before it is actionable.",
-			"evidence": [
-				"Draft until complete.",
-				"Full tests, final production build, local QA ... and CI qualification are in progress."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T01:47:07.887Z"
-		},
-		{
 			"key": "pr:minion-meta#884",
 			"kind": "pr",
 			"stage": "development",
@@ -4759,6 +4693,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:24:50.163Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-6250f8862fa6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-bookings.assistant.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6250f8862fa6.md",
+			"sourceUpdatedAt": "2026-11-07",
+			"sourceFingerprint": "b393350b3ec8b3859d942807b9832cf3df587e76e5dd222b471e1b859033804d",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already-approved, concrete finding that scheduling tests never verify RLS/GUC isolation for the app_ledger role, a multi-tenant data-leak risk with a clear fix direction.",
+			"evidence": [
+				"status: approved",
+				"'users could see other tenants' booking data in production' if RLS misconfigured",
+				"fix direction: disposable Postgres instance with real schema + RLS, assert tenant-scoped rows"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T02:17:31.877Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9654a64b55fa",
@@ -6221,40 +6188,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:15:29.537Z"
-		},
-		{
-			"key": "pr:minion_hub#626",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#626 feat(nav): sections need only a name, slugs auto-suffix, and the dialog gets Advanced settings (icon, who can view)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/626",
-			"sourceUpdatedAt": "2026-11-07T01:44:22Z",
-			"sourceFingerprint": "543e745c780d1f63aaed328710a081cc101d8946950a62a9ea2461ff5e120ed0",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#639"
-			],
-			"rationale": "Rebased, gated PR (161 tests, check/lint/format clean) that supersedes #602 and unblocks #639, so it is ready to merge now.",
-			"evidence": [
-				"supersedes #602, merge this one and close #602",
-				"vitest ... 0 (17 files, 161 tests)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T01:47:07.887Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -12002,6 +11935,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T05:17:40.191Z"
+		},
+		{
+			"key": "pr:minion_hub#639",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#639 feat(nav): personalize your sidebar and discover every permitted section",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/639",
+			"sourceUpdatedAt": "2026-11-07T02:14:58Z",
+			"sourceFingerprint": "c74ee4758efbdc11315fb2ab790511497b9a7bb70ee9f85323a9444c8776ce8a",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#626"
+			],
+			"rationale": "Owner requested deployment of these nav items but the PR is still draft with full tests, build, and QA explicitly in progress.",
+			"evidence": [
+				"status: draft; 'Full tests, final production build, local QA ... are in progress. Draft until complete.'",
+				"builds on #602/#626/#628/#630 chain"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T02:17:31.877Z"
 		},
 		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
@@ -19139,6 +19106,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T17:48:16.339Z"
+		},
+		{
+			"key": "pr:minion_hub#626",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#626 feat(nav): sections need only a name, slugs auto-suffix, and the dialog gets Advanced settings (icon, who can view)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/626",
+			"sourceUpdatedAt": "2026-11-07T01:48:29Z",
+			"sourceFingerprint": "aa321f2dc3dd5e1bb2054a9a923246bf62bb3b27738876b1570992ed9df70975",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#639"
+			],
+			"rationale": "Mature nav-slug/advanced-settings PR with passing gates and tests that supersedes #602 and unblocks #639, ready to merge.",
+			"evidence": [
+				"gates after rebase: i18n:compile 0, vitest 161 tests 0, check 0, lint:design/tokens 0",
+				"supersedes #602; base for #639"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T02:17:31.877Z"
 		},
 		{
 			"key": "pr:minion_hub#630",
@@ -43058,37 +43059,6 @@
 			"scoredAt": "2026-11-07T00:59:46.943Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-07",
-			"sourceFingerprint": "5aa1ab416d81eebda852aed916774bf39b63ed3182b8ca3db8441b89cc378c21",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers are quoted strings already embedded inside the generated rankings/index.json file itself rather than actionable source TODOs at those locations.",
-			"evidence": [
-				"repo: NikolasP98/minion-meta, file rankings/index.json:3127 etc. quote unrelated feature text, not a real TODO(handoff) comment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T01:47:07.887Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2278437967",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -45329,6 +45299,38 @@
 			"scoredAt": "2026-11-07T00:51:10.509Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-07",
+			"sourceFingerprint": "daadd8b306d554be85ec549cb32bcafbb182ef7fd2d08653b6a562abb72f4ed4",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged markers are quoted text fragments inside rankings/index.json's own rationale/evidence fields, not real unresolved TODOs in source code.",
+			"evidence": [
+				"all line refs point into rankings/index.json, a generated ranking data artifact",
+				"listed marker snippets read as copied rationale text, not code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T02:17:31.877Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3236367837",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -45535,38 +45537,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T07:47:58.071Z"
-		},
-		{
-			"key": "run:minion_hub#42325621776",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/42325621776",
-			"sourceUpdatedAt": "2026-11-07T01:44:36Z",
-			"sourceFingerprint": "1b83a0f7e962cab17eb3036140100e61855336f4ddd88161c445db2d3b7a0524",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a transient CI run status, not a work item with a defined outcome to rank.",
-			"evidence": [
-				"push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T01:47:07.887Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
