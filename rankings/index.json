@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T13:17:02.565Z",
+	"generatedAt": "2026-11-07T13:47:09.964Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -45381,7 +45381,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-07",
-			"sourceFingerprint": "e5a5da6be75c1320d72658f915d56cda3870842db571c84c1c19ad6425e146eb",
+			"sourceFingerprint": "dd5fa9130d257325b9dd0cbd4ce15f6fe348f3064a235245659482ff9aecd161",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -45390,20 +45390,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This marker points at lines inside rankings/index.json itself, meaning the sweep is quoting other goals' evidence strings back as if they were source TODOs rather than identifying a real open-items ledger entry in code.",
+			"rationale": "The sweep is flagging quoted text fragments inside rankings/index.json itself (a generated data file), not actual TODO(handoff) markers in source code, making this a self-referential false positive with no real actionable work.",
 			"evidence": [
-				"all cited locations are 'rankings/index.json' lines, the ranking output file, not application source",
-				"targets are quoted evidence fragments from unrelated goals (payments, auth, schema) with no single coherent open end"
+				"all 17 cited markers point to lines within rankings/index.json, the ranking output file, not application source",
+				"summary states markers are 'text copied out of repository source this sweep did not write' yet the source is the rankings index itself"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T09:47:12.107Z"
+			"scoredAt": "2026-11-07T13:47:09.789Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
