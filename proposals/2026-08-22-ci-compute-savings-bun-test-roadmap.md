@@ -3,7 +3,7 @@ id: 2026-08-22-ci-compute-savings-bun-test-roadmap
 title: CI and Factory compute savings — evidence-first roadmap including Bun 1.4 test evaluation
 status: in-spec
 created: 2026-08-22
-updated: 2026-08-31
+updated: 2026-10-17
 spawned_spec: 2026-08-31-ci-compute-savings-bun-test-roadmap-spec
 repos: [minion, minion_hub, minion_site, minion-factory, minion-meta, minion-base, paperclip]
 tags: [infra, test]
@@ -11,6 +11,18 @@ approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 90/100, 
 ---
 
 # CI and Factory compute savings — evidence-first roadmap including Bun 1.4 test evaluation
+
+## Budget-governance reconciliation — 2026-10-17
+
+The related `2026-08-17-factory-token-budget-governance-spec` no longer lacks a
+Base budget consumer/widget: Base `3c4d5bef` contains them, focused Base tests
+pass 41 cases, and successful production deployment `6216990278` names that SHA.
+The anonymous browser reaches `/login?to=%2Fsettings`, so authenticated S5 and
+the original all-slice acceptance are still unproven. Retain the related spec's
+qualification hold; do not pay to rebuild its S1-S5 code. Its current evidence
+ledger and TODO(handoff) identify the remaining checks and fixture-only budget
+changes. Closing that qualification does not satisfy this proposal's distinct
+phase-attributable telemetry, benchmark, adoption or model-canary requirements.
 
 ## Problem in the user's words
 
