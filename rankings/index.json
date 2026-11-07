@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T22:16:59.354Z",
+	"generatedAt": "2026-11-07T22:47:08.944Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1891,6 +1891,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:22:19.446Z"
+		},
+		{
+			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Restore typed assistant analytics and persisted brain delegation after security containment",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-09-assistant-query-delegation-restoration.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "e1f89bf3a2f8862be34092b4d99a32da51757c174ea881e478e660088b4eaf98",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Restoring typed analytics and gateway brain delegation after a security containment is strategically central and well-scoped, but requires persisted assignment infrastructure and tests not yet built, so execution isn't yet actionable.",
+			"evidence": [
+				"raw /api/gateway/query always returns 503 ASSISTANT_SQL_DISABLED",
+				"brains table persists agent/org but no gateway assignment yet",
+				"requires replacing raw SQL with versioned server-owned operations"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T22:47:08.781Z"
 		},
 		{
 			"key": "proposal:2026-10-29-gateway-per-org-credentials-followups",
@@ -5388,38 +5421,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T19:48:49.112Z"
-		},
-		{
-			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Restore typed assistant analytics and persisted brain delegation after security containment",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-09-assistant-query-delegation-restoration.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "e1f89bf3a2f8862be34092b4d99a32da51757c174ea881e478e660088b4eaf98",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The containment is already fail-closed and safe, but the proposal bundles five distinct restoration streams (SQL sandbox replacement, tool registry deprecation, brain assignment persistence, test coverage, log rotation) that need separate executable slices rather than one goal.",
-			"evidence": [
-				"Raw /api/gateway/query always returns 503 with code: ASSISTANT_SQL_DISABLED, retryable: false",
-				"Required restoration work lists 5 numbered items spanning assistant-query.service.ts, minion-tools.ts, assistant-principal.ts, and credential log review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T22:17:28.656Z"
 		},
 		{
 			"key": "proposal:2026-09-09-flow-sql-bindings-migration",
@@ -9660,6 +9661,38 @@
 			"scoredAt": "2026-11-04T18:48:13.348Z"
 		},
 		{
+			"key": "proposal:2026-08-28-factory-legacy-develop-token-scope",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Remove GH_TOKEN from the legacy develop/self-test environment",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-28-factory-legacy-develop-token-scope.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "054c4df7171edcad315d6811dcf60a6f32df501f238d5d7b3cb3ae9384154661",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Legacy run.sh still allows the develop agent to forge human-facing PR signals via inherited GH_TOKEN, but containment-v2 already solves this structurally and the proposal itself is undecided between accelerating rollout or patching run.sh.",
+			"evidence": [
+				"develop agent can run gh pr ready/comment itself",
+				"containment-v2 already refuses start when GitHub credential present"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T22:47:08.781Z"
+		},
+		{
 			"key": "proposal:2026-10-07-hub-readiness-state-integrity-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10658,38 +10691,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:20:41.611Z"
-		},
-		{
-			"key": "proposal:2026-08-28-factory-legacy-develop-token-scope",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Remove GH_TOKEN from the legacy develop/self-test environment",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-28-factory-legacy-develop-token-scope.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "054c4df7171edcad315d6811dcf60a6f32df501f238d5d7b3cb3ae9384154661",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Legacy run.sh still inherits GH_TOKEN into develop/self-test, letting it forge human-facing PR signals, but containment-v2's structural fix is already tested and just needs rollout or a scoped env-scrub patch.",
-			"evidence": [
-				"develop refuses to start when a GitHub credential is present (agent/factory-develop.sh:120)",
-				"containment-v2 ... review runs with github: null"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T22:17:28.656Z"
 		},
 		{
 			"key": "proposal:2026-08-29-roadmap-milestone-order-deviation",
