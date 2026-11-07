@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T21:17:04.856Z",
+	"generatedAt": "2026-11-07T21:47:33.527Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7957,39 +7957,6 @@
 			"scoredAt": "2026-11-07T04:19:08.186Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "9cbbdebbbd1eb4be1eec75e10c3533391b97ac36e4e147f2013210f4fd8502cc",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, well-specified migration gap (missing DROP COLUMN/CONSTRAINT) with concrete diagnosis and two bounded fix options ready to act on.",
-			"evidence": [
-				"TODO(handoff): drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
-				"diagnosis: DROP COLUMN/DROP CONSTRAINT statements missing, causing schema drift",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T21:17:29.570Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8278,21 +8245,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Bundles ~20 heterogeneous findings (several high-severity unchecked-access crashes on customer-facing CRM pages) into one draft proposal that is too broad to execute as a single bounded goal.",
+			"rationale": "Concrete multi-file findings include runtime-crash-risk unchecked-access bugs and masked errors across many hub source files, with clear file:line specificity.",
 			"evidence": [
-				"high unchecked-access: c.tag_ids spread without null check in crm/customers/+page.svelte:61",
-				"high unchecked-access: b.startTime passed to fmtBooking() without null check in crm/[contactId]/+page.svelte:891",
-				"status: draft"
+				"high: c.tag_ids spread without null check throws at runtime in crm/customers/+page.svelte:61",
+				"high: b.startTime passed without null check crashes fmtBooking() in [contactId]/+page.svelte:891",
+				"status: draft, commit range e98422b..25e2bb7"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T21:17:29.570Z"
+			"scoredAt": "2026-11-07T21:47:33.364Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-platform-spec",
@@ -10047,6 +10014,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T09:48:48.932Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "9cbbdebbbd1eb4be1eec75e10c3533391b97ac36e4e147f2013210f4fd8502cc",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved migration intended to retire a column is missing its actual DROP statements, leaving schema drift between stated intent and live database state.",
+			"evidence": [
+				"status: approved",
+				"migration file exists but DROP COLUMN/DROP CONSTRAINT statements are missing",
+				"fix direction specifies verifying code usage before completing or reverting the migration"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T21:47:33.364Z"
 		},
 		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
@@ -18995,39 +18995,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T05:19:34.658Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8c6ed5b4021d.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "fbf0b49f7defde96baf86e012b61f2ef19445c9effe36ad308bda37d4cb6daf1",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Clear drag-state usability bug with a fix direction, but the proposal's own reconciliation note flags it as a possible duplicate of a separate per-file handoff ledger needing human decision before execution.",
-			"evidence": [
-				"TODO(handoff): HC-017 — while a copy is being dragged only THAT copy",
-				"reconciliation note flags possible duplicate of handoff-minion-hub-1194287278",
-				"status: review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T21:17:29.570Z"
 		},
 		{
 			"key": "spec:2026-08-31-handoff-minion-hub-722867358-spec",
@@ -29534,6 +29501,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T07:18:02.629Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8c6ed5b4021d.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "fbf0b49f7defde96baf86e012b61f2ef19445c9effe36ad308bda37d4cb6daf1",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A scoped UI drag bug with a clear diagnosis, but the reconciliation note flags it as a likely duplicate of a ledger proposal not present in this batch, so dedup should be resolved before action.",
+			"evidence": [
+				"Reconciliation note 2026-10-10: possible duplicate of handoff-minion-hub-1194287278",
+				"status: review, flagged rather than merged pending human decision"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T21:47:33.364Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-8ef9cc8545b6",
@@ -43064,6 +43063,38 @@
 			"scoredAt": "2026-11-07T00:59:46.943Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-07",
+			"sourceFingerprint": "d3052daa57139af07ec521f81ff38df94650c9fc870e6f845c573fa6df15e5cc",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The quoted markers are text copied from other proposals' bodies embedded in the rankings data file itself, not actionable code TODOs needing a fix.",
+			"evidence": [
+				"source: handoff-sweep targets rankings/index.json, a generated data file",
+				"markers quoted (e.g. L3133, L3991) duplicate text found verbatim in other candidate summaries in this same batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T21:47:33.364Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2278437967",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -45338,38 +45369,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T00:51:10.509Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-07",
-			"sourceFingerprint": "dd5fa9130d257325b9dd0cbd4ce15f6fe348f3064a235245659482ff9aecd161",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The sweep is flagging quoted text fragments inside rankings/index.json itself (a generated data file), not actual TODO(handoff) markers in source code, making this a self-referential false positive with no real actionable work.",
-			"evidence": [
-				"all 17 cited markers point to lines within rankings/index.json, the ranking output file, not application source",
-				"summary states markers are 'text copied out of repository source this sweep did not write' yet the source is the rankings index itself"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T13:47:09.789Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
