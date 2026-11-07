@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T11:16:57.423Z",
+	"generatedAt": "2026-11-07T11:47:09.733Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3997,6 +3997,39 @@
 			"scoredAt": "2026-11-07T04:18:13.377Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A multi-tenant data isolation gap in the CRM dashboard rollups is a concrete correctness/security issue with a bounded, single-file fix already scoped.",
+			"evidence": [
+				"TODO(handoff): scope word-frequency/sentiment/win-index rollups by owner",
+				"Fix direction: add owner_id grouping and filter by authenticated user scope",
+				"Single file: src/server/services/crm-insights-dashboard.service.ts:40"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T11:47:09.501Z"
+		},
+		{
 			"key": "spec:2026-10-03-notification-slice5-integrity-quarantine-definer-amendment",
 			"kind": "spec",
 			"stage": "spec",
@@ -7922,39 +7955,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T04:19:08.186Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-eea107ee93eb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/crm-insights-dashboard.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-eea107ee93eb.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "8f5e413b38e3e20b58ede9bee2645a2cc157639c8b3a4440bc414ae83a3c1e09",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Unscoped CRM rollups break multi-tenant isolation in a merged dashboard service with a clear, bounded fix direction already specified.",
-			"evidence": [
-				"TODO(handoff) marker at crm-insights-dashboard.service.ts:40 for owner-scoped rollups",
-				"Diagnosis states aggregate stats mix across owners, breaking per-owner isolation",
-				"Fix direction specifies owner_id grouping and scope filtering with test verification"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T11:17:08.035Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
