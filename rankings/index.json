@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T19:16:58.710Z",
+	"generatedAt": "2026-11-07T19:47:06.961Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2787,17 +2787,17 @@
 				"specification": 8,
 				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Backups and retention pruning silently never run because the scheduler is never invoked, risking data loss with no alerting.",
+			"rationale": "Backups and retention pruning silently never run because the scheduler has zero call sites, a clear data-safety gap with a bounded fix.",
 			"evidence": [
 				"startBackupScheduler() has zero call sites anywhere in the repo",
-				"TODO(handoff) at backup-scheduler.ts:164 corroborated by PR #282 and a postmerge finding"
+				"no error or log indicates backups/pruning never run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T19:17:08.593Z"
+			"scoredAt": "2026-11-07T19:47:06.786Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
@@ -44196,6 +44196,38 @@
 			"scoredAt": "2026-11-07T00:57:06.396Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-2f3c914",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 2f3c914",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-2f3c914.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "2732434b2fe9ae12690a0f1b603f5fefc3ff99d6b4f48a1fe277b7c9cf1b13fb",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A single medium-severity hardcoded-constant nit in a test file is low-consequence cleanup, not a goal worth tracking.",
+			"evidence": [
+				"medium severity hardcoded-config finding",
+				"single bullet: timeout value should be a named constant"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T19:47:06.786Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-77196cfff827",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -44510,38 +44542,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T21:00:42.893Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-2f3c914",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 2f3c914",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-2f3c914.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "2732434b2fe9ae12690a0f1b603f5fefc3ff99d6b4f48a1fe277b7c9cf1b13fb",
-			"score": 13,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A single medium-severity hardcoded-constant nit in a test file is minor cleanup, not goal-worthy work.",
-			"evidence": [
-				"medium hardcoded-config finding: 60_000 timeout should be a named constant",
-				"scope limited to one line in server.maintenance-timer-ownership.e2e.test.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T19:17:08.593Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-d222079",
