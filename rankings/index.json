@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T13:47:09.964Z",
+	"generatedAt": "2026-11-07T14:17:13.467Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -27531,6 +27531,74 @@
 			"scoredAt": "2026-11-03T10:47:18.706Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-site-ce10a6641861",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.h2b5bcf9a124ff5add691c22cad63ac8d9e68096d567339d2e265f1c4c39c1c3d.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ce10a6641861.md",
+			"sourceUpdatedAt": "2026-10-31",
+			"sourceFingerprint": "36222ab0aacc56770ff69a22d4404dcfd6307fb27037c4e35801db64157972c7",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-site-f287089bb777"
+			],
+			"rationale": "Same merged PR committed an unscanned binary tarball into minion-site/deps/, and a near-identical companion finding from the same PR should be consolidated into one dependency-hygiene goal.",
+			"evidence": [
+				"merged PR https://github.com/NikolasP98/minion-site/pull/38 added deps/minion-stack-ui-0.1.0-....tgz with zero diff captured",
+				"reconciliation note flags this as duplicate_candidate pending human confirmation against existing UI-06 remediation scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T14:17:13.280Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-f287089bb777",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h7de7a0efb32dcbb6dad6c4ff41a68bfd7e2488210117fc59a00c016374c69dc3.tgz (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-f287089bb777.md",
+			"sourceUpdatedAt": "2026-10-31",
+			"sourceFingerprint": "70447fe857463b6109344ac0414bacef33300b32c07a4ddee2f5a7cdd162affe",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-site-ce10a6641861"
+			],
+			"rationale": "Same merged PR committed another unscanned binary tarball into minion-site/deps/, matching the companion finding and warranting one combined dependency-hygiene goal rather than two separate items.",
+			"evidence": [
+				"merged PR https://github.com/NikolasP98/minion-site/pull/38 added deps/minion-stack-design-tokens-0.1.1-....tgz with zero diff captured",
+				"reconciliation note flags this as duplicate_candidate pending human confirmation against existing UI-06 remediation scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T14:17:13.280Z"
+		},
+		{
 			"key": "spec:2026-10-03-readiness-button-consumer-semantics-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -32630,74 +32698,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T08:48:30.848Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-site-ce10a6641861",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-ui-0.1.0-durability.h2b5bcf9a124ff5add691c22cad63ac8d9e68096d567339d2e265f1c4c39c1c3d.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ce10a6641861.md",
-			"sourceUpdatedAt": "2026-10-31",
-			"sourceFingerprint": "36222ab0aacc56770ff69a22d4404dcfd6307fb27037c4e35801db64157972c7",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-site-f287089bb777"
-			],
-			"rationale": "A committed binary tarball scan-gap flagged as likely duplicate of existing dependency-provenance remediation work, best merged with the sibling finding.",
-			"evidence": [
-				"Reconciliation note flags duplicate_candidate against 2026-09-08-platform-qc-remediation UI-06",
-				"Same merged PR #38 and repo as the sibling .tgz finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T13:47:10.407Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-site-f287089bb777",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — scan-gap in deps/minion-stack-design-tokens-0.1.1-durability.h7de7a0efb32dcbb6dad6c4ff41a68bfd7e2488210117fc59a00c016374c69dc3.tgz (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-f287089bb777.md",
-			"sourceUpdatedAt": "2026-10-31",
-			"sourceFingerprint": "70447fe857463b6109344ac0414bacef33300b32c07a4ddee2f5a7cdd162affe",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-site-ce10a6641861"
-			],
-			"rationale": "Same class of committed-tarball scan-gap from the same PR as the sibling finding, should be resolved together under the existing remediation slice.",
-			"evidence": [
-				"Same merged PR #38 (minion-site) and same reconciliation note pointing to UI-06 remediation",
-				"Status added with zero diff captured, same deps/ pattern"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T13:47:10.407Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-brain-org-all-scope-spec",
