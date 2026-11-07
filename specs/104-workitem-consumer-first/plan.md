@@ -9,8 +9,9 @@ Deliver the missing S5 trust/admission gate in one Factory PR before any S4
 producer retrofit. Reuse current topic-policy and manifest risk behavior.
 Apply one strict WorkItem boundary to automatic approval, proposal approval
 commits, automatic approved-proposal spec starts, and explicit spec starts.
-Keep the parent goal in review until independent review and owner security
-approval are recorded. This PR changes planning records only.
+Independent review and owner security approval are recorded through merged PR
+#835 and the owner's confirmation. Implementation remains one Factory S5 PR;
+owner merge and later producer/intake approvals are still required.
 
 ## Technical Context
 
@@ -33,8 +34,8 @@ human security approval before code and human merge before deployment.
 - IV: No UI, route, endpoint, navigation, user string or database surface is
   added. Existing authenticated endpoints gain validation.
 - V: This changes approval authority. Owner approval of this security-tagged
-  revised spec and owner merge are required. Planning/research are allowed now;
-  implementation is blocked until approval is recorded.
+  revised spec is recorded before code. Owner merge of implementation remains
+  required; no later producer/intake approval is implied.
 - Post-design recheck: no exception to these gates is requested.
 
 ## Project Structure
@@ -47,11 +48,20 @@ Implementation paths, relative to the independent Factory repository:
 ```text
 runner/src/workitem.ts                 strict DB-free validator/parser (new)
 runner/src/workitem.test.ts            contract behavior (new)
+runner/src/workitem-admission.ts       shared pinned-source/revision boundary (new)
 runner/src/manifest.ts                 reuse/export risk aggregation if needed
+runner/src/topics.ts                  fresh canonical policy for WorkItem gates
+runner/src/topics.test.ts             stale-cache outage refusal controls
 runner/src/lifecycle.ts                eligibility, approval commit, spec admission
 runner/src/lifecycle.test.ts           real approval/sweep persistence behavior
+runner/src/requeue.ts                  existing automatic spec-retry admission
+runner/src/requeue.test.ts             retry authority and concurrency controls
+runner/src/promotion-circuit.ts        unchanged breaker read shared without cycles
+runner/src/queue.ts                    re-export existing breaker API unchanged
 runner/src/index.ts                    existing POST /pipeline/spec
 runner/src/index.test.ts               actual HTTP rejection and accepted controls
+agent/spec.sh                         exact-site execution-content handoff TODO
+README.md                             intake contract and migration limitations
 ```
 
 `runner/src/automerge.ts`, scheduling, queue ranking and existing run manifests
@@ -59,6 +69,13 @@ are regression boundaries. Do not replace their authority with mutable proposal
 fields. Meta S4, producer edits and typed monitor intake remain later work.
 
 ### Legacy parent dispatch
+
+This interactive session may implement the approved S5 directly on an isolated
+Factory branch using the complete reviewed artifacts, as the manual SDLC path
+in `AGENTS.md` permits. Record the owner approval first. This does not enqueue a
+production run or change a pause; no automated source/context check is bypassed
+because `/runs` is not called. The following hold remains mandatory whenever
+automated Factory dispatch is chosen. Code scope and acceptance do not change.
 
 The parent declares multiple repos, so its S5 run requires explicit per-repo
 dispatch to Factory. Current `/runs` collects plan/tasks automatically only from

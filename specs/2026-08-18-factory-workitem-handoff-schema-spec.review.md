@@ -1,13 +1,23 @@
 ---
 spec: 2026-08-18-factory-workitem-handoff-schema-spec
 pass: 3
-verdict: pending
-reviewer: root-reconciliation
+verdict: approved
+reviewer: owner-NikolasP98
 created: 2026-10-17
-reviewed_commit: 61f41156
+reviewed_commit: 0dc0ece6c615e157133160bab62eaf945e724bf8
 ---
 
-# Pass 3 — consumer-first correction awaiting review
+# Pass 3 — owner-approved consumer-first implementation plan
+
+The owner merged plan PR #835 at the reviewed commit above on
+2026-10-17T23:27:51Z and answered `done` to the plan-approval request.
+Implementation approval covers the existing Factory S5 consumer slice only.
+Independent planning reviews at `61f41156` and final head `f80cf39f` passed
+Standards and Spec. Owner merge of implementation and separate review of later
+S4/S6 remain required. This record certifies no implemented or deployed code.
+
+The following pending-language and pass-2 entries are retained as historical
+review context; this frontmatter and the owner approval above are current.
 
 The former approval is not current execution authority. The October source
 audit confirms S5 trust consumers are still missing while the old plan places
