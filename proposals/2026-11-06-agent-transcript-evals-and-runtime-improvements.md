@@ -1,0 +1,159 @@
+---
+id: 2026-11-06-agent-transcript-evals-and-runtime-improvements
+title: Evaluate real agent traces and correct date, outcome, access, and completion behavior
+status: draft
+created: 2026-11-06
+updated: 2026-11-06
+repos: [minion-meta, minion, minion_hub]
+---
+
+# Agent transcript evals and runtime improvements
+
+## AS-IS
+
+The owner requested collection of agent message ledgers and a review of recurring patterns and improvements. The read-only audit is at [the transcript review](../audits/2026-11-06-agent-transcript-review/README.md); Private-local `findings.json` supplies exact retained source windows and measurement limits; it is excluded from this PR. Private source exports and executable collection/analysis scripts live under `.local/agent-transcript-review-2026-11-06/` and must not be published as evaluation fixtures.
+
+Observed examples include a relative-day error corrected by the user; a gateway-assignment denial turned into personality onboarding; sale price substituted for margin; raw model tool-protocol text in final content; no-op calls; rejected memory writes followed by completion claims; booking actions without resolvable reference data; and environment enumeration that persisted unmasked secret-bearing fields. Historical provider failures and workshop memory chatter form separate cohorts. These observations establish past behavior, not an assertion that every defect remains live.
+
+The audit also captures positive cases: one-call catalog answers with all tied maxima, explicit refusal to compute from incomplete data, and successful memory-write recovery. The candidate eval seeds are agent-reviewed and human-unreviewed; they are not an executed benchmark or a production evaluator.
+
+## TO-BE
+
+Minion answers authorized business requests using scoped tools, the organization's local date, the requested metric, and evidence of the actual outcome. It distinguishes unavailable data, denied access, incomplete coverage, invalid input, transient failure, and uncertain effects. It confirms writes only from successful receipts and bounds retries by progress. Secrets do not enter persisted transcripts or shareable eval exports.
+
+Authorization and confirmation remain deterministic. Existing organization isolation and permission checks must remain enforced. Model judges do not grant permissions, authorize writes, infer credential validity, or turn uncertain effects into successful ones. Useful abstentions and valid alternative tool sequences remain acceptable.
+
+## DELTA
+
+1. **Scope and sanitize (audit F12).** Reproduce environment enumeration using synthetic credentials only. Apply task-appropriate tool allowlists and redact secret-bearing keys and credential-bearing URLs before persistence/export. Assess the affected historical credentials through an explicitly authorized operator process; no credential rotation is authorized by this audit.
+2. **Outcome and format contracts (F04/F08).** Adapt actual tool responses to typed outcomes with retryability and effect certainty. Prove outer-success/body-error, empty success, denied access, timeout/unknown, and raw DSML cases. Do not execute tool calls parsed from ordinary final text.
+3. **Date and metric correctness (F01/F03).** Resolve local calendar periods once, generate half-open timestamp bounds, and return local display times. Keep quantity, sale price, revenue, margin, period, coverage, and cost provenance explicit. Test local midnight, day boundaries, ties, capped lists, missing costs, and partial-period samples.
+4. **Readiness and action closure (F02/F07).** Separate gateway assignment, module authorization, tool availability, and conversational onboarding. Preserve the pending user task. Resolve booking service/event-type IDs through authorized typed reference data before promising creation; retain confirmation and effect receipts.
+5. **Progress and receipts (F05/F06/F10).** Bound unchanged discovery, permanent-error retries, invalid-schema retries, and provider failures separately. Require success receipts before completion claims. Preserve correct repair sequences; an intermediate failure alone does not fail the user task.
+6. **Memory and workshop provenance (F09).** Distinguish user facts, plans, peer opinions, tool receipts, and inferred state. Exclude duplicate heartbeat filler and incomplete promises from completed-task memories. Add workshop goals, bounded rounds, and stop conditions.
+7. **Qualification (F11 and all seeds).** Build sanitized, executable trace fixtures; explicitly label human, automation, workshop, synthetic test, historical, and continuation cohorts. Add negative controls and positive regression cases. Obtain human adjudication and a holdout before making model-quality claims. Run offline first, then shadow scoring; enabling per-request intervention is a separate reviewed change.
+8. **Trace correlation.** Measure agent/session/run/tool-call/effect attribution where events are genuinely agent-generated. The canonical snapshot has only 140 nonempty agent_id values, including a no-agent sentinel, so it cannot supply a complete AI-only denominator. Preserve human/imported channel history without inventing attribution. Reconcile the 20 distinct Default outbox client IDs absent from the canonical snapshot against retention, routing, timestamps, and source provenance before alleging data loss. Use immutable provenance and timestamped source revisions rather than treating all outbound messages as AI replies.
+
+## Evidence and definition of done
+
+- Every implemented change maps to an audit finding, source reproduction, and executable acceptance check.
+- Failed writes cannot produce a saved confirmation; uncertain effects cannot be retried as confirmed failures without reconciliation.
+- Local-day and metric tests reject the observed wrong behavior; positive tied-price and honest-abstention cases still pass.
+- Synthetic PAT/API key/token/password/secret-key/URL fixtures cannot persist raw secrets.
+- Evaluation reports separate structural signals from task outcomes, historical operational faults from reasoning quality, and sampled review from complete collection.
+- Source changes, local checks, CI, deployment, runtime verification, and human adjudication are reported separately.
+
+## Lifecycle and handoff
+
+This draft records the audit's improvement backlog; it does not authorize product implementation, live evaluators, paid model calls, outbound messaging, credential changes, or deployment. Security/data work retains human approval and merge gates. Product implementation proceeds through the normal reviewed spec and development lifecycle. Related proposals cover assistant lifecycle, dynamic tools, and prior harness evaluation work; deduplicate against their current implementation before planning replacements.
+
+The private report builder contains the corresponding `TODO(handoff)` pointer for proposed checks and unqualified live behavior. Raw transcript excerpts must be sanitized before promotion into repository fixtures. Repository-wide proposal-index validation currently encounters unrelated existing invalid topics/status values; preserve that work and resolve it in its owning change.
+
+## Deeper code review — 6 November 2026
+
+The owner requested examination of whether agents skip checks or assume outcomes. [The code review](../audits/2026-11-06-agent-transcript-review/code-review/README.md) qualifies findings against freshly fetched Gateway DEV `d3e0fbf54fc657521df07c896ea7adce5ba1afcd` and Hub master `1f1ab6a327b347645aeff16f5bd675b8d9fbf54d`, rather than the older shared working checkouts. Fifteen synthetic source-boundary probes reproduce eight improvement areas and verify positive controls. These probes do not call production services, databases, or model providers.
+
+| Item | Verified code behavior | Required correction |
+| --- | --- | --- |
+| C01 | Durable extraction receives at most two current-turn messages; its default threshold is four, so the attempt caller never opens the gate. | Accumulate real new messages against an input cursor; retain context stripping and deduplication. This does not disable the separate KG extractor or explicit remember tools. |
+| C02 | The bootstrap gate forbids ordinary tasks until onboarding completes, while personality guidance says to process ordinary tasks normally. | Set one personal-agent policy and separate optional preferences from actual authority/readiness. |
+| C03 | Booking preview returns HTTP 200 for nonexistent references without semantic booking validation; customer/staff IDs are absent from the preview. | Add an authorized read-only preflight, include resolved effect-defining fields, and revalidate availability at commit. |
+| C04 | Booking service defaults to 500 rows; its agent route returns a bare list without completeness/count/cursor information. | Add an assistant bounded-list/exact-count contract with explicit truncation so partial results cannot silently stand for totals; no full enumeration is promised. |
+| C05 | Malformed finance dates become the rolling twelve-month default; the agent tool cannot explicitly forward the Hub's all-time selector. | Strictly validate explicit agent periods and expose intentional all-time queries without breaking absent-filter UI defaults. |
+| C06 | The exact DSML protocol family seen in retained finals passes the outbound sanitizer unchanged. | Validate provider terminal output and add bounded recovery; never execute narrated protocol text or silently discard the entire answer. |
+| C07 | Default tool-result persistence retains synthetic secret-bearing fields; egress misses named keys and fine-grained PAT shapes. | Make secret-aware persistence/export redaction mandatory and restrict unnecessary environment access. Use synthetic fixtures only. |
+| C08 | Ten overlapping eligible extractions pass a budget of five and leave the cursor count at one. | Reserve capacity before scheduling and avoid captured stale-cursor commits. Fix with C01; historical/default-path overspending is not claimed. |
+
+**Already addressed in canonical code:** the current Hub helper preserves structured error metadata and gateway identity; the current tracking wrapper marks fulfilled semantic errors with `isError`. The unused `extractMemories` convenience stub is not the runner's actual path. Do not recreate these fixes from the older working copies or mistake historical transcript counts for current defects.
+
+Exact `TODO(handoff)` comments are recorded at nine sites in private annotated source snapshots and in the review's `handoff-todos.patch`. The original `git archive` snapshots and pre-annotation fingerprints are retained. Shared product checkouts remain untouched. This is an audit and correction contract, not an implemented fix or deployed-runtime qualification. C03–C05 are partly adjacent code defects found while following the chat workflow; the review explicitly distinguishes them from directly observed causal failures.
+
+
+## EGM-tested candidate approaches — 6 November 2026
+
+Status: **tested candidates, not adopted product changes**. The owner's request to find EGM approaches and test them is fulfilled in [the consolidated EGM report](../audits/2026-11-06-agent-transcript-review/egm/consolidated_review_report.md). The design covers C01–C08, includes alternatives, and was challenged in five stages by nine fresh reviewers plus three fresh reviewers in one Stage9 re-audit. Two blocker-level composition defects were found, corrected and closed by re-audit; original severities remain recorded. Final RR-1 coverage closure is root-tested after that re-audit, not independently re-reviewed. No convergence or production approval is claimed.
+
+Exported Gateway/Hub patches modify18source files against the previously pinned source. Independent reconstruction matches every changed-file hash and passes253distinct tests (153new,100nearby);293raw executions include40duplicates. No shared source checkout, branch, commit, deployment or provider was changed/called. Runtime/dependencies were reused and are disclosed in verification.json.
+
+Selected changes: real buffered memory admission with synchronous budget reservations and generation fences; personal non-blocking onboarding; shared native booking preflight; bounded list/exact count with truncation; strict agent dates/all-time and presence-aware adapter validation; fail-closed DSML and terminal fallback through enabled/disabled TTS; mandatory supported-secret redaction after persistence transforms and at qualified text/speech boundaries.
+
+### Candidate handoff ledger
+
+The candidate's exact-site TODO(handoff) comments point here. Production adoption remains open:
+
+- **Memory write detection:** attempt.ts cannot yet recognize authenticated filesystem/plugin-specific memory writes; known explicit memory-tool attempts are conservatively suppressed. Add an outcome contract before broader adoption.
+- **Durable sink acknowledgment:** attempt.ts calls recordExtractedMemories without storage acknowledgment/idempotency. Processed extraction is not proof of durable delivery. Define receipts and partial-delivery behavior.
+- **Provider settlement:** extract-memories-runner.ts has no abort/timeout transport contract for injected model calls. A hung provider can retain active capacity; cancel/clear fences later writes without retracting dispatched calls.
+- **Other session rotation:** sessions.ts wires gateway RPC reset/delete only. Qualify command/automatic rotation; lazy30min idle expiry and cap256 bound retained states without claiming a lifetime budget.
+- **Native authority and concurrency:** the local native-service fixture replaces withOrgCore with a transaction. Its TODO names actual app_ledger role/GUC/RLS testing; deployed policies, authenticated route-to-native-service composition and concurrent booking exclusion remain unproven.
+- **Alternate egress/persistence:** tts.ts and reply-dispatcher.ts TODOs identify direct speech/telephony and dispatcher-bypass paths. Qualify custom delivery/export/disk serialization; supported-pattern redaction is not universal secret detection. Historical data and credential changes remain separate operator-authorized work.
+- **Dependencies/full checks:** native SDK SessionManager suites are blocked before assertions by pi-ai ./providers/all exports; qualify supported runtime, clean locked dependencies and complete builds/checks. Focused mocks do not replace this proof.
+- **Booking prerequisites and environment authority:** authorized service/event-type discovery and restrictions on unnecessary environment access are not implemented by preflight/redaction. Keep these earlier backlog items open; no access grant or credential rotation is inferred.
+
+The accepted bounded booking read does not enumerate all matches; filters can still leave >500identical-time rows, which must remain visibly truncated. Preview is not a reservation, and optional resource assignment may be recomputed by commit. Pattern recognition covers listed fixtures and preserves explicit unsupported-path limits. Normal spec/development/independent review gates remain, with human approval and merge for security/data work and later deployed-runtime verification.
+
+## Release-review blockers, 6 November 2026
+
+Signed submissions are not production-ready. Gateway review findings F1–F4 have been relayed verbatim to the owner and no decision has been received: device-free JWT node admission from unrelated history (scope decision pending), earlier assistant-text extraction removing invalid-protocol evidence, LINE controls erased before normalization, and a supported credential assignment shortened before redaction. The active gate owns that source branch; no root edits or product fixes were applied around it. Formal re-review added F6 for a clean spoken override bypassing whole-response invalidity. It issued no separate memory-retention finding; the already disclosed per-retained-generation budget and retirement/restart reset limits remain explicit rather than a conversation-lifetime guarantee.
+
+Hub review R1/R2 led to a signed gate fix for HR availability and real Vitest discovery checks. Re-review found competing dated working-hours overrides still defeating HR closures (R1) and business-local finance filters retaining database-timezone series buckets (R3). The second gate fix is active. Prior focused tests do not close these later findings or establish final-head build/CI.
+
+The no-mistakes v1.57 default-branch rebase ignores the intended non-default validation base even when `pr.base_branch` is correct. Meta's phase agent stopped instead of replaying unrelated history onto `main`; the terminal run returned unchanged user custody. The documentation draft therefore follows the canonical standard `dev` PR route with all normal review/CI/approval requirements retained. Gateway's wrong-base range must be corrected before publication. See the `TODO(handoff)` comment at `.no-mistakes.yaml`; no global default, daemon database or policy was changed as a workaround.
+
+The current-layout [Spec Kit draft](../specs/111-agent-transcript-guardrails/spec.md) records the historical exploratory-code ordering and remains blocked on the existing behavior/scope decision, security/data owner approval and two-pass review. It does not retrospectively approve code or mark deployment complete.
+
+### Owner correction decision
+
+On 6 November 2026 the owner answered “Fix all four and retest,” then “Fix F1–F4 and F6; retest.” The five targeted Gateway corrections are explicitly approved before their corrective implementation; backup findings remain separate. The decision and implementation tasks are recorded in Spec Kit feature111. Source corrections, exact-head checks, human merge and deployment verification remain incomplete.
+
+### Interrupted release recovery — 6 November 2026
+
+The previous Gateway gate stopped with `daemon shutting down`; Hub stopped while signing the document phase. Restored invoking clones preserve the retained signed source and both prior Hub review fixes. All ten failed Hub phase files were recovered byte-for-byte from tree `3056f5786a6601c94c34db10da82a5ae6fad0973` and signed as `ad8a6cef`. Gateway custody was recovered through `no-mistakes axi sync --recover`; ancestry-only merges preserve its submitted candidate, rebased candidate and canonical `DEV` base without changing the qualified source tree.
+
+The owner-approved F1–F4 and F6 corrections are implemented in signed Gateway commit `7dcd7c207`. Boundary, native session-file/reopen, speech and old-admission negative-control results are recorded in `release-status.json`; overlapping runs are identified rather than summed. Current Gateway build/check pass; its full configured tests and independent release review continue. The recovered Hub review and API-to-SQL tests pass; final static checks, full CI and production proof remain pending. Durable private recovery bundles and a manifest are retained under `.local/agent-release-recovery-20261106/`.
+
+This recovery does not change the remaining human security/data merge gate or declare production live. Backup findings remain excluded. The existing exact-site handoff ledger still applies.
+
+### Remaining release gate after recovery
+
+Hub draft PR637 contains signed timezone-helper correction `393b8966`: it removes a direct `Intl` validation call that tripped the formatter ratchet without relaxing the baseline. The recovered complete ordinary suite recorded8966passes,289skips and that one failure; the corrected content-contract/finance suites pass22/22, the follow-up gate passes, and fresh exact-head CI remains pending.
+
+Gateway run `01M6RYR0BGPT22FGPJJ26RXF2R` is parked for the owner's R1/R2 choice. R1 concerns terminal quoted-DSML policy: the existing frozen EGM report explicitly rejects literal examples; the later run intent overstated extraction-only quote preservation as a terminal guarantee. Preserve the existing policy unless the owner changes it. R2 is an actual open defect at `src/tts/tts.ts` where `cleanedPayload` reaches `parseLineDirectives`: supported credentials can enter LINE template metadata before text redaction. The candidate must not ship with this leak. Preserve controls while redacting their supported secret values, including TTS-off paths. The exact-site TODO is retained in the private pinned source annotation under `.local/agent-release-recovery-20261106/handoff/src/tts/tts.ts`; the active gate owns runtime source until the owner responds. This annotation is a handoff record, not an applied runtime fix.
+
+Two real-SDK recovery tests also retain the old fallback expectation for malformed nonempty output; align them with the approved status-warning policy while preserving the one-recovery budget and error/aborted controls. Other configured Gateway lanes pass:224fork tests,1785extension tests and1150gateway tests. The main unit run reports10612passes,15skips and those two assertion failures. Full-suite green, human merge and production proof remain incomplete.
+
+### Owner decision for recovered gate R1/R2
+
+The owner asked what the recommendation does, was told it preserves terminal rejection of internal tool-call markup (including quoted examples), fixes supported credential redaction in LINE cards/buttons without losing the controls, and then retests and continues release validation. The owner replied “ok, proceed.” This authorizes fixing R2 and aligning the two recovery assertions; retain the existing terminal policy rather than applying R1’s proposed relaxation. R1 is an intent clarification, not a policy change. Human merge and production-promotion gates remain separate.
+
+### Current qualification checkpoint
+
+Hub PR637 head `0664b4a0` passed the latest local gate and its exact-head full test/build jobs plus PostgreSQL lanes and Vercel preview. Actual CI42287959511 still has the QA-stack and critical-journeys jobs running. The join fixture now serializes synthetic multipart bytes before bounded-reader cancellation; production input limits and rejection assertions remain intact. No product merge or production deployment has occurred.
+
+Gateway head `b1d3805f` passes337focused cases across38files, but independent review found four remaining violations of the already approved boundary policy: complete credential URLs must be protected before LINE splitting (R6), literal DSML including quoted examples must invalidate complete messages before block delivery (R7), response rejection must remove success cards (R8), and complete supported credentials must be redacted before block chunking (R9). The owner-approved correction round is active. These are open defects, not qualified release behavior; existing exact-site handoff records remain applicable until the runtime fixes and independent review close them.
+
+The earlier evaluation software in meta PR881 and conversation ownership/Stop work in Hub PR590 are verified merged. The current offline corpus CLI validates24synthetic episodes and reports zero human-adjudicated development/holdout/consequential records; readiness remains false with deficits60/240/40. This software proof does not establish a real-chat quality gain or activate scoring/learning. Frozen EGM tests remain historical candidate evidence. The authoritative current state remains `release-status.json`.
+
+### Hub ready; Gateway corrections continue
+
+All13actual checks pass for Hub PR637 head `0664b4a0`, including8971tests/289skips, full build, native PostgreSQL lanes, QA stack, critical browser journeys and Vercel preview. The PR is ready for human review. Human merge and deployed behavior remain pending; preview and synthetic API/SQL proof do not establish production RLS.
+
+Gateway correction `c060020b` passed459focused cases, then49affected SDK/chunker cases after a progress correction; these overlap. Independent re-review closed R6-R9 but found R10 at `src/auto-reply/reply/line-directives.ts` (directive delimiters applied to prose leave a supported password suffix) and R11 at `src/agents/pi-embedded/pi-embedded-subscribe.handlers.messages.ts` (model final-tag enforcement removes trusted protocol warnings). The active gate is fixing both under the owner's existing redaction/fail-closed approval. They remain open until correction and independent verification complete. No product Gateway PR, merge or production promotion is claimed.
+
+### Latest signer checkpoint
+
+R10/R11 source corrections pass491focused cases across40files underNode22.23.1, including ordinary model final-tag controls and the one-recovery budget. The configured1Password signer returned `failed to fill whole buffer` for the meta checkpoint; Gateway's gate is waiting on its own correction signature before re-review. Signing remains enabled. The owner unlock request is pending. Source fixes are not independently cleared or published merely because focused tests pass. Private working-tree patches and bundles preserve the active corrections; gate custody remains intact.
+
+### Restored signer-blocked source
+
+Gateway run01M6RYR0BGPT22FGPJJ26RXF2R ended at correction-commit signing with the same1Password error. Supported `axi sync --recover` returned all committed fixes through `c060020b`; the private491-case working patch was restored byte-for-byte in the invoking clone. The only subsequent source changes are exact-site `TODO(handoff)` comments in `src/auto-reply/reply/line-directives.ts` and `src/agents/pi-embedded/pi-embedded-subscribe.handlers.messages.ts`, pointing here for signature recovery, independent review and final release qualification. Preserve all prior fix commits. Do not restart from the old submitted head or bypass the signer. No active validation agent remains; resume the original-intent pipeline after the restored correction is signed. Hub637 remains ready with allchecks green.
+
+### Owner requests live release
+
+The owner now instructs: “I want those fixes live. Lmk.” This authorizes the scoped qualified merges, deployment and safe production verification. Signing recovered: restored Gateway correction `84bafc47e` is signed, including three mechanical test-lint repairs. Fresh exact-source validation is running. Hub637 picked up a conflict with newer master after its green run; refresh run01M6SRMWJMRZRTKR2E0VGDNKMG preserves the qualified0664b4a0 source and both upstream/candidate join-input tests, then requalifies the merged source before release.
+
+A distinct production-scope choice is pending: Gateway CI `.github/workflows/ci.yml` requires `HEAD_REF=DEV` for main promotion, while current DEV also contains unreleasedJWT PR363 and backup PR366. The owner was asked whether to authorize a scoped hotfix promotion exception or qualification/promotion of all current DEV changes. Do not change that CI policy or ship the unrelated features while this choice is pending. Continue the independent Gateway corrections and Hub release. Paid evaluation, real business messages, credential changes and production business fixtures remain excluded.
+
+### Approved scoped Gateway promotion
+
+The owner selected “Prepare a scoped hotfix promotion exception for these fixes only (recommended).” The [promotion spec](../specs/2026-11-06-agent-transcript-hotfix-promotion-spec.md) binds one production hotfix branch to current-main SHA50a3036ad7fac23710943e7eeadfe66b38d96fcd and the same repository. Its CI path must run full validation and fail closed on missing evidence; after main moves the exception is inert. Preserve the ordinary DEV promotion. The production candidate excludes JWT363 and backups366. The existing feature corrections still qualify through DEV; the production source receives a separate exact-main qualification. This records the owner-authorized branch-policy exception without approving unrelated features, runtime auth changes, mutable release flags or production business mutations.

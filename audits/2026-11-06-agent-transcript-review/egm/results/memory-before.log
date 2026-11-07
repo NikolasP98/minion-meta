@@ -1,0 +1,39 @@
+
+ RUN  v4.1.10 /tmp/minion-agent-egm-20261106-971jwsz3
+
+ ❯ tests/memory-candidate.test.ts (2 tests | 2 failed) 14ms
+     × extracts two actual settled pairs once at the unchanged threshold 9ms
+     × bounds ten overlapping eligible windows by five and commits all successes 3ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/memory-candidate.test.ts > C01/C08 real post-turn seam > extracts two actual settled pairs once at the unchanged threshold
+AssertionError: expected "vi.fn()" to be called once, but got 0 times
+ ❯ tests/memory-candidate.test.ts:36:83
+     34|     const llm = vi.fn(async (_prompt: string) => response);
+     35|     attempt("run-1", llm); await vi.runAllTimersAsync(); expect(llm).n…
+     36|     const sink = attempt("run-2", llm); await vi.runAllTimersAsync(); …
+       |                                                                                   ^
+     37|     expect(llm.mock.calls[0][0]).toContain("Synthetic question run-1")…
+     38|     expect(sink).toHaveBeenCalledOnce(); expect(getOrCreateCursor(sess…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/memory-candidate.test.ts > C01/C08 real post-turn seam > bounds ten overlapping eligible windows by five and commits all successes
+AssertionError: expected "vi.fn()" to be called 5 times, but got 10 times
+ ❯ tests/memory-candidate.test.ts:42:47
+     40|   it("bounds ten overlapping eligible windows by five and commits all …
+     41|     const llm = vi.fn(async (_prompt: string) => response); for (let i…
+     42|     await vi.runAllTimersAsync(); expect(llm).toHaveBeenCalledTimes(5)…
+       |                                               ^
+     43|   });
+     44| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  02:36:13
+   Duration  886ms (transform 314ms, setup 0ms, import 664ms, tests 14ms, environment 0ms)
+

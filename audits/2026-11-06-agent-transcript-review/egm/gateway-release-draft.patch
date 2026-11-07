@@ -1,0 +1,3008 @@
+diff --git a/.no-mistakes.yaml b/.no-mistakes.yaml
+new file mode 100644
+index 00000000000..2630b4958eb
+--- /dev/null
++++ b/.no-mistakes.yaml
+@@ -0,0 +1,2 @@
++pr:
++  base_branch: DEV
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index b7c44ae50e6..2c85c604274 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -18,6 +18,11 @@ Docs: https://docs.openclaw.ai
+ 
+ ### Fixes
+ 
++- Assistants: keep personal naming and style setup optional while handling authorized tasks.
++- Memory: accumulate settled conversation turns and bound overlapping extraction attempts without losing cursor updates.
++- Replies: reject invalid tool-protocol responses before text or speech delivery and ask users to check action status before retrying an uncertain result.
++- Security: redact supported credential fields from persisted tool results and protected text/speech output while retaining structured receipts and identifiers.
++- Hub tools: expose booking totals and truncation, exact count mode, and explicit all-time finance queries with validated calendar periods.
+ - Alert watcher: recover persisted classification and suggestion results after restart, retain per-call billing, and prevent automatic retries of uncertain sends. (#356) Thanks @NikolasP98.
+ - Alert watcher: expire retained source, reply and queue payloads before recovery delivery while preserving duplicate-prevention records. (#356) Thanks @NikolasP98.
+ - Cron: validate explicit agent and session bindings when jobs are added, updated and executed so invalid targets cannot fall back to another agent. (#356) Thanks @NikolasP98.
+diff --git a/src/agents/bootstrap/bootstrap-files.ts b/src/agents/bootstrap/bootstrap-files.ts
+index a5fa37c3c09..927d8a61d56 100644
+--- a/src/agents/bootstrap/bootstrap-files.ts
++++ b/src/agents/bootstrap/bootstrap-files.ts
+@@ -1,6 +1,8 @@
+ import type { MinionConfig } from "../../config/config.js";
+ import { isTruthyEnvValue, logAcceptedEnvOption } from "../../infra/env.js";
++import { resolveAgentIdFromSessionKey } from "../../routing/session-key.js";
+ import {
++  DEFAULT_BOOTSTRAP_FILENAME,
+   DEFAULT_FOCUS_FILENAME,
+   DEFAULT_HEARTBEAT_FILENAME,
+   DEFAULT_TOOLS_FILENAME,
+@@ -10,6 +12,7 @@ import {
+   loadWorkspaceBootstrapFiles,
+   type WorkspaceBootstrapFile,
+ } from "../identity/workspace.js";
++import { isPersonalAgentId } from "../personal-agent-id.js";
+ import type { EmbeddedContextFile } from "../pi-embedded/pi-embedded-helpers.js";
+ import {
+   buildBootstrapContextFiles,
+@@ -63,6 +66,18 @@ then delete BOOTSTRAP.md to mark onboarding as complete.
+ 
+ Do NOT proceed with other tasks until onboarding is resolved.`;
+ 
++const PERSONAL_ONBOARDING_CONTENT = `# Optional Personal Setup
++
++For personal agents, this policy supersedes workspace onboarding/personality rituals, including
++references to BOOTSTRAP.md. Process authorized tasks immediately. Optional identity and conversation-style setup must not
++block a task or require a naming interview. Leave unknown preferences and identity facts unknown.
++Only discuss setup when the user asks for it or has no task to handle.
++
++Do not invent defaults, modify identity/profile files, delete BOOTSTRAP.md, or mark onboarding
++complete merely because the user starts a task. File/configuration changes still require the
++applicable owner/admin permission and confirmation. Capability and assignment restrictions still
++apply; explain the actual access/readiness error rather than attributing it to optional setup.`;
++
+ export async function resolveBootstrapContextForRun(params: {
+   workspaceDir: string;
+   overlayDir?: string;
+@@ -100,13 +115,23 @@ export async function resolveBootstrapContextForRun(params: {
+     }
+   }
+ 
++  const agentId = params.agentId ?? resolveAgentIdFromSessionKey(params.sessionKey);
++  const personalAgent = isPersonalAgentId(agentId);
++  if (personalAgent) {
++    // BOOTSTRAP is a setup ritual, not capability or permission policy. Keep the
++    // source file intact while preventing it from contradicting personal task handling.
++    bootstrapFiles = bootstrapFiles.filter((file) => file.name !== DEFAULT_BOOTSTRAP_FILENAME);
++  }
++
+   const contextFiles = buildBootstrapContextFiles(bootstrapFiles, {
+     maxChars: resolveBootstrapMaxChars(params.config),
+     totalMaxChars: resolveBootstrapTotalMaxChars(params.config),
+     warn: params.warn,
+   });
+ 
+-  if (!isTruthyEnvValue(process.env.OPENCLAW_SKIP_ONBOARDING_GATE)) {
++  if (personalAgent) {
++    contextFiles.unshift({ path: "ONBOARDING_OPTIONAL", content: PERSONAL_ONBOARDING_CONTENT });
++  } else if (!isTruthyEnvValue(process.env.OPENCLAW_SKIP_ONBOARDING_GATE)) {
+     logAcceptedEnvOption({
+       key: "OPENCLAW_SKIP_ONBOARDING_GATE",
+       description: "skip onboarding-required system prompt injection",
+diff --git a/src/agents/pi-embedded-runner/run/attempt.ts b/src/agents/pi-embedded-runner/run/attempt.ts
+index 79bddcd7367..6ba5c00ef64 100644
+--- a/src/agents/pi-embedded-runner/run/attempt.ts
++++ b/src/agents/pi-embedded-runner/run/attempt.ts
+@@ -3,7 +3,6 @@ import type { AgentMessage } from "@earendil-works/pi-agent-core";
+ import { emitEvent } from "../../../events/emitter.js";
+ import { startSentrySpan, withSentryIsolationScope } from "../../../infra/sentry.js";
+ import { MAX_IMAGE_BYTES } from "../../../media/constants.js";
+-import { maybeExtractMemories } from "../../../memory/extract-memories-runner.js";
+ import { emitMemoryRead } from "../../../memory/knowledge-graph.js";
+ import { callLlmForMemory } from "../../../memory/llm-call.js";
+ import { recordExtractedMemories } from "../../../memory/memory-service.js";
+@@ -46,7 +45,7 @@ import {
+   shouldFlagCompactionTimeout,
+ } from "./compaction-timeout.js";
+ import { detectAndLoadPromptImages } from "./images.js";
+-import { stripInjectedUserContext } from "./strip-injected-context.js";
++import { extractTurnMemories, formatRecalledMemoryContext } from "./memory-turn.js";
+ import { resolvePersonalToolRecoveryText } from "./tool-progress.js";
+ import type { EmbeddedRunAttemptParams, EmbeddedRunAttemptResult } from "./types.js";
+ 
+@@ -362,6 +361,7 @@ async function _runEmbeddedAttemptInner(
+         // Run before_prompt_build hooks to allow plugins to inject prompt context.
+         // Legacy compatibility: before_agent_start is also checked for context fields.
+         let effectivePrompt = params.prompt;
++        let existingMemoryForExtraction = "";
+         const hookCtx = {
+           agentId: hookAgentId,
+           sessionKey: params.sessionKey,
+@@ -465,7 +465,10 @@ async function _runEmbeddedAttemptInner(
+         if (!aborted) {
+           try {
+             const hits = await recallMemories(env.sessionAgentId, params.prompt, { limit: 5 });
+-            const lines = hits.filter((h) => h.score >= 0.2).map((h) => `- ${h.content}`);
++            const { lines, existingMemory } = formatRecalledMemoryContext(hits);
++            // Reuse only memory already authorized for this run. No second read
++            // or private bootstrap-file load is needed by the detached extractor.
++            existingMemoryForExtraction = existingMemory;
+             if (lines.length > 0) {
+               effectivePrompt = `## Relevant memories\n${lines.join("\n")}\n\n${effectivePrompt}`;
+               emitMemoryRead({ source: "pre-turn-recall", hits: lines.length });
+@@ -709,49 +712,29 @@ async function _runEmbeddedAttemptInner(
+             });
+         }
+ 
+-        // Memory extraction must see ~what the user typed, NOT the gateway's
+-        // injected per-turn context (timestamp / metadata / page-context envelope /
+-        // voice header) — otherwise that context gets mined as bogus "facts" and
+-        // recalled every turn. See strip-injected-context.ts.
+-        const promptForMemory = stripInjectedUserContext(params.prompt);
+-
+-        // Fire-and-forget: extract and store new memory from this turn.
+-        if (env.kgSession && !aborted && !promptError) {
+-          const lastText = extractLastAssistantText(messagesSnapshot);
+-          if (lastText) {
+-            void extractAndStoreMemory(promptForMemory, lastText, env.kgSession).catch((err) => {
+-              log.warn(`KG post-turn extraction failed: ${String(err)}`);
+-            });
+-          }
+-        }
+-
+-        // Fire-and-forget: auto-extract durable memories when conversation settles.
+-        // Only runs when the last turn had no tool calls (the model produced a final response).
+-        if (!aborted && !promptError) {
+-          const hadToolCalls = (toolMetas?.length ?? 0) > 0;
+-          const lastText = extractLastAssistantText(messagesSnapshot);
+-          const recentMsgs = lastText
+-            ? [
+-                { role: "user" as const, content: promptForMemory },
+-                { role: "assistant" as const, content: lastText },
+-              ]
+-            : [];
+-          maybeExtractMemories({
+-            sessionId: params.sessionId,
+-            lastTurnHadToolCalls: hadToolCalls,
+-            newMessageCount: recentMsgs.length,
+-            userWroteMemoryThisTurn: false,
+-            existingMemory: "",
+-            recentMessages: recentMsgs,
+-            llmCall: callLlmForMemory,
+-            // Fan extracted memories into the hub corpus (was previously dropped —
+-            // no persistence callback was wired). Best-effort; no-op unless the
+-            // memory sink is configured and an agent id is resolved.
+-            onMemoryExtracted: async (mem) => {
+-              recordExtractedMemories([mem], { agentId: env.sessionAgentId });
+-            },
+-          });
+-        }
++        const kgSession = env.kgSession;
++        extractTurnMemories({
++          sessionId: params.sessionId,
++          runId: params.runId,
++          prompt: params.prompt,
++          assistantText: extractLastAssistantText(messagesSnapshot),
++          toolMetas,
++          existingMemory: existingMemoryForExtraction,
++          aborted,
++          promptError,
++          abortSignal: params.abortSignal,
++          llmCall: callLlmForMemory,
++          onKgExtraction: kgSession
++            ? (prompt, assistant) => extractAndStoreMemory(prompt, assistant, kgSession)
++            : undefined,
++          onKgError: (err) => log.warn(`KG post-turn extraction failed: ${String(err)}`),
++          onMemoryExtracted: async (mem) => {
++            // TODO(handoff): require acknowledged/idempotent sink delivery before
++            // claiming durable persistence; current sink is fire-and-forget. See
++            // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
++            recordExtractedMemories([mem], { agentId: env.sessionAgentId });
++          },
++        });
+       } finally {
+         clearTimeout(abortTimer);
+         if (abortWarnTimer) {
+diff --git a/src/agents/pi-embedded-runner/run/memory-turn.ts b/src/agents/pi-embedded-runner/run/memory-turn.ts
+new file mode 100644
+index 00000000000..340212abf96
+--- /dev/null
++++ b/src/agents/pi-embedded-runner/run/memory-turn.ts
+@@ -0,0 +1,61 @@
++import { maybeExtractMemories } from "../../../memory/extract-memories-runner.js";
++import { stripInjectedUserContext } from "./strip-injected-context.js";
++
++type RunnerOptions = Parameters<typeof maybeExtractMemories>[0];
++type TurnOptions = Pick<
++  RunnerOptions,
++  "sessionId" | "abortSignal" | "llmCall" | "onMemoryExtracted"
++> & {
++  runId: string;
++  prompt: string;
++  assistantText?: string;
++  toolMetas: ReadonlyArray<{ toolName?: string }>;
++  existingMemory: string;
++  aborted?: boolean;
++  promptError?: unknown;
++  onKgExtraction?: (prompt: string, assistant: string) => Promise<unknown>;
++  onKgError: (error: unknown) => void;
++};
++
++/** Keep the already-authorized recall policy shared by prompt and extraction context. */
++export function formatRecalledMemoryContext(
++  hits: ReadonlyArray<{ score: number; content: string }>,
++) {
++  const lines = hits.filter((hit) => hit.score >= 0.2).map((hit) => `- ${hit.content}`);
++  return { lines, existingMemory: lines.join("\n").slice(0, 16_000) };
++}
++
++/** One executable post-turn boundary; KG stays independent of the durable tool gate. */
++export function extractTurnMemories(options: TurnOptions): void {
++  if (options.aborted || options.promptError || !options.assistantText) {
++    return;
++  }
++  const prompt = stripInjectedUserContext(options.prompt);
++  if (options.onKgExtraction) {
++    void options.onKgExtraction(prompt, options.assistantText).catch(options.onKgError);
++  }
++  // Metadata has no success receipt, so known writes are suppressed conservatively.
++  // TODO(handoff): cover authenticated filesystem/plugin memory-write outcomes; see
++  // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
++  const userWroteMemoryThisTurn = options.toolMetas.some(
++    ({ toolName }) =>
++      typeof toolName === "string" &&
++      ["remember", "brain_remember", "forget", "update_entity"].includes(toolName),
++  );
++  const recentMessages = [
++    { role: "user", content: prompt },
++    { role: "assistant", content: options.assistantText },
++  ];
++  maybeExtractMemories({
++    sessionId: options.sessionId,
++    windowId: options.runId,
++    abortSignal: options.abortSignal,
++    lastTurnHadToolCalls: options.toolMetas.length > 0,
++    newMessageCount: recentMessages.length,
++    userWroteMemoryThisTurn,
++    existingMemory: options.existingMemory,
++    recentMessages,
++    llmCall: options.llmCall,
++    onMemoryExtracted: options.onMemoryExtracted,
++  });
++}
+diff --git a/src/agents/sections/__tests__/personality-section.test.ts b/src/agents/sections/__tests__/personality-section.test.ts
+index 0651125e7f0..180e2001785 100644
+--- a/src/agents/sections/__tests__/personality-section.test.ts
++++ b/src/agents/sections/__tests__/personality-section.test.ts
+@@ -21,8 +21,8 @@ import { PERSONAL_FIRST_CONVO } from "./fixtures.js";
+ describe("personality section (Phase 3b config-driven)", () => {
+   it("omits Personality section when personality is undefined (legacy / unconfigured)", () => {
+     const prompt = assembleAgentSystemPrompt(PERSONAL_FIRST_CONVO);
+-    // The First Conversation Onboarding block fires instead.
+-    expect(prompt).toContain("First Conversation Onboarding");
++    // Unconfigured personality offers setup without blocking an authorized task.
++    expect(prompt).toContain("Optional Personal Setup");
+     expect(prompt).not.toContain("## Personality\n\n");
+   });
+ 
+@@ -31,7 +31,7 @@ describe("personality section (Phase 3b config-driven)", () => {
+       ...PERSONAL_FIRST_CONVO,
+       personality: { configured: false, text: "ignored when not configured" },
+     });
+-    expect(prompt).toContain("First Conversation Onboarding");
++    expect(prompt).toContain("Optional Personal Setup");
+     expect(prompt).not.toContain("ignored when not configured");
+   });
+ 
+@@ -41,8 +41,8 @@ describe("personality section (Phase 3b config-driven)", () => {
+       ...PERSONAL_FIRST_CONVO,
+       personality: { configured: true, text: personalityText },
+     });
+-    // Onboarding block must NOT fire once configured.
+-    expect(prompt).not.toContain("First Conversation Onboarding");
++    // Optional setup is omitted once personality is configured.
++    expect(prompt).not.toContain("Optional Personal Setup");
+     // Personality text surfaces verbatim.
+     expect(prompt).toContain(personalityText);
+   });
+@@ -52,7 +52,7 @@ describe("personality section (Phase 3b config-driven)", () => {
+       ...PERSONAL_FIRST_CONVO,
+       personality: { configured: true },
+     });
+-    expect(prompt).not.toContain("First Conversation Onboarding");
++    expect(prompt).not.toContain("Optional Personal Setup");
+     expect(prompt).not.toContain("## Personality\n\n");
+   });
+ 
+@@ -63,23 +63,25 @@ describe("personality section (Phase 3b config-driven)", () => {
+       personality: { configured: true, text: "this should not appear for panik" },
+     });
+     expect(prompt).not.toContain("this should not appear for panik");
+-    expect(prompt).not.toContain("First Conversation Onboarding");
++    expect(prompt).not.toContain("Optional Personal Setup");
+   });
+ 
+-  it("greets the user by name during onboarding when senderName is known", () => {
++  it("uses a known account name without a naming interview during optional setup", () => {
+     const prompt = assembleAgentSystemPrompt({
+       ...PERSONAL_FIRST_CONVO,
+       senderName: "Nikolas",
+     });
+-    expect(prompt).toContain("First Conversation Onboarding");
+-    // The known name surfaces and the agent is told NOT to ask what to call them.
++    expect(prompt).toContain("Optional Personal Setup");
++    // Account knowledge remains usable without delaying the requested task.
+     expect(prompt).toContain("Nikolas");
+-    expect(prompt).toContain("Do NOT ask what to call them");
++    expect(prompt).toContain("Use their account name without a naming interview");
++    expect(prompt).toContain("Process an authorized task immediately");
+   });
+ 
+-  it("falls back to asking the conversation-style question when senderName is absent", () => {
++  it("offers optional setup without inventing a name or blocking the requested task", () => {
+     const prompt = assembleAgentSystemPrompt(PERSONAL_FIRST_CONVO);
+-    expect(prompt).toContain("First Conversation Onboarding");
+-    expect(prompt).not.toContain("Do NOT ask what to call them");
++    expect(prompt).toContain("Optional Personal Setup");
++    expect(prompt).not.toContain("The user's name is **");
++    expect(prompt).toContain("Process an authorized task immediately");
+   });
+ });
+diff --git a/src/agents/sections/identity.ts b/src/agents/sections/identity.ts
+index 0398554c702..2616b79a65d 100644
+--- a/src/agents/sections/identity.ts
++++ b/src/agents/sections/identity.ts
+@@ -70,15 +70,15 @@ export const IDENTITY_SECTIONS: PromptSectionDefinition[] = [
+         const nameGuidance = knownName
+           ? [
+               `The user's name is **${knownName}** (from their account) — you already know it. Greet them by name (e.g. "Hey ${knownName}").`,
+-              "Do NOT ask what to call them. If you want, you may ask once whether they'd prefer to go by a different name — but if they don't answer or just move on, keep using their account name. Never block onboarding on this.",
++              "Use their account name without a naming interview. Ask about a different preferred name only if they request optional setup; keep using their account name if they move on.",
+               "",
+             ]
+           : [];
+         return [
+-          "## First Conversation Onboarding",
++          "## Optional Personal Setup",
+           "",
+           ...nameGuidance,
+-          "This is a new personal agent that hasn't been configured with a personality yet. On your FIRST message to this user, naturally introduce yourself and ask about their preferred conversation style. Offer these options:",
++          "This personal agent has no configured personality yet. Process an authorized task immediately using a friendly, clear style; do not interrupt it with setup questions. If the user requests setup or has no task, you may introduce yourself and offer these optional styles:",
+           "",
+           "- **Professional**: Clear, structured responses with a focus on accuracy and efficiency",
+           "- **Casual**: Friendly and conversational, like chatting with a helpful friend",
+diff --git a/src/agents/sessions/session-tool-result-guard.ts b/src/agents/sessions/session-tool-result-guard.ts
+index 7f1644e5898..bb2fbb1341a 100644
+--- a/src/agents/sessions/session-tool-result-guard.ts
++++ b/src/agents/sessions/session-tool-result-guard.ts
+@@ -5,6 +5,10 @@ import type {
+   PluginHookBeforeMessageWriteEvent,
+   PluginHookBeforeMessageWriteResult,
+ } from "../../plugins/types.js";
++import {
++  redactExplicitSecretDetails,
++  redactExplicitSecretText,
++} from "../../security/explicit-secret-redaction.js";
+ import { emitSessionTranscriptUpdate } from "../../sessions/transcript-events.js";
+ import { HARD_MAX_TOOL_RESULT_CHARS } from "../pi-embedded-runner/tool-result-truncation.js";
+ import {
+@@ -79,6 +83,31 @@ function capToolResultSize(msg: AgentMessage): AgentMessage {
+   return { ...msg, content: newContent } as AgentMessage;
+ }
+ 
++/** Run last, after all optional/plugin transforms, so persistence cannot opt out. */
++function redactToolResultForPersistence(message: AgentMessage): AgentMessage {
++  const result = message as AgentMessage & { content?: unknown; details?: unknown };
++  const content = Array.isArray(result.content)
++    ? result.content.map((block: unknown) => {
++        if (!block || typeof block !== "object" || (block as { type?: unknown }).type !== "text") {
++          return block; // Preserve image bytes and non-text protocol blocks.
++        }
++        const textBlock = block as { text?: unknown };
++        return typeof textBlock.text === "string"
++          ? { ...block, text: redactExplicitSecretText(textBlock.text).text }
++          : block;
++      })
++    : typeof result.content === "string"
++      ? redactExplicitSecretText(result.content).text
++      : result.content;
++  return {
++    ...message,
++    content,
++    ...(Object.hasOwn(result, "details")
++      ? { details: redactExplicitSecretDetails(result.details) }
++      : {}),
++  } as AgentMessage;
++}
++
+ export function installSessionToolResultGuard(
+   sessionManager: SessionManager,
+   opts?: {
+@@ -163,7 +192,7 @@ export function installSessionToolResultGuard(
+           }),
+         );
+         if (flushed) {
+-          originalAppend(flushed as never);
++          originalAppend(redactToolResultForPersistence(flushed) as never);
+         }
+       }
+     }
+@@ -204,7 +233,7 @@ export function installSessionToolResultGuard(
+       if (!persisted) {
+         return undefined;
+       }
+-      return originalAppend(persisted as never);
++      return originalAppend(redactToolResultForPersistence(persisted) as never);
+     }
+ 
+     const toolCalls =
+@@ -227,7 +256,11 @@ export function installSessionToolResultGuard(
+     if (!finalMessage) {
+       return undefined;
+     }
+-    const result = originalAppend(finalMessage as never);
++    const result = originalAppend(
++      ((finalMessage as { role?: unknown }).role === "toolResult"
++        ? redactToolResultForPersistence(finalMessage)
++        : finalMessage) as never,
++    );
+ 
+     const sessionFile = (
+       sessionManager as { getSessionFile?: () => string | null }
+diff --git a/src/agents/tools/hub/bookings-query-tool.ts b/src/agents/tools/hub/bookings-query-tool.ts
+index cd2d559a03b..b0a81b81da7 100644
+--- a/src/agents/tools/hub/bookings-query-tool.ts
++++ b/src/agents/tools/hub/bookings-query-tool.ts
+@@ -1,7 +1,8 @@
+ import { Type } from "typebox";
+ import { wrapToolWithTracking } from "../../../logging/tool-tracking.js";
++import { optionalStringEnum } from "../../schema/typebox.js";
+ import type { AnyAgentTool } from "../common.js";
+-import { jsonResult, readStringParam } from "../common.js";
++import { jsonResult, readStringParam, readNumberParam } from "../common.js";
+ import { hubGet, hubToolsAvailable, ORG_ID_FIELD } from "./hub-common.js";
+ 
+ const BookingsQuerySchema = Type.Object({
+@@ -18,6 +19,17 @@ const BookingsQuerySchema = Type.Object({
+   dateTo: Type.Optional(
+     Type.String({ description: "ISO date/time, inclusive upper bound on start time." }),
+   ),
++  limit: Type.Optional(
++    Type.Integer({
++      minimum: 1,
++      maximum: 500,
++      description: "Maximum rows in list mode; default 500. Narrow filters if truncated.",
++    }),
++  ),
++  mode: optionalStringEnum(["list", "count"], {
++    description:
++      "Use count for exact scoped totals without fetching the list; list returns total/returned/truncated/limit.",
++  }),
+   orgId: ORG_ID_FIELD,
+ });
+ 
+@@ -37,7 +49,7 @@ export function createBookingsQueryTool(options: { agentId?: string }): AnyAgent
+       label: "Bookings Query",
+       name: "bookings_query",
+       description:
+-        "List appointments/bookings — upcoming, past, or a date range, optionally filtered to one contact. Use for 'what's on the schedule today', 'when is X's next appointment'. To create/change/cancel a booking use booking_create/booking_reschedule/booking_cancel. Present results with a deep link like [bookings](/scheduling/bookings) or, for one contact, [bookings](/scheduling/bookings?contact={contactId}).",
++        "List appointments/bookings; disclose truncated results and use total for counts, never array length — upcoming, past, or a date range, optionally filtered to one contact. Use for 'what's on the schedule today', 'when is X's next appointment'. To create/change/cancel a booking use booking_create/booking_reschedule/booking_cancel. Present results with a deep link like [bookings](/scheduling/bookings) or, for one contact, [bookings](/scheduling/bookings?contact={contactId}).",
+       parameters: BookingsQuerySchema,
+       execute: async (_toolCallId, args, signal) => {
+         const params = args as Record<string, unknown>;
+@@ -45,6 +57,8 @@ export function createBookingsQueryTool(options: { agentId?: string }): AnyAgent
+           "query/bookings",
+           agentId as string,
+           {
++            limit: readNumberParam(params, "limit")?.toString(),
++            mode: readStringParam(params, "mode"),
+             status: readStringParam(params, "status"),
+             contact: readStringParam(params, "contactId"),
+             from: readStringParam(params, "dateFrom"),
+diff --git a/src/agents/tools/hub/finance-query-tool.ts b/src/agents/tools/hub/finance-query-tool.ts
+index b23d9b68d04..44c507b7046 100644
+--- a/src/agents/tools/hub/finance-query-tool.ts
++++ b/src/agents/tools/hub/finance-query-tool.ts
+@@ -1,17 +1,28 @@
+ import { Type } from "typebox";
+ import { wrapToolWithTracking } from "../../../logging/tool-tracking.js";
++import { optionalStringEnum } from "../../schema/typebox.js";
+ import type { AnyAgentTool } from "../common.js";
+ import { jsonResult, readStringParam } from "../common.js";
+ import { hubGet, hubToolsAvailable, ORG_ID_FIELD } from "./hub-common.js";
+ 
+ const FinanceQuerySchema = Type.Object({
+-  dateFrom: Type.Optional(Type.String({ description: "ISO date, inclusive lower bound." })),
+-  dateTo: Type.Optional(Type.String({ description: "ISO date, inclusive upper bound." })),
+-  bucket: Type.Optional(
+-    Type.Union([Type.Literal("day"), Type.Literal("week"), Type.Literal("month")], {
+-      description: "Granularity of the revenue time series. Defaults to 'month'.",
++  dateFrom: Type.Optional(
++    Type.String({
++      description: "YYYY-MM-DD calendar date in the business timezone; inclusive first day.",
+     }),
+   ),
++  dateTo: Type.Optional(
++    Type.String({
++      description: "YYYY-MM-DD calendar date in the business timezone; inclusive last day.",
++    }),
++  ),
++  range: optionalStringEnum(["all"], {
++    description:
++      "Explicit all-time query. Omit dateFrom/dateTo when set. Without any period filter, returns rolling 12 months; report the returned periodSemantics.",
++  }),
++  bucket: optionalStringEnum(["day", "week", "month"], {
++    description: "Revenue time-series granularity; default month.",
++  }),
+   orgId: ORG_ID_FIELD,
+ });
+ 
+@@ -37,14 +48,19 @@ export function createFinanceQueryTool(options: { agentId?: string }): AnyAgentT
+       parameters: FinanceQuerySchema,
+       execute: async (_toolCallId, args, signal) => {
+         const params = args as Record<string, unknown>;
+-        const dateFrom = readStringParam(params, "dateFrom");
+-        const dateTo = readStringParam(params, "dateTo");
+-        const bucket = readStringParam(params, "bucket");
++        // Supplied blank inputs must not disappear into the Hub's absent-filter
++        // default. Preserve presence before the common optional-string reader.
++        const readPeriod = (key: string) =>
++          readStringParam(params, key, { required: Object.hasOwn(params, key) });
++        const dateFrom = readPeriod("dateFrom");
++        const dateTo = readPeriod("dateTo");
++        const bucket = readPeriod("bucket");
+         const orgId = readStringParam(params, "orgId");
+         const result = await hubGet(
+           "query/finance",
+           agentId as string,
+           {
++            range: readPeriod("range"),
+             from: dateFrom,
+             to: dateTo,
+             bucket,
+diff --git a/src/agents/tools/hub/query-contracts.regression.test.ts b/src/agents/tools/hub/query-contracts.regression.test.ts
+new file mode 100644
+index 00000000000..a418a444365
+--- /dev/null
++++ b/src/agents/tools/hub/query-contracts.regression.test.ts
+@@ -0,0 +1,100 @@
++import { beforeEach, describe, expect, it, vi } from "vitest";
++const fixture = vi.hoisted(() => ({ get: vi.fn() }));
++vi.mock("../../../logging/tool-tracking.js", () => ({
++  wrapToolWithTracking: (tool: unknown) => tool,
++}));
++vi.mock("./hub-common.js", () => ({
++  hubToolsAvailable: () => true,
++  ORG_ID_FIELD: { type: "string" },
++  hubGet: fixture.get,
++}));
++import { createBookingsQueryTool } from "./bookings-query-tool.js";
++import { createFinanceQueryTool } from "./finance-query-tool.js";
++beforeEach(() => {
++  vi.clearAllMocks();
++  fixture.get.mockResolvedValue({ ok: true });
++});
++describe("C04/C05 actual gateway adapter contract", () => {
++  it("forwards bounded list/count options and signal", async () => {
++    const tool = createBookingsQueryTool({ agentId: "personal-synthetic" })!;
++    const signal = new AbortController().signal;
++    await tool.execute(
++      "synthetic",
++      {
++        limit: 20,
++        mode: "count",
++        dateFrom: "2030-01-07T00:00:00Z",
++        orgId: "synthetic-org",
++      },
++      signal,
++    );
++    expect(fixture.get).toHaveBeenCalledWith(
++      "query/bookings",
++      "personal-synthetic",
++      expect.objectContaining({
++        limit: "20",
++        mode: "count",
++        from: "2030-01-07T00:00:00Z",
++        orgId: "synthetic-org",
++      }),
++      signal,
++    );
++    expect(tool.parameters).toMatchObject({
++      properties: {
++        limit: { maximum: 500 },
++        mode: { enum: ["list", "count"] },
++      },
++    });
++  });
++  it("forwards explicit all-time without dates, uses provider compatible enum schemas", async () => {
++    const tool = createFinanceQueryTool({ agentId: "personal-synthetic" })!;
++    await tool.execute("synthetic", { range: "all", bucket: "month" });
++    expect(fixture.get).toHaveBeenCalledWith(
++      "query/finance",
++      "personal-synthetic",
++      expect.objectContaining({ range: "all", from: undefined, to: undefined }),
++      undefined,
++    );
++    expect(tool.parameters).toMatchObject({
++      properties: {
++        range: { enum: ["all"] },
++        bucket: { enum: ["day", "week", "month"] },
++      },
++    });
++    expect(JSON.stringify(tool.parameters)).not.toContain("anyOf");
++  });
++});
++
++it.each([
++  { dateFrom: "" },
++  { dateTo: "   " },
++  { range: "all", dateFrom: "" },
++  { range: "" },
++  { bucket: "  " },
++  { dateFrom: 123 },
++  { dateTo: null },
++  { range: false },
++  { bucket: ["month"] },
++])("rejects supplied invalid finance field before HTTP: %j", async (args) => {
++  await expect(
++    createFinanceQueryTool({ agentId: "personal-synthetic" })!.execute("synthetic", args),
++  ).rejects.toThrow(Object.hasOwn(args, "dateFrom") ? "dateFrom" : Object.keys(args)[0]);
++  expect(fixture.get).not.toHaveBeenCalled();
++});
++it("preserves truly absent finance period and malformed nonblank input for authoritative Hub validation", async () => {
++  const tool = createFinanceQueryTool({ agentId: "personal-synthetic" })!;
++  await tool.execute("synthetic", {});
++  expect(fixture.get).toHaveBeenLastCalledWith(
++    "query/finance",
++    "personal-synthetic",
++    expect.objectContaining({ from: undefined, to: undefined, range: undefined }),
++    undefined,
++  );
++  await tool.execute("synthetic", { dateFrom: "2030-02-30" });
++  expect(fixture.get).toHaveBeenLastCalledWith(
++    "query/finance",
++    "personal-synthetic",
++    expect.objectContaining({ from: "2030-02-30" }),
++    undefined,
++  );
++});
+diff --git a/src/auto-reply/reply/reply-dispatcher.ts b/src/auto-reply/reply/reply-dispatcher.ts
+index 5197f0c81de..00a833a6c46 100644
+--- a/src/auto-reply/reply/reply-dispatcher.ts
++++ b/src/auto-reply/reply/reply-dispatcher.ts
+@@ -1,4 +1,7 @@
+-import { sanitizeOutboundText } from "../../channels/outbound-sanitizer.js";
++import {
++  sanitizeOutboundText,
++  sanitizeTerminalFinalText,
++} from "../../channels/outbound-sanitizer.js";
+ import type { HumanDelayConfig } from "../../config/types.js";
+ import { sleep } from "../../utils.js";
+ import type { GetReplyOptions, ReplyPayload } from "../types.js";
+@@ -101,6 +104,8 @@ function normalizeReplyPayloadInternal(
+   });
+ }
+ 
++// TODO(handoff): qualify channel delivery paths that bypass this dispatcher before
++// claiming fleet-wide egress coverage; see proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ export function createReplyDispatcher(options: ReplyDispatcherOptions): ReplyDispatcher {
+   let sendChain: Promise<void> = Promise.resolve();
+   // Track in-flight deliveries so we can emit a reliable "idle" signal.
+@@ -139,15 +144,25 @@ export function createReplyDispatcher(options: ReplyDispatcherOptions): ReplyDis
+     // tool-call syntax leaks, and redact secret shapes from EVERY outbound
+     // reply on EVERY channel — the streaming path (block/final/tool) previously
+     // bypassed the sanitizer that only the web HTTP path applied, so [[tts]]
+-    // markers leaked into hub chat (onboarding transcript 2026-06-11). Audio is
+-    // already generated upstream (maybeApplyTtsToPayload) from the raw text, so
+-    // cleaning the visible text here does not affect TTS.
++    // markers leaked into hub chat (onboarding transcript 2026-06-11). TTS
++    // sanitizes before synthesis; keep this final guard after later transforms.
+     if (normalized.text) {
+-      const sanitized = sanitizeOutboundText(normalized.text);
++      const hasMedia = Boolean(normalized.mediaUrl) || (normalized.mediaUrls?.length ?? 0) > 0;
++      const hasChannelData = Boolean(
++        normalized.channelData && Object.keys(normalized.channelData).length > 0,
++      );
++      // Classify the original body so a presentation prefix cannot turn a
++      // protocol-only answer into apparently valid prose.
++      const terminal =
++        kind === "final" && !hasMedia && !hasChannelData
++          ? sanitizeTerminalFinalText(payload.text ?? "")
++          : undefined;
++      const sanitized = terminal?.invalidToolProtocol
++        ? terminal
++        : sanitizeOutboundText(normalized.text);
+       if (sanitized.text !== normalized.text) {
+-        const hasMedia = Boolean(normalized.mediaUrl) || (normalized.mediaUrls?.length ?? 0) > 0;
+-        if (!sanitized.text.trim() && !hasMedia) {
+-          // Whole message was control tokens / tool syntax — nothing to send.
++        if (!sanitized.text.trim() && !hasMedia && !hasChannelData) {
++          // Intentional control-only suppression or nonterminal tool syntax.
+           options.onSkip?.(payload, { kind, reason: "empty" });
+           return false;
+         }
+diff --git a/src/channels/agent-output.corrections.test.ts b/src/channels/agent-output.corrections.test.ts
+new file mode 100644
+index 00000000000..d3ac52ebe25
+--- /dev/null
++++ b/src/channels/agent-output.corrections.test.ts
+@@ -0,0 +1,280 @@
++import type { AgentMessage } from "@earendil-works/pi-agent-core";
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
++
++const workspace = vi.hoisted(() => ({ complete: false }));
++vi.mock("../agents/identity/workspace.js", () => ({
++  DEFAULT_BOOTSTRAP_FILENAME: "BOOTSTRAP.md",
++  DEFAULT_FOCUS_FILENAME: "FOCUS.md",
++  DEFAULT_HEARTBEAT_FILENAME: "HEARTBEAT.md",
++  DEFAULT_TOOLS_FILENAME: "TOOLS.md",
++  DEFAULT_WORKSHOP_FILENAME: "WORKSHOP.md",
++  filterBootstrapFilesForSession: (files: unknown[]) => files,
++  isWorkspaceOnboardingCompleted: async () => workspace.complete,
++  loadWorkspaceBootstrapFiles: async () => [
++    {
++      name: "BOOTSTRAP.md",
++      path: "/synthetic/BOOTSTRAP.md",
++      content: "MANDATORY_RITUAL: Stop all other tasks, invent defaults, delete BOOTSTRAP.md.",
++      missing: false,
++    },
++    {
++      name: "AGENTS.md",
++      path: "/synthetic/AGENTS.md",
++      content: "Require owner permission and confirmation for writes.",
++      missing: false,
++    },
++  ],
++}));
++vi.mock("../agents/pi-embedded/pi-embedded-helpers.js", () => ({
++  buildBootstrapContextFiles: (files: Array<{ path: string; content?: string }>) =>
++    files.map(({ path, content }) => ({ path, content })),
++  resolveBootstrapMaxChars: () => 10000,
++  resolveBootstrapTotalMaxChars: () => 20000,
++}));
++vi.mock("../agents/bootstrap/bootstrap-hooks.js", () => ({
++  applyBootstrapHookOverrides: async ({ files }: { files: unknown[] }) => files,
++}));
++vi.mock("../agents/pi-embedded-runner/tool-result-truncation.js", () => ({
++  HARD_MAX_TOOL_RESULT_CHARS: 400000,
++}));
++import { resolveBootstrapContextForRun } from "../agents/bootstrap/bootstrap-files.js";
++import { IDENTITY_SECTIONS } from "../agents/sections/identity.js";
++import type { SectionRenderContext } from "../agents/sections/types.js";
++import { installSessionToolResultGuard } from "../agents/sessions/session-tool-result-guard.js";
++import { sanitizeOutboundText } from "./outbound-sanitizer.js";
++
++beforeEach(() => {
++  workspace.complete = false;
++  vi.stubEnv("OPENCLAW_SKIP_ONBOARDING_GATE", "");
++});
++afterEach(() => vi.unstubAllEnvs());
++
++const dsml =
++  '<｜DSML｜tool_calls>\n<｜DSML｜invoke name="sdk_inspect">\n<｜DSML｜parameter name="query" string="true">cost</｜DSML｜parameter>\n</｜DSML｜invoke>\n</｜DSML｜tool_calls>';
++
++describe("C02 personal onboarding policy", () => {
++  it.each([{ agentId: "personal-fixture" }, { sessionKey: "agent:personal-fixture:main" }])(
++    "allows authorized tasks without loaded mandatory ritual: %j",
++    async (identity) => {
++      const result = await resolveBootstrapContextForRun({
++        workspaceDir: "/synthetic",
++        ...identity,
++      });
++      const text = result.contextFiles.map((f) => f.content).join("\n");
++      expect(text).not.toContain("before doing anything else");
++      expect(text).not.toContain("MANDATORY_RITUAL");
++      expect(text).toContain("authorized tasks");
++      expect(text).toContain("unknown");
++      expect(text).toContain("Require owner permission and confirmation for writes.");
++      expect(result.contextFiles.some((f) => f.path === "ONBOARDING_REQUIRED")).toBe(false);
++    },
++  );
++  it("keeps strict onboarding for non-personal and unknown profiles", async () => {
++    for (const agentId of ["main", undefined]) {
++      const result = await resolveBootstrapContextForRun({ workspaceDir: "/synthetic", agentId });
++      expect(result.contextFiles[0].path).toBe("ONBOARDING_REQUIRED");
++      expect(result.contextFiles.map((f) => f.content).join("\n")).toContain("MANDATORY_RITUAL");
++    }
++  });
++  it("preserves completion and explicit skip controls for strict profiles", async () => {
++    workspace.complete = true;
++    expect(
++      (await resolveBootstrapContextForRun({ workspaceDir: "/synthetic" })).contextFiles[0].path,
++    ).not.toBe("ONBOARDING_REQUIRED");
++    workspace.complete = false;
++    vi.stubEnv("OPENCLAW_SKIP_ONBOARDING_GATE", "true");
++    expect(
++      (await resolveBootstrapContextForRun({ workspaceDir: "/synthetic" })).contextFiles[0].path,
++    ).not.toBe("ONBOARDING_REQUIRED");
++  });
++  it("personality section makes the first task take priority and retains permission section", () => {
++    const section = IDENTITY_SECTIONS.find((s) => s.id === "personality")!;
++    const context = {
++      params: {
++        runtimeInfo: { agentId: "personal-fixture" },
++        senderName: "Fixture",
++        senderPermissionLevel: "user",
++      },
++    } as unknown as SectionRenderContext;
++    const text = section.render(context).join("\n");
++    expect(text).toContain("authorized task");
++    expect(text).not.toContain("On your FIRST message to this user");
++    expect(
++      IDENTITY_SECTIONS.find((s) => s.id === "permissions")!
++        .render(context)
++        .join("\n"),
++    ).toContain("require owner or admin access");
++  });
++});
++
++describe("C06 invalid terminal DSML output", () => {
++  it("returns an explicit bounded failure for a protocol-only reply", () => {
++    const out = sanitizeOutboundText(dsml);
++    expect(out.strippedToolSyntax).toBe(true);
++    expect(out.text).toContain("invalid tool protocol");
++    expect(out.text).not.toContain("DSML");
++    expect(out.text).not.toContain("sdk_inspect");
++  });
++  it("returns a failure for fenced DSML instead of empty code fences", () => {
++    const out = sanitizeOutboundText("```xml\n" + dsml + "\n```");
++    expect(out.text).toContain("invalid tool protocol");
++    expect(out.text).not.toContain("```");
++  });
++  it("rejects the entire answer when complete DSML contaminates prose", () => {
++    expect(sanitizeOutboundText(`Before.\n${dsml}\nAfter.`).text).toContain(
++      "invalid tool protocol",
++    );
++  });
++  it.each([
++    '<｜DSML｜tool_calls>\n<｜DSML｜invoke name="exec">unsafe',
++    '<｜DSML｜invoke name="exec">unsafe</｜DSML｜invoke>',
++    "<｜DSML｜tool_calls",
++    '<｜DSML｜invoke name="exec"',
++  ])("rejects incomplete or standalone DSML: %s", (input) => {
++    const out = sanitizeOutboundText(input);
++    expect(out.strippedToolSyntax).toBe(true);
++    expect(out.text).toContain("invalid tool protocol");
++    expect(out.text).not.toContain("unsafe");
++  });
++  it("keeps normal prose, legitimate code, and existing plain-tag behavior", () => {
++    for (const text of [
++      "Please explain DSML tool_calls.",
++      "```typescript\nconst invoice = { id: 'abc', amount: 12 };\n```",
++      "Use <div>hello</div>.",
++    ]) {
++      expect(sanitizeOutboundText(text).text).toBe(text);
++    }
++    expect(sanitizeOutboundText("<tool_calls>internal</tool_calls>").text).toBe("");
++  });
++});
++
++describe("C07 mandatory secret redaction", () => {
++  const fixtures = [
++    "TOKEN=synthetic-token",
++    "PAT=synthetic-pat",
++    "API_KEY=synthetic-api",
++    "MINION_SECRETS_KEY=synthetic-secrets",
++    'PASSWORD="synthetic pass word"',
++    '{"SECRETS_KEY":"synthetic-json","apiKey":"synthetic-camel"}',
++    "https://fixture-user:synthetic-password@fixture.invalid/path?PAT=synthetic-query&other=ok",
++    "github_pat_" + "X".repeat(82),
++    "ghp_" + "X".repeat(36),
++    "Summary: TOKEN=synthetic-prose",
++    "https://fixture.invalid/path?TOKEN=synthetic-url&other=ok",
++    "url=https://fixture.invalid/path?PAT=synthetic-assigned-url&other=ok",
++    '{"url":"https://fixture.invalid/path?apiKey=synthetic-json-url&other=ok"}',
++    "export PASSWORD=synthetic-export",
++    "Bearer " + "a".repeat(25),
++  ];
++  it.each(fixtures)("redacts explicit secret forms at egress: %s", (text) => {
++    const out = sanitizeOutboundText(text);
++    expect(out.redactions).toBeGreaterThan(0);
++    expect(out.text).not.toContain("synthetic-");
++    expect(out.text).not.toContain("synthetic pass word");
++    expect(out.text).not.toContain("github_pat_");
++    expect(out.text).not.toContain("ghp_");
++    expect(out.text).not.toContain("a".repeat(25));
++  });
++  function persisted(
++    message: AgentMessage,
++    opts?: Parameters<typeof installSessionToolResultGuard>[1],
++  ) {
++    const stored: AgentMessage[] = [];
++    const manager = {
++      appendMessage: (msg: AgentMessage) => {
++        stored.push(msg);
++        return "synthetic-entry";
++      },
++    } as unknown as Parameters<typeof installSessionToolResultGuard>[0];
++    installSessionToolResultGuard(manager, opts);
++    manager.appendMessage(message as Parameters<typeof manager.appendMessage>[0]);
++    return stored;
++  }
++  const toolResult = (text: string, details: unknown = {}) =>
++    ({
++      role: "toolResult",
++      toolCallId: "call_fixture",
++      toolName: "read",
++      content: [{ type: "text", text }],
++      details,
++      timestamp: 1,
++      isError: false,
++    }) as AgentMessage;
++  it("redacts default persistence text and nested details without mutating the input", () => {
++    const input = toolResult(fixtures.join("\n"), {
++      env: { MINION_SECRETS_KEY: "synthetic-details" },
++      rows: [{ id: "record_abcdef0123456789", count: 1 }],
++      url: "postgres://alice:synthetic-db@fixture.invalid/db",
++    });
++    const output = persisted(input);
++    expect(JSON.stringify(output)).not.toContain("synthetic-");
++    expect(JSON.stringify(input)).toContain("synthetic-details");
++    expect(JSON.stringify(output)).toContain("record_abcdef0123456789");
++  });
++  it("cannot be bypassed by either optional transform or the final before-write plugin", () => {
++    const output = persisted(toolResult("ok"), {
++      transformMessageForPersistence: (message) =>
++        ({
++          ...message,
++          content: [{ type: "text", text: "TOKEN=synthetic-transform" }],
++        }) as AgentMessage,
++      transformToolResultForPersistence: (message) =>
++        ({ ...message, details: { PAT: "synthetic-tool-transform" } }) as AgentMessage,
++      beforeMessageWriteHook: ({ message }) => ({
++        message: {
++          ...message,
++          content: [{ type: "text", text: "PASSWORD=synthetic-hook" }],
++          details: { apiKey: "synthetic-final" },
++        } as AgentMessage,
++      }),
++    });
++    expect(JSON.stringify(output)).not.toContain("synthetic-");
++    expect(JSON.stringify(output)).toContain("[REDACTED]");
++  });
++  it("redacts plugin additions to synthetic missing results and preserves hook blocking", () => {
++    const stored: AgentMessage[] = [];
++    const manager = {
++      appendMessage: (msg: AgentMessage) => {
++        stored.push(msg);
++        return "synthetic-entry";
++      },
++    } as unknown as Parameters<typeof installSessionToolResultGuard>[0];
++    const guard = installSessionToolResultGuard(manager, {
++      transformToolResultForPersistence: (message) =>
++        ({ ...message, details: { PAT: "synthetic-flush" } }) as AgentMessage,
++    });
++    manager.appendMessage({
++      role: "assistant",
++      content: [{ type: "toolCall", id: "call_pending", name: "read", arguments: {} }],
++    } as Parameters<typeof manager.appendMessage>[0]);
++    guard.flushPendingToolResults();
++    expect(stored).toHaveLength(2);
++    expect(JSON.stringify(stored)).not.toContain("synthetic-flush");
++    expect(JSON.stringify(stored)).toContain("[REDACTED]");
++    expect(guard.getPendingIds()).toEqual([]);
++    expect(
++      persisted(toolResult("ok"), { beforeMessageWriteHook: () => ({ block: true }) }),
++    ).toEqual([]);
++  });
++  it("preserves ordinary identifiers, schemas, images and receipts", () => {
++    const schema = {
++      type: "object",
++      properties: {
++        TOKEN: { type: "string", description: "Opaque application token" },
++        id: { type: "string" },
++      },
++      required: ["TOKEN"],
++    };
++    const normal = toolResult(
++      JSON.stringify({ id: "ab".repeat(32), bookingId: "abc-123", amount: 15, schema }),
++      { schema, receipt: { id: "receipt-123", amount: 15 }, tokenCount: 3 },
++    );
++    (normal as AgentMessage & { content: unknown[] }).content.push({
++      type: "image",
++      data: "synthetic-image-bytes",
++      mimeType: "image/png",
++    });
++    expect(persisted(normal)[0]).toEqual(normal);
++    expect(sanitizeOutboundText(JSON.stringify(schema)).text).toBe(JSON.stringify(schema));
++  });
++});
+diff --git a/src/channels/outbound-sanitizer.ts b/src/channels/outbound-sanitizer.ts
+index dce84e7cc00..62968e968ae 100644
+--- a/src/channels/outbound-sanitizer.ts
++++ b/src/channels/outbound-sanitizer.ts
+@@ -1,3 +1,5 @@
++import { redactExplicitSecretText } from "../security/explicit-secret-redaction.js";
++
+ /**
+  * Outbound message sanitizer — a model-independent last line of defense.
+  *
+@@ -88,20 +90,11 @@ const DOUBLE_BRACKET_TOKEN_RE = /\[\[[^\]\n]*?\]\]/g;
+ const MALFORMED_TTS_TOKEN_RE = /\[{1,2}\/?tts(?::[a-z]+)?\]{1,2}/gi;
+ const WORKSHOP_TOKEN_RE = /\[(?:VOTE_UP|VOTE_DOWN|KEEP_PIN)\]/g;
+ 
+-/** High-confidence secret shapes. Conservative to avoid redacting normal text. */
+-const SECRET_PATTERNS: RegExp[] = [
+-  /\b\d{5,}:[A-Za-z0-9_-]{20,}\b/g, // Telegram/ManyChat-style bot token (recon #169)
+-  /1\/\/0[A-Za-z0-9_/-]{20,}/g, // Google OAuth refresh token (fleet recon S1: panik leak)
+-  /\bsk-or-[A-Za-z0-9-]{20,}\b/g, // OpenRouter (fleet recon S1: leiva)
+-  /\bsk-ant-[A-Za-z0-9_-]{20,}\b/g, // Anthropic-style
+-  /\bsk-[A-Za-z0-9]{20,}\b/g, // OpenAI-style
+-  /\bgh[posru]_[A-Za-z0-9]{20,}\b/g, // GitHub PAT
+-  /\bxox[baprs]-[A-Za-z0-9-]{10,}\b/g, // Slack
+-  /\bAKIA[0-9A-Z]{16}\b/g, // AWS access key id
+-  /\bAIza[0-9A-Za-z_-]{30,}\b/g, // Google API key
+-];
+-
+-const REDACTION = "[REDACTED]";
++/** DSML provider protocol is invalid final output, including incomplete invocations. */
++const DSML_PAIRED_RE = /<｜DSML｜(tool_calls|invoke|parameter)\b[^>]*>[\s\S]*?<\/｜DSML｜\1\s*>/gi;
++const DSML_UNFINISHED_RE = /<\/?｜DSML｜(?:tool_calls|invoke|parameter)\b[\s\S]*$/gi;
++const INVALID_PROTOCOL_REPLY =
++  "I could not validate this response because it contained invalid tool protocol. If you requested an action, check its status before retrying.";
+ 
+ /**
+  * Sanitize an outbound message body. Returns cleaned text plus what was done,
+@@ -115,6 +108,27 @@ export function sanitizeOutboundText(input: string): OutboundSanitizeResult {
+ 
+   let text = input;
+   let strippedToolSyntax = false;
++  let invalidProviderProtocol = false;
++
++  // Detect complete or incomplete envelopes before other stripping. Any DSML
++  // contamination invalidates the whole response, including surrounding prose.
++  text = text.replace(FENCED_TOOL_BLOCK_RE, (whole, body: string) => {
++    if (/<\/?｜DSML｜(?:tool_calls|invoke|parameter)\b/i.test(body)) {
++      invalidProviderProtocol = true;
++      return "";
++    }
++    return whole;
++  });
++  text = text
++    .replace(DSML_PAIRED_RE, () => {
++      invalidProviderProtocol = true;
++      return "";
++    })
++    .replace(DSML_UNFINISHED_RE, () => {
++      invalidProviderProtocol = true;
++      return "";
++    });
++  strippedToolSyntax = invalidProviderProtocol;
+ 
+   // 1. Fenced tool blocks (only when the body is clearly tool machinery).
+   text = text.replace(FENCED_TOOL_BLOCK_RE, (whole, body: string) => {
+@@ -162,14 +176,10 @@ export function sanitizeOutboundText(input: string): OutboundSanitizeResult {
+   }
+   text = afterBrackets;
+ 
+-  // 5. Redact high-confidence secret shapes.
+-  let redactions = 0;
+-  for (const pattern of SECRET_PATTERNS) {
+-    text = text.replace(pattern, () => {
+-      redactions += 1;
+-      return REDACTION;
+-    });
+-  }
++  // Mandatory redaction shares the same vocabulary as transcript persistence.
++  const redacted = redactExplicitSecretText(text);
++  text = redacted.text;
++  const redactions = redacted.redactions;
+ 
+   // Tidy up whitespace left by strips: collapse 3+ blank lines, trim trailing
+   // spaces per line, and trim the whole thing.
+@@ -180,5 +190,36 @@ export function sanitizeOutboundText(input: string): OutboundSanitizeResult {
+       .trim();
+   }
+ 
++  if (invalidProviderProtocol) {
++    text = INVALID_PROTOCOL_REPLY;
++  }
+   return { text, redactions, strippedToolSyntax };
+ }
++
++/** A recognized provider invocation contaminates the whole terminal answer. */
++export function containsProviderToolProtocol(input: string): boolean {
++  return /<\/?｜DSML｜(?:tool_calls|invoke|parameter)\b/i.test(input);
++}
++
++/**
++ * Terminal text-only final replies need an explicit outcome when invocation
++ * syntax was the entire answer. Control-only suppression stays intentional.
++ */
++export function sanitizeTerminalFinalText(
++  input: string,
++): OutboundSanitizeResult & { invalidToolProtocol: boolean } {
++  const result = sanitizeOutboundText(input);
++  if (result.text.trim()) {
++    return { ...result, invalidToolProtocol: containsProviderToolProtocol(input) };
++  }
++  const invocationSyntax =
++    input.search(LONE_TOOL_TAG_RE) >= 0 ||
++    input.search(JSON_ACTION_RE) >= 0 ||
++    input.search(TOOLU_ID_RE) >= 0 ||
++    [...input.matchAll(FENCED_TOOL_BLOCK_RE)].some((match) => TOOL_BLOCK_MARKERS.test(match[1]));
++  return {
++    ...result,
++    ...(invocationSyntax ? { text: INVALID_PROTOCOL_REPLY } : {}),
++    invalidToolProtocol: invocationSyntax,
++  };
++}
+diff --git a/src/channels/terminal-output-policy.test.ts b/src/channels/terminal-output-policy.test.ts
+new file mode 100644
+index 00000000000..fc859b87be0
+--- /dev/null
++++ b/src/channels/terminal-output-policy.test.ts
+@@ -0,0 +1,10 @@
++import { expect, it } from "vitest";
++import { sanitizeTerminalFinalText } from "./outbound-sanitizer.js";
++it("withholds a narrated success and preserves action uncertainty instead of inviting a blind retry", () => {
++  const output = sanitizeTerminalFinalText(
++    'Booked successfully. <｜DSML｜tool_calls><｜DSML｜invoke name="book">fixture</｜DSML｜invoke></｜DSML｜tool_calls>',
++  );
++  expect(output.invalidToolProtocol).toBe(true);
++  expect(output.text).not.toContain("Booked successfully");
++  expect(output.text).toContain("check its status before retrying");
++});
+diff --git a/src/gateway/server-methods/session-runtime-cleanup.ts b/src/gateway/server-methods/session-runtime-cleanup.ts
+new file mode 100644
+index 00000000000..fc830324089
+--- /dev/null
++++ b/src/gateway/server-methods/session-runtime-cleanup.ts
+@@ -0,0 +1,41 @@
++import { abortEmbeddedPiRun, waitForEmbeddedPiRunEnd } from "../../agents/pi-embedded.js";
++import { stopSubagentsForRequester } from "../../auto-reply/reply/abort.js";
++import { clearSessionQueues } from "../../auto-reply/reply/queue.js";
++import type { MinionConfig } from "../../config/config.js";
++import { clearSessionCursor } from "../../memory/extract-memories-runner.js";
++import { ErrorCodes, errorShape } from "../protocol/index.js";
++import type { resolveGatewaySessionStoreTarget } from "../sessions/session-utils.js";
++
++export async function ensureSessionRuntimeCleanup(params: {
++  cfg: MinionConfig;
++  key: string;
++  target: Pick<ReturnType<typeof resolveGatewaySessionStoreTarget>, "storeKeys" | "canonicalKey">;
++  sessionId?: string;
++}) {
++  const queueKeys = new Set<string>(params.target.storeKeys);
++  queueKeys.add(params.target.canonicalKey);
++  if (params.sessionId) {
++    queueKeys.add(params.sessionId);
++  }
++  clearSessionQueues([...queueKeys]);
++  stopSubagentsForRequester({ cfg: params.cfg, requesterSessionKey: params.target.canonicalKey });
++  if (!params.sessionId) {
++    return undefined;
++  }
++  abortEmbeddedPiRun(params.sessionId);
++  const ended = await waitForEmbeddedPiRunEnd(params.sessionId, 15_000);
++  if (ended) {
++    // Reset/delete own the detached extraction generation too. Wait until the
++    // attempt has stopped scheduling jobs, then fence queued/late completions
++    // before replacing/removing the session store entry. Failed cleanup keeps
++    // the current session and its attempt budget intact.
++    // TODO(handoff): qualify automatic rotation paths outside these RPCs; see
++    // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
++    clearSessionCursor(params.sessionId);
++    return undefined;
++  }
++  return errorShape(
++    ErrorCodes.UNAVAILABLE,
++    `Session ${params.key} is still active; try again in a moment.`,
++  );
++}
+diff --git a/src/gateway/server-methods/sessions.memory-cleanup.test.ts b/src/gateway/server-methods/sessions.memory-cleanup.test.ts
+new file mode 100644
+index 00000000000..63af2db13b0
+--- /dev/null
++++ b/src/gateway/server-methods/sessions.memory-cleanup.test.ts
+@@ -0,0 +1,109 @@
++import { beforeEach, afterEach, expect, it, vi } from "vitest";
++import {
++  clearSessionCursor,
++  maybeExtractMemories,
++  getSessionExtractionStats,
++} from "../../memory/extract-memories-runner.js";
++vi.mock("../../infra/posthog.js", () => ({ trackEvent: vi.fn() }));
++vi.mock("../../infra/sentry.js", () => ({ addSentryBreadcrumb: vi.fn() }));
++vi.mock("../../logging/subsystem.js", () => ({
++  createSubsystemLogger: () => ({ info: vi.fn(), warn: vi.fn(), debug: vi.fn() }),
++}));
++const lifecycle = vi.hoisted(() => ({
++  abortEmbeddedPiRun: vi.fn(),
++  waitForEmbeddedPiRunEnd: vi.fn(),
++  stopSubagentsForRequester: vi.fn(),
++  clearSessionQueues: vi.fn(),
++}));
++vi.mock("../../agents/pi-embedded.js", () => ({
++  abortEmbeddedPiRun: lifecycle.abortEmbeddedPiRun,
++  waitForEmbeddedPiRunEnd: lifecycle.waitForEmbeddedPiRunEnd,
++}));
++vi.mock("../../auto-reply/reply/abort.js", () => ({
++  stopSubagentsForRequester: lifecycle.stopSubagentsForRequester,
++}));
++vi.mock("../../auto-reply/reply/queue.js", () => ({
++  clearSessionQueues: lifecycle.clearSessionQueues,
++}));
++import { ensureSessionRuntimeCleanup } from "./session-runtime-cleanup.js";
++const old = "reset-old";
++const tick = () => new Promise<void>((r) => setImmediate(r));
++const response = JSON.stringify([
++  { content: "Synthetic only", category: "preference", confidence: 0.95 },
++]);
++function deps(ended = true) {
++  vi.clearAllMocks();
++  lifecycle.waitForEmbeddedPiRunEnd.mockResolvedValue(ended);
++  return lifecycle;
++}
++const input = {
++  cfg: {},
++  key: "agent:personal-synthetic:main",
++  target: { storeKeys: ["legacy"], canonicalKey: "canonical" },
++  sessionId: old,
++};
++beforeEach(() => clearSessionCursor(old));
++afterEach(() => clearSessionCursor(old));
++function submit(sink: () => Promise<void>) {
++  let resolve!: (s: string) => void;
++  const llmCall = vi.fn(
++    () =>
++      new Promise<string>((r) => {
++        resolve = r;
++      }),
++  );
++  maybeExtractMemories({
++    sessionId: old,
++    windowId: "old-turn",
++    lastTurnHadToolCalls: false,
++    newMessageCount: 4,
++    userWroteMemoryThisTurn: false,
++    existingMemory: "",
++    recentMessages: Array.from({ length: 4 }, (_, i) => ({
++      role: i % 2 ? "assistant" : "user",
++      content: `fixture ${i}`,
++    })),
++    llmCall,
++    onMemoryExtracted: sink,
++  });
++  return { llmCall, finish: () => resolve(response) };
++}
++it("the actual shared reset/delete lifecycle suppresses a late extraction write after cleanup succeeds", async () => {
++  const sink = vi.fn(async () => {});
++  const run = submit(sink);
++  await tick();
++  expect(run.llmCall).toHaveBeenCalledOnce();
++  const d = deps();
++  expect(await ensureSessionRuntimeCleanup(input)).toBeUndefined();
++  expect(d.abortEmbeddedPiRun).toHaveBeenCalledWith(old);
++  run.finish();
++  await tick();
++  expect(sink).not.toHaveBeenCalled();
++  expect(getSessionExtractionStats(old).completed).toBe(0);
++});
++it("successful cleanup cancels queued extraction before model dispatch", async () => {
++  const sink = vi.fn(async () => {});
++  const run = submit(sink);
++  await (deps(), ensureSessionRuntimeCleanup(input));
++  await tick();
++  expect(run.llmCall).not.toHaveBeenCalled();
++  expect(sink).not.toHaveBeenCalled();
++});
++it("a failed cleanup does not reset the unchanged session budget", async () => {
++  const sink = vi.fn(async () => {});
++  const run = submit(sink);
++  await tick();
++  expect(await (deps(false), ensureSessionRuntimeCleanup(input))).toMatchObject({
++    code: "UNAVAILABLE",
++  });
++  expect(getSessionExtractionStats(old).attempts).toBe(1);
++  run.finish();
++  await tick();
++  expect(sink).toHaveBeenCalledOnce();
++});
++it("missing session ID retains original queue cleanup and never waits for a run", async () => {
++  const d = deps();
++  await ensureSessionRuntimeCleanup({ ...input, sessionId: undefined });
++  expect(d.clearSessionQueues).toHaveBeenCalledWith(["legacy", "canonical"]);
++  expect(d.waitForEmbeddedPiRunEnd).not.toHaveBeenCalled();
++});
+diff --git a/src/gateway/server-methods/sessions.ts b/src/gateway/server-methods/sessions.ts
+index 1f03aa71865..6ec7fd39cd6 100644
+--- a/src/gateway/server-methods/sessions.ts
++++ b/src/gateway/server-methods/sessions.ts
+@@ -1,9 +1,6 @@
+ import { randomUUID } from "node:crypto";
+ import fs from "node:fs";
+ import { resolveDefaultAgentId } from "../../agents/agent-scope.js";
+-import { abortEmbeddedPiRun, waitForEmbeddedPiRunEnd } from "../../agents/pi-embedded.js";
+-import { stopSubagentsForRequester } from "../../auto-reply/reply/abort.js";
+-import { clearSessionQueues } from "../../auto-reply/reply/queue.js";
+ import { loadConfig } from "../../config/config.js";
+ import {
+   loadSessionStore,
+@@ -42,6 +39,7 @@ import {
+ } from "../sessions/session-utils.js";
+ import { applySessionsPatchToStore } from "../sessions/sessions-patch.js";
+ import { resolveSessionKeyFromResolveParams } from "../sessions/sessions-resolve.js";
++import { ensureSessionRuntimeCleanup } from "./session-runtime-cleanup.js";
+ import type { GatewayRequestHandlers, RespondFn } from "./types.js";
+ import { assertValidParams, respondError } from "./validation.js";
+ 
+@@ -112,33 +110,6 @@ function archiveSessionTranscriptsForSession(params: {
+   });
+ }
+ 
+-async function ensureSessionRuntimeCleanup(params: {
+-  cfg: ReturnType<typeof loadConfig>;
+-  key: string;
+-  target: ReturnType<typeof resolveGatewaySessionStoreTarget>;
+-  sessionId?: string;
+-}) {
+-  const queueKeys = new Set<string>(params.target.storeKeys);
+-  queueKeys.add(params.target.canonicalKey);
+-  if (params.sessionId) {
+-    queueKeys.add(params.sessionId);
+-  }
+-  clearSessionQueues([...queueKeys]);
+-  stopSubagentsForRequester({ cfg: params.cfg, requesterSessionKey: params.target.canonicalKey });
+-  if (!params.sessionId) {
+-    return undefined;
+-  }
+-  abortEmbeddedPiRun(params.sessionId);
+-  const ended = await waitForEmbeddedPiRunEnd(params.sessionId, 15_000);
+-  if (ended) {
+-    return undefined;
+-  }
+-  return errorShape(
+-    ErrorCodes.UNAVAILABLE,
+-    `Session ${params.key} is still active; try again in a moment.`,
+-  );
+-}
+-
+ export const sessionsHandlers: GatewayRequestHandlers = {
+   "sessions.list": ({ params, respond }) => {
+     if (!assertValidParams(params, validateSessionsListParams, "sessions.list", respond)) {
+diff --git a/src/media/load.forks.test.ts b/src/media/load.forks.test.ts
+index 1f24a961186..be36aeb3336 100644
+--- a/src/media/load.forks.test.ts
++++ b/src/media/load.forks.test.ts
+@@ -305,7 +305,8 @@ describe("web media loading", () => {
+ 
+ describe("Discord voice message input hardening", () => {
+   it("rejects local paths outside allowed media roots", async () => {
+-    const candidate = path.join(process.cwd(), "package.json");
++    // The checkout may itself live under the default allowed temporary root.
++    const candidate = path.join(path.parse(os.tmpdir()).root, "minion-media-denied", "voice.ogg");
+     await expect(sendVoiceMessageDiscord("channel:123", candidate)).rejects.toThrow(
+       /Local media path is not under an allowed directory/i,
+     );
+diff --git a/src/memory/extract-memories-runner.test.ts b/src/memory/extract-memories-runner.test.ts
+index e8c806e77ff..a094489bde4 100644
+--- a/src/memory/extract-memories-runner.test.ts
++++ b/src/memory/extract-memories-runner.test.ts
+@@ -21,12 +21,14 @@ function defaultOpts(overrides: Partial<Parameters<typeof maybeExtractMemories>[
+   return {
+     sessionId: "test-session",
+     lastTurnHadToolCalls: false,
+-    newMessageCount: 5,
++    newMessageCount: 4,
+     userWroteMemoryThisTurn: false,
+     existingMemory: "",
+     recentMessages: [
+       { role: "user", content: "I prefer dark mode" },
+       { role: "assistant", content: "Noted!" },
++      { role: "user", content: "Project uses pnpm" },
++      { role: "assistant", content: "Understood." },
+     ],
+     llmCall: vi.fn<(prompt: string) => Promise<string>>().mockResolvedValue(VALID_LLM_RESPONSE),
+     onMemoryExtracted: vi
+@@ -113,7 +115,10 @@ describe("maybeExtractMemories", () => {
+   });
+ 
+   it("does NOT call llmCall when newMessageCount is below threshold", async () => {
+-    const opts = defaultOpts({ newMessageCount: 1 });
++    const opts = defaultOpts({
++      newMessageCount: 1,
++      recentMessages: [{ role: "user", content: "One actual message" }],
++    });
+     maybeExtractMemories(opts);
+ 
+     await vi.runAllTimersAsync();
+diff --git a/src/memory/extract-memories-runner.ts b/src/memory/extract-memories-runner.ts
+index f546cc50410..dc159e9ba2c 100644
+--- a/src/memory/extract-memories-runner.ts
++++ b/src/memory/extract-memories-runner.ts
+@@ -1,3 +1,4 @@
++import { createHash } from "node:crypto";
+ import { trackEvent } from "../infra/posthog.js";
+ import { addSentryBreadcrumb } from "../infra/sentry.js";
+ import { createSubsystemLogger } from "../logging/subsystem.js";
+@@ -14,99 +15,310 @@ import {
+ } from "./extract-memories.js";
+ 
+ const log = createSubsystemLogger("memory");
++const MAX_PENDING_MESSAGES = 64;
++const MAX_PENDING_CHARACTERS = 64_000;
++const MAX_REMEMBERED_WINDOWS = 128;
++const MAX_QUEUED_WINDOWS = 5;
++const MAX_LOCAL_MEMORY_CHARACTERS = 16_000;
++const MAX_RETAINED_SESSIONS = 256;
++const IDLE_RETENTION_MS = 30 * 60 * 1000;
+ 
+-// Per-session cursor tracking (in-memory, resets on process restart)
+-const SESSION_CURSORS = new Map<string, ExtractionCursor>();
+-
+-/**
+- * Get or create an extraction cursor for a session.
+- */
+-export function getOrCreateCursor(sessionId: string): ExtractionCursor {
+-  let cursor = SESSION_CURSORS.get(sessionId);
+-  if (!cursor) {
+-    cursor = createCursor(sessionId);
+-    SESSION_CURSORS.set(sessionId, cursor);
+-  }
+-  return cursor;
+-}
+-
+-/**
+- * Fire-and-forget memory extraction. Called after the agent's final response.
+- * NEVER delays the user's next message — runs in a detached microtask.
+- *
+- * @param opts.sessionId - The current session ID
+- * @param opts.lastTurnHadToolCalls - Whether the last assistant turn included tool calls
+- * @param opts.newMessageCount - Number of messages since last extraction
+- * @param opts.userWroteMemoryThisTurn - Whether the user/agent wrote to memory this turn
+- * @param opts.existingMemory - Current MEMORY.md content (for dedup)
+- * @param opts.recentMessages - Messages since last extraction (role + content pairs)
+- * @param opts.llmCall - Function to call the LLM (injected dependency)
+- * @param opts.onMemoryExtracted - Callback for each extracted memory (write to store)
+- * @param opts.config - Optional extraction config override
+- */
+-export function maybeExtractMemories(opts: {
++type Message = { role: string; content: string };
++type ExtractionOptions = {
+   sessionId: string;
++  /** Stable identity of a new turn/window; the actual attempt passes its runId. */
++  windowId?: string;
++  abortSignal?: AbortSignal;
+   lastTurnHadToolCalls: boolean;
++  /** Compatibility field only. Admission counts the actual buffered messages. */
+   newMessageCount: number;
+   userWroteMemoryThisTurn: boolean;
+   existingMemory: string;
+-  recentMessages: ReadonlyArray<{ role: string; content: string }>;
++  recentMessages: ReadonlyArray<Message>;
+   llmCall: (prompt: string) => Promise<string>;
+   onMemoryExtracted?: (memory: ExtractedMemory) => Promise<void>;
+   config?: ExtractionConfig;
+-}): void {
++};
++type InputWindow = { id: string; messages: Message[]; characters: number; signal?: AbortSignal };
++type Job = { opts: ExtractionOptions; windows: InputWindow[]; lastWindowId: string };
++type SessionState = {
++  cursor: ExtractionCursor;
++  pending: InputWindow[];
++  seenWindows: Set<string>;
++  queue: Job[];
++  running: boolean;
++  reserved: number;
++  attempts: number;
++  failed: number;
++  canceled: number;
++  extractedContext: string;
++  lastActivity: number;
++};
++
++// State-object identity is the generation fence. Clearing cannot let an old
++// completion replace a newly created session's cursor or begin another write.
++const SESSIONS = new Map<string, SessionState>();
++function getOrCreateState(sessionId: string): SessionState | undefined {
++  let state = SESSIONS.get(sessionId);
++  if (!state) {
++    if (SESSIONS.size >= MAX_RETAINED_SESSIONS) {
++      return undefined;
++    }
++    state = {
++      cursor: createCursor(sessionId),
++      pending: [],
++      seenWindows: new Set(),
++      queue: [],
++      running: false,
++      reserved: 0,
++      attempts: 0,
++      failed: 0,
++      canceled: 0,
++      extractedContext: "",
++      lastActivity: Date.now(),
++    };
++    SESSIONS.set(sessionId, state);
++  }
++  return state;
++}
++
++export function getOrCreateCursor(sessionId: string): ExtractionCursor {
++  // At capacity, an inspection receives an untracked default, not a new slot.
++  return getOrCreateState(sessionId)?.cursor ?? createCursor(sessionId);
++}
++
++/** Snapshot: paid attempts include failures/cancellations after model dispatch. */
++export function getSessionExtractionStats(sessionId: string) {
++  const state = getOrCreateState(sessionId);
++  return {
++    tracked: state !== undefined,
++    retainedSessions: SESSIONS.size,
++    reserved: state?.reserved ?? 0,
++    attempts: state?.attempts ?? 0,
++    failed: state?.failed ?? 0,
++    canceled: state?.canceled ?? 0,
++    completed: state?.cursor.extractionCount ?? 0,
++    pendingMessages: state?.pending.reduce((sum, window) => sum + window.messages.length, 0) ?? 0,
++    queued: state?.queue.length ?? 0,
++    lastActivityAt: state?.lastActivity ?? null,
++  };
++}
++
++/** Lazy retention sweep never evicts in-flight or queued work/paid capacity. */
++function expireIdleSessions(now: number): void {
++  for (const [sessionId, state] of SESSIONS) {
++    if (
++      !state.running &&
++      state.queue.length === 0 &&
++      now - state.lastActivity >= IDLE_RETENTION_MS
++    ) {
++      clearSessionCursor(sessionId);
++    }
++  }
++}
++
++/**
++ * Accumulate actual new messages and reserve capacity synchronously, then run a
++ * single detached worker per session. Legacy callers without an identity get
++ * exact-window content deduplication; callers with run IDs may repeat real text.
++ * Buffers/dedup are bounded and process-local, as was the original cursor.
++ */
++export function maybeExtractMemories(opts: ExtractionOptions): void {
+   const config = opts.config ?? createDefaultConfig();
+-  const cursor = getOrCreateCursor(opts.sessionId);
++  if (
++    !config.enabled ||
++    opts.abortSignal?.aborted ||
++    (config.skipIfUserWroteMemory && opts.userWroteMemoryThisTurn)
++  ) {
++    return;
++  }
++  expireIdleSessions(Date.now());
++  const state = getOrCreateState(opts.sessionId);
++  if (!state) {
++    log.warn(
++      `memory extraction session capacity full; admission skipped for session=${opts.sessionId}`,
++    );
++    return;
++  }
++  if (state.attempts + state.reserved >= config.maxExtractionsPerSession) {
++    return;
++  }
++  const windowId =
++    opts.windowId ??
++    `turn-${createHash("sha256").update(JSON.stringify(opts.recentMessages)).digest("hex")}`;
++  if (state.seenWindows.has(windowId) || opts.recentMessages.length === 0) {
++    return;
++  }
++  const characters = opts.recentMessages.reduce(
++    (sum, message) => sum + message.content.length + message.role.length,
++    0,
++  );
++  if (
++    windowId.length > 256 ||
++    opts.recentMessages.length > MAX_PENDING_MESSAGES ||
++    characters > MAX_PENDING_CHARACTERS ||
++    state.queue.length >= MAX_QUEUED_WINDOWS
++  ) {
++    log.warn(`memory extraction window exceeds buffer capacity for session=${opts.sessionId}`);
++    return;
++  }
++  state.pending = state.pending.filter((window) => !window.signal?.aborted);
++  let pendingCount = state.pending.reduce((sum, window) => sum + window.messages.length, 0);
++  let pendingCharacters = state.pending.reduce((sum, window) => sum + window.characters, 0);
++  // Whole-window rolling retention cannot deadlock when many tool turns defer
++  // extraction. Eviction is explicit and never leaves half a user/assistant pair.
++  while (
++    pendingCount + opts.recentMessages.length > MAX_PENDING_MESSAGES ||
++    pendingCharacters + characters > MAX_PENDING_CHARACTERS
++  ) {
++    const oldest = state.pending.shift();
++    if (!oldest) {
++      break;
++    }
++    pendingCount -= oldest.messages.length;
++    pendingCharacters -= oldest.characters;
++    log.warn(`memory extraction evicted oldest pending window for session=${opts.sessionId}`);
++  }
++  state.seenWindows.add(windowId);
++  if (state.seenWindows.size > MAX_REMEMBERED_WINDOWS) {
++    const oldest = state.seenWindows.values().next().value;
++    if (oldest !== undefined) {
++      state.seenWindows.delete(oldest);
++    }
++  }
++  state.lastActivity = Date.now();
++  state.pending.push({
++    id: windowId,
++    messages: opts.recentMessages.map(({ role, content }) => ({ role, content })),
++    characters,
++    signal: opts.abortSignal,
++  });
+ 
+   if (
+     !shouldExtract(
+       config,
+-      cursor,
++      { ...state.cursor, extractionCount: state.attempts + state.reserved },
+       opts.lastTurnHadToolCalls,
+-      opts.newMessageCount,
++      pendingCount + opts.recentMessages.length,
+       opts.userWroteMemoryThisTurn,
+     )
+   ) {
+     return;
+   }
+ 
+-  // Fire and forget — setImmediate ensures we don't block the current event loop turn
+-  setImmediate(async () => {
++  // Reservation happens before setImmediate, so all overlapping callers observe
++  // the same monotonically consumed budget. No stale captured cursor is used.
++  state.reserved++;
++  state.queue.push({ opts: { ...opts }, windows: state.pending, lastWindowId: windowId });
++  state.pending = [];
++  if (!state.running) {
++    state.running = true;
++    setImmediate(() => {
++      void drainSession(opts.sessionId, state);
++    });
++  }
++}
++
++async function drainSession(sessionId: string, state: SessionState): Promise<void> {
++  const current = () => SESSIONS.get(sessionId) === state;
++  while (current() && state.queue.length > 0) {
++    const job = state.queue.shift();
++    if (!job) {
++      break;
++    }
++    state.reserved--;
++    const canceled = () => job.windows.some((window) => window.signal?.aborted);
++    if (canceled()) {
++      // A canceled reservation never called a model: its capacity is reusable.
++      state.canceled++;
++      state.lastActivity = Date.now();
++      continue;
++    }
++    const valid = () => current() && !canceled();
++    state.attempts++;
+     try {
+-      const prompt = buildExtractionPrompt(opts.recentMessages, opts.existingMemory);
+-      const raw = await opts.llmCall(prompt);
++      const existingMemory = [job.opts.existingMemory, state.extractedContext]
++        .filter(Boolean)
++        .join("\n");
++      // TODO(handoff): define provider timeout/abort transport so a hung model
++      // cannot occupy retained capacity indefinitely; see
++      // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
++      const raw = await job.opts.llmCall(
++        buildExtractionPrompt(
++          job.windows.flatMap((window) => window.messages),
++          existingMemory,
++        ),
++      );
++      if (!valid()) {
++        state.canceled++;
++        continue;
++      }
+       const memories = parseExtractionResponse(raw);
+-
++      for (const memory of memories) {
++        if (!valid()) {
++          break;
++        }
++        if (job.opts.onMemoryExtracted) {
++          await job.opts.onMemoryExtracted(memory);
++        }
++        if (!valid()) {
++          break;
++        }
++        state.extractedContext = `${state.extractedContext}\n${memory.content}`.slice(
++          -MAX_LOCAL_MEMORY_CHARACTERS,
++        );
++      }
++      if (!valid()) {
++        state.canceled++;
++        continue;
++      }
++      state.cursor = advanceCursor(state.cursor, job.lastWindowId);
+       if (memories.length > 0) {
+-        log.info(`extracted ${memories.length} memories for session=${opts.sessionId}`);
+-        addSentryBreadcrumb({
+-          category: "dream.extraction",
+-          message: `extracted ${memories.length} memories for session=${opts.sessionId}`,
+-          level: "info",
+-        });
+-        void trackEvent(opts.sessionId, "dream_extraction", {
+-          sessionId: opts.sessionId,
+-          memoriesExtracted: memories.length,
+-        });
+-        if (opts.onMemoryExtracted) {
+-          for (const mem of memories) {
+-            await opts.onMemoryExtracted(mem);
+-          }
++        try {
++          log.info(`extracted ${memories.length} memories for session=${sessionId}`);
++          addSentryBreadcrumb({
++            category: "dream.extraction",
++            message: `extracted ${memories.length} memories for session=${sessionId}`,
++            level: "info",
++          });
++          void Promise.resolve(
++            trackEvent(sessionId, "dream_extraction", {
++              sessionId,
++              memoriesExtracted: memories.length,
++            }),
++          ).catch(() => log.debug("memory extraction telemetry failed"));
++        } catch {
++          log.debug("memory extraction telemetry failed");
+         }
+       }
+-
+-      // Advance cursor
+-      const lastId = `turn-${Date.now()}`;
+-      SESSION_CURSORS.set(opts.sessionId, advanceCursor(cursor, lastId));
+     } catch (err) {
+-      log.warn(`memory extraction failed for session=${opts.sessionId}: ${String(err)}`);
++      // Failed attempts remain charged; replay cannot create an unbounded retry
++      // bill. Partial callback writes are not retried automatically.
++      if (valid()) {
++        state.failed++;
++      } else {
++        state.canceled++;
++      }
++      log.warn(`memory extraction failed for session=${sessionId}: ${String(err)}`);
++    } finally {
++      if (current()) {
++        state.lastActivity = Date.now();
++      }
+     }
+-  });
++  }
++  state.running = false;
+ }
+ 
+-/**
+- * Clean up cursor for a session (call on session end).
+- */
++/** Clear a session generation; queued jobs and late provider results become inert. */
+ export function clearSessionCursor(sessionId: string): void {
+-  SESSION_CURSORS.delete(sessionId);
++  const state = SESSIONS.get(sessionId);
++  SESSIONS.delete(sessionId);
++  if (state) {
++    state.canceled += state.reserved;
++    state.reserved = 0;
++    state.queue = [];
++    state.pending = [];
++    state.seenWindows.clear();
++    state.extractedContext = "";
++  }
+ }
+diff --git a/src/memory/extract-memories.corrections.test.ts b/src/memory/extract-memories.corrections.test.ts
+new file mode 100644
+index 00000000000..41e41d13294
+--- /dev/null
++++ b/src/memory/extract-memories.corrections.test.ts
+@@ -0,0 +1,474 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
++import {
++  extractTurnMemories,
++  formatRecalledMemoryContext,
++} from "../agents/pi-embedded-runner/run/memory-turn.js";
++import { trackEvent } from "../infra/posthog.js";
++import { addSentryBreadcrumb } from "../infra/sentry.js";
++import {
++  clearSessionCursor,
++  getOrCreateCursor,
++  getSessionExtractionStats,
++  maybeExtractMemories,
++} from "./extract-memories-runner.js";
++vi.mock("../infra/posthog.js", () => ({ trackEvent: vi.fn() }));
++vi.mock("../infra/sentry.js", () => ({ addSentryBreadcrumb: vi.fn() }));
++vi.mock("../logging/subsystem.js", () => ({
++  createSubsystemLogger: () => ({ info: vi.fn(), warn: vi.fn(), debug: vi.fn() }),
++}));
++const response = JSON.stringify([
++  { content: "Synthetic preference", category: "preference", confidence: 0.9 },
++]);
++const sessionId = "memory-candidate";
++const pair = (id: string) => [
++  { role: "user", content: `Synthetic question ${id}` },
++  { role: "assistant", content: `Synthetic answer ${id}` },
++];
++function submit(
++  id: string,
++  llmCall = vi.fn(async (_prompt: string) => response),
++  extra: Partial<Parameters<typeof maybeExtractMemories>[0]> = {},
++) {
++  const recentMessages = [...pair(`${id}-a`), ...pair(`${id}-b`)];
++  maybeExtractMemories({
++    sessionId,
++    windowId: id,
++    lastTurnHadToolCalls: false,
++    newMessageCount: recentMessages.length,
++    userWroteMemoryThisTurn: false,
++    existingMemory: "",
++    recentMessages,
++    llmCall,
++    ...extra,
++  });
++  return llmCall;
++}
++function deferred<T>() {
++  let resolve!: (value: T) => void;
++  const promise = new Promise<T>((res) => {
++    resolve = res;
++  });
++  return { promise, resolve };
++}
++function attempt(
++  runId: string,
++  llmCall: (prompt: string) => Promise<string>,
++  extra: {
++    tool?: boolean;
++    toolName?: string;
++    memory?: string;
++    prompt?: string;
++    kgSession?: object;
++    kg?: (prompt: string, assistant: string) => Promise<unknown>;
++  } = {},
++) {
++  const sink = vi.fn(async () => undefined);
++  extractTurnMemories({
++    sessionId,
++    runId,
++    prompt: extra.prompt ?? `Synthetic question ${runId}`,
++    assistantText: pair(runId).at(-1)?.content,
++    toolMetas: extra.tool ? [{ toolName: extra.toolName ?? "synthetic_read" }] : [],
++    existingMemory: extra.memory ?? "",
++    llmCall,
++    onMemoryExtracted: sink,
++    onKgExtraction: extra.kgSession ? (extra.kg ?? vi.fn(async () => undefined)) : undefined,
++    onKgError: vi.fn(),
++  });
++  return sink;
++}
++beforeEach(() => {
++  vi.useFakeTimers();
++  clearSessionCursor(sessionId);
++});
++afterEach(() => {
++  clearSessionCursor(sessionId);
++  vi.useRealTimers();
++});
++describe("C01/C08 executable post-turn boundary", () => {
++  it("extracts two actual settled pairs once at the unchanged threshold", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    attempt("run-1", llm);
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    const sink = attempt("run-2", llm);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    expect(llm.mock.calls[0][0]).toContain("Synthetic question run-1");
++    expect(llm.mock.calls[0][0]).toContain("Synthetic question run-2");
++    expect(sink).toHaveBeenCalledOnce();
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(1);
++  });
++  it("bounds ten overlapping eligible windows by five and commits all successes", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    for (let i = 0; i < 10; i++) {
++      submit(`overlap-${i}`, llm);
++    }
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledTimes(5);
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(5);
++    expect(getSessionExtractionStats(sessionId)).toMatchObject({
++      attempts: 5,
++      reserved: 0,
++      completed: 5,
++    });
++  });
++});
++
++describe("memory candidate replay, accounting and generation fences", () => {
++  it("coalesces duplicates before and after completion by actual runId", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    attempt("repeat-1", llm);
++    attempt("repeat-1", llm);
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    attempt("repeat-2", llm);
++    attempt("repeat-2", llm);
++    await vi.runAllTimersAsync();
++    attempt("repeat-1", llm);
++    attempt("repeat-2", llm);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    expect(getOrCreateCursor(sessionId).lastExtractedMessageId).toBe("repeat-2");
++  });
++  it("allows identical real text in different runIds", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    submit("different-1", llm, { recentMessages: pair("same") });
++    submit("different-2", llm, { recentMessages: pair("same") });
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++  });
++  it("never opens the gate by an inflated compatibility count", async () => {
++    const llm = submit("inflated", undefined, {
++      recentMessages: pair("only-two"),
++      newMessageCount: 1000,
++    });
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++  });
++  it("keeps actual tool-settling gate and independent KG behavior", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    const kg = vi.fn(async () => undefined);
++    attempt("tool-1", llm, { tool: true, kgSession: {}, kg });
++    attempt("tool-2", llm, { tool: true, kgSession: {}, kg });
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    expect(kg).toHaveBeenCalledTimes(2);
++    attempt("settled-3", llm);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    expect(llm.mock.calls[0][0]).toContain("Synthetic question tool-1");
++  });
++  it("strips injected gateway context in the actual accumulating caller", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    attempt("privacy-1", llm, {
++      prompt:
++        "[Thu 2026-11-05 12:00 GMT-5] [Voice call private-routing] Synthetic first preference",
++    });
++    attempt("privacy-2", llm, {
++      prompt:
++        "[In-app assistant context private-page Don't restate this context.] Synthetic second preference",
++    });
++    await vi.runAllTimersAsync();
++    const prompt = llm.mock.calls[0][0];
++    expect(prompt).toContain("Synthetic first preference");
++    expect(prompt).toContain("Synthetic second preference");
++    expect(prompt).not.toMatch(/private-routing|private-page|2026-11-05/);
++  });
++  it("serializes model calls and builds later prompts with the latest extracted context", async () => {
++    const first = deferred<string>();
++    const llm = vi
++      .fn<(prompt: string) => Promise<string>>()
++      .mockImplementationOnce(() => first.promise)
++      .mockResolvedValue(response);
++    submit("serial-1", llm);
++    submit("serial-2", llm);
++    expect(getSessionExtractionStats(sessionId)).toMatchObject({
++      attempts: 0,
++      reserved: 2,
++      queued: 2,
++    });
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    first.resolve(response);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledTimes(2);
++    expect(llm.mock.calls[1][0]).toContain("## Existing Memory\n\nSynthetic preference");
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(2);
++  });
++  it("bounds model failures and duplicate retries by the admission budget", async () => {
++    const llm = vi.fn(async (_prompt: string) => {
++      throw new Error("synthetic provider failure");
++    });
++    for (let i = 0; i < 20; i++) {
++      submit(`failure-${i}`, llm);
++      await vi.runAllTimersAsync();
++    }
++    submit("failure-0", llm);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledTimes(5);
++    expect(getSessionExtractionStats(sessionId)).toMatchObject({
++      attempts: 5,
++      reserved: 0,
++      completed: 0,
++      failed: 5,
++    });
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(0);
++  });
++  it("does not revive a cleared session from a scheduled callback", async () => {
++    const llm = submit("scheduled-clear");
++    clearSessionCursor(sessionId);
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(0);
++  });
++  it("fences late results and queued jobs after clear and recreation", async () => {
++    const first = deferred<string>();
++    const llm = vi.fn((_prompt: string) => first.promise);
++    const sink = vi.fn(async () => undefined);
++    submit("old-generation-1", llm, { onMemoryExtracted: sink });
++    submit("old-generation-2", llm, { onMemoryExtracted: sink });
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    clearSessionCursor(sessionId);
++    const fresh = submit("fresh-generation");
++    await vi.runAllTimersAsync();
++    expect(fresh).toHaveBeenCalledOnce();
++    first.resolve(response);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    expect(sink).not.toHaveBeenCalled();
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(1);
++    expect(getOrCreateCursor(sessionId).lastExtractedMessageId).toBe("fresh-generation");
++  });
++  it("refunds canceled reservations before model dispatch", async () => {
++    const abort = new AbortController();
++    const llm = vi.fn(async (_prompt: string) => response);
++    submit("cancel-queued", llm, { abortSignal: abort.signal });
++    for (let i = 0; i < 4; i++) {
++      submit(`queued-${i}`, llm);
++    }
++    abort.abort();
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledTimes(4);
++    submit("replacement", llm);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledTimes(5);
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(5);
++  });
++  it("charges cancellation after dispatch but suppresses writes and cursor advancement", async () => {
++    const abort = new AbortController();
++    const first = deferred<string>();
++    const sink = vi.fn(async () => undefined);
++    const llm = vi.fn((_prompt: string) => first.promise);
++    submit("cancel-active", llm, { abortSignal: abort.signal, onMemoryExtracted: sink });
++    await vi.runAllTimersAsync();
++    abort.abort();
++    first.resolve(response);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    expect(sink).not.toHaveBeenCalled();
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(0);
++    expect(getSessionExtractionStats(sessionId)).toMatchObject({
++      attempts: 1,
++      reserved: 0,
++      completed: 0,
++      canceled: 1,
++    });
++  });
++  it("drops canceled accumulated windows rather than mining them later", async () => {
++    const abort = new AbortController();
++    const llm = vi.fn(async (_prompt: string) => response);
++    submit("pending-abort", llm, {
++      recentMessages: pair("canceled-content"),
++      abortSignal: abort.signal,
++    });
++    abort.abort();
++    submit("pending-new", llm, { recentMessages: pair("replacement-content") });
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    submit("pending-new-2", llm, { recentMessages: pair("replacement-content-2") });
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    expect(llm.mock.calls[0][0]).not.toContain("canceled-content");
++  });
++  it("bounds callback failures and never retries partial writes", async () => {
++    const sink = vi.fn(async () => {
++      throw new Error("synthetic sink failure");
++    });
++    const llm = vi.fn(async (_prompt: string) => response);
++    for (let i = 0; i < 10; i++) {
++      submit(`sink-failure-${i}`, llm, { onMemoryExtracted: sink });
++    }
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledTimes(5);
++    expect(sink).toHaveBeenCalledTimes(5);
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(0);
++  });
++  it("checks the generation again between persistence callbacks", async () => {
++    const sink = vi.fn(async () => {
++      clearSessionCursor(sessionId);
++    });
++    submit(
++      "callback-clear",
++      vi.fn(async (_prompt: string) =>
++        JSON.stringify([
++          { content: "First synthetic", category: "fact", confidence: 0.9 },
++          { content: "Second synthetic", category: "fact", confidence: 0.9 },
++        ]),
++      ),
++      { onMemoryExtracted: sink },
++    );
++    await vi.runAllTimersAsync();
++    expect(sink).toHaveBeenCalledOnce();
++    expect(getOrCreateCursor(sessionId).extractionCount).toBe(0);
++  });
++  it("keeps bounded rolling whole-window history through a long tool sequence", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    for (let i = 0; i < 50; i++) {
++      submit(`tool-pending-${i}`, llm, {
++        recentMessages: pair(`tool-pending-${i}`),
++        lastTurnHadToolCalls: true,
++      });
++    }
++    submit("tool-final", llm, { recentMessages: pair("tool-final") });
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    const prompt = llm.mock.calls[0][0];
++    expect(prompt).not.toContain("question tool-pending-0\n");
++    expect(prompt).toContain("Synthetic question tool-final");
++    expect((prompt.match(/Synthetic (question|answer)/g) ?? []).length).toBe(64);
++  });
++});
++
++describe("memory candidate compatibility and rejection boundaries", () => {
++  it("retains legacy source calls with exact-window fallback dedup", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    submit("legacy", llm, { windowId: undefined });
++    submit("legacy", llm, { windowId: undefined });
++    await vi.runAllTimersAsync();
++    submit("legacy", llm, { windowId: undefined });
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    expect(getOrCreateCursor(sessionId).lastExtractedMessageId).toMatch(/^turn-/);
++  });
++  it("does not collect manually written-memory or disabled windows", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    submit("manual", llm, { userWroteMemoryThisTurn: true });
++    submit("disabled", llm, {
++      config: {
++        enabled: false,
++        maxExtractionsPerSession: 5,
++        minNewMessagesForExtraction: 4,
++        skipIfUserWroteMemory: true,
++      },
++    });
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    expect(getSessionExtractionStats(sessionId).pendingMessages).toBe(0);
++  });
++  it("rejects oversized windows and still processes later bounded input", async () => {
++    const llm = vi.fn(async (_prompt: string) => response);
++    submit("oversized", llm, { recentMessages: [{ role: "user", content: "x".repeat(64_001) }] });
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    submit("normal-sized", llm);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++  });
++  it("does not let callers mutate a pending or scheduled prompt after admission", async () => {
++    const messages = [...pair("original-a"), ...pair("original-b")];
++    const llm = submit("immutable", undefined, { recentMessages: messages });
++    messages[0].content = "unexpected mutation";
++    messages.splice(1);
++    await vi.runAllTimersAsync();
++    expect(llm.mock.calls[0][0]).toContain("Synthetic question original-a");
++    expect(llm.mock.calls[0][0]).not.toContain("unexpected mutation");
++  });
++  it("respects cancellation on any contributing window before a combined dispatch", async () => {
++    const abort = new AbortController();
++    const llm = vi.fn(async (_prompt: string) => response);
++    submit("combined-1", llm, { recentMessages: pair("combined-1"), abortSignal: abort.signal });
++    submit("combined-2", llm, { recentMessages: pair("combined-2") });
++    abort.abort();
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    expect(getSessionExtractionStats(sessionId)).toMatchObject({
++      attempts: 0,
++      reserved: 0,
++      canceled: 1,
++      completed: 0,
++    });
++  });
++  it("classifies a rejected model promise after cancellation as canceled and still charges it", async () => {
++    const abort = new AbortController();
++    let reject!: (reason: Error) => void;
++    const llm = vi.fn(
++      (_prompt: string) =>
++        new Promise<string>((_resolve, fail) => {
++          reject = fail;
++        }),
++    );
++    submit("cancel-rejected", llm, { abortSignal: abort.signal });
++    await vi.runAllTimersAsync();
++    abort.abort();
++    reject(new Error("synthetic cancellation"));
++    await vi.runAllTimersAsync();
++    expect(getSessionExtractionStats(sessionId)).toMatchObject({
++      attempts: 1,
++      reserved: 0,
++      canceled: 1,
++      failed: 0,
++      completed: 0,
++    });
++  });
++});
++
++it("keeps telemetry errors outside extraction accounting", async () => {
++  vi.mocked(addSentryBreadcrumb).mockImplementationOnce(() => {
++    throw new Error("synthetic breadcrumb failure");
++  });
++  submit("telemetry-sync");
++  await vi.runAllTimersAsync();
++  vi.mocked(trackEvent).mockRejectedValueOnce(new Error("synthetic analytics failure"));
++  submit("telemetry-async");
++  await vi.runAllTimersAsync();
++  expect(getSessionExtractionStats(sessionId)).toMatchObject({
++    attempts: 2,
++    completed: 2,
++    failed: 0,
++    reserved: 0,
++  });
++});
++
++describe("post-turn existing-memory/write gates", () => {
++  it("shares filtered authorized recall as bounded extraction context", async () => {
++    const { existingMemory: memory } = formatRecalledMemoryContext([
++      { score: 0.9, content: "Existing authorized preference" },
++      { score: 0.1, content: "Low-score excluded preference" },
++      { score: 0.8, content: "x".repeat(20_000) },
++    ]);
++    expect(memory.length).toBe(16_000);
++    expect(memory).toContain("Existing authorized preference");
++    expect(memory).not.toContain("Low-score excluded preference");
++    const llm = vi.fn(async (_prompt: string) => response);
++    attempt("recall-1", llm, { memory });
++    attempt("recall-2", llm, { memory });
++    await vi.runAllTimersAsync();
++    expect(llm.mock.calls[0][0]).toContain("## Existing Memory\n- Existing authorized preference");
++  });
++  it.each(["remember", "brain_remember", "forget", "update_entity"])(
++    "conservatively excludes explicit %s tool attempts from later accumulated extraction",
++    async (toolName) => {
++      const llm = vi.fn(async (_prompt: string) => response);
++      attempt("memory-write-attempt", llm, { tool: true, toolName });
++      attempt("after-write-1", llm);
++      await vi.runAllTimersAsync();
++      expect(llm).not.toHaveBeenCalled();
++      attempt("after-write-2", llm);
++      await vi.runAllTimersAsync();
++      expect(llm).toHaveBeenCalledOnce();
++      expect(llm.mock.calls[0][0]).not.toContain("Synthetic question memory-write-attempt");
++    },
++  );
++});
+diff --git a/src/memory/extract-memories.retention.test.ts b/src/memory/extract-memories.retention.test.ts
+new file mode 100644
+index 00000000000..4d841539833
+--- /dev/null
++++ b/src/memory/extract-memories.retention.test.ts
+@@ -0,0 +1,209 @@
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
++import {
++  clearSessionCursor,
++  getOrCreateCursor,
++  getSessionExtractionStats,
++  maybeExtractMemories,
++} from "./extract-memories-runner.js";
++const mocks = vi.hoisted(() => ({ warn: vi.fn() }));
++vi.mock("../infra/posthog.js", () => ({ trackEvent: vi.fn() }));
++vi.mock("../infra/sentry.js", () => ({ addSentryBreadcrumb: vi.fn() }));
++vi.mock("../logging/subsystem.js", () => ({
++  createSubsystemLogger: () => ({ warn: mocks.warn, debug: vi.fn(), info: vi.fn() }),
++}));
++const ids = new Set<string>();
++const id = (value: string) => {
++  const name = `retention-${value}`;
++  ids.add(name);
++  return name;
++};
++const duration = 30 * 60 * 1000;
++const response = JSON.stringify([
++  { content: "Synthetic durable fact", category: "fact", confidence: 0.9 },
++]);
++function submit(
++  sessionId: string,
++  llmCall = vi.fn(async (_prompt: string) => response),
++  windowId = "window-1",
++  onMemoryExtracted = vi.fn(async () => undefined),
++) {
++  maybeExtractMemories({
++    sessionId,
++    windowId,
++    lastTurnHadToolCalls: false,
++    newMessageCount: 4,
++    userWroteMemoryThisTurn: false,
++    existingMemory: "",
++    recentMessages: [
++      { role: "user", content: "First synthetic question" },
++      { role: "assistant", content: "First answer" },
++      { role: "user", content: "Second synthetic question" },
++      { role: "assistant", content: "Second answer" },
++    ],
++    llmCall,
++    onMemoryExtracted,
++  });
++  return llmCall;
++}
++function fill(count: number, prefix = "fill") {
++  for (let i = 0; i < count; i++) {
++    getOrCreateCursor(id(`${prefix}-${i}`));
++  }
++}
++beforeEach(() => {
++  vi.useFakeTimers();
++  vi.setSystemTime(0);
++  mocks.warn.mockClear();
++});
++afterEach(() => {
++  for (const sessionId of ids) {
++    clearSessionCursor(sessionId);
++  }
++  ids.clear();
++  vi.useRealTimers();
++});
++
++describe("bounded retained extraction generations", () => {
++  it("caps retention at256 and declines new admission/getter growth without exceptions", async () => {
++    fill(256);
++    const existing = getOrCreateCursor(id("fill-0"));
++    const overflow = id("overflow");
++    const llm = submit(overflow);
++    await vi.runAllTimersAsync();
++    expect(llm).not.toHaveBeenCalled();
++    expect(getSessionExtractionStats(overflow)).toMatchObject({
++      tracked: false,
++      retainedSessions: 256,
++      attempts: 0,
++    });
++    expect(getOrCreateCursor(overflow)).not.toBe(getOrCreateCursor(overflow));
++    expect(getOrCreateCursor(id("fill-0"))).toBe(existing);
++  });
++  it("lazily expires idle states after30min on admission and starts a new budget generation", async () => {
++    const old = id("expired");
++    const llm = submit(old);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledOnce();
++    const oldCursor = getOrCreateCursor(old);
++    fill(255);
++    vi.setSystemTime(duration + 1);
++    const replacement = id("replacement");
++    const next = submit(replacement);
++    await vi.runAllTimersAsync();
++    expect(next).toHaveBeenCalledOnce();
++    expect(getSessionExtractionStats(replacement)).toMatchObject({
++      tracked: true,
++      retainedSessions: 1,
++    });
++    expect(getOrCreateCursor(old)).not.toBe(oldCursor);
++    expect(getSessionExtractionStats(old)).toMatchObject({ attempts: 0, completed: 0 });
++    const again = submit(old);
++    await vi.runAllTimersAsync();
++    expect(again).toHaveBeenCalledOnce();
++  });
++  it("never expires running or queued generations or resets their paid budget", async () => {
++    const active = id("active");
++    let resolve!: (value: string) => void;
++    const pending = new Promise<string>((done) => {
++      resolve = done;
++    });
++    const llm = vi
++      .fn<(prompt: string) => Promise<string>>()
++      .mockImplementationOnce(() => pending)
++      .mockResolvedValue(response);
++    submit(active, llm, "first");
++    submit(active, llm, "second");
++    await vi.runAllTimersAsync();
++    const cursor = getOrCreateCursor(active);
++    fill(255);
++    vi.setSystemTime(duration + 1);
++    submit(id("fresh-after-expiry"));
++    await vi.runAllTimersAsync();
++    expect(getOrCreateCursor(active)).toBe(cursor);
++    expect(getSessionExtractionStats(active)).toMatchObject({
++      attempts: 1,
++      reserved: 1,
++      queued: 1,
++    });
++    resolve(response);
++    await vi.runAllTimersAsync();
++    expect(llm).toHaveBeenCalledTimes(2);
++    expect(getSessionExtractionStats(active)).toMatchObject({
++      attempts: 2,
++      completed: 2,
++      reserved: 0,
++    });
++  });
++  it("refreshes last activity on completion rather than expiring a long-running result immediately", async () => {
++    const active = id("completion");
++    let resolve!: (value: string) => void;
++    const llm = vi.fn(
++      (_prompt: string) =>
++        new Promise<string>((done) => {
++          resolve = done;
++        }),
++    );
++    submit(active, llm);
++    await vi.runAllTimersAsync();
++    vi.setSystemTime(duration * 2);
++    resolve(response);
++    await vi.runAllTimersAsync();
++    const cursor = getOrCreateCursor(active);
++    vi.setSystemTime(duration * 2 + 1);
++    submit(id("trigger-sweep"));
++    await vi.runAllTimersAsync();
++    expect(getOrCreateCursor(active)).toBe(cursor);
++    expect(getSessionExtractionStats(active).attempts).toBe(1);
++  });
++  it("refreshes idle retention on accepted windows without dispatching tool turns", async () => {
++    const waiting = id("accepted-window");
++    const addToolWindow = (windowId: string) =>
++      maybeExtractMemories({
++        sessionId: waiting,
++        windowId,
++        lastTurnHadToolCalls: true,
++        newMessageCount: 1,
++        userWroteMemoryThisTurn: false,
++        existingMemory: "",
++        recentMessages: [{ role: "user", content: "Synthetic pending question" }],
++        llmCall: vi.fn(async () => response),
++      });
++    addToolWindow("first");
++    const cursor = getOrCreateCursor(waiting);
++    vi.setSystemTime(duration - 1);
++    addToolWindow("second");
++    vi.setSystemTime(duration + 1);
++    submit(id("window-refresh-sweep"));
++    await vi.runAllTimersAsync();
++    expect(getOrCreateCursor(waiting)).toBe(cursor);
++    expect(getSessionExtractionStats(waiting).pendingMessages).toBe(2);
++  });
++  it("preserves the late-completion fence and returns capacity after clear", async () => {
++    const active = id("late");
++    let resolve!: (value: string) => void;
++    const sink = vi.fn(async () => undefined);
++    const llm = vi.fn(
++      (_prompt: string) =>
++        new Promise<string>((done) => {
++          resolve = done;
++        }),
++    );
++    submit(active, llm, "old", sink);
++    await vi.runAllTimersAsync();
++    fill(255);
++    expect(getSessionExtractionStats(id("full-denied")).tracked).toBe(false);
++    clearSessionCursor(active);
++    const next = submit(active, undefined, "new");
++    await vi.runAllTimersAsync();
++    expect(next).toHaveBeenCalledOnce();
++    resolve(response);
++    await vi.runAllTimersAsync();
++    expect(sink).not.toHaveBeenCalled();
++    expect(getSessionExtractionStats(active)).toMatchObject({
++      tracked: true,
++      retainedSessions: 256,
++      attempts: 1,
++      completed: 1,
++    });
++  });
++});
+diff --git a/src/security/explicit-secret-redaction.test.ts b/src/security/explicit-secret-redaction.test.ts
+new file mode 100644
+index 00000000000..ffda045f092
+--- /dev/null
++++ b/src/security/explicit-secret-redaction.test.ts
+@@ -0,0 +1,17 @@
++import { expect, it } from "vitest";
++import { redactExplicitSecretText } from "./explicit-secret-redaction.js";
++it("preserves and scans a large non-secret tool result without quadratic retries", () => {
++  const plain = "x".repeat(200_000);
++  const started = performance.now();
++  expect(redactExplicitSecretText(plain)).toEqual({ text: plain, redactions: 0 });
++  expect(performance.now() - started).toBeLessThan(5000);
++});
++it("still redacts assignments at token boundaries after long prose and JSON prefixes", () => {
++  const plain = "x".repeat(100_000);
++  expect(redactExplicitSecretText(plain + " TOKEN=synthetic-secret").text).toBe(
++    plain + " TOKEN=[REDACTED]",
++  );
++  expect(
++    redactExplicitSecretText('{"API_KEY":"synthetic-secret","recordId":"normal-id"}').text,
++  ).toBe('{"API_KEY":"[REDACTED]","recordId":"normal-id"}');
++});
+diff --git a/src/security/explicit-secret-redaction.ts b/src/security/explicit-secret-redaction.ts
+new file mode 100644
+index 00000000000..211d3115dc1
+--- /dev/null
++++ b/src/security/explicit-secret-redaction.ts
+@@ -0,0 +1,85 @@
++/** Mandatory, configuration-independent redaction for explicit credential evidence. */
++export const SECRET_REDACTION = "[REDACTED]";
++
++// Preserve the existing egress vocabulary; deliberately avoid entropy/long-ID heuristics.
++const SECRET_SHAPES: RegExp[] = [
++  /\b\d{5,}:[A-Za-z0-9_-]{20,}\b/g,
++  /1\/\/0[A-Za-z0-9_/-]{20,}/g,
++  /\bsk-or-[A-Za-z0-9-]{20,}\b/g,
++  /\bsk-ant-[A-Za-z0-9_-]{20,}\b/g,
++  /\bsk-[A-Za-z0-9]{20,}\b/g,
++  /\bgh[posru]_[A-Za-z0-9]{20,}\b/g,
++  /\bgithub_pat_[A-Za-z0-9_]{20,}\b/g,
++  /\bxox[baprs]-[A-Za-z0-9-]{10,}\b/g,
++  /\bAKIA[0-9A-Z]{16}\b/g,
++  /\bAIza[0-9A-Za-z_-]{30,}\b/g,
++  /\bBearer\s+[A-Za-z0-9._\-+=]{18,}\b/gi,
++  /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]+?-----END [A-Z ]*PRIVATE KEY-----/g,
++];
++
++function isSecretKey(key: string): boolean {
++  const normalized = key
++    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
++    .replace(/[-.]/g, "_")
++    .toUpperCase();
++  return /(?:^|_)(?:TOKEN|PAT|API_KEY|SECRETS?_KEY|PASSWORD|PASSWD|SECRET|ACCESS_KEY)$/.test(
++    normalized,
++  );
++}
++
++// Match scalar assignments only. In particular, a schema's TOKEN: {type: ...}
++// and required: ["TOKEN"] are not credential values. The token-start boundary
++// prevents retrying a long optional key prefix at every character in plain
++// tool output (quadratic scanning on capped, non-secret text).
++const ASSIGNMENT_RE =
++  /(?<![\w.-])((?:["']?)((?:[A-Za-z_][\w.-]*?)?(?:TOKEN|PAT|API[_-]?KEY|SECRETS?[_-]?KEY|PASSWORD|PASSWD|SECRET|ACCESS[_-]?KEY))(?:["']?)\s*[:=]\s*)("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[^\s"'`<>{},;&\])]+)/gi;
++const CREDENTIAL_URL_RE = /\b([a-z][a-z0-9+.-]*:\/\/)([^\s/@]+:[^\s/@]+)@/gi;
++
++export function redactExplicitSecretText(input: string): { text: string; redactions: number } {
++  let redactions = 0;
++  let text = input.replace(CREDENTIAL_URL_RE, (_whole, scheme: string) => {
++    redactions += 1;
++    return `${scheme}${SECRET_REDACTION}@`;
++  });
++  text = text.replace(ASSIGNMENT_RE, (whole, prefix: string, key: string, value: string) => {
++    if (
++      !isSecretKey(key) ||
++      value === SECRET_REDACTION ||
++      value === `"${SECRET_REDACTION}"` ||
++      value === `'${SECRET_REDACTION}'`
++    ) {
++      return whole;
++    }
++    redactions += 1;
++    const quote = value[0] === '"' || value[0] === "'" ? value[0] : "";
++    return `${prefix}${quote}${SECRET_REDACTION}${quote}`;
++  });
++  for (const pattern of SECRET_SHAPES) {
++    text = text.replace(pattern, () => {
++      redactions += 1;
++      return SECRET_REDACTION;
++    });
++  }
++  return { text, redactions };
++}
++
++/** Redact text values and explicit credential fields, retaining structured schemas. */
++export function redactExplicitSecretDetails(value: unknown): unknown {
++  if (typeof value === "string") {
++    return redactExplicitSecretText(value).text;
++  }
++  if (Array.isArray(value)) {
++    return value.map(redactExplicitSecretDetails);
++  }
++  if (!value || typeof value !== "object" || Object.getPrototypeOf(value) !== Object.prototype) {
++    return value;
++  }
++  return Object.fromEntries(
++    Object.entries(value).map(([key, child]) => [
++      key,
++      isSecretKey(key) && typeof child === "string"
++        ? SECRET_REDACTION
++        : redactExplicitSecretDetails(child),
++    ]),
++  );
++}
+diff --git a/src/tts/tts.output-boundaries.test.ts b/src/tts/tts.output-boundaries.test.ts
+new file mode 100644
+index 00000000000..ca979df77cf
+--- /dev/null
++++ b/src/tts/tts.output-boundaries.test.ts
+@@ -0,0 +1,308 @@
++import { rmSync } from "node:fs";
++import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
++import type { ReplyPayload } from "../auto-reply/types.js";
++import type { MinionConfig } from "../config/config.js";
++
++const boundary = vi.hoisted(() => ({
++  summary: vi.fn(),
++  speech: vi.fn(),
++  openai: vi.fn(),
++  cleanup: vi.fn(),
++}));
++vi.mock("@minion-stack/drone", () => ({
++  defineDrone: vi.fn(),
++  runDrone: vi.fn(() => {
++    throw Error("Provider forbidden");
++  }),
++}));
++vi.mock("node-edge-tts", () => ({ EdgeTTS: vi.fn() }));
++vi.mock("../agents/models/model-selection.js", () => ({
++  buildModelAliasIndex: vi.fn(),
++  resolveDefaultModelForAgent: vi.fn(),
++  resolveModelRefFromString: vi.fn(),
++}));
++vi.mock("../drones/host.js", () => ({
++  createGatewayDroneHost: vi.fn(() => {
++    throw Error("Provider forbidden");
++  }),
++}));
++vi.mock("../globals.js", () => ({
++  logVerbose: vi.fn(),
++  shouldLogVerbose: () => false,
++}));
++vi.mock("../channels/plugins/index.js", () => ({
++  normalizeChannelId: (channel: string) => channel,
++}));
++vi.mock("../agents/pi-embedded/pi-embedded-helpers.js", () => ({
++  sanitizeUserFacingText: (text: string) => text,
++}));
++vi.mock("./tts-core.js", async (importOriginal) => ({
++  ...(await importOriginal<typeof import("./tts-core.js")>()),
++  summarizeText: boundary.summary,
++  edgeTTS: boundary.speech,
++  openaiTTS: boundary.openai,
++  elevenLabsTTS: vi.fn(() => {
++    throw Error("Provider forbidden");
++  }),
++  voxtralTTS: vi.fn(() => {
++    throw Error("Provider forbidden");
++  }),
++  scheduleCleanup: boundary.cleanup,
++}));
++import { clearAllDispatchers } from "../auto-reply/reply/dispatcher-registry.js";
++import { createReplyDispatcher } from "../auto-reply/reply/reply-dispatcher.js";
++import { maybeApplyTtsToPayload } from "./tts.js";
++
++const dsml =
++  '<｜DSML｜tool_calls><｜DSML｜invoke name="exec">unsafe</｜DSML｜invoke></｜DSML｜tool_calls>';
++const cfg = (auto: "always" | "tagged" | "off" = "always"): MinionConfig => ({
++  messages: {
++    tts: { auto, provider: "edge", prefsPath: "/synthetic-egm/no-prefs", maxTextLength: 4096 },
++  },
++});
++beforeEach(() => {
++  vi.clearAllMocks();
++  vi.stubGlobal(
++    "fetch",
++    vi.fn(() => {
++      throw Error("External network forbidden");
++    }),
++  );
++  boundary.speech.mockResolvedValue(undefined);
++  boundary.summary.mockResolvedValue({
++    summary: "A safe spoken summary.",
++    inputLength: 2000,
++    outputLength: 22,
++  });
++  boundary.openai.mockImplementation(() => {
++    throw Error("Unexpected speech provider");
++  });
++});
++afterEach(() => {
++  for (const [directory] of boundary.cleanup.mock.calls) {
++    rmSync(directory, { recursive: true, force: true });
++  }
++  vi.unstubAllGlobals();
++  clearAllDispatchers();
++});
++
++function expectSafe(text: string) {
++  expect(text).not.toContain("synthetic-secret");
++  expect(text).not.toContain("DSML");
++  expect(text).not.toContain("<tool_calls>");
++  expect(text).not.toContain("unsafe");
++}
++
++describe("ZI-2 actual maybeApplyTtsToPayload speech boundary", () => {
++  it("sanitizes caption and speech input before an immediate provider call", async () => {
++    const output = await maybeApplyTtsToPayload({
++      payload: { text: `Readable explanation. TOKEN=synthetic-secret ${dsml}` },
++      cfg: cfg(),
++      kind: "final",
++    });
++    expect(boundary.speech).toHaveBeenCalledOnce();
++    expectSafe(boundary.speech.mock.calls[0][0].text);
++    expectSafe(output.text!);
++    expect(output.text).toContain("invalid tool protocol");
++  });
++  it("parses legitimate TTS text and provider directives before sanitizing separate speech", async () => {
++    const config = cfg("tagged");
++    config.messages!.tts!.provider = "openai";
++    config.messages!.tts!.openai = { apiKey: "synthetic-provider-config" };
++    const output = await maybeApplyTtsToPayload({
++      payload: {
++        text: `Clean caption for the user. [[tts:provider=edge]][[tts:text]]Spoken override TOKEN=synthetic-secret ${dsml}[[/tts:text]]`,
++      },
++      cfg: config,
++      kind: "final",
++    });
++    expect(boundary.speech).toHaveBeenCalledOnce();
++    expect(boundary.openai).not.toHaveBeenCalled();
++    expectSafe(boundary.speech.mock.calls[0][0].text);
++    expect(boundary.speech.mock.calls[0][0].text).toContain("invalid tool protocol");
++    expect(output.text).toContain("invalid tool protocol");
++  });
++  it("sanitizes before summarization and again after a contaminated model summary", async () => {
++    boundary.summary.mockResolvedValue({
++      summary: `Summary TOKEN=synthetic-secret ${dsml}`,
++      inputLength: 2000,
++      outputLength: 100,
++    });
++    await maybeApplyTtsToPayload({
++      payload: {
++        text:
++          `Long safe explanation. TOKEN=synthetic-secret <tool_calls>unsafe</tool_calls> ` +
++          "More context. ".repeat(160),
++      },
++      cfg: cfg(),
++      kind: "final",
++    });
++    expect(boundary.summary).toHaveBeenCalledOnce();
++    expectSafe(boundary.summary.mock.calls[0][0].text);
++    expect(boundary.speech).toHaveBeenCalledOnce();
++    expectSafe(boundary.speech.mock.calls[0][0].text);
++    expect(boundary.speech.mock.calls[0][0].text).toContain("invalid tool protocol");
++  });
++  it("does not speak an ordinary protocol-only generated summary", async () => {
++    boundary.summary.mockResolvedValue({ summary: "<tool_calls>unsafe</tool_calls>" });
++    await maybeApplyTtsToPayload({
++      payload: { text: "Long explanation. ".repeat(160) },
++      cfg: cfg(),
++      kind: "final",
++    });
++    expect(boundary.summary).toHaveBeenCalledOnce();
++    expect(boundary.speech).not.toHaveBeenCalled();
++  });
++  it("redacts separate caption and spoken credentials without discarding legitimate directives", async () => {
++    const output = await maybeApplyTtsToPayload({
++      payload: {
++        text: "Caption TOKEN=synthetic-secret [[tts:text]]Spoken PASSWORD=synthetic-secret details.[[/tts:text]]",
++      },
++      cfg: cfg("tagged"),
++      kind: "final",
++    });
++    expectSafe(output.text!);
++    expect(output.text).toContain("Caption TOKEN=[REDACTED]");
++    expectSafe(boundary.speech.mock.calls[0][0].text);
++    expect(boundary.speech.mock.calls[0][0].text).toContain("Spoken PASSWORD=[REDACTED]");
++  });
++  it("retains normal spoken override semantics", async () => {
++    const output = await maybeApplyTtsToPayload({
++      payload: { text: "Visible caption. [[tts]]Distinct spoken explanation.[[/tts]]" },
++      cfg: cfg("tagged"),
++      kind: "final",
++    });
++    expect(output.text).toBe("Visible caption.");
++    expect(boundary.speech.mock.calls[0][0].text).toBe("Distinct spoken explanation.");
++  });
++  it("preserves disabled TTS and media-only payloads without provider calls", async () => {
++    const media = { mediaUrl: "/synthetic/image.png" };
++    expect(await maybeApplyTtsToPayload({ payload: media, cfg: cfg(), kind: "final" })).toEqual(
++      media,
++    );
++    await maybeApplyTtsToPayload({
++      payload: { text: "Normal disabled reply." },
++      cfg: cfg("off"),
++      kind: "final",
++    });
++    expect(boundary.summary).not.toHaveBeenCalled();
++    expect(boundary.speech).not.toHaveBeenCalled();
++  });
++});
++
++async function dispatch(payload: ReplyPayload, kind: "final" | "block" = "final") {
++  const delivered = vi.fn(async (_payload: ReplyPayload, _info: { kind: string }) => undefined);
++  const onSkip = vi.fn();
++  const dispatcher = createReplyDispatcher({ deliver: delivered, onSkip });
++  const accepted =
++    kind === "final" ? dispatcher.sendFinalReply(payload) : dispatcher.sendBlockReply(payload);
++  dispatcher.markComplete();
++  await dispatcher.waitForIdle();
++  return { accepted, delivered, onSkip };
++}
++
++describe("ZI-3 actual dispatcher terminal-final boundary", () => {
++  it.each([
++    "<tool_calls>unsafe</tool_calls>",
++    '```tool_calls\n[{"name":"exec","input":{}}]\n```',
++    dsml,
++  ])("delivers a bounded failure for protocol-only final: %s", async (text) => {
++    const output = await dispatch({ text });
++    expect(output.accepted).toBe(true);
++    expect(output.delivered).toHaveBeenCalledOnce();
++    expect(output.delivered.mock.calls[0][0].text).toContain("invalid tool protocol");
++    expect(output.onSkip).not.toHaveBeenCalled();
++  });
++  it.each(["NO_REPLY", "HEARTBEAT_OK", "[[reply_to_current]]", "[[tts]]", "[VOTE_UP]"])(
++    "preserves intentional suppression: %s",
++    async (text) => {
++      const output = await dispatch({ text });
++      expect(output.accepted).toBe(false);
++      expect(output.delivered).not.toHaveBeenCalled();
++    },
++  );
++  it("preserves media-only and channel-data-only replies", async () => {
++    for (const payload of [
++      { mediaUrl: "/synthetic/voice.ogg" },
++      { text: "<tool_calls>unsafe</tool_calls>", mediaUrl: "/synthetic/image.png" },
++      { text: "[[reply_to_current]]", channelData: { fixture: { id: 1 } } },
++    ]) {
++      const output = await dispatch(payload);
++      expect(output.accepted).toBe(true);
++      expect(output.delivered).toHaveBeenCalledOnce();
++      expect(output.delivered.mock.calls[0][0].text ?? "").not.toContain("invalid tool protocol");
++    }
++  });
++  it("does not let a configured response prefix hide a protocol-only final", async () => {
++    const delivered = vi.fn(async (_payload: ReplyPayload, _info: { kind: string }) => undefined);
++    const dispatcher = createReplyDispatcher({ deliver: delivered, responsePrefix: "[Agent]" });
++    dispatcher.sendFinalReply({ text: "<tool_calls>unsafe</tool_calls>" });
++    dispatcher.markComplete();
++    await dispatcher.waitForIdle();
++    expect(delivered.mock.calls[0][0].text).toContain("invalid tool protocol");
++  });
++  it("preserves ordinary sanitizer behavior for nonterminal block output", async () => {
++    const output = await dispatch({ text: "<tool_calls>unsafe</tool_calls>" }, "block");
++    expect(output.accepted).toBe(false);
++    expect(output.delivered).not.toHaveBeenCalled();
++  });
++  it("rejects a mixed DSML success receipt instead of preserving its unsupported claim", async () => {
++    const output = await dispatch({ text: `Booked successfully. ${dsml}` });
++    const text = output.delivered.mock.calls[0][0].text;
++    expect(text).toContain("invalid tool protocol");
++    expect(text).not.toContain("Booked successfully");
++  });
++  it("retains prose around ordinary tags and redacts supported credentials", async () => {
++    const output = await dispatch({
++      text: `Available summary. <tool_calls>unsafe</tool_calls> TOKEN=synthetic-secret`,
++    });
++    const delivered = output.delivered.mock.calls[0][0].text!;
++    expectSafe(delivered);
++    expect(delivered).toContain("Available summary.");
++    expect(delivered).toContain("[REDACTED]");
++  });
++});
++
++describe("Stage9 sequential TTS-to-dispatch terminal contract", () => {
++  it.each(["off", "always", "tagged"] as const)(
++    "retains explicit protocol failure through TTS %s then real dispatch",
++    async (auto) => {
++      for (const text of ["<tool_calls>unsafe</tool_calls>", dsml]) {
++        const transformed = await maybeApplyTtsToPayload({
++          payload: { text },
++          cfg: cfg(auto),
++          kind: "final",
++        });
++        const result = await dispatch(transformed);
++        expect(result.accepted).toBe(true);
++        expect(result.delivered).toHaveBeenCalledOnce();
++        expect(result.delivered.mock.calls[0][0].text).toContain("invalid tool protocol");
++        if (auto === "off") {
++          expect(boundary.speech).not.toHaveBeenCalled();
++        }
++      }
++    },
++  );
++  it("keeps disabled-TTS control silence and media/channel data through the real dispatcher", async () => {
++    for (const text of ["[[reply_to_current]]", "[[tts]]", "NO_REPLY"]) {
++      const output = await dispatch(
++        await maybeApplyTtsToPayload({ payload: { text }, cfg: cfg("off"), kind: "final" }),
++      );
++      expect(output.accepted).toBe(false);
++      expect(output.delivered).not.toHaveBeenCalled();
++    }
++    for (const payload of [
++      { mediaUrl: "/synthetic/image.png" },
++      { text: "<tool_calls>unsafe</tool_calls>", mediaUrl: "/synthetic/voice.ogg" },
++      { text: "[[reply_to_current]]", channelData: { fixture: { id: 1 } } },
++    ]) {
++      const output = await dispatch(
++        await maybeApplyTtsToPayload({ payload, cfg: cfg("off"), kind: "final" }),
++      );
++      expect(output.accepted).toBe(true);
++      expect(output.delivered).toHaveBeenCalledOnce();
++      expect(output.delivered.mock.calls[0][0].text ?? "").not.toContain("invalid tool protocol");
++    }
++    expect(boundary.speech).not.toHaveBeenCalled();
++  });
++});
+diff --git a/src/tts/tts.ts b/src/tts/tts.ts
+index 4b565859896..31c49278005 100644
+--- a/src/tts/tts.ts
++++ b/src/tts/tts.ts
+@@ -12,6 +12,11 @@ import { tmpdir } from "node:os";
+ import path from "node:path";
+ import type { ReplyPayload } from "../auto-reply/types.js";
+ import { stripMarkdown } from "../channels/impl/line/markdown-to-line.js";
++import {
++  containsProviderToolProtocol,
++  sanitizeOutboundText,
++  sanitizeTerminalFinalText,
++} from "../channels/outbound-sanitizer.js";
+ import { normalizeChannelId } from "../channels/plugins/index.js";
+ import type { ChannelId } from "../channels/plugins/types.js";
+ import type { MinionConfig } from "../config/config.js";
+@@ -585,6 +590,8 @@ function formatTtsProviderError(provider: TtsProvider, err: unknown): string {
+   return `${provider}: ${error.message}`;
+ }
+ 
++// TODO(handoff): qualify direct speech callers that bypass maybeApplyTtsToPayload;
++// see proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md (C06/C07).
+ export async function textToSpeech(params: {
+   text: string;
+   cfg: MinionConfig;
+@@ -765,6 +772,8 @@ export async function textToSpeech(params: {
+   };
+ }
+ 
++// TODO(handoff): apply and qualify the explicit output policy for direct telephony
++// callers; see proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ export async function textToSpeechTelephony(params: {
+   text: string;
+   cfg: MinionConfig;
+@@ -891,12 +900,21 @@ export async function maybeApplyTtsToPayload(params: {
+     prefsPath,
+     sessionAuto: params.ttsAuto,
+   });
++  const hasMedia = Boolean(params.payload.mediaUrl) || (params.payload.mediaUrls?.length ?? 0) > 0;
++  const hasChannelData = Boolean(
++    params.payload.channelData && Object.keys(params.payload.channelData).length > 0,
++  );
++  const sanitizeVisible =
++    params.kind === "final" && !hasMedia && !hasChannelData
++      ? sanitizeTerminalFinalText
++      : sanitizeOutboundText;
+   if (autoMode === "off") {
+     // Still strip [[tts]] tags from text even when TTS is disabled,
+     // so users never see raw directives in channel output.
+     const rawText = params.payload.text ?? "";
+     const offDirectives = parseTtsDirectives(rawText, config.modelOverrides);
+-    const offCleaned = offDirectives.cleanedText.trim();
++    const offInput = containsProviderToolProtocol(rawText) ? rawText : offDirectives.cleanedText;
++    const offCleaned = sanitizeVisible(offInput).text.trim();
+     if (offCleaned !== rawText.trim()) {
+       return { ...params.payload, text: offCleaned.length > 0 ? offCleaned : undefined };
+     }
+@@ -909,10 +927,12 @@ export async function maybeApplyTtsToPayload(params: {
+     logVerbose(`TTS: ignored directive overrides (${directives.warnings.join("; ")})`);
+   }
+ 
+-  const cleanedText = directives.cleanedText;
+-  const trimmedCleaned = cleanedText.trim();
+-  const visibleText = trimmedCleaned.length > 0 ? trimmedCleaned : "";
+-  const ttsText = directives.ttsText?.trim() || visibleText;
++  // Parse valid directives first, then guard both independent text surfaces.
++  // A DSML envelope in either surface invalidates the whole response, including
++  // any success claim outside the envelope.
++  const visibleInput = containsProviderToolProtocol(text) ? text : directives.cleanedText;
++  const visibleText = sanitizeVisible(visibleInput).text.trim();
++  const ttsText = sanitizeVisible(directives.ttsText?.trim() || visibleText).text.trim();
+ 
+   const nextPayload =
+     visibleText === text.trim()
+@@ -966,7 +986,8 @@ export async function maybeApplyTtsToPayload(params: {
+           config,
+           timeoutMs: config.timeoutMs,
+         });
+-        textForAudio = summary.summary;
++        // The model-generated summary is a new untrusted egress surface.
++        textForAudio = sanitizeOutboundText(summary.summary).text;
+         wasSummarized = true;
+         if (textForAudio.length > config.maxTextLength) {
+           logVerbose(
+@@ -982,7 +1003,8 @@ export async function maybeApplyTtsToPayload(params: {
+     }
+   }
+ 
+-  textForAudio = stripMarkdown(textForAudio).trim(); // strip markdown for TTS (### → "hashtag" etc.)
++  // Guard again after formatting, which can reveal previously escaped syntax.
++  textForAudio = sanitizeOutboundText(stripMarkdown(textForAudio)).text.trim();
+   if (textForAudio.length < 10) {
+     return nextPayload;
+   }

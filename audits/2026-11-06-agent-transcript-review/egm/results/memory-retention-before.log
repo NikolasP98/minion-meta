@@ -1,0 +1,110 @@
+
+ RUN  v4.1.10 /tmp/minion-agent-egm-20261106-971jwsz3
+
+ ❯ tests/memory-retention.test.ts (6 tests | 3 failed) 29ms
+     × caps retention at256 and declines new admission/getter growth without exceptions 12ms
+     × lazily expires idle states after30min on admission and starts a new budget generation 8ms
+     × preserves the late-completion fence and returns capacity after clear 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/memory-retention.test.ts > bounded retained extraction generations > caps retention at256 and declines new admission/getter growth without exceptions
+AssertionError: expected "vi.fn()" to not be called at all, but actually been called 1 times
+
+Received:
+
+  1st vi.fn() call:
+
+    Array [
+      "You are a memory extraction agent. Analyze the conversation below and identify
+    durable facts worth remembering across sessions. Focus on:
+    - User preferences, habits, constraints
+    - Decisions made and their rationale
+    - Technical patterns or project details
+    - Recurring topics or themes
+    
+    Do NOT extract:
+    - Transient details (timestamps, filenames being worked on right now)
+    - Things already in the existing memory
+    - Obvious/generic information
+    
+    Return a JSON array of objects with: content (string), category (fact|preference|decision|pattern|todo), confidence (0.0-1.0).
+    Return an empty array [] if nothing is worth extracting.
+    
+    ## Existing Memory
+    (none)
+    
+    ## Conversation
+    user: First synthetic question
+    assistant: First answer
+    user: Second synthetic question
+    assistant: Second answer",
+    ]
+
+
+Number of calls: 1
+
+ ❯ tests/memory-retention.test.ts:23:81
+     21|   it("caps retention at256 and declines new admission/getter growth wi…
+     22|     fill(256); const existing = getOrCreateCursor(id("fill-0")); const…
+     23|     const llm = submit(overflow); await vi.runAllTimersAsync(); expect…
+       |                                                                                 ^
+     24|     expect(getSessionExtractionStats(overflow)).toMatchObject({tracked…
+     25|     expect(getOrCreateCursor(overflow)).not.toBe(getOrCreateCursor(ove…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  tests/memory-retention.test.ts > bounded retained extraction generations > lazily expires idle states after30min on admission and starts a new budget generation
+AssertionError: expected { reserved: +0, attempts: 1, …(5) } to match object { tracked: true, retainedSessions: 1 }
+(7 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "retainedSessions": 1,
+-   "tracked": true,
++   "attempts": 1,
++   "canceled": 0,
++   "completed": 1,
++   "failed": 0,
++   "pendingMessages": 0,
++   "queued": 0,
++   "reserved": 0,
+  }
+
+ ❯ tests/memory-retention.test.ts:32:89
+     30|     const oldCursor = getOrCreateCursor(old); fill(255);
+     31|     vi.setSystemTime(duration + 1); const replacement = id("replacemen…
+     32|     expect(next).toHaveBeenCalledOnce(); expect(getSessionExtractionSt…
+       |                                                                                         ^
+     33|     expect(getOrCreateCursor(old)).not.toBe(oldCursor); expect(getSess…
+     34|     const again = submit(old); await vi.runAllTimersAsync(); expect(ag…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  tests/memory-retention.test.ts > bounded retained extraction generations > preserves the late-completion fence and returns capacity after clear
+AssertionError: expected undefined to be false // Object.is equality
+
+- Expected:
+false
+
++ Received:
+undefined
+
+ ❯ tests/memory-retention.test.ts:64:66
+     62|     const llm = vi.fn((_prompt: string) => new Promise<string>(done =>…
+     63|     submit(active, llm, "old", sink); await vi.runAllTimersAsync(); fi…
+     64|     expect(getSessionExtractionStats(id("full-denied")).tracked).toBe(…
+       |                                                                  ^
+     65|     const next = submit(active, undefined, "new"); await vi.runAllTime…
+     66|     resolve(response); await vi.runAllTimersAsync(); expect(sink).not.…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+   Start at  02:45:35
+   Duration  408ms (transform 116ms, setup 0ms, import 153ms, tests 29ms, environment 0ms)
+
