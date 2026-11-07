@@ -27,54 +27,56 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-07)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:3101` — Gate constrained capabilities before component mounting, audit token/method authority",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3101
-- `NikolasP98/minion-meta@dev rankings/index.json:3959` — Qualify separate-connection invoice/stock crash races in plan 10-03 before rollout",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3959
-- `NikolasP98/minion-meta@dev rankings/index.json:5154` — spec 045 T037/T038 hide (not lock) every surface behind this list",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5154
-- `NikolasP98/minion-meta@dev rankings/index.json:6087` — paidAmount sums every non-void line regardless of status",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6087
-- `NikolasP98/minion-meta@dev rankings/index.json:7620` — online payment link (Culqi / Mercado Pago) — no credentials yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7620
-- `NikolasP98/minion-meta@dev rankings/index.json:7685` — Retain tombstones until provider write-quiescence",
+- `NikolasP98/minion-meta@dev rankings/index.json:3133` — Gate constrained capabilities before component mounting, audit token/method authority",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3133
+- `NikolasP98/minion-meta@dev rankings/index.json:3991` — Qualify separate-connection invoice/stock crash races in plan 10-03 before rollout",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3991
+- `NikolasP98/minion-meta@dev rankings/index.json:4024` — scope word-frequency/sentiment/win-index rollups by owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4024
+- `NikolasP98/minion-meta@dev rankings/index.json:5219` — spec 045 T037/T038 hide (not lock) every surface behind this list",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5219
+- `NikolasP98/minion-meta@dev rankings/index.json:6152` — paidAmount sums every non-void line regardless of status",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6152
+- `NikolasP98/minion-meta@dev rankings/index.json:7685` — online payment link (Culqi / Mercado Pago) — no credentials yet",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7685
-- `NikolasP98/minion-meta@dev rankings/index.json:7717` — the existing provider JSON reader is not byte bounded before res.json()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7717
-- `NikolasP98/minion-meta@dev rankings/index.json:7952` — drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7952
-- `NikolasP98/minion-meta@dev rankings/index.json:13730` — Replace raw upstream error messages with an approved safe RPC projection",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13730
-- `NikolasP98/minion-meta@dev rankings/index.json:14025` — a full per-handler audit of the remaining requireAdmin'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14025
-- `NikolasP98/minion-meta@dev rankings/index.json:14057` — Add an explicitly reviewed indeterminate recovery policy",
+- `NikolasP98/minion-meta@dev rankings/index.json:7750` — Retain tombstones until provider write-quiescence",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7750
+- `NikolasP98/minion-meta@dev rankings/index.json:7782` — the existing provider JSON reader is not byte bounded before res.json()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7782
+- `NikolasP98/minion-meta@dev rankings/index.json:7984` — drop stk_items.fin_product_id + stk_items_org_fin_product_uniq",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7984
+- `NikolasP98/minion-meta@dev rankings/index.json:13762` — Replace raw upstream error messages with an approved safe RPC projection",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13762
+- `NikolasP98/minion-meta@dev rankings/index.json:14057` — a full per-handler audit of the remaining requireAdmin'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14057
-- `NikolasP98/minion-meta@dev rankings/index.json:15345` — spec 045 A4 deletes the flag — make the audience unconditional there (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15345
-- `NikolasP98/minion-meta@dev rankings/index.json:15409` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15409
-- `NikolasP98/minion-meta@dev rankings/index.json:15671` — drop with the legacy audience in spec 045 A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15671
-- `NikolasP98/minion-meta@dev rankings/index.json:15703` — host error-log scrubbing is separate from the sanitized",
+- `NikolasP98/minion-meta@dev rankings/index.json:14089` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14089
+- `NikolasP98/minion-meta@dev rankings/index.json:15377` — spec 045 A4 deletes the flag — make the audience unconditional there (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15377
+- `NikolasP98/minion-meta@dev rankings/index.json:15441` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15441
+- `NikolasP98/minion-meta@dev rankings/index.json:15703` — drop with the legacy audience in spec 045 A4 (T054)",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15703
-- `NikolasP98/minion-meta@dev rankings/index.json:18409` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18409
-- `NikolasP98/minion-meta@dev rankings/index.json:19026` — runs after (not inside) the document write — a failure here leaves...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19026
-- `NikolasP98/minion-meta@dev rankings/index.json:19058` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19058
-- `NikolasP98/minion-meta@dev rankings/index.json:19122` — HC-017 — while a copy is being dragged only THAT copy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19122
-- `NikolasP98/minion-meta@dev rankings/index.json:22147` — onArtifactCallback/onChoice are NOT routed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22147
-- `NikolasP98/minion-meta@dev rankings/index.json:22213` — Reconcile uploaded blobs after failed/concurrent import creation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22213
-- `NikolasP98/minion-meta@dev rankings/index.json:23431` — \"reopened mid-exit — cancel the pending close\"",
+- `NikolasP98/minion-meta@dev rankings/index.json:15735` — host error-log scrubbing is separate from the sanitized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15735
+- `NikolasP98/minion-meta@dev rankings/index.json:18376` — spec §3.2b allows a reschedule outside working hours",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18376
+- `NikolasP98/minion-meta@dev rankings/index.json:18993` — runs after (not inside) the document write — a failure here leaves...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18993
+- `NikolasP98/minion-meta@dev rankings/index.json:19025` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19025
+- `NikolasP98/minion-meta@dev rankings/index.json:19089` — HC-017 — while a copy is being dragged only THAT copy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19089
+- `NikolasP98/minion-meta@dev rankings/index.json:22114` — onArtifactCallback/onChoice are NOT routed",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22114
+- `NikolasP98/minion-meta@dev rankings/index.json:22180` — Reconcile uploaded blobs after failed/concurrent import creation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22180
+- `NikolasP98/minion-meta@dev rankings/index.json:23398` — \"reopened mid-exit — cancel the pending close\"",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23398
+- `NikolasP98/minion-meta@dev rankings/index.json:23431` — no org business-hours/timezone table exists yet",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23431
-- `NikolasP98/minion-meta@dev rankings/index.json:23464` — no org business-hours/timezone table exists yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23464
-- `NikolasP98/minion-meta@dev rankings/index.json:23562` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23562
+- `NikolasP98/minion-meta@dev rankings/index.json:23529` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23529
 - `NikolasP98/minion-meta@dev rankings/index.json:25062` — HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25062
 - `NikolasP98/minion-meta@dev rankings/index.json:25128` — HC-028 hand-rolled wizard modal... no Escape path at all",
@@ -105,17 +107,17 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35896
 - `NikolasP98/minion-meta@dev rankings/index.json:36486` — no dedicated unit test for this function's memoisation",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36486
-- `NikolasP98/minion-meta@dev rankings/index.json:40492` — UI-002 — this test and \"Staff and event-type filters narrow the' (cut off)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40492
-- `NikolasP98/minion-meta@dev rankings/index.json:40964` — when attachment_links (spec S1) lands, delete this",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40964
-- `NikolasP98/minion-meta@dev rankings/index.json:43380` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43380
-- `NikolasP98/minion-meta@dev rankings/index.json:43448` — additional custom fields lose their mailto link"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43448
-- `NikolasP98/minion-meta@dev rankings/index.json:43480` — FilterValue (component) ⇄ TableFilterValue (kit) is a generic"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43480
-- `NikolasP98/minion-meta@dev rankings/index.json:44289` — brief-debloat-c §3 asked for this to be wrapped in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44289
-- `NikolasP98/minion-meta@dev rankings/index.json:44321` — SUPABASE_SERVICE_ROLE_KEY is generated by supabase start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44321
+- `NikolasP98/minion-meta@dev rankings/index.json:40524` — UI-002 — this test and \"Staff and event-type filters narrow the' (cut off)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40524
+- `NikolasP98/minion-meta@dev rankings/index.json:40996` — when attachment_links (spec S1) lands, delete this",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40996
+- `NikolasP98/minion-meta@dev rankings/index.json:43379` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43379
+- `NikolasP98/minion-meta@dev rankings/index.json:43447` — additional custom fields lose their mailto link"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43447
+- `NikolasP98/minion-meta@dev rankings/index.json:43479` — FilterValue (component) ⇄ TableFilterValue (kit) is a generic"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43479
+- `NikolasP98/minion-meta@dev rankings/index.json:44288` — brief-debloat-c §3 asked for this to be wrapped in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44288
+- `NikolasP98/minion-meta@dev rankings/index.json:44320` — SUPABASE_SERVICE_ROLE_KEY is generated by supabase start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44320
