@@ -10,7 +10,7 @@ Owner approval: F1–F4 and F6, with retesting. No task below authorizes backup 
 ## Phase 2: Foundation
 
 - [ ] T003 Preserve gate custody, signing and canonical source scope in Gateway `.no-mistakes.yaml` and the release proposal.
-- [ ] T004 Recover Hub committed and failed-phase changes without dropping fixes in `src/server/services/scheduling-bookings.assistant.test.ts` and `src/server/services/finance-summary.correctness.test.ts`.
+- [x] T004 Recover Hub committed and failed-phase changes without dropping fixes in `src/server/services/scheduling-bookings.assistant.test.ts` and `src/server/services/finance-summary.correctness.test.ts`.
 
 ## Phase 3: US1 — Trust output and admission
 
@@ -21,16 +21,16 @@ Independent criterion: real connection, extraction, normalization, speech and na
 - [ ] T007 [US1] Reproduce and fix F2 at the real `extractAssistantText` boundary and its streaming/final consumers.
 - [ ] T008 [US1] Reproduce and fix F3 channel metadata preservation in `src/tts/tts.ts` and existing reply normalization.
 - [ ] T009 [US1] Reproduce and fix F6 whole-response speech validity in `src/tts/tts.ts`, including clean overrides and off/tagged/always modes.
-- [ ] T010 [US1] Reproduce and fix F4 redaction/cap ordering in `src/agents/sessions/session-tool-result-guard.ts` with native persisted output.
+- [x] T010 [US1] Reproduce and fix F4 redaction/cap ordering in `src/agents/sessions/session-tool-result-guard.ts` with native persisted output.
 - [ ] T011 [US1] Run focused and nearby Gateway tests, typecheck/build/check and independent review; record exact source in release evidence.
 
 ## Phase 4: US2 — Validate business requests
 
 Independent criterion: synthetic request-to-SQL receipts demonstrate preview/confirmation rejection, no partial effects, open-day success and correct local finance buckets/cache behavior.
 
-- [ ] T012 [US2] Retain Hub HR closure precedence and finance timezone fixes in `src/server/services/scheduling-bookings.service.ts` and the existing finance service.
+- [x] T012 [US2] Retain Hub HR closure precedence and finance timezone fixes in `src/server/services/scheduling-bookings.service.ts` and the existing finance service.
 - [ ] T013 [US2] Retain request-to-SQL regressions in `src/server/services/scheduling-bookings.assistant.test.ts` and `src/server/services/finance-summary.correctness.test.ts`; verify negative controls detect the old bugs.
-- [ ] T014 [US2] Complete final Hub check/build/test/architecture and required remote CI; record any native-role limitations in the release proposal.
+- [x] T014 [US2] Complete final Hub check/build/test/architecture and required remote CI; record any native-role limitations in the release proposal.
 
 ## Phase 5: US3 — Preserve bounded continuity
 
@@ -53,3 +53,7 @@ Setup precedes implementation. US1 and US2 are separate repositories and may pro
 ## Implementation strategy
 
 First close the explicitly approved Gateway failures without broadening backup scope. Preserve the already reviewed Hub fixes and exact test evidence. Then qualify final sources and present concrete PRs for human merge. Deployment/runtime verification is the final phase, not an assumed consequence of local success.
+
+## Qualification receipt
+
+Hub tasks T004/T012/T014 are evidenced by recovered signed source, the passed local gate and PR637 head `0664b4a0` with all13remote checks green (8971tests,289skips). T010 is evidenced by real SessionManager disk/reopen cap/redaction tests at recovered Gateway correction `7dcd7c207`; the session guard is unchanged in later boundary fixes. Remaining US1 and final Gateway qualification stay open because R10/R11 are active. Production authority/concurrency handoffs and human merge/deployment are not completed by these receipts.
