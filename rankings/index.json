@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T01:02:57.864Z",
+	"generatedAt": "2026-11-07T01:17:32.307Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4395,8 +4395,8 @@
 			"repo": "minion_hub",
 			"title": "#637 fix(assistant): validate bookings and use the business timezone",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/637",
-			"sourceUpdatedAt": "2026-11-06T20:48:00Z",
-			"sourceFingerprint": "8d6d542a862fca8b54a7ab01a375767644ba9d625cf1d19e67809198d7603a83",
+			"sourceUpdatedAt": "2026-11-07T01:13:08Z",
+			"sourceFingerprint": "71468fcc1dff85f8153d51fb56befdb76f004de78a2308b20ba7f09f538b46b4",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -4413,15 +4413,15 @@
 			"relatedKeys": [
 				"pr:minion-meta#954"
 			],
-			"rationale": "Adds real validation for booking/finance agent queries with broad passing CI but explicitly depends on the unresolved release-contract PR #954 and admits production RLS/deployed behavior are unverified.",
+			"rationale": "Fixes real booking/finance validation gaps with extensive passing CI evidence, though production RLS/deployed behavior remains unverified and still needs human merge.",
 			"evidence": [
-				"8,971 tests pass with 289 skips across 13 checks",
-				"release contract cited as NikolasP98/minion-meta#954",
-				"PR text: 'Production RLS and deployed behavior are not established by these checks'"
+				"8,971 tests pass with 289 skips across 13 checks at head 0664b4a0",
+				"targets master; human review and merge required, triggers production deployment",
+				"Production RLS and deployed behavior are not established by these checks"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T21:18:27.228Z"
+			"scoredAt": "2026-11-07T01:17:32.129Z"
 		},
 		{
 			"key": "pr:minion-meta#884",
@@ -10114,6 +10114,39 @@
 			"scoredAt": "2026-11-05T17:48:16.339Z"
 		},
 		{
+			"key": "pr:minion_hub#628",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
+			"sourceUpdatedAt": "2026-11-07T01:06:02Z",
+			"sourceFingerprint": "db27a506a607f8ef1c4496b17c7a92a2ca97010dfc28f28407c46489a28e0c22",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Spec-backed nav restructuring with route-contract updates and new tests across multiple files appears bounded and ready for review.",
+			"evidence": [
+				"references specs/046-hub-nav-home-landing-sections slice S3",
+				"route contract endpoints 163→165, redirects 11→13",
+				"new tests: landing.test.ts, org-landing-page.test.ts, ModuleSwitcher.mounted.test.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T01:17:32.129Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13317,42 +13350,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:53:42.655Z"
-		},
-		{
-			"key": "pr:minion_hub#628",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#628 feat(nav): Inicio first and / resolves to your landing page; /home becomes /chat",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/628",
-			"sourceUpdatedAt": "2026-11-07T00:09:00Z",
-			"sourceFingerprint": "a254089c6940a3cdc594b42139d3987e902276e313ce544877dcc82318b00d7a",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#626",
-				"pr:minion_hub#630"
-			],
-			"rationale": "Foundational routing/landing-page rework is well-specified, heavily tested, and open, making it ready to ship despite moderate urgency.",
-			"evidence": [
-				"spec 046 S3, route endpoints 163→165, redirects 11→13",
-				"new landing.ts resolver consumed by other slices",
-				"status: open, multiple new test files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T00:17:53.096Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
@@ -19147,41 +19144,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T01:48:21.814Z"
-		},
-		{
-			"key": "pr:minion-meta#954",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#954 docs(agents): review tested transcript guardrails and release gates",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/954",
-			"sourceUpdatedAt": "2026-11-06T20:35:41Z",
-			"sourceFingerprint": "ae84abc261c4553fd1349815c38d670bfafe41ab691d1adad794bcf1fc9066f7",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#637"
-			],
-			"rationale": "This release-gate documentation PR is still draft with acknowledged unresolved guardrail/HR issues and a failed no-mistakes run, so it is not yet actionable despite being cited by #637 as the release contract.",
-			"evidence": [
-				"PR text: 'additional guardrail and HR availability issues; fixes and owner decisions are still pending'",
-				"'no-mistakes documentation run stopped before validation' due to a rebase-policy violation",
-				"'branch remains a draft until those requirements are satisfied'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T21:18:27.228Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
@@ -35969,6 +35931,41 @@
 			"scoredAt": "2026-11-05T17:48:16.339Z"
 		},
 		{
+			"key": "pr:minion-meta#954",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#954 docs(agents): review tested transcript guardrails and release gates",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/954",
+			"sourceUpdatedAt": "2026-11-07T01:09:18Z",
+			"sourceFingerprint": "1b77d42df240173dba7d9b8f7118bf9bfeef126c6f7befdc3adb9e644611927b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#637"
+			],
+			"rationale": "Self-referential governance/documentation draft with a blocked quality checklist and multiple explicitly open items makes it not yet actionable despite serving as evidence for pr:minion_hub#637.",
+			"evidence": [
+				"branch remains a draft until requirements are satisfied",
+				"no-mistakes documentation run stopped before validation due to rebase-onto-main issue",
+				"Exact committed-head checks, security/data human approval and merge... remain open"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T01:17:32.129Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-datatable-server-mode-test-gap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -43510,38 +43507,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:49:50.455Z"
-		},
-		{
-			"key": "run:minion_hub#42317470560",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/42317470560",
-			"sourceUpdatedAt": "2026-11-07T00:19:57Z",
-			"sourceFingerprint": "c6f9f1af554cb0f0e480c1f3e29557a376187d0bbd407e1b96ac71d077005c3d",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run on master with no finding or defect attached, so there is nothing to action as a goal.",
-			"evidence": [
-				"push on master",
-				"in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T00:22:08.414Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
