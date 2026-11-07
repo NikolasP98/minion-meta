@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T04:19:08.342Z",
+	"generatedAt": "2026-11-07T04:48:02.302Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2048,21 +2048,22 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 9,
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Safety-critical amendment to prevent unreviewed resend of real customer messages during gateway upgrade/rollback, with concrete fixture-based qualification already defined.",
+			"relatedKeys": [
+				"proposal:2026-10-09-performance-release-qualification"
+			],
+			"rationale": "This safety fence prevents resending 51 real ambiguous legacy delivery entries during gateway upgrades and is already in the implementing stage with concrete executable qualification steps.",
 			"evidence": [
 				"51 unversioned V1 queue entries found in production (47 WhatsApp, 4 Telegram)",
-				"status implementing with explicit executable qualification steps",
-				"binds deployment to an exact reviewed image"
+				"status implementing with explicit fixture/recovery qualification steps"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
+			"scoredAt": "2026-11-07T04:48:02.125Z"
 		},
 		{
 			"key": "pr:minion_hub#466",
@@ -2324,6 +2325,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T06:18:18.520Z"
+		},
+		{
+			"key": "proposal:2026-10-09-performance-release-qualification",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Qualify and release the most progressed performance corrections",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-performance-release-qualification.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "515750c891df568144c04acddfa4cae5b43339898335c30590f222f2081c76d0",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-09-windows-release-qualification",
+				"spec:2026-10-09-delivery-upgrade-fence-spec"
+			],
+			"rationale": "This approved umbrella release is actively progressing with one merged sub-release and clearly enumerated remaining qualification gates.",
+			"evidence": [
+				"notification compatibility and optimized-policy release merged via Hub PR455 and deployed",
+				"remaining Gateway and disabled-worker gates recorded in QUALIFICATION.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T04:48:02.125Z"
 		},
 		{
 			"key": "proposal:2026-10-17-agent-dynamic-tools",
@@ -5023,41 +5059,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T02:47:12.585Z"
-		},
-		{
-			"key": "proposal:2026-10-09-windows-release-qualification",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Qualify Windows durable delivery and bounded script execution",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-windows-release-qualification.md",
-			"sourceUpdatedAt": "2026-10-09",
-			"sourceFingerprint": "1f5f9788bcfab4f484110460f3c1e0b5383592ba387d480b8fcee2f21450cfcc",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:2026-10-09-performance-release-qualification"
-			],
-			"rationale": "Concrete, currently-failing native Windows CI (63-66 test failures across multiple runs) blocks release on that platform and remains unresolved.",
-			"evidence": [
-				"Full DEV CI at d880c73b fails 63 Windows tests across nine files",
-				"PR306 eddcad9 failed 66 tests across 11 files on actual Windows",
-				"queue lease EPERM remains unresolved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-ci",
@@ -10215,6 +10216,38 @@
 			"scoredAt": "2026-11-01T18:47:07.155Z"
 		},
 		{
+			"key": "proposal:2026-10-09-hub-notification-worker-production-activation",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Qualify and activate a separately owned production notification worker",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-hub-notification-worker-production-activation.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "888dd293ed929d34ec00d351d4a1ebb76c8705471f43832e1d378c5b968d4017",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Production activation is explicitly out of scope for this release and blocked on an unresolved private-artifact-attestation entitlement, so the execution path isn't yet settled.",
+			"evidence": [
+				"required private-repo attestation entitlement has not been established",
+				"disabled-artifact gate passes but production activation remains outside this release"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T04:48:02.125Z"
+		},
+		{
 			"key": "spec:2026-08-03-crm-icp-score-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -10761,77 +10794,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T15:48:02.308Z"
-		},
-		{
-			"key": "proposal:2026-10-09-hub-notification-worker-production-activation",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Qualify and activate a separately owned production notification worker",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-hub-notification-worker-production-activation.md",
-			"sourceUpdatedAt": "2026-10-09",
-			"sourceFingerprint": "888dd293ed929d34ec00d351d4a1ebb76c8705471f43832e1d378c5b968d4017",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-09-notification-worker-disabled-artifact-spec"
-			],
-			"rationale": "Substantial remaining deployment work gated behind an in-progress disabled-artifact slice, with production activation explicitly out of scope for now.",
-			"evidence": [
-				"disabled staging gate passes but final exact-source builds and hosted qualification remain in progress",
-				"production activation remains outside this release",
-				"status in-spec"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
-		},
-		{
-			"key": "proposal:2026-10-09-performance-release-qualification",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Qualify and release the most progressed performance corrections",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-performance-release-qualification.md",
-			"sourceUpdatedAt": "2026-10-09",
-			"sourceFingerprint": "515750c891df568144c04acddfa4cae5b43339898335c30590f222f2081c76d0",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-09-windows-release-qualification",
-				"spec:2026-10-09-delivery-upgrade-fence-spec"
-			],
-			"rationale": "An umbrella proposal whose open sub-threads (Windows regressions, delivery fence) are tracked as separate catalog items in this same batch.",
-			"evidence": [
-				"Gateway PR296 retains the GW024 security hold",
-				"NOTIF019 rebase and FACES resource controls still open",
-				"Hub PR455 already merged and deployed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
 		},
 		{
 			"key": "proposal:2026-10-21-windows-qualification-kernel-containment",
@@ -11383,41 +11345,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:26:05.227Z"
-		},
-		{
-			"key": "spec:2026-10-09-notification-worker-disabled-artifact-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Stage an immutable disabled notification worker artifact",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-09-notification-worker-disabled-artifact-spec.md",
-			"sourceUpdatedAt": "2026-10-09",
-			"sourceFingerprint": "91eaa3c9dcad68d34682dca8401ba0d7703ba159831e9cbe105ac6d5f889b3fc",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-09-hub-notification-worker-production-activation"
-			],
-			"rationale": "Well-bounded, deliberately pre-activation artifact-staging spec with detailed invariants and in-progress implementation that reduces risk before the larger activation effort.",
-			"evidence": [
-				"deliberately stops before worker activation",
-				"no committed immutable worker manifest or installer exists yet",
-				"status implementing, security-tagged"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
 		},
 		{
 			"key": "spec:2026-10-23-harness-digest-spec",
@@ -15101,6 +15028,40 @@
 			"scoredAt": "2026-11-02T03:48:19.118Z"
 		},
 		{
+			"key": "proposal:2026-10-09-windows-release-qualification",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Qualify Windows durable delivery and bounded script execution",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-windows-release-qualification.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "1f5f9788bcfab4f484110460f3c1e0b5383592ba387d480b8fcee2f21450cfcc",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-09-performance-release-qualification"
+			],
+			"rationale": "Native Windows CI still fails dozens of tests with an unresolved lease EPERM root cause, and the spec gives concrete next diagnostic steps.",
+			"evidence": [
+				"PR306 failed 66 tests across 11 files on actual Windows",
+				"queue lease EPERM remains unresolved; directory-flush hypothesis under native diagnosis"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T04:48:02.125Z"
+		},
+		{
 			"key": "proposal:ci-minion-site-claude-code",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18033,6 +17994,38 @@
 			"scoredAt": "2026-11-04T05:17:31.935Z"
 		},
 		{
+			"key": "proposal:2026-10-09-gateway-startup-heap-profiling",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Gateway startup heap phase profiling",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-gateway-startup-heap-profiling.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "67bdac7fae160286bd3e3c1fd7f2ccf8d611d486e535bc35a3f0f0dfbbb9dc74",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A fully specified, provider-free phase-profiling harness is ready to build to resolve an open heap-attribution gap behind a bounded operational override.",
+			"evidence": [
+				"DEV image exceeded former V8 heap allowance before listen, bounded override in place",
+				"status draft with detailed phase/fixture/acceptance-gate design but no implementation yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T04:48:02.125Z"
+		},
+		{
 			"key": "proposal:2026-10-09-native-formatting-coverage",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18688,6 +18681,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:26:05.227Z"
+		},
+		{
+			"key": "spec:2026-10-09-notification-worker-disabled-artifact-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Stage an immutable disabled notification worker artifact",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-09-notification-worker-disabled-artifact-spec.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "91eaa3c9dcad68d34682dca8401ba0d7703ba159831e9cbe105ac6d5f889b3fc",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-09-hub-notification-worker-production-activation"
+			],
+			"rationale": "This disabled-artifact staging slice is a well-specified, in-progress prerequisite that unblocks the larger notification-worker activation without any live production risk.",
+			"evidence": [
+				"status implementing with detailed manifest/build/attestation invariants",
+				"explicitly stops before worker activation, no credentials or database lease involved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T04:48:02.125Z"
 		},
 		{
 			"key": "spec:2026-10-21-assistant-catalog-answer-and-history-polish-spec",
@@ -31198,39 +31225,6 @@
 			"scoredAt": "2026-11-02T14:23:31.465Z"
 		},
 		{
-			"key": "proposal:2026-10-09-gateway-startup-heap-profiling",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Gateway startup heap phase profiling",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-gateway-startup-heap-profiling.md",
-			"sourceUpdatedAt": "2026-10-09",
-			"sourceFingerprint": "67bdac7fae160286bd3e3c1fd7f2ccf8d611d486e535bc35a3f0f0dfbbb9dc74",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A speculative, still-draft profiling harness with no implementation evidence and no stated deadline beyond a past operational override.",
-			"evidence": [
-				"status draft",
-				"'current telemetry cannot assign the startup peak to a phase'",
-				"no network/provider calls, generated fixtures only - still a proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
-		},
-		{
 			"key": "proposal:2026-10-12-hub-catalog-composition-cache-staleness",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36013,6 +36007,38 @@
 			"scoredAt": "2026-11-02T05:19:34.658Z"
 		},
 		{
+			"key": "proposal:2026-10-09-gateway-native-formatter-reproducibility",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Reproduce native formatting during Gateway release qualification",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-gateway-native-formatter-reproducibility.md",
+			"sourceUpdatedAt": "2026-10-09",
+			"sourceFingerprint": "091378247b2a40103fc25d221c4e91e503feae0dce588a80fc19ddab2e5b078b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The release-gate correction already merged to Gateway DEV and passed its 29 hosted gates, closing the defect this proposal tracked.",
+			"evidence": [
+				"formatter correction merged to Gateway DEV as 740f after 29 hosted success/skip gates",
+				"current state explicitly says this closes the moving-formatter release-gate defect"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T04:48:02.125Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-1778568796",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39775,38 +39801,6 @@
 			"scoredAt": "2026-11-01T23:17:57.694Z"
 		},
 		{
-			"key": "proposal:2026-10-09-gateway-native-formatter-reproducibility",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Reproduce native formatting during Gateway release qualification",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-gateway-native-formatter-reproducibility.md",
-			"sourceUpdatedAt": "2026-10-09",
-			"sourceFingerprint": "091378247b2a40103fc25d221c4e91e503feae0dce588a80fc19ddab2e5b078b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The proposal's own 'Current state' says the described formatter release-gate defect already merged and closed, leaving no open work under this entry.",
-			"evidence": [
-				"formatter correction merged to Gateway DEV as 740f after 29 hosted gates",
-				"'This closes the moving-formatter release-gate defect described above'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T04:17:56.360Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-2187559393",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42820,6 +42814,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T21:18:27.228Z"
+		},
+		{
+			"key": "issue:minion-meta#964",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#964 [monitor:unstick] rank run d39f9bb9 (minion-meta): both ranking providers failed batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/964",
+			"sourceUpdatedAt": "2026-11-07T04:17:39Z",
+			"sourceFingerprint": "0368311fd3bb49b4f5c7fd6849aeed6735781dca3a5d4f356015cf29df959dd4",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#965"
+			],
+			"rationale": "Diagnosed as a transient bounded-provider failure safe to retry with no spec/code defect, matching the sibling run and better handled as one classifier-signature goal.",
+			"evidence": [
+				"diagnosis: safe to retry as-is, no spec or code fix needed",
+				"note explicitly pairs with run 52734259 (issue 965)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T04:48:02.125Z"
+		},
+		{
+			"key": "issue:minion-meta#965",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#965 [monitor:unstick] rank run 52734259 (minion-meta): claude invalid JSON then silent codex fallback, no further log",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/965",
+			"sourceUpdatedAt": "2026-11-07T04:18:14Z",
+			"sourceFingerprint": "a51778db8d98d38c73205fc999a7406380a3ba1e82b6679a8be8c0e3293ce900",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#964"
+			],
+			"rationale": "Same ranking-pipeline transient-failure pattern as #964 roughly 30 minutes apart; consolidating avoids duplicate low-value monitor tickets.",
+			"evidence": [
+				"identical note text to d39f9bb9, ~30 min apart",
+				"recommends adding a host classifier signature if the pattern recurs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T04:48:02.125Z"
 		},
 		{
 			"key": "proposal:2026-08-17-site-vendored-tgz-untracked",
