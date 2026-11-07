@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T05:47:18.521Z",
+	"generatedAt": "2026-11-07T06:17:37.278Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4468,6 +4468,38 @@
 			"scoredAt": "2026-11-04T19:48:49.112Z"
 		},
 		{
+			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The proposal documents a measured production cost problem (4k tokens/turn, misrouted searches) with a fully specified AS-IS/TO-BE/DELTA including file paths and named tests.",
+			"evidence": [
+				"measured envelope cost of ~16,096 chars (~4,000 tokens) per turn on production",
+				"delta table lists concrete files and corresponding test files per change"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T06:17:37.071Z"
+		},
+		{
 			"key": "proposal:2026-10-12-hub-pos-package-semantics",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5419,40 +5451,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T21:00:42.893Z"
-		},
-		{
-			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-16-hub-sandbox-builder-context-engineering"
-			],
-			"rationale": "Well-evidenced AS-IS/TO-BE/DELTA with measured per-turn token waste and a DELTA table showing tests and a live-probe already in place, so this is ready to ship.",
-			"evidence": [
-				"measured 4,000 token envelope prepended to every assistant turn",
-				"DELTA table cites turn-router.test.ts, assistant-router.service.test.ts (15 cases) and a live classifier probe"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T05:47:41.963Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3818988565",
@@ -18075,21 +18073,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 4
+				"implementation": 5
 			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:2026-10-12-hub-assistant-jev-context-router"
-			],
-			"rationale": "Four concrete AS-IS problems are documented with file-line evidence but the TO-BE mechanisms (S1-S4) are only sketched, not yet backed by delta/test evidence like the sibling JEV proposal.",
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Owner-directed, concretely scoped into four bounded mechanisms with specific files, though less proven via tests than the sibling JEV router proposal.",
 			"evidence": [
-				"AS-IS cites bridge.ts:98-109, tools.ts:391-408, dispatch.ts:12 TODO with no theme registered",
-				"TO-BE section truncated at S1 with no DELTA/test table yet"
+				"owner verbatim ask specifies scope and explicitly warns against over-engineering",
+				"AS-IS section cites exact files/lines (bridge.ts:98-109, pruner.ts:137, tools.ts:391-408)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T05:47:41.963Z"
+			"scoredAt": "2026-11-07T06:17:37.071Z"
 		},
 		{
 			"key": "proposal:2026-10-21-assistant-catalog-answer-and-history-polish",
@@ -21956,38 +21952,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-31T07:19:45.767Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Bounded, approved finding with a clear fix direction (add one integration test for merge-target wiring) and a named file/PR to anchor the work.",
-			"evidence": [
-				"TODO(handoff) marker: predicate tested, wiring untested, no integration test",
-				"status approved, fix direction specifies happy-path + one edge case test"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T05:47:41.963Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5c9adae4137a",
@@ -29857,6 +29821,38 @@
 			"scoredAt": "2026-11-02T14:27:17.452Z"
 		},
 		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 113446 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-11-07T06:12:31Z",
+			"sourceFingerprint": "20849518fd062bb77e69f6e7f8c7bd789a72cedb3746d6e7d57cfcdbf2263f98",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated upstream-sync notification dumping a raw commit list with no scoped task or decision to make.",
+			"evidence": [
+				"title cites '113446 new commit(s)' with no triage scope",
+				"body is a raw git log listing, not a defined deliverable"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T06:17:37.071Z"
+		},
+		{
 			"key": "issue:minion-meta#447",
 			"kind": "issue",
 			"stage": "proposal",
@@ -32111,6 +32107,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T08:49:47.645Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, narrowly-scoped handoff item with a clear definition of done requiring one integration test for an untested wiring path.",
+			"evidence": [
+				"status is approved with explicit definition of done",
+				"diagnosis names exact file and the untested integration gap (merge-target.test.ts)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T06:17:37.071Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-574186478082",
@@ -37422,39 +37450,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T21:47:35.706Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 113163 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-11-06T06:15:30Z",
-			"sourceFingerprint": "240543fb3451c9a225f81a2d8619890fa1f536fd85368e266ed4df261dd6da0c",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A bulk upstream-sync notification listing 100+ unrelated commits is not a scoped, actionable goal as written.",
-			"evidence": [
-				"title: 'Upstream sync: 113163 new commit(s) available'",
-				"summary lists dozens of unrelated fix/feat/perf/test commits with no specific scope or decision criteria",
-				"tags: upstream-sync"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-06T06:17:14.184Z"
 		},
 		{
 			"key": "issue:minion-meta#575",
