@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-07T02:17:32.080Z",
+	"generatedAt": "2026-11-07T02:47:12.763Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1192,38 +1192,6 @@
 			"scoredAt": "2026-11-02T03:53:30.172Z"
 		},
 		{
-			"key": "pr:minion-meta#887",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#887 docs(spec): 039 — data-source permissions: roles grant view/add/edit/remove per dataset, enforced on reads",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/887",
-			"sourceUpdatedAt": "2026-10-24T01:34:52Z",
-			"sourceFingerprint": "f97c7212c174d8892887fa5c46b75b2d3adf973979d4fd96d8760f4845df719b",
-			"score": 76,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Security/data-tagged dataset-RBAC spec with reproducible repo-wide findings and a slice plan that must land before companion spec 037 breaks today's safe equivalence.",
-			"evidence": [
-				"62 read with only the route guard in front",
-				"Today it is safe only because route prefix rules ≡ <module>:view; spec 037's page roles break that equivalence on purpose"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T02:35:44.887Z"
-		},
-		{
 			"key": "spec:2026-10-29-gateway-per-org-credentials-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2226,6 +2194,40 @@
 			"scoredAt": "2026-11-06T21:03:33.111Z"
 		},
 		{
+			"key": "pr:minion-meta#887",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#887 docs(spec): 039 — data-source permissions: roles grant view/add/edit/remove per dataset, enforced on reads",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/887",
+			"sourceUpdatedAt": "2026-10-24T01:34:52Z",
+			"sourceFingerprint": "f97c7212c174d8892887fa5c46b75b2d3adf973979d4fd96d8760f4845df719b",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#882"
+			],
+			"rationale": "Large security/data-tagged RBAC initiative with anchored research and slice plan, but spans many slices and requires owner approval per slice.",
+			"evidence": [
+				"security, data tags — owner approves the spec and merges every slice",
+				"126 page loads, 62 read with only route guard in front"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T02:47:12.585Z"
+		},
+		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2631,38 +2633,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T17:48:16.339Z"
-		},
-		{
-			"key": "pr:minion-meta#882",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#882 docs(spec): 034 one owner per WhatsApp number, with a confirmed handover between orgs",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/882",
-			"sourceUpdatedAt": "2026-10-24T01:00:32Z",
-			"sourceFingerprint": "37fa0bda215a2a5c06102e6b32e2504d41b38fd05d4ea8ab979608294cf4dbc6",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Spec 034 documents a concrete multi-tenant data-crossing bug across physical gateways with a clear AS-IS/TO-BE/handover design awaiting owner approval.",
-			"evidence": [
-				"gateway hydration sends no gateway id, so both netcup gateways load the MINION record's rows",
-				"Security-tagged: owner approves the spec before any code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T02:35:44.887Z"
 		},
 		{
 			"key": "pr:minion-meta#900",
@@ -4356,40 +4326,6 @@
 			"scoredAt": "2026-11-04T18:48:13.348Z"
 		},
 		{
-			"key": "pr:minion-meta#884",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#884 spec(035): durable agent sessions (reset.mode never) + /new for member-mode senders",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/884",
-			"sourceUpdatedAt": "2026-10-24T01:42:58Z",
-			"sourceFingerprint": "3320c257fcdab00983c629edca11e1f7be61f6ea586e42b9cb031f5c85e639a9",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"deploy:minion (gateway)"
-			],
-			"rationale": "Spec 035's durable-session redesign has owner decisions locked and its G3 slice is already merged.",
-			"evidence": [
-				"Owner decision (2026-10-23): \"stay away from the daily reset altogether and remove it\"",
-				"G3: member-mode senders may /new / /reset their own personal session only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T02:35:44.887Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5020,6 +4956,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T05:19:34.658Z"
+		},
+		{
+			"key": "pr:minion-meta#882",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#882 docs(spec): 034 one owner per WhatsApp number, with a confirmed handover between orgs",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/882",
+			"sourceUpdatedAt": "2026-10-24T01:00:32Z",
+			"sourceFingerprint": "37fa0bda215a2a5c06102e6b32e2504d41b38fd05d4ea8ab979608294cf4dbc6",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Security-tagged spec fixing crossed WhatsApp ownership data but still a draft awaiting owner approval before code.",
+			"evidence": [
+				"Security-tagged: owner approves the spec before any code",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T02:47:12.585Z"
 		},
 		{
 			"key": "proposal:2026-10-09-windows-release-qualification",
@@ -10494,6 +10462,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:18:51.064Z"
+		},
+		{
+			"key": "pr:minion-meta#884",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#884 spec(035): durable agent sessions (reset.mode never) + /new for member-mode senders",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/884",
+			"sourceUpdatedAt": "2026-10-24T01:42:58Z",
+			"sourceFingerprint": "3320c257fcdab00983c629edca11e1f7be61f6ea586e42b9cb031f5c85e639a9",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Clear owner-decided durable-session architecture change but still a draft spec with rollout steps pending.",
+			"evidence": [
+				"Owner decision (2026-10-23): remove daily reset, durable pi agents",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T02:47:12.585Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -34851,38 +34851,6 @@
 			"scoredAt": "2026-11-02T07:17:51.409Z"
 		},
 		{
-			"key": "pr:minion-meta#886",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#886 docs(spec): 038 — sidebar loading indicator on the section icon or header divider",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/886",
-			"sourceUpdatedAt": "2026-10-24T01:30:02Z",
-			"sourceFingerprint": "fa4920b34c3d6a390b8c4bae1fa841e8bc1fe01fd25ad518ca8f6dfb4d63f2c9",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A small, fully recon'd UI-polish spec with owner decisions set and a bounded single-PR task list ready to implement.",
-			"evidence": [
-				"Owner decisions (spec.md table): D1 icon-ring, D3 1px",
-				"Implementation = one hub PR ... ~12 files, no new route/RBAC/migration"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T02:35:44.887Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38028,6 +37996,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:16:44.492Z"
+		},
+		{
+			"key": "pr:minion-meta#886",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#886 docs(spec): 038 — sidebar loading indicator on the section icon or header divider",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/886",
+			"sourceUpdatedAt": "2026-10-24T01:30:02Z",
+			"sourceFingerprint": "fa4920b34c3d6a390b8c4bae1fa841e8bc1fe01fd25ad518ca8f6dfb4d63f2c9",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-scoped, low-risk UI spec with concrete implementation plan and no new route/RBAC/migration.",
+			"evidence": [
+				"~12 files, no new route/RBAC/migration",
+				"gates and 7-screenshot browser proof spelled out in tasks.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-07T02:47:12.585Z"
 		},
 		{
 			"key": "pr:minion-meta#946",
@@ -42620,20 +42620,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 7,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Self-diagnosed transient provider JSON-parse fault on one ranking batch, already recommended as safe to retry with prior batches intact, not an actionable product goal.",
+			"rationale": "Transient provider JSON-parse failure on one batch that already self-resolved via retry, already committed progress, not actionable work.",
 			"evidence": [
-				"This reads as a transient provider/infra fault ... not a spec or task-logic failure",
-				"Recommendation: safe to retry the run"
+				"batches 1-3 succeeded with same spec and inputs",
+				"safe to retry the run; only remaining pending batches need redo"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-10-31T02:35:44.887Z"
+			"scoredAt": "2026-11-07T02:47:12.585Z"
 		},
 		{
 			"key": "issue:minion-meta#928",
