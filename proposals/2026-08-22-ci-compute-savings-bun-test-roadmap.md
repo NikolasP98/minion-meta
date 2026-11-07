@@ -3,14 +3,34 @@ id: 2026-08-22-ci-compute-savings-bun-test-roadmap
 title: CI and Factory compute savings — evidence-first roadmap including Bun 1.4 test evaluation
 status: in-spec
 created: 2026-08-22
-updated: 2026-08-31
+updated: 2026-10-17
 spawned_spec: 2026-08-31-ci-compute-savings-bun-test-roadmap-spec
 repos: [minion, minion_hub, minion_site, minion-factory, minion-meta, minion-base, paperclip]
-tags: [infra, test]
+tags: [infra, data, test]
 approved_reason: "Ranked-queue supervisor approval: board-goal-v2 score 90/100, recommendation execute, readiness specification 9/10 and implementation 8/10; live admission threshold 80/100 and readiness threshold 6/10."
 ---
 
 # CI and Factory compute savings — evidence-first roadmap including Bun 1.4 test evaluation
+
+## Current review handoff — 2026-10-17
+
+The surviving child spec is now in changes-requested review. Original run
+`60bca3bb` failed after pass 2 because a same-provider fallback wrote the invalid
+verdict `degraded`; that result is not approval and must not be blindly replayed.
+Fresh Factory `43a174b2` research found a non-universal phase identity model,
+allocated legacy costs mislabeled as direct phase prices, omitted strict broker
+and containment transports, unhandled terminal/restart ordering, and an invalid
+simple-duration-sum invariant. The child's pass-2 review records R1-R6 with
+source anchors and proving cases; its S1 TODO(handoff) points back here.
+Later-slice Base paths and assumptions about already-present OpenRouter paths
+also need source refresh before planning those delivery units.
+
+The proposed additive persistence is a schema migration, so `data` now exposes
+the existing owner-approval-before-code and owner-merge gates. This is not a new
+board goal or authorization for code, migration or budget changes. Revise the
+measurement contract and Spec Kit plan/tasks while preserving the complete six
+original deltas, including the reconcile/low-risk/test-heavy acceptance subjects,
+all per-repository benchmark decisions and the guarded canary/no-canary decision.
 
 ## Problem in the user's words
 
