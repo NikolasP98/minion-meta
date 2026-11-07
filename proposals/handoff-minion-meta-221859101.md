@@ -89,18 +89,18 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27294
 - `NikolasP98/minion-meta@dev rankings/index.json:27429` — plan button gated on pos:create, but server-side",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27429
-- `NikolasP98/minion-meta@dev rankings/index.json:28708` — tagOptions is the FILTER's list — the event-scope registry ...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28708
-- `NikolasP98/minion-meta@dev rankings/index.json:28774` — Price cell still formats with formatMoney's PEN",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28774
-- `NikolasP98/minion-meta@dev rankings/index.json:28942` — plain limit, newest-first — no server pagination",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28942
-- `NikolasP98/minion-meta@dev rankings/index.json:32125` — drop with A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32125
-- `NikolasP98/minion-meta@dev rankings/index.json:32424` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32424
-- `NikolasP98/minion-meta@dev rankings/index.json:32457` — Legacy receipts cannot reconstruct a complete source manifest",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32457
+- `NikolasP98/minion-meta@dev rankings/index.json:28776` — tagOptions is the FILTER's list — the event-scope registry ...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28776
+- `NikolasP98/minion-meta@dev rankings/index.json:28842` — Price cell still formats with formatMoney's PEN",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28842
+- `NikolasP98/minion-meta@dev rankings/index.json:29010` — plain limit, newest-first — no server pagination",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29010
+- `NikolasP98/minion-meta@dev rankings/index.json:32193` — drop with A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32193
+- `NikolasP98/minion-meta@dev rankings/index.json:32492` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32492
+- `NikolasP98/minion-meta@dev rankings/index.json:32525` — Legacy receipts cannot reconstruct a complete source manifest",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32525
 - `NikolasP98/minion-meta@dev rankings/index.json:33379` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33379
 - `NikolasP98/minion-meta@dev rankings/index.json:35896` — delete this route in A4 (T054)",
