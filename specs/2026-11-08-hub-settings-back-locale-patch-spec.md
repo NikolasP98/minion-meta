@@ -1,8 +1,8 @@
 ---
 id: 2026-11-08-hub-settings-back-locale-patch-spec
 title: Settings Back keeps one locale prefix
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-11-08
@@ -79,3 +79,13 @@ That browser run then failed because the staff mobile fixture tried Plugins, whi
 On exact candidate 4c08f554487113aff65011fe85f92cb4c1e9c4c2, CI 42461195432 completed the Settings primary navigation, Back guard and mobile parity step successfully at 2026-11-08T08:10:05Z. The complete nine-checkpoint flow passed. The same candidate passed check/build and the full 9053-test unit suite (289 skipped). The general page-conformance comparison is blocked by its missing initial ledger; the credential-free browser matrix is still pending. No merge or production deployment is claimed yet.
 
 The final QA stack completed successfully and its retained Settings receipts contain all nine checkpoints with no repeated locale URL. Screenshots were inspected at desktop, intermediate and mobile sizes. The unrelated general conformance script reports “blocked: no ledger yet” and intentionally exits zero under the existing CI configuration; no general page-conformance pass is claimed. Candidate 4c08f55 and CI's synthetic merge eb13cee have the same verified Git tree 00feda2fbf787d7efb02a2d305783c94ef41ccab. The broader cross-browser matrix remains pending.
+
+## Release and completion
+
+All ten jobs in exact-source CI 42461195432 passed: 9053 unit tests (289 skipped), zero type-check errors/warnings, clean build, nine Settings browser checkpoints and 245 cross-browser cases across five projects. Independent Standards and scoped Spec/runtime review passed. The existing general page-conformance comparison remains unqualified because its initial ledger is absent; CI intentionally exits zero in that condition. It is not counted as a page-conformance pass.
+
+Hub #641 merged as 8259be3a4710cb5461453f4ddb420fac9e823436 at 2026-11-08T08:31:13Z using the owner's existing merge-override authorization. Its Git tree equals the tested candidate/CI merge tree: 00feda2fbf787d7efb02a2d305783c94ef41ccab. No branch-protection settings changed.
+
+Vercel production dpl_8MzvbaPk8fMeNEJY39fQzBPXktxD is READY for that exact merge revision. Both deployment metadata and the domain alias API identify hub.minion-ai.org as assigned to this deployment. At 08:35:38Z, anonymous read-only runtime checks returned the protected Settings document redirect (302), a separate Settings loader redirect payload (HTTP200), and /api/me401. Authenticated functionality was qualified against disposable seeded QA; no authenticated production mutation was used.
+
+The Settings browser-qualification follow-up is resolved by this patch. Its legacy in-code TODO points to this now-completed record; the earlier release's waived browser gate is not retroactively marked passing. Exact receipts, nine screenshots and telemetry proof limits are in ../evidence/2026-11-08-settings-back-locale/qualification.json and its sibling files.

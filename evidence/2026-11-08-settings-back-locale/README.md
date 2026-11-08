@@ -45,3 +45,13 @@ CI 42460375326 on 97f9bdd passed check/build and 9053 unit tests (289 skipped). 
 Both independent review axes passed: Standards and Spec. Temporary prototype wrappers were removed; the retained loopback-QA probe only reads state and is not imported by the production app.
 
 The final candidate's nine Settings browser checkpoints passed. [qualification.json](qualification.json) records the exact candidate, identical CI merge tree, result boundaries and eventual release. [settings-navigation/checks.json](settings-navigation/checks.json) retains exact URLs/document generations; screenshots are beside it. The QA stack job is green, but the repository's general conformance comparison reports missing initial ledger and exits zero by design. Its observed measurements are not treated as a general conformance pass or evidence of new regressions. The broader cross-browser job remains pending.
+
+## Release and completion
+
+All ten jobs in exact-source CI 42461195432 passed: 9053 unit tests (289 skipped), zero type-check errors/warnings, clean build, nine Settings browser checkpoints and 245 cross-browser cases across five projects. Independent Standards and scoped Spec/runtime review passed. The existing general page-conformance comparison remains unqualified because its initial ledger is absent; CI intentionally exits zero in that condition. It is not counted as a page-conformance pass.
+
+Hub #641 merged as 8259be3a4710cb5461453f4ddb420fac9e823436 at 2026-11-08T08:31:13Z using the owner's existing merge-override authorization. Its Git tree equals the tested candidate/CI merge tree: 00feda2fbf787d7efb02a2d305783c94ef41ccab. No branch-protection settings changed.
+
+Vercel production dpl_8MzvbaPk8fMeNEJY39fQzBPXktxD is READY for that exact merge revision. Both deployment metadata and the domain alias API identify hub.minion-ai.org as assigned to this deployment. At 08:35:38Z, anonymous read-only runtime checks returned the protected Settings document redirect (302), a separate Settings loader redirect payload (HTTP200), and /api/me401. Authenticated functionality was qualified against disposable seeded QA; no authenticated production mutation was used.
+
+The Settings browser-qualification follow-up is resolved by this patch. Its legacy in-code TODO points to this now-completed record; the earlier release's waived browser gate is not retroactively marked passing. Exact receipts, nine screenshots and telemetry proof limits are in qualification.json and its sibling files.

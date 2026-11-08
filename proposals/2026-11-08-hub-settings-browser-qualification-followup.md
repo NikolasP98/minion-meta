@@ -1,7 +1,7 @@
 ---
 id: 2026-11-08-hub-settings-browser-qualification-followup
 title: Complete Settings browser qualification after owner release override
-status: in-spec
+status: done
 created: 2026-11-08
 updated: 2026-11-08
 repos: [minion_hub]
@@ -38,3 +38,13 @@ Evidence and proof limits: `../evidence/2026-11-08-settings-back-locale/README.m
 ## Owner-authorized patch
 
 The owner requested “Please proceed with the patch”. Implementation and exact-head verification now follow `../specs/2026-11-08-hub-settings-back-locale-patch-spec.md`. The patch preserves remembered locale/query/hash, localizes the direct fallback once, and opts the complete Back URL out of automatic anchor translation. The real provider regression failed before the patch and the expanded focused run passed all 28 tests afterward. Full CI/runtime and release verification remain pending.
+
+## Release and completion
+
+All ten jobs in exact-source CI 42461195432 passed: 9053 unit tests (289 skipped), zero type-check errors/warnings, clean build, nine Settings browser checkpoints and 245 cross-browser cases across five projects. Independent Standards and scoped Spec/runtime review passed. The existing general page-conformance comparison remains unqualified because its initial ledger is absent; CI intentionally exits zero in that condition. It is not counted as a page-conformance pass.
+
+Hub #641 merged as 8259be3a4710cb5461453f4ddb420fac9e823436 at 2026-11-08T08:31:13Z using the owner's existing merge-override authorization. Its Git tree equals the tested candidate/CI merge tree: 00feda2fbf787d7efb02a2d305783c94ef41ccab. No branch-protection settings changed.
+
+Vercel production dpl_8MzvbaPk8fMeNEJY39fQzBPXktxD is READY for that exact merge revision. Both deployment metadata and the domain alias API identify hub.minion-ai.org as assigned to this deployment. At 08:35:38Z, anonymous read-only runtime checks returned the protected Settings document redirect (302), a separate Settings loader redirect payload (HTTP200), and /api/me401. Authenticated functionality was qualified against disposable seeded QA; no authenticated production mutation was used.
+
+The Settings browser-qualification follow-up is resolved by this patch. Its legacy in-code TODO points to this now-completed record; the earlier release's waived browser gate is not retroactively marked passing. Exact receipts, nine screenshots and telemetry proof limits are in ../evidence/2026-11-08-settings-back-locale/qualification.json and its sibling files.

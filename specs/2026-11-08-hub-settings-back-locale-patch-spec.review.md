@@ -23,3 +23,7 @@ Standards PASS; Spec PASS on 4c08f55. The 97f9bdd runtime receipts prove initial
 ## Retained Settings runtime evidence review
 
 Standards PASS; scoped Spec runtime qualification PASS on 4c08f55 / tree 00feda2fbf787d7efb02a2d305783c94ef41ccab. The reviewer verified the local tree hash against the receipt, read checks.json and inspected desktop/mobile/Cancel screenshots. Nine checkpoints establish full query/hash return, Cancel/Discard, stable session documents, history/collapse, direct reload fallback, 1024px vertical layout and staff mobile permission filtering/Back. No repeated locale navigation was captured. General conformance remains explicitly unqualified because there is no committed ledger. Critical-journeys and deployment remain pending.
+
+## Completion evidence
+
+The primary agent subsequently verified all ten CI jobs passed, including 245 cross-browser cases, and confirmed the merged tree equals the tested candidate. Production deployment dpl_8MzvbaPk8fMeNEJY39fQzBPXktxD is READY for merge 8259be3a4710cb5461453f4ddb420fac9e823436; the domain alias API points hub.minion-ai.org to it. Protected document and loader responses were checked separately. These deployment checks are primary-agent evidence, not an additional independent runtime execution.
