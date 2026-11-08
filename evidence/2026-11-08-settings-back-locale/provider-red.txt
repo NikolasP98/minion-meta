@@ -1,0 +1,64 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-settings-back-fix-20261108
+
+ ❯ src/lib/components/settings/SettingsLayerHeader.mounted.test.ts (6 tests | 3 failed) 61ms
+     × uses personal home after an actor change while the layer remains open 10ms
+     × renders one en locale through the actual app translation provider 9ms
+     × renders one es locale through the actual app translation provider 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/components/settings/SettingsLayerHeader.mounted.test.ts > Settings Back uses the real layer owner > uses personal home after an actor change while the layer remains open
+AssertionError: expected '/account/home' to be '/es/account/home' // Object.is equality
+
+Expected: "/es/account/home"
+Received: "/account/home"
+
+ ❯ src/lib/components/settings/SettingsLayerHeader.mounted.test.ts:68:75
+     66|     settingsLayer.reconcile();
+     67|     const view = render(SettingsLayerHeader);
+     68|     expect(view.getByRole('link', { name: 'Back' }).getAttribute('href…
+       |                                                                           ^
+     69|   });
+     70|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/lib/components/settings/SettingsLayerHeader.mounted.test.ts > Settings Back uses the real layer owner > renders one en locale through the actual app translation provider
+AssertionError: expected '/en/en/pos/sell?session=one#cart' to be '/en/pos/sell?session=one#cart' // Object.is equality
+
+Expected: "/en/pos/sell?session=one#cart"
+Received: "/en/en/pos/sell?session=one#cart"
+
+ ❯ src/lib/components/settings/SettingsLayerHeader.mounted.test.ts:95:77
+     93|       settingsLayer.observe();
+     94|       const view = render(SettingsBackTranslation, { language });
+     95|       expect(view.getByRole('link', { name: 'Back' }).getAttribute('hr…
+       |                                                                             ^
+     96|         `/${language}/pos/sell?session=one#cart`,
+     97|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/lib/components/settings/SettingsLayerHeader.mounted.test.ts > Settings Back uses the real layer owner > renders one es locale through the actual app translation provider
+AssertionError: expected '/es/es/pos/sell?session=one#cart' to be '/es/pos/sell?session=one#cart' // Object.is equality
+
+Expected: "/es/pos/sell?session=one#cart"
+Received: "/es/es/pos/sell?session=one#cart"
+
+ ❯ src/lib/components/settings/SettingsLayerHeader.mounted.test.ts:95:77
+     93|       settingsLayer.observe();
+     94|       const view = render(SettingsBackTranslation, { language });
+     95|       expect(view.getByRole('link', { name: 'Back' }).getAttribute('hr…
+       |                                                                             ^
+     96|         `/${language}/pos/sell?session=one#cart`,
+     97|       );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 3 passed (6)
+   Start at  01:37:54
+   Duration  1.92s (transform 1.18s, setup 27ms, import 1.46s, tests 61ms, environment 214ms)
+
