@@ -36,7 +36,7 @@ The same behavior applies to desktop and mobile because they share SettingsLayer
 - Mount the actual app Paraglide provider and shared Button in regression tests. Cover both remembered/current locale combinations, both direct-entry fallback languages, query/hash, owner replacement, error-location rejection and a native link while busy.
 - Keep decorative icons and unrelated UI exports outside this focused test; do not mock the translation provider, translation functions or shared Button.
 - Add the missing standard SvelteKit test aliases for `$app/stores` and `$app/paths`.
-- In the QA-only smoke, hide the development-inspector container before real avatar clicks. Do not force clicks or suppress application guards. Retain normal document-generation, URL, layout and Cancel/Discard assertions.
+- In the QA-only smoke, hide the development-inspector container before real avatar clicks. Do not force clicks or suppress application guards. Retain normal document-generation, URL, layout and Cancel/Discard assertions. Require the exact Back href and reject every observed doubled-locale main-frame navigation, including transient visits that later recover.
 - Run focused red/green tests, design/token gates, full exact-head CI and the existing browser smoke. Keep independent Standards and Spec review separate. Verify the production revision and alias after release.
 
 ## Cross-check and scope
@@ -52,3 +52,5 @@ Settings form redesign, other navigation links, global translation-library chang
 navigation_review completed two independent source passes: Standards PASS, Spec PASS. The regression with the real provider failed on the expected repeated prefixes before the production change. The final expanded focused run passed all 28 tests in 22.70 seconds with one worker. Exact-head CI and runtime qualification remain pending.
 
 PostHog authentication now works. Read-only Hub navigation events around the reported Settings/POS transitions were found. No completed doubled-locale pageview was captured in the bounded post-release query, and the session-recording tool reports no recording available for that session. These telemetry limits do not contradict the supplied error screenshot or the deterministic provider regression. No replay-based explanation of the subsequent recovery is claimed. Private event receipts remain local, outside the repository.
+
+Independent source review also passed the QA-only transient-navigation assertion in Hub candidate `398276b`: both personas install the listener before navigating, and later recovery cannot remove captured malformed URLs. Application source remains identical to the focused-tested `88895ba`. Final exact-head CI is recorded when complete.
