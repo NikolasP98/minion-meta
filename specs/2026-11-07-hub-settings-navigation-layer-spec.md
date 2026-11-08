@@ -6,7 +6,7 @@ status: implementing
 pass: 2
 verdict: approved
 created: 2026-11-07
-updated: 2026-11-07
+updated: 2026-11-08
 repos: [minion_hub]
 source: owner-approved-settings-workshop
 ---
@@ -47,3 +47,11 @@ Settings form redesign, new permissions, database migrations, changes to native 
 ## Independent spec review
 
 navigation_review completed separate Standards and Spec passes. Both passed. Clarifications adopted: Back validates a known route/custom instance in addition to current access; its return point survives a cancelled dirty-form navigation; alias routes activate the layer; every responsive SectionNav rule is opt-in to the default variant; the header retains global busy feedback. The owner explicitly approved implementation and deployment after the FigCraft workshop.
+
+## Implementation review and qualification
+
+Hub PR #640, candidate ca033c60. Independent Standards and Spec source review passed after correcting localized permission rechecks, stale built-in Settings placements, error-page return memory and dirty-navigation hash retention. Back uses a real SvelteKit link; the existing dirty guard owns Cancel/Discard. Navigation mode is untouched and the saved rail collapse setting is retained.
+
+Local design ratchet passed with no increased governed debt; token lint reported zero violations. Local heavy test/check runs were explicitly stopped under severe shared host memory pressure and are not counted as passing. Exact-head CI owns full tests/check/build and a new real seeded-QA browser smoke, including 1440/1024/390px and retained screenshots. In that CI-only smoke, gateway dirty state is injected in actual config memory because the disposable stack has no live gateway; no config save/model call occurs. Production release remains pending qualification.
+
+QA run 42449471734 exposed an existing formula race-test assumption before the UI stage: when a definition update wins its valid race, the later archive assertion reused the pre-race version and hit CAS first. The test now reads the committed definition after both race operations settle, then still requires exactly `409/formula_dependency_in_use`. Independent review approved this test-only correction; product services and the original one-success/one-rejection race assertions are unchanged. Exact-head replacement CI: 42449792546.
