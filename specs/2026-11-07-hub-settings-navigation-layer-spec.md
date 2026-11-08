@@ -1,8 +1,8 @@
 ---
 id: 2026-11-07-hub-settings-navigation-layer-spec
 title: Settings owns the primary navigation layer
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-11-07
@@ -52,12 +52,20 @@ navigation_review completed separate Standards and Spec passes. Both passed. Cla
 
 Hub PR #640, candidate `32e7dbc74fa858a1bad9257a225f6848c2bbd5c3`. Independent Standards and Spec source review passed. Back uses a real SvelteKit link; the existing dirty guard owns Cancel/Discard. Navigation mode is untouched and the saved rail collapse setting is retained. Canonical permission revalidation, stale built-in Settings placements, error-page return memory and dirty-navigation hash retention are covered by the implementation and tests.
 
-Local design ratchet passed with no increased governed debt; token lint reported zero violations. Local heavy test/check runs were stopped under severe shared host memory pressure and are not counted as passing. Exact-head CI run `42452225927` passed all 9047 tests across 1013 files (289 tests/5 files skipped), typecheck and production build. The exact-source Vercel preview is READY. Browser qualification and production release remain pending.
+Local design ratchet passed with no increased governed debt; token lint reported zero violations. Local heavy test/check runs were stopped under severe shared host memory pressure and are not counted as passing. Exact-head CI run `42452225927` passed all 9047 tests across 1013 files (289 tests/5 files skipped), typecheck and production build. The exact-source Vercel preview is READY. Browser qualification was explicitly waived by the owner; production verification is recorded below.
 
 The new seeded-QA browser smoke checks avatar entry, one Settings navigation column, search, active gateway tabs, unsaved-change Cancel/Discard, prior query/hash and collapse restoration, browser history, direct-entry reload, and 1440/1024/390px layout with staff permission filtering. The disposable stack has no live gateway: dirty state is injected into actual config memory through the Vite module, and no config save/model call occurs. Screenshots and receipts are retained as the CI `ui-audit-conformance` artifact.
 
-Earlier attempts exposed three qualification issues. A pre-existing formula race test reused a stale definition version; it now re-reads the committed version before still requiring exactly `409/formula_dependency_in_use`. A content-only SectionShell preserves the Settings form contract without duplicating navigation; primary SectionNav explicitly ignores responsive collapse. Finally, the lazy development inspector is prebundled and awaited before the session-only browser flow, with document-generation and Back-href receipts guarding against optimizer reloads. These corrections received independent source review. The candidate run's QA database failed before bootstrap because runner port 54422 was occupied; a fresh QA-job retry is required, rather than treating the infrastructure failure as a feature pass.
+Earlier attempts exposed three qualification issues. A pre-existing formula race test reused a stale definition version; it now re-reads the committed version before still requiring exactly `409/formula_dependency_in_use`. A content-only SectionShell preserves the Settings form contract without duplicating navigation; primary SectionNav explicitly ignores responsive collapse. Finally, the lazy development inspector is prebundled and awaited before the session-only browser flow, with document-generation and Back-href receipts guarding against optimizer reloads. These corrections received independent source review. The candidate run's QA database failed before bootstrap because runner port 54422 was occupied; a fresh QA-job retry is required before browser qualification can be claimed. The owner subsequently waived that release gate, as recorded below.
 
 ## Owner release exception
 
 On 2026-11-08, after being informed that browser QA remained pending, the owner explicitly requested “skip the check and merge”. This waives the remaining CI/browser release gate for Hub #640. The production code is unchanged from candidate 32e7dbc7; a comment-only handoff commit points to `../proposals/2026-11-08-hub-settings-browser-qualification-followup.md`. The suspected development reload correction is not claimed as browser-verified. Record production deployment independently from that deferred qualification.
+
+## Production release
+
+Hub #640 was squash-merged with the explicit owner CI/review override as `50c9d4e1a8ba98f683cbaf577d4eecc0ebc0ccb2` at 2026-11-08T06:08:09Z. No branch-protection settings changed. Vercel production deployment `dpl_CpAuXkwrNpeRFBWPT3d1aPmEYneM` is READY; its Git metadata matches the merge and its assigned aliases include `hub.minion-ai.org`.
+
+Read-only anonymous production checks: `/en/settings/appearance` returns HTTP 302 to sign-in with the Settings return path; its SvelteKit data loader returns HTTP 200 with a redirect payload to that same sign-in target; `/api/me` returns HTTP 401. These outcomes prove protected runtime responses and are recorded separately from authenticated UI qualification. No authenticated production mutation was performed. The uncompleted browser flow remains in the follow-up proposal and matching in-code TODO.
+
+Evidence: `../evidence/2026-11-07-settings-navigation/qualification.json`. Retained earlier screenshots/failure receipts are labelled as an unsuccessful earlier run, not final browser success. The implementation is shipped under an explicit owner check exception.
