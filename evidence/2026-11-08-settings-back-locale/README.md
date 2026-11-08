@@ -2,7 +2,7 @@
 
 The Settings Back link passes an already-localized remembered URL through Paraglide's automatic anchor translation. The second translation adds another locale segment. This reproduces the screenshot's `/es/es/pos/sell` destination.
 
-Released source: Hub commit `50c9d4e1a8ba98f683cbaf577d4eecc0ebc0ccb2`. The inspected source matches that release. No product fix or new deployment was performed in this investigation.
+Released source: Hub commit `50c9d4e1a8ba98f683cbaf577d4eecc0ebc0ccb2`. The inspected source matches that release. This was the deployed source at the initial investigation; patch implementation and later qualification are recorded below.
 
 ## Confirmed path
 
@@ -33,3 +33,13 @@ An attempted full mounted-provider probe was stopped after cold compilation exce
 The automatic post-merge QA run `42453496644` failed before Settings entry because the dev-only query-inspector overlay intercepted the avatar click. It supplies no Back-navigation result and is separate from this product defect.
 
 The existing [browser qualification follow-up](../../proposals/2026-11-08-hub-settings-browser-qualification-followup.md) owns the correction and integrated regression coverage. Its matching in-code `TODO(handoff)` is at the Back-restoration assertion in `scripts/qa/settings-navigation-smoke.ts`.
+
+## Patch qualification
+
+The actual provider regression and focused red/green receipts are retained in [provider-red.txt](provider-red.txt) and [provider-green.txt](provider-green.txt). The final focused suite passed 28 tests with a single worker. The source correction opts the complete Back URL out of automatic translation and captures the initial successful workspace after router readiness.
+
+PostHog server-event corroboration is retained in [posthog-corroboration.json](posthog-corroboration.json). It contains only the known static paths, aggregate captured-event counts, release and digests; actor/session identifiers and raw telemetry remain private. Six captured error events do not imply six distinct user actions.
+
+CI 42460375326 on 97f9bdd passed check/build and 9053 unit tests (289 skipped). Its Settings smoke passed eight checkpoints through staff mobile layout, including the previously failing desktop full-URL Back, dirty Cancel/Discard, collapse, browser history, direct reload and 1024px layout. It failed when the staff fixture expected a Plugins link that correctly requires settings:manage. Candidate 4c08f55 changes only the QA action to permitted Appearance and explicitly asserts Plugins absent. Exact-head CI 42461195432 is required before release.
+
+Both independent review axes passed: Standards and Spec. Temporary prototype wrappers were removed; the retained loopback-QA probe only reads state and is not imported by the production app.
