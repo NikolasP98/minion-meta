@@ -26,7 +26,7 @@ The existing mounted Header test renders the component without the app's Paragli
 
 ## Proof limits and follow-up
 
-PostHog's connected tool returned `UNAUTHORIZED` and requested reauthentication. No session recording was accessed. The user asked to continue the investigation; that reply did not confirm reconnection. The screenshot and executable translation probe establish the malformed destination. The subsequent automatic recovery to the correct page is not established without a navigation trace or replay.
+PostHog initially returned `UNAUTHORIZED`. After the owner reauthenticated, read-only Hub navigation events were retrieved around the reported Settings/POS transitions. The session-recording tool reports no recording available for that session, and the bounded post-release query found no completed doubled-locale pageview. No session recording was accessed. The screenshot and executable translation probe establish the malformed destination. The subsequent automatic recovery to the correct page is not established without a navigation trace or replay.
 
 An attempted full mounted-provider probe was stopped after cold compilation exceeded its diagnostic time budget; it produced no passing test result and is not counted as evidence. Only its task-owned processes were terminated. Temporary checkout files were removed.
 

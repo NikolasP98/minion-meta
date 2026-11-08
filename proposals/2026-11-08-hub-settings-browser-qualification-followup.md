@@ -31,6 +31,10 @@ The owner supplied an authenticated error screenshot at `/es/es/pos/sell` and re
 
 Correct the Back-link translation boundary so remembered localized URLs retain one locale, and localize the direct-entry fallback once. Add integrated provider coverage for both languages, query/hash, fallback and dirty Cancel/Discard. The existing matching TODO remains at the Back-restoration assertion. This investigation made no product change or deployment.
 
-PostHog access remains unavailable because its connector requires reauthentication. The malformed href is reproduced; the later automatic recovery described by the owner remains unverified. The post-merge QA attempt was separately blocked by the development inspector overlay before Settings entry and does not establish Back behavior.
+PostHog access was restored after the owner reauthenticated. Read-only Hub navigation events were found around the Settings/POS transitions, but the recording tool reports no replay available for that session. No completed doubled-locale pageview appeared in the bounded post-release query. The malformed href is independently reproduced; the later automatic recovery described by the owner remains unverified. The post-merge QA attempt was separately blocked by the development inspector overlay before Settings entry and does not establish Back behavior.
 
 Evidence and proof limits: `../evidence/2026-11-08-settings-back-locale/README.md` and `translation-probe.json` beside it.
+
+## Owner-authorized patch
+
+The owner requested “Please proceed with the patch”. Implementation and exact-head verification now follow `../specs/2026-11-08-hub-settings-back-locale-patch-spec.md`. The patch preserves remembered locale/query/hash, localizes the direct fallback once, and opts the complete Back URL out of automatic anchor translation. The real provider regression failed before the patch and the expanded focused run passed all 28 tests afterward. Full CI/runtime and release verification remain pending.
