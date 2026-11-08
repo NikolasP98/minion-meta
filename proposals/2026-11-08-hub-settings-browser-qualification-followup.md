@@ -1,7 +1,7 @@
 ---
 id: 2026-11-08-hub-settings-browser-qualification-followup
 title: Complete Settings browser qualification after owner release override
-status: review
+status: in-spec
 created: 2026-11-08
 updated: 2026-11-08
 repos: [minion_hub]
