@@ -1,12 +1,12 @@
 ---
 id: 2026-11-06-hub-personal-navigation-spec
 title: Complete section discovery and personal navigation
-stage: dev
+stage: test
 status: implementing
 pass: 2
 verdict: approved
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-07
 repos: [minion_hub]
 source: owner-request-2026-11-06
 ---
@@ -53,3 +53,19 @@ Existing `.local/figcraft/minion-hub.figcraft`, new page “Settings · AS-IS �
 ## Out of scope
 
 Settings implementation, /home→/chat rename, landing-page resolution, provisioning and unrelated WIP. Explicit user authorization covers navigation deployment only.
+
+## Implementation qualification
+
+Hub PR #639, source `7d44875b87cc1ba981dd47efee6486243da54a3c`. Independent Standards and Spec review is clear. The shared autosave correction keeps derived getters pure and makes owner/status-scope stamps reactive; this handles the real app provider initializing or replacing scope after editors construct. Retirement on dispatch/completion remains intact.
+
+CI run 42328030330 passed: 1010 test files and 9018 tests passed (5 files/289 tests skipped); check/build, migration pairing, QA stack, PostgreSQL scenarios, dependency browser and critical browser journeys all succeeded. Desktop qualification also passed. Vercel preview status for this exact SHA reports deployment completed. Local task browser qualification and production verification are recorded below when complete.
+
+Actual-provider mounted regressions cover late scope initialization, immediate projection, lost-response feedback and owner replacement. Independent actual-Home/provider scenarios also passed Review latest without replay, preserving a newer edit during delayed review and active-host rotation. Negative controls reproduced unsafe mutation and missing projection/feedback before the correction. Local compiled evidence is preserved under the isolated candidate `docs/verification/2026-11-06-personal-navigation/mounted/provider-*`.
+
+Local browser-harness qualification uses a document-generation fence after reload: the initial navigation helper can return while the old document is still present. Reading old controls produced a false-negative sidebar assertion; waits now require the new document before mounting/card checks. Headless compositor screenshot requests also timed out; DOM/geometry receipts are retained separately from the successfully captured desktop render. These harness failures are not passing product evidence.
+
+Local QA browser qualification passed all 18 assertions on 7d44875b: empty discovery and opening; preserved Start slug; account-submenu layout bypass; immediate personal sidebar show/hide; persistence after reload; explicit unknown-write review and adopting the server without replay; reorder persistence; owner full-navigation option and staff exclusion; 390px viewport with no document overflow. Local synthetic owner restored, task-owned sections removed, and the original personal preference restored. Per-step DOM/geometry receipts and browser-results.json are preserved in `/home/nikolas/.cache/codex-work/hub-nav-browser-evidence` and the isolated candidate verification folder. Captured desktop render is `desktop-current.png`; additional screenshot capture timeouts limit visual evidence, not the completed functional assertions.
+
+## Release gate
+
+Evidence manifest: `evidence/2026-11-06-personal-navigation/qualification.json`. All candidate checks passed. GitHub refused the normal squash merge because master requires one approving GitHub review. Independent agent review does not create a GitHub review. Owner/admin override approval was requested explicitly; no protection settings were changed and no override was used while that decision is pending. Production remains unchanged.
