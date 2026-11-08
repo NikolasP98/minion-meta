@@ -34,3 +34,7 @@ Page: Settings · AS-IS → TO-BE · 2026-11-06. Review-only, with prototype Ava
 ## Navigation release
 
 Hub #639 merged as fac6ad07ffe51c152c1f59626ad3147d8723ba1c after the owner explicitly approved the GitHub admin merge override. Vercel dpl_GR8N6BkUrJoNPuDysTQmcGWdZQWE is READY and serves hub.minion-ai.org. The linked spec and evidence manifest record 9018 passing tests, independent review and 18 passing local QA browser assertions. This proposal stays in-spec for the deliberately deferred Settings workshop/implementation; no production Settings change was shipped.
+
+## Settings workshop approved
+
+The owner reviewed the proposal UI and explicitly requested “apply and deploy” on 2026-11-07. This supersedes the earlier Settings deferral. Implementation and verification follow `../specs/2026-11-07-hub-settings-navigation-layer-spec.md`. The existing deployed personal navigation remains in scope only as a compatibility boundary.
