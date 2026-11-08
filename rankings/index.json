@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T07:17:37.552Z",
+	"generatedAt": "2026-11-08T07:47:23.253Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9445,41 +9445,6 @@
 			"scoredAt": "2026-11-04T18:48:13.348Z"
 		},
 		{
-			"key": "pr:minion_hub#641",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#641 fix(settings): return to your workspace without a temporary 404",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/641",
-			"sourceUpdatedAt": "2026-11-08T07:11:32Z",
-			"sourceFingerprint": "8b13ece83e046f03a25b53369dc2d8403268e9de2175f392d91c93d017bc0600",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#970"
-			],
-			"rationale": "Real 404 regression fix with a reproducing test suite (28 cases) and two passed reviews, just awaiting full exact-head CI.",
-			"evidence": [
-				"all28 focused tests now pass",
-				"Independent Standards/Spec reviews passed twice",
-				"full exact-head CI and runtime qualification are required"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T07:17:37.351Z"
-		},
-		{
 			"key": "proposal:2026-08-28-factory-legacy-develop-token-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13115,6 +13080,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:53:42.655Z"
+		},
+		{
+			"key": "pr:minion_hub#641",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#641 fix(settings): return to your workspace without a temporary 404",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/641",
+			"sourceUpdatedAt": "2026-11-08T07:38:55Z",
+			"sourceFingerprint": "207d67d3b9ce4a124613c30a804023a4c83e0dfdbbf24f929dfb439ca4978e51",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A diagnosed locale-doubling 404 regression in Settings Back has a spec, passing focused tests, and two independent reviews, leaving only full CI/runtime qualification.",
+			"evidence": [
+				"28 focused tests pass including locale combinations and fallback cases",
+				"spec and double review cited: minion-meta PR#970",
+				"full exact-head CI and runtime qualification still required"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T07:47:23.075Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
@@ -23357,20 +23355,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 5,
 				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The change requires a new shared-schema table affecting multiple consumers, which the finding itself says should go through a spec rather than be executed directly.",
+			"rationale": "Missing org business-hours/timezone data touches the shared @minion-stack/db schema used by multiple consumers and the proposal itself says it needs a proper spec, not a hotfix.",
 			"evidence": [
-				"TODO(handoff): no org business-hours/timezone table exists yet",
-				"Diagnosis explicitly states 'this should be a spec task, not a hotfix — it touches shared schema and affects all consumers'"
+				"TODO notes no org business-hours/timezone table exists yet",
+				"proposal states this should be a spec task since it touches shared schema",
+				"affects daily-feed scheduling across multi-org deployments"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T07:17:14.806Z"
+			"scoredAt": "2026-11-08T07:47:23.075Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5006c27444a5",
@@ -28583,6 +28582,39 @@
 			"scoredAt": "2026-11-02T13:18:17.864Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-152748b32645",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/appointment-overdue.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-152748b32645.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "0217f5beeb5fdac4fdc802ba407078a23a175b7c4af3341b0e993103939f278f",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The unwired ?booking= deep-link param affects shareable appointment links but the diagnosis is auto-generated and no investigation or scoping has occurred yet.",
+			"evidence": [
+				"TODO(handoff) marker found in merged PR #479",
+				"fix direction is a generic auto-diagnosis, not a verified scope",
+				"no implementation evidence beyond marker extraction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T07:47:23.075Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2d7b4a1718f3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29473,6 +29505,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:15:29.537Z"
+		},
+		{
+			"key": "pr:minion-meta#971",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#971 design(figcraft): FigCraft masters + demo-first UI process",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/971",
+			"sourceUpdatedAt": "2026-11-08T07:34:07Z",
+			"sourceFingerprint": "c05df992bf222b3aad32a24efb4e4e3aa047be4f60887eefed1f68d4e6e61b3c",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This establishes the governing demo-first UI design process referenced by the hub/site UI contract with all stated checks already passing.",
+			"evidence": [
+				"68/68 spec-index tests pass and regeneration is byte-identical",
+				"piiscan.py gate blocks unclean production captures",
+				"FACES production previews explicitly deferred to a follow-up"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T07:47:23.075Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-minion-run-dev-switcher",
@@ -38584,38 +38649,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T05:48:39.288Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-152748b32645",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/appointment-overdue.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-152748b32645.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "0217f5beeb5fdac4fdc802ba407078a23a175b7c4af3341b0e993103939f278f",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Bounded single-file UX fix with a clear fix direction for wiring the booking deep-link param.",
-			"evidence": [
-				"TODO(handoff) marker in appointment-overdue.ts for unwired ?booking= param",
-				"Definition of done and fix direction are explicit and narrow in scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T07:17:14.806Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
