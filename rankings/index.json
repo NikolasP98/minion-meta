@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T04:17:19.695Z",
+	"generatedAt": "2026-11-08T04:39:17.876Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1393,6 +1393,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T00:22:08.414Z"
+		},
+		{
+			"key": "pr:minion_hub#606",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#606 fix(pos): a calendar charge with consumed products no longer blanks the cart",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/606",
+			"sourceUpdatedAt": "2026-10-25T03:52:13Z",
+			"sourceFingerprint": "accd83b082ef630f216c6d133816f439b69d4c82c552d96ea535a15da6ebe398",
+			"score": 74,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A keyed-each crash is poisoning localStorage and blocking all sales on an affected device, with a root-caused one-line fix and passing tests.",
+			"evidence": [
+				"every /pos/sell view since 2026-10-13 throws each_key_duplicate (29/33), 0 sales finished in 14 days",
+				"vitest 192 tests green; new case fails on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T04:39:17.719Z"
 		},
 		{
 			"key": "spec:2026-08-17-sdlc-phase-gates-scoring-spec",
@@ -3431,39 +3463,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T21:03:33.111Z"
-		},
-		{
-			"key": "pr:minion_hub#606",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#606 fix(pos): a calendar charge with consumed products no longer blanks the cart",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/606",
-			"sourceUpdatedAt": "2026-10-25T03:52:13Z",
-			"sourceFingerprint": "accd83b082ef630f216c6d133816f439b69d4c82c552d96ea535a15da6ebe398",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 8,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A root-caused one-line key fix unblocks a device stuck with zero completed sales for 14 days, verified by replay and PostHog data.",
-			"evidence": [
-				"0 sales finished on affected device in 14 days, 29/33 throws today",
-				"192 vitest cases green, new regression case fails on master",
-				"hotfix documents bypassed spec stage with root cause"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T04:17:01.933Z"
 		},
 		{
 			"key": "spec:2026-08-18-agent-instruction-parity-and-repo-policy-spec",
@@ -8918,40 +8917,6 @@
 			"scoredAt": "2026-11-06T20:16:44.492Z"
 		},
 		{
-			"key": "pr:minion-meta#963",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#963 docs(nav): specify personal navigation and Settings workshop boundary",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/963",
-			"sourceUpdatedAt": "2026-11-07T01:42:02Z",
-			"sourceFingerprint": "9eea25f402b10e769a47fa17a12e665d19157080ce44363d3ec428caf2466e52",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#639"
-			],
-			"rationale": "Two-pass reviewed spec that defines the personal-navigation boundary and directly gates the companion Hub PR's deployment.",
-			"evidence": [
-				"Companion implementation: NikolasP98/minion_hub#639",
-				"Validation: two-pass independent spec review and implementation review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T01:47:07.887Z"
-		},
-		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11700,40 +11665,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T05:17:40.191Z"
-		},
-		{
-			"key": "pr:minion_hub#639",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#639 feat(nav): personalize your sidebar and discover every permitted section",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/639",
-			"sourceUpdatedAt": "2026-11-07T02:14:58Z",
-			"sourceFingerprint": "c74ee4758efbdc11315fb2ab790511497b9a7bb70ee9f85323a9444c8776ce8a",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#626"
-			],
-			"rationale": "Owner requested deployment of these nav items but the PR is still draft with full tests, build, and QA explicitly in progress.",
-			"evidence": [
-				"status: draft; 'Full tests, final production build, local QA ... are in progress. Draft until complete.'",
-				"builds on #602/#626/#628/#630 chain"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T02:17:31.877Z"
 		},
 		{
 			"key": "proposal:2026-08-17-base-kanban-possibly-shipped-surface",
@@ -22288,6 +22219,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:58:19.649Z"
+		},
+		{
+			"key": "pr:minion-meta#963",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#963 docs(nav): specify personal navigation and Settings workshop boundary",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/963",
+			"sourceUpdatedAt": "2026-11-08T04:35:46Z",
+			"sourceFingerprint": "bc29fa85cd96f2727264f52b522415256839b25fb757770f85e751b2c4378383",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A reviewed navigation/Settings-boundary spec with a companion hub implementation PR is ready to move forward through the SDLC.",
+			"evidence": [
+				"two-pass independent spec review completed",
+				"companion implementation NikolasP98/minion_hub#639"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T04:39:17.719Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-3c21d7c",
@@ -42799,6 +42762,38 @@
 			"scoredAt": "2026-11-08T02:47:11.803Z"
 		},
 		{
+			"key": "issue:minion-meta#968",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#968 [monitor:unstick] rank board goals failed (run 62eb9fcd)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/968",
+			"sourceUpdatedAt": "2026-11-08T04:17:20Z",
+			"sourceFingerprint": "81cd851fbd7aa1160e0eb05411033bc1bc7faa3c2aee995f5c1690055c23fe6a",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated monitor alert diagnosing a transient provider outage during a ranking run, not an actionable engineering task.",
+			"evidence": [
+				"Diagnosis: transient infra fault, not a task-logic failure",
+				"Recommendation: safe to retry the run as-is"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T04:39:17.719Z"
+		},
+		{
 			"key": "proposal:2026-08-17-site-vendored-tgz-untracked",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -43732,6 +43727,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:49:50.455Z"
+		},
+		{
+			"key": "run:minion_hub#42447526180",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/42447526180",
+			"sourceUpdatedAt": "2026-11-08T04:37:03Z",
+			"sourceFingerprint": "5c613dae0042bbc686be7b8f647b7002ffbcd3a5fd440308487f45071a99a42e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master with no indication of failure requiring action.",
+			"evidence": [
+				"CI push on master",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T04:39:17.719Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
