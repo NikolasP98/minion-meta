@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T16:17:02.800Z",
+	"generatedAt": "2026-11-08T16:47:06.924Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13077,6 +13077,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:53:42.655Z"
+		},
+		{
+			"key": "issue:minion-meta#973",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#973 [monitor:unstick] run bd383fd7: ranking catalog refused — pixel-agents source unavailable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/973",
+			"sourceUpdatedAt": "2026-11-08T16:17:24Z",
+			"sourceFingerprint": "e6c4db54590c088980c1bec5cd3e2ac4dc0f29880f90633b5ab5413ae639313d",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A fail-fast guard in board-ranking-catalog.mjs is blocking the ranking pipeline because the pixel-agents source is unavailable, so a human needs to diagnose and restore the source or fix the catalog spec.",
+			"evidence": [
+				"guard at board-ranking-catalog.mjs line 107 throws when a repo source cannot be resolved",
+				"missing source is 'pixel-agents', exit code 1, no stack frames below the guard"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T16:47:06.744Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-orchestration-round7",
