@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T08:47:08.046Z",
+	"generatedAt": "2026-11-08T09:07:16.651Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1260,39 +1260,6 @@
 			"scoredAt": "2026-11-08T02:18:07.302Z"
 		},
 		{
-			"key": "pr:minion_hub#644",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#644 fix(dev): devtools launcher sits beside the avatar instead of on top of it (unblocks master qa-stack)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/644",
-			"sourceUpdatedAt": "2026-11-08T08:20:51Z",
-			"sourceFingerprint": "8e2be814ed5b9e16e3dce23000e09a0547da7a37918c0ce4c4081a35acd7d342",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Master's qa-stack smoke is currently red and blocking every PR, and this PR has a verified fix with passing gates.",
-			"evidence": [
-				"smoke fails on master itself since 50c9d4e1, blocking every PR",
-				"bun run check: 0 errors/warnings; 50 layout component tests passed",
-				"CI qa-stack job on this PR is cited as the proof"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T08:33:59.667Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-qa-stack-first-pass-defects",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1757,14 +1724,14 @@
 			"scoredAt": "2026-11-05T06:18:18.520Z"
 		},
 		{
-			"key": "pr:minion_hub#643",
+			"key": "pr:minion_hub#644",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#643 fix(assistant): resume the UI-block loop after a lost chat.send ack",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/643",
-			"sourceUpdatedAt": "2026-11-08T08:42:19Z",
-			"sourceFingerprint": "d013160670b0b250513129a7fbfde4861a031e7a0d93ae2e22817acebf7349b2",
+			"title": "#644 fix(dev): devtools launcher sits beside the avatar instead of on top of it (unblocks master qa-stack)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/644",
+			"sourceUpdatedAt": "2026-11-08T08:52:35Z",
+			"sourceFingerprint": "00983cd577ec662558b09138c43a67af048d992fc4858b448c5f6b965ec7173b",
 			"score": 72,
 			"band": "high",
 			"axes": {
@@ -1774,20 +1741,21 @@
 			},
 			"readiness": {
 				"specification": 9,
-				"implementation": 9
+				"implementation": 8
 			},
 			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a reproducible bug where lost chat.send acks silently stall the assistant's UI loop, with tests and SDLC review documented.",
+			"relatedKeys": [
+				"run:minion_hub#42465619321"
+			],
+			"rationale": "Fixes a root-caused CI-blocking regression on master (qa-stack smoke failing for every PR) with gates and tests already passing in-tree.",
 			"evidence": [
-				"ack timeout causes 'blocks only run on live finals' to never execute",
-				"397 passed, 1 skipped in new test files",
-				"EGM Goldfish review completed with 3 blockers fixed before merge"
+				"\"the qa-stack smoke ... fails on master itself (and therefore on every PR)\"",
+				"\"bun run check → 0 errors ... layout component tests → 50 passed\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T08:47:07.862Z"
+			"scoredAt": "2026-11-08T09:07:16.478Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-deploy-gateway-devprd-channels",
@@ -39504,14 +39472,14 @@
 			"scoredAt": "2026-11-06T21:03:33.111Z"
 		},
 		{
-			"key": "run:minion_hub#42463282331",
+			"key": "run:minion_hub#42465619321",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/42463282331",
-			"sourceUpdatedAt": "2026-11-08T08:31:29Z",
-			"sourceFingerprint": "668a52b54e593c25306abc5e94c695651df3263b3ecc189764daea86c98cb906",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/42465619321",
+			"sourceUpdatedAt": "2026-11-08T09:04:45Z",
+			"sourceFingerprint": "492d888f95ba45aa2c3b0497585d71addd50870dbfa2d2667f965dce505f26a3",
 			"score": 25,
 			"band": "low",
 			"axes": {
@@ -39520,23 +39488,22 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 1,
+				"implementation": 1
 			},
 			"confidence": 3,
-			"recommendation": "reevaluate",
+			"recommendation": "prune",
 			"relatedKeys": [
 				"pr:minion_hub#644"
 			],
-			"rationale": "This is an in-progress CI run on master, not an actionable goal, and likely reflects the #644 fix landing.",
+			"rationale": "This is a transient in-progress CI run status on master, not an actionable work item itself.",
 			"evidence": [
-				"kind: run, status: in_progress",
-				"summary: push on master",
-				"updatedAt close to pr:minion_hub#644's updatedAt"
+				"\"push on master\"",
+				"status: in_progress"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T08:33:59.667Z"
+			"scoredAt": "2026-11-08T09:07:16.478Z"
 		},
 		{
 			"key": "issue:minion (gateway)#264",
