@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T05:17:10.979Z",
+	"generatedAt": "2026-11-08T05:47:12.175Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4949,40 +4949,6 @@
 			"scoredAt": "2026-11-02T03:52:25.870Z"
 		},
 		{
-			"key": "spec:2026-10-10-hub-inbox-notifications-reminders-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "In-app inbox with scope tiers — reminders (overdue, unpaid, after-hours shifts, daily feed), app changelog, operational extras",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-10-hub-inbox-notifications-reminders-spec.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "e240b7470be98cf6c6fcef1571349473a3ecbbeac59be1e31cba8470cf52f495",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-10-hub-inbox-notifications-reminders"
-			],
-			"rationale": "The spec has a clear AS-IS/TO-BE/DELTA with Slice 1 already implemented and in draft PR, making continued slice execution the actionable next step.",
-			"evidence": [
-				"Status is 'implementing' with D1/D2 delta table and Slice 1 verified live AS-IS",
-				"Slice 1 handoff lists concrete unresolved items (org timezone table, pagination cursor, unverified DB migration)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T05:17:06.353Z"
-		},
-		{
 			"key": "spec:2026-10-14-hub-pos-history-shift-view-and-visit-completion-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -5542,6 +5508,40 @@
 			"scoredAt": "2026-11-06T21:00:42.893Z"
 		},
 		{
+			"key": "proposal:2026-10-10-hub-inbox-notifications-reminders",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "In-app inbox with scope tiers — reminders, daily feed, app changelog, operational extras",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-inbox-notifications-reminders.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "240eeabd04da3f04ff2d0243b2c94fec9afc2bb97fd68f8ffb1591b310c96afc",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-10-hub-inbox-notifications-reminders-spec"
+			],
+			"rationale": "Valuable notification/reminder system with Slice 1 implemented but several unresolved open ends and no live-DB verification yet.",
+			"evidence": [
+				"Slice 1 implemented on branch feat/inbox-scope-tiers (draft PR)",
+				"Not verified against a live database in this session; migration never applied to a real Postgres"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T05:47:12.028Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-2934814273",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5976,6 +5976,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:50:53.583Z"
+		},
+		{
+			"key": "spec:2026-10-10-hub-inbox-notifications-reminders-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "In-app inbox with scope tiers — reminders (overdue, unpaid, after-hours shifts, daily feed), app changelog, operational extras",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-10-hub-inbox-notifications-reminders-spec.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "e240b7470be98cf6c6fcef1571349473a3ecbbeac59be1e31cba8470cf52f495",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-10-10-hub-inbox-notifications-reminders"
+			],
+			"rationale": "Well-specified AS-IS/TO-BE/DELTA spec for a meaningful reliability feature, currently in the implementing stage with slices remaining.",
+			"evidence": [
+				"status: implementing",
+				"DELTA table defines D1 app_notifications tables with migration + seed proof"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T05:47:12.028Z"
 		},
 		{
 			"key": "spec:2026-10-21-windows-qualification-kernel-containment-spec",
@@ -6646,40 +6680,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:22:19.446Z"
-		},
-		{
-			"key": "proposal:2026-10-10-hub-inbox-notifications-reminders",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "In-app inbox with scope tiers — reminders, daily feed, app changelog, operational extras",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-inbox-notifications-reminders.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "240eeabd04da3f04ff2d0243b2c94fec9afc2bb97fd68f8ffb1591b310c96afc",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-10-10-hub-inbox-notifications-reminders-spec"
-			],
-			"rationale": "This proposal is the originating request for the same inbox/notifications work already carried forward into the paired spec, so it should be tracked as one goal rather than two.",
-			"evidence": [
-				"Definition of done points to spec:2026-10-10-hub-inbox-notifications-reminders-spec",
-				"Slice 1 already implemented on branch feat/inbox-scope-tiers per the handoff notes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T05:17:06.353Z"
 		},
 		{
 			"key": "proposal:2026-10-22-agent-decision-and-proactivity-experiments",
@@ -8882,6 +8882,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:42:23.684Z"
+		},
+		{
+			"key": "pr:minion_hub#640",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#640 feat(settings): open Settings from your avatar in its own sidebar",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/640",
+			"sourceUpdatedAt": "2026-11-08T05:34:00Z",
+			"sourceFingerprint": "9b3c91d60dfed2ca2c3bfc70ab87e4d0a85dce74a798e9c57e420307c4e67ae0",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "UI navigation change is reviewed and validated but still awaits exact-head CI qualification before merge.",
+			"evidence": [
+				"independent Standards and Spec source review passed",
+				"Exact-head CI qualification is pending; local heavy runs were stopped due severe host memory pressure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T05:47:12.028Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -13472,41 +13504,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T08:47:35.139Z"
-		},
-		{
-			"key": "pr:minion_hub#640",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#640 feat(settings): open Settings from your avatar in its own sidebar",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/640",
-			"sourceUpdatedAt": "2026-11-08T05:14:30Z",
-			"sourceFingerprint": "d6536fc63246afe79261787e11b18280df2a0efc922c26a1c45481e7ce519c37",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#969",
-				"run:minion_hub#42447526180"
-			],
-			"rationale": "A reviewed Settings navigation rework with linked spec but still draft, with exact-head CI qualification pending and a concurrent CI failure on master.",
-			"evidence": [
-				"status draft, exact-head CI qualification is pending",
-				"local heavy runs stopped due to severe host memory pressure, not passing evidence"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T05:17:10.799Z"
 		},
 		{
 			"key": "pr:minion-meta#809",
@@ -35109,6 +35106,38 @@
 			"scoredAt": "2026-11-08T02:29:25.819Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-08",
+			"sourceFingerprint": "dcbbc535fe95380e8ce34957c229acde39e2cdaab19d53743ca8b303fdf4a15d",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automatically filed ledger marker aggregating unrelated TODO lines rather than a single actionable goal.",
+			"evidence": [
+				"Filed automatically by the factory handoff-ledger sweep",
+				"Markers quoted below is text copied out of repository source this sweep did not write"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T05:47:12.028Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2456427302",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -45426,38 +45455,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T02:27:59.729Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-08",
-			"sourceFingerprint": "e0d4ae2cf38e0b463ddc43fc85224f0b6f413524534debfb0a8094bc428fbef9",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Every quoted marker cites a line in rankings/index.json itself, meaning the handoff sweep flagged the ranking data file's own content as a code TODO rather than a real open end.",
-			"evidence": [
-				"All markers reference NikolasP98/minion-meta@dev rankings/index.json line numbers",
-				"Quoted text is ranking rationale/evidence strings, not source code comments"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T04:47:23.257Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
