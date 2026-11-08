@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T17:17:00.419Z",
+	"generatedAt": "2026-11-08T17:47:22.372Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16178,18 +16178,17 @@
 				"specification": 8,
 				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A prior PR already shipped the first wave of fixes and this proposal enumerates a concrete, evidence-backed ledger of the remaining UI consistency items with file/line anchors.",
+			"rationale": "Approved proposal lists 11 concrete open findings with exact file:line anchors from a prior shipped audit, giving clear scope and verifiable fixes.",
 			"evidence": [
-				"55 ledger findings; six parallel audits shipped in PR feat/uiux-consistency-2026-10-10",
-				"AS-IS table lists 11 remaining findings with specific file:line evidence",
-				"status: approved, updatedAt 2026-10-11"
+				"status: approved, 11 numbered AS-IS findings with file/line anchors",
+				"prior PR feat/uiux-consistency-2026-10-10 already shipped related work, these are the deferred remainder"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T17:17:04.942Z"
+			"scoredAt": "2026-11-08T17:47:22.197Z"
 		},
 		{
 			"key": "proposal:2026-10-12-hub-onboarding-org-user",
@@ -43302,6 +43301,38 @@
 			"scoredAt": "2026-11-08T02:29:25.819Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-08",
+			"sourceFingerprint": "26a5f790560996796de3997347e058fa8fe7e2145b0ebbf90fb6cd606d4bc69c",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The listed markers all point to lines inside rankings/index.json itself quoting fragments of other ranking entries, indicating the handoff sweep scanned its own generated output rather than real source-code TODOs.",
+			"evidence": [
+				"all marker locations are NikolasP98/minion-meta@dev rankings/index.json (a generated data file, not source)",
+				"marker text consists of quoted fragments that look like other findings' rationale/evidence strings, not actual TODO(handoff) comments in code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T17:47:22.197Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -45480,38 +45511,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T02:27:59.729Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-08",
-			"sourceFingerprint": "90b976e144591da0b2206368d52e487e612cc3c972b69e7e2e176e1a4f9cf4af",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This handoff marker is a self-referential sweep artifact listing disjointed text fragments extracted from the rankings/index.json output file itself rather than real actionable TODO(handoff) comments in source code.",
-			"evidence": [
-				"summary states 'source: handoff-sweep' with repo minion-meta targeting rankings/index.json",
-				"the quoted markers are fragmented, unrelated snippets (payment links, audit notes, spec references) spanning thousands of lines with no single verifiable scope or outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T13:47:10.995Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
