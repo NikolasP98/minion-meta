@@ -1,0 +1,123 @@
+{
+  "status": "source repairs reviewed; final candidate qualification underway",
+  "standards": {
+    "reviewer": "/root/authority_standards_review",
+    "status": "completed source review",
+    "findings": [
+      {
+        "id": "AUTH-1",
+        "severity": "P1",
+        "issue": "unintended docComments schema fields not in migration",
+        "repair": "removed from comments; audit metadata only",
+        "verification": "reviewer reread and cleared"
+      },
+      {
+        "id": "AUTH-2",
+        "severity": "P1",
+        "issue": "workflow unroled transition bypassed edit/view and own-record limits",
+        "repair": "domain admission/owner predicates; selected admin has no platform bypass",
+        "verification": "workflow module/owner regressions green; locked direct status PATCH production regressions 17/17 green; fresh source recheck PASS"
+      },
+      {
+        "id": "AUTH-3",
+        "severity": "P1",
+        "issue": "repeatable-read snapshot established before session lock wait",
+        "repair": "READ COMMITTED, shared/exclusive lock and one coherent authority SELECT after wait",
+        "verification": "native7/7 green, including pg_locks-controlled generation waiter; exact final native8 rerun pending"
+      },
+      {
+        "id": "AUTH-4",
+        "severity": "P2",
+        "issue": "narrowing counted overview as analytics",
+        "repair": "canonical shared business-module intersection",
+        "verification": "pure overview/disjoint-business regressions passed"
+      }
+    ]
+  },
+  "spec": {
+    "reviewer": "/root/spec_ux_review",
+    "status": "completed source review",
+    "findings": [
+      {
+        "id": "SPEC-1",
+        "severity": "P2",
+        "issue": "Restore inherited preview removed all ancestors",
+        "repair": "current rules minus only edited target; inherited scope/field preview",
+        "verification": "shared writer tests22/22 and mounted inherited editor tests7/7 green"
+      },
+      {
+        "id": "SPEC-2",
+        "severity": "P2",
+        "issue": "unknown Start left old privileged display visible",
+        "repair": "retire/conceal/reconcile in both directions without replay",
+        "verification": "client30/30 and actual controller/peek retirement47/47 green"
+      },
+      {
+        "id": "SPEC-3",
+        "severity": "P2",
+        "issue": "Response.body/clones/iterator escaped stale guard",
+        "repair": "stream readers fence/cancel on retirement, clone/derived stream guards",
+        "verification": "reproduced delayed body/clone regressions repaired; latest controlled generation client30/30 green"
+      }
+    ]
+  },
+  "runtime": {
+    "qa": "loopback Supabase started, real migration applied, paired seed completed; no production target",
+    "nativeSession": "native7/7 passed with real GoTrue sessions, generation lock wait, restricted expiry/deletion, revoked-token boundary, private state-table ACL and forced actual audit identity; final8 including warm-cache test pending",
+    "browser": "login page loaded in dedicated headless browser; feature interaction not yet qualified",
+    "check": "final source-stable check running; no passing whole-check claim",
+    "merge": "not performed",
+    "deployment": "not performed",
+    "test": "focused latest read/write42/42, read fixtures42/42, workflow17/17; full run stopped during host memory pressure; final full suite pending",
+    "design": "lint:design passed, governed debt decreased; lint:tokens0 violations; optimistic policy gate passed"
+  },
+  "latestReviews": [
+    {
+      "reviewer": "/root/final_domain_authority_review",
+      "standards": "no additional mutation violation found",
+      "spec": "CRM prefill/party read ceilings incomplete; repaired below",
+      "method": "independent source-only"
+    },
+    {
+      "reviewer": "/root/final_read_scope_review",
+      "standards": "PASS",
+      "spec": "PASS",
+      "scope": "fresh actual request authority, canonical actual/selected mutation helpers, CRM prefill and shared party projections; metadata hydration regression repaired",
+      "method": "independent source-only; scoped diff check"
+    },
+    {
+      "reviewer": "/root/final_read_scope_review",
+      "standards": "PASS",
+      "spec": "PASS",
+      "scope": "direct sales/support PATCH workflow checks in locked mutation transaction",
+      "method": "separate source recheck; no executed tests claimed"
+    }
+  ],
+  "additionalRepairs": [
+    {
+      "issue": "freshness after policy mutation, cached actual-role grants",
+      "repair": "one coherent fresh ordinary request capability snapshot, exact actor/org ALS matching; selected scope takes precedence",
+      "verification": "focused production mutations24/24; native warmed-cache negative-control rerun pending"
+    },
+    {
+      "issue": "own-record mutation policy was applied only during simulation",
+      "repair": "same mutation predicate/parent lock/assignment checks for fresh actual browser roles; ordinary actual platform admin bypass preserved, independent jobs unchanged",
+      "verification": "ordinary own foreign deny and owned success; actual platformadmin outside/inside selectedscope pass in42-test focused bundle"
+    },
+    {
+      "issue": "CRM prefill and shared party raw reads omitted owner/field ceiling",
+      "repair": "canonical scoped prefill, deleted/foreign404, masked PII; shared party picker projection, name-only sensitive search, bounded consumer alternatives",
+      "verification": "prefill/party PGlite and boundary tests plus attachment/gateway audit-fixture bundle42/42; source review PASS"
+    },
+    {
+      "issue": "new direct read gate blocked ordinary navigation metadata hydration",
+      "repair": "exact GET modules and plugins/ui-list remain auth-only; mutations retain settings guards",
+      "verification": "admission expectations added; final rerun pending"
+    },
+    {
+      "issue": "status PATCH validated workflow before separate mutation transaction",
+      "repair": "current row FOR UPDATE and enabled definition FOR SHARE, validate before domain changes/audit/SLA/event effects in one tx",
+      "verification": "production-service late intent tests and optimistic/workflow suite17/17; source recheck PASS"
+    }
+  ]
+}
