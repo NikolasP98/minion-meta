@@ -31,7 +31,7 @@ The same behavior applies to desktop and mobile because they share SettingsLayer
 
 ## DELTA and verification
 
-- Observe the current successful URL as the first beforeNavigate action. This covers the first leave after a hard load and shallow query/hash changes; Settings/error destinations remain excluded and owner reconciliation is unchanged.
+- Capture the initial successful URL in the existing router-ready onMount task after canonicalization. Observe the current successful URL as the first beforeNavigate action. This covers the first leave after a hard load and shallow query/hash changes; Settings/error destinations remain excluded and owner reconciliation is unchanged.
 - Format a complete return URL in `settingsLayer.returnHref`: preserve existing locale; otherwise localize its pathname; keep search/hash separate.
 - Opt the Back Button out of Paraglide's automatic anchor translation with `data-no-translate`.
 - Mount the actual app Paraglide provider and shared Button in regression tests. Cover both remembered/current locale combinations, both direct-entry fallback languages, query/hash, owner replacement, error-location rejection and a native link while busy.
@@ -61,3 +61,9 @@ Independent source review also passed the QA-only transient-navigation assertion
 Candidate 398276b passed full check/build and unit tests, then the seeded browser test failed its exact pre-guard Back href assertion: after hard-loading personal home with query/hash, Back already contained only the home fallback. All three desktop checkpoints retained the same document origin and no doubled locale. The failure is separate from the locale-formatting defect. The app now observes the current successful location before navigation begins, covering first-entry and shallow URL updates independently of initial afterNavigate timing. Independent source review verified Kit calls beforeNavigate before replacing the page URL/data, and that Settings/error/owner exclusions still apply. The existing hard-load browser case remains the required red-to-green signal; no assertion was weakened. Final candidate and run are recorded after qualification.
 
 PostHog server telemetry also corroborated the locale defect: sanitized 404 fingerprints match the known doubled-locale Home and POS paths under the released application revision. The payload deliberately contains route templates and digests rather than raw request URLs. Event receipts and actor identifiers remain private/local; no replay-based recovery claim is made.
+
+## Live return-context trace
+
+The d0a14c9 QA trace established stable nonempty actor/organization ownership, origin, HTTP200 state, no page error, and allowed/known Home destination. Home already returned the fallback before opening Settings. Every captured observe call after trace attachment was for a Settings URL; no non-Settings URL was recorded before the first Settings Header. Header, state probe and navigation callbacks shared one traced memory instance. This supports a missing initial observation, not a Home authorization rejection.
+
+Candidate 97f9bdd captures the initial successful workspace in the existing one-task-later mount handler immediately after address canonicalization. Direct Settings/error entry still remains excluded and owner data is read at execution rather than captured in a stale closure. Independent Standards and Spec source review passed this change. Temporary prototype wrappers were removed; only read-only loopback-QA snapshots remain. The unchanged hard-load query/hash assertion remains required runtime proof.
