@@ -51,6 +51,24 @@
 //
 // Run from repo root: node scripts/spec-index.mjs [--check]
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
+
+// Directory spec: specs/<id>/<id>.md (used when a spec carries more than one
+// file — a FigCraft demo, fixtures). Single-file specs stay specs/<id>.md.
+export function isDirSpecPath(name) {
+	const rel = name.startsWith('specs/') ? name.slice('specs/'.length) : name;
+	const parts = rel.split('/');
+	return parts.length === 2 && parts[1] === `${parts[0]}.md`;
+}
+
+// Live scan: top-level spec files plus directory specs, as specs/-relative paths.
+export function listSpecFiles() {
+	const out = [];
+	for (const f of readdirSync('specs', { withFileTypes: true })) {
+		if (f.isFile() && f.name.endsWith('.md') && f.name !== 'TEMPLATE.md' && !f.name.endsWith('.review.md')) out.push(f.name);
+		else if (f.isDirectory() && existsSync(`specs/${f.name}/${f.name}.md`)) out.push(`${f.name}/${f.name}.md`);
+	}
+	return out;
+}
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { parseFrontmatter, isValidISODate, STAGES, STATUSES, VERDICTS } from './spec-frontmatter.mjs';
@@ -555,7 +573,10 @@ export function readSpecCorpusAtRev(rev) {
 				name.endsWith('.md') &&
 				!name.endsWith('/TEMPLATE.md') &&
 				!name.endsWith('.review.md') &&
-				!name.slice('specs/'.length).includes('/')
+				// direct children of specs/, plus directory specs: specs/<id>/<id>.md
+				// (a spec becomes a directory only when it ships more than one file,
+				// e.g. a FigCraft demo next to it — design/figcraft/README.md)
+				(!name.slice('specs/'.length).includes('/') || isDirSpecPath(name))
 		);
 	return names.flatMap((name) => {
 		const parsed = parseFrontmatter(readFileAtRev(rev, name) ?? '');
@@ -620,9 +641,7 @@ function main() {
 	}
 	const grandfathered = new Set(topics?.grandfatheredSpecIds ?? []);
 
-	for (const name of readdirSync('specs')
-		.filter((f) => f.endsWith('.md') && f !== 'TEMPLATE.md' && !f.endsWith('.review.md'))
-		.sort()) {
+	for (const name of listSpecFiles().sort()) {
 		const parsed = parseFrontmatter(readFileSync(`specs/${name}`, 'utf8'));
 		if (!parsed) {
 			errors.push(`${name}: missing frontmatter (run scripts/spec-retrofit.mjs or add by hand)`);
@@ -661,7 +680,7 @@ function main() {
 			errors.push(`${name}: status "retired" requires retired_reason (>=20 chars)`);
 		// id is the stable join key (specs/TEMPLATE.md) — it must match the filename
 		// and be unique, or link resolution silently picks whichever file loaded last.
-		const idFromFilename = name.slice(0, -3);
+		const idFromFilename = name.split('/').pop().slice(0, -3); // specs/<id>.md or specs/<id>/<id>.md
 		if (fm.id && fm.id !== idFromFilename)
 			errors.push(`${name}: "id" ("${fm.id}") must match filename ("${idFromFilename}")`);
 		if (fm.id) {
