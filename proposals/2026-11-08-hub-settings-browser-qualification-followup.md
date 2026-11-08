@@ -24,3 +24,13 @@ Run the seeded Settings browser flow on the released application source. Establi
 Retry QA on a runner with its required database port available, or qualify a stable isolated QA stack. Run `scripts/qa/settings-navigation-smoke.ts` and the existing conformance gate. Update this proposal and the Settings implementation spec with exact-source results; remove the matching `TODO(handoff)` only after completion. This records an explicit release exception, not a passing browser result.
 
 Spec: `../specs/2026-11-07-hub-settings-navigation-layer-spec.md`.
+
+## Confirmed Back URL root cause — 2026-11-08
+
+The owner supplied an authenticated error screenshot at `/es/es/pos/sell` and requested root-cause analysis. The remembered URL already includes `/es`; the shared Back Button is then automatically translated under the app's Paraglide provider, adding `/es` again. Executing the installed translation functions reproduces both `/es/es/pos/sell` and `/en/en/pos/sell`, including retained query/hash. The existing isolated Header test omits that provider, so it observes the correct stored href before the translation that breaks it.
+
+Correct the Back-link translation boundary so remembered localized URLs retain one locale, and localize the direct-entry fallback once. Add integrated provider coverage for both languages, query/hash, fallback and dirty Cancel/Discard. The existing matching TODO remains at the Back-restoration assertion. This investigation made no product change or deployment.
+
+PostHog access remains unavailable because its connector requires reauthentication. The malformed href is reproduced; the later automatic recovery described by the owner remains unverified. The post-merge QA attempt was separately blocked by the development inspector overlay before Settings entry and does not establish Back behavior.
+
+Evidence and proof limits: `../evidence/2026-11-08-settings-back-locale/README.md` and `translation-probe.json` beside it.
