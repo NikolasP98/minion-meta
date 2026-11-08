@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T02:47:11.964Z",
+	"generatedAt": "2026-11-08T03:17:43.139Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7578,38 +7578,6 @@
 			"scoredAt": "2026-11-04T05:17:31.935Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-774c6bbb4186",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/attachment-lifecycle.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-774c6bbb4186.md",
-			"sourceUpdatedAt": "2026-09-13",
-			"sourceFingerprint": "3bbdbafab7c1db10dc197051ea67e798164b3350c032a4ae9eb9262ccc6de505",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Potential silent data corruption from tombstone/provider race is a real concern, but the fix requires new quiescence-tracking design and scheduled GC that isn't yet bounded for execution.",
-			"evidence": [
-				"TODO(handoff): Retain tombstones until provider write-quiescence",
-				"fix direction requires new ACK/quiescence tracking plus scheduled GC job, not yet scoped"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T02:47:27.993Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b6caed3b36fd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9739,6 +9707,38 @@
 			"scoredAt": "2026-11-02T05:19:34.658Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-774c6bbb4186",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/attachment-lifecycle.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-774c6bbb4186.md",
+			"sourceUpdatedAt": "2026-09-13",
+			"sourceFingerprint": "3bbdbafab7c1db10dc197051ea67e798164b3350c032a4ae9eb9262ccc6de505",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Potential data-resurrection race in attachment tombstone cleanup is a real consistency risk, but the fix requires new quiescence-tracking design before it is actionable as bounded work.",
+			"evidence": [
+				"TODO: 'Retain tombstones until provider write-quiescence and a...'",
+				"diagnosis flags attachments could 'ghost back' or collide with incomplete deletion records"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T03:17:42.985Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-7cff7d845501",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11012,38 +11012,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-03T03:17:32.382Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-749505623182",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/worker-lifecycle.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-749505623182.md",
-			"sourceUpdatedAt": "2026-09-13",
-			"sourceFingerprint": "f6cdccb94ca129dd7c9047f10003fbc041f088c4ec8ae6500cfec527430715c7",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Worker-lifecycle streaming response leak is a plausible reliability risk but the marker text is truncated and the fix direction is vague, so scope needs clarifying before paid execution.",
-			"evidence": [
-				"TODO(handoff) marker cut off mid-sentence: 'can retain body/deferred work beyond'",
-				"fix direction only generic: 'ensure body fully drained... use finally blocks'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T02:47:27.993Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-distinct-visit-dates-spec",
@@ -13312,6 +13280,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T08:19:22.795Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-749505623182",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/worker-lifecycle.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-749505623182.md",
+			"sourceUpdatedAt": "2026-09-13",
+			"sourceFingerprint": "f6cdccb94ca129dd7c9047f10003fbc041f088c4ec8ae6500cfec527430715c7",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Recurring streaming-response cleanup concern in worker lifecycle across two merges suggests real risk, but the auto diagnosis gives only generic guidance, not a bounded fix.",
+			"evidence": [
+				"TODO recurs at same file across PR #271 and PR #272 merges",
+				"fix direction is generic: 'ensure response body fully drained... consider adding explicit flush/drain calls'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T03:17:42.985Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9b86db24576e",
@@ -21519,38 +21519,6 @@
 			"scoredAt": "2026-11-07T18:47:16.974Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-10e9567",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 10e9567",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-10e9567.md",
-			"sourceUpdatedAt": "2026-09-12",
-			"sourceFingerprint": "59ae511cbf93ad648ad39e8c408c615f778abac58e90b678f37d0f2254809cbe",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Empty catch block silently swallows a database write error in production retry-job code, hurting observability.",
-			"evidence": [
-				"src/server/services/bg-runtime.ts:330 empty-catch swallows RetryableJobError silently",
-				"severity: medium"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T02:47:27.993Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-198db99358ad",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26817,6 +26785,38 @@
 			"scoredAt": "2026-11-02T14:24:50.163Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-10e9567",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 10e9567",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-10e9567.md",
+			"sourceUpdatedAt": "2026-09-12",
+			"sourceFingerprint": "59ae511cbf93ad648ad39e8c408c615f778abac58e90b678f37d0f2254809cbe",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Empty catch swallowing a DB write error in production retry logic is a clear, narrow observability gap with a straightforward logging fix.",
+			"evidence": [
+				"src/server/services/bg-runtime.ts:330 empty-catch swallows DB write error silently",
+				"scoped to RetryableJobError handler, single file/line"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T03:17:42.985Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-7854cfd",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28657,38 +28657,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:49:50.455Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-7103ac983198",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/history/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7103ac983198.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "515c769fd9a105bedc31102c533f85ac6665c7c37e1594b2b3652282bd8a6ac6",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, well-specified gap where POS history has no pagination, creating a growing UX/performance dead-end.",
-			"evidence": [
-				"TODO(handoff): plain limit, newest-first — no server pagination",
-				"status: approved, DoD and fix direction specified"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T02:47:27.993Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9732f7ab41ad",
@@ -36675,38 +36643,6 @@
 			"scoredAt": "2026-11-08T02:29:25.819Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-12c3ee1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 12c3ee1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-12c3ee1.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "d7b54d02ef5ec6ab8c8a9627cad1e03f0654cf220c9cd6ba88b3b05fe0b43e77",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Narrow unchecked-access bug in a test file with a precise line reference and a bounded fix.",
-			"evidence": [
-				"test/ci/security-scope-workflow.test.ts:100 unchecked-access on parents[0]/parents[1]",
-				"severity: medium"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T02:47:27.993Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-59d7c8f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36833,6 +36769,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T08:18:08.131Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7103ac983198",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/history/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7103ac983198.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "515c769fd9a105bedc31102c533f85ac6665c7c37e1594b2b3652282bd8a6ac6",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Missing pagination on the POS history page has a clear, bounded fix direction and approved status, even though current scale makes it non-urgent.",
+			"evidence": [
+				"TODO notes plain limit, newest-first, no server pagination, 'fine at' current scale",
+				"fix direction specifies cursor/offset pagination with LIMIT+1 check"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T03:17:42.985Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b841c1438bbc",
@@ -43278,6 +43246,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T14:24:50.163Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-12c3ee1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 12c3ee1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-12c3ee1.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "d7b54d02ef5ec6ab8c8a9627cad1e03f0654cf220c9cd6ba88b3b05fe0b43e77",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Low-risk test-only unchecked-array-access fix with a precise file/line target and trivial bounded remediation.",
+			"evidence": [
+				"test/ci/security-scope-workflow.test.ts:100 unchecked-access on parents[0]/parents[1]",
+				"finding severity labeled medium but scope is test code only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T03:17:42.985Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-2ee0fee",
