@@ -7,6 +7,7 @@ updated: 2026-11-08
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_from: [handoff-minion-hub-2613706211]
 ---
 
 # Post-merge finding — todo-handoff in `scripts/qa/settings-navigation-smoke.ts`
@@ -45,3 +46,10 @@ This unblocks the handoff and closes the gap in your QA gate.
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/640
 - file: `scripts/qa/settings-navigation-smoke.ts`
 - checked: 2026-11-08
+
+## Merged from handoff-minion-hub-2613706211
+
+The handoff-ledger sweep independently flagged the same marker. Permalink to
+the exact line:
+`NikolasP98/minion_hub@master scripts/qa/settings-navigation-smoke.ts:158` —
+https://github.com/NikolasP98/minion_hub/blob/master/scripts/qa/settings-navigation-smoke.ts#L158

@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2613706211
 title: Handoff marker — scripts/qa/settings-navigation-smoke.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-4870fa66eecc
 created: 2026-11-08
 updated: 2026-11-08
 repos: [minion-hub]
