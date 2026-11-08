@@ -31,3 +31,7 @@ tags: [logic, data, ui]
 - **SC-004** seeded KPI block: `scripts/qa/seed/seed.contract.test.ts` (`tenancy.sandbox.kpi`, runs on the QA stack / CI `qa-stack` job).
 - **SC-005** gates on the PR tree: `bun run check` 0/0, targeted vitest 142 passed, `lint:design` + `lint:tokens` green, `i18n:compile` run; `bun run build` and the full suite are qualified by CI on hub #642 (local box OOM at the adapter step).
 - Post-merge: open `/sandbox` on the QA stack, confirm the seeded "Tickets (30 days)" tile renders with a delta chip, then ask the assistant for "sales per week as an area chart" and confirm a `sandbox.block_chart` call lands without a custom element.
+
+## Out of scope
+
+Series split by a second dimension, a board-level date control, drill-down to module records, per-row currency, converting the seeded custom element, and a catalogue API/MCP outside the hub page — all tracked in `proposals/2026-11-08-hub-sandbox-block-kit-followups.md`.
