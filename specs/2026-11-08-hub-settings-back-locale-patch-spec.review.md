@@ -19,3 +19,7 @@ The actual trace and final router-ready mount capture were reviewed: Standards P
 ## Final QA contract review
 
 Standards PASS; Spec PASS on 4c08f55. The 97f9bdd runtime receipts prove initial capture and desktop query/hash/Cancel/Discard/history/reload/intermediate-width behavior. Staff Plugins remains hidden under settings:manage. Clicking the permitted native Appearance link retains a meaningful sheet-close assertion; the following Back proves closure for a distinct Home navigation. Final mobile runtime completion and exact-head CI remain pending. The reviewer ran no local tests, builds or browsers.
+
+## Retained Settings runtime evidence review
+
+Standards PASS; scoped Spec runtime qualification PASS on 4c08f55 / tree 00feda2fbf787d7efb02a2d305783c94ef41ccab. The reviewer verified the local tree hash against the receipt, read checks.json and inspected desktop/mobile/Cancel screenshots. Nine checkpoints establish full query/hash return, Cancel/Discard, stable session documents, history/collapse, direct reload fallback, 1024px vertical layout and staff mobile permission filtering/Back. No repeated locale navigation was captured. General conformance remains explicitly unqualified because there is no committed ledger. Critical-journeys and deployment remain pending.
