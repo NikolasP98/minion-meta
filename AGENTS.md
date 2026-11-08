@@ -391,6 +391,7 @@ When sending work to a subproject, always include:
 ### Key Conventions
 
 - **UI design governance (hub + site)**: ALL UI work follows the design-token contract — `packages/design-tokens/contract.json` is machine truth, `specs/2026-07-13-hub-ui-coherence-implementation-spec.md` §D2 is naming law. Before touching any UI, invoke the `ui-design-governance` skill (`.claude/skills/ui-design-governance/SKILL.md`). Semantic tokens only; after UI edits run `bun run lint:design && bun run lint:tokens` (debt may only decrease).
+- **FigCraft demo first (hub + site UI)**: the canonical UI lives in `design/figcraft/*.master.figcraft` (git + Synology-synced). Any UI change is validated as a FigCraft demo before implementation: the proposal gets its own file built from the master with `design/figcraft/pipeline/fc-proposal.py` (as-is frames copied from the master wherever an existing view or component changes, to-be frames for the proposal), linked from the spec; approved + implemented → `fc-promote.py` folds it into the master and deletes the proposal file. A spec that ships more than one file (spec + demo) becomes a directory `specs/<id>/<id>.md`; single-file specs stay flat. Full rule: `design/figcraft/README.md`.
 - **TypeScript** strict mode everywhere. Avoid `any`. Never add `@ts-nocheck`.
 - **Svelte 5 only** (hub + site): runes, snippets (`Snippet` type for children), `onclick={}` syntax. No legacy Svelte 4 patterns.
 - **Formatting**: minion/ uses oxlint + oxfmt. SvelteKit projects use svelte-check.
