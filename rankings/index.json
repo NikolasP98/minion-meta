@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T18:47:00.096Z",
+	"generatedAt": "2026-11-08T19:17:09.313Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4477,6 +4477,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T18:48:13.348Z"
+		},
+		{
+			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Replace the temporary SUNAT-SUSII overlay with provider-neutral invoice source references",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-20-hub-finance-provider-source-refs.md",
+			"sourceUpdatedAt": "2026-10-04",
+			"sourceFingerprint": "75dd4f5c8ded872a1d84d1fd42c692a1bf5582d7d52890f4d334ca673513837f",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A financial data-integrity gap with 3,996 invoices at risk of duplication/misattribution has a clear schema proposal and definition of done but still needs schema/migration work before it's actionable.",
+			"evidence": [
+				"3,996 SUSII invoices, 924 SIRE documents with 909 matches",
+				"canonical row still labelled provider='susii' after retirement",
+				"TODO(handoff) marker at finance.service.ts:82 confirms open end"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T19:17:09.139Z"
 		},
 		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
@@ -9897,39 +9930,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T01:17:32.129Z"
-		},
-		{
-			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Replace the temporary SUNAT-SUSII overlay with provider-neutral invoice source references",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-20-hub-finance-provider-source-refs.md",
-			"sourceUpdatedAt": "2026-10-04",
-			"sourceFingerprint": "75dd4f5c8ded872a1d84d1fd42c692a1bf5582d7d52890f4d334ca673513837f",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Replacing the temporary metadata overlay with a typed, provider-neutral schema removes technical debt that blocks clean SUSII retirement and has a clear, testable definition of done.",
-			"evidence": [
-				"3,996 SUSII invoices with 909/924 SIRE matches",
-				"temporary overlay writes to untyped metadata.sourceOverlays.sunat-sire",
-				"DoD specifies unique constraints, backfill, and five test scenarios"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T18:47:07.155Z"
 		},
 		{
 			"key": "proposal:2026-10-09-hub-notification-worker-production-activation",
@@ -26674,6 +26674,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-02T03:48:19.118Z"
+		},
+		{
+			"key": "pr:minion_hub#645",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#645 fix(prompt): rendered markdown gets real headings, list markers, tables and quotes",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/645",
+			"sourceUpdatedAt": "2026-11-08T19:08:27Z",
+			"sourceFingerprint": "84cabca48e00624900cd253a64b7ad93846f689d6fb1d3f939d3556da2cdbb53",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A scoped, single-file UI fix with passing gates and visible-but-non-blocking rendering defects.",
+			"evidence": [
+				"One file, src/lib/components/prompt/MarkdownView.svelte",
+				"lint:design and lint:tokens pass, 7/7 story tests pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T19:17:09.139Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
