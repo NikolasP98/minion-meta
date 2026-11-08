@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-08T02:33:04.080Z",
+	"generatedAt": "2026-11-08T02:47:11.964Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5780,6 +5780,38 @@
 			"scoredAt": "2026-11-07T08:19:22.795Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c4ef8f310a4a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c4ef8f310a4a.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "68a74454b92b9bbcce90e8a7375c55627a2e4b9377d2262e940f37581171ba40",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Flagged for human review due to possible duplicate/stale status versus a closed finding on the same production-gating TODO(handoff) marker, so it needs reconciliation before execution.",
+			"evidence": [
+				"\"Flagged for a human rather than merged, since the closing rationale may still be correct\"",
+				"gates production NOTIFICATION_WORKER=1 activation pending artifact publisher/rollback controls"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T02:47:11.803Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-defaces-crm-tools-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -9182,38 +9214,6 @@
 			"scoredAt": "2026-11-04T06:47:37.080Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c4ef8f310a4a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c4ef8f310a4a.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "68a74454b92b9bbcce90e8a7375c55627a2e4b9377d2262e940f37581171ba40",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Recurring TODO(handoff) gating a production notification worker behind missing deployment/rollback safety, already flagged for human review due to reconciliation ambiguity.",
-			"evidence": [
-				"gates NOTIFICATION_WORKER=1 on missing rollback floor and qualification checks",
-				"explicitly flagged for human rather than auto-merged due to possible stale closure"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T02:17:09.541Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-reserva-keyword-config-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -11832,39 +11832,6 @@
 			"scoredAt": "2026-11-02T03:48:19.118Z"
 		},
 		{
-			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub evening batch 2026-10-10 — open ends (drop override, per-user shifts, unified sell history, filters across calendar views, DATE property formats)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-pos-sell-history-unified.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "872f2bef387b9cf88ee95f3e633958a139576b379197fd49d6535de8b0c73ad9",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Detailed ledger of 12 concrete open ends from a merged batch, several with real double-booking and permission-widening risk but none flagged as urgent production incidents.",
-			"evidence": [
-				"item 1: drop override can double-book due to unclear error reason code",
-				"item 4: permission widening allows staff to close own register",
-				"12 enumerated open ends with specific TODO(handoff) pointers"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T02:17:09.541Z"
-		},
-		{
 			"key": "proposal:2026-10-21-windows-qualification-admission-independence",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13165,20 +13132,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Well-specified multi-slice extension of custom-column infrastructure with clear TO-BE but broad unbounded scope needing slicing before execution.",
+			"rationale": "Large multi-capability follow-on proposal (relations, query planner, provisioning) with clear TO-BE but broad unsliced scope needing decomposition before paid execution.",
 			"evidence": [
-				"41 production DataTable uses identified",
-				"four TO-BE items spanning formulas, query planning, provisioning, and migration"
+				"41 production DataTable uses identified needing full-result query support",
+				"scope spans formula engine, query planner, provisioning, and legacy migration"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-01T02:17:09.541Z"
+			"scoredAt": "2026-11-08T02:47:11.803Z"
 		},
 		{
 			"key": "proposal:2026-10-13-hub-calendar-context-menu-followups",
@@ -17757,6 +17724,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T04:48:02.125Z"
+		},
+		{
+			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub evening batch 2026-10-10 — open ends (drop override, per-user shifts, unified sell history, filters across calendar views, DATE property formats)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-pos-sell-history-unified.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "872f2bef387b9cf88ee95f3e633958a139576b379197fd49d6535de8b0c73ad9",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Ledger of 12 well-specified open ends from a shipped batch, several with concrete fixes (e.g. override conflict reason code) but mixed priority and no single bounded slice yet.",
+			"evidence": [
+				"item 1: drop override double-books, closing move identified (reason code on SlotUnavailableError)",
+				"item 3: migration window leaves uniqueness guard gap during production migration"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T02:47:11.803Z"
 		},
 		{
 			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
@@ -42833,6 +42832,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T04:48:02.125Z"
+		},
+		{
+			"key": "issue:minion-meta#967",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#967 [monitor:unstick] rank run f60409b3: batch 5 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/967",
+			"sourceUpdatedAt": "2026-11-08T02:17:24Z",
+			"sourceFingerprint": "0ade763ff1911b85fdec51986a216ded44f6721f8621fb1c7d9be64436223c94",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Monitor intake describes a transient dual-provider ranking batch failure that the run note itself says is resumable/idempotent, not an actionable defect.",
+			"evidence": [
+				"\"Recommendation: retry the run; ranking appears resumable/idempotent\"",
+				"\"No sign of a spec/task defect or injected/adversarial log content\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-08T02:47:11.803Z"
 		},
 		{
 			"key": "proposal:2026-08-17-site-vendored-tgz-untracked",
