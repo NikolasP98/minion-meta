@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-4870fa66eecc
 title: "Post-merge finding — todo-handoff in scripts/qa/settings-navigation-smoke.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-11-08
 updated: 2026-11-08
 repos: [minion-hub]
