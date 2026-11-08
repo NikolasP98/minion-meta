@@ -3,7 +3,7 @@ id: 2026-11-06-hub-personal-navigation-and-settings-layer
 title: Personal navigation and a separate Settings layer
 status: in-spec
 created: 2026-11-06
-updated: 2026-11-06
+updated: 2026-11-07
 repos: [minion_hub, minion-meta]
 source: owner-request-2026-11-06
 tags: [ui, permissions]
@@ -30,3 +30,7 @@ Overlaps the 2026-10-28 org/module/nav-home proposal and open Hub PRs #602, #626
 ## Settings workshop
 
 Page: Settings · AS-IS → TO-BE · 2026-11-06. Review-only, with prototype Avatar → Settings → Back. Implementation is intentionally excluded pending the owner's workshop feedback; this is an explicit stage boundary, not an unwired production change.
+
+## Navigation release
+
+Hub #639 merged as fac6ad07ffe51c152c1f59626ad3147d8723ba1c after the owner explicitly approved the GitHub admin merge override. Vercel dpl_GR8N6BkUrJoNPuDysTQmcGWdZQWE is READY and serves hub.minion-ai.org. The linked spec and evidence manifest record 9018 passing tests, independent review and 18 passing local QA browser assertions. This proposal stays in-spec for the deliberately deferred Settings workshop/implementation; no production Settings change was shipped.

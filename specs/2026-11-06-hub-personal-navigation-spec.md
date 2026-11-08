@@ -1,8 +1,8 @@
 ---
 id: 2026-11-06-hub-personal-navigation-spec
 title: Complete section discovery and personal navigation
-stage: test
-status: implementing
+stage: done
+status: shipped
 pass: 2
 verdict: approved
 created: 2026-11-06
@@ -68,4 +68,8 @@ Local QA browser qualification passed all 18 assertions on 7d44875b: empty disco
 
 ## Release gate
 
-Evidence manifest: `evidence/2026-11-06-personal-navigation/qualification.json`. All candidate checks passed. GitHub refused the normal squash merge because master requires one approving GitHub review. Independent agent review does not create a GitHub review. Owner/admin override approval was requested explicitly; no protection settings were changed and no override was used while that decision is pending. Production remains unchanged.
+Evidence manifest: `evidence/2026-11-06-personal-navigation/qualification.json`. All candidate checks passed. GitHub refused the normal squash merge because master requires one approving GitHub review. Independent agent review does not create a GitHub review. The owner explicitly approved the admin merge override after qualification. PR #639 was squash-merged as fac6ad07ffe51c152c1f59626ad3147d8723ba1c. No branch protection settings changed. Vercel production deployment dpl_GR8N6BkUrJoNPuDysTQmcGWdZQWE reached READY. Its Git metadata matches the merge SHA and its assigned aliases include hub.minion-ai.org. Navigation and the design-only Settings workshop are delivered; Settings production implementation remains outside this spec.
+
+## Post-merge runtime proof
+
+Vercel and GitHub deployment status both report success for fac6ad07ffe51c152c1f59626ad3147d8723ba1c. The production alias serves the new deployment. A separate empty browser context opened `/account/home` and rendered the expected sign-in page at `/en/login?redirectTo=%2Faccount%2Fhome`; route-data loader outcomes are recorded separately in the manifest. Production verification was read-only and unauthenticated; all authenticated feature mutations were tested on local synthetic QA. Settings implementation remains deferred.
