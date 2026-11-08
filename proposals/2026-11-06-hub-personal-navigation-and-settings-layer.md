@@ -1,9 +1,9 @@
 ---
 id: 2026-11-06-hub-personal-navigation-and-settings-layer
 title: Personal navigation and a separate Settings layer
-status: in-spec
+status: done
 created: 2026-11-06
-updated: 2026-11-07
+updated: 2026-11-08
 repos: [minion_hub, minion-meta]
 source: owner-request-2026-11-06
 tags: [ui, permissions]
@@ -17,11 +17,11 @@ The picker omits empty sections. Everyone can pick the full development-oriented
 
 ## TO-BE
 
-Deploy complete permission-filtered section discovery and personal navigation. Restrict Todas las secciones to owner/admin/manager. Workshop Settings in the existing FigCraft project before any Settings implementation.
+Complete permission-filtered section discovery and personal navigation are deployed. Todas las secciones is restricted to owner/admin/manager. The Settings workshop in the existing FigCraft project was reviewed and approved; implement its separate primary navigation layer.
 
 ## DELTA
 
-Navigation implementation/qualification follows the linked spec. Settings is deliberately design-only: avatar menu entry, a settings-only sidebar, and Back restoring prior context. Existing views copied into a new page of `.local/figcraft/minion-hub.figcraft`.
+Navigation implementation/qualification follows the linked personal-navigation spec. The approved Settings layer adds an avatar menu entry, a settings-only primary sidebar, and Back restoring prior context, following `../specs/2026-11-07-hub-settings-navigation-layer-spec.md`. Existing views were copied into a new page of `.local/figcraft/minion-hub.figcraft` for the completed workshop.
 
 ## Cross-check
 
@@ -29,8 +29,16 @@ Overlaps the 2026-10-28 org/module/nav-home proposal and open Hub PRs #602, #626
 
 ## Settings workshop
 
-Page: Settings · AS-IS → TO-BE · 2026-11-06. Review-only, with prototype Avatar → Settings → Back. Implementation is intentionally excluded pending the owner's workshop feedback; this is an explicit stage boundary, not an unwired production change.
+Page: Settings · AS-IS → TO-BE · 2026-11-06. Prototype Avatar → Settings → Back. The owner reviewed the UI and approved implementation/deployment; the Settings implementation spec now owns verification and release.
 
 ## Navigation release
 
-Hub #639 merged as fac6ad07ffe51c152c1f59626ad3147d8723ba1c after the owner explicitly approved the GitHub admin merge override. Vercel dpl_GR8N6BkUrJoNPuDysTQmcGWdZQWE is READY and serves hub.minion-ai.org. The linked spec and evidence manifest record 9018 passing tests, independent review and 18 passing local QA browser assertions. This proposal stays in-spec for the deliberately deferred Settings workshop/implementation; no production Settings change was shipped.
+Hub #639 merged as fac6ad07ffe51c152c1f59626ad3147d8723ba1c after the owner explicitly approved the GitHub admin merge override. Vercel dpl_GR8N6BkUrJoNPuDysTQmcGWdZQWE is READY and serves hub.minion-ai.org. The linked spec and evidence manifest record 9018 passing tests, independent review and 18 passing local QA browser assertions. This navigation release preceded the approved Settings implementation. Settings release state is recorded in its own linked spec.
+
+## Settings workshop approved
+
+The owner reviewed the proposal UI and explicitly requested “apply and deploy” on 2026-11-07. This supersedes the earlier Settings deferral. Implementation and verification follow `../specs/2026-11-07-hub-settings-navigation-layer-spec.md`. The existing deployed personal navigation remains in scope only as a compatibility boundary.
+
+## Settings release
+
+The owner explicitly waived the remaining checks and requested merge. Hub #640 merged as `50c9d4e1a8ba98f683cbaf577d4eecc0ebc0ccb2`; Vercel `dpl_CpAuXkwrNpeRFBWPT3d1aPmEYneM` is READY and assigned to hub.minion-ai.org. Independent review, 9047 passing tests and build/typecheck evidence are retained in the linked implementation spec. Browser qualification remains deferred under that override, tracked separately in `2026-11-08-hub-settings-browser-qualification-followup.md`.
