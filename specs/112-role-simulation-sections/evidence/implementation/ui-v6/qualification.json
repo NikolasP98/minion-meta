@@ -1,5 +1,5 @@
 {
-  "status": "Latest UI implemented, signed and pushed; release CI pending; production release authorized but not yet proved",
+  "status": "Final-source CI and preview passed; normal merge blocked by required GitHub review; production not deployed",
   "sourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
   "sourceTree": "43043adce9bce6a95cf765e2211fe7ae833c7393",
   "hubPR": "https://github.com/NikolasP98/minion_hub/pull/646",
@@ -44,7 +44,7 @@
       "errors": 0,
       "warnings": 0,
       "result": "PASS",
-      "boundary": "Recorded role-first/footer/search candidate check; final avatar icon/color/padding detail followed this run. Exact-HEAD check/build remains pending in currentCI."
+      "boundary": "Local check preceded final badge cosmetics; final exact-source CI now confirms zero errors and warnings on the same candidate tree."
     },
     {
       "evidence": "format.txt",
@@ -114,9 +114,12 @@
     "CI": {
       "run": "42577143704",
       "url": "https://github.com/NikolasP98/minion_hub/actions/runs/42577143704",
-      "status": "in_progress",
+      "status": "completed",
       "sourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
-      "progressNote": "Orchestrator reported15of17checks passed; two browserjobs pending; no failures. This is a checkpoint, not a completed CI conclusion."
+      "progressNote": "All 18 check runs succeeded; Vercel commit status also succeeded.",
+      "conclusion": "success",
+      "checkRunsPassed": 18,
+      "evidence": "ci-release-final.json"
     },
     "desktop": {
       "run": "42577143739",
@@ -125,9 +128,9 @@
       "sourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
       "conclusion": "success"
     },
-    "merge": "not yet proved",
-    "productionDeployment": "not yet proved",
-    "authenticatedProductionVerification": "not yet proved",
+    "merge": "Blocked by GitHub required-review rule; normal merge rejected; admin override choice pending",
+    "productionDeployment": "Not performed; production remains on prior source",
+    "authenticatedProductionVerification": "Pending authorized signed-in production browser access",
     "productionPreflight": {
       "evidence": "production-preflight.json",
       "result": "PASS read-only prerequisites",
@@ -153,7 +156,8 @@
       "productionAlias": "hub.minion-ai.org",
       "boundary": "Read-only production-before state; the new feature has not yet been deployed."
     },
-    "hubPRState": "Ready for review; no longer draft per orchestrator"
+    "hubPRState": "Ready for review; no longer draft per orchestrator",
+    "githubGateEvidence": "release-gate.json"
   },
   "qa": {
     "url": "http://127.0.0.1:5199/en/home",
@@ -290,6 +294,34 @@
       "sha256": "ee9de0bb87558a64565b80b9b2e6f2a3a3743bc25cd0f615fc1f9220327eacb0",
       "originalPath": "/tmp/pos-toolbar-mobile-source71.json",
       "sourceMtimeUTC": "2026-11-09T07:20:27.561184+00:00"
+    },
+    "ci-release-final.json": {
+      "sha256": "5143a3f18c3aaf4dec54117a10261663d57863db143dfed09811014e9da1290c",
+      "originalPath": "/tmp/hub-role-release-ci-71d3743d.json",
+      "sourceMtimeUTC": "2026-11-09T07:38:12.512182+00:00"
+    },
+    "ci-conformance-comparison.json": {
+      "sha256": "32b35bd5c646cf54789dafa913a2fff5324dc0eab146b4fa97527d8bf1d431b0",
+      "originalPath": "/tmp/hub-role-release-ci-71d3743d-qa-comparison.json",
+      "sourceMtimeUTC": "2026-11-09T07:25:27.162315+00:00"
+    },
+    "pos-toolbar-mobile-coarse-source71.png": {
+      "sha256": "d3f9b745d7908c10975537ec3dbd26414326dc242b25e07cfdd67eea4df6b0fb",
+      "originalPath": "/tmp/pos-toolbar-mobile-coarse-source71.png",
+      "sourceMtimeUTC": "2026-11-09T07:24:27.994748+00:00"
     }
+  },
+  "ciQualification": {
+    "evidence": "ci-release-final.json",
+    "sourceTree": "43043adce9bce6a95cf765e2211fe7ae833c7393",
+    "candidateTreeEqual": true,
+    "unitPassed": 9279,
+    "unitSkipped": 301,
+    "architecturePassed": 3,
+    "criticalBrowserPassed": 245,
+    "criticalBrowserSkipped": 0,
+    "criticalBrowserBoundary": "Actual components with synthetic identity/HTTP/WS, no real app server/auth provider/database or production runtime proof.",
+    "qaConformanceBoundary": "Generic page-conformance comparison has no committed initial ledger; CI intentionally exits zero. Retained baseline comparison shows selected POS/account/settings/navigation metrics are unchanged or improved; this is not a full-fleet conformance pass.",
+    "qaConformanceComparison": "ci-conformance-comparison.json"
   }
 }

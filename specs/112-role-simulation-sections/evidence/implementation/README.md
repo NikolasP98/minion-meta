@@ -1,6 +1,6 @@
 # Implementation qualification
 
-Latest checkpoint: [UI V6 and authorized production delivery](ui-v6/README.md), signed source 71d3743d. Local role/footer/search and scoped native checks pass within their recorded boundaries. Exact-source CI and production verification are pending. Older receipts below remain historical.
+Latest checkpoint: [UI V6 and authorized production delivery](ui-v6/README.md), signed source 71d3743d. Local role/footer/search and scoped native checks pass within their recorded boundaries. Exact-source CI is green; production merge and verification remain pending. Older receipts below remain historical.
 
 Earlier UI follow-up: [separate QA account switching from role simulation](qa-controls-followup/README.md), signed source `8cf5dc35`. Local checks and Owner → Staff desktop/mobile proof pass; fresh CI is running. Earlier final-source receipts below describe the previously qualified source.
 
@@ -26,3 +26,5 @@ Native tests independently exercise real verified sessions across two organizati
 Final visual review reproduced an off-mode assistant overlapping the new tray primary action: [before hit-test](assistant-overlap-before.json). The repaired enabled controls now receive their clicks: [Apply role](assistant-cta-after.json), [Review changes](assistant-access-cta-after.json). With the assistant initially open, [suspension preserves its unsent QA draft](assistant-suspended.json); native Escape then [restores the panel and draft](assistant-restored.json). No message was sent or policy applied in this regression. Earlier overlap screenshots remain historical evidence.
 
 No merge or production release has occurred. The configured signer recovered. Final production source `2f1fa81b` is published. A native principal fixture-only follow-up `91baf240` passed [8 native cases](principal-native-eight.txt), [report contract](principal-native-contract.txt) and [typecheck](principal-fixture-typecheck.txt); [final CI](ci-final.json) passed on the exact final SHA. Final source/evidence delivery is complete; human merge and production release remain separate.
+
+Final-source CI is green in [ui-v6/ci-release-final.json](ui-v6/ci-release-final.json). [The GitHub merge gate](ui-v6/release-gate.json) remains unresolved; production is not deployed.

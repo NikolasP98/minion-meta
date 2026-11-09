@@ -22,4 +22,4 @@ Existing mounted DataTable, role menu/tray, frame, client and POS route checks p
 
 ## Final source and release authorization
 
-Signed Hub `71d3743d020a518b95ad1a090b76ca46f16fd56f`, tree `43043adce9bce6a95cf765e2211fe7ae833c7393`, contains the final opaque frame/badge color and padded key glyph. The owner approved this UI and requested push plus production verification. [Current evidence](evidence/implementation/ui-v6/README.md) records local qualification, capture boundaries and pending exact-source CI. Production deployment and authenticated runtime proof are not yet established.
+Signed Hub `71d3743d020a518b95ad1a090b76ca46f16fd56f`, tree `43043adce9bce6a95cf765e2211fe7ae833c7393`, contains the final opaque frame/badge color and padded key glyph. The owner approved this UI and requested push plus production verification. [Current evidence](evidence/implementation/ui-v6/README.md) records local qualification, capture boundaries and successful exact-source CI. Production deployment and authenticated runtime proof are not yet established.

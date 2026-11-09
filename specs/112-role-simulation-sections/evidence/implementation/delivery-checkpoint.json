@@ -1,5 +1,5 @@
 {
-  "status": "Latest UI source signed and pushed; owner authorized production delivery; exact-source CI and release verification pending",
+  "status": "Final-source CI green; owner-authorized release waits on GitHub review/admin choice; production not deployed",
   "hub": {
     "checkout": "/home/nikolas/.cache/codex-work/hub-role-simulation-20261108",
     "branch": "feat/112-role-simulation-section-access",
@@ -13,11 +13,14 @@
       "url": "https://github.com/NikolasP98/minion_hub/actions/runs/42577143704",
       "desktopRun": "42577143739",
       "desktopURL": "https://github.com/NikolasP98/minion_hub/actions/runs/42577143739",
-      "status": "in_progress",
+      "status": "completed",
       "sourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
       "desktopStatus": "completed",
       "desktopConclusion": "success",
-      "progressNote": "15of17checks passed; two browserjobs pending per orchestrator; no completed CI conclusion"
+      "progressNote": "All final check runs and Vercel preview status succeeded.",
+      "conclusion": "success",
+      "checkRunsPassed": 18,
+      "evidence": "ui-v6/ci-release-final.json"
     },
     "sourceTree": "43043adce9bce6a95cf765e2211fe7ae833c7393",
     "priorCI": {
@@ -50,18 +53,27 @@
     "branch": "feat/112-role-simulation-section-access",
     "draftPR": "https://github.com/NikolasP98/minion-meta/pull/974",
     "priorEvidenceCommit": "2413678b",
-    "finalEvidence": "This branch preserves historical full qualification and adds currentUI/sourcebound local receipts. Currentrelease remains pending until recorded."
+    "finalEvidence": "This branch preserves historical full qualification and adds currentUI/sourcebound local receipts. Currentrelease remains pending until recorded.",
+    "latestPublishedBeforeThisReceipt": "5ce624bb2915c4f7c5b0a67f97ac01952bd0af15",
+    "validation": "Merged current dev to preserve all index entries; 310 specs/1084 proposals checked; CI42579187116 succeeded."
   },
   "signer": {
     "program": "/opt/1Password/op-ssh-sign",
     "policy": "Continue configured signed commits; do not bypass.",
     "status": "Recovered; configured signature succeeded on retry, no bypass",
-    "previousError": "1Password: failed to fill whole buffer"
+    "previousError": "1Password: failed to fill whole buffer",
+    "latestEvidenceAttempt": {
+      "result": "failed",
+      "error": "1Password: failed to fill whole buffer; fatal: failed to write commit object",
+      "boundary": "Product source remains pushed; final CI evidence update remains staged and uncommitted. No signing bypass used."
+    }
   },
   "resume": [
-    "Finish exact-source CI and desktop qualification on71d3743d; record actual results.",
-    "Complete the owner-authorized merge and production deployment after qualification.",
-    "Perform authenticated production verification and bind it to the deployed source; do not infer runtime success from a document shell or preview status."
+    "Retry the configured signed evidence commit when 1Password is available; push and verify current meta CI. Do not disable signing.",
+    "Resolve the pending GitHub required-review/admin-override choice for Hub PR646; do not infer approval from elapsed time.",
+    "Recheck source/base and qualified tree; complete authorized merge and branch-triggered production deployment.",
+    "Repull explicit production env securely, verify migration/schema/runtime and exact deployed source; remove the temporary env afterward.",
+    "Use the pending authorized signed-in browser choice for production UI verification; do not infer runtime success from a document shell, preview or fixture-only browser matrix."
   ],
   "qa": {
     "url": "http://127.0.0.1:5199/en/crm/customers",
@@ -77,7 +89,7 @@
     "source": "Direct current-session instructions confirmed by orchestrator; distinct from signing approval"
   },
   "releaseProof": {
-    "merge": "pending",
+    "merge": "Normal merge rejected by GitHub required-review rule; override-or-review choice pending",
     "productionDeployment": "pending",
     "authenticatedProductionVerification": "pending",
     "productionPreflight": {
@@ -96,6 +108,7 @@
       "readyState": "READY",
       "productionAlias": "hub.minion-ai.org",
       "evidence": "ui-v6/production-before.json"
-    }
+    },
+    "githubGateEvidence": "ui-v6/release-gate.json"
   }
 }

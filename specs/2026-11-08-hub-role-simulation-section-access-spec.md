@@ -39,8 +39,10 @@ Latest signed Hub source `71d3743d020a518b95ad1a090b76ca46f16fd56f`, tree `43043
 
 ## Verification and authorized production delivery
 
-On 2026-11-09 the owner approved the latest UI and requested push plus production verification. This direct release authorization is distinct from the earlier signing approval. [Current CI 42577143704](https://github.com/NikolasP98/minion_hub/actions/runs/42577143704) and [desktop 42577143739](https://github.com/NikolasP98/minion_hub/actions/runs/42577143739) are pending at this checkpoint. Read-only production preflight confirms prerequisites; the migration was not yet applied at that check. Merge, production deployment and authenticated post-merge behavior remain unproved. The [delivery checkpoint](112-role-simulation-sections/evidence/implementation/delivery-checkpoint.json) records the remaining release steps.
+On 2026-11-09 the owner approved the latest UI and requested push plus production verification. This direct release authorization is distinct from the earlier signing approval. [Current CI 42577143704](https://github.com/NikolasP98/minion_hub/actions/runs/42577143704) and [desktop 42577143739](https://github.com/NikolasP98/minion_hub/actions/runs/42577143739) completed successfully: all 18 check runs and Vercel preview status passed. Read-only production preflight confirms prerequisites; the migration was not yet applied at that check. Merge, production deployment and authenticated post-merge behavior remain unproved. The [delivery checkpoint](112-role-simulation-sections/evidence/implementation/delivery-checkpoint.json) records the remaining release steps.
 
 ## Out of scope
 
 Other-user identity impersonation, membership edits, cross-organization simulation, broad Settings redesign and unrelated context-menu work.
+
+The [release-gate receipt](112-role-simulation-sections/evidence/implementation/ui-v6/release-gate.json) records GitHub's rejection of normal merge under its one-review rule. The requested override-or-review choice is pending; production remains unchanged.

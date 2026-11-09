@@ -45,5 +45,7 @@ Revision 5 (2026-11-09): the owner selected the role-first option and requested 
 
 - [x] T018 Implement owner-selected role-first UI, dividers, atomic role editing, quiet pulsing viewport frame, final padded circular key badge, two-row footer and shared CompactSearch/POS alignment. Publish signed Hub 71d3743d. [Local receipts and capture boundaries](evidence/implementation/ui-v6/README.md) record 122 focused cases,2 connection-status cases,8 scoped native cases and type/style checks.
 - [x] T019 Record owner approval of the latest UI and explicit request to push and verify production. This release authorization is separate from signing approval.
-- [ ] T020 Complete exact-source CI 42577143704 and desktop 42577143739; record actual outcomes without reusing prior green receipts.
+- [x] T020 Complete exact-source CI 42577143704 and desktop 42577143739; record actual outcomes without reusing prior green receipts.
 - [ ] T021 Complete authorized merge, production deployment and authenticated post-merge verification; bind results to the released source.
+
+Final release checkpoint: all 18 exact-source checks and Vercel preview status passed. Normal merge was rejected by the GitHub one-review rule; the owner's override-or-review choice is pending. No merge, deployment or authenticated production check is claimed. See [final CI](evidence/implementation/ui-v6/ci-release-final.json) and [release gate](evidence/implementation/ui-v6/release-gate.json).

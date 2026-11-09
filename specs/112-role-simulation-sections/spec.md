@@ -16,7 +16,7 @@ tags: [security, auth, ui]
 > Latest approved UI direction: [revision 6](ui-revision-6-viewport-footer.md) uses a subtle pulsing 1px viewport perimeter, a padded circular key badge on the avatar, a role-first selector and a separate Finish row enclosed by dividers. It supersedes the intermediate V5 avatar ring. Role replacement remains atomic and retains the original simulation lifetime.
 
 **Feature Branch**: `feat/112-role-simulation-section-access`, isolated Hub checkout `/home/nikolas/.cache/codex-work/hub-role-simulation-20261108`.
-**Created**: 2026-11-08. **Status**: Owner-approved for implementation; EGM feature and technical admission converged before code. The original implementation passed local and CI qualification on 91baf240. Latest signed source 71d3743d is locally qualified within the [recorded boundaries](evidence/implementation/ui-v6/README.md); exact-source release CI is pending. The owner approved the latest UI and requested production delivery. No deployment claim.
+**Created**: 2026-11-08. **Status**: Owner-approved for implementation; EGM feature and technical admission converged before code. The original implementation passed local and CI qualification on 91baf240. Latest signed source 71d3743d is locally qualified within the [recorded boundaries](evidence/implementation/ui-v6/README.md); exact-source release CI passed all 18 checks, with Vercel preview success. The owner approved the latest UI and requested production delivery. No deployment claim.
 **Input**: Owners/admins can simulate an active organization's roles from the avatar menu, reload under those rules, and move to a permitted page if needed. Authorized users can manage section RBAC from main pages. Evaluate context-menu placement through FigCraft and UX agents.
 **Owner clarification**: “Allow real changes, gated by the simulated role.” This settles live actions; the later implementation authorization below approves proceeding with this scope.
 
@@ -203,3 +203,5 @@ Original qualification checklist: focused authority and persistence tests; seede
 ## Latest release checkpoint
 
 [UI V6 qualification](evidence/implementation/ui-v6/README.md) binds the latest source, local receipts and screenshot boundaries. The owner authorized production delivery. CI on 71d3743d, approved merge, deployment and authenticated post-merge verification remain distinct recorded steps; none is inferred from prior green CI, a push, a Vercel preview or a successful document shell.
+
+The final [CI receipt](evidence/implementation/ui-v6/ci-release-final.json) confirms the qualified tree. [GitHub rejected normal merge](evidence/implementation/ui-v6/release-gate.json) under its one-review rule; the override-or-review choice remains pending. Production is not deployed.
