@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-09)
 
-- `NikolasP98/minion_hub@master src/server/services/job-effects.service.ts:476` — Null manifest plus receipts requires explicit reingest or a
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/job-effects.service.ts#L476
-- `NikolasP98/minion_hub@master src/server/services/job-effects.service.ts:750` — Add an explicitly reviewed indeterminate recovery policy;
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/job-effects.service.ts#L750
+- `NikolasP98/minion_hub@master src/server/services/job-effects.service.ts:477` — Null manifest plus receipts requires explicit reingest or a
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/job-effects.service.ts#L477
+- `NikolasP98/minion_hub@master src/server/services/job-effects.service.ts:752` — Add an explicitly reviewed indeterminate recovery policy;
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/job-effects.service.ts#L752

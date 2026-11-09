@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-2492030615
 title: Handoff marker — src/lib/components/layout/NavContextMenu.svelte (minion_hub)
-status: draft
+status: closed
 created: 2026-10-26
 updated: 2026-11-09
 repos: [minion-hub]
@@ -30,3 +30,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/layout/NavContextMenu.svelte#L188
 - `NikolasP98/minion_hub@master src/lib/components/layout/NavContextMenu.svelte:206` — section "Access…" (users:manage) arrives with S5.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/layout/NavContextMenu.svelte#L206
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-11-09; the sweep closed this proposal.

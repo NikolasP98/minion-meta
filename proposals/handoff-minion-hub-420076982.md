@@ -28,7 +28,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-09)
 
-- `NikolasP98/minion_hub@master src/server/services/brains.service.ts:1037` — Indeterminate admissions need an explicit recovery/UI and
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/brains.service.ts#L1037
-- `NikolasP98/minion_hub@master src/server/services/brains.service.ts:1060` — JOB-02 still requires driver-recovery and deployed migration/drain
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/brains.service.ts#L1060
+- `NikolasP98/minion_hub@master src/server/services/brains.service.ts:1040` — Indeterminate admissions need an explicit recovery/UI and
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/brains.service.ts#L1040
+- `NikolasP98/minion_hub@master src/server/services/brains.service.ts:1063` — JOB-02 still requires driver-recovery and deployed migration/drain
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/brains.service.ts#L1063

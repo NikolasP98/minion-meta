@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-hub-2900193194
 title: Handoff marker — src/server/services/nav-config.service.ts (minion_hub)
-status: review
+status: closed
 created: 2026-10-26
 updated: 2026-11-09
 repos: [minion-hub]
@@ -29,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/server/services/nav-config.service.ts:53` — runs after (not inside) the document write — a failure here leaves
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/nav-config.service.ts#L53
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-11-09; the sweep closed this proposal.
