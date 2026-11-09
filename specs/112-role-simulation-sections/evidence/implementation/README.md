@@ -4,7 +4,7 @@ The guarded QA runtime uses loopback Supabase Auth and PostgreSQL. These receipt
 
 | Behavior | Runtime evidence |
 | --- | --- |
-| One avatar item, single-screen searchable role tray, brief real-data warning | [Picker](role-picker.png), [search](role-search.png) |
+| One avatar item, single-screen searchable role tray, brief real-data warning | [Current picker](role-picker-current.png), [search](role-search.png) |
 | Full viewport frame, avatar-only Finish | [Desktop](viewer-frame-desktop.png), [avatar](avatar-finish.png), [mobile zero-page shell](zero-mobile.png), [mobile avatar](zero-mobile-avatar.png) |
 | Permitted real edit, foreign-record denial, masked PII, actual actor audit | [API receipt](live-write-api.json), [audit receipt](live-write-audit.json) |
 | Contextual access without Settings permission | [Real access-manager API receipt](actual-manager-api.json), [side-menu action](actual-access-more.png), [editor](actual-access-editor.png) |
@@ -21,4 +21,4 @@ Native tests independently exercise real verified sessions across two organizati
 
 Final visual review reproduced an off-mode assistant overlapping the new tray primary action: [before hit-test](assistant-overlap-before.json). The repaired enabled controls now receive their clicks: [Apply role](assistant-cta-after.json), [Review changes](assistant-access-cta-after.json). With the assistant initially open, [suspension preserves its unsent QA draft](assistant-suspended.json); native Escape then [restores the panel and draft](assistant-restored.json). No message was sent or policy applied in this regression. Earlier overlap screenshots remain historical evidence.
 
-No merge or production release has occurred. The configured signer recovered. Final signed Hub source `2f1fa81b` is published; fresh CI is running. Final meta evidence publication and human merge remain separate.
+No merge or production release has occurred. The configured signer recovered. Final production source `2f1fa81b` is published. A native principal fixture-only follow-up `91baf240` passed [8 native cases](principal-native-eight.txt), [report contract](principal-native-contract.txt) and [typecheck](principal-fixture-typecheck.txt); [final CI](ci-final.json) passed on the exact final SHA. Final source/evidence delivery is complete; human merge and production release remain separate.

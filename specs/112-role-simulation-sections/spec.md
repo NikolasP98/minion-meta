@@ -14,7 +14,7 @@ tags: [security, auth, ui]
 # Feature Specification: Organization role simulation and contextual section access
 
 **Feature Branch**: `feat/112-role-simulation-section-access`, isolated Hub checkout `/home/nikolas/.cache/codex-work/hub-role-simulation-20261108`.
-**Created**: 2026-11-08. **Status**: Owner-approved for implementation; EGM feature and technical admission converged before code. Local final-candidate qualification passed; the final signed Hub source is published and fresh CI is running. No release claim.
+**Created**: 2026-11-08. **Status**: Owner-approved for implementation; EGM feature and technical admission converged before code. Local and final CI qualification passed; signed Hub source and evidence are published for human review. No release claim.
 **Input**: Owners/admins can simulate an active organization's roles from the avatar menu, reload under those rules, and move to a permitted page if needed. Authorized users can manage section RBAC from main pages. Evaluate context-menu placement through FigCraft and UX agents.
 **Owner clarification**: “Allow real changes, gated by the simulated role.” This settles live actions; the later implementation authorization below approves proceeding with this scope.
 
