@@ -36,3 +36,7 @@ Other-user identity impersonation, organization membership changes, broad Settin
 ## Verification
 
 See the canonical spec's Verification section and adjacent evidence. Completion requires fresh authority, cache/delegation, browser, design-token, i18n and route-contract proof against the final candidate. Lifecycle advances only with recorded evidence.
+
+## QA picker placement follow-up
+
+[The follow-up receipt](112-role-simulation-sections/evidence/implementation/qa-controls-followup/README.md) records the reported Owner → Staff ambiguity and moves real QA account switching to DEV. The avatar retains the single role simulation entry/Finish action. Signed Hub `8cf5dc35` is locally qualified; fresh CI is pending. Prior green CI remains bound to its earlier source.

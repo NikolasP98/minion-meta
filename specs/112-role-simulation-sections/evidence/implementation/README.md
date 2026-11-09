@@ -1,5 +1,7 @@
 # Implementation qualification
 
+Latest UI follow-up: [separate QA account switching from role simulation](qa-controls-followup/README.md), signed source `8cf5dc35`. Local checks and Owner → Staff desktop/mobile proof pass; fresh CI is running. Earlier final-source receipts below describe the previously qualified source.
+
 The guarded QA runtime uses loopback Supabase Auth and PostgreSQL. These receipts prove local behavior; they do not prove a merged or production deployment. [qualification.json](qualification.json) records the candidate, current gates and delivery boundary. Earlier receipts remain historical when a later source change supersedes them.
 
 | Behavior | Runtime evidence |
