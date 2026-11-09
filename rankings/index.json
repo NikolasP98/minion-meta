@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-09T13:50:04.436Z",
+	"generatedAt": "2026-11-09T14:17:48.968Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26549,38 +26549,6 @@
 			"scoredAt": "2026-11-06T20:53:42.655Z"
 		},
 		{
-			"key": "issue:minion-meta#933",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#933 [monitor:unstick] run 2d63cf70 (minion-meta, rank board goals) failed: ranking catalog source unavailable",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/933",
-			"sourceUpdatedAt": "2026-11-02T13:17:25Z",
-			"sourceFingerprint": "fdf54f49edde41ae7c8d3822649b77a34585e54b8a925bdb2d57be7dd36a29b5",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The guard-rail failure in the ranking catalog builder is well-diagnosed but explicitly recommended for retry first since it looks plausibly transient rather than confirmed persistent.",
-			"evidence": [
-				"error: ranking catalog source unavailable for minion (gateway); refusing a partial catalog at board-ranking-catalog.mjs:107",
-				"diagnosis recommends retry before escalating to a config fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T13:47:47.928Z"
-		},
-		{
 			"key": "issue:minion-meta#940",
 			"kind": "issue",
 			"stage": "proposal",
@@ -37344,6 +37312,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T04:18:13.377Z"
+		},
+		{
+			"key": "issue:minion-meta#933",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#933 [monitor:unstick] run 2d63cf70 (minion-meta, rank board goals) failed: ranking catalog source unavailable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/933",
+			"sourceUpdatedAt": "2026-11-02T13:17:25Z",
+			"sourceFingerprint": "fdf54f49edde41ae7c8d3822649b77a34585e54b8a925bdb2d57be7dd36a29b5",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The diagnosis pinpoints a deliberate guard-rail throw at a specific file/line but explicitly recommends retrying first since the failure looks transient, so no fix is actionable yet.",
+			"evidence": [
+				"scripts/board-ranking-catalog.mjs:107 throws \"ranking catalog source unavailable for minion (gateway); refusing a partial catalog\"",
+				"Recommendation: retry the run first since this looks plausibly transient; escalate only if it recurs with the identical message"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-09T14:17:48.800Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-902041533",
