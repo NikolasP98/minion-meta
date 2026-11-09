@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-09T15:18:04.811Z",
+	"generatedAt": "2026-11-09T15:47:50.029Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26464,6 +26464,38 @@
 			"scoredAt": "2026-11-06T20:53:42.655Z"
 		},
 		{
+			"key": "issue:minion-meta#898",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#898 [monitor:unstick] rank run e5bba43a: batch 5 provider exhaustion",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/898",
+			"sourceUpdatedAt": "2026-10-26T14:17:28Z",
+			"sourceFingerprint": "1170646cec5af21b3cd4cb19e571864d3df01e7f5e5c17dd07fc0d280440fd18",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A transient provider-exhaustion failure stalled one batch of an automated rank run while four batches persisted cleanly, so it needs confirmation of resumability rather than urgent paid work.",
+			"evidence": [
+				"batches 1-4 of 5 completed cleanly via shadow provider",
+				"batch 5 failed when both bounded providers returned unavailable/invalid JSON, exit_code 1"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-09T15:47:49.862Z"
+		},
+		{
 			"key": "issue:minion-meta#940",
 			"kind": "issue",
 			"stage": "proposal",
@@ -36309,38 +36341,6 @@
 			"scoredAt": "2026-11-05T17:48:16.339Z"
 		},
 		{
-			"key": "pr:minion-meta#974",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#974 docs(rbac): record approved role simulation and contextual access implementation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/974",
-			"sourceUpdatedAt": "2026-11-09T15:14:13Z",
-			"sourceFingerprint": "9530defb96e62650e95f4502cd6230e99f52accc3b2532f68681b647307c0282",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Documentation PR recording already-merged, production-verified Hub work with full AS-IS/TO-BE/DELTA and post-merge receipts, so closing it out is low-risk and ready now.",
-			"evidence": [
-				"Hub merged as 206d9ae2, Vercel production READY",
-				"all 18 final-source checks and successful post-merge CI cited"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-09T15:18:04.624Z"
-		},
-		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39585,39 +39585,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:49:32.517Z"
-		},
-		{
-			"key": "issue:minion-meta#898",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#898 [monitor:unstick] rank run e5bba43a: batch 5 provider exhaustion",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/898",
-			"sourceUpdatedAt": "2026-10-26T14:17:28Z",
-			"sourceFingerprint": "1170646cec5af21b3cd4cb19e571864d3df01e7f5e5c17dd07fc0d280440fd18",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Self-diagnosed as a transient infra fault with batches 1-4 durable and no corruption, leaving only a conditional 'retry if it recurs' action rather than a standalone actionable goal.",
-			"evidence": [
-				"Diagnosis: transient infra fault, not a task-logic failure",
-				"Batches 1-4 of 5 completed cleanly... catalog and index writes for batches 1-4 succeeded and persisted",
-				"good candidate for a new host classifier signature... if this... recurs across runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T15:17:41.483Z"
 		},
 		{
 			"key": "issue:minion-meta#911",
