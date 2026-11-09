@@ -1,5 +1,6 @@
 <script lang="ts" module>
   import type { Snippet } from 'svelte';
+  import type { HTMLAttributes } from 'svelte/elements';
 
   export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
   export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'touch' | 'icon';
@@ -17,6 +18,8 @@
     icon?: Snippet;
     children?: Snippet;
     onclick?: (event: MouseEvent) => void;
+    role?: HTMLAttributes<HTMLElement>['role'];
+    tabindex?: HTMLAttributes<HTMLElement>['tabindex'];
     [key: string]: unknown;
   }
 
@@ -58,6 +61,8 @@
     icon,
     children,
     onclick,
+    role,
+    tabindex,
     ...rest
   }: ButtonProps = $props();
 
@@ -90,6 +95,7 @@
   }
 </script>
 
+<!-- Caller semantics survive the primitive; disabled links still leave the tab order. -->
 <svelte:element
   this={element}
   {...rest}
@@ -98,9 +104,9 @@
   class={classes}
   disabled={href ? undefined : isDisabled}
   aria-disabled={href && isDisabled ? 'true' : undefined}
-  role={href && isDisabled ? 'link' : undefined}
+  role={role ?? (href && isDisabled ? 'link' : undefined)}
   aria-busy={loading ? 'true' : undefined}
-  tabindex={href && isDisabled ? -1 : undefined}
+  tabindex={href && isDisabled ? -1 : tabindex}
   onclick={handleClick}
   data-part="button"
   data-variant={variant}

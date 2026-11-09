@@ -44,7 +44,8 @@ if (command === 'validate') {
 		const prior = existing.get(candidate.key);
 		return !prior || prior.sourceFingerprint !== candidate.sourceFingerprint || prior.rubricVersion !== RANKING_RUBRIC_VERSION || dueForReevaluation(prior);
 	});
-	writeFileSync(outputPath, `${JSON.stringify({ schemaVersion: RANKING_SCHEMA_VERSION, candidates: pending }, null, '\t')}\n`);
+	const authoritativeDeploymentKeys = candidates.filter((candidate) => candidate.kind === 'deploy').map((candidate) => candidate.key);
+	writeFileSync(outputPath, `${JSON.stringify({ schemaVersion: RANKING_SCHEMA_VERSION, candidates: pending, authoritativeDeploymentKeys }, null, '\t')}\n`);
 	console.log(`ranking candidates pending: ${pending.length}/${candidates.length}`);
 } else if (command === 'apply') {
 	const catalogPath = process.argv[4];
@@ -57,16 +58,21 @@ if (command === 'validate') {
 	const candidates = catalog.candidates.map(validateCandidate);
 	const candidateByKey = new Map(candidates.map((candidate) => [candidate.key, candidate]));
 	const allowedKeys = new Set(candidateByKey.keys());
+	const deploymentKeys = catalog.authoritativeDeploymentKeys;
+	if (deploymentKeys !== undefined && (
+		!Array.isArray(deploymentKeys) ||
+		deploymentKeys.some((key) => typeof key !== 'string' || !key.trim() || key.length > 300) ||
+		new Set(deploymentKeys).size !== deploymentKeys.length ||
+		candidates.some((candidate) => candidate.kind === 'deploy' && !deploymentKeys.includes(candidate.key))
+	)) throw new Error('authoritativeDeploymentKeys must contain unique deployment keys including every scored deployment');
+	const liveDeploymentKeys = deploymentKeys === undefined ? null : new Set(deploymentKeys);
 	const scores = agent.scores.map((score) => validateAgentScore(score, allowedKeys));
 	if (scores.length !== candidates.length) throw new Error(`agent returned ${scores.length} scores for ${candidates.length} candidates`);
 	if (new Set(scores.map((score) => score.key)).size !== scores.length) throw new Error('agent returned duplicate score keys');
 	const scoredAt = new Date().toISOString();
-	// Deployment candidates are derived entirely from explicitly configured workflow evidence. Once
-	// the catalog no longer emits one, retaining its old score would fabricate current deployment
-	// health forever. Other absent entries remain historical until the explicit `prune` command.
 	const merged = new Map(
 		index.rankings
-			.filter((entry) => entry.kind !== 'deploy' || allowedKeys.has(entry.key))
+			.filter((entry) => entry.kind !== 'deploy' || liveDeploymentKeys === null || liveDeploymentKeys.has(entry.key))
 			.map((entry) => [entry.key, entry])
 	);
 	for (const score of scores) merged.set(score.key, rankingEntry(candidateByKey.get(score.key), score, scoredAt));

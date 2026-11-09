@@ -1,0 +1,64 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway
+
+ ❯ |extensions| extensions/alert-watcher/src/live-retention.test.ts (6 tests | 4 failed) 172ms
+   × live tick expires indeterminate raw/failed copies without changing external-effect truth 45ms
+   × live tick expires sent raw/failed copies without changing external-effect truth 14ms
+   × live terminal housekeeping retries unlink failures behind tombstone and bounds each tick to ten receipts 43ms
+   × actual recovered uncertain bridge outcome is cleaned by later watcher tick without restart 23ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires indeterminate raw/failed copies without changing external-effect truth
+Error: CHECK constraint failed: state!='indeterminate' OR (admitted_at IS NOT NULL AND safe_reason IS NOT NULL)
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:31:94
+     29|       await releaseDeliveryQueueLease(lease);
+     30|     }
+     31|     f.db.prepare("UPDATE alert_delivery_receipts SET state=?,queue_gen…
+       |                                                                                              ^
+     32|     // Failed-directory copies carry the same body, mirror and errors;…
+     33|     // cannot depend on the normal executable root file still existing.
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires sent raw/failed copies without changing external-effect truth
+Error: CHECK constraint failed: state!='sent' OR provider_receipts IS NOT NULL
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:31:94
+     29|       await releaseDeliveryQueueLease(lease);
+     30|     }
+     31|     f.db.prepare("UPDATE alert_delivery_receipts SET state=?,queue_gen…
+       |                                                                                              ^
+     32|     // Failed-directory copies carry the same body, mirror and errors;…
+     33|     // cannot depend on the normal executable root file still existing.
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live terminal housekeeping retries unlink failures behind tombstone and bounds each tick to ten receipts
+Error: CHECK constraint failed: state!='indeterminate' OR (admitted_at IS NOT NULL AND safe_reason IS NOT NULL)
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:52:76
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > actual recovered uncertain bridge outcome is cleaned by later watcher tick without restart
+AssertionError: expected { state: 'admitted' } to deeply equal { state: 'indeterminate' }
+
+- Expected
++ Received
+
+  {
+-   "state": "indeterminate",
++   "state": "admitted",
+  }
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:72:75
+
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯
+
+
+ Test Files  1 failed | 2 passed (3)
+      Tests  4 failed | 15 passed (19)
+   Start at  03:11:16
+   Duration  33.74s (transform 24.98s, setup 171ms, import 25.08s, tests 12.75s, environment 0ms)
+

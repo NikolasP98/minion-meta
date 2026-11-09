@@ -1,0 +1,80 @@
+{
+  "status": "B-V1 corrected locally; ready for bounded independent re-verification",
+  "candidate": "4a9ad22073efc509dc8c11e4ad0c8ea912bf7c2d5b34f0680b2535571ee0001a",
+  "supersedes": "def8080c0ace0a08d8e26e8700b4f8269f0c1d5bc9cce944d072c3baabf10b25",
+  "baseSha": "5e28c7ae8c2bc9a7e2fef1da052f0ae2fbe86810",
+  "branch": "feature/agent-harness-b-factory",
+  "files": 25,
+  "correctionFiles": [
+    "agent/lib/cost.sh",
+    "agent/lib/jev-accounting.py",
+    "agent/lib/jev.sh",
+    "runner/src/jev-accounting.test.ts",
+    "runner/src/jev-accounting.ts"
+  ],
+  "lockUnchanged": true,
+  "findings": {
+    "B_V1": {
+      "status": "corrected; independent disposition pending",
+      "red": "tiny-cost-chain-red.log",
+      "green": "tiny-cost-chain-green.log",
+      "preservedIndependentRegression": "../../../verification/b-factory/tiny-cost-chain.mts",
+      "contract": "Exact binary64 number encoding at hash boundary in both languages; no amount quantization; Python JSON integer tokens use the same binary64 parsing boundary as JavaScript"
+    },
+    "B_S1": {
+      "status": "obsolete TODO removed",
+      "path": "agent/lib/jev.sh"
+    }
+  },
+  "gates": {
+    "runner": {
+      "passed": 1268,
+      "failed": 0,
+      "skipped": 0,
+      "log": "runner-full.log"
+    },
+    "focused": {
+      "passed": 46,
+      "failed": 0,
+      "log": "focused.log"
+    },
+    "independentRegression": {
+      "passed": 1,
+      "failed": 0,
+      "actualWorkers": [
+        "run",
+        "spec",
+        "reconcile"
+      ],
+      "log": "tiny-cost-chain-green.log"
+    },
+    "report": {
+      "passed": 16,
+      "failed": 0,
+      "log": "shadow-report.log"
+    },
+    "typecheck": "passed",
+    "shellcheck": "passed",
+    "bashSyntax": "passed",
+    "jevShell": "passed",
+    "costShell": "passed",
+    "guardShell": "passed",
+    "deadlineShell": "passed",
+    "specIntegrity": "passed",
+    "installedHarness": {
+      "version": "2.1.233",
+      "hookElapsedMs": 3826.241859998845,
+      "jevCalls": 1,
+      "hookOutcome": "success",
+      "receipt": "pinned-harness.receipt.json"
+    }
+  },
+  "paidCalls": 0,
+  "releaseActions": [],
+  "implementationOpenEnds": [],
+  "pending": [
+    "independent Astra re-verification",
+    "parent-owned scoped commit/PR",
+    "human merge/release gates"
+  ]
+}

@@ -3,7 +3,7 @@ id: 2026-09-08-platform-qc-remediation
 title: Platform QC follow-ups — authorization, durable execution, compatibility and release evidence
 status: draft
 created: 2026-09-08
-updated: 2026-09-08
+updated: 2026-10-07
 repos: [minion-meta, minion_hub, minion, minion_site, minion-factory, paperclip, pixel-agents]
 ---
 
@@ -224,6 +224,8 @@ Draft 14-09 must reject cutover if the source authenticated tuple changed during
 
 14-08 preserves generic request send-failure behavior outside its handshake scope; request cleanup needs a separate 14-01 regression and repair. Runtime envelope/hello validation also remains14-01. Exact source TODOs at shared gateway client request and message dispatch preserve these gaps. Shared authenticated notification does not itself adopt any consumer package.
 
+Merged from `handoff-minion-meta-2794439305` (minion-meta `scripts/fixtures/shared-errors/client.patch:60`): "Generic request send/serialization failures need pending-map cleanup in 14-01" — this is the same 14-01 request-cleanup gap tracked above; https://github.com/NikolasP98/minion-meta/blob/dev/scripts/fixtures/shared-errors/client.patch#L60.
+
 ### Shared candidate artifact and shipping gap
 
 14-11 prepares an isolated unpublished shared package from verified14-08 source. Existing package metadata declares README and MIT, but current package/root README/license text was not found in the inspected locations. The native compiler also emits tests/maps. Exact archive, runtime/declaration closure, shipped-file/license disposition and immutable version are separate release gates; local candidate test use is permitted while those gates remain open. Active dist, application packages and locks remain unchanged.
@@ -430,3 +432,19 @@ Upstream SDK example negative: cancellation during model work returns cancelled,
 Ported from the shared hub checkout in hub PR "artifacts: generated inline plugin-bridge region + qc build-trace tooling". `scripts/artifacts/build-inline-bridge.mjs` rebuilds the region from the **sibling gateway checkout's** `minion/packages/plugin-ui-bridge/dist/index.js`, resolved as `<meta root>/minion/…` relative to the hub directory. Hub CI checks out `minion_hub` alone, so `bridge.contract.test.ts` guards its rebuild case with `it.runIf(existsSync(ENTRY))`; `--check` mode (committed region bytes + provenance digests) still runs everywhere.
 
 Open end: either publish `@nikolasp98/plugin-ui-bridge` dist as the reviewed input (provenance already records its sha256) so the rebuild no longer needs a sibling checkout, or add a CI job that checks out the gateway at the recorded commit. Until then a bridge update is a local, reviewed `--write` followed by a lock-digest re-approval in the generator (`LOCK_HASH`), as done for the 2026-09-11 dependency transaction (#257).
+
+## Reconciliation merge — 2026-10-04
+
+The following handoff-sweep marker proposals are duplicates of items already tracked above — several of their source `TODO(handoff)` comments explicitly cite this proposal by path — and are tombstoned here as merged, with no new unique content:
+
+- handoff-minion-meta-608985431 (`.planning/operations/360/checkpoint-2026-09-11/ui/site-ui.patch`)
+- handoff-minion-meta-3663138542 (`.planning/operations/360/checkpoint-2026-09-11/site-ci/source/.github/workflows/ci.yml`)
+- handoff-minion-meta-2120635823 (`.planning/operations/360/checkpoint-2026-09-11/sender.patch`)
+- handoff-minion-meta-1910089182 (`.../sender/before/packages/shells-bridge/src/run-journal.test.ts`)
+- handoff-minion-meta-1967076684 (`.../sender/source/packages/shells-bridge/src/run-journal.ts`)
+- handoff-minion-meta-2028489184 (`.../sender/before/packages/shells-bridge/src/bridge.ts`)
+- handoff-minion-meta-2187562221 (`.../sender/source/packages/shells-bridge/src/run-journal.test.ts`)
+- handoff-minion-meta-2934878458 (`.../sender/before/packages/shells-bridge/src/run-journal.ts`)
+- handoff-minion-meta-915328540 (`.../sender/source/packages/shells-bridge/src/bridge.ts`)
+- handoff-minion-factory-3080677443 (`tool-host/src/runner-effects.test.ts`, matches the "2026-09-12 governance and ACP qualification limits" runner-effects TODO above)
+- handoff-minion-meta-4036985971 (`scripts/qc/proposal-requirement-map.mjs`, matches the `qc-history-body-review` record in the handoff-ledger block above)

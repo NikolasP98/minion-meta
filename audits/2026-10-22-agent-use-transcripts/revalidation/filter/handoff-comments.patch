@@ -1,0 +1,38 @@
+--- a/extensions/alert-watcher/src/dedup.ts
++++ b/extensions/alert-watcher/src/dedup.ts
+@@ -45,6 +45,7 @@
+   return {
+     markSeen(id: string | undefined): boolean {
+       if (id === undefined) return false;
++      // TODO(handoff): Scope IDs by channel/account/chat before dedup; chat-local Telegram IDs collide and drop unrelated alerts. See minion-meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md (F-01).
+       return trackToken(`id:${id}`);
+     },
+     markSeenFallback(p): boolean {
+--- a/extensions/alert-watcher/index.ts
++++ b/extensions/alert-watcher/index.ts
+@@ -638,6 +638,7 @@
+       // (some channel/event shapes drop it), fall back to a content-hash key
+       // so the dual-listener registration on message_inbound + message_received
+       // can't triple-process the same event.
++      // TODO(handoff): Separate in-flight claims from completed receipts; classifier failure currently consumes the dedup key and prevents redelivery retry. See minion-meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md (F-03).
+       if (event.messageId !== undefined) {
+         if (dedup.markSeen(event.messageId)) return;
+       } else {
+@@ -861,6 +862,7 @@
+     api.on("message_received", async (event, ctx) => {
+       const cfg = resolveConfig(api.pluginConfig as Record<string, unknown>);
+       if (!matchesAgentSub(cfg.subscriptions, ctx.agentId)) return;
++      // TODO(handoff): Map message_received metadata.messageId and conversationId to canonical origin identity; current casts lose identity and duplicate channel+agent classification. See minion-meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md (F-02).
+       await handle(
+         {
+           channel: ctx.channelId,
+--- a/src/drones/host.ts
++++ b/src/drones/host.ts
+@@ -31,6 +31,7 @@
+   // ponytail: records the primary spec's provider/model — a rare credential
+   // fallback to a different provider would mislabel provider (token counts stay
+   // exact); the drone SDK's resolvedModel isn't surfaced on the event to do better.
++  // TODO(handoff): Bind model attribution to each run; alert-watcher shares this host and concurrent model resolutions can misprice earlier completions. See minion-meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md (F-04).
+   let resolvedModel: { provider: string; model: string } | undefined;
+ 
+   return {

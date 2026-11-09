@@ -1,0 +1,40 @@
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { createRequire } from "node:module";
+import { pathToFileURL } from "node:url";
+
+const [gateway, meta] = process.argv.slice(2);
+const require = createRequire(path.join(gateway, "package.json"));
+const Ajv = require("ajv");
+const ajv = new Ajv({ strict: true, allErrors: true });
+ajv.addFormat("uuid", /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i);
+const schema = JSON.parse(fs.readFileSync(path.join(gateway, "extensions/alert-watcher/src/complaint-evaluation.schema.json"), "utf8"));
+const check = ajv.compile(schema);
+const validate = (record: unknown) => assert.ok(check(record), ajv.errorsText(check.errors));
+const records = JSON.parse(fs.readFileSync(path.join(gateway, "extensions/alert-watcher/src/fixtures/complaint-retry-revisions-v1.json"), "utf8"));
+const { reconcileComplaints, complaintReport } = await import(pathToFileURL(path.join(meta, "scripts/agent-evals/complaint.mjs")).href);
+const result = reconcileComplaints(records, validate);
+assert.deepEqual(result.quarantine, []);
+assert.equal(result.records.length, 2);
+const attempts = result.records.flatMap((record) => record.attempts);
+assert.equal(attempts.length, 1);
+assert.equal(attempts[0].costStatus, "known");
+assert.equal(attempts[0].costCoverage, "complete");
+const report = complaintReport(records, validate);
+// Consumer output is authoritative; compare its public cost result with the
+// one retained paid attempt, rather than copying reconciliation logic into C.
+assert.equal(report.actualShadowCosts.knownUsd, attempts[0].costUsd);
+assert.deepEqual(report.actualShadowCosts.unknownAttempts, []);
+assert.equal(report.actualShadowCosts.attempts, 1);
+assert.equal(report.logicalSources, 2);
+const completed = result.records.find((record) => record.baseline.disposition === "negative");
+assert.ok(completed);
+const replacement = structuredClone(completed);
+replacement.receiptRevision++;
+replacement.resultId = "ffffffff-ffff-4fff-8fff-ffffffffffff";
+assert.ok(reconcileComplaints([completed, replacement], validate).quarantine.length > 0);
+const sameRevision = structuredClone(completed);
+sameRevision.attempts[0].costUsd++;
+assert.ok(reconcileComplaints([completed, sameRevision], validate).quarantine.length > 0);
+console.log(JSON.stringify({ status: "passed", sourceRevisions: records.length, logicalRecords: result.records.length, paidAttempts: report.actualShadowCosts.attempts, knownUsd: report.actualShadowCosts.knownUsd, unknownAttempts: report.actualShadowCosts.unknownAttempts, legalRetryQuarantine: result.quarantine, terminalReplacementRejected: true, conflictingSameRevisionRejected: true }, null, 2));

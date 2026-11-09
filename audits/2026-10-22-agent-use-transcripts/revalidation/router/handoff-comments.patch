@@ -1,0 +1,30 @@
+--- a/src/routes/(app)/home/+page.svelte
++++ b/src/routes/(app)/home/+page.svelte
+@@ -675,6 +675,7 @@
+     // manifests this turn needs, fail open to the full envelope. `routing`
+     // holds the send guard across the await (chat.sending only flips once
+     // sendAssistantTurn runs), so a second Enter can't send the turn twice.
++    // TODO(handoff): Fence this pending route by actor/org/agent/session/page and cancel generation; mutable scope after await can send the original request to another thread. See meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
+     routing = true;
+     void (async () => {
+       let loaded;
+--- a/src/lib/components/layout/FloatingAssistant.svelte
++++ b/src/lib/components/layout/FloatingAssistant.svelte
+@@ -432,6 +432,7 @@
+   const threadKey = $derived(`${messages.length}:${stream?.length ?? -1}:${sending}`);
+   // Chat mode only: the factory desk has no run to stop.
+   const replyRunning = $derived(composerMode === 'chat' && (sending || stream !== null || routing));
++  // TODO(handoff): Cancel pending classifier sends and fence session/page changes; Stop currently aborts only gateway work and the pending route can still send. See meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
+   function stopReply() {
+     const id = assistant.personalAgentId;
+     if (id) void abortChat(id, sessionKeyFor(id));
+--- a/src/lib/server/observability-context.ts
++++ b/src/lib/server/observability-context.ts
+@@ -302,6 +302,7 @@
+   p_forms: probabilityField,
+   p_data: probabilityField,
+   p_brain: probabilityField,
++  // TODO(handoff): Add validated p_sandbox here and to assistant_route fields; the producer emits it but sanitization drops it, preventing sandbox calibration. See meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md.
+   p_changelog: probabilityField,
+ };
+ const identityFields = [

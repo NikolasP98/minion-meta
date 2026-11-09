@@ -1,0 +1,401 @@
+--- revision1.patch
++++ revision2.patch
+@@ -2048,7 +2048,7 @@
+              results.push(await handler.sendMedia(caption, url, sendOverrides));
+            }
+ diff --git a/src/infra/outbound/delivery-queue-files.ts b/src/infra/outbound/delivery-queue-files.ts
+-index f1dd340ad9bafdd14afa4e25d85e14147a988d1a..824874a820e0a6d2a2064652416caf3418ff38ce 100644
++index f1dd340ad9bafdd14afa4e25d85e14147a988d1a..fd1c40215ad0510b855b2ab8e2a51357165f7d2c 100644
+ --- a/src/infra/outbound/delivery-queue-files.ts
+ +++ b/src/infra/outbound/delivery-queue-files.ts
+ @@ -308,6 +308,9 @@ export async function acquireDeliveryRecoveryLease(stateDir?: string): Promise<D
+@@ -2061,7 +2061,7 @@
+    const filePath = resolveEntryPath(id, stateDir);
+    const raw = await readBoundedFile(filePath, MAX_QUEUE_FILE_BYTES);
+    const entry = parseQueuedDelivery(raw, path.basename(filePath));
+-@@ -378,3 +381,234 @@ export async function writeEntryAtomic(
++@@ -378,3 +381,395 @@ export async function writeEntryAtomic(
+      throw err;
+    }
+  }
+@@ -2075,6 +2075,8 @@
+ +  recipientHash: string;
+ +  retiredAt: number;
+ +  reason: "expired" | "settled";
+++  /** Partial orphan writes cannot prove the missing checkpoint had no effect. */
+++  outcomeUncertain?: boolean;
+ +  payloads: Array<{
+ +    id: string;
+ +    state: string;
+@@ -2105,6 +2107,7 @@
+ +      !Number.isSafeInteger(value.retiredAt) ||
+ +      value.retiredAt <= 0 ||
+ +      !["expired", "settled"].includes(value.reason) ||
+++      (value.outcomeUncertain !== undefined && typeof value.outcomeUncertain !== "boolean") ||
+ +      !Array.isArray(value.payloads) ||
+ +      value.payloads.length > 256 ||
+ +      [value.namespaceHash, value.payloadHash, value.recipientHash].some(
+@@ -2148,19 +2151,21 @@
+ +  lease: DeliveryQueueLease,
+ +  reason: "expired" | "settled",
+ +  stateDir?: string,
+++  settled?: {
+++    generation: number;
+++    payloads: DeliveryTombstone["payloads"];
+++    receiptsHashed?: boolean;
+++  },
+ +): Promise<void> {
+ +  await assertEntryLease(entry.id, lease);
+ +  const guard = entry.callerRetention;
+ +  if (!guard) {
+ +    throw new DeliveryQueueHealthError("Retention requires a bound caller");
+ +  }
+-+  const finalPath = tombstonePath(entry.id, stateDir);
+-+  const directory = path.dirname(finalPath);
+-+  await fs.promises.mkdir(directory, { recursive: true, mode: 0o700 });
+ +  const value: DeliveryTombstone = {
+ +    version: 1,
+ +    id: entry.id,
+-+    generation: entry.generation,
+++    generation: Math.max(entry.generation, settled?.generation ?? 0),
+ +    namespaceHash: guard.namespaceHash,
+ +    payloadHash: guard.payloadHash,
+ +    recipientHash: guard.recipientHash,
+@@ -2180,6 +2185,45 @@
+ +        : undefined,
+ +    })),
+ +  };
+++  // A stale atomic backup cannot erase a newer acceptance already committed by
+++  // the caller. Merge only those authoritative facts; other payloads stay uncertain.
+++  for (const payload of settled?.payloads ?? []) {
+++    if (
+++      payload.state !== "accepted" ||
+++      !Number.isSafeInteger(payload.acceptedAt) ||
+++      !payload.receipt
+++    ) {
+++      throw new DeliveryQueueHealthError("Invalid settled acceptance evidence");
+++    }
+++    const known = {
+++      ...payload,
+++      receipt: payload.receipt
+++        ? {
+++            ...payload.receipt,
+++            providerMessageIds: payload.receipt.providerMessageIds.map((id) =>
+++              settled?.receiptsHashed ? id : crypto.createHash("sha256").update(id).digest("hex"),
+++            ),
+++          }
+++        : undefined,
+++    };
+++    const index = value.payloads.findIndex((existing) => existing.id === payload.id);
+++    if (index >= 0) {
+++      value.payloads[index] = known;
+++    } else {
+++      value.payloads.push(known);
+++    }
+++  }
+++  if (value.payloads.length > 256) {
+++    throw new DeliveryQueueHealthError("Retained payload capacity exceeded");
+++  }
+++  await writeDeliveryTombstone(value, stateDir);
+++  // A failed cleanup leaves the tombstone authoritative; reads/enqueues still reject.
+++  await cleanupRetainedDeliveryFiles(entry.id, lease, stateDir);
+++}
+++async function writeDeliveryTombstone(value: DeliveryTombstone, stateDir?: string): Promise<void> {
+++  const finalPath = tombstonePath(value.id, stateDir),
+++    directory = path.dirname(finalPath);
+++  await fs.promises.mkdir(directory, { recursive: true, mode: 0o700 });
+ +  const temporary = `${finalPath}.tmp-${crypto.randomUUID()}`;
+ +  const handle = await fs.promises.open(temporary, "wx", 0o600);
+ +  try {
+@@ -2190,20 +2234,6 @@
+ +  }
+ +  await fs.promises.rename(temporary, finalPath);
+ +  await syncDirectory(directory);
+-+  await fs.promises.unlink(resolveEntryPath(entry.id, stateDir)).catch((err) => {
+-+    if (errorCode(err) !== "ENOENT") {
+-+      throw err;
+-+    }
+-+  });
+-+  // A failed cleanup leaves the tombstone authoritative; reads/enqueues still reject.
+-+  await fs.promises
+-+    .unlink(path.join(resolveFailedDir(stateDir), `${entry.id}.json`))
+-+    .catch((err) => {
+-+      if (errorCode(err) !== "ENOENT") {
+-+        throw err;
+-+      }
+-+    });
+-+  await syncDirectory(resolveQueueDir(stateDir));
+ +}
+ +export async function enforceDeliveryRetention(
+ +  entry: QueuedDelivery,
+@@ -2221,10 +2251,17 @@
+ +  return false;
+ +}
+ +
+-+/** Retry raw cleanup after tombstone commit even if a previous unlink/fsync failed. */
+-+export async function cleanupRetainedQueueFiles(stateDir?: string): Promise<void> {
+-+  const roots = [resolveQueueDir(stateDir), resolveFailedDir(stateDir)];
+-+  for (const root of roots) {
+++/** Exact names produced by writeEntryAtomic, never an arbitrary prefix match. */
+++function artifactEntryId(name: string): string | undefined {
+++  const match =
+++    /^([A-Za-z0-9_-]+)\.json(?:\.(?:tmp|bak)-[1-9][0-9]*-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})?$/.exec(
+++      name,
+++    );
+++  return match?.[1];
+++}
+++async function queueCopyPaths(id: string | undefined, stateDir?: string): Promise<string[]> {
+++  const paths: string[] = [];
+++  for (const root of [resolveQueueDir(stateDir), resolveFailedDir(stateDir)]) {
+ +    let names: string[];
+ +    try {
+ +      names = await fs.promises.readdir(root);
+@@ -2238,27 +2275,151 @@
+ +      throw new DeliveryQueueHealthError("Retention cleanup capacity exceeded");
+ +    }
+ +    for (const name of names) {
+-+      if (!name.endsWith(".json")) {
+-+        continue;
+++      const owner = artifactEntryId(name);
+++      if (owner && (!id || owner === id)) {
+++        paths.push(path.join(root, name));
+ +      }
+-+      const id = name.slice(0, -5);
+-+      const tombstone = await readDeliveryTombstone(id, stateDir);
+-+      if (!tombstone) {
+-+        continue;
+++    }
+++  }
+++  return paths;
+++}
+++/** Tombstone first, then every exact writer-owned copy under the same entry lease. */
+++export async function cleanupRetainedDeliveryFiles(
+++  id: string,
+++  lease: DeliveryQueueLease,
+++  stateDir?: string,
+++): Promise<void> {
+++  await assertEntryLease(id, lease);
+++  if (!(await readDeliveryTombstone(id, stateDir))) {
+++    throw new DeliveryQueueHealthError("Raw cleanup requires a retained tombstone");
+++  }
+++  for (const file of await queueCopyPaths(id, stateDir)) {
+++    await fs.promises.unlink(file).catch((err) => {
+++      if (errorCode(err) !== "ENOENT") {
+++        throw err;
+ +      }
+-+      const lease = await acquireDeliveryEntryLease(id, stateDir);
+-+      try {
+-+        await fs.promises.unlink(path.join(root, name)).catch((err) => {
+-+          if (errorCode(err) !== "ENOENT") {
+-+            throw err;
+-+          }
+-+        });
+-+        await syncDirectory(root);
+-+      } finally {
+-+        await releaseDeliveryQueueLease(lease);
+++    });
+++    await syncDirectory(path.dirname(file));
+++  }
+++}
+++/** Retry raw cleanup after tombstone commit even if a previous unlink/fsync failed. */
+++export async function cleanupRetainedQueueFiles(stateDir?: string): Promise<void> {
+++  const ids = new Set(
+++    (await queueCopyPaths(undefined, stateDir)).map(
+++      (file) => artifactEntryId(path.basename(file))!,
+++    ),
+++  );
+++  for (const id of ids) {
+++    if (!(await readDeliveryTombstone(id, stateDir))) {
+++      continue;
+++    }
+++    const lease = await acquireDeliveryEntryLease(id, stateDir);
+++    try {
+++      await cleanupRetainedDeliveryFiles(id, lease, stateDir);
+++    } finally {
+++      await releaseDeliveryQueueLease(lease);
+++    }
+++  }
+++}
+++/** Retire an expired caller receipt without executing it, including failed/orphan copies. */
+++export async function retireExpiredCallerDelivery(
+++  binding: NonNullable<QueuedDelivery["callerRetention"]>,
+++  lease: DeliveryQueueLease,
+++  stateDir?: string,
+++  terminalEvidence?: {
+++    generation: number;
+++    payloads: DeliveryTombstone["payloads"];
+++    receiptsHashed?: boolean;
+++  },
+++): Promise<void> {
+++  const id = binding.receiptId;
+++  await assertEntryLease(id, lease);
+++  if (binding.expiresAt > Date.now()) {
+++    throw new DeliveryQueueHealthError("Caller receipt is not expired");
+++  }
+++  const matches = (value: { namespaceHash: string; payloadHash: string; recipientHash: string }) =>
+++    value.namespaceHash === binding.namespaceHash &&
+++    value.payloadHash === binding.payloadHash &&
+++    value.recipientHash === binding.recipientHash;
+++  const tombstone = await readDeliveryTombstone(id, stateDir);
+++  if (tombstone) {
+++    if (!matches(tombstone)) {
+++      throw new DeliveryQueueHealthError("Retained caller binding mismatch");
+++    }
+++    await cleanupRetainedDeliveryFiles(id, lease, stateDir);
+++    return;
+++  }
+++  const copies = await queueCopyPaths(id, stateDir);
+++  // Canonical checkpoints are authoritative; a lone stale backup cannot prove no send.
+++  copies.sort((a, b) => Number(!a.endsWith(".json")) - Number(!b.endsWith(".json")));
+++  let entry: QueuedDelivery | undefined;
+++  for (const file of copies) {
+++    try {
+++      const candidate = parseQueuedDelivery(
+++        await readBoundedFile(file, MAX_QUEUE_FILE_BYTES),
+++        `${id}.json`,
+++      );
+++      if (
+++        candidate.id !== id ||
+++        !candidate.callerRetention ||
+++        !matches(candidate.callerRetention) ||
+++        candidate.callerRetention.expiresAt !== binding.expiresAt
+++      ) {
+++        throw new DeliveryQueueHealthError("Expired caller binding mismatch");
+ +      }
+++      entry = candidate;
+++      if (!file.endsWith(".json")) {
+++        entry.payloads = entry.payloads.map((payload) =>
+++          payload.state === "accepted" ? payload : { ...payload, state: "uncertain" },
+++        );
+++      }
+++      break;
+++    } catch (err) {
+++      // An interrupted temporary write may be partial; only a valid bound copy can fence it.
+++      if (file.endsWith(".json")) {
+++        throw err;
+++      }
+ +    }
+ +  }
+++  if (!entry) {
+++    if (copies.length) {
+++      if (!terminalEvidence) {
+++        throw new DeliveryQueueHealthError("No valid expired caller checkpoint");
+++      }
+++      // The durable caller has already settled. Fence partial orphan bytes without
+++      // inventing missing payload IDs, acceptance, or a no-effect disposition.
+++      await writeDeliveryTombstone(
+++        {
+++          version: 1,
+++          id,
+++          generation: Math.max(0, terminalEvidence.generation),
+++          namespaceHash: binding.namespaceHash,
+++          payloadHash: binding.payloadHash,
+++          recipientHash: binding.recipientHash,
+++          retiredAt: Date.now(),
+++          reason: "expired",
+++          outcomeUncertain: true,
+++          payloads: terminalEvidence.payloads.map((payload) => ({
+++            ...payload,
+++            receipt: payload.receipt
+++              ? {
+++                  ...payload.receipt,
+++                  providerMessageIds: payload.receipt.providerMessageIds.map((id) =>
+++                    terminalEvidence.receiptsHashed
+++                      ? id
+++                      : crypto.createHash("sha256").update(id).digest("hex"),
+++                  ),
+++                }
+++              : undefined,
+++          })),
+++        },
+++        stateDir,
+++      );
+++      await cleanupRetainedDeliveryFiles(id, lease, stateDir);
+++    }
+++    return;
+++  }
+++  await retainDeliveryTombstone(entry, lease, "expired", stateDir, terminalEvidence);
+ +}
+ +export async function expireRetainedFailedDeliveries(stateDir?: string): Promise<void> {
+ +  let names: string[];
+@@ -2350,19 +2511,20 @@
+            queueContext: {
+              entryId: entry.id,
+ diff --git a/src/infra/outbound/delivery-queue-store.ts b/src/infra/outbound/delivery-queue-store.ts
+-index cdda881dd3a42ed664882ef4554c9969504ebbeb..3b325c9212ca2881ac459b22ef079e216f4b8298 100644
++index cdda881dd3a42ed664882ef4554c9969504ebbeb..6d9a2594b4e4d772fd8506e8f0719b52bcddf524 100644
+ --- a/src/infra/outbound/delivery-queue-store.ts
+ +++ b/src/infra/outbound/delivery-queue-store.ts
+-@@ -3,6 +3,8 @@ import fs from "node:fs";
++@@ -3,6 +3,9 @@ import fs from "node:fs";
+  import path from "node:path";
+  import {
+    acquireDeliveryEntryLease,
+ +  readDeliveryTombstone,
+++  cleanupRetainedDeliveryFiles,
+ +  retainDeliveryTombstone,
+    assertEntryLease,
+    ensureQueueDir,
+    readBoundedFile,
+-@@ -35,6 +37,7 @@ import {
++@@ -35,6 +38,7 @@ import {
+    type QueuedPayloadReceipt,
+    type QueuedPayloadState,
+  } from "./delivery-queue-types.js";
+@@ -2370,7 +2532,7 @@
+  
+  function createQueuedDelivery(params: QueuedDeliveryParams): QueuedDelivery {
+    if (params.payloads.length > MAX_QUEUE_PAYLOADS) {
+-@@ -43,7 +46,7 @@ function createQueuedDelivery(params: QueuedDeliveryParams): QueuedDelivery {
++@@ -43,7 +47,7 @@ function createQueuedDelivery(params: QueuedDeliveryParams): QueuedDelivery {
+      );
+    }
+    const id = params.id === undefined ? crypto.randomUUID() : assertSafeId(params.id, "delivery id");
+@@ -2379,7 +2541,7 @@
+      version: QUEUE_VERSION,
+      id,
+      generation: 0,
+-@@ -66,6 +69,8 @@ function createQueuedDelivery(params: QueuedDeliveryParams): QueuedDelivery {
++@@ -66,6 +70,8 @@ function createQueuedDelivery(params: QueuedDeliveryParams): QueuedDelivery {
+      retryCount: 0,
+      completionPolicy: params.completionPolicy,
+    };
+@@ -2388,7 +2550,7 @@
+  }
+  
+  /** Persist a delivery and retain its exclusive entry lease for the send attempt. */
+-@@ -77,6 +82,9 @@ export async function enqueueDeliveryWithLease(
++@@ -77,6 +83,9 @@ export async function enqueueDeliveryWithLease(
+    const entry = createQueuedDelivery(params);
+    const lease = await acquireDeliveryEntryLease(entry.id, stateDir);
+    try {
+@@ -2398,7 +2560,7 @@
+      try {
+        await fs.promises.lstat(resolveEntryPath(entry.id, stateDir));
+        throw new DeliveryQueueError(`Delivery ${entry.id} already exists`);
+-@@ -271,6 +279,10 @@ export async function acknowledgeTerminalDelivery(params: {
++@@ -271,6 +280,10 @@ export async function acknowledgeTerminalDelivery(params: {
+        `Delivery ${params.id} cannot be acknowledged with unfinished payloads`,
+      );
+    }
+@@ -2409,17 +2571,18 @@
+    await fs.promises.unlink(resolveEntryPath(params.id, params.stateDir));
+    await syncDirectory(resolveQueueDir(params.stateDir));
+  }
+-@@ -285,6 +297,9 @@ export async function acknowledgeCallerManagedDelivery(
++@@ -285,6 +298,10 @@ export async function acknowledgeCallerManagedDelivery(
+  ): Promise<void> {
+    const lease = await acquireDeliveryEntryLease(id, stateDir);
+    try {
+ +    if (await readDeliveryTombstone(id, stateDir)) {
+++      await cleanupRetainedDeliveryFiles(id, lease, stateDir);
+ +      return;
+ +    }
+      let entry: QueuedDelivery;
+      try {
+        entry = await readQueuedDelivery(id, stateDir);
+-@@ -440,6 +455,9 @@ export async function loadPendingDeliveries(
++@@ -440,6 +457,9 @@ export async function loadPendingDeliveries(
+      }
+      assertQueueScanWithinDeadline(options.deadlineAt);
+      const entry = parseQueuedDelivery(raw, filename);

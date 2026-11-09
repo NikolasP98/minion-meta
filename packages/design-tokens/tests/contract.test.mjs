@@ -5,6 +5,8 @@ import {
   contractPath,
   contrastRatio,
   generatedCssPath,
+  normalTextContrastFailures,
+  relativeLuminance,
   readContract,
   resolveTheme,
   semanticColorMap,
@@ -36,28 +38,54 @@ test('contract is valid JSON and declares every required foundation family', asy
 
 test('every theme is a complete, resolvable semantic mode', async () => {
   const contract = await readContract();
-  assert.equal(Object.keys(contract.themes).length, 18);
+  assert.equal(Object.keys(contract.themes).length, 22);
   for (const [themeId, theme] of Object.entries(contract.themes)) {
     assert.ok(['light', 'dark'].includes(theme.mode), `${themeId}: mode`);
     assert.ok(contract.radiusScales[theme.radiusScale], `${themeId}: radiusScale`);
     assert.ok(contract.shadowStyles[theme.shadowStyle], `${themeId}: shadowStyle`);
     assert.ok(contract.typographyStyles[theme.typographyStyle], `${themeId}: typographyStyle`);
+    assert.ok(contract.statusRecipes[theme.statusRecipe ?? theme.mode], `${themeId}: statusRecipe`);
+    if (theme.palettes) assert.deepEqual(Object.keys(theme.palettes).sort(), Object.keys(contract.palettes).sort());
     assert.deepEqual(Object.keys(theme.colors).sort(), Object.keys(semanticColorMap).sort(), `${themeId}: colors`);
-    assert.equal(new Map(resolveTheme(contract, themeId)).size, 43, `${themeId}: resolved tokens`);
+    assert.equal(new Map(resolveTheme(contract, themeId)).size, 48, `${themeId}: resolved tokens`);
   }
 });
 
-test('text, accent, and status pairs meet WCAG AA contrast', async () => {
+test('normal text meets AA across every supported base surface', async () => {
+  const contract = await readContract();
+  assert.deepEqual(contract.contrast.normalText, {
+    foregrounds: ['textPrimary', 'textSecondary', 'textTertiary'],
+    backgrounds: ['canvas', 'surface1', 'surface2', 'surface3', 'overlay'],
+    minimumRatio: 4.5,
+  });
+  assert.equal(Object.keys(contract.themes).length * 3 * 5, 330);
+  assert.deepEqual(normalTextContrastFailures(contract), []);
+  for (const [id, theme] of Object.entries(contract.themes)) {
+    const levels = ['textPrimary', 'textSecondary', 'textTertiary'].map((role) =>
+      relativeLuminance(theme.colors[role]),
+    );
+    assert.ok(theme.mode === 'light'
+      ? levels[0] <= levels[1] && levels[1] <= levels[2]
+      : levels[0] >= levels[1] && levels[1] >= levels[2], `${id}: text hierarchy`);
+  }
+});
+
+test('contrast audit rejects the original raised-surface failure', async () => {
+  const contract = await readContract();
+  contract.themes['gruvbox-light'].colors.textTertiary = '#716c5f';
+  assert.ok(normalTextContrastFailures(contract).some((failure) =>
+    failure.themeId === 'gruvbox-light' && failure.foreground === 'textTertiary'
+      && failure.background === 'surface3' && failure.ratio < 3.1,
+  ));
+});
+
+test('accent and status pairs meet WCAG AA contrast', async () => {
   const contract = await readContract();
   for (const [themeId, theme] of Object.entries(contract.themes)) {
-    for (const textRole of ['textPrimary', 'textSecondary', 'textTertiary']) {
-      const ratio = contrastRatio(theme.colors[textRole], theme.colors.canvas);
-      assert.ok(ratio >= 4.5, `${themeId}: ${textRole}/canvas ${ratio.toFixed(2)}:1`);
-    }
     const accentRatio = contrastRatio(theme.colors.onAccent, theme.colors.accent);
     assert.ok(accentRatio >= 4.5, `${themeId}: onAccent/accent ${accentRatio.toFixed(2)}:1`);
     for (const status of statusNames) {
-      const recipe = contract.statusRecipes[theme.mode][status];
+      const recipe = contract.statusRecipes[theme.statusRecipe ?? theme.mode][status];
       const ratio = contrastRatio(recipe.fg, recipe.surface);
       assert.ok(ratio >= 4.5, `${themeId}: ${status} fg/surface ${ratio.toFixed(2)}:1`);
       assert.deepEqual(Object.keys(recipe).sort(), [...statusParts].sort());
@@ -67,6 +95,53 @@ test('text, accent, and status pairs meet WCAG AA contrast', async () => {
   for (const [accentId, accent] of Object.entries(contract.accentOptions)) {
     const ratio = contrastRatio(accent.onAccent, accent.accent);
     assert.ok(ratio >= 4.5, `${accentId}: onAccent/accent ${ratio.toFixed(2)}:1`);
+  }
+});
+
+test('Clinic modes cover every token family and readable text on every surface', async () => {
+  const contract = await readContract();
+  const baselineKeys = resolveTheme(contract, contract.defaultTheme).map(([key]) => key).sort();
+  for (const mode of ['light', 'dark']) {
+    const id = `clinic-${mode}`;
+    const theme = contract.themes[id];
+    assert.ok(theme, id);
+    assert.equal(theme.mode, mode);
+    assert.deepEqual(resolveTheme(contract, id).map(([key]) => key).sort(), baselineKeys);
+    assert.deepEqual(Object.keys(theme.palettes).sort(), Object.keys(contract.palettes).sort());
+    for (const surface of ['canvas', 'surface1', 'surface2', 'surface3', 'overlay']) {
+      for (const role of ['textPrimary', 'textSecondary', 'textTertiary']) {
+        const ratio = contrastRatio(theme.colors[role], theme.colors[surface]);
+        assert.ok(ratio >= 4.5, `${id}: ${role}/${surface} ${ratio.toFixed(2)}:1`);
+      }
+      assert.ok(contrastRatio(theme.colors.accent, theme.colors[surface]) >= 3, `${id}: accent/${surface}`);
+      // Chat errors paint danger-fg at 15% over their host, then inherit that fg.
+      const danger = contract.statusRecipes[theme.statusRecipe].danger.fg;
+      const channels = (hex) => hex.slice(1).match(/../g).map((v) => parseInt(v, 16));
+      const host = channels(theme.colors[surface]);
+      const tinted = '#' + channels(danger).map((v, i) =>
+        Math.round(v * 0.15 + host[i] * 0.85).toString(16).padStart(2, '0'),
+      ).join('');
+      assert.ok(contrastRatio(danger, tinted) >= 4.5, `${id}: chat error/${surface}`);
+    }
+    for (const [role, value] of Object.entries(theme.palettes)) {
+      for (const surface of ['canvas', 'surface2']) {
+        assert.ok(contrastRatio(value, theme.colors[surface]) >= 3, `${id}: ${role}/${surface}`);
+      }
+    }
+  }
+});
+
+test('switching away from Clinic restores the categorical palette for every preset', async () => {
+  const contract = await readContract();
+  const css = generateCss(contract);
+  for (const [id, theme] of Object.entries(contract.themes)) {
+    const resolved = new Map(resolveTheme(contract, id));
+    for (const [token, fallback] of Object.entries(contract.palettes)) {
+      assert.equal(resolved.get(token), theme.palettes?.[token] ?? fallback, `${id}: ${token}`);
+    }
+    if (id === contract.defaultTheme) continue;
+    const block = css.split(`:root[data-minion-theme='${id}'],`)[1]?.split('}')[0];
+    for (const token of Object.keys(contract.palettes)) assert.ok(block?.includes(`${token}:`), `${id}: ${token}`);
   }
 });
 
@@ -127,6 +202,8 @@ test('generated CSS exposes every theme mode and excludes undeclared legacy toke
     css.includes('@theme static {'),
     'foundation tokens must be emitted even when a consumer does not generate a matching utility',
   );
+  assert.equal(contract.foundations.layout['--page-max'], '80rem');
+  assert.match(css, /\n\s*--page-max: 80rem;/);
   for (const themeId of Object.keys(contract.themes)) {
     if (themeId === contract.defaultTheme) continue;
     assert.ok(css.includes(`data-minion-theme='${themeId}'`), themeId);

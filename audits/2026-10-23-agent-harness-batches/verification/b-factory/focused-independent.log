@@ -1,0 +1,276 @@
+TAP version 13
+# [jev] run=account-known-error-run site=guard ok=false ms=106
+# [jev] run=account-known-error-spec site=guard ok=false ms=5
+# [jev] run=account-known-error-reconcile site=guard ok=false ms=5
+# Subtest: A08 actual guard cleanup → all worker emitters → queue settlement (known-error)
+ok 1 - A08 actual guard cleanup → all worker emitters → queue settlement (known-error)
+  ---
+  duration_ms: 2817.645249
+  type: 'test'
+  ...
+# [jev] run=account-unknown-run site=guard ok=true ms=6
+# [jev] run=account-unknown-spec site=guard ok=true ms=4
+# [jev] run=account-unknown-reconcile site=guard ok=true ms=3
+# Subtest: A08 actual guard cleanup → all worker emitters → queue settlement (unknown)
+ok 2 - A08 actual guard cleanup → all worker emitters → queue settlement (unknown)
+  ---
+  duration_ms: 2641.002883
+  type: 'test'
+  ...
+# Subtest: A08 actual guard cleanup → all worker emitters → queue settlement (denied)
+ok 3 - A08 actual guard cleanup → all worker emitters → queue settlement (denied)
+  ---
+  duration_ms: 2753.907726
+  type: 'test'
+  ...
+# Subtest: A08 late authoritative receipt invalidates terminal stats and settles retained exposure once
+ok 4 - A08 late authoritative receipt invalidates terminal stats and settles retained exposure once
+  ---
+  duration_ms: 22.353793
+  type: 'test'
+  ...
+# Subtest: A08 admission journal write failure denies dispatch and exposes incomplete source
+ok 5 - A08 admission journal write failure denies dispatch and exposes incomplete source
+  ---
+  duration_ms: 2.118025
+  type: 'test'
+  ...
+# Subtest: A08 retained settlement survives transient journal lock and reconciles without inference replay
+ok 6 - A08 retained settlement survives transient journal lock and reconciles without inference replay
+  ---
+  duration_ms: 53.820449
+  type: 'test'
+  ...
+# Subtest: A08 new process rejects old capability and refuses an existing run allowance namespace
+ok 7 - A08 new process rejects old capability and refuses an existing run allowance namespace
+  ---
+  duration_ms: 245.40545
+  type: 'test'
+  ...
+# Subtest: A08 legacy grounding aggregate retains known subtotal with unjoined incomplete coverage
+ok 8 - A08 legacy grounding aggregate retains known subtotal with unjoined incomplete coverage
+  ---
+  duration_ms: 112.206265
+  type: 'test'
+  ...
+# Subtest: A09 remaining duration bounds delayed headers and preserves unknown dispatched exposure
+ok 9 - A09 remaining duration bounds delayed headers and preserves unknown dispatched exposure
+  ---
+  duration_ms: 115.637069
+  type: 'test'
+  ...
+# Subtest: A09 remaining duration bounds delayed body and preserves unknown dispatched exposure
+ok 10 - A09 remaining duration bounds delayed body and preserves unknown dispatched exposure
+  ---
+  duration_ms: 109.241864
+  type: 'test'
+  ...
+# Subtest: A09 pre-aborted direct call never dispatches
+ok 11 - A09 pre-aborted direct call never dispatches
+  ---
+  duration_ms: 1.059857
+  type: 'test'
+  ...
+# [jev] run=route-run site=rank ok=true ms=7
+# Subtest: A09 Express normal request close does not abort a healthy response
+ok 12 - A09 Express normal request close does not abort a healthy response
+  ---
+  duration_ms: 39.733732
+  type: 'test'
+  ...
+# [jev] run=route-run site=rank ok=false ms=0
+# Subtest: A09 Express body parsing consumes caller budget before provider admission
+ok 13 - A09 Express body parsing consumes caller budget before provider admission
+  ---
+  duration_ms: 110.664986
+  type: 'test'
+  ...
+# [jev] run=route-run site=rank ok=false ms=10
+# Subtest: A09 Express genuine client disconnect aborts provider and retains unknown fence
+ok 14 - A09 Express genuine client disconnect aborts provider and retains unknown fence
+  ---
+  duration_ms: 17.938533
+  type: 'test'
+  ...
+# BadRequestError: request aborted
+#     at IncomingMessage.onAborted (/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/b-factory/runner/node_modules/raw-body/index.js:245:10)
+#     at IncomingMessage.emit (node:events:531:35)
+#     at IncomingMessage._destroy (node:_http_incoming:221:10)
+#     at _destroy (node:internal/streams/destroy:122:10)
+#     at IncomingMessage.destroy (node:internal/streams/destroy:84:5)
+#     at abortIncoming (node:_http_server:838:9)
+#     at socketOnClose (node:_http_server:832:3)
+#     at Socket.emit (node:events:531:35)
+#     at TCP.<anonymous> (node:net:347:12)
+# Subtest: A09 Express disconnect before the JSON body completes dispatches no inference
+ok 15 - A09 Express disconnect before the JSON body completes dispatches no inference
+  ---
+  duration_ms: 33.175773
+  type: 'test'
+  ...
+# [jev] run=run-1 site=rank ok=false ms=1
+# [jev] run=run-1 site=rank ok=false ms=0
+# [jev] run=run-1 site=rank ok=false ms=0
+# [jev] run=run-1 site=rank ok=true ms=4
+# [jev] run=identified-run site=rank ok=false ms=0
+# [jev] run=identified-run site=rank ok=false ms=0
+# Subtest: mint/lookup/revoke round-trip
+ok 16 - mint/lookup/revoke round-trip
+  ---
+  duration_ms: 3.236917
+  type: 'test'
+  ...
+# Subtest: minting twice for the same run revokes the first token
+ok 17 - minting twice for the same run revokes the first token
+  ---
+  duration_ms: 0.482378
+  type: 'test'
+  ...
+# Subtest: bad bearer 401s
+ok 18 - bad bearer 401s
+  ---
+  duration_ms: 0.728687
+  type: 'test'
+  ...
+# Subtest: oversize/malformed questions 400
+ok 19 - oversize/malformed questions 400
+  ---
+  duration_ms: 0.883574
+  type: 'test'
+  ...
+# Subtest: invalid site is rejected
+ok 20 - invalid site is rejected
+  ---
+  duration_ms: 0.872316
+  type: 'test'
+  ...
+# Subtest: ok path (unconfigured runner) still returns 200 with ok:false, logs shadow, and counts against budget
+ok 21 - ok path (unconfigured runner) still returns 200 with ok:false, logs shadow, and counts against budget
+  ---
+  duration_ms: 4.961316
+  type: 'test'
+  ...
+# Subtest: MEDIUM-2: a container cannot claim a runner-owned site
+ok 22 - MEDIUM-2: a container cannot claim a runner-owned site
+  ---
+  duration_ms: 0.898377
+  type: 'test'
+  ...
+# Subtest: MEDIUM-1: an oversize `today` is rejected before it can grow the central log unbounded
+ok 23 - MEDIUM-1: an oversize `today` is rejected before it can grow the central log unbounded
+  ---
+  duration_ms: 0.41484
+  type: 'test'
+  ...
+# Subtest: LOW: __proto__/constructor/prototype question keys are rejected, never merged onto the questions object
+ok 24 - LOW: __proto__/constructor/prototype question keys are rejected, never merged onto the questions object
+  ---
+  duration_ms: 0.604978
+  type: 'test'
+  ...
+# Subtest: LOW: a 400 (malformed request) counts against the same per-run call budget a successful call does
+ok 25 - LOW: a 400 (malformed request) counts against the same per-run call budget a successful call does
+  ---
+  duration_ms: 0.615535
+  type: 'test'
+  ...
+# Subtest: run budget: max calls exhausts to 429
+ok 26 - run budget: max calls exhausts to 429
+  ---
+  duration_ms: 1.722213
+  type: 'test'
+  ...
+# Subtest: MEDIUM-3: a cost-unreported (unknown-costSource) response still counts toward the per-run $ budget
+ok 27 - MEDIUM-3: a cost-unreported (unknown-costSource) response still counts toward the per-run $ budget
+  ---
+  duration_ms: 5.978816
+  type: 'test'
+  ...
+# Subtest: revoked capability 401s on the next request
+ok 28 - revoked capability 401s on the next request
+  ---
+  duration_ms: 0.500616
+  type: 'test'
+  ...
+# Subtest: sweep drops only capabilities older than FACTORY_RUN_TIMEOUT + 30 minutes
+ok 29 - sweep drops only capabilities older than FACTORY_RUN_TIMEOUT + 30 minutes
+  ---
+  duration_ms: 0.500106
+  type: 'test'
+  ...
+# Subtest: v2 proxy owns attempt identity, retains logical retries and logs matching bindings
+ok 30 - v2 proxy owns attempt identity, retains logical retries and logs matching bindings
+  ---
+  duration_ms: 1.523398
+  type: 'test'
+  ...
+# [jev] run=joined-run site=rank ok=true ms=1
+# Subtest: v2 real shell -> proxy -> provider receipt -> report bills once (invalid=false)
+ok 31 - v2 real shell -> proxy -> provider receipt -> report bills once (invalid=false)
+  ---
+  duration_ms: 375.393503
+  type: 'test'
+  ...
+# [jev] run=joined-run site=rank ok=false ms=1
+# Subtest: v2 real shell -> proxy -> provider receipt -> report bills once (invalid=true)
+ok 32 - v2 real shell -> proxy -> provider receipt -> report bills once (invalid=true)
+  ---
+  duration_ms: 389.192465
+  type: 'test'
+  ...
+# [jev] run=atomic-run site=rank ok=true ms=19
+# [jev] run=unknown-run site=rank ok=true ms=1
+# [jev] run=overage-run site=rank ok=true ms=1
+# [jev] run=revoked-inflight site=rank ok=true ms=1
+# [jev] run=revoked-inflight site=rank ok=true ms=1
+# Subtest: A08 cap-one is reserved before await; busy does not debit and rotation cannot reset it
+ok 33 - A08 cap-one is reserved before await; busy does not debit and rotation cannot reset it
+  ---
+  duration_ms: 22.04892
+  type: 'test'
+  ...
+# Subtest: A08 malformed allowance saturates; invalid and fractional configuration is finite
+ok 34 - A08 malformed allowance saturates; invalid and fractional configuration is finite
+  ---
+  duration_ms: 1.175137
+  type: 'test'
+  ...
+# Subtest: A08 terminal tombstones reject remint and pressure never evicts an existing ledger
+ok 35 - A08 terminal tombstones reject remint and pressure never evicts an existing ledger
+  ---
+  duration_ms: 1.343634
+  type: 'test'
+  ...
+# Subtest: A08 revoked unknown attempt fences remint across token expiry without estimated free spend
+ok 36 - A08 revoked unknown attempt fences remint across token expiry without estimated free spend
+  ---
+  duration_ms: 2.121429
+  type: 'test'
+  ...
+# Subtest: A09 proxy rejects malformed durations without provider attempts
+ok 37 - A09 proxy rejects malformed durations without provider attempts
+  ---
+  duration_ms: 0.510199
+  type: 'test'
+  ...
+# Subtest: A08 known provider overage records actual bill and denies later admission
+ok 38 - A08 known provider overage records actual bill and denies later admission
+  ---
+  duration_ms: 1.705548
+  type: 'test'
+  ...
+# Subtest: A08 revoked in-flight request settles once against the retained ledger; busy spends no allowance
+ok 39 - A08 revoked in-flight request settles once against the retained ledger; busy spends no allowance
+  ---
+  duration_ms: 2.984047
+  type: 'test'
+  ...
+1..39
+# tests 39
+# suites 0
+# pass 39
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12441.577575

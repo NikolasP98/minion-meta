@@ -1,0 +1,153 @@
+{
+  "artifact": "notification-slice5-v12-integrity-quarantine-recon",
+  "authorRevision": "v4",
+  "status": "author-draft",
+  "created": "2026-10-03",
+  "repo": "minion_hub",
+  "repoCommit": "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54",
+  "parentContract": {
+    "path": "spec-notification-slice5-audience-projection.md",
+    "sha256": "425eb193f6cf86f3f27b721a474362653f8133602f108e8ee374bc07b1268fe6",
+    "revision": "v11"
+  },
+  "sourceSnapshot": [
+    {
+      "repo": "minion_hub",
+      "file": "supabase/migrations/20261003150000_notification_event_outbox.sql",
+      "line": 257,
+      "repoCommit": "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54",
+      "sha256": "afde75a6976b2b403dd0bb6951f26391e34068449f92130f00db19c7f8eadead",
+      "detail": "The existing bounded quarantine function is SECURITY INVOKER, owns the exact JSON validation and live claim predicate, and grants EXECUTE only to notification_worker."
+    },
+    {
+      "repo": "minion_hub",
+      "file": "supabase/migrations/20261003170000_notification_audience_projection.sql",
+      "line": 635,
+      "repoCommit": "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54",
+      "sha256": "f5134e10f586adbc42842991e961c548de7bd2d5c46364416728799f03ebbea5",
+      "detail": "Slice5 replaces notification_worker's permissive FOR ALL policy with pending/processing SELECT and processing/quarantined UPDATE policies so terminal rows are not readable."
+    },
+    {
+      "repo": "minion_hub",
+      "file": "supabase/migrations/20261003170000_notification_audience_projection.sql",
+      "line": 1303,
+      "repoCommit": "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54",
+      "sha256": "f5134e10f586adbc42842991e961c548de7bd2d5c46364416728799f03ebbea5",
+      "detail": "The reviewed v11 transaction-local bridge already supplies bounded ownership-transfer authority to notification_event_trigger and is removed before commit."
+    },
+    {
+      "repo": "minion_hub",
+      "file": "src/server/services/notifications/outbox-settlement.ts",
+      "line": 23,
+      "repoCommit": "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54",
+      "sha256": "3bf2d32242b794aefc48f1e31db362c4ff6786f90968555cd98cea9f033b1f4f",
+      "detail": "The single-event quarantine helper still performs a direct UPDATE while the batch/projector path invokes notification_quarantine_claims(jsonb). Both must converge on one fixed authority surface after Slice5."
+    },
+    {
+      "repo": "minion_hub",
+      "file": "src/server/services/notifications/worker-transaction.ts",
+      "line": 20,
+      "repoCommit": "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54",
+      "sha256": "1bffe8e03911c4e34f55cf7d1552103a616ba3f7107e302d753295c108ccd5b9",
+      "detail": "The shared worker transaction initializes generation but not scope mode, event ID or quarantine reason; the amendment must initialize every setting that the fixed function captures and restores."
+    },
+    {
+      "repo": "minion_hub",
+      "file": "src/server/services/notifications/projection/projector.ts",
+      "line": 55,
+      "repoCommit": "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54",
+      "sha256": "2b0d1e514cad77a3eca7f06e90a63f96ce2626e2670c0226d714f5c371c9b623",
+      "detail": "The production projector sends malformed claimed events through the existing bounded quarantine function and requires exactly one settled row, but its distinct claim transaction initializes scope/event/generation without initializing quarantine reason."
+    },
+    {
+      "repo": "minion_hub",
+      "file": "src/server/services/notifications/projection/catalog-admission.ts",
+      "line": 1,
+      "repoCommit": "0040a8fbb483ae52bf78366fd6d0dcfee7cebf54",
+      "sha256": "56bcb812c6b0e593d34bf0b9605b861040bfc4bb0c74731a443951cc0a0c3913",
+      "detail": "Runtime admission already captures exact operational ACLs, policies, role reachability and four fixed functions; the quarantine owner/function/policies must join that finite inventory."
+    }
+  ],
+  "failureEvidence": {
+    "path": "notification-slice5-focused-native-v6.log",
+    "sha256": "bb038f28b367b4e61f93950c598ae7e514dcfb7d50ec583849aa1673f719ebe7",
+    "test": "uses the command tag for exact claim-role quarantine while terminal SELECT remains denied",
+    "databaseError": "new row violates row-level security policy for table notification_outbox",
+    "result": "1 failed, 8 passed",
+    "interpretation": "The terminal-read restriction is effective, but a SECURITY INVOKER update cannot both write the terminal row and retain that restriction."
+  },
+  "reviewFindings": [
+    {
+      "id": "S5Q-001",
+      "severity": "blocker",
+      "state": "open",
+      "detail": "Integrity quarantine cannot commit after Slice5 without either reopening terminal SELECT to notification_worker or using a fixed inaccessible authority."
+    },
+    {
+      "id": "S5Q-002",
+      "severity": "security",
+      "state": "contracted",
+      "detail": "The authority must not accept dynamic SQL, relation names, roles or free-form reasons and must preserve exact live organization, event, owner and generation fencing."
+    },
+    {
+      "id": "S5Q-003",
+      "severity": "security",
+      "state": "contracted",
+      "detail": "The notification worker and all browser/application roles must remain unable to read terminal outbox rows or reach the definer owner."
+    },
+    {
+      "id": "S5Q-004",
+      "severity": "compatibility",
+      "state": "contracted",
+      "detail": "The current single-event and 250-event callers must keep their exact boolean/count behavior while sharing one database mutation path."
+    }
+  ],
+  "constraints": {
+    "databaseMajors": [17, 18],
+    "functionSignature": "public.notification_quarantine_claims(jsonb) returns integer",
+    "maximumClaims": 250,
+    "maximumInputBytes": 65536,
+    "allowedReasons": ["payload_invalid", "digest_mismatch", "envelope_invalid"],
+    "functionOwner": "notification_event_trigger",
+    "executeCaller": "notification_worker",
+    "scopeMode": "integrity_quarantine",
+    "mutatedTransactionSettings": [
+      "app.notification_scope_mode",
+      "app.notification_event_id",
+      "app.notification_generation",
+      "app.notification_quarantine_reason"
+    ],
+    "ownerTablePrivileges": ["INSERT"],
+    "ownerSelectColumns": [
+      "organization_id",
+      "event_id",
+      "state",
+      "lease_owner",
+      "generation",
+      "claimed_at",
+      "hard_deadline",
+      "lease_expires_at",
+      "renewal_count",
+      "completed_at",
+      "quarantine_reason",
+      "terminal_owner_id",
+      "terminal_generation"
+    ],
+    "ownerUpdateColumns": [
+      "state",
+      "completed_at",
+      "quarantine_reason",
+      "lease_owner",
+      "claimed_at",
+      "hard_deadline",
+      "lease_expires_at",
+      "renewal_count"
+    ]
+  },
+  "authorization": {
+    "sourceImplementation": false,
+    "productionWrites": false,
+    "externalEffects": false,
+    "nextGate": "parent Spec review and independent Standards review"
+  }
+}

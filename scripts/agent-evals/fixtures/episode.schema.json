@@ -1,0 +1,282 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://minion.ai/schemas/eval-episode-v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "episodeId",
+    "clusterId",
+    "leakageGroupId",
+    "family",
+    "locale",
+    "provenance",
+    "truth",
+    "initialState",
+    "permissions",
+    "steps",
+    "expectedReceipts",
+    "expectedArtifacts",
+    "terminal",
+    "maxEffort",
+    "consequential",
+    "history"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "episodeId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "clusterId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "leakageGroupId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "family": {
+      "enum": [
+        "informational_question",
+        "lookup",
+        "authorized_form_fill",
+        "multi_intent_navigation",
+        "off_page_discovery",
+        "ui_choice",
+        "artifact_callback",
+        "short_continuation",
+        "changed_page",
+        "compacted_history",
+        "tool_provider_failure",
+        "cancel_scope_transition"
+      ]
+    },
+    "locale": {
+      "enum": ["en", "es"]
+    },
+    "provenance": {
+      "enum": ["synthetic_software", "source_backed"]
+    },
+    "truth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["references", "sha256"],
+      "properties": {
+        "references": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "initialState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fixtureId", "sha256", "persona", "org", "surface", "sandbox"],
+      "properties": {
+        "fixtureId": {
+          "enum": ["empty", "one-element"]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "persona": {
+          "enum": ["owner", "reader"]
+        },
+        "org": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096
+        },
+        "surface": {
+          "enum": ["home", "floating"]
+        },
+        "sandbox": {
+          "type": "boolean"
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowedTools", "forbiddenTools", "allowedActions", "forbiddenActions"],
+      "properties": {
+        "allowedTools": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "forbiddenTools": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "allowedActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "forbiddenActions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        }
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "payload"],
+        "properties": {
+          "type": {
+            "enum": ["turn", "transition", "cancel"]
+          },
+          "payload": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "expectedReceipts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      }
+    },
+    "expectedArtifacts": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 4096
+      }
+    },
+    "terminal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criterion", "expectedText", "forbiddenSideEffects"],
+      "properties": {
+        "criterion": {
+          "enum": ["answer_contains", "receipts", "canceled"]
+        },
+        "expectedText": {
+          "type": ["string", "null"]
+        },
+        "forbiddenSideEffects": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        }
+      }
+    },
+    "maxEffort": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["calls", "durationMs", "steps"],
+      "properties": {
+        "calls": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600000
+        },
+        "durationMs": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600000
+        },
+        "steps": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600000
+        }
+      }
+    },
+    "consequential": {
+      "type": "boolean"
+    },
+    "history": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["revision", "compacted", "sourceHash"],
+          "properties": {
+            "revision": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 4096
+            },
+            "compacted": {
+              "const": true
+            },
+            "sourceHash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        }
+      ]
+    },
+    "providerFixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "main": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "type": "object"
+          }
+        },
+        "classifier": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

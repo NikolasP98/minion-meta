@@ -1,0 +1,1058 @@
+{
+  "schemaVersion": 1,
+  "reportId": "notifications-recon-2026-10-03",
+  "generatedAt": "2026-10-03T00:00:00-05:00",
+  "verdict": "action_required",
+  "mode": "read_only_source_recon",
+  "businessMutationCount": 0,
+  "sourceBaselines": {
+    "hub": {
+      "repo": "minion_hub",
+      "commit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+      "workingTreeNote": "Concurrent POS and shared-session work exists, but every notification anchor below is unchanged from HEAD."
+    },
+    "gateway": {
+      "repo": "minion",
+      "commit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+      "workingTreeNote": "Concurrent lifecycle work modifies update-notify timer cleanup. Findings use git show at HEAD. The candidate cleanup does not add delivery receipts, release attestation, audience policy, or target retries."
+    },
+    "meta": {
+      "repo": "minion-meta",
+      "commit": "f45cb024785c3dcc7636f178ef3ebd683a128b71",
+      "workingTreeNote": "Concurrent readiness-report changes are excluded. Historical migration and design anchors use committed files."
+    }
+  },
+  "scope": {
+    "included": [
+      "Hub generic notification rules, scheduler entrypoint, database model and settings routes",
+      "scheduling reminders, finance failure alerts, join lifecycle email, Pulse, bell, page, toast, Workforce inbox and workshop inbox",
+      "Gateway channels.send, update notifications, cron outcomes, notify_user tool and Pulse tool",
+      "typed requested events: upcoming appointments, status subscriptions, low stock, new users, finance summaries, released revisions and agent-defined reports",
+      "audience, privacy, RLS, idempotency, timezone, DST, quiet hours, digest, navigation and visual-artifact boundaries"
+    ],
+    "excluded": [
+      "production queries or writes",
+      "provider sends, live email, WhatsApp, Telegram or release webhooks",
+      "browser screenshots, which remain owned by the parent browser session",
+      "source implementation before two-pass specification approval"
+    ]
+  },
+  "findings": [
+    {
+      "id": "NOTIF-001",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "The generic engine records sent before delivery and cannot reliably record failure",
+      "summary": "The Hub inserts notif_log with status sent before calling the Gateway. Its runtime role has only SELECT and INSERT on notif_log, so the failure UPDATE can be rejected and leave a false sent claim that the unique key suppresses forever. The Gateway ignores the supplied idempotencyKey and subject fields.",
+      "impact": "A provider rejection or ambiguous connection loss can permanently lose a notification, display a false audit result, or duplicate a later manual retry.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/services/notif.service.ts",
+          "line": 230,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Inserts status sent at lines 232-246 before channels.send, then tries to UPDATE failed at lines 261-268."
+        },
+        {
+          "repo": "hub",
+          "file": "supabase/qa/baseline/schema.sql",
+          "line": 11212,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "app_ledger receives SELECT,INSERT only on notif_log."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/db/with-org-core.ts",
+          "line": 89,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "withOrgCore executes as app_ledger with the org GUC."
+        },
+        {
+          "repo": "gateway",
+          "file": "src/gateway/server-methods/channels.ts",
+          "line": 257,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "channels.send reads only channel, to, text and accountId; it does not consume idempotencyKey or subject."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-001-static-claim-path",
+        "capturedAt": "2026-10-03",
+        "method": "git show frozen commits plus grant inspection",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Use a durable pending delivery effect with lease/generation, status transitions permitted by the migration, provider/gateway operation identity, message receipt storage and explicit unknown reconciliation. Never equate request admission with provider delivery.",
+      "acceptance": [
+        "A rejected send cannot leave sent status.",
+        "A crash before, during and after provider acceptance converges without blind resend.",
+        "The recorded message receipt belongs to the exact destination and operation."
+      ],
+      "slice": "S0-security-and-ledger"
+    },
+    {
+      "id": "NOTIF-002",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "A Gateway token can insert Pulse cards into an arbitrary organization",
+      "summary": "Server-token authentication binds locals.tenantCtx to the credential organization, but the Pulse route checks only locals.serverId and builds CoreCtx from body.orgId. The Gateway tool also asks the agent to supply orgId.",
+      "impact": "A credential for organization A can write untrusted notification/action cards into organization B if its ID is known, crossing the tenant boundary and presenting executable proposals to the wrong audience.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/auth/resolve-identity.ts",
+          "line": 295,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Server-token resolution binds the authenticated credential to its canonical tenant context."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/gateway/pulse/proposals/+server.ts",
+          "line": 14,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The route trusts body.orgId and constructs CoreCtx from it after checking only serverId."
+        },
+        {
+          "repo": "gateway",
+          "file": "extensions/gmail-calendar/src/pulse-tools.ts",
+          "line": 18,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "pulse_propose exposes orgId as an agent-controlled parameter and forwards it verbatim."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/gateway/pulse/proposals/server.test.ts",
+          "line": 10,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Tests cover missing server token and missing orgId, not credential-org mismatch."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-002-auth-dataflow",
+        "capturedAt": "2026-10-03",
+        "method": "frozen source data-flow trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Derive the org from authenticated server authority, reject any supplied mismatch before parsing cards, and bind the Gateway tool to its hydrated canonical org rather than an agent argument.",
+      "acceptance": [
+        "An org-A token with org-B body receives 403 and writes zero rows.",
+        "A shared Gateway may publish only to an org explicitly bound to that authenticated connection.",
+        "Logs do not retain card bodies or recipient PII."
+      ],
+      "slice": "S0-security-and-ledger"
+    },
+    {
+      "id": "NOTIF-003",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "Notification and reminder settings can be enabled while both production ticks are unscheduled",
+      "summary": "Both route comments and the settings product copy imply production execution, but vercel.json contains neither route. The canonical automation manifest says both ticks were dropped on 2026-07-25 and remain unscheduled.",
+      "impact": "Users can configure rules and reminders that never run, with no heartbeat, next-run time or failed-scheduler state visible on the settings page.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "vercel.json",
+          "line": 1,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The five Vercel cron entries omit notifications and scheduling reminders."
+        },
+        {
+          "repo": "hub",
+          "file": "src/lib/automations/system-automations.ts",
+          "line": 115,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The verified manifest marks both routes unscheduled and records their July removal."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/scheduling/reminders/tick/+server.ts",
+          "line": 10,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The comment still calls this a Vercel Cron every minute."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/notifications/tick/+server.ts",
+          "line": 9,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The generic route tells operators to wire an external cron but carries no durable schedule receipt."
+        }
+      ],
+      "historyAnchors": [
+        {
+          "repo": "hub",
+          "commit": "c57fe7f35c519eb0eee1e0f33389ddab13671a07",
+          "detail": "fix(automations): make the system manifest match the real crontab (#275)"
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-003-schedule-inventory",
+        "capturedAt": "2026-10-03",
+        "method": "compare vercel.json, canonical automation manifest and route comments",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Admit durable worker jobs through the approved scheduler architecture, record heartbeat/next-run/last-success/last-failure receipts, and make enablement fail visibly when no runnable schedule exists.",
+      "acceptance": [
+        "Enabled settings show a current scheduler receipt and next run.",
+        "A removed or stale schedule changes UI state to blocked/degraded.",
+        "A scheduler retry cannot overlap or double-publish the same event."
+      ],
+      "slice": "S1-durable-event-foundation"
+    },
+    {
+      "id": "NOTIF-004",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "A busy rule can silently discard every matching row after the first 500",
+      "summary": "The SQL scan has LIMIT 500 without stable ordering or a cursor. After processing the returned rows, last_run_at advances directly to now. Rows beyond the limit are outside the next window and are never evaluated. Non-table sources have no common cap or continuation contract, and stock discovery depends on an import side effect absent from the settings loader.",
+      "impact": "A burst of more than 500 inserts or updates creates deterministic notification loss. The rule UI can also omit a runtime-supported stock source depending on module import order.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/services/notif.service.ts",
+          "line": 166,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Candidate scan uses an unordered window and LIMIT 500 at line 193."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/notif.service.ts",
+          "line": 273,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The rule watermark advances to now regardless of truncation or send outcome."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/notif.service.ts",
+          "line": 34,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Candidate sources live in a process-local registration map; NOTIF_TABLES is materialized only from TABLE_META."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/(app)/settings/notifications/+page.server.ts",
+          "line": 4,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The settings loader returns static NOTIF_TABLES and does not import stock.service."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/notifications/tick/+server.ts",
+          "line": 5,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Only the tick side-effect-imports stock.service."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-004-window-proof",
+        "capturedAt": "2026-10-03",
+        "method": "static cursor/window trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Replace scans with a transaction outbox whose committed pending rows are leased by row state in bounded primary-key pages. Event time is display data, never an authoritative high-water mark. Make the typed catalog explicit and independent of imports.",
+      "acceptance": [
+        "A 501-row same-timestamp burst publishes all eligible events across bounded row claims.",
+        "Transaction B may commit and be consumed before an earlier-time transaction A commits; A remains pending and is consumed later.",
+        "Crash and lease expiry reclaim unfinished rows without duplicate audience projection.",
+        "Every catalog event appears identically in settings, worker and validation code."
+      ],
+      "slice": "S1-durable-event-foundation"
+    },
+    {
+      "id": "NOTIF-005",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "Scheduling reminders permanently suppress failed, crashed and ambiguous sends",
+      "summary": "A unique reminder row is claimed as sending before the external call. Every existing status is loaded into doneCombos, including sending and failed, so no later tick retries it. The Gateway ignores the idempotency key supplied by Hub.",
+      "impact": "A crash after claim, provider rejection, or response loss permanently loses the reminder. Blindly removing the row can instead duplicate a provider-accepted message.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/services/reminders.service.ts",
+          "line": 90,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "All recorded rows become doneCombos without filtering terminal success."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/reminders.service.ts",
+          "line": 132,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The unique slot is inserted with status sending before channels.send."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/reminders.service.ts",
+          "line": 183,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Hub supplies a stable idempotency key but relies on the Gateway to honor it."
+        },
+        {
+          "repo": "gateway",
+          "file": "src/gateway/server-methods/channels.ts",
+          "line": 263,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "Gateway channels.send has no operation-id/idempotency handling."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-005-reminder-state-trace",
+        "capturedAt": "2026-10-03",
+        "method": "static state-machine trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Move reminders onto the same leased delivery effect and unknown-reconciliation model as other notification deliveries; retain booking-stage semantics as a typed producer.",
+      "acceptance": [
+        "A stale sending claim is reclaimed by generation, not treated as delivered.",
+        "Permanent provider rejection is visible and retry policy is explicit.",
+        "Response loss never causes a blind second send."
+      ],
+      "slice": "S2-delivery-effects"
+    },
+    {
+      "id": "NOTIF-006",
+      "priority": "P2",
+      "status": "confirmed_new",
+      "title": "Low-stock alerts are permanent level alarms rather than threshold crossings",
+      "summary": "Every item/warehouse at or below reorder level is returned, then a constant threshold key permanently deduplicates that entity. Recovery above the level does not re-arm a later crossing. No hysteresis or rate cap exists.",
+      "impact": "The first shortage may alert, but later independent shortages never do. Around-threshold fluctuations cannot be controlled without either silence or spam.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/services/stock.service.ts",
+          "line": 1104,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The comment explicitly records permanent dedupe and the missing recovery marker."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/stock.service.ts",
+          "line": 1114,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The source returns current low-level rows rather than durable crossing events."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/notif.service.ts",
+          "line": 223,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Every registered-source event uses the fixed threshold trigger key."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-006-threshold-model",
+        "capturedAt": "2026-10-03",
+        "method": "static source and dedupe trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Persist crossing state per org/item/warehouse/rule, re-arm only after `qty >= threshold + hysteresis`, and enforce an org/rule rate cap and digest option.",
+      "acceptance": [
+        "Low, recover, low emits two crossing events.",
+        "Oscillation inside the hysteresis band emits none.",
+        "Concurrent stock commits create one event for one crossing."
+      ],
+      "slice": "S4-requested-business-events"
+    },
+    {
+      "id": "NOTIF-007",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "Notification rule data is readable by any tenant member and rule semantics are weakly validated",
+      "summary": "The GET endpoint requires only CoreCtx although the settings page is admin-only, exposing static destinations, templates and conditions to any authenticated tenant member who calls the API. Conditions and recipients are arrays of unknown values, and patch validation does not validate the final merged table/event/date-field combination.",
+      "impact": "Member-visible destination addresses and templates can leak operational or personal data. Malformed or contradictory rules can persist and silently never fire or select unintended row fields.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/routes/api/notifications/rules/+server.ts",
+          "line": 9,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "condition and recipients accept unknown elements; GET at lines 25-29 has no admin/capability check."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/(app)/settings/notifications/+page.server.ts",
+          "line": 6,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The page itself is admin-only, so the API and UI authority differ."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/notif.service.ts",
+          "line": 140,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Patch validation checks dateField only when triggerTable is present in the same patch."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/db/pg-notifications-schema.ts",
+          "line": 18,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "JSONB rule fields and string enums have no database checks or destination foreign keys."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-007-rule-api-authority",
+        "capturedAt": "2026-10-03",
+        "method": "route/schema authority trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Gate rule reads and writes with explicit notification management capability, replace JSON unknowns with versioned typed conditions/audiences, validate the merged row, and reference canonical channel accounts.",
+      "acceptance": [
+        "A member without manage receives 403 and no rule secrets.",
+        "Every persisted rule validates as one catalog event with a typed audience and delivery policy.",
+        "Changing only event/table/date fields cannot create an invalid merged rule."
+      ],
+      "slice": "S3-preferences-and-rule-builder"
+    },
+    {
+      "id": "NOTIF-008",
+      "priority": "P2",
+      "status": "confirmed_new",
+      "title": "The bell, notifications page and toast store are not a durable user notification inbox",
+      "summary": "The bell counts join requests, Pulse proposals and one pending Gateway update. It polls every minute and suppresses fetch failures. The page is an admin join/Pulse action page. Toasts are local transient UI. Outgoing notif_log rows have no recipient-user, read/unread, navigation or audience model. Workforce and workshop inboxes are separate execution/canvas domains.",
+      "impact": "Ordinary users have no durable, permission-filtered history, read state, preference center or reliable link back to the affected record. Board messages can be mistaken for human notifications if the domains are merged casually.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/lib/state/features/notifications.svelte.ts",
+          "line": 4,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Badge composition and silent 60-second polling cover only three unrelated sources."
+        },
+        {
+          "repo": "hub",
+          "file": "src/lib/components/layout/NotificationsPopup.svelte",
+          "line": 28,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Popup fetches join requests and Pulse, with a separate Gateway update row."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/(app)/notifications/+page.server.ts",
+          "line": 11,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The route is admin-only and returns pending joins plus optional Pulse."
+        },
+        {
+          "repo": "hub",
+          "file": "src/lib/state/ui/toast.svelte.ts",
+          "line": 116,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Toasts have finite client durations and no durable receipt."
+        },
+        {
+          "repo": "hub",
+          "file": "src/lib/workforce/pipeline-inbox.ts",
+          "line": 153,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Workforce inbox applies its own backend assignment and role eligibility contract."
+        },
+        {
+          "repo": "hub",
+          "file": "src/lib/workshop/inbox-bridge.ts",
+          "line": 18,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Workshop inbox is canvas-local state and autosave, not a human navigation inbox."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-008-surface-inventory",
+        "capturedAt": "2026-10-03",
+        "method": "UI state and server-loader inventory",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Add a durable human inbox projection with per-recipient RLS, read/dismiss state and server-owned navigation. Keep Workforce and workshop inboxes separate and project only explicit safe links/counts.",
+      "acceptance": [
+        "A user sees only notifications for which current membership and capability still permit the subject.",
+        "Read state survives reload and another tab.",
+        "A board artifact or agent inbox body never appears in the human bell without an explicit safe projection."
+      ],
+      "slice": "S3-preferences-and-rule-builder"
+    },
+    {
+      "id": "NOTIF-009",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "The agent notify_user path bypasses notification policy, uses mismatched authority and drops subject",
+      "summary": "The Gateway declares comms:create, but the Hub permits comms:view or memberships:view. A confirmed call sends directly with a new Date.now idempotency key, stores no local receipt, checks no recipient preference/quiet hours, and supplies subject to a Gateway method that ignores it.",
+      "impact": "A role with read-only access can send external email-like messages; retries are always distinct, audit is absent, and the user-visible subject contract is false.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/routes/api/gateway/actions/notify-user/+server.ts",
+          "line": 16,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The service gap is documented; lines 31-33 authorize either view capability and lines 59-73 send directly."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/gateway/actions/notify-user/+server.ts",
+          "line": 67,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Date.now creates a new identity for every retry."
+        },
+        {
+          "repo": "gateway",
+          "file": "src/agents/tools/hub/notify-user-tool.meta.ts",
+          "line": 3,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "Tool governance requires comms:create."
+        },
+        {
+          "repo": "gateway",
+          "file": "src/gateway/server-methods/channels.ts",
+          "line": 263,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "The transport ignores subject and operation identity."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-009-agent-send-contract",
+        "capturedAt": "2026-10-03",
+        "method": "cross-repo permission and payload trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Require the same create/send capability at tool and route, admit a stable user-approved operation into the durable delivery ledger, apply preferences and verified destinations, and expose only receipt-backed status.",
+      "acceptance": [
+        "A view-only principal receives 403 before recipient lookup or send.",
+        "Same operation replay returns the same receipt.",
+        "Subject support is either implemented end to end or rejected at validation."
+      ],
+      "slice": "S2-delivery-effects"
+    },
+    {
+      "id": "NOTIF-010",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "Gateway release notifications are best-effort fan-out with version-wide loss and incomplete release provenance",
+      "summary": "fanOutNotify swallows each target failure and stores no target receipt. Once update-pending contains a version, a repeat for that version is suppressed for all targets. The webhook path accepts a validly shaped version/optional SHA and records availability; periodic npm lookup proves a registry tag but neither path binds a sanitized changelog and immutable released artifact receipt to each audience.",
+      "impact": "One channel outage permanently loses that audience's release notification. A webhook can announce availability before the exact reviewed artifact is proven released, and free-form notes lack a release-content policy.",
+      "sourceAnchors": [
+        {
+          "repo": "gateway",
+          "file": "src/gateway/update-notify.ts",
+          "line": 79,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "Committed HEAD catches and discards each fan-out error without a receipt."
+        },
+        {
+          "repo": "gateway",
+          "file": "src/gateway/update-notify.ts",
+          "line": 93,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "Duplicate suppression is global by pending version, before per-target delivery."
+        },
+        {
+          "repo": "gateway",
+          "file": "src/gateway/server/hooks.ts",
+          "line": 33,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "The authenticated update hook forwards shaped version, sha and notes directly to recordAvailableUpdate."
+        },
+        {
+          "repo": "gateway",
+          "file": "src/infra/update-startup.ts",
+          "line": 108,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "Scheduled checks resolve an npm channel tag and then call recordAvailableUpdate without changelog provenance."
+        },
+        {
+          "repo": "gateway",
+          "file": "src/config/zod-schema.ts",
+          "line": 319,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "Notification targets contain only channel and to; there is no audience, preference or delivery policy."
+        }
+      ],
+      "candidateWorkingTree": {
+        "file": "src/gateway/update-notify.ts",
+        "detail": "Concurrent WIP adds timer ownership cleanup only; it does not address release admission or delivery receipts."
+      },
+      "baselineReceipt": {
+        "id": "notif-010-release-path",
+        "capturedAt": "2026-10-03",
+        "method": "git show Gateway HEAD and compare concurrent diff",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Emit a universal per-user product-release event and a separate operator Gateway-update event only from an attested published artifact. Sanitize release notes and track version, audience, recipient and target receipts independently.",
+      "acceptance": [
+        "Draft, build-only and failed-publish revisions emit no release event.",
+        "Minor and major releases reach every eligible active user through per-user preferences; operator Gateway actions remain capability-scoped.",
+        "A failed target can reconcile or retry without repeating successful targets."
+      ],
+      "slice": "S6-release-notifications"
+    },
+    {
+      "id": "NOTIF-011",
+      "priority": "P2",
+      "status": "confirmed_new",
+      "title": "Pulse settings do not create the configured briefing and approved actions lack executed receipts",
+      "summary": "Hub stores enabled, briefing time, channels and watch toggles, but no runtime source reads them to create or reconcile a scheduled job. The only Gateway Pulse code is an agent tool. Approving create_event/reminder serializes loosely validated JSON into an instruction, schedules it, then marks approved; a WhatsApp sentence is treated as the future receipt.",
+      "impact": "A user can enable a daily briefing that never exists. An approved card can be accepted without execution, and untrusted proposal payload becomes agent instruction text.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/services/pulse.service.ts",
+          "line": 101,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Settings are stored and read but have no scheduler reconciliation."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/pulse/settings/+server.ts",
+          "line": 9,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Loose time/locale/channel settings are persisted; auto-approve remains scaffold-only."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/pulse/proposals/[id]/+server.ts",
+          "line": 42,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Proposal args are embedded in an instruction and cron.add acceptance precedes approved state."
+        },
+        {
+          "repo": "gateway",
+          "file": "extensions/gmail-calendar/src/pulse-tools.ts",
+          "line": 28,
+          "repoCommit": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+          "detail": "Gateway contributes only the on-demand pulse_propose tool; no settings scheduler exists."
+        },
+        {
+          "repo": "meta",
+          "file": "specs/2026-07-17-pulse-slice1-plan.md",
+          "line": 878,
+          "repoCommit": "f45cb024785c3dcc7636f178ef3ebd683a128b71",
+          "detail": "The historical plan required a one-time manual instruction to self-schedule rather than a settings-driven reconciler."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-011-pulse-reachability",
+        "capturedAt": "2026-10-03",
+        "method": "cross-repo settings consumer search and action trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Reconcile settings to an exact durable schedule and represent proposed, approved, executed and committed-domain-effect states separately. Only immutable committed effect receipts may emit automation.effects.committed.",
+      "acceptance": [
+        "Saving enabled settings produces a durable schedule receipt or a visible blocked state.",
+        "A proposed or approved action without a committed domain receipt emits no business-change notification.",
+        "No-op, failed and partially rolled-back runs cannot claim tangible committed changes."
+      ],
+      "slice": "S4-requested-business-events"
+    },
+    {
+      "id": "NOTIF-012",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "Hub's deploy migration directory omits the notification and reminder migrations",
+      "summary": "The table migrations are committed in the meta repository and are present in the QA schema snapshot, but Hub's own migration runner reads only Hub/supabase/migrations and those four files are absent there. Fresh Hub migration state therefore does not reproducibly create these runtime tables.",
+      "impact": "A new or rebuilt environment can pass source compilation yet fail at runtime when notification/reminder tables are first accessed. A schema snapshot can hide the missing deploy provenance.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "scripts/db-migrate.ts",
+          "line": 3,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Hub's deployment runner applies files from its own supabase/migrations directory and records hub_migrations."
+        },
+        {
+          "repo": "meta",
+          "file": "supabase/migrations/20260622230000_notifications.sql",
+          "line": 1,
+          "repoCommit": "f45cb024785c3dcc7636f178ef3ebd683a128b71",
+          "detail": "The generic notification migration exists only in the meta checkout."
+        },
+        {
+          "repo": "meta",
+          "file": "supabase/migrations/20260618120000_scheduling_reminders.sql",
+          "line": 1,
+          "repoCommit": "f45cb024785c3dcc7636f178ef3ebd683a128b71",
+          "detail": "The reminder base migration and later multichannel/inference additions exist in meta."
+        },
+        {
+          "repo": "hub",
+          "file": "supabase/qa/baseline/schema.sql",
+          "line": 3540,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "QA snapshot contains the tables and can mask the omission."
+        }
+      ],
+      "historyAnchors": [
+        {
+          "repo": "meta",
+          "commit": "2b0a88b6dc297d32072e40339aece2086a2070bc",
+          "detail": "Historical commit says the notification migration was production-applied."
+        },
+        {
+          "repo": "meta",
+          "commit": "5c9aca53bbb70ea851e16d9201c6220f457585c1",
+          "detail": "Historical commit says scheduling/reminder migrations were production-applied."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-012-migration-inventory",
+        "capturedAt": "2026-10-03",
+        "method": "git ls-files and Hub runner source comparison",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Adopt additive Hub-owned migrations with exact historical-state reconciliation and real fresh-schema qualification. Do not copy old IF NOT EXISTS files blindly without recording whether their versions were already applied outside hub_migrations.",
+      "acceptance": [
+        "An empty disposable PostgreSQL database reaches the exact schema through Hub's canonical runner.",
+        "A legacy database with existing tables reconciles without destructive recreation or false ledger claims.",
+        "RLS, grants, constraints and indexes are asserted on the actual migrated catalog."
+      ],
+      "slice": "S0-security-and-ledger"
+    },
+    {
+      "id": "NOTIF-013",
+      "priority": "P2",
+      "status": "confirmed_gap",
+      "title": "There is no configurable financial daily summary; only a global best-effort sync-failure alert",
+      "summary": "The daily finance route sends only on sync failure, routes through global FINANCE_ALERT_CHANNEL/TO, embeds org/provider/reason in plaintext, stores no user receipt and explicitly bypasses the generic engine. The separate Factory monitor is an operations incident path.",
+      "impact": "Organizations cannot configure a daily financial digest by audience, timezone or sensitivity. A global destination can receive tenant identifiers and provider failure detail without an org-scoped policy.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/routes/api/finances/sync/daily/+server.ts",
+          "line": 18,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The comment documents the outage alert, empty rules and lack of dedupe."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/finances/sync/daily/+server.ts",
+          "line": 37,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Delivery uses two global environment values and includes org/provider/reason."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/finances/sync/daily/+server.ts",
+          "line": 60,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Factory monitor is an independent maintenance intake, not a user notification."
+        },
+        {
+          "repo": "hub",
+          "file": "vercel.json",
+          "line": 3,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The route is scheduled daily at 08:00 UTC."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-013-finance-path",
+        "capturedAt": "2026-10-03",
+        "method": "route and scheduler inventory",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Keep operations failures separate. Add a typed finance.daily_summary.ready event generated only from a committed authoritative snapshot, with field-level audience checks, org timezone, digest policy and authenticated in-app detail.",
+      "acceptance": [
+        "A failed/in-progress sync never masquerades as a financial summary.",
+        "A completed summary contains only fields the recipient may view.",
+        "One org's configured destination cannot receive another org's summary or failure detail."
+      ],
+      "slice": "S4-requested-business-events"
+    },
+    {
+      "id": "NOTIF-014",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "Join-request email sends requester identity to every global profile admin, not target-org managers",
+      "summary": "After inserting an org-scoped join_request, createRequest selects every profile whose global role is admin without filtering organization membership, then sends each requester name and email. The in-app pending query is correctly org-scoped.",
+      "impact": "In a multi-tenant deployment, admins outside the requested organization may receive another tenant's applicant identity and access request.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/services/join/requests.service.ts",
+          "line": 25,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The request row includes organization_id, but lines 56-67 select all profiles with global role admin and email them."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/join/requests.service.ts",
+          "line": 91,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The in-app pending list explicitly scopes by organization, showing the intended boundary."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/email.service.ts",
+          "line": 150,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The email includes requester name and email and links to review."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/email.join.test.ts",
+          "line": 4,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The email test only proves no-op without a key; it does not prove audience isolation."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-014-join-audience",
+        "capturedAt": "2026-10-03",
+        "method": "Supabase query scope trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Produce join.requested after the org-scoped commit, resolve current users:manage recipients within that org, recheck membership before delivery and avoid putting applicant PII in cross-channel previews unless required.",
+      "acceptance": [
+        "Admins outside the target org receive no row and no external delivery.",
+        "Target-org managers without users:manage receive none.",
+        "Audience revocation before dispatch prevents later publication."
+      ],
+      "slice": "S0-security-and-ledger"
+    },
+    {
+      "id": "NOTIF-015",
+      "priority": "P2",
+      "status": "confirmed_gap",
+      "title": "Requested, approved and activated membership are not distinct durable events",
+      "summary": "The system emails admins only when a request is created. Approval first creates organization_members/member_roles and then updates join_request, but it emits no applicant notification or durable event. Denial is also silent. Invite-link consumption bypasses the request lifecycle entirely.",
+      "impact": "The applicant cannot reliably tell whether approval, denial or actual membership activation occurred, and downstream automation cannot distinguish review decisions from an effective role grant.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/services/join/requests.service.ts",
+          "line": 104,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Approval creates membership then updates request status without emitting a durable event."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/join/membership.ts",
+          "line": 32,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Activation spans organization_members and member_roles; both are required for effective access."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/join/+page.server.ts",
+          "line": 69,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Invite consumption directly grants membership and redirects, a separate lifecycle origin."
+        },
+        {
+          "repo": "hub",
+          "file": "src/lib/state/features/notifications.svelte.ts",
+          "line": 20,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The bell exposes only the pending admin count, not applicant outcomes."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-015-membership-lifecycle",
+        "capturedAt": "2026-10-03",
+        "method": "join write-path inventory",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Define join.requested, join.approved, join.denied and membership.activated as separate typed events. Emit activated only after both membership and role authority are durable; requester outcome audiences are exact-user.",
+      "acceptance": [
+        "Approval without effective role activation cannot emit membership.activated.",
+        "Applicant receives exactly one outcome for a request or invite operation.",
+        "Retrying approval does not create a second activation event."
+      ],
+      "slice": "S4-requested-business-events"
+    },
+    {
+      "id": "NOTIF-016",
+      "priority": "P2",
+      "status": "confirmed_gap",
+      "title": "Hub has status-bearing records but no notification subscription registry",
+      "summary": "Projects, tasks, support issues and other domains store statuses and assignees, but no event-subscription/preferences table or service maps a user to subject/status changes. identity_subscriptions is only an opt-in to another member's shareable provider identity feed and cannot authorize business-record notifications.",
+      "impact": "Users cannot subscribe to the status of a task, issue, booking or other record. Building this from generic table rules would expose raw table/field concepts and would not enforce record-level authorization at read or delivery time.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/db/pg-projects-schema.ts",
+          "line": 57,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Project tasks have status and assignee fields but no notification relation."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/db/pg-support-schema.ts",
+          "line": 21,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Support issues have status, owner and deadlines but no watcher/subscription model."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/shared-identity.service.ts",
+          "line": 7,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "identity_subscriptions is explicitly for shareable account identities, not domain events."
+        }
+      ],
+      "absenceReceipt": {
+        "command": "rg -n 'notification_preferences|status_subscription|event_subscription|quiet_hours' src supabase/migrations",
+        "result": "No matching notification preference or event-subscription implementation at frozen Hub HEAD."
+      },
+      "baselineReceipt": {
+        "id": "notif-016-subscription-inventory",
+        "capturedAt": "2026-10-03",
+        "method": "schema/service inventory plus negative symbol search",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Add a typed subject subscription keyed by user, org, event kind and canonical subject identity. Validate current read capability at subscribe, event projection and every read/delivery.",
+      "acceptance": [
+        "A user can subscribe to an authorized subject and selected terminal/transitional states.",
+        "Losing subject access removes visibility and prevents later external dispatch.",
+        "A guessed cross-org subject ID creates no subscription and leaks no existence."
+      ],
+      "slice": "S4-requested-business-events"
+    },
+    {
+      "id": "NOTIF-017",
+      "priority": "P2",
+      "status": "confirmed_gap",
+      "title": "Agent-defined report rules and visual artifacts have no durable notification authority model",
+      "summary": "Current Gateway query routes correctly resolve a fresh assistant principal, check module capability and apply field/per-brain access. Artifacts are org-scoped and sandboxed, but artifact context is produced at view time and no report rule binds a query, owner authority, recipient audience, immutable result snapshot and notification receipt. There is no safe stored-SQL path and none should be added.",
+      "impact": "A naive report scheduler could run with stale creator authority, deliver sensitive fields to a broader role, expose raw brain evidence, or send generated HTML outside the authenticated artifact host.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/routes/api/gateway/query/finance/+server.ts",
+          "line": 19,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Finance query reuses services and applies current field-level masking."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/api/gateway/brain-search/+server.ts",
+          "line": 25,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Brain search checks current brains:view and per-brain source access."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/auth/assistant-principal.ts",
+          "line": 83,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Assistant principal resolution rechecks canonical agent/member authority; there is no stored report owner principal."
+        },
+        {
+          "repo": "hub",
+          "file": "src/lib/server/artifacts/store.ts",
+          "line": 17,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Artifact rows are org-scoped and revisioned but do not carry notification audience/query provenance."
+        },
+        {
+          "repo": "hub",
+          "file": "src/lib/components/artifacts/ArtifactHost.svelte",
+          "line": 54,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "Visuals are rendered in a sandbox and obtain data through authenticated same-origin context."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-017-report-authority",
+        "capturedAt": "2026-10-03",
+        "method": "assistant query and artifact boundary trace",
+        "result": "confirmed_gap",
+        "mutationCount": 0
+      },
+      "remediation": "Store only reviewed composable query-plan nodes and validated parameters, never SQL. Re-resolve creator and recipient authority at execution/publication; materialize an immutable redacted result with row/time/byte/cost caps, then send an authenticated link instead of HTML or raw evidence.",
+      "acceptance": [
+        "Creator revocation before query prevents execution; recipient revocation before inbox publication or external dispatch prevents that publication.",
+        "Role audiences receive per-recipient field masking and brain-source checks.",
+        "Visual notifications link to an auth-checked immutable snapshot and never attach executable artifact HTML."
+      ],
+      "slice": "S5-agent-defined-reports"
+    },
+    {
+      "id": "NOTIF-018",
+      "priority": "P1",
+      "status": "confirmed_new",
+      "title": "Pending join-request lookup ignores organization despite per-org uniqueness",
+      "summary": "The database explicitly permits one pending request per user and organization, but createRequest searches only by user and pending status and returns whichever single row it sees. The generic pending lookup has the same user-only shape and uses maybeSingle, which becomes ambiguous when the allowed second organization row exists.",
+      "impact": "A pending request for organization A can prevent a request for organization B, return A's receipt to a B request, or make the generic join page lose its pending state once both rows exist. This crosses request identity between tenants even though approval and the database uniqueness rule are organization-scoped.",
+      "sourceAnchors": [
+        {
+          "repo": "hub",
+          "file": "src/server/services/join/requests.service.ts",
+          "line": 32,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "createRequest filters an existing pending row by user_id and status but omits organization_id before returning it."
+        },
+        {
+          "repo": "hub",
+          "file": "src/server/services/join/requests.service.ts",
+          "line": 79,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "getPendingRequestForUser has no organization parameter and calls maybeSingle on a result set that can legally contain multiple organizations."
+        },
+        {
+          "repo": "hub",
+          "file": "supabase/qa/baseline/schema.sql",
+          "line": 7613,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The partial unique index is (user_id, organization_id) for pending rows, proving simultaneous pending requests in different organizations are intentional schema state."
+        },
+        {
+          "repo": "hub",
+          "file": "src/routes/join/+page.server.ts",
+          "line": 54,
+          "repoCommit": "a65b28403c5bc1b8ecaa69ad515beb108579c94d",
+          "detail": "The no-token page redirects on a user-only pending lookup, while its request action independently selects a concrete target organization."
+        }
+      ],
+      "baselineReceipt": {
+        "id": "notif-018-org-pending-request-selection",
+        "capturedAt": "2026-10-03",
+        "method": "frozen service, route and partial-unique-index trace",
+        "result": "confirmed",
+        "mutationCount": 0
+      },
+      "remediation": "Make create and retry identity exact on user plus organization plus pending status. Where a target organization is known, query only that organization. Where the generic join page has no target, return a bounded collection or explicit multi-pending state instead of maybeSingle; never substitute one organization's request for another.",
+      "acceptance": [
+        "A pending request for organization A does not block or satisfy a request for organization B; B receives its own row and receipt.",
+        "Retrying organization B returns only B's pending request, while approval or denial remains bound to the exact request organization.",
+        "The generic join page handles zero, one and multiple legal pending requests without maybeSingle ambiguity or disclosure of another organization's private data."
+      ],
+      "slice": "S0-security-and-ledger"
+    }
+  ],
+  "requestedTypedCatalog": [
+    "scheduling.booking.upcoming",
+    "domain.status.changed",
+    "stock.low.crossed",
+    "join.requested",
+    "join.approved",
+    "join.denied",
+    "membership.activated",
+    "finance.daily_summary.ready",
+    "stock.daily_summary.ready",
+    "release.product.published",
+    "release.gateway.available",
+    "automation.schedule.committed",
+    "automation.run.failed",
+    "automation.effects.committed",
+    "agent.user_notice",
+    "agent.report.ready"
+  ],
+  "blindSpots": [
+    "No browser screenshots were taken in this worker; current UI statements are source-derived and need parent-owned Browser Harness evidence.",
+    "No production scheduler, database row counts, notification rules, recipient addresses or provider status were queried.",
+    "The historical meta migrations say they were applied to gxv; this recon did not query a production migration ledger.",
+    "Provider-specific idempotency and message-status APIs vary. The design must preserve an unknown state rather than claim exactly-once delivery where the provider cannot prove it."
+  ]
+}

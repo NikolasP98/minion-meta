@@ -1,0 +1,238 @@
+{
+  "version": 2,
+  "scope": "Slice5 v8 source-policy and finalizer-creator adoption against the supported QA baseline",
+  "observedAt": "2026-10-03",
+  "baseline": {
+    "path": "hub/supabase/qa/baseline/schema.sql",
+    "repoCommit": "9975b4ec06b12aebf8e9a3208889ba242ada1eb7",
+    "lastPathCommit": "b76d58f21a6d0d756b0ba445e89d18264de9c88a",
+    "sha256": "90422f4b78a0d28a0b9b455b17c5cd1dc95f822e312b589382fd0627d301512c"
+  },
+  "relations": [
+    {
+      "relation": "organizations",
+      "rls": "enabled",
+      "privilegedConsumers": ["anon", "authenticated", "service_role", "relation_owner"],
+      "noRelationPrivilege": ["app_ledger", "app_assistant_ro", "brain_vector_worker"],
+      "policies": [
+        {
+          "name": "organizations_admin_all",
+          "command": "ALL",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9520
+        },
+        {
+          "name": "organizations_member_select",
+          "command": "SELECT",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9526
+        }
+      ],
+      "v7PolicyRoles": ["anon", "authenticated", "service_role", "relation_owner"]
+    },
+    {
+      "relation": "organization_members",
+      "rls": "enabled, forced",
+      "privilegedConsumers": [
+        "anon",
+        "authenticated",
+        "service_role",
+        "app_ledger",
+        "relation_owner"
+      ],
+      "noRelationPrivilege": ["app_assistant_ro", "brain_vector_worker"],
+      "policies": [
+        {
+          "name": "organization_members_admin_all",
+          "command": "ALL",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9503
+        },
+        {
+          "name": "organization_members_org_guc",
+          "command": "SELECT",
+          "roles": ["app_ledger"],
+          "permissive": true,
+          "line": 9509
+        },
+        {
+          "name": "organization_members_self_select",
+          "command": "SELECT",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9513
+        }
+      ],
+      "v7PublicPolicyRoles": [
+        "anon",
+        "authenticated",
+        "service_role",
+        "app_ledger",
+        "relation_owner"
+      ]
+    },
+    {
+      "relation": "profiles",
+      "rls": "enabled",
+      "privilegedConsumers": [
+        "anon",
+        "authenticated",
+        "service_role",
+        "app_ledger",
+        "relation_owner"
+      ],
+      "noRelationPrivilege": ["app_assistant_ro", "brain_vector_worker"],
+      "policies": [
+        {
+          "name": "profiles_self_select",
+          "command": "SELECT",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9659
+        },
+        {
+          "name": "profiles_self_update",
+          "command": "UPDATE",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9663
+        }
+      ],
+      "v7SelectPolicyRoles": [
+        "anon",
+        "authenticated",
+        "service_role",
+        "app_ledger",
+        "relation_owner"
+      ],
+      "v7UpdatePolicyRoles": ["anon", "authenticated", "service_role", "relation_owner"]
+    },
+    {
+      "relation": "member_roles",
+      "rls": "enabled, forced",
+      "privilegedConsumers": [
+        "anon",
+        "authenticated",
+        "service_role",
+        "app_ledger",
+        "relation_owner"
+      ],
+      "noRelationPrivilege": ["app_assistant_ro", "brain_vector_worker"],
+      "policies": [
+        {
+          "name": "member_roles_org_guc",
+          "command": "ALL",
+          "roles": ["app_ledger"],
+          "permissive": true,
+          "line": 9309
+        }
+      ],
+      "v7Change": "none; policy is already role-specific"
+    },
+    {
+      "relation": "permission_rules",
+      "rls": "enabled, forced",
+      "privilegedConsumers": [
+        "anon",
+        "authenticated",
+        "service_role",
+        "app_ledger",
+        "relation_owner"
+      ],
+      "noRelationPrivilege": ["app_assistant_ro", "brain_vector_worker"],
+      "policies": [
+        {
+          "name": "permission_rules_org_guc",
+          "command": "ALL",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9552
+        }
+      ],
+      "v7PolicyRoles": ["anon", "authenticated", "service_role", "app_ledger", "relation_owner"]
+    },
+    {
+      "relation": "join_request",
+      "rls": "enabled",
+      "privilegedConsumers": ["anon", "authenticated", "service_role", "relation_owner"],
+      "noRelationPrivilege": ["app_ledger", "app_assistant_ro", "brain_vector_worker"],
+      "policies": [
+        {
+          "name": "join_request_admin_all",
+          "command": "ALL",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9261
+        },
+        {
+          "name": "join_request_self_insert",
+          "command": "INSERT",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9267
+        },
+        {
+          "name": "join_request_self_select",
+          "command": "SELECT",
+          "roles": ["PUBLIC"],
+          "permissive": true,
+          "line": 9271
+        }
+      ],
+      "v7PolicyRoles": ["anon", "authenticated", "service_role", "relation_owner"]
+    }
+  ],
+  "roleSemantics": {
+    "browser": ["anon", "authenticated"],
+    "service": ["service_role"],
+    "applicationLedger": "app_ledger is retained only on relations where the baseline grants it the relevant table command",
+    "assistantReadOnly": "app_assistant_ro has schema USAGE but no privilege on any of the six relations",
+    "brainWorker": "brain_vector_worker has schema USAGE but no privilege on any of the six relations",
+    "relationOwner": "the migration resolves and records each actual relation owner; the owner must not be either Slice5 worker role and remains named on retargeted policies so forced-RLS maintenance is not silently removed",
+    "futureRoles": "a future table grantee is intentionally not authorized by the former PUBLIC policy until a reviewed policy-role migration adds it"
+  },
+  "reproduction": {
+    "script": "notification-slice5-v8-rls-repro.sh",
+    "scriptSha256": "20e937c27a73b24bbe83663346deb04def6e9722fa0029910eee8f2e183c5ff1",
+    "result": "notification-slice5-v8-rls-repro.json",
+    "resultSha256": "30962fc551b1a60dc620b3948b28516c5dc467100ef240f4db1f37209b42cf00",
+    "failureLog": "notification-slice5-v8-rls-recursive.log",
+    "failureLogSha256": "105e1282da7eb1f12875170c2ba4b645232f0f35fc8e5d7eb49ac61899e6c7ae",
+    "existingPublicPolicyResult": "PostgreSQL ERROR 42P17 infinite recursion detected in policy for relation organization_members",
+    "retargetedResult": "the same worker sees the two exact-org memberships and two member profiles through one policy per relation; the three legacy policies name every current grantee plus the exact relation owner",
+    "cleanup": "child database and temporary role absent after exit",
+    "rerunLog": "notification-slice5-v8-rls-rerun.log",
+    "rerunLogSha256": "e5c5ff67e80a561534e2ce73b35ce332a14720dc5febbcda534d4aa37d6f7e46",
+    "plainPostgres18CreatorResult": "server 180006, zero membership rows targeting the probe finalizer",
+    "supabasePostgres17CreatorResult": "bound external receipt: exact platform ADMIN-only edge, no SET/USAGE"
+  },
+  "finalizerCreatorAuthority": {
+    "plainPostgres18": {
+      "target": "notification_projection_finalizer",
+      "membershipEdges": [],
+      "meaning": "installation actor is trusted superuser DDL authority; no target role-membership row is retained"
+    },
+    "supabasePostgres17": {
+      "member": "postgres",
+      "target": "notification_projection_finalizer",
+      "grantor": "supabase_admin",
+      "adminOption": true,
+      "inheritOption": false,
+      "setOption": false,
+      "usage": false,
+      "evidenceAnalogue": "hub-bootstrap-pg17-postconditions.log proves identical CREATE ROLE platform semantics for notification_event_trigger",
+      "evidenceSha256": "b707d6d9ca01c14e41ac5f424697fe30d321da3ce12b773ec6ef174f32afd377"
+    },
+    "forbidden": "every other direct/transitive member, grantor, ADMIN, INHERIT, SET or USAGE edge; every application/runtime role ADMIN edge",
+    "temporaryOwnership": "exact migration actor/grantor edge is revoked before commit; the platform-owned Supabase edge is preserved"
+  },
+  "commandRoleEnumeration": {
+    "path": "notification-slice5-v8-command-role-inventory.sql",
+    "sha256": "489154021e0c0466d1726749209265407f805931ca566da5cef9e85d54f7bdb8",
+    "algorithm": "every direct table/column ACL grantee for the policy command plus exact relation owner; full membership fingerprint rejects every unknown transitive SET/USAGE path, including built-in data roles",
+    "runtimeFingerprint": "ordered owners/RLS flags, table+column ACLs, policies, role attributes, direct+transitive memberships, finalizer creator mode, definer functions and commit-guard trigger"
+  }
+}

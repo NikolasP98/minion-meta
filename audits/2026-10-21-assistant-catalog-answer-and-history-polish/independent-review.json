@@ -1,0 +1,42 @@
+{
+  "reviewer": "independent hub_finish agent",
+  "initialCandidate": "5667056700112820a4127da768e9c9d3741ec2ec",
+  "initialVerdict": {
+    "standards": "changes required",
+    "spec": "changes required"
+  },
+  "findings": [
+    {
+      "priority": "P2",
+      "issue": "SessionViewer cache round trip/fallback discarded raw omission metadata and mixed blocks",
+      "resolution": "Render raw WS response on cache miss; retain metadata verbatim, unchanged cache POST, remove lossy refetch; add actual mounted loading regression"
+    },
+    {
+      "priority": "P3",
+      "issue": "Undefined --space-5 in browser fixture",
+      "resolution": "Use supported --space-6"
+    }
+  ],
+  "finalVerdict": {
+    "standards": "PASS",
+    "spec": "PASS",
+    "remainingFindings": []
+  },
+  "reviewedRefinementHashes": {
+    "src/lib/components/sessions/SessionViewer.svelte": "4a493b810ed5b47d84c925e50f291707e5a1da6db755f6ec3b2427828d318b40",
+    "src/lib/components/sessions/SessionViewer.history.mounted.test.ts": "06fd9abf1c16983b3cc24e7bbbd65fee4aeb01869b85ef10e1202d0012b94e48",
+    "tests/fixtures/assistant-history/fixture.css": "1d8bde56509845e6dc9ba6d76fa79b11c096da04de26ce4d490d4de35c09a4da"
+  },
+  "limits": "Source review only. CI, fixture and production are separate evidence.",
+  "additionalLifecycleReview": {
+    "trigger": "CI full suite caught3 uncaught callbacks after mounted environment teardown",
+    "standards": "PASS",
+    "spec": "PASS",
+    "resolution": "Own pending timeout and RAF; cancel replacement/destruction, guard late async completion; retain normal two-stage scroll",
+    "hashes": {
+      "src/lib/components/sessions/SessionViewer.svelte": "99db52dceb64e029a63a0f873a3803e2875dcf641a93e940c2461d8f0616c99a",
+      "src/lib/components/sessions/SessionViewer.history.mounted.test.ts": "7e3ba1f1cc187080be43147e51fd251fcd1ed41710fec1b95df493900b90e333"
+    },
+    "qualification": "Final tests/typecheck/CI separately required; no errors suppressed"
+  }
+}

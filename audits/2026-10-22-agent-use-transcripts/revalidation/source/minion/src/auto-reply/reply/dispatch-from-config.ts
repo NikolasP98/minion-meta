@@ -1,0 +1,692 @@
+import { resolveSessionAgentId } from "../../agents/agent-scope.js";
+import type { MinionConfig } from "../../config/config.js";
+import { loadSessionStore, resolveStorePath } from "../../config/sessions.js";
+import { logVerbose } from "../../globals.js";
+import { isDiagnosticsEnabled } from "../../infra/diagnostic-events.js";
+import { deriveTraceId, traceChatEvent, traceGatewayEvent } from "../../logging/chat-trace.js";
+import {
+  logMessageProcessed,
+  logMessageQueued,
+  logSessionStateChange,
+} from "../../logging/diagnostic.js";
+import { emitReliabilityEvent } from "../../logging/reliability.js";
+import { getGlobalHookRunner } from "../../plugins/hook-runner-global.js";
+import { isChannelEnabledForAccount, resolveAccountOrgIds } from "../../plugins/org-enforcement.js";
+import { normalizeAgentId } from "../../routing/session-key.js";
+import { scanInboundMessage } from "../../security/prompt-guard.js";
+import {
+  maybeApplyTtsToPayload,
+  normalizeTtsAutoMode,
+  resolveTtsConfig,
+  stripTtsDirectivesFromText,
+} from "../../tts/tts.js";
+import { getReplyFromConfig } from "../reply.js";
+import type { FinalizedMsgContext } from "../templating.js";
+import type { GetReplyOptions, ReplyPayload } from "../types.js";
+import { formatAbortReplyText, tryFastAbortFromMessage } from "./abort.js";
+import { shouldSkipDuplicateInbound } from "./inbound-dedupe.js";
+import type { ReplyDispatcher, ReplyDispatchKind } from "./reply-dispatcher.js";
+import { isRoutableChannel, routeReply } from "./route-reply.js";
+
+/**
+ * Returns a cfg with per-agent TTS settings merged in (agent overrides global).
+ * Used so different agents can have different TTS providers/voices.
+ */
+function resolveAgentEffectiveTtsCfg(cfg: MinionConfig, agentId: string): MinionConfig {
+  const normalizedId = normalizeAgentId(agentId);
+  const agentEntry = cfg.agents?.list?.find(
+    (e) => e && typeof e === "object" && normalizeAgentId(e.id) === normalizedId,
+  );
+  const agentTts = agentEntry?.messages?.tts;
+  if (!agentTts) {
+    return cfg;
+  }
+  return {
+    ...cfg,
+    messages: { ...cfg.messages, tts: { ...cfg.messages?.tts, ...agentTts } },
+  };
+}
+
+const AUDIO_PLACEHOLDER_RE = /^<media:audio>(\s*\([^)]*\))?$/i;
+const AUDIO_HEADER_RE = /^\[Audio\b/i;
+
+const normalizeMediaType = (value: string): string => value.split(";")[0]?.trim().toLowerCase();
+
+const isInboundAudioContext = (ctx: FinalizedMsgContext): boolean => {
+  const rawTypes = [
+    typeof ctx.MediaType === "string" ? ctx.MediaType : undefined,
+    ...(Array.isArray(ctx.MediaTypes) ? ctx.MediaTypes : []),
+  ].filter(Boolean) as string[];
+  const types = rawTypes.map((type) => normalizeMediaType(type));
+  if (types.some((type) => type === "audio" || type.startsWith("audio/"))) {
+    return true;
+  }
+
+  const body =
+    typeof ctx.BodyForCommands === "string"
+      ? ctx.BodyForCommands
+      : typeof ctx.CommandBody === "string"
+        ? ctx.CommandBody
+        : typeof ctx.RawBody === "string"
+          ? ctx.RawBody
+          : typeof ctx.Body === "string"
+            ? ctx.Body
+            : "";
+  const trimmed = body.trim();
+  if (!trimmed) {
+    return false;
+  }
+  if (AUDIO_PLACEHOLDER_RE.test(trimmed)) {
+    return true;
+  }
+  return AUDIO_HEADER_RE.test(trimmed);
+};
+
+const resolveSessionTtsAuto = (ctx: FinalizedMsgContext, cfg: MinionConfig): string | undefined => {
+  const targetSessionKey =
+    ctx.CommandSource === "native" ? ctx.CommandTargetSessionKey?.trim() : undefined;
+  const sessionKey = (targetSessionKey ?? ctx.SessionKey)?.trim();
+  if (!sessionKey) {
+    return undefined;
+  }
+  const agentId = resolveSessionAgentId({ sessionKey, config: cfg });
+  const storePath = resolveStorePath(cfg.session?.store, { agentId });
+  try {
+    const store = loadSessionStore(storePath);
+    const entry = store[sessionKey.toLowerCase()] ?? store[sessionKey];
+    return normalizeTtsAutoMode(entry?.ttsAuto);
+  } catch {
+    return undefined;
+  }
+};
+
+export type DispatchFromConfigResult = {
+  queuedFinal: boolean;
+  counts: Record<ReplyDispatchKind, number>;
+};
+
+export async function dispatchReplyFromConfig(params: {
+  ctx: FinalizedMsgContext;
+  cfg: MinionConfig;
+  dispatcher: ReplyDispatcher;
+  replyOptions?: Omit<GetReplyOptions, "onToolResult" | "onBlockReply">;
+  replyResolver?: typeof getReplyFromConfig;
+}): Promise<DispatchFromConfigResult> {
+  const { ctx, cfg, dispatcher } = params;
+  const diagnosticsEnabled = isDiagnosticsEnabled(cfg);
+  const channel = String(ctx.Surface ?? ctx.Provider ?? "unknown").toLowerCase();
+  const chatId = ctx.To ?? ctx.From;
+  const messageId = ctx.MessageSid ?? ctx.MessageSidFirst ?? ctx.MessageSidLast;
+  const sessionKey = ctx.SessionKey;
+  const sessionAgentId = sessionKey
+    ? resolveSessionAgentId({ sessionKey, config: cfg })
+    : undefined;
+  const effectiveCfg = sessionAgentId ? resolveAgentEffectiveTtsCfg(cfg, sessionAgentId) : cfg;
+  const startTime = diagnosticsEnabled ? Date.now() : 0;
+  const canTrackSession = diagnosticsEnabled && Boolean(sessionKey);
+  const traceId = deriveTraceId(messageId);
+
+  if (sessionAgentId) {
+    traceChatEvent({
+      agentId: sessionAgentId,
+      traceId,
+      level: "INFO",
+      stage: "DISPATCHED",
+      data: { sessionKey, channel },
+    });
+  }
+
+  const recordProcessed = (
+    outcome: "completed" | "skipped" | "error",
+    opts?: {
+      reason?: string;
+      error?: string;
+    },
+  ) => {
+    // Always-on reliability signal for message-processing failures. This is the
+    // universal chokepoint for every channel, so it gives /reliability per-channel
+    // failure visibility regardless of the opt-in diagnostics flag. Error-path
+    // only (low volume) and rate-limited (60s/event-name) inside emitReliabilityEvent.
+    if (outcome === "error") {
+      emitReliabilityEvent({
+        category: "message",
+        severity: "medium",
+        event: "message.processing_error",
+        message: `Message processing failed on ${channel}${opts?.error ? `: ${opts.error}` : ""}`,
+        sessionKey: sessionKey ?? undefined,
+        metadata: {
+          channel,
+          ...(opts?.reason ? { reason: opts.reason } : {}),
+          ...(opts?.error ? { error: opts.error } : {}),
+        },
+      });
+    }
+    if (!diagnosticsEnabled) {
+      return;
+    }
+    logMessageProcessed({
+      channel,
+      chatId,
+      messageId,
+      sessionKey,
+      durationMs: Date.now() - startTime,
+      outcome,
+      reason: opts?.reason,
+      error: opts?.error,
+    });
+  };
+
+  const markProcessing = () => {
+    if (!canTrackSession || !sessionKey) {
+      return;
+    }
+    logMessageQueued({ sessionKey, channel, source: "dispatch" });
+    logSessionStateChange({
+      sessionKey,
+      state: "processing",
+      reason: "message_start",
+    });
+  };
+
+  const markIdle = (reason: string) => {
+    if (!canTrackSession || !sessionKey) {
+      return;
+    }
+    logSessionStateChange({
+      sessionKey,
+      state: "idle",
+      reason,
+    });
+  };
+
+  if (shouldSkipDuplicateInbound(ctx)) {
+    recordProcessed("skipped", { reason: "duplicate" });
+    return { queuedFinal: false, counts: dispatcher.getQueuedCounts() };
+  }
+
+  // Per-org plugin enforcement: if the org that owns this channel account has
+  // turned the channel's plugin OFF, do not run an agent for this inbound. The
+  // gate is fail-open — unscoped accounts and single-tenant connections are
+  // never blocked. See src/plugins/org-enforcement.ts.
+  if (!isChannelEnabledForAccount(cfg, channel, ctx.AccountId)) {
+    recordProcessed("skipped", { reason: "plugin_disabled_for_org" });
+    return { queuedFinal: false, counts: dispatcher.getQueuedCounts() };
+  }
+
+  // Credential scanning — always enabled as a security floor, regardless of prompt guard config.
+  // Only blocks on credential-leak; other prompt guard categories are not checked here.
+  const inboundText =
+    typeof ctx.BodyForCommands === "string"
+      ? ctx.BodyForCommands
+      : typeof ctx.RawBody === "string"
+        ? ctx.RawBody
+        : typeof ctx.Body === "string"
+          ? ctx.Body
+          : "";
+  if (inboundText) {
+    const credentialScan = scanInboundMessage(inboundText, {
+      enabled: true,
+      sensitivity: "low",
+      action: "block",
+    });
+    if (credentialScan.flagged && credentialScan.categories.includes("credential-leak")) {
+      dispatcher.sendFinalReply({
+        text: "Message blocked: your message appears to contain credentials (API key, token, or private key). Please remove sensitive data and resend.",
+      });
+      recordProcessed("skipped", { reason: "credential_leak_blocked" });
+      markIdle("credential_leak_blocked");
+      return { queuedFinal: true, counts: dispatcher.getQueuedCounts() };
+    }
+  }
+
+  const inboundAudio = isInboundAudioContext(ctx);
+  const sessionTtsAuto = resolveSessionTtsAuto(ctx, cfg);
+  const hookRunner = getGlobalHookRunner();
+
+  // Extract message context for hooks (plugin and internal)
+  const timestamp =
+    typeof ctx.Timestamp === "number" && Number.isFinite(ctx.Timestamp) ? ctx.Timestamp : undefined;
+  const messageIdForHook =
+    ctx.MessageSidFull ?? ctx.MessageSid ?? ctx.MessageSidFirst ?? ctx.MessageSidLast;
+  const content =
+    typeof ctx.BodyForCommands === "string"
+      ? ctx.BodyForCommands
+      : typeof ctx.RawBody === "string"
+        ? ctx.RawBody
+        : typeof ctx.Body === "string"
+          ? ctx.Body
+          : "";
+  const channelId = (ctx.OriginatingChannel ?? ctx.Surface ?? ctx.Provider ?? "").toLowerCase();
+  const conversationId = ctx.OriginatingTo ?? ctx.To ?? ctx.From ?? undefined;
+
+  // Trigger plugin hooks (fire-and-forget)
+  if (hookRunner?.hasHooks("message_received")) {
+    void hookRunner
+      .runMessageReceived(
+        {
+          from: ctx.From ?? "",
+          content,
+          timestamp,
+          metadata: {
+            to: ctx.To,
+            provider: ctx.Provider,
+            surface: ctx.Surface,
+            threadId: ctx.MessageThreadId,
+            originatingChannel: ctx.OriginatingChannel,
+            originatingTo: ctx.OriginatingTo,
+            messageId: messageIdForHook,
+            senderId: ctx.SenderId,
+            senderName: ctx.SenderName,
+            senderUsername: ctx.SenderUsername,
+            senderE164: ctx.SenderE164,
+          },
+        },
+        {
+          channelId,
+          accountId: ctx.AccountId,
+          conversationId,
+          sessionKey: sessionKey ?? undefined,
+          agentId: sessionKey ? resolveSessionAgentId({ sessionKey, config: cfg }) : undefined,
+          orgIds: ((): string[] | undefined => {
+            const orgs = resolveAccountOrgIds(cfg, channelId, ctx.AccountId);
+            return orgs.length > 0 ? orgs : undefined;
+          })(),
+        },
+      )
+      .catch((err) => {
+        logVerbose(`dispatch-from-config: message_received plugin hook failed: ${String(err)}`);
+      });
+  }
+
+  // NOTE: the internal `message:received` hook that drives flow Channel Triggers
+  // is now emitted at INBOUND time (channels/fire-message-inbound.ts →
+  // fireInboundTriggerHook), decoupled from agent dispatch / sessionKey /
+  // pairing. It used to fire here gated on `if (sessionKey)`, which silently
+  // skipped messages whose dispatch ctx carried no SessionKey (e.g. the embedded
+  // agent runner) — so triggers never fired for them. Emitting at inbound fixes
+  // that and avoids double-firing.
+
+  // Check if we should route replies to originating channel instead of dispatcher.
+  // Only route when the originating channel is DIFFERENT from the current surface.
+  // This handles cross-provider routing (e.g., message from Telegram being processed
+  // by a shared session that's currently on Slack) while preserving normal dispatcher
+  // flow when the provider handles its own messages.
+  //
+  // Debug: `pnpm test src/auto-reply/reply/dispatch-from-config.test.ts`
+  const originatingChannel = ctx.OriginatingChannel;
+  const originatingTo = ctx.OriginatingTo;
+  const currentSurface = (ctx.Surface ?? ctx.Provider)?.toLowerCase();
+  const shouldRouteToOriginating =
+    isRoutableChannel(originatingChannel) && originatingTo && originatingChannel !== currentSurface;
+  const ttsChannel = shouldRouteToOriginating ? originatingChannel : currentSurface;
+
+  /**
+   * Helper to send a payload via route-reply (async).
+   * Only used when actually routing to a different provider.
+   * Note: Only called when shouldRouteToOriginating is true, so
+   * originatingChannel and originatingTo are guaranteed to be defined.
+   */
+  const sendPayloadAsync = async (
+    payload: ReplyPayload,
+    abortSignal?: AbortSignal,
+    mirror?: boolean,
+  ): Promise<void> => {
+    // TypeScript doesn't narrow these from the shouldRouteToOriginating check,
+    // but they're guaranteed non-null when this function is called.
+    if (!originatingChannel || !originatingTo) {
+      return;
+    }
+    if (abortSignal?.aborted) {
+      return;
+    }
+    const result = await routeReply({
+      payload,
+      channel: originatingChannel,
+      to: originatingTo,
+      sessionKey: ctx.SessionKey,
+      accountId: ctx.AccountId,
+      threadId: ctx.MessageThreadId,
+      cfg,
+      abortSignal,
+      mirror,
+    });
+    if (!result.ok) {
+      logVerbose(`dispatch-from-config: route-reply failed: ${result.error ?? "unknown error"}`);
+    }
+  };
+
+  markProcessing();
+
+  try {
+    const fastAbort = await tryFastAbortFromMessage({ ctx, cfg });
+    if (fastAbort.handled) {
+      const payload = {
+        text: formatAbortReplyText(fastAbort.stoppedSubagents),
+      } satisfies ReplyPayload;
+      let queuedFinal = false;
+      let routedFinalCount = 0;
+      if (shouldRouteToOriginating && originatingChannel && originatingTo) {
+        const result = await routeReply({
+          payload,
+          channel: originatingChannel,
+          to: originatingTo,
+          sessionKey: ctx.SessionKey,
+          accountId: ctx.AccountId,
+          threadId: ctx.MessageThreadId,
+          cfg,
+        });
+        queuedFinal = result.ok;
+        if (result.ok) {
+          routedFinalCount += 1;
+        }
+        if (!result.ok) {
+          logVerbose(
+            `dispatch-from-config: route-reply (abort) failed: ${result.error ?? "unknown error"}`,
+          );
+        }
+      } else {
+        queuedFinal = dispatcher.sendFinalReply(payload);
+      }
+      const counts = dispatcher.getQueuedCounts();
+      counts.final += routedFinalCount;
+      recordProcessed("completed", { reason: "fast_abort" });
+      markIdle("message_completed");
+      return { queuedFinal, counts };
+    }
+
+    // Track accumulated block text for TTS generation after streaming completes.
+    // When block streaming succeeds, there's no final reply, so we need to generate
+    // TTS audio separately from the accumulated block content.
+    let accumulatedBlockText = "";
+    let blockCount = 0;
+    // Track whether any media was already delivered via tool results or block replies
+    // to avoid generating duplicate TTS audio from accumulated block text.
+    let deliveredMediaDuringStream = false;
+
+    const shouldSendToolSummaries = ctx.ChatType !== "group" && ctx.CommandSource !== "native";
+
+    const resolveToolDeliveryPayload = (payload: ReplyPayload): ReplyPayload | null => {
+      if (shouldSendToolSummaries) {
+        return payload;
+      }
+      // Group/native flows intentionally suppress tool summary text, but media-only
+      // tool results (for example TTS audio) must still be delivered.
+      const hasMedia = Boolean(payload.mediaUrl) || (payload.mediaUrls?.length ?? 0) > 0;
+      if (!hasMedia) {
+        return null;
+      }
+      return { ...payload, text: undefined };
+    };
+
+    const outerOnModelSelected = params.replyOptions?.onModelSelected;
+    const outerOnToolStart = params.replyOptions?.onToolStart;
+
+    const replyResult = await (params.replyResolver ?? getReplyFromConfig)(
+      ctx,
+      {
+        ...params.replyOptions,
+        onModelSelected: (modelCtx) => {
+          if (sessionAgentId) {
+            traceChatEvent({
+              agentId: sessionAgentId,
+              traceId,
+              level: "INFO",
+              stage: "MODEL_SELECTED",
+              data: {
+                provider: modelCtx.provider,
+                model: modelCtx.model,
+                thinkLevel: modelCtx.thinkLevel,
+              },
+            });
+          }
+          outerOnModelSelected?.(modelCtx);
+        },
+        onToolStart: (payload) => {
+          if (sessionAgentId && payload.name) {
+            traceChatEvent({
+              agentId: sessionAgentId,
+              traceId,
+              level: "DEBUG",
+              stage: "TOOL_CALL",
+              data: { tool: payload.name, phase: payload.phase },
+            });
+          }
+          return outerOnToolStart?.(payload);
+        },
+        onToolResult: (payload: ReplyPayload) => {
+          // Set flag SYNCHRONOUSLY before any await to prevent race with
+          // accumulated block TTS check that runs after agent completion.
+          if (payload.mediaUrl || (payload.mediaUrls?.length ?? 0) > 0) {
+            deliveredMediaDuringStream = true;
+          }
+          const run = async () => {
+            logVerbose(
+              `dispatch-from-config: onToolResult hasText=${Boolean(payload.text)} hasMediaUrl=${Boolean(payload.mediaUrl)} mediaUrlsCount=${payload.mediaUrls?.length ?? 0} deliveredMediaDuringStream=${deliveredMediaDuringStream}`,
+            );
+            const ttsPayload = await maybeApplyTtsToPayload({
+              payload,
+              cfg: effectiveCfg,
+              channel: ttsChannel,
+              kind: "tool",
+              inboundAudio,
+              ttsAuto: sessionTtsAuto,
+            });
+            const deliveryPayload = resolveToolDeliveryPayload(ttsPayload);
+            if (!deliveryPayload) {
+              return;
+            }
+            if (deliveryPayload.mediaUrl || (deliveryPayload.mediaUrls?.length ?? 0) > 0) {
+              deliveredMediaDuringStream = true;
+              logVerbose(
+                `dispatch-from-config: onToolResult delivering media mediaUrl=${deliveryPayload.mediaUrl ?? "none"} mediaUrls=${JSON.stringify(deliveryPayload.mediaUrls ?? [])}`,
+              );
+            }
+            if (shouldRouteToOriginating) {
+              await sendPayloadAsync(deliveryPayload, undefined, false);
+            } else {
+              dispatcher.sendToolResult(deliveryPayload);
+            }
+          };
+          return run();
+        },
+        onBlockReply: (payload: ReplyPayload, context) => {
+          // Set flag SYNCHRONOUSLY before any await (same pattern as onToolResult).
+          if (payload.mediaUrl || (payload.mediaUrls?.length ?? 0) > 0) {
+            deliveredMediaDuringStream = true;
+          }
+          const run = async () => {
+            logVerbose(
+              `dispatch-from-config: onBlockReply hasText=${Boolean(payload.text)} textLen=${payload.text?.length ?? 0} hasMediaUrl=${Boolean(payload.mediaUrl)} mediaUrlsCount=${payload.mediaUrls?.length ?? 0}`,
+            );
+            // Accumulate block text for TTS generation after streaming
+            if (payload.text) {
+              if (accumulatedBlockText.length > 0) {
+                accumulatedBlockText += "\n";
+              }
+              accumulatedBlockText += payload.text;
+              blockCount++;
+            }
+            const ttsPayload = await maybeApplyTtsToPayload({
+              payload,
+              cfg: effectiveCfg,
+              channel: ttsChannel,
+              kind: "block",
+              inboundAudio,
+              ttsAuto: sessionTtsAuto,
+            });
+            if (ttsPayload.mediaUrl || (ttsPayload.mediaUrls?.length ?? 0) > 0) {
+              deliveredMediaDuringStream = true;
+            }
+            if (shouldRouteToOriginating) {
+              await sendPayloadAsync(ttsPayload, context?.abortSignal, false);
+            } else {
+              dispatcher.sendBlockReply(ttsPayload);
+            }
+          };
+          return run();
+        },
+      },
+      cfg,
+    );
+
+    if (sessionAgentId) {
+      traceChatEvent({
+        agentId: sessionAgentId,
+        traceId,
+        level: "INFO",
+        stage: "LLM_RESULT",
+        data: {
+          status: "success",
+          durationMs: Date.now() - startTime,
+          replyCount: replyResult ? (Array.isArray(replyResult) ? replyResult.length : 1) : 0,
+        },
+      });
+    }
+
+    const replies = replyResult ? (Array.isArray(replyResult) ? replyResult : [replyResult]) : [];
+
+    logVerbose(
+      `dispatch-from-config: final replies=${replies.length} blockCount=${blockCount} deliveredMediaDuringStream=${deliveredMediaDuringStream} accumulatedBlockTextLen=${accumulatedBlockText.length}`,
+    );
+
+    let queuedFinal = false;
+    let routedFinalCount = 0;
+    for (const reply of replies) {
+      logVerbose(
+        `dispatch-from-config: final reply hasText=${Boolean(reply.text)} textLen=${reply.text?.length ?? 0} textPreview=${JSON.stringify((reply.text ?? "").slice(0, 100))} hasMediaUrl=${Boolean(reply.mediaUrl)} mediaUrlsCount=${reply.mediaUrls?.length ?? 0}`,
+      );
+      let ttsReply: ReplyPayload;
+      if (deliveredMediaDuringStream) {
+        // Strip [[tts]] tags from visible text but skip TTS generation
+        // (audio was already delivered during streaming)
+        const rawText = reply.text ?? "";
+        const cleaned = stripTtsDirectivesFromText(rawText, effectiveCfg).trim();
+        ttsReply =
+          cleaned !== rawText.trim()
+            ? { ...reply, text: cleaned.length > 0 ? cleaned : undefined }
+            : reply;
+      } else {
+        ttsReply = await maybeApplyTtsToPayload({
+          payload: reply,
+          cfg: effectiveCfg,
+          channel: ttsChannel,
+          kind: "final",
+          inboundAudio,
+          ttsAuto: sessionTtsAuto,
+        });
+      }
+      if (shouldRouteToOriginating && originatingChannel && originatingTo) {
+        // Route final reply to originating channel.
+        const result = await routeReply({
+          payload: ttsReply,
+          channel: originatingChannel,
+          to: originatingTo,
+          sessionKey: ctx.SessionKey,
+          accountId: ctx.AccountId,
+          threadId: ctx.MessageThreadId,
+          cfg,
+        });
+        if (!result.ok) {
+          logVerbose(
+            `dispatch-from-config: route-reply (final) failed: ${result.error ?? "unknown error"}`,
+          );
+        }
+        queuedFinal = result.ok || queuedFinal;
+        if (result.ok) {
+          routedFinalCount += 1;
+        }
+      } else {
+        queuedFinal = dispatcher.sendFinalReply(ttsReply) || queuedFinal;
+      }
+    }
+
+    const ttsMode = resolveTtsConfig(effectiveCfg).mode ?? "final";
+    logVerbose(
+      `dispatch-from-config: post-final ttsMode=${ttsMode} repliesLen=${replies.length} blockCount=${blockCount} accumulatedHasText=${Boolean(accumulatedBlockText.trim())} deliveredMedia=${deliveredMediaDuringStream}`,
+    );
+    // Generate TTS-only reply after block streaming completes (when there's no final reply).
+    // This handles the case where block streaming succeeds and drops final payloads,
+    // but we still want TTS audio to be generated from the accumulated block content.
+    // Skip when media (e.g. TTS audio) was already delivered via tool results or block
+    // replies during streaming, to avoid sending duplicate audio to the user.
+    if (
+      ttsMode === "final" &&
+      replies.length === 0 &&
+      blockCount > 0 &&
+      accumulatedBlockText.trim() &&
+      !deliveredMediaDuringStream
+    ) {
+      try {
+        const ttsSyntheticReply = await maybeApplyTtsToPayload({
+          payload: { text: accumulatedBlockText },
+          cfg: effectiveCfg,
+          channel: ttsChannel,
+          kind: "final",
+          inboundAudio,
+          ttsAuto: sessionTtsAuto,
+        });
+        // Only send if TTS was actually applied (mediaUrl exists)
+        if (ttsSyntheticReply.mediaUrl) {
+          // Send TTS-only payload (no text, just audio) so it doesn't duplicate the block content
+          const ttsOnlyPayload: ReplyPayload = {
+            mediaUrl: ttsSyntheticReply.mediaUrl,
+            audioAsVoice: ttsSyntheticReply.audioAsVoice,
+          };
+          if (shouldRouteToOriginating && originatingChannel && originatingTo) {
+            const result = await routeReply({
+              payload: ttsOnlyPayload,
+              channel: originatingChannel,
+              to: originatingTo,
+              sessionKey: ctx.SessionKey,
+              accountId: ctx.AccountId,
+              threadId: ctx.MessageThreadId,
+              cfg,
+            });
+            queuedFinal = result.ok || queuedFinal;
+            if (result.ok) {
+              routedFinalCount += 1;
+            }
+            if (!result.ok) {
+              logVerbose(
+                `dispatch-from-config: route-reply (tts-only) failed: ${result.error ?? "unknown error"}`,
+              );
+            }
+          } else {
+            const didQueue = dispatcher.sendFinalReply(ttsOnlyPayload);
+            queuedFinal = didQueue || queuedFinal;
+          }
+        }
+      } catch (err) {
+        logVerbose(
+          `dispatch-from-config: accumulated block TTS failed: ${err instanceof Error ? err.message : String(err)}`,
+        );
+      }
+    }
+
+    const counts = dispatcher.getQueuedCounts();
+    counts.final += routedFinalCount;
+    recordProcessed("completed");
+    markIdle("message_completed");
+    return { queuedFinal, counts };
+  } catch (err) {
+    const errorData = {
+      agentId: sessionAgentId,
+      error: err instanceof Error ? err.message : String(err),
+      errorClass: err instanceof Error ? err.constructor.name : typeof err,
+      durationMs: Date.now() - startTime,
+    };
+    if (sessionAgentId) {
+      traceChatEvent({
+        agentId: sessionAgentId,
+        traceId,
+        level: "ERROR",
+        stage: "LLM_ERROR",
+        data: errorData,
+      });
+    }
+    traceGatewayEvent({ traceId, level: "ERROR", stage: "LLM_ERROR", data: errorData });
+    recordProcessed("error", { error: String(err) });
+    markIdle("message_error");
+    throw err;
+  }
+}

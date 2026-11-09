@@ -42,7 +42,7 @@ export function resolveTheme(contract, themeId) {
   const status = statusNames.flatMap((name) =>
     statusParts.map((part) => [
       `--color-${name}-${part}`,
-      contract.statusRecipes[theme.mode][name][part],
+      contract.statusRecipes[theme.statusRecipe ?? theme.mode][name][part],
     ]),
   );
 
@@ -52,6 +52,8 @@ export function resolveTheme(contract, themeId) {
     ...Object.entries(contract.radiusScales[theme.radiusScale]),
     ...Object.entries(contract.shadowStyles[theme.shadowStyle]),
     ...Object.entries(contract.typographyStyles[theme.typographyStyle]),
+    // Reset the complete categorical palette on every theme transition.
+    ...Object.entries({ ...contract.palettes, ...theme.palettes }),
   ];
 }
 
@@ -79,5 +81,16 @@ export function contrastRatio(foreground, background) {
   return (
     (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
     (Math.min(foregroundLuminance, backgroundLuminance) + 0.05)
+  );
+}
+
+/** Ordinary text is supported on every base surface, including raised cards. */
+export function normalTextContrastFailures(contract) {
+  const { foregrounds, backgrounds, minimumRatio } = contract.contrast.normalText;
+  return Object.entries(contract.themes).flatMap(([themeId, theme]) =>
+    foregrounds.flatMap((foreground) => backgrounds.flatMap((background) => {
+      const ratio = contrastRatio(theme.colors[foreground], theme.colors[background]);
+      return ratio < minimumRatio ? [{ themeId, foreground, background, ratio }] : [];
+    })),
   );
 }

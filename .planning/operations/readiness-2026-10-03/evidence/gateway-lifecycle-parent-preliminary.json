@@ -1,0 +1,20 @@
+{
+  "status": "corrections-requested",
+  "environment": "uncommitted isolated Gateway feature tree",
+  "base": "3e352a68acd396bad09d22309cbab8d82a9cc01d",
+  "productionMutations": 0,
+  "findings": [
+    {
+      "file": "src/gateway/server-core/server-owned-resources.ts",
+      "issue": "Late registration evaluates disposer before Promise.resolve; a synchronous throw bypasses containment.",
+      "required": "Deferred invocation and real throwing-disposer regression.",
+      "observedSourceSha256": "943edeeab4b29fae6bbf05fa234f97f95d0a964ba4051901ba334aea81b9370e"
+    },
+    {
+      "file": "src/cli/gateway-cli/run-loop.ts",
+      "issue": "Restart action captured before awaited startup/shutdown ignores a later SIGTERM before respawn.",
+      "required": "Recheck stop priority after async cleanup; deferred shutdown and startup rollback regressions.",
+      "observedSourceSha256": "1097b8aea0dcae667d19b9cc629caadb9ae9abd7ea421880dd199e32686a3f43"
+    }
+  ]
+}

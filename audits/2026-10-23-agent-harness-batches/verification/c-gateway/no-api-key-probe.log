@@ -1,0 +1,57 @@
+(node:2264844) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[events] emitEvent called before initEventEmitter — event dropped
+{
+  "credentialLookups": 1,
+  "providerCalls": 0,
+  "sdkError": "Error: alert classifier failed: NO_API_KEY",
+  "baseline": {
+    "disposition": "failed",
+    "severity": null,
+    "attemptIds": [
+      "391c0fc8-7091-4d89-9a5c-20abe7bd1aaa"
+    ]
+  },
+  "attempts": [
+    {
+      "attemptId": "391c0fc8-7091-4d89-9a5c-20abe7bd1aaa",
+      "purpose": "baseline",
+      "disposition": "failed",
+      "requestedModel": {
+        "model": "claude-haiku-4-5",
+        "provider": "anthropic",
+        "revision": "unqualified"
+      },
+      "resolvedModel": null,
+      "costStatus": "unknown",
+      "costUsd": null,
+      "costCoverage": "incomplete",
+      "usage": {
+        "inputTokens": null,
+        "outputTokens": null,
+        "cacheReadTokens": null,
+        "cacheCreationTokens": null
+      },
+      "elapsedMs": 0
+    }
+  ],
+  "costCoverage": "incomplete"
+}
+node:internal/modules/run_main:123
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: proven NO_API_KEY before any provider dispatch must not create an unknown bill
+
+1 !== 0
+
+    at <anonymous> (/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/verification/c-gateway/no-api-key-probe.mts:26:9) {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 1,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.3

@@ -1,0 +1,10 @@
+--- a/src/routes/api/pulse/proposals/[id]/+server.ts
++++ b/src/routes/api/pulse/proposals/[id]/+server.ts
+@@ -39,6 +39,7 @@
+     return json({ ok: true, status: 'dismissed' });
+   }
+ 
++  // TODO(handoff): Atomically claim this pending proposal and persist a dispatch receipt before cron.add; concurrent approval or a post-RPC DB failure can schedule duplicates. See minion-meta proposals/2026-10-22-agent-decision-and-proactivity-experiments.md (DUR-01).
+   // approve
+   if (EXECUTE_KINDS.has(proposal.kind)) {
+     const instruction =

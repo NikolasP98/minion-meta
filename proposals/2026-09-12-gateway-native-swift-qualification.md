@@ -3,7 +3,7 @@ id: 2026-09-12-gateway-native-swift-qualification
 title: 'Qualify the Gateway native Swift toolchain separately from server runtime'
 status: draft
 created: 2026-09-12
-updated: 2026-09-12
+updated: 2026-10-04
 repos: [minion]
 ---
 
@@ -18,3 +18,7 @@ Bounded next scope: establish intended SwiftFormat/SwiftLint/Xcode versions from
 A separately committed, unadopted CI comment points to this proposal at the exact tool installation/qualification site; it changes no behavior and triggers no release. Record its source identity in the priority-delivery report before handoff. Completion requires reproducible native-app checks and explicit release qualification; passing TypeScript alone is insufficient.
 
 Exact unadopted handoff: signed local commit1ed362a32db68aa1e58f36e8b9121b45108c380b, parentDEVdd9dde24. Four comments beside the macOS Homebrew tools step; parsed YAML is semantically identical to the parent. Patch and receipt are archived in.planning/operations/360/priority-delivery-2026-09-12. No push, PR or workflow trigger occurred.
+
+## Reconciliation merge — 2026-10-04
+
+handoff-minion-meta-2071590033 (`.planning/operations/360/priority-delivery-2026-09-12/native-swift-handoff.patch`) is the same handoff marker as this proposal's "native-swift-handoff.patch" archive above; tombstoned as merged here, no new content.

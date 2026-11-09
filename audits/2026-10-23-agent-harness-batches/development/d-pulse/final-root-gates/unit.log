@@ -1,0 +1,205 @@
+$ vitest run && bun run test:architecture-recon
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse
+
+AggregateError: 
+    at internalConnectMultiple (node:net:1135:18)
+    at afterConnectMultiple (node:net:1716:7) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:3000
+        at createConnectionError (node:net:1679:14)
+        at afterConnectMultiple (node:net:1709:16) {
+      errno: -111,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 3000
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:3000
+        at createConnectionError (node:net:1679:14)
+        at afterConnectMultiple (node:net:1709:16) {
+      errno: -111,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 3000
+    }
+  ]
+}
+AggregateError: 
+    at internalConnectMultiple (node:net:1135:18)
+    at afterConnectMultiple (node:net:1716:7) {
+  code: 'ECONNREFUSED',
+  [errors]: [
+    Error: connect ECONNREFUSED ::1:3000
+        at createConnectionError (node:net:1679:14)
+        at afterConnectMultiple (node:net:1709:16) {
+      errno: -111,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '::1',
+      port: 3000
+    },
+    Error: connect ECONNREFUSED 127.0.0.1:3000
+        at createConnectionError (node:net:1679:14)
+        at afterConnectMultiple (node:net:1709:16) {
+      errno: -111,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 3000
+    }
+  ]
+}
+DOMException [AbortError]: The operation was aborted.
+    at Fetch.onAsyncTaskManagerAbort (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/happy-dom/lib/fetch/Fetch.js:546:23)
+    at Object.<anonymous> (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/happy-dom/lib/fetch/Fetch.js:416:101)
+    at AsyncTaskManager.abortAll (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/happy-dom/lib/async-task-manager/AsyncTaskManager.js:292:30)
+    at AsyncTaskManager.abort (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/happy-dom/lib/async-task-manager/AsyncTaskManager.js:52:21)
+    at DetachedBrowserFrame.abort (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/happy-dom/lib/browser/detached-browser/DetachedBrowserFrame.js:112:58)
+    at DetachedWindowAPI.abort (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/happy-dom/lib/window/DetachedWindowAPI.js:51:35)
+    at teardownWindow (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:331:22)
+    at Object.teardown (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/vitest/dist/chunks/index.DC7d2Pf8.js:392:10)
+    at file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/vitest/dist/chunks/base.B6Opl8PE.js:168:65
+    at Traces.$ (file:///home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/node_modules/vitest/dist/chunks/traces.DT5aQ62U.js:142:27)
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts (5 tests | 5 failed) 44ms
+     × approve on create_event fires a one-shot agentTurn 30ms
+     × approve on digest does NOT call the gateway 1ms
+     × dismiss calls dismiss() and never the gateway 1ms
+     × 404s when the proposal does not exist 9ms
+     × 409s on re-approving an already-approved proposal and never re-fires the gateway 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 5 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > approve on create_event fires a one-shot agentTurn
+Error: [vitest] No "decidePulseProposal" export is defined on the "$server/services/pulse.service" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+vi.mock(import("$server/services/pulse.service"), async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // your mocked methods
+  }
+})
+
+ ❯ Module.POST src/routes/api/pulse/proposals/[id]/+server.ts:27:21
+     25|   const ctx = await requireCoreCtx(locals);
+     26|   const { action, expectedRevision } = await parseBody(request, postSc…
+     27|   return json(await decidePulseProposal(ctx, params.id, action, expect…
+       |                     ^
+     28| };
+     29| export const PATCH: RequestHandler = async ({ locals, params, request …
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:60:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/5]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > approve on digest does NOT call the gateway
+Error: [vitest] No "decidePulseProposal" export is defined on the "$server/services/pulse.service" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+vi.mock(import("$server/services/pulse.service"), async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // your mocked methods
+  }
+})
+
+ ❯ Module.POST src/routes/api/pulse/proposals/[id]/+server.ts:27:21
+     25|   const ctx = await requireCoreCtx(locals);
+     26|   const { action, expectedRevision } = await parseBody(request, postSc…
+     27|   return json(await decidePulseProposal(ctx, params.id, action, expect…
+       |                     ^
+     28| };
+     29| export const PATCH: RequestHandler = async ({ locals, params, request …
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:85:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/5]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > dismiss calls dismiss() and never the gateway
+Error: [vitest] No "decidePulseProposal" export is defined on the "$server/services/pulse.service" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+vi.mock(import("$server/services/pulse.service"), async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // your mocked methods
+  }
+})
+
+ ❯ Module.POST src/routes/api/pulse/proposals/[id]/+server.ts:27:21
+     25|   const ctx = await requireCoreCtx(locals);
+     26|   const { action, expectedRevision } = await parseBody(request, postSc…
+     27|   return json(await decidePulseProposal(ctx, params.id, action, expect…
+       |                     ^
+     28| };
+     29| export const PATCH: RequestHandler = async ({ locals, params, request …
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:95:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/5]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > 404s when the proposal does not exist
+AssertionError: expected Error: [vitest] No "decidePulseProposal" … { codeFrame: '…' } to match object { status: 404 }
+(1 matching property omitted from actual)
+
+- Expected
++ Received
+
+- {
+-   "status": 404,
++ Error {
++   "message": "[vitest] No \"decidePulseProposal\" export is defined on the \"$server/services/pulse.service\" mock. Did you forget to return it from \"vi.mock\"?
++ If you need to partially mock a module, you can use \"importOriginal\" helper inside:
++ ",
++   "codeFrame": "vi.mock(import(\"$server/services/pulse.service\"), async (importOriginal) => {
++   const actual = await importOriginal()
++   return {
++     ...actual,
++     // your mocked methods
++   }
++ })",
+  }
+
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:104:57
+    102|   it('404s when the proposal does not exist', async () => {
+    103|     getProposalMock.mockResolvedValue(null);
+    104|     await expect(call('missing', { action: 'approve' })).rejects.toMat…
+       |                                                         ^
+    105|   });
+    106|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/5]⎯
+
+ FAIL  src/routes/api/pulse/proposals/[id]/server.test.ts > POST /api/pulse/proposals/[id] > 409s on re-approving an already-approved proposal and never re-fires the gateway
+Error: [vitest] No "decidePulseProposal" export is defined on the "$server/services/pulse.service" mock. Did you forget to return it from "vi.mock"?
+If you need to partially mock a module, you can use "importOriginal" helper inside:
+
+vi.mock(import("$server/services/pulse.service"), async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    // your mocked methods
+  }
+})
+
+ ❯ Module.POST src/routes/api/pulse/proposals/[id]/+server.ts:27:21
+     25|   const ctx = await requireCoreCtx(locals);
+     26|   const { action, expectedRevision } = await parseBody(request, postSc…
+     27|   return json(await decidePulseProposal(ctx, params.id, action, expect…
+       |                     ^
+     28| };
+     29| export const PATCH: RequestHandler = async ({ locals, params, request …
+ ❯ src/routes/api/pulse/proposals/[id]/server.test.ts:115:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/5]⎯
+
+
+ Test Files  1 failed | 907 passed | 5 skipped (913)
+      Tests  5 failed | 7975 passed | 268 skipped (8248)
+   Start at  04:59:29
+   Duration  701.87s (transform 184.92s, setup 11.23s, import 916.33s, tests 282.79s, environment 32.93s)
+
+error: script "test" exited with code 1

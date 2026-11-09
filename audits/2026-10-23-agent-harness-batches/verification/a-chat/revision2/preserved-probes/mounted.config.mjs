@@ -1,0 +1,2 @@
+import base from './vitest.config.mjs';
+export default {...base, resolve:{...base.resolve,dedupe:['svelte']},test:{...base.test,alias:{...base.test.alias,'@sentry/sveltekit':'/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat/node_modules/@sentry/sveltekit/build/esm/index.client.js','@testing-library/svelte':'/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat/node_modules/@testing-library/svelte/src/index.js'}}};

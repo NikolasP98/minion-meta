@@ -1,0 +1,76 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway
+
+ ❯ |e2e| src/gateway/server.cron.e2e.test.ts (3 tests | 1 failed) 10223ms
+     × posts webhooks for delivery mode and legacy notify fallback only when summary exists 16ms
+ ❯ |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts (17 tests | 17 failed) 19ms
+     × treats blank model overrides as unset 7ms
+     × uses last non-empty agent text as summary 1ms
+     × appends current time after the cron header line 1ms
+     × uses agentId for workspace, session key, and store paths 0ms
+     × uses model override when provided 0ms
+     × uses stored session override when no job model override is provided 0ms
+     × prefers job model override over stored session override 0ms
+     × uses hooks.gmail.model for Gmail hook sessions 0ms
+     × keeps hooks.gmail.model precedence over stored session override 1ms
+     × wraps external hook content by default 0ms
+     × skips external content wrapping when hooks.gmail opts out 0ms
+     × ignores hooks.gmail.model when not in the allowlist 0ms
+     × rejects invalid model override 0ms
+     × defaults thinking to low for reasoning-capable models 0ms
+     × truncates long summaries 0ms
+     × starts a fresh session id for each cron run 0ms
+     × preserves an existing cron session label 0ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 18 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |e2e| src/gateway/server.cron.e2e.test.ts > gateway server cron > posts webhooks for delivery mode and legacy notify fallback only when summary exists
+AssertionError: expected 'undefined' to be 'string' // Object.is equality
+
+Expected: "string"
+Received: "undefined"
+
+ ❯ src/gateway/server.cron.e2e.test.ts:473:31
+    471|
+    472|     const configPath = process.env.OPENCLAW_CONFIG_PATH;
+    473|     expect(typeof configPath).toBe("string");
+       |                               ^
+    474|     await fs.mkdir(path.dirname(configPath as string), { recursive: tr…
+    475|     await fs.writeFile(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/18]⎯
+
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > treats blank model overrides as unset
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > uses last non-empty agent text as summary
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > appends current time after the cron header line
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > uses agentId for workspace, session key, and store paths
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > uses model override when provided
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > uses stored session override when no job model override is provided
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > prefers job model override over stored session override
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > uses hooks.gmail.model for Gmail hook sessions
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > keeps hooks.gmail.model precedence over stored session override
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > wraps external hook content by default
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > skips external content wrapping when hooks.gmail opts out
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > ignores hooks.gmail.model when not in the allowlist
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > rejects invalid model override
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > defaults thinking to low for reasoning-capable models
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > truncates long summaries
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > starts a fresh session id for each cron run
+ FAIL  |e2e| src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts > runCronIsolatedAgentTurn > preserves an existing cron session label
+TypeError: vi.mocked(...).mockResolvedValue is not a function
+ ❯ src/platform/cron/isolated-agent.uses-last-non-empty-agent-text-as.e2e.test.ts:171:33
+    169|   beforeEach(() => {
+    170|     vi.mocked(runEmbeddedPiAgent).mockReset();
+    171|     vi.mocked(loadModelCatalog).mockResolvedValue([]);
+       |                                 ^
+    172|   });
+    173|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/18]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  18 failed | 2 passed (20)
+   Start at  01:11:02
+   Duration  25.78s (transform 15.12s, setup 584ms, import 14.52s, tests 10.24s, environment 0ms)
+

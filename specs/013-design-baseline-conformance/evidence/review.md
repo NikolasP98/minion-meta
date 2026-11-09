@@ -1,0 +1,5 @@
+# Independent review record (feature 013)
+
+- Spec-level: `analysis.md` (independent analysis pass) returned **blocked** on three premises before any PR; all were folded into spec/plan/contracts and sent to the streams as course corrections (density on `AppViewport`, existing route manifest, lint ceilings not yet a gate). Verdict after amendments: approved (review sidecar pass 2).
+- PR-level: each PR was reviewed by the coordinator for scope and semantics (B's lint-semantics change read line by line: governed totals, strict gate, decrease-only), by hosted CI (13 checks ×4 PRs, each re-run after rebase), and by the hub's own automatic review workflows on the PRs. No dedicated human-style code review agent ran per PR; this is recorded as a limitation and the follow-ups below carry the residual risks.
+- Follow-ups recorded in the proposal: comfortable density on desktop beyond tables; raw-control-height / raw-icon-size residual gaps; `KNOWN_NONCONFORMING` (46) reasons from source reading; collapse pixel proof at 390/320; stale-age caption supplied by callers.

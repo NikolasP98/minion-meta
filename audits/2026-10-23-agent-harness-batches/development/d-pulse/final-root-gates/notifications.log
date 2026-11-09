@@ -1,0 +1,14 @@
+$ bun scripts/notification-catalog-manifest.ts
+26 |     'Notification catalog manifest drift; review the catalog revision before regeneration.',
+27 |   );
+28 | else {
+29 |   const base = process.env.NOTIFICATION_CATALOG_BASE_REF;
+30 |   if (!base || !/^[a-f0-9]{40,64}$/.test(base))
+31 |     throw new Error('An exact NOTIFICATION_CATALOG_BASE_REF commit is required');
+                   ^
+error: An exact NOTIFICATION_CATALOG_BASE_REF commit is required
+      at /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse/scripts/notification-catalog-manifest.ts:31:15
+      at loadAndEvaluateModule (2:1)
+
+Bun v1.3.4 (Linux x64)
+error: script "lint:notifications" exited with code 1

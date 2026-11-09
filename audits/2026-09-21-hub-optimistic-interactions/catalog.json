@@ -1,0 +1,432 @@
+[
+  {
+    "id": "A01",
+    "family": "Module navigation",
+    "source": "minion_hub/src/routes/(app)/+layout.svelte",
+    "line": 41,
+    "policy": "R",
+    "immediate": "Select destination immediately; keep shell, scroll owner and current content until keyed target content is ready.",
+    "settlement": "Only newest navigation may replace active view; failed load offers retry.",
+    "gesture": "No Save"
+  },
+  {
+    "id": "A02",
+    "family": "Search, filters, sort and paging",
+    "source": "minion_hub/src/lib/components/data-table/DataTable.svelte",
+    "line": 85,
+    "policy": "R",
+    "immediate": "Update control intent; keep prior keyed results marked refreshing, or render matching cached results.",
+    "settlement": "Latest query generation wins; never label old data as the newly requested result.",
+    "gesture": "No Save"
+  },
+  {
+    "id": "A03",
+    "family": "Date ranges and chart refresh",
+    "source": "minion_hub/src/lib/components/dashboard/DateRangeControls.svelte",
+    "line": 1,
+    "policy": "R",
+    "immediate": "Update selected interval immediately; preserve chart instance and axes where meaningful.",
+    "settlement": "Apply canonical matching-range data; stale interval responses cannot replace selection.",
+    "gesture": "No Save"
+  },
+  {
+    "id": "A04",
+    "family": "POS calendar view/date navigation",
+    "source": "minion_hub/src/routes/(app)/pos/appointments/+page.svelte",
+    "line": 36,
+    "policy": "R",
+    "immediate": "Day/work-week/week, Today and arrows react on input; retain layout and show only matching cached windows.",
+    "settlement": "Selected interval has keyed loading/error; reconcile URL Back/Forward.",
+    "gesture": "No Save"
+  },
+  {
+    "id": "A05",
+    "family": "Calendar split, staff, kinds and inherited tags",
+    "source": "minion_hub/src/lib/components/scheduling/calendar/CalendarToolbar.svelte",
+    "line": 1,
+    "policy": "L/R/O",
+    "immediate": "Split lanes/filter intent updates immediately; local filtering has no network wait.",
+    "settlement": "Persist only declared preferences; failure marks preference unsynced without relabeling booking facts.",
+    "gesture": "No Save"
+  },
+  {
+    "id": "A06",
+    "family": "POS booking drag and resize",
+    "source": "minion_hub/src/lib/components/scheduling/BookingCalendar.svelte",
+    "line": 511,
+    "policy": "O",
+    "immediate": "Keep dropped/resized chip at target after pointer release with pending outline.",
+    "settlement": "Canonical booking/version replaces overlay; known conflict reverts affected move and preserves retry intent.",
+    "gesture": "Drop commits; exceptions reviewed"
+  },
+  {
+    "id": "A07",
+    "family": "Scheduling booking drag and resize",
+    "source": "minion_hub/src/lib/components/scheduling/calendar/MoveConfirmDialog.svelte",
+    "line": 1,
+    "policy": "O/C",
+    "immediate": "Ordinary single-booking move commits on drop, reusing shared overlay; conditional review handles series/override.",
+    "settlement": "Same operation rules as POS; remove routine Save modal only after server capability gates pass.",
+    "gesture": "Drop commits; conditional confirmation"
+  },
+  {
+    "id": "A08",
+    "family": "Paid line dropped into calendar",
+    "source": "minion_hub/src/routes/(app)/pos/appointments/+page.svelte",
+    "line": 36,
+    "policy": "C",
+    "immediate": "Reserve tray item locally and insert provisional booking with stable key, labeled creating.",
+    "settlement": "Paid line identity deduplicates creation; conflict restores tray/draft; confirmed booking comes from server.",
+    "gesture": "Drop initiates explicit booking command"
+  },
+  {
+    "id": "A09",
+    "family": "Appointment creation and slot lookup",
+    "source": "minion_hub/src/lib/components/scheduling/AppointmentForm.svelte",
+    "line": 173,
+    "policy": "D/R/C",
+    "immediate": "Form typing is local; latest service/day selection owns slot requests; show provisional creation after submit.",
+    "settlement": "Capacity validation and idempotent create required; failed submit retains complete draft.",
+    "gesture": "Keep Book/Create"
+  },
+  {
+    "id": "A10",
+    "family": "Booking internal notes and labels",
+    "source": "minion_hub/src/lib/components/scheduling/BookingDetailDrawer.svelte",
+    "line": 197,
+    "policy": "O",
+    "immediate": "Edit note/label inline; text remains visible with reserved pending status.",
+    "settlement": "Patch revision reconciles; tag and booking partial outcomes remain separate until atomic endpoint exists.",
+    "gesture": "Blur/Enter/debounce; remove note Save"
+  },
+  {
+    "id": "A11",
+    "family": "Booking completion, cancellation and series",
+    "source": "minion_hub/src/lib/components/scheduling/BookingDetailDrawer.svelte",
+    "line": 197,
+    "policy": "C",
+    "immediate": "Show action pending in place; keep unrelated calendar interactions usable.",
+    "settlement": "Status, package reversal, accrual and stock warnings reflect committed outcome; no false rollback after partial commit.",
+    "gesture": "Keep explicit consequence review"
+  },
+  {
+    "id": "A12",
+    "family": "POS catalog enabled toggle",
+    "source": "minion_hub/src/routes/(app)/pos/catalog/+page.svelte",
+    "line": 24,
+    "policy": "O",
+    "immediate": "Thumb and intended state move immediately using existing overlay/pending Toggle.",
+    "settlement": "Await canonical result; reject scoped operation; preserve newer queued intent.",
+    "gesture": "Selection commits"
+  },
+  {
+    "id": "A13",
+    "family": "POS cart quantities and tender draft",
+    "source": "minion_hub/src/lib/components/pos/SellCart.svelte",
+    "line": 1,
+    "policy": "D",
+    "immediate": "Recalculate local cart preview immediately, animate changed line/total without claiming payment.",
+    "settlement": "Server validates totals/stock at explicit charge; draft remains coherent.",
+    "gesture": "Local edits; keep Charge"
+  },
+  {
+    "id": "A14",
+    "family": "Payment, ticket emission and closing shift",
+    "source": "minion_hub/src/routes/(app)/pos/sell/+page.svelte",
+    "line": 319,
+    "policy": "C/J",
+    "immediate": "Immediate processing acknowledgement; confirmed receipt renders without waiting for ancillary refresh.",
+    "settlement": "Unknown result reconciles by operation identity; never blindly retry or claim paid/emitted/closed.",
+    "gesture": "Keep Charge/Issue/Close"
+  },
+  {
+    "id": "A15",
+    "family": "CRM contact scalar fields",
+    "source": "minion_hub/src/routes/(app)/crm/[contactId]/+page.svelte",
+    "line": 283,
+    "policy": "O",
+    "immediate": "Show revised property immediately and subtle saving state.",
+    "settlement": "Existing expectedUpdatedAt adapter rejects stale edit; errors retain draft and latest server baseline.",
+    "gesture": "Blur/Enter/selection"
+  },
+  {
+    "id": "A16",
+    "family": "Manual tags and entity links",
+    "source": "minion_hub/src/lib/components/tags/TagsField.svelte",
+    "line": 55,
+    "policy": "O",
+    "immediate": "Chip appears/disappears immediately with stable identity; tag creation uses provisional chip.",
+    "settlement": "Desired membership/idempotent create plus server rules; rollback only this membership, not entire tag set.",
+    "gesture": "Selection commits"
+  },
+  {
+    "id": "A17",
+    "family": "CRM outbound messages",
+    "source": "minion_hub/src/lib/components/crm/ContactChat.svelte",
+    "line": 98,
+    "policy": "C/J",
+    "immediate": "Pending bubble appears immediately; composer content retained for recovery; no duplicate echo.",
+    "settlement": "Same clientId on retry; accepted, sent, delivered and read are distinct.",
+    "gesture": "Keep Send"
+  },
+  {
+    "id": "A18",
+    "family": "Stock table scalar edits and fill",
+    "source": "minion_hub/src/routes/(app)/stock/items/+page.svelte",
+    "line": 19,
+    "policy": "O",
+    "immediate": "Reuse Claude cell overlay; keep active cell/focus and pending per row; coalesce refreshes for fill.",
+    "settlement": "Add atomic stale-write guards first; partial batch results reconcile by row.",
+    "gesture": "Cell commit/fill; no row Save"
+  },
+  {
+    "id": "A19",
+    "family": "Stock UOM, packaging and recipe forms",
+    "source": "minion_hub/src/routes/(app)/stock/items/[id]/+page.svelte",
+    "line": 172,
+    "policy": "D",
+    "immediate": "Instant local diagram/cost preview; preserve interdependent draft.",
+    "settlement": "Validate and commit coherent configuration, keeping values on validation failure.",
+    "gesture": "Keep Apply configuration"
+  },
+  {
+    "id": "A20",
+    "family": "Stock submit/cancel and invoice actions",
+    "source": "minion_hub/src/routes/(app)/stock/entries/[id]/+page.svelte",
+    "line": 37,
+    "policy": "C",
+    "immediate": "Immediate local processing state with stable preview; block duplicate command only.",
+    "settlement": "Show ledger state only after commit; operation outcome required before retry.",
+    "gesture": "Keep Submit/Cancel"
+  },
+  {
+    "id": "A21",
+    "family": "Social integration asset toggle",
+    "source": "minion_hub/src/routes/(app)/socials/settings/+page.svelte",
+    "line": 65,
+    "policy": "O/C",
+    "immediate": "Pending intended toggle replaces delayed snap; consequential disconnect has immediate pending row.",
+    "settlement": "Check actual enabled outcome; connection removal remains confirmed.",
+    "gesture": "Toggle autosaves; keep Disconnect"
+  },
+  {
+    "id": "A22",
+    "family": "Sync, import, reindex, backups and provisioning",
+    "source": "minion_hub/src/lib/components/finance/FinanceSyncBadge.svelte",
+    "line": 1,
+    "policy": "J",
+    "immediate": "Show queued/requesting immediately; actual progress only when backend reports it.",
+    "settlement": "Accepted request is not job completion; follow operation ID, resume observation, expose failure.",
+    "gesture": "Keep Run/Sync/Import/Restore"
+  },
+  {
+    "id": "A23",
+    "family": "Media/comments and metadata enrichment",
+    "source": "minion_hub/src/routes/(app)/socials/posts/[postId]/+page.svelte",
+    "line": 3,
+    "policy": "R",
+    "immediate": "Keep mirrored content; independent reads parallelize and fill reserved regions.",
+    "settlement": "Entity/query guards discard stale replies; unavailable differs from empty.",
+    "gesture": "No Save"
+  },
+  {
+    "id": "A24",
+    "family": "Notes create/edit/delete",
+    "source": "minion_hub/src/lib/state/features/agent-notes.svelte.ts",
+    "line": 36,
+    "policy": "O",
+    "immediate": "New note and typing render immediately; deleting affects only selected note.",
+    "settlement": "Recoverable draft, temp ID resolution, revision save and supported Undo; failure never silently loses text.",
+    "gesture": "Typing autosaves; deletion policy explicit"
+  },
+  {
+    "id": "A25",
+    "family": "Flow draft and node positions",
+    "source": "minion_hub/src/lib/state/features/flow-editor.svelte.ts",
+    "line": 516,
+    "policy": "O",
+    "immediate": "Canvas responds immediately; per-entity queued save badge, no remount.",
+    "settlement": "Capture revision; old success cannot clear newer draft; unsent draft survives navigation according to policy.",
+    "gesture": "Debounce/drop; no routine Save"
+  },
+  {
+    "id": "A26",
+    "family": "Skill metadata and chapter positions",
+    "source": "minion_hub/src/lib/state/builder/skill-editor.core.svelte.ts",
+    "line": 166,
+    "policy": "O",
+    "immediate": "Title/text edits and chapter movement update locally with scoped pending status.",
+    "settlement": "Coordinate-only rollback; acknowledged revision gating before publish; no whole-chapter-array restore.",
+    "gesture": "Autosave draft; keep Publish"
+  },
+  {
+    "id": "A27",
+    "family": "Publish, activate and execute agent/flow",
+    "source": "minion_hub/src/lib/state/builder/skill-editor.core.svelte.ts",
+    "line": 20,
+    "policy": "C/J",
+    "immediate": "Immediate publishing/starting state; preserve working draft and latest saved revision.",
+    "settlement": "Wait for confirmed publish/run identity; execution completion follows job/stream, not request ack.",
+    "gesture": "Keep Publish/Run"
+  },
+  {
+    "id": "A28",
+    "family": "Personal dashboard resize/reorder",
+    "source": "minion_hub/src/lib/components/dashboard/EditableGrid.svelte",
+    "line": 76,
+    "policy": "L",
+    "immediate": "Drag/resize follows input immediately and persists personal layout.",
+    "settlement": "Scope local storage by user/org/dashboard; visual Done exits mode, not a network Save.",
+    "gesture": "No Save"
+  },
+  {
+    "id": "A29",
+    "family": "Publish dashboard organization default",
+    "source": "minion_hub/src/lib/components/dashboard/EditableGrid.svelte",
+    "line": 85,
+    "policy": "C",
+    "immediate": "Mark publishing; do not freeze further personal editing.",
+    "settlement": "Capture submitted layout; cache only acknowledged snapshot and preserve personal overrides.",
+    "gesture": "Keep Set organization default"
+  },
+  {
+    "id": "A30",
+    "family": "Appearance, locale and personal navigation",
+    "source": "minion_hub/src/lib/state/ui/preference-sync.svelte.ts",
+    "line": 12,
+    "policy": "O",
+    "immediate": "Theme/order/preference changes apply immediately.",
+    "settlement": "Distinguish saved locally from synced; check HTTP status; scope/serialize writes and report retry.",
+    "gesture": "Selection autosaves"
+  },
+  {
+    "id": "A31",
+    "family": "Display name and ordinary profile properties",
+    "source": "minion_hub/src/lib/components/users/EditableName.svelte",
+    "line": 15,
+    "policy": "O",
+    "immediate": "Render draft in place on Enter/blur; reserve status affordance.",
+    "settlement": "Rejected draft remains available; always settle busy state on exception.",
+    "gesture": "No Save for scalar"
+  },
+  {
+    "id": "A32",
+    "family": "Roles, access, credentials and security",
+    "source": "minion_hub/src/lib/components/users/MemberAccessControls.svelte",
+    "line": 34,
+    "policy": "C",
+    "immediate": "Render pending intent with current effective access unchanged.",
+    "settlement": "Server capabilities authoritative; atomic compound role changes or explicit partial state.",
+    "gesture": "Explicit Apply/confirmation for security"
+  },
+  {
+    "id": "A33",
+    "family": "Team resources and harmless preferences",
+    "source": "minion_hub/src/lib/components/team/TeamSettingsView.svelte",
+    "line": 7,
+    "policy": "O/D",
+    "immediate": "Reuse existing overlay for independent reversible fields; compound resource edits remain drafts.",
+    "settlement": "Validate boundaries/capacity; shared error/status, do not assume every team setting harmless.",
+    "gesture": "Scalar autosave; coherent form submit"
+  },
+  {
+    "id": "A34",
+    "family": "Gateway tools and skills toggles",
+    "source": "minion_hub/src/lib/state/agents/agent-tools.svelte.ts",
+    "line": 32,
+    "policy": "O/C",
+    "immediate": "Immediate pending intent, retaining current optimistic behavior.",
+    "settlement": "Scope by org/host/agent; late failure cannot revert newer intent; effective capabilities await RPC.",
+    "gesture": "Toggle commit; sensitive policy explicit"
+  },
+  {
+    "id": "A35",
+    "family": "Agent groups and membership movement",
+    "source": "minion_hub/src/lib/state/features/agent-groups.svelte.ts",
+    "line": 134,
+    "policy": "O",
+    "immediate": "Immediate group placement and provisional creation with stable identity.",
+    "settlement": "Atomic membership move or partial reconciliation required; UI-only snapshot restore is insufficient.",
+    "gesture": "Drop/selection commits after capability gate"
+  },
+  {
+    "id": "A36",
+    "family": "Gateway chat and agent streaming",
+    "source": "minion_hub/src/lib/services/gateway/chat-rpc.ts",
+    "line": 40,
+    "policy": "C/J",
+    "immediate": "Immediate queued bubble/thinking indicator; stream fills stable node.",
+    "settlement": "Run ID idempotency and echo reconciliation; cancellation and completion require server signals.",
+    "gesture": "Keep Send/Stop"
+  },
+  {
+    "id": "A37",
+    "family": "Attachments upload, link, hide and restore",
+    "source": "minion_hub/src/lib/components/attachments/AttachmentList.svelte",
+    "line": 61,
+    "policy": "O/C/J",
+    "immediate": "Pending tile appears after file selection; link hiding/restoring is a reversible overlay.",
+    "settlement": "Bytes transferred is not finalized; canonical linked file only after finalize. Unknown outcomes reconcile, recoverable hide supports Undo only via restore.",
+    "gesture": "Selection uploads; permanent delete explicit"
+  },
+  {
+    "id": "A38",
+    "family": "Notifications and approval commands",
+    "source": "minion_hub/src/routes/(app)/notifications/+page.svelte",
+    "line": 17,
+    "policy": "C",
+    "immediate": "Immediate per-request pending state, stable list and focus.",
+    "settlement": "No optimistic permission grant or approval of consequential work; remove row only after ack.",
+    "gesture": "Keep Approve/Deny"
+  },
+  {
+    "id": "A39",
+    "family": "Dialogs, drawers, pickers and menus",
+    "source": "minion_hub/src/lib/components/ui/foundations/Dialog.svelte",
+    "line": 1,
+    "policy": "L/R",
+    "immediate": "Open shell and focus immediately; content fetch runs independently with first-load skeleton.",
+    "settlement": "Keep dimensions/focus stable; failures render inline; close cleanup never waits solely on animation events.",
+    "gesture": "No Save for opening; forms retain submit"
+  },
+  {
+    "id": "A40",
+    "family": "Workforce polling and cross-view reads",
+    "source": "minion_hub/src/lib/utils/live-polling.ts",
+    "line": 17,
+    "policy": "R",
+    "immediate": "Retain prior rows on background polling and soft refresh; animate only changed identity.",
+    "settlement": "Authorized load remains source; coalesce invalidations, focus/reconnect revalidate, inactive tabs pause unnecessary work.",
+    "gesture": "No Save"
+  },
+  {
+    "id": "A41",
+    "family": "Charts, sparklines, graphs and workshop",
+    "source": "minion_hub/src/lib/components/charts/Chart.svelte",
+    "line": 68,
+    "policy": "L/R/J",
+    "immediate": "Animate confirmed data delta or existing intentional canvas feedback; avoid full intro replay.",
+    "settlement": "Reduced-motion policy covers engine/physics; never fabricate intermediate business values as committed results.",
+    "gesture": "No Save unless a separate draft action"
+  },
+  {
+    "id": "A42",
+    "family": "Gateway configuration editing and apply",
+    "source": "minion_hub/src/lib/state/config/config.svelte.ts",
+    "line": 271,
+    "policy": "D/C",
+    "immediate": "Local form previews and validation respond immediately; show apply/restart pending.",
+    "settlement": "Preserve base-hash/version conflict and explicit restart/application result; not every config edit is safe autosave.",
+    "gesture": "Keep Apply configuration"
+  },
+  {
+    "id": "A43",
+    "family": "Notification delivery rules",
+    "source": "minion_hub/src/routes/(app)/settings/notifications/+page.svelte",
+    "line": 54,
+    "policy": "D/C",
+    "immediate": "Rule form previews respond immediately; recipients/conditions/template remain one coherent draft.",
+    "settlement": "Activation and external delivery intent are confirmed; qualified name-only metadata may later use O adapter.",
+    "gesture": "Keep Apply rule/Activate"
+  }
+]

@@ -66,3 +66,17 @@ try {
 
 An empty `2xx` still resolves to `null` (the `Promise<void>` endpoints), and
 every JSON response behaves exactly as before.
+
+### Federation admission contract
+
+The `@minion-stack/workforce-client/hub-identity-contract` export is used by the
+Paperclip HTTP middleware and Hub's compatibility tests. `admitHubIdentity` accepts
+the raw identity header, the already authenticated actor type, the secret and the
+path relative to `/api`. It returns `existing-actor`, `identity`, or `rejected`.
+Consumers must honor rejection before persistence; only `identity` may provision
+the exact signed subject into its pre-existing company. Database membership and
+least-privilege actor construction remain Paperclip responsibilities.
+
+This extraction preserves existing UUID v1-v5, trimming, role-order and optional
+header behavior. Changes to those rules require both consumer suites. A malformed
+supplied token must never fall back to an existing bearer actor.

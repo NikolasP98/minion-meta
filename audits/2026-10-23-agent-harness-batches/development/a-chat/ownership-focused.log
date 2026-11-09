@@ -1,0 +1,43 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/a-chat
+
+ ❯ src/lib/assistant/dispatch.ownership.test.ts (13 tests | 6 failed) 370ms
+     × real sandbox tool/host/lease handoff: valid 64ms
+     × real sandbox tool/host/lease handoff: user_navigation 53ms
+     × real sandbox tool/host/lease handoff: registry 54ms
+     × real sandbox tool/host/lease handoff: forged 54ms
+     × real sandbox tool/host/lease handoff: failed_refresh 52ms
+     × real sandbox tool/host/lease handoff: expired 52ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: valid
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: user_navigation
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: registry
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: forged
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: failed_refresh
+ FAIL  src/lib/assistant/dispatch.ownership.test.ts > actual live dispatch ownership > real sandbox tool/host/lease handoff: expired
+AssertionError: expected [ …(3) ] to have a length of 1 but got 3
+
+- Expected
++ Received
+
+- 1
++ 3
+
+ ❯ src/lib/assistant/dispatch.ownership.test.ts:81:86
+     79|     await running;
+     80|     expect(next).not.toHaveBeenCalled(); expect(s.followUp).toHaveBeen…
+     81|     expect(vi.mocked(fetch).mock.calls.filter(([,init]) => init?.metho…
+       |                                                                                      ^
+     82|   });
+     83|   it('capability is private, single publication/consumption, registrat…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 7 passed (13)
+   Start at  00:57:46
+   Duration  1.23s (transform 639ms, setup 43ms, import 705ms, tests 370ms, environment 0ms)
+

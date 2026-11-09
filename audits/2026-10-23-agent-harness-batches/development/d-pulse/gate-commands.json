@@ -1,0 +1,86 @@
+{
+  "cwd": "/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/d-pulse",
+  "check": {
+    "argv": [
+      "bun",
+      "run",
+      "check"
+    ],
+    "env": {
+      "PUBLIC_POSTHOG_KEY": "phc_local_fixture",
+      "PUBLIC_POSTHOG_HOST": "http://127.0.0.1:0"
+    }
+  },
+  "unit": {
+    "argv": [
+      "bun",
+      "run",
+      "test"
+    ],
+    "env": {
+      "VITEST_MAX_WORKERS": "2",
+      "GIT_CONFIG_GLOBAL": "/dev/null",
+      "GIT_CONFIG_NOSYSTEM": "1",
+      "GIT_CONFIG_COUNT": "1",
+      "GIT_CONFIG_KEY_0": "commit.gpgsign",
+      "GIT_CONFIG_VALUE_0": "false"
+    }
+  },
+  "build": {
+    "argv": [
+      "bun",
+      "run",
+      "build"
+    ],
+    "env": {
+      "PUBLIC_POSTHOG_KEY": "phc_local_fixture",
+      "PUBLIC_POSTHOG_HOST": "http://127.0.0.1:0"
+    }
+  },
+  "browser": {
+    "BU_NAME": "minion-d-pulse-7j3r-final",
+    "BU_CDP_URL": "http://127.0.0.1:9223",
+    "target": "http://127.0.0.1:18903/pulse.html",
+    "script": "/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/development/d-pulse/browser-harness/manual-proof-final.py"
+  },
+  "historicalPulseOnly": {
+    "argv": [
+      "bun",
+      "run",
+      "test:critical-journeys"
+    ],
+    "env": {
+      "MINION_CRITICAL_PULSE_ONLY": "1",
+      "PLAYWRIGHT_BROWSERS_PATH": "/home/nikolas/.cache/ms-playwright",
+      "MINION_CRITICAL_RUN_ROOT": "/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/development/d-pulse/pulse-critical-run-05",
+      "MINION_WEBKIT_EXECUTABLE": "/home/nikolas/.cache/minion-qc/webkit-runtime-2026-09-11/run-webkit.sh"
+    }
+  },
+  "defaultCritical": {
+    "argv": [
+      "bun",
+      "run",
+      "test:critical-journeys"
+    ],
+    "env": {
+      "PLAYWRIGHT_BROWSERS_PATH": "/home/nikolas/.cache/ms-playwright",
+      "MINION_WEBKIT_EXECUTABLE": "/home/nikolas/.cache/minion-qc/webkit-runtime-2026-09-11/run-webkit.sh",
+      "MINION_CRITICAL_RUN_ROOT": "/home/nikolas/Documents/CODE/MINION/audits/2026-10-23-agent-harness-batches/development/d-pulse/default-critical-run-06"
+    },
+    "ensureUnset": [
+      "MINION_CRITICAL_PULSE_ONLY",
+      "MINION_CRITICAL_REUSE"
+    ],
+    "expectedTests": 120,
+    "mustUseDeclaredConfigReporterAndCaps": true
+  },
+  "order": [
+    "i18n:compile",
+    "check",
+    "unit",
+    "build",
+    "defaultCritical",
+    "browser",
+    "finalFreeze"
+  ]
+}

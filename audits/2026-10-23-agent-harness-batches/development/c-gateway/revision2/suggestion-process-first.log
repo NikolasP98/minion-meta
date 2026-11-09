@@ -1,0 +1,43 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway
+
+ ❯ |extensions| extensions/alert-watcher/suggestion-recovery.test.ts (3 tests | 3 failed) 8261ms
+   × actual watcher suggestion kill after admitted never recalls and recovers locally 3497ms
+   × actual watcher suggestion kill after received never recalls and recovers locally 2762ms
+   × actual watcher suggestion kill after materialized never recalls and recovers locally 1998ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |extensions| extensions/alert-watcher/suggestion-recovery.test.ts > actual watcher suggestion kill after admitted never recalls and recovers locally
+ FAIL  |extensions| extensions/alert-watcher/suggestion-recovery.test.ts > actual watcher suggestion kill after received never recalls and recovers locally
+ FAIL  |extensions| extensions/alert-watcher/suggestion-recovery.test.ts > actual watcher suggestion kill after materialized never recalls and recovers locally
+Error: /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway/src/agents/models/model-auth.ts:3
+import { getEnvApiKey } from "@earendil-works/pi-ai/compat";
+         ^
+SyntaxError: The requested module '@earendil-works/pi-ai/compat' does not provide an export named 'getEnvApiKey'
+    at ModuleJob._instantiate (node:internal/modules/esm/module_job:226:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:335:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)
+    at async Promise.all (index 0)
+    at async <anonymous> (/home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway/extensions/alert-watcher/test-support/suggestion-process.ts:35:134)
+
+Node.js v22.23.3
+
+ ❯ <anonymous> extensions/alert-watcher/test-support/suggestion-process.ts:35:134
+ ❯ barrier extensions/alert-watcher/suggestion-recovery.test.ts:18:45
+     16|   for(let i=0;i<400;i++) {
+     17|     if(fs.existsSync(path.join(directory,"barrier"))){return fs.readFi…
+     18|     if(process.child.exitCode!==null){throw Error(process.stderr());}
+       |                                             ^
+     19|     await new Promise(resolve=>setTimeout(resolve,25));
+     20|   }
+ ❯ extensions/alert-watcher/suggestion-recovery.test.ts:28:12
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed (3)
+   Start at  03:09:31
+   Duration  12.57s (transform 2.72s, setup 82ms, import 4.05s, tests 8.26s, environment 0ms)
+

@@ -1,0 +1,133 @@
+
+ RUN  v4.1.10 /home/nikolas/.cache/codex-implementation/2026-10-23-agent-harness-batches-7j3rswst/c-gateway
+
+ ❯ |extensions| extensions/alert-watcher/src/live-retention.test.ts (8 tests | 7 failed) 319ms
+   × live tick expires indeterminate raw/failed copies without changing external-effect truth 58ms
+   × live tick expires failed raw/failed copies without changing external-effect truth 20ms
+   × live tick expires canceled raw/failed copies without changing external-effect truth 18ms
+   × live tick expires sent raw/failed copies without changing external-effect truth 23ms
+   × actual recovered uncertain bridge outcome is cleaned by later watcher tick without restart 48ms
+   × partial-temp-only terminal cleanup preserves explicit uncertainty across fsync/unlink faults and a fresh disabled process 22ms
+   × partial-temp-only terminal cleanup preserves known acceptance across fsync/unlink faults and a fresh disabled process 21ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires indeterminate raw/failed copies without changing external-effect truth
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires canceled raw/failed copies without changing external-effect truth
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires sent raw/failed copies without changing external-effect truth
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:134:32
+    132|     await w.tick();
+    133|     await w.stop();
+    134|     expect(fs.existsSync(raw)).toBe(false);
+       |                                ^
+    135|     expect(fs.existsSync(failed)).toBe(false);
+    136|     const tombstone = await readDeliveryTombstone(row.id, f.dir);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > live tick expires failed raw/failed copies without changing external-effect truth
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:135:35
+    133|     await w.stop();
+    134|     expect(fs.existsSync(raw)).toBe(false);
+    135|     expect(fs.existsSync(failed)).toBe(false);
+       |                                   ^
+    136|     const tombstone = await readDeliveryTombstone(row.id, f.dir);
+    137|     expect(tombstone?.reason).toBe("expired");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > actual recovered uncertain bridge outcome is cleaned by later watcher tick without restart
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:230:58
+    228|   await w.stop();
+    229|   expect(send).not.toHaveBeenCalled();
+    230|   expect(fs.existsSync(resolveEntryPath(row.id, f.dir))).toBe(false);
+       |                                                          ^
+    231|   expect((await readDeliveryTombstone(row.id, f.dir))?.payloads[0].sta…
+    232|   f.db.close();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > partial-temp-only terminal cleanup preserves explicit uncertainty across fsync/unlink faults and a fresh disabled process
+AssertionError: expected undefined to match object { …(7) }
+
+- Expected:
+{
+  "generation": 13,
+  "id": "63c043bf-9994-4699-8c5b-60a615e32ded",
+  "namespaceHash": "c664670b10d6de79c5aa1711e1d470907125878fa14bbb52c356482498e6aab6",
+  "outcomeUncertain": true,
+  "payloadHash": "d01056df62a40a3eb6c7311ee1cec0d93678ff52569f70619cc4648a0ea1e350",
+  "reason": "expired",
+  "recipientHash": "85ca0855c53c83696229a2c1e47dccf2b5a9602205e3155614795edaabe28b1a",
+}
+
++ Received:
+undefined
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:296:23
+    294|     removeFault.mockRestore();
+    295|     const tombstone = await readDeliveryTombstone(row.id, f.dir);
+    296|     expect(tombstone).toMatchObject({
+       |                       ^
+    297|       id: row.id,
+    298|       generation: 13,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  |extensions| extensions/alert-watcher/src/live-retention.test.ts > partial-temp-only terminal cleanup preserves known acceptance across fsync/unlink faults and a fresh disabled process
+AssertionError: expected undefined to match object { …(7) }
+
+- Expected:
+{
+  "generation": 13,
+  "id": "ade96ac3-995d-4d50-8cac-6281788a5cd7",
+  "namespaceHash": "c664670b10d6de79c5aa1711e1d470907125878fa14bbb52c356482498e6aab6",
+  "outcomeUncertain": true,
+  "payloadHash": "d01056df62a40a3eb6c7311ee1cec0d93678ff52569f70619cc4648a0ea1e350",
+  "reason": "expired",
+  "recipientHash": "85ca0855c53c83696229a2c1e47dccf2b5a9602205e3155614795edaabe28b1a",
+}
+
++ Received:
+undefined
+
+ ❯ extensions/alert-watcher/src/live-retention.test.ts:296:23
+    294|     removeFault.mockRestore();
+    295|     const tombstone = await readDeliveryTombstone(row.id, f.dir);
+    296|     expect(tombstone).toMatchObject({
+       |                       ^
+    297|       id: row.id,
+    298|       generation: 13,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  7 failed | 25 passed (32)
+   Start at  03:15:30
+   Duration  31.97s (transform 24.78s, setup 182ms, import 37.82s, tests 8.92s, environment 1ms)
+

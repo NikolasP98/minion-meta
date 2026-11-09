@@ -1,0 +1,83 @@
+{
+  "fixture": "Hola, ¿a qué hora abren mañana?",
+  "bytes": {
+    "systemPrompt": 782,
+    "outputSchema": 483,
+    "userPrompt": 57,
+    "actualComponentsJson": 1396,
+    "illustrativeGateJson": 344
+  },
+  "actualComponents": {
+    "systemPrompt": "You are a customer-complaint classifier.\n\nYou will receive a single MESSAGE from a customer. Decide:\n- is_complaint: does this single message express a customer complaint or grievance?\n- severity: low / med / high (only meaningful when is_complaint=true)\n- category: one of the configured categories\n- summary: if and only if is_complaint=true, a one-sentence summary of the complaint. Otherwise an empty string.\n\nHard rules:\n- Greetings, questions about hours/prices, requests for information, agreement words, single characters, typos, generic chitchat → is_complaint=false.\n- The summary describes only what THIS message says. Do not invent prior history.\n- Call the result tool exactly once.\nWrite the \"summary\" field in Spanish (one short sentence summarizing the complaint).",
+    "output": {
+      "type": "object",
+      "required": [
+        "is_complaint",
+        "severity",
+        "category",
+        "summary"
+      ],
+      "properties": {
+        "is_complaint": {
+          "type": "boolean"
+        },
+        "severity": {
+          "anyOf": [
+            {
+              "const": "low",
+              "type": "string"
+            },
+            {
+              "const": "med",
+              "type": "string"
+            },
+            {
+              "const": "high",
+              "type": "string"
+            }
+          ]
+        },
+        "category": {
+          "anyOf": [
+            {
+              "const": "product_defect",
+              "type": "string"
+            },
+            {
+              "const": "billing",
+              "type": "string"
+            },
+            {
+              "const": "delivery",
+              "type": "string"
+            },
+            {
+              "const": "service",
+              "type": "string"
+            },
+            {
+              "const": "other",
+              "type": "string"
+            }
+          ]
+        },
+        "summary": {
+          "type": "string"
+        }
+      }
+    },
+    "prompt": "Message to classify:\n\"Hola, ¿a qué hora abren mañana?\"",
+    "maxTokens": 256
+  },
+  "illustrativeGate": {
+    "model": "~typesafe/jev-latest",
+    "state": "Message to classify:\n\"Hola, ¿a qué hora abren mañana?\"",
+    "questions": {
+      "complaint": {
+        "type": "noul",
+        "question": "Does this single customer message express a complaint or grievance? Greetings, questions about hours/prices, requests for information, agreement words and generic chitchat do not count."
+      }
+    }
+  },
+  "boundary": "Actual runDrone arguments, not provider wire payload or tokenizer counts. Illustrative gate has not been validated against provider API. No live inference, billed tokens, costs, cached tokens, traffic or quality measured."
+}

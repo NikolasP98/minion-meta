@@ -1,0 +1,143 @@
+{
+  "parent": "specs/2026-10-22-agent-harness-reliability-and-proactivity-spec.md",
+  "mapping": [
+    {
+      "id": "A21",
+      "sourceLine": 490,
+      "intents": [
+        "FR-001",
+        "FR-002",
+        "SC-001",
+        "US1/AC1",
+        "US1/AC2",
+        "US1/AC3",
+        "US1/AC4",
+        "PROBE-SOURCE-01",
+        "PROBE-SOURCE-02",
+        "PROBE-SOURCE-03",
+        "PROBE-SOURCE-04",
+        "PROBE-SOURCE-05"
+      ],
+      "proof": [
+        "../native-unit-results.json",
+        "../fetch-deadline.log",
+        "../independent-results.json",
+        "affected-results.json"
+      ],
+      "disposition": "Source and bounded proof pass; provider/source activation separate."
+    },
+    {
+      "id": "A22",
+      "sourceLine": 500,
+      "intents": [
+        "FR-003",
+        "SC-002",
+        "US2/AC1",
+        "US2/AC2",
+        "PROBE-ADMIT-01",
+        "PROBE-ADMIT-02",
+        "PROBE-ADMIT-03",
+        "PROBE-AUTH-01"
+      ],
+      "proof": [
+        "affected-results.json",
+        "independent-invariants-results.json",
+        "late-receipt-observations.jsonl"
+      ],
+      "disposition": "Actual SQL admission, stable namespace, unknown fence and current authority pass."
+    },
+    {
+      "id": "A23",
+      "sourceLine": 510,
+      "intents": [
+        "FR-004",
+        "US2/AC3",
+        "US2/AC4",
+        "PROBE-SDK-01",
+        "PROBE-SDK-02",
+        "PROBE-SDK-03",
+        "PROBE-SDK-04",
+        "PROBE-SDK-05",
+        "PROBE-SDK-06"
+      ],
+      "proof": [
+        "../native-unit-results.json",
+        "../sdk-deadline-results.json",
+        "affected-results.json",
+        "independent-invariants-results.json"
+      ],
+      "disposition": "Unchanged installed SDK wire/local recovery plus fresh receipt/crash/authority SQL proof pass; no paid calls."
+    },
+    {
+      "id": "A24",
+      "sourceLine": 520,
+      "intents": [
+        "FR-005",
+        "FR-006",
+        "US2/AC5",
+        "T017",
+        "PROBE-PUB-01",
+        "PROBE-PUB-02",
+        "PROBE-PUB-03",
+        "PROBE-PUB-04",
+        "PROBE-PUB-05"
+      ],
+      "proof": [
+        "affected-results.json",
+        "independent-invariants-results.json"
+      ],
+      "disposition": "Actual atomic publication, full binding, cursor CAS, ingress and crashes pass; human claim-support promotion separate."
+    },
+    {
+      "id": "A25",
+      "sourceLine": 530,
+      "intents": [
+        "FR-007",
+        "FR-010",
+        "US3/AC1",
+        "US3/AC2",
+        "US3/AC3",
+        "US3/AC4",
+        "PROBE-FEEDBACK-01",
+        "PROBE-FEEDBACK-02",
+        "PROBE-FEEDBACK-03",
+        "PROBE-FEEDBACK-04",
+        "PROBE-UI-01",
+        "PROBE-UI-02"
+      ],
+      "proof": [
+        "affected-results.json",
+        "e02-export-to-f.json",
+        "../f-reader-tests.log"
+      ],
+      "disposition": "SQL/routes/export/import and UI source pass. Final current EN/ES keyboard/failed-save/committed-refresh browser proof pending."
+    },
+    {
+      "id": "A32",
+      "sourceLine": 600,
+      "intents": [
+        "FR-008",
+        "FR-009",
+        "SC-004",
+        "US4/AC1",
+        "US4/AC2",
+        "US4/AC3",
+        "US4/AC4",
+        "US4/AC5",
+        "PROBE-TICK-01",
+        "PROBE-TICK-02",
+        "PROBE-TICK-03",
+        "PROBE-SCHED-01",
+        "PROBE-SCHED-02"
+      ],
+      "proof": [
+        "affected-results.json",
+        "original-retention-green-results.json",
+        "scheduler.log",
+        "scheduler-receipt.json",
+        "scheduler-receipt.json.scope.json"
+      ],
+      "disposition": "Actual E02 authenticated shell/selected worker empty-queue restart/source change/cold-scope and cleanup proof pass. Final current component reconnect browser proof pending. Actual cron intentionally uninstalled; activation unqualified."
+    }
+  ]
+}

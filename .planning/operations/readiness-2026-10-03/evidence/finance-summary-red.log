@@ -1,0 +1,207 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-implementation/2026-10-03-hub-gw/hub
+
+ ❯ src/server/services/finance-summary.correctness.test.ts (8 tests | 8 failed) 2492ms
+     × keeps losses signed instead of reporting break-even 34ms
+     × recomputes summary and series after stock visibility changes from false 19ms
+     × recomputes summary and series after stock visibility changes from true 16ms
+     × uses live invoices for sales and clients, and all documents for void rate 17ms
+     × counts a client as new at their first live invoice, even with an earlier void 14ms
+     × excludes void-only customers and products from every economic ranking 15ms
+     × keeps the absolute loss visible with nonpositive billed revenue and a defined zero margin rate 14ms
+     × reports all-void and empty populations without division by zero 14ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > keeps losses signed instead of reporting break-even
+AssertionError: expected +0 to be -50 // Object.is equality
+
+- Expected
++ Received
+
+- -50
++ 0
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:72:31
+     70|     await cost(150);
+     71|     const result = await financeSummary(ctx, period, 'business');
+     72|     expect(result.netRevenue).toBe(-50);
+       |                               ^
+     73|     expect(result.marginRate).toBe(-0.5);
+     74|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > recomputes summary and series after stock visibility changes from false
+AssertionError: expected +0 to be 40 // Object.is equality
+
+- Expected
++ Received
+
+- 40
++ 0
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:86:28
+     84|     const nextSeries = await revenueSeries(ctx, period, nextKind);
+     85|     expect(first.totalCogs).toBe(initial ? 40 : 0);
+     86|     expect(next.totalCogs).toBe(initial ? 0 : 40);
+       |                            ^
+     87|     expect(firstSeries[0].opCost).toBe(initial ? 40 : 0);
+     88|     expect(nextSeries[0].opCost).toBe(initial ? 0 : 40);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > recomputes summary and series after stock visibility changes from true
+AssertionError: expected 40 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 40
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:86:28
+     84|     const nextSeries = await revenueSeries(ctx, period, nextKind);
+     85|     expect(first.totalCogs).toBe(initial ? 40 : 0);
+     86|     expect(next.totalCogs).toBe(initial ? 0 : 40);
+       |                            ^
+     87|     expect(firstSeries[0].opCost).toBe(initial ? 40 : 0);
+     88|     expect(nextSeries[0].opCost).toBe(initial ? 0 : 40);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > uses live invoices for sales and clients, and all documents for void rate
+AssertionError: expected { totalNet: 100, …(16) } to match object { invoiceCount: 1, …(5) }
+(11 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "avgTicket": 100,
+    "invoiceCount": 1,
+-   "newClients": 1,
+-   "uniqueClients": 1,
++   "newClients": 2,
++   "uniqueClients": 2,
+    "voidCount": 1,
+-   "voidRate": 0.5,
++   "voidRate": 1,
+  }
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:95:20
+     93|     await invoice('void-only', 'void', 900);
+     94|     const result = await financeSummary(ctx, period, 'personal');
+     95|     expect(result).toMatchObject({ invoiceCount: 1, uniqueClients: 1, …
+       |                    ^
+     96|     const series = await revenueSeries(ctx, period, 'personal');
+     97|     expect(series[0]).toMatchObject({ invoices: 1, revenue: 100, gross…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > counts a client as new at their first live invoice, even with an earlier void
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:104:31
+    102|     await invoice('customer', 'paid', 100);
+    103|     const result = await financeSummary(ctx, { ...period, from: '2026-…
+    104|     expect(result.newClients).toBe(1);
+       |                               ^
+    105|   });
+    106|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > excludes void-only customers and products from every economic ranking
+AssertionError: expected [ [ 'live', 900, 2 ], …(1) ] to deeply equal [ [ 'live', 100, 1 ] ]
+
+- Expected
++ Received
+
+  [
+    [
+      "live",
+-     100,
++     900,
++     2,
++   ],
++   [
++     "void-only",
++     900,
+      1,
+    ],
+  ]
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:118:93
+    116|           case when status='void' then 'Voided procedure' else 'Live p…
+    117|     `);
+    118|     expect((await clientRevenueRows(ctx)).map((r) => [r.docNumber, r.r…
+       |                                                                                             ^
+    119|     expect((await topClients(ctx, period)).map((r) => [r.docNumber, r.…
+    120|     expect((await topProducts(ctx, period)).map((r) => [r.code, r.reve…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > keeps the absolute loss visible with nonpositive billed revenue and a defined zero margin rate
+AssertionError: expected { totalNet: -100, …(16) } to match object { netRevenue: -120, marginRate: +0 }
+(15 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "marginRate": 0,
+-   "netRevenue": -120,
++   "netRevenue": 0,
+  }
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:131:20
+    129|     await cost(20);
+    130|     const result = await financeSummary(ctx, period, 'business');
+    131|     expect(result).toMatchObject({ netRevenue: -120, marginRate: 0 });
+       |                    ^
+    132|   });
+    133|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯
+
+ FAIL  src/server/services/finance-summary.correctness.test.ts > finance summary populations and cache on a real SQL engine > reports all-void and empty populations without division by zero
+AssertionError: expected { totalNet: +0, totalGross: +0, …(15) } to match object { Object (invoiceCount, voidCount, ...) }
+(12 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "invoiceCount": 0,
+-   "newClients": 0,
+-   "uniqueClients": 0,
++   "newClients": 1,
++   "uniqueClients": 1,
+    "voidCount": 1,
+-   "voidRate": 1,
++   "voidRate": 0,
+  }
+
+ ❯ src/server/services/finance-summary.correctness.test.ts:140:21
+    138|     configureCache({ backend: new MemoryBackend(), namespace: 'finance…
+    139|     const allVoid = await financeSummary(ctx, period, 'personal');
+    140|     expect(allVoid).toMatchObject({ invoiceCount: 0, voidCount: 1, voi…
+       |                     ^
+    141|   });
+    142| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Start at  21:29:50
+   Duration  3.51s (transform 215ms, setup 48ms, import 799ms, tests 2.49s, environment 0ms)
+

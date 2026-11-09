@@ -1,0 +1,1830 @@
+
+src/gateway/server-methods/chat/handlers.ts:129-191
+129:   "chat.abort": ({ params, respond, context }) => {
+130:     if (!validateChatAbortParams(params)) {
+131:       respondError(
+132:         respond,
+133:         ErrorCodes.INVALID_REQUEST,
+134:         `invalid chat.abort params: ${formatValidationErrors(validateChatAbortParams.errors)}`,
+135:       );
+136:       return;
+137:     }
+138:     const { sessionKey: rawSessionKey, runId } = params as {
+139:       sessionKey: string;
+140:       runId?: string;
+141:     };
+142: 
+143:     const ops = createChatAbortOps(context);
+144: 
+145:     if (!runId) {
+146:       const res = abortChatRunsForSessionKeyWithPartials({
+147:         context,
+148:         ops,
+149:         sessionKey: rawSessionKey,
+150:         abortOrigin: "rpc",
+151:         stopReason: "rpc",
+152:       });
+153:       respond(true, { ok: true, aborted: res.aborted, runIds: res.runIds });
+154:       return;
+155:     }
+156: 
+157:     const active = context.chatAbortControllers.get(runId);
+158:     if (!active) {
+159:       respond(true, { ok: true, aborted: false, runIds: [] });
+160:       return;
+161:     }
+162:     if (active.sessionKey !== rawSessionKey) {
+163:       respondError(respond, ErrorCodes.INVALID_REQUEST, "runId does not match sessionKey");
+164:       return;
+165:     }
+166: 
+167:     const partialText = context.chatRunBuffers.get(runId);
+168:     const res = abortChatRunById(ops, {
+169:       runId,
+170:       sessionKey: rawSessionKey,
+171:       stopReason: "rpc",
+172:     });
+173:     if (res.aborted && partialText && partialText.trim()) {
+174:       persistAbortedPartials({
+175:         context,
+176:         sessionKey: rawSessionKey,
+177:         snapshots: [
+178:           {
+179:             runId,
+180:             sessionId: active.sessionId,
+181:             text: partialText,
+182:             abortOrigin: "rpc",
+183:           },
+184:         ],
+185:       });
+186:     }
+187:     respond(true, {
+188:       ok: true,
+189:       aborted: res.aborted,
+190:       runIds: res.aborted ? [runId] : [],
+191:     });
+
+src/gateway/server-methods/chat/handlers.ts:231-307
+231:     if (normalizedAttachments.length > 0) {
+232:       try {
+233:         const parsed = await parseMessageWithAttachments(inboundMessage, normalizedAttachments, {
+234:           maxBytes: 5_000_000,
+235:           log: context.logGateway,
+236:         });
+237:         parsedMessage = parsed.message;
+238:         parsedImages = parsed.images;
+239:       } catch (err) {
+240:         respondError(respond, ErrorCodes.INVALID_REQUEST, String(err));
+241:         return;
+242:       }
+243:     }
+244:     const rawSessionKey = p.sessionKey;
+245:     const { cfg, entry, canonicalKey: sessionKey } = loadSessionEntry(rawSessionKey);
+246:     const timeoutMs = resolveAgentTimeoutMs({
+247:       cfg,
+248:       overrideMs: p.timeoutMs,
+249:     });
+250:     const now = Date.now();
+251:     const clientRunId = p.idempotencyKey;
+252: 
+253:     const sendPolicy = resolveSendPolicy({
+254:       cfg,
+255:       entry,
+256:       sessionKey,
+257:       channel: entry?.channel,
+258:       chatType: entry?.chatType,
+259:     });
+260:     if (sendPolicy === "deny") {
+261:       respondError(respond, ErrorCodes.INVALID_REQUEST, "send blocked by session policy");
+262:       return;
+263:     }
+264: 
+265:     if (stopCommand) {
+266:       const res = abortChatRunsForSessionKeyWithPartials({
+267:         context,
+268:         ops: createChatAbortOps(context),
+269:         sessionKey: rawSessionKey,
+270:         abortOrigin: "stop-command",
+271:         stopReason: "stop",
+272:       });
+273:       respond(true, { ok: true, aborted: res.aborted, runIds: res.runIds });
+274:       return;
+275:     }
+276: 
+277:     const cached = context.dedupe.get(`chat:${clientRunId}`);
+278:     if (cached) {
+279:       respond(cached.ok, cached.payload, cached.error, {
+280:         cached: true,
+281:       });
+282:       return;
+283:     }
+284: 
+285:     const activeExisting = context.chatAbortControllers.get(clientRunId);
+286:     if (activeExisting) {
+287:       respond(true, { runId: clientRunId, status: "in_flight" as const }, undefined, {
+288:         cached: true,
+289:         runId: clientRunId,
+290:       });
+291:       return;
+292:     }
+293: 
+294:     try {
+295:       const abortController = new AbortController();
+296:       context.chatAbortControllers.set(clientRunId, {
+297:         controller: abortController,
+298:         sessionId: entry?.sessionId ?? clientRunId,
+299:         sessionKey: rawSessionKey,
+300:         startedAtMs: now,
+301:         expiresAtMs: resolveChatRunExpiresAtMs({ now, timeoutMs }),
+302:       });
+303:       const ackPayload = {
+304:         runId: clientRunId,
+305:         status: "started" as const,
+306:       };
+307:       respond(true, ackPayload, undefined, { runId: clientRunId });
+
+src/gateway/server-methods/chat/handlers.ts:320-340
+320:       const ctx: MsgContext = {
+321:         Body: parsedMessage,
+322:         BodyForAgent: stampedMessage,
+323:         BodyForCommands: commandBody,
+324:         RawBody: parsedMessage,
+325:         CommandBody: commandBody,
+326:         SessionKey: sessionKey,
+327:         Provider: INTERNAL_MESSAGE_CHANNEL,
+328:         Surface: INTERNAL_MESSAGE_CHANNEL,
+329:         OriginatingChannel: INTERNAL_MESSAGE_CHANNEL,
+330:         ChatType: "direct",
+331:         CommandAuthorized: true,
+332:         MessageSid: clientRunId,
+333:         SenderId: clientInfo?.id,
+334:         SenderName: clientInfo?.displayName,
+335:         SenderUsername: clientInfo?.displayName,
+336:         GatewayClientScopes: client?.connect?.scopes,
+337:       };
+338: 
+339:       const agentId = resolveSessionAgentId({
+340:         sessionKey,
+
+src/gateway/server-methods/chat/handlers.ts:366-399
+366:       let agentRunStarted = false;
+367:       void dispatchInboundMessage({
+368:         ctx,
+369:         cfg,
+370:         dispatcher,
+371:         replyOptions: {
+372:           runId: clientRunId,
+373:           abortSignal: abortController.signal,
+374:           images: parsedImages.length > 0 ? parsedImages : undefined,
+375:           onAgentRunStart: (runId) => {
+376:             agentRunStarted = true;
+377:             const connId = typeof client?.connId === "string" ? client.connId : undefined;
+378:             const wantsToolEvents = hasGatewayClientCap(
+379:               client?.connect?.caps,
+380:               GATEWAY_CLIENT_CAPS.TOOL_EVENTS,
+381:             );
+382:             if (connId && wantsToolEvents) {
+383:               context.registerToolEventRecipient(runId, connId);
+384:               // Register for any other active runs *in the same session* so
+385:               // late-joining clients (e.g. page refresh mid-response) receive
+386:               // in-progress tool events without leaking cross-session data.
+387:               for (const [activeRunId, active] of context.chatAbortControllers) {
+388:                 if (activeRunId !== runId && active.sessionKey === p.sessionKey) {
+389:                   context.registerToolEventRecipient(activeRunId, connId);
+390:                 }
+391:               }
+392:             }
+393:           },
+394:           onModelSelected,
+395:         },
+396:       })
+397:         .then(() => {
+398:           if (!agentRunStarted) {
+399:             const combinedReply = finalReplyParts
+
+src/gateway/server-methods/chat/handlers.ts:438-471
+438:               sessionKey: rawSessionKey,
+439:               message,
+440:             });
+441:           }
+442:           context.dedupe.set(`chat:${clientRunId}`, {
+443:             ts: Date.now(),
+444:             ok: true,
+445:             payload: { runId: clientRunId, status: "ok" as const },
+446:           });
+447:         })
+448:         .catch((err) => {
+449:           const error = errorShape(ErrorCodes.UNAVAILABLE, String(err));
+450:           context.dedupe.set(`chat:${clientRunId}`, {
+451:             ts: Date.now(),
+452:             ok: false,
+453:             payload: {
+454:               runId: clientRunId,
+455:               status: "error" as const,
+456:               summary: String(err),
+457:             },
+458:             error,
+459:           });
+460:           broadcastChatError({
+461:             context,
+462:             runId: clientRunId,
+463:             sessionKey: rawSessionKey,
+464:             errorMessage: String(err),
+465:           });
+466:         })
+467:         .finally(() => {
+468:           context.chatAbortControllers.delete(clientRunId);
+469:         });
+470:     } catch (err) {
+471:       const error = errorShape(ErrorCodes.UNAVAILABLE, String(err));
+
+src/gateway/server-core/server-methods.ts:205-250
+205: export function authorizeGatewayMethod(
+206:   method: string,
+207:   client: GatewayRequestOptions["client"],
+208:   params?: Record<string, unknown>,
+209: ) {
+210:   if (!client?.connect) {
+211:     return null;
+212:   }
+213:   if (client.authMethod === "none" && SESSION_AUTH_REQUIRED_METHODS.has(method)) {
+214:     return errorShape(
+215:       ErrorCodes.INVALID_REQUEST,
+216:       "session operations require authentication; configure gateway.auth.token or gateway.auth.password",
+217:     );
+218:   }
+219:   const role = client.connect.role ?? "operator";
+220:   const scopes = client.connect.scopes ?? [];
+221:   if (NODE_ROLE_METHODS.has(method)) {
+222:     if (role === "node") {
+223:       return null;
+224:     }
+225:     return errorShape(ErrorCodes.INVALID_REQUEST, `unauthorized role: ${role}`);
+226:   }
+227:   if (role === "node") {
+228:     return errorShape(ErrorCodes.INVALID_REQUEST, `unauthorized role: ${role}`);
+229:   }
+230:   if (role !== "operator") {
+231:     return errorShape(ErrorCodes.INVALID_REQUEST, `unauthorized role: ${role}`);
+232:   }
+233:   if (scopes.includes(ADMIN_SCOPE)) {
+234:     // Admin scope bypasses all checks including agent assignment
+235:     return null;
+236:   }
+237:   if (APPROVAL_METHODS.has(method) && !scopes.includes(APPROVALS_SCOPE)) {
+238:     return errorShape(ErrorCodes.INVALID_REQUEST, "missing scope: operator.approvals");
+239:   }
+240:   if (PAIRING_METHODS.has(method) && !scopes.includes(PAIRING_SCOPE)) {
+241:     return errorShape(ErrorCodes.INVALID_REQUEST, "missing scope: operator.pairing");
+242:   }
+243:   if (READ_METHODS.has(method) && !(scopes.includes(READ_SCOPE) || scopes.includes(WRITE_SCOPE))) {
+244:     return errorShape(ErrorCodes.INVALID_REQUEST, "missing scope: operator.read");
+245:   }
+246:   if (WRITE_METHODS.has(method) && !scopes.includes(WRITE_SCOPE)) {
+247:     return errorShape(ErrorCodes.INVALID_REQUEST, "missing scope: operator.write");
+248:   }
+249: 
+250:   // Agent assignment check (MT-03): non-admin users with assignedAgentIds
+
+src/auto-reply/reply/get-reply.ts:64-84
+64:   const targetSessionKey =
+65:     ctx.CommandSource === "native" ? ctx.CommandTargetSessionKey?.trim() : undefined;
+66:   const agentSessionKey = targetSessionKey || ctx.SessionKey;
+67:   const agentId = resolveSessionAgentId({
+68:     sessionKey: agentSessionKey,
+69:     config: cfg,
+70:   });
+71:   const mergedSkillFilter = mergeSkillFilters(
+72:     opts?.skillFilter,
+73:     resolveAgentSkillsFilter(cfg, agentId),
+74:   );
+75:   const resolvedOpts =
+76:     mergedSkillFilter !== undefined ? { ...opts, skillFilter: mergedSkillFilter } : opts;
+77:   const agentCfg = cfg.agents?.defaults;
+78:   const sessionCfg = cfg.session;
+79:   const { defaultProvider, defaultModel, aliasIndex } = resolveDefaultModel({
+80:     cfg,
+81:     agentId,
+82:   });
+83:   let provider = defaultProvider;
+84:   let model = defaultModel;
+
+src/auto-reply/reply/get-reply.ts:248-295
+248:   // ── Smart routing: classify message and potentially override model ──────
+249:   const promptText =
+250:     sessionState.sessionCtx.CommandBody ??
+251:     sessionState.sessionCtx.RawBody ??
+252:     sessionState.sessionCtx.BodyStripped ??
+253:     "";
+254: 
+255:   // S.2: Check existing session pin before routing. If the session is pinned
+256:   // from a previous message, re-use that model without re-classifying.
+257:   const sessionFastMode = sessionEntry?.fastMode ?? false;
+258:   const routingEnabled = Boolean(agentCfg?.routing?.enabled);
+259:   const existingPin = routingEnabled && sessionKey ? getSessionPin(sessionKey) : undefined;
+260: 
+261:   // When fast mode is active, bias the routing profile toward cost-optimized.
+262:   const effectiveRouting =
+263:     sessionFastMode && agentCfg?.routing?.enabled
+264:       ? { ...agentCfg.routing, profile: "cost-optimized" as const }
+265:       : agentCfg?.routing;
+266: 
+267:   let smartRoute = existingPin
+268:     ? existingPin.routingResult
+269:     : routeMessage({
+270:         message: promptText,
+271:         routing: effectiveRouting,
+272:         orchestrator: agentCfg?.orchestrator,
+273:       });
+274: 
+275:   let smartRouted = false;
+276:   if (smartRoute?.provider && smartRoute?.model) {
+277:     provider = smartRoute.provider;
+278:     model = smartRoute.model;
+279:     smartRouted = true;
+280: 
+281:     // S.2: Pin the session after first routing decision so subsequent messages
+282:     // reuse the same model for the duration of the conversation.
+283:     if (routingEnabled && sessionKey && !existingPin) {
+284:       pinSession(sessionKey, smartRoute);
+285:     }
+286:   }
+287:   if (smartRoute?.contextTokensCap) {
+288:     contextTokens = Math.min(contextTokens, smartRoute.contextTokensCap);
+289:   }
+290:   // B.3: Override timeout when smart routing specifies a tier-specific timeout.
+291:   if (smartRoute?.timeoutMs) {
+292:     timeoutMs = smartRoute.timeoutMs;
+293:   }
+294:   const smartRouteDisableTools = smartRoute?.disableTools ?? false;
+295:   // ── End smart routing ───────────────────────────────────────────────────
+
+src/auto-reply/reply/get-reply-run.ts:200-215
+200:   const inboundMetaPrompt = buildInboundMetaSystemPrompt(
+201:     isNewSession ? sessionCtx : { ...sessionCtx, ThreadStarterBody: undefined },
+202:   );
+203:   const smartRoutingPrompt = smartRouted && smartRouteDisableTools ? FAST_CHAT_SYSTEM_PROMPT : "";
+204:   const memorySnapshot =
+205:     smartRouted && smartRouteDisableTools ? await readMemorySnapshot(workspaceDir) : undefined;
+206:   const extraSystemPrompt = [
+207:     inboundMetaPrompt,
+208:     groupChatContext,
+209:     groupIntro,
+210:     groupSystemPrompt,
+211:     memorySnapshot,
+212:     smartRoutingPrompt,
+213:   ]
+214:     .filter(Boolean)
+215:     .join("\n\n");
+
+src/auto-reply/reply/get-reply-run.ts:522-577
+522:   const followupRun = {
+523:     prompt: queuedBody,
+524:     messageId: sessionCtx.MessageSidFull ?? sessionCtx.MessageSid,
+525:     summaryLine: baseBodyTrimmedRaw,
+526:     enqueuedAt: Date.now(),
+527:     // Originating channel for reply routing.
+528:     originatingChannel: ctx.OriginatingChannel,
+529:     originatingTo: ctx.OriginatingTo,
+530:     originatingAccountId: ctx.AccountId,
+531:     originatingThreadId: ctx.MessageThreadId,
+532:     originatingChatType: ctx.ChatType,
+533:     run: {
+534:       agentId,
+535:       agentDir,
+536:       sessionId: sessionIdFinal,
+537:       sessionKey,
+538:       messageProvider: sessionCtx.Provider?.trim().toLowerCase() || undefined,
+539:       agentAccountId: sessionCtx.AccountId,
+540:       groupId: resolveGroupSessionKey(sessionCtx)?.id ?? undefined,
+541:       groupChannel: sessionCtx.GroupChannel?.trim() ?? sessionCtx.GroupSubject?.trim(),
+542:       groupSpace: sessionCtx.GroupSpace?.trim() ?? undefined,
+543:       senderId: sessionCtx.SenderId?.trim() || undefined,
+544:       resolvedHubUserId: sessionCtx.ResolvedHubUserId,
+545:       senderName: sessionCtx.SenderName?.trim() || undefined,
+546:       senderUsername: sessionCtx.SenderUsername?.trim() || undefined,
+547:       senderE164: sessionCtx.SenderE164?.trim() || undefined,
+548:       senderIsOwner: command.senderIsOwner,
+549:       senderPermissionLevel: command.permissionLevel,
+550:       sessionFile,
+551:       workspaceDir,
+552:       config: cfg,
+553:       skillsSnapshot,
+554:       provider,
+555:       model,
+556:       authProfileId,
+557:       authProfileIdSource,
+558:       thinkLevel: resolvedThinkLevel,
+559:       verboseLevel: resolvedVerboseLevel,
+560:       reasoningLevel: resolvedReasoningLevel,
+561:       elevatedLevel: resolvedElevatedLevel,
+562:       execOverrides,
+563:       bashElevated: {
+564:         enabled: elevatedEnabled,
+565:         allowed: elevatedAllowed,
+566:         defaultLevel: resolvedElevatedLevel ?? "off",
+567:       },
+568:       timeoutMs,
+569:       blockReplyBreak: resolvedBlockStreamingBreak,
+570:       ownerNumbers: command.ownerList.length > 0 ? command.ownerList : undefined,
+571:       extraSystemPrompt: extraSystemPrompt || undefined,
+572:       ...(isReasoningTagProvider(provider) ? { enforceFinalTag: true } : {}),
+573:       ...(sessionEntry?.fastMode && provider === "anthropic"
+574:         ? { streamParams: { anthropicFastMode: true } }
+575:         : {}),
+576:     },
+577:   };
+
+src/auto-reply/reply/agent-runner.ts:222-235
+222:   if (shouldSteer && isStreaming) {
+223:     const steered = queueEmbeddedPiMessage(followupRun.run.sessionId, followupRun.prompt);
+224:     if (steered && !shouldFollowup) {
+225:       await touchActiveSessionEntry();
+226:       typing.cleanup();
+227:       return undefined;
+228:     }
+229:   }
+230: 
+231:   if (isActive && (shouldFollowup || resolvedQueue.mode === "steer")) {
+232:     enqueueFollowupRun(queueKey, followupRun, resolvedQueue);
+233:     await touchActiveSessionEntry();
+234:     typing.cleanup();
+235:     return undefined;
+
+src/auto-reply/reply/agent-runner.ts:412-435
+412:     const usage = runResult.meta?.agentMeta?.usage;
+413:     const promptTokens = runResult.meta?.agentMeta?.promptTokens;
+414:     const modelUsed = runResult.meta?.agentMeta?.model ?? fallbackModel ?? defaultModel;
+415:     const providerUsed =
+416:       runResult.meta?.agentMeta?.provider ?? fallbackProvider ?? followupRun.run.provider;
+417:     const cliSessionId = isCliProvider(providerUsed, cfg)
+418:       ? runResult.meta?.agentMeta?.sessionId?.trim()
+419:       : undefined;
+420:     const contextTokensUsed =
+421:       agentCfgContextTokens ??
+422:       lookupContextTokens(modelUsed) ??
+423:       activeSessionEntry?.contextTokens ??
+424:       DEFAULT_CONTEXT_TOKENS;
+425: 
+426:     await persistRunSessionUsage({
+427:       storePath,
+428:       sessionKey,
+429:       usage,
+430:       lastCallUsage: runResult.meta?.agentMeta?.lastCallUsage,
+431:       promptTokens,
+432:       modelUsed,
+433:       providerUsed,
+434:       contextTokensUsed,
+435:       systemPromptReport: runResult.meta?.systemPromptReport,
+
+src/auto-reply/reply/agent-runner.ts:470-519
+470:     const successfulCronAdds = runResult.successfulCronAdds ?? 0;
+471:     const hasReminderCommitment = replyPayloads.some(
+472:       (payload) =>
+473:         !payload.isError &&
+474:         typeof payload.text === "string" &&
+475:         hasUnbackedReminderCommitment(payload.text),
+476:     );
+477:     const guardedReplyPayloads =
+478:       hasReminderCommitment && successfulCronAdds === 0
+479:         ? appendUnscheduledReminderNote(replyPayloads)
+480:         : replyPayloads;
+481: 
+482:     await signalTypingIfNeeded(guardedReplyPayloads, typingSignals);
+483: 
+484:     if (isDiagnosticsEnabled(cfg) && hasNonzeroUsage(usage)) {
+485:       const input = usage.input ?? 0;
+486:       const output = usage.output ?? 0;
+487:       const cacheRead = usage.cacheRead ?? 0;
+488:       const cacheWrite = usage.cacheWrite ?? 0;
+489:       const promptTokens = input + cacheRead + cacheWrite;
+490:       const totalTokens = usage.total ?? promptTokens + output;
+491:       const costConfig = resolveModelCostConfig({
+492:         provider: providerUsed,
+493:         model: modelUsed,
+494:         config: cfg,
+495:       });
+496:       const costUsd = estimateUsageCost({ usage, cost: costConfig });
+497:       emitDiagnosticEvent({
+498:         type: "model.usage",
+499:         sessionKey,
+500:         sessionId: followupRun.run.sessionId,
+501:         channel: replyToChannel,
+502:         provider: providerUsed,
+503:         model: modelUsed,
+504:         usage: {
+505:           input,
+506:           output,
+507:           cacheRead,
+508:           cacheWrite,
+509:           promptTokens,
+510:           total: totalTokens,
+511:         },
+512:         lastCallUsage: runResult.meta?.agentMeta?.lastCallUsage,
+513:         context: {
+514:           limit: contextTokensUsed,
+515:           used: totalTokens,
+516:         },
+517:         costUsd,
+518:         durationMs: Date.now() - runStartedAt,
+519:       });
+
+src/auto-reply/reply/agent-runner-utils.ts:157-188
+157: export function buildEmbeddedRunBaseParams(params: {
+158:   run: FollowupRun["run"];
+159:   provider: string;
+160:   model: string;
+161:   runId: string;
+162:   authProfile: ReturnType<typeof resolveProviderScopedAuthProfile>;
+163: }) {
+164:   return {
+165:     sessionFile: params.run.sessionFile,
+166:     workspaceDir: params.run.workspaceDir,
+167:     agentDir: params.run.agentDir,
+168:     config: params.run.config,
+169:     skillsSnapshot: params.run.skillsSnapshot,
+170:     ownerNumbers: params.run.ownerNumbers,
+171:     enforceFinalTag: resolveEnforceFinalTag(params.run, params.provider),
+172:     provider: params.provider,
+173:     model: params.model,
+174:     ...params.authProfile,
+175:     thinkLevel: params.run.thinkLevel,
+176:     verboseLevel: params.run.verboseLevel,
+177:     reasoningLevel: params.run.reasoningLevel,
+178:     execOverrides: params.run.execOverrides,
+179:     bashElevated: params.run.bashElevated,
+180:     timeoutMs: params.run.timeoutMs,
+181:     runId: params.runId,
+182:     streamParams: params.run.streamParams,
+183:   };
+184: }
+185: 
+186: export function buildEmbeddedContextFromTemplate(params: {
+187:   run: FollowupRun["run"];
+188:   sessionCtx: TemplateContext;
+
+src/auto-reply/reply/agent-runner-utils.ts:207-226
+207: 
+208: export function buildTemplateSenderContext(sessionCtx: TemplateContext) {
+209:   return {
+210:     senderId: sessionCtx.SenderId?.trim() || undefined,
+211:     resolvedHubUserId: sessionCtx.ResolvedHubUserId,
+212:     senderName: sessionCtx.SenderName?.trim() || undefined,
+213:     senderUsername: sessionCtx.SenderUsername?.trim() || undefined,
+214:     senderE164: sessionCtx.SenderE164?.trim() || undefined,
+215:   };
+216: }
+217: 
+218: export function resolveRunAuthProfile(run: FollowupRun["run"], provider: string) {
+219:   return resolveProviderScopedAuthProfile({
+220:     provider,
+221:     primaryProvider: run.provider,
+222:     authProfileId: run.authProfileId,
+223:     authProfileIdSource: run.authProfileIdSource,
+224:   });
+225: }
+226: 
+
+src/auto-reply/reply/agent-runner-execution.ts:90-96
+90:   // Track payloads sent directly (not via pipeline) during tool flush to avoid duplicates.
+91:   const directlySentBlockKeys = new Set<string>();
+92: 
+93:   const runId = params.opts?.runId ?? crypto.randomUUID();
+94:   params.opts?.onAgentRunStart?.(runId);
+95:   if (params.sessionKey) {
+96:     registerAgentRunContext(runId, {
+
+src/auto-reply/reply/agent-runner-execution.ts:258-294
+258:           const { authProfile, embeddedContext, senderContext } = buildEmbeddedRunContexts({
+259:             run: params.followupRun.run,
+260:             sessionCtx: params.sessionCtx,
+261:             hasRepliedRef: params.opts?.hasRepliedRef,
+262:             provider,
+263:           });
+264:           const runBaseParams = buildEmbeddedRunBaseParams({
+265:             run: params.followupRun.run,
+266:             provider,
+267:             model,
+268:             runId,
+269:             authProfile,
+270:           });
+271:           return withModelSpan({ provider, model, operation: "embedded" }, () =>
+272:             runEmbeddedPiAgent({
+273:               ...embeddedContext,
+274:               groupId: resolveGroupSessionKey(params.sessionCtx)?.id,
+275:               groupChannel:
+276:                 params.sessionCtx.GroupChannel?.trim() ?? params.sessionCtx.GroupSubject?.trim(),
+277:               groupSpace: params.sessionCtx.GroupSpace?.trim() ?? undefined,
+278:               ...senderContext,
+279:               ...runBaseParams,
+280:               prompt: params.commandBody,
+281:               extraSystemPrompt: params.followupRun.run.extraSystemPrompt,
+282:               toolResultFormat: (() => {
+283:                 const channel = resolveMessageChannel(
+284:                   params.sessionCtx.Surface,
+285:                   params.sessionCtx.Provider,
+286:                 );
+287:                 if (!channel) {
+288:                   return "markdown";
+289:                 }
+290:                 return isMarkdownCapableMessageChannel(channel) ? "markdown" : "plain";
+291:               })(),
+292:               suppressToolErrorWarnings: params.opts?.suppressToolErrorWarnings,
+293:               images: params.opts?.images,
+294:               abortSignal: params.opts?.abortSignal,
+
+src/auto-reply/reply/followup-runner.ts:115-185
+115:   return async (queued: FollowupRun) => {
+116:     try {
+117:       const runId = crypto.randomUUID();
+118:       if (queued.run.sessionKey) {
+119:         registerAgentRunContext(runId, {
+120:           sessionKey: queued.run.sessionKey,
+121:           verboseLevel: queued.run.verboseLevel,
+122:         });
+123:       }
+124:       let autoCompactionCompleted = false;
+125:       let runResult: Awaited<ReturnType<typeof runEmbeddedPiAgent>>;
+126:       let fallbackProvider = queued.run.provider;
+127:       let fallbackModel = queued.run.model;
+128:       try {
+129:         const fallbackResult = await runWithModelFallback({
+130:           cfg: queued.run.config,
+131:           provider: queued.run.provider,
+132:           model: queued.run.model,
+133:           agentDir: queued.run.agentDir,
+134:           hasTools: true, // Minion agents always have tools
+135:           fallbacksOverride: resolveAgentModelFallbacksOverride(
+136:             queued.run.config,
+137:             resolveAgentIdFromSessionKey(queued.run.sessionKey),
+138:           ),
+139:           run: (provider, model) => {
+140:             const authProfile = resolveRunAuthProfile(queued.run, provider);
+141:             return runEmbeddedPiAgent({
+142:               sessionId: queued.run.sessionId,
+143:               sessionKey: queued.run.sessionKey,
+144:               agentId: queued.run.agentId,
+145:               messageProvider: queued.run.messageProvider,
+146:               agentAccountId: queued.run.agentAccountId,
+147:               messageTo: queued.originatingTo,
+148:               messageThreadId: queued.originatingThreadId,
+149:               groupId: queued.run.groupId,
+150:               groupChannel: queued.run.groupChannel,
+151:               groupSpace: queued.run.groupSpace,
+152:               senderId: queued.run.senderId,
+153:               senderName: queued.run.senderName,
+154:               senderUsername: queued.run.senderUsername,
+155:               senderE164: queued.run.senderE164,
+156:               sessionFile: queued.run.sessionFile,
+157:               workspaceDir: queued.run.workspaceDir,
+158:               config: queued.run.config,
+159:               skillsSnapshot: queued.run.skillsSnapshot,
+160:               prompt: queued.prompt,
+161:               extraSystemPrompt: queued.run.extraSystemPrompt,
+162:               ownerNumbers: queued.run.ownerNumbers,
+163:               enforceFinalTag: queued.run.enforceFinalTag,
+164:               provider,
+165:               model,
+166:               ...authProfile,
+167:               thinkLevel: queued.run.thinkLevel,
+168:               verboseLevel: queued.run.verboseLevel,
+169:               reasoningLevel: queued.run.reasoningLevel,
+170:               suppressToolErrorWarnings: opts?.suppressToolErrorWarnings,
+171:               execOverrides: queued.run.execOverrides,
+172:               bashElevated: queued.run.bashElevated,
+173:               timeoutMs: queued.run.timeoutMs,
+174:               runId,
+175:               blockReplyBreak: queued.run.blockReplyBreak,
+176:               onAgentEvent: (evt) => {
+177:                 if (evt.stream !== "compaction") {
+178:                   return;
+179:                 }
+180:                 const phase = typeof evt.data.phase === "string" ? evt.data.phase : "";
+181:                 if (phase === "end") {
+182:                   autoCompactionCompleted = true;
+183:                 }
+184:               },
+185:             });
+
+src/auto-reply/reply/queue/types.ts:22-84
+22: export type FollowupRun = {
+23:   prompt: string;
+24:   /** Provider message ID, when available (for deduplication). */
+25:   messageId?: string;
+26:   summaryLine?: string;
+27:   enqueuedAt: number;
+28:   /**
+29:    * Originating channel for reply routing.
+30:    * When set, replies should be routed back to this provider
+31:    * instead of using the session's lastChannel.
+32:    */
+33:   originatingChannel?: OriginatingChannelType;
+34:   /**
+35:    * Originating destination for reply routing.
+36:    * The chat/channel/user ID where the reply should be sent.
+37:    */
+38:   originatingTo?: string;
+39:   /** Provider account id (multi-account). */
+40:   originatingAccountId?: string;
+41:   /** Thread id for reply routing (Telegram topic id or Matrix thread event id). */
+42:   originatingThreadId?: string | number;
+43:   /** Chat type for context-aware threading (e.g., DM vs channel). */
+44:   originatingChatType?: string;
+45:   run: {
+46:     agentId: string;
+47:     agentDir: string;
+48:     sessionId: string;
+49:     sessionKey?: string;
+50:     messageProvider?: string;
+51:     agentAccountId?: string;
+52:     groupId?: string;
+53:     groupChannel?: string;
+54:     groupSpace?: string;
+55:     senderId?: string;
+56:     senderName?: string;
+57:     senderUsername?: string;
+58:     senderE164?: string;
+59:     sessionFile: string;
+60:     workspaceDir: string;
+61:     config: MinionConfig;
+62:     skillsSnapshot?: SkillSnapshot;
+63:     provider: string;
+64:     model: string;
+65:     authProfileId?: string;
+66:     authProfileIdSource?: "auto" | "user";
+67:     thinkLevel?: ThinkLevel;
+68:     verboseLevel?: VerboseLevel;
+69:     reasoningLevel?: ReasoningLevel;
+70:     elevatedLevel?: ElevatedLevel;
+71:     execOverrides?: Pick<ExecToolDefaults, "host" | "security" | "ask" | "node">;
+72:     bashElevated?: {
+73:       enabled: boolean;
+74:       allowed: boolean;
+75:       defaultLevel: ElevatedLevel;
+76:     };
+77:     timeoutMs: number;
+78:     blockReplyBreak: "text_end" | "message_end";
+79:     ownerNumbers?: string[];
+80:     extraSystemPrompt?: string;
+81:     enforceFinalTag?: boolean;
+82:     streamParams?: AgentStreamParams;
+83:   };
+84: };
+
+src/auto-reply/reply/queue/state.ts:16-26
+16: 
+17: export const DEFAULT_QUEUE_DEBOUNCE_MS = 1000;
+18: export const DEFAULT_QUEUE_CAP = 20;
+19: export const DEFAULT_QUEUE_DROP: QueueDropPolicy = "summarize";
+20: 
+21: export const FOLLOWUP_QUEUES = new Map<string, FollowupQueueState>();
+22: 
+23: export function getFollowupQueue(key: string, settings: QueueSettings): FollowupQueueState {
+24:   const existing = FOLLOWUP_QUEUES.get(key);
+25:   if (existing) {
+26:     applyQueueRuntimeSettings({
+
+src/auto-reply/reply/smart-routing.ts:553-580
+553:   // FF.2: ECO tier — ultra-short messages route to the cheapest configured model.
+554:   if (routing.ecoModel) {
+555:     const ecoRef = parseModelRef(routing.ecoModel);
+556:     if (ecoRef) {
+557:       const words = params.message.trim().split(/\s+/).filter(Boolean).length;
+558:       if (words < 20 && params.message.trim().length < 80) {
+559:         return {
+560:           complexity: "simple",
+561:           provider: ecoRef.provider,
+562:           model: ecoRef.model,
+563:           disableTools: true,
+564:           contextTokensCap: routing.fastModelContextTokens ?? DEFAULT_FAST_CONTEXT_TOKENS,
+565:           timeoutMs: LOCAL_TIER_TIMEOUT_MS,
+566:         };
+567:       }
+568:     }
+569:   }
+570: 
+571:   // "always" strategy: skip tier classification, route everything to orchestrator.
+572:   // (local-only profile disables orchestrator always-route to keep traffic local)
+573:   if (routing.profile !== "local-only") {
+574:     const alwaysRoute = routeAlwaysOrchestrator(params.orchestrator);
+575:     if (alwaysRoute) {
+576:       return alwaysRoute;
+577:     }
+578:   }
+579: 
+580:   const rawComplexity = classifyMessage(message, {
+
+src/auto-reply/reply/smart-routing.ts:714-725
+714:  * In-memory session pin map — bounded with TTL eviction.
+715:  *
+716:  * When a session's first message is routed to a specific model, subsequent
+717:  * messages reuse that model without re-classifying — preventing jarring
+718:  * mid-conversation model switches.
+719:  *
+720:  * Pins are scoped by session key and auto-expire after SESSION_PIN_TTL_MS.
+721:  * Map is capped at SESSION_PIN_MAX_ENTRIES to prevent unbounded growth in
+722:  * long-lived processes.
+723:  */
+724: const SESSION_PIN_TTL_MS = 4 * 60 * 60 * 1000; // 4 hours
+725: const SESSION_PIN_MAX_ENTRIES = 10_000;
+
+src/auto-reply/reply/smart-routing.ts:750-780
+750: export function pinSession(sessionKey: string, result: SmartRoutingResult): void {
+751:   if (!result.provider || !result.model) {
+752:     return;
+753:   }
+754:   // Periodic eviction: run every 100 writes to amortize cost
+755:   if (sessionPins.size > 0 && sessionPins.size % 100 === 0) {
+756:     evictStalePins();
+757:   }
+758:   sessionPins.set(sessionKey, {
+759:     provider: result.provider,
+760:     model: result.model,
+761:     complexity: result.complexity,
+762:     pinnedAt: Date.now(),
+763:     routingResult: result,
+764:   });
+765: }
+766: 
+767: /**
+768:  * Get the current pin for a session, or undefined if not pinned / expired.
+769:  */
+770: export function getSessionPin(sessionKey: string): SessionPin | undefined {
+771:   const pin = sessionPins.get(sessionKey);
+772:   if (!pin) {
+773:     return undefined;
+774:   }
+775:   // Lazy TTL check on read
+776:   if (Date.now() - pin.pinnedAt > SESSION_PIN_TTL_MS) {
+777:     sessionPins.delete(sessionKey);
+778:     return undefined;
+779:   }
+780:   return pin;
+
+src/auto-reply/reply/smart-routing.ts:805-815
+805: // ── System Prompt ────────────────────────────────────────────────────────────
+806: 
+807: /** System prompt suffix injected when routing to fast model (tools disabled). */
+808: export const FAST_CHAT_SYSTEM_PROMPT = `IMPORTANT: You are in fast chat mode. Respond conversationally in plain text only.
+809: Do NOT output any JSON, tool calls, function calls, or code blocks.
+810: Do NOT attempt to use memory_get, read, email, or any other tool.
+811: Just reply naturally as a helpful assistant.`;
+812: 
+813: // ── Memory Snapshot ──────────────────────────────────────────────────────────
+814: 
+815: import { readFile } from "node:fs/promises";
+
+src/agents/pi-embedded-runner/run.ts:158-178
+158:       // ── In-flight turn recovery ──────────────────────────────────────────
+159:       // Record this turn so that if the process exits mid-response (SIGTERM,
+160:       // crash, OOM) the next gateway instance can replay it. Probe sessions
+161:       // are health checks — skip them. Row is deleted in finally on success;
+162:       // on throw or crash the row is left for recovery.
+163:       // See specs/2026-05-22-gateway-turn-recovery.md.
+164:       const inFlightTurnRowId = isProbeSession
+165:         ? null
+166:         : recordStart({
+167:             channel: params.messageChannel ?? params.messageProvider ?? "unknown",
+168:             accountId: params.agentAccountId ?? "default",
+169:             chatId:
+170:               params.currentChannelId ??
+171:               (typeof params.messageTo === "string" ? params.messageTo : null) ??
+172:               params.sessionKey ??
+173:               params.sessionId,
+174:             agentId: params.agentId ?? "unknown",
+175:             sessionId: params.sessionId,
+176:             sessionKey: params.sessionKey,
+177:             userContent: params.prompt,
+178:             language: undefined,
+
+src/agents/pi-embedded-runner/run.ts:216-297
+216:       // Run before_model_resolve hooks early so plugins can override the
+217:       // provider/model before resolveModel().
+218:       //
+219:       // Legacy compatibility: before_agent_start is also checked for override
+220:       // fields if present. New hook takes precedence when both are set.
+221:       let modelResolveOverride: { providerOverride?: string; modelOverride?: string } | undefined;
+222:       const hookRunner = getGlobalHookRunner();
+223:       const hookCtx = {
+224:         agentId: workspaceResolution.agentId,
+225:         sessionKey: params.sessionKey,
+226:         sessionId: params.sessionId,
+227:         workspaceDir: resolvedWorkspace,
+228:         messageProvider: params.messageProvider ?? undefined,
+229:       };
+230:       if (hookRunner?.hasHooks("before_model_resolve")) {
+231:         try {
+232:           modelResolveOverride = await hookRunner.runBeforeModelResolve(
+233:             { prompt: params.prompt },
+234:             hookCtx,
+235:           );
+236:         } catch (hookErr) {
+237:           log.warn(`before_model_resolve hook failed: ${String(hookErr)}`);
+238:         }
+239:       }
+240:       if (hookRunner?.hasHooks("before_agent_start")) {
+241:         try {
+242:           const legacyResult = await hookRunner.runBeforeAgentStart(
+243:             { prompt: params.prompt },
+244:             hookCtx,
+245:           );
+246:           modelResolveOverride = {
+247:             providerOverride:
+248:               modelResolveOverride?.providerOverride ?? legacyResult?.providerOverride,
+249:             modelOverride: modelResolveOverride?.modelOverride ?? legacyResult?.modelOverride,
+250:           };
+251:         } catch (hookErr) {
+252:           log.warn(
+253:             `before_agent_start hook (legacy model resolve path) failed: ${String(hookErr)}`,
+254:           );
+255:         }
+256:       }
+257:       if (modelResolveOverride?.providerOverride) {
+258:         provider = modelResolveOverride.providerOverride;
+259:         log.info(`[hooks] provider overridden to ${provider}`);
+260:       }
+261:       if (modelResolveOverride?.modelOverride) {
+262:         modelId = modelResolveOverride.modelOverride;
+263:         log.info(`[hooks] model overridden to ${modelId}`);
+264:       }
+265: 
+266:       // Privacy mode: force routing to local provider when MINION_PRIVACY_MODE=true.
+267:       const privacyOverride = resolvePrivacyModeOverride(provider, modelId);
+268:       if (privacyOverride) {
+269:         provider = privacyOverride.provider;
+270:         modelId = privacyOverride.modelId;
+271:       }
+272: 
+273:       // Tool-model pin: external messaging turns (whatsapp/telegram/discord/…)
+274:       // must run on a tool-native model. If a sticky /model override or per-agent
+275:       // config downgraded this turn to a weak model, upgrade to the configured
+276:       // capable default (fleet recon H1). Dev/CLI turns are untouched; disable
+277:       // via MINION_DISABLE_TOOL_MODEL_PIN=1.
+278:       const pinChannel = params.messageChannel ?? params.messageProvider;
+279:       if (shouldPinToolModel(pinChannel) && !isToolCapableModel(modelId)) {
+280:         const configuredModel = params.config?.agents?.defaults?.model;
+281:         const configuredPrimary =
+282:           typeof configuredModel === "string" ? configuredModel : configuredModel?.primary;
+283:         const capable = parseModelRef(
+284:           (configuredPrimary ?? `${DEFAULT_PROVIDER}/${DEFAULT_MODEL}`).trim(),
+285:           DEFAULT_PROVIDER,
+286:         );
+287:         if (
+288:           capable &&
+289:           isToolCapableModel(capable.model) &&
+290:           capable.model.toLowerCase() !== modelId.toLowerCase()
+291:         ) {
+292:           log.info(
+293:             `[tool-model-pin] upgraded ${provider}/${modelId} -> ${capable.provider}/${capable.model} for channel=${(pinChannel ?? "").toLowerCase()}`,
+294:           );
+295:           provider = capable.provider;
+296:           modelId = capable.model;
+297:         }
+
+src/agents/pi-embedded-runner/run.ts:625-668
+625: 
+626:           const attempt = await runEmbeddedAttempt({
+627:             toolProgressState,
+628:             sessionId: params.sessionId,
+629:             sessionKey: params.sessionKey,
+630:             messageChannel: params.messageChannel,
+631:             messageProvider: params.messageProvider,
+632:             agentAccountId: params.agentAccountId,
+633:             messageTo: params.messageTo,
+634:             messageThreadId: params.messageThreadId,
+635:             groupId: params.groupId,
+636:             groupChannel: params.groupChannel,
+637:             groupSpace: params.groupSpace,
+638:             spawnedBy: params.spawnedBy,
+639:             senderIsOwner: params.senderIsOwner,
+640:             currentChannelId: params.currentChannelId,
+641:             currentThreadTs: params.currentThreadTs,
+642:             replyToMode: params.replyToMode,
+643:             hasRepliedRef: params.hasRepliedRef,
+644:             sessionFile: params.sessionFile,
+645:             workspaceDir: resolvedWorkspace,
+646:             workspaceOverlayDir: params.workspaceOverlayDir,
+647:             agentDir,
+648:             config: params.config,
+649:             skillsSnapshot: params.skillsSnapshot,
+650:             prompt,
+651:             images: params.images,
+652:             disableTools: params.disableTools,
+653:             provider,
+654:             modelId,
+655:             model,
+656:             modelRuntime,
+657:             agentId: workspaceResolution.agentId,
+658:             thinkLevel,
+659:             verboseLevel: params.verboseLevel,
+660:             reasoningLevel: params.reasoningLevel,
+661:             toolResultFormat: resolvedToolResultFormat,
+662:             execOverrides: params.execOverrides,
+663:             bashElevated: params.bashElevated,
+664:             timeoutMs: params.timeoutMs,
+665:             runId: params.runId,
+666:             abortSignal: params.abortSignal,
+667:             shouldEmitToolResult: params.shouldEmitToolResult,
+668:             shouldEmitToolOutput: params.shouldEmitToolOutput,
+
+src/agents/pi-embedded-runner/run.ts:1174-1187
+1174:           const lastCallUsage = normalizeUsage(lastAssistant?.usage as UsageLike);
+1175:           const promptTokens = derivePromptTokens(lastRunPromptUsage);
+1176:           const agentMeta: EmbeddedPiAgentMeta = {
+1177:             sessionId: sessionIdUsed,
+1178:             provider: lastAssistant?.provider ?? provider,
+1179:             model: lastAssistant?.model ?? model.id,
+1180:             usage,
+1181:             lastCallUsage: lastCallUsage ?? undefined,
+1182:             promptTokens,
+1183:             compactionCount: autoCompactionCount > 0 ? autoCompactionCount : undefined,
+1184:           };
+1185: 
+1186:           const payloads = buildEmbeddedRunPayloads({
+1187:             assistantTexts: attempt.assistantTexts,
+
+src/agents/pi-embedded-runner/run.ts:1298-1318
+1298:           markCompleted(inFlightTurnRowId);
+1299:         }
+1300:         emitEvent({
+1301:           category: "agent",
+1302:           severity: "info",
+1303:           event: "agent.run.end",
+1304:           message: `Agent run ended: ${workspaceResolution.agentId} (${Date.now() - started}ms)`,
+1305:           agentId: workspaceResolution.agentId,
+1306:           correlationId: params.sessionKey,
+1307:           metadata: {
+1308:             runId: params.runId,
+1309:             sessionId: params.sessionId,
+1310:             durationMs: Date.now() - started,
+1311:             usage: usageAccumulator,
+1312:             compactionCount: autoCompactionCount,
+1313:           },
+1314:           timestamp: Date.now(),
+1315:         });
+1316: 
+1317:         // Fire-and-forget: autoDream consolidation check at run end.
+1318:         // Evaluates time+session+lock gates — only consolidates when all pass.
+
+src/agents/pi-embedded-runner/run/attempt-env.ts:114-155
+114:   const toolsRaw = params.disableTools
+115:     ? []
+116:     : await createOpenClawCodingTools({
+117:         exec: {
+118:           ...params.execOverrides,
+119:           elevated: params.bashElevated,
+120:         },
+121:         sandbox,
+122:         messageProvider: params.messageChannel ?? params.messageProvider,
+123:         agentAccountId: params.agentAccountId,
+124:         messageTo: params.messageTo,
+125:         messageThreadId: params.messageThreadId,
+126:         groupId: params.groupId,
+127:         groupChannel: params.groupChannel,
+128:         groupSpace: params.groupSpace,
+129:         spawnedBy: params.spawnedBy,
+130:         senderId: params.senderId,
+131:         senderName: params.senderName,
+132:         senderUsername: params.senderUsername,
+133:         resolvedHubUserId: params.resolvedHubUserId,
+134:         senderE164: params.senderE164,
+135:         senderIsOwner: params.senderIsOwner,
+136:         sessionKey: params.sessionKey ?? params.sessionId,
+137:         agentDir,
+138:         workspaceDir: effectiveWorkspace,
+139:         config: params.config,
+140:         abortSignal,
+141:         modelProvider: params.model.provider,
+142:         modelId: params.modelId,
+143:         modelContextWindowTokens: params.model.contextWindow,
+144:         modelAuthMode: resolveModelAuthMode(params.model.provider, params.config),
+145:         currentChannelId: params.currentChannelId,
+146:         currentThreadTs: params.currentThreadTs,
+147:         replyToMode: params.replyToMode,
+148:         hasRepliedRef: params.hasRepliedRef,
+149:         modelHasVision,
+150:         requireExplicitMessageTarget:
+151:           params.requireExplicitMessageTarget ?? isSubagentSessionKey(params.sessionKey),
+152:         disableMessageTool: params.disableMessageTool,
+153:         skillEnvOverrides,
+154:       });
+155:   // JIT tool gate: L1 RBAC permission filter (always) + L2 relevance shortlist
+
+src/agents/pi-embedded-runner/run/attempt-session.ts:120-123
+120:     const { customTools } = splitSdkTools({
+121:       tools: env.availableTools ?? tools,
+122:       sandboxEnabled: !!env.sandbox?.enabled,
+123:     });
+
+src/agents/pi-embedded-runner/run/attempt-session.ts:194-212
+194:     // Keep the complete permitted registry for same-run discovery, but expose only
+195:     // the selected loadout. SDK 1.1 refreshes it between model responses.
+196:     const initialToolNames = [
+197:       ...tools.map((tool) => tool.name),
+198:       ...clientToolDefs.map((tool) => tool.name),
+199:     ];
+200:     if (codemode.enabled) {
+201:       initialToolNames.push(
+202:         ...activeSession
+203:           .getActiveToolNames()
+204:           .filter(
+205:             (name) => name === "codemode" || name === "tool_search" || name.startsWith("mcp__"),
+206:           ),
+207:       );
+208:     }
+209:     activeSession.setActiveToolsByName([...new Set(initialToolNames)]);
+210:     bindToolDiscoveryActivation(env.availableTools ?? tools, activeSession);
+211: 
+212:     // Build the context guard transform and apply it to the agent.
+
+src/agents/pi-embedded-runner/run/attempt.ts:129-166
+129:         const prior = await sanitizeSessionHistory({
+130:           messages: activeSession.messages,
+131:           modelApi: params.model.api,
+132:           modelId: params.modelId,
+133:           provider: params.provider,
+134:           config: params.config,
+135:           sessionManager,
+136:           sessionId: params.sessionId,
+137:           policy: transcriptPolicy,
+138:         });
+139:         cacheTrace?.recordStage("session:sanitized", { messages: prior });
+140:         const validatedGemini = transcriptPolicy.validateGeminiTurns
+141:           ? validateGeminiTurns(prior)
+142:           : prior;
+143:         const validated = transcriptPolicy.validateAnthropicTurns
+144:           ? validateAnthropicTurns(validatedGemini)
+145:           : validatedGemini;
+146:         const truncated = limitHistoryTurns(
+147:           validated,
+148:           getDmHistoryLimitFromSessionKey(params.sessionKey, params.config),
+149:         );
+150:         // Re-run tool_use/tool_result pairing repair after truncation, since
+151:         // limitHistoryTurns can orphan tool_result blocks by removing the
+152:         // assistant message that contained the matching tool_use.
+153:         const limited = transcriptPolicy.repairToolUseResultPairing
+154:           ? sanitizeToolUseResultPairing(truncated)
+155:           : truncated;
+156:         cacheTrace?.recordStage("session:limited", { messages: limited });
+157:         if (limited.length > 0) {
+158:           // pi 0.87 made SessionManager canonical for AgentSession provider context:
+159:           // this assignment still shapes the next provider request, but any in-run
+160:           // refresh (auto-compaction, tree navigation) replaces it with the session
+161:           // projection again.
+162:           // TODO(handoff): move transcript sanitization onto the canonical path —
+163:           // `sessionManager` + `session.refreshContext()`, or `agent.transformContext`
+164:           // so it re-applies per request. See
+165:           // proposals/2026-10-12-gateway-pi-1.1-upgrade-and-jev-turn-router.md.
+166:           activeSession.agent.state.messages = limited;
+
+src/agents/pi-embedded-runner/run/attempt.ts:551-597
+551:                 `provider=${params.provider}/${params.modelId} sessionFile=${params.sessionFile}`,
+552:             );
+553:           }
+554: 
+555:           if (hookRunner?.hasHooks("llm_input")) {
+556:             hookRunner
+557:               .runLlmInput(
+558:                 {
+559:                   runId: params.runId,
+560:                   sessionId: params.sessionId,
+561:                   provider: params.provider,
+562:                   model: params.modelId,
+563:                   systemPrompt: env.systemPromptText,
+564:                   prompt: effectivePrompt,
+565:                   historyMessages: activeSession.messages,
+566:                   imagesCount: imageResult.images.length,
+567:                 },
+568:                 {
+569:                   agentId: hookAgentId,
+570:                   sessionKey: params.sessionKey,
+571:                   sessionId: params.sessionId,
+572:                   workspaceDir: params.workspaceDir,
+573:                   messageProvider: params.messageProvider ?? undefined,
+574:                 },
+575:               )
+576:               .catch((err) => {
+577:                 log.warn(`llm_input hook failed: ${String(err)}`);
+578:               });
+579:           }
+580: 
+581:           // Only pass images option if there are actually images to pass
+582:           const promptOpts: {
+583:             images?: typeof imageResult.images;
+584:             streamingBehavior?: "steer" | "followUp";
+585:           } = {};
+586:           if (imageResult.images.length > 0) {
+587:             promptOpts.images = imageResult.images;
+588:           }
+589:           if (params.streamingBehavior) {
+590:             promptOpts.streamingBehavior = params.streamingBehavior;
+591:           }
+592:           if (Object.keys(promptOpts).length > 0) {
+593:             await abortable(activeSession.prompt(effectivePrompt, promptOpts));
+594:           } else {
+595:             await abortable(activeSession.prompt(effectivePrompt));
+596:           }
+597:         } catch (err) {
+
+src/agents/tool-search/apply-selection.ts:89-97
+89: export async function applyJitToolGate(params: {
+90:   tools: AnyAgentTool[];
+91:   prompt: string;
+92:   agentId: string;
+93:   sessionKey?: string;
+94:   config?: MinionConfig;
+95: }): Promise<GatedTools> {
+96:   const { tools, prompt, agentId, sessionKey, config } = params;
+97: 
+
+src/agents/tool-search/apply-selection.ts:124-163
+124:   const index = await createToolIndex({
+125:     catalog,
+126:     config,
+127:     agentId,
+128:     embeddings: selection.mode !== "off",
+129:   });
+130:   const scored = selection.mode === "off" ? [] : await index.rank(prompt);
+131:   const sessionLoaded = [...getLoadedTools(sessionKey)];
+132:   const { activeIds } = selectTools({
+133:     candidates: scored.filter((candidate) =>
+134:       l1Tools.some((tool) => tool.name === candidate.id && isJitManaged(tool)),
+135:     ),
+136:     k: selection.k,
+137:     alwaysOn: selection.alwaysOn,
+138:     sessionLoaded,
+139:     order: TOOL_ORDER,
+140:   });
+141:   const activeSet = new Set(activeIds);
+142: 
+143:   // ponytail: hit/miss of actually-called tools needs post-turn feedback wiring;
+144:   // left as a TODO seam. We log the selection so shadow-mode data is captured.
+145:   log.info(
+146:     `[jit-select] ${JSON.stringify({
+147:       mode: selection.mode,
+148:       agentId,
+149:       catalogSize: catalog.length,
+150:       allowedSize: l1Tools.length,
+151:       k: selection.k,
+152:       activeCount: activeSet.size,
+153:       sessionLoaded: sessionLoaded.length,
+154:       activeIds: [...activeSet],
+155:     })}`,
+156:   );
+157: 
+158:   const activeTools =
+159:     selection.mode === "on"
+160:       ? l1Tools.filter((t) => !isJitManaged(t) || activeSet.has(t.name))
+161:       : l1Tools;
+162:   configureToolDiscovery(l1Tools, index, new Set(activeTools.map((tool) => tool.name)));
+163:   return { tools: activeTools, availableTools: l1Tools };
+
+src/agents/minion-tools.ts:225-242
+225:         userId: opts?.resolvedHubUserId,
+226:         channel: opts?.agentChannel,
+227:         senderId: opts?.agentTo,
+228:       };
+229:     case "gws_auth_status":
+230:       return {
+231:         agentId: ctx.agentId,
+232:         sessionKey: opts?.agentSessionKey,
+233:         userId: opts?.resolvedHubUserId,
+234:       };
+235:     case "gws_auth_revoke":
+236:       return { agentId: ctx.agentId, sessionKey: opts?.agentSessionKey };
+237:     case "gws_exec":
+238:       return {
+239:         agentId: ctx.agentId,
+240:         sessionKey: opts?.agentSessionKey,
+241:         userId: opts?.resolvedHubUserId,
+242:         channel: opts?.agentChannel,
+
+src/agents/minion-tools.ts:409-432
+409:   const pluginTools = resolvePluginTools({
+410:     context: {
+411:       config: options?.config,
+412:       workspaceDir,
+413:       agentDir: options?.agentDir,
+414:       agentId,
+415:       sessionKey: options?.agentSessionKey,
+416:       messageChannel: options?.agentChannel,
+417:       agentAccountId: options?.agentAccountId,
+418:       sandboxed: options?.sandboxed,
+419:       resolvedHubUserId: options?.resolvedHubUserId,
+420:       senderId: options?.agentTo,
+421:     },
+422:     existingToolNames: new Set(tools.map((tool) => tool.name)),
+423:     toolAllowlist: options?.pluginToolAllowlist,
+424:   });
+425: 
+426:   // Custom tools (hub-linked personal agents only; no-op otherwise). Appended
+427:   // here so they flow through the downstream policy pipeline + JIT gate.
+428:   const customTools = await loadCustomTools({
+429:     agentId,
+430:     userId: options?.resolvedHubUserId,
+431:     gatewayUrl: process.env.MINION_GATEWAY_URL,
+432:   });
+
+src/agents/tool-search/custom-tools.ts:240-255
+240:           }
+241:           const input = readStringParam(args as Record<string, unknown>, "input");
+242:           const env: Record<string, string> = {
+243:             ...rec.envVars,
+244:             MINION_AGENT_ID: agentId,
+245:             MINION_TOOL_ID: rec.id,
+246:             MINION_TOOL_NAME: rec.name,
+247:           };
+248:           if (params.userId) {
+249:             env.MINION_USER_ID = params.userId;
+250:           }
+251:           if (params.orgId) {
+252:             env.MINION_ORG_ID = params.orgId;
+253:           }
+254:           if (hubUrl) {
+255:             env.MINION_HUB_URL = hubUrl;
+
+extensions/gmail-calendar/src/gws-runner.ts:178-207
+178: ): Promise<GwsResult> {
+179:   const { agentId, sessionKey, userId, channel, senderId } = ctx;
+180:   const { timeoutMs = 60_000 } = opts;
+181: 
+182:   let credFilePath: string | null = null;
+183:   const adcClient = getGoogleAdcClient();
+184: 
+185:   // No resolved hub user — this channel is not linked to any account.
+186:   // Generate a one-click link so the user can pair their channel instantly.
+187:   if (!userId) {
+188:     const linkPart =
+189:       channel && senderId
+190:         ? ` Link it now: ${HUB_URL}/link/` + generateLinkCode(channel, senderId)
+191:         : ` Go to ${HUB_URL}/settings, sign in, and link your phone number.`;
+192:     return {
+193:       ok: false,
+194:       error:
+195:         "Your channel is not linked to a hub account yet." +
+196:         linkPart +
+197:         " Once linked, I can access your Google Drive, Gmail, Calendar, and more.",
+198:     };
+199:   }
+200: 
+201:   if (adcClient) {
+202:     credFilePath = await loadSessionCredentialsViaHub({
+203:       agentId,
+204:       sessionKey,
+205:       userId,
+206:       client: adcClient,
+207:     });
+
+src/web/inbound/monitor.ts:122-140
+122:   const debouncer = createInboundDebouncer<WebInboundMessage>({
+123:     debounceMs: options.debounceMs ?? 0,
+124:     buildKey: (msg) => {
+125:       const senderKey =
+126:         msg.chatType === "group"
+127:           ? (msg.senderJid ?? msg.senderE164 ?? msg.senderName ?? msg.from)
+128:           : msg.from;
+129:       if (!senderKey) {
+130:         return null;
+131:       }
+132:       const conversationKey = msg.chatType === "group" ? msg.chatId : msg.from;
+133:       return `${msg.accountId}:${conversationKey}:${senderKey}`;
+134:     },
+135:     shouldDebounce: options.shouldDebounce,
+136:     onFlush: async (entries) => {
+137:       const last = entries.at(-1);
+138:       if (!last) {
+139:         return;
+140:       }
+
+src/web/inbound/monitor.ts:229-248
+229:       if (entries.length === 1) {
+230:         await options.onMessage(last);
+231:         return;
+232:       }
+233:       const mentioned = new Set<string>();
+234:       for (const entry of entries) {
+235:         for (const jid of entry.mentionedJids ?? []) {
+236:           mentioned.add(jid);
+237:         }
+238:       }
+239:       const combinedBody = entries
+240:         .map((entry) => entry.body)
+241:         .filter(Boolean)
+242:         .join("\n");
+243:       const combinedMessage: WebInboundMessage = {
+244:         ...last,
+245:         body: combinedBody,
+246:         mentionedJids: mentioned.size > 0 ? Array.from(mentioned) : undefined,
+247:       };
+248:       await options.onMessage(combinedMessage);
+
+src/web/auto-reply/monitor/on-message.ts:69-85
+69:   return async (msg: WebInboundMsg) => {
+70:     const conversationId = msg.conversationId ?? msg.from;
+71:     const peerId = resolvePeerId(msg);
+72:     // Fresh config for bindings lookup; other routing inputs are payload-derived.
+73:     const route = resolveAgentRoute({
+74:       cfg: loadConfig(),
+75:       channel: "whatsapp",
+76:       accountId: msg.accountId,
+77:       peer: {
+78:         kind: msg.chatType === "group" ? "group" : "direct",
+79:         id: peerId,
+80:       },
+81:     });
+82:     const traceId = deriveTraceId(msg.id ?? msg.conversationId);
+83:     const ingestData = {
+84:       channel: "whatsapp",
+85:       from: msg.from,
+
+src/web/auto-reply/monitor/on-message.ts:112-123
+112: 
+113:     // Receive-only / no-agent route: the inbound message was already ingested to the
+114:     // ledger upstream (message_inbound hook in the inbound monitor), so short-circuit
+115:     // here before any reply dispatch or personal-agent auto-provisioning. Mirrors the
+116:     // Telegram path's isNoAgentRoute guard (channels/impl/telegram/bot-handlers.ts).
+117:     // See specs/2026-06-19-linked-channels-config-restructure.md.
+118:     if (route.noAgent) {
+119:       logVerbose(`Skipping reply: no-agent route (${route.sessionKey})`);
+120:       return;
+121:     }
+122: 
+123:     const groupHistoryKey =
+
+src/web/auto-reply/monitor/process-message.ts:462-511
+462:   const ctxPayload = finalizeInboundContext({
+463:     Body: agentBody,
+464:     BodyForAgent: params.msg.body,
+465:     InboundHistory: inboundHistory,
+466:     RawBody: params.msg.body,
+467:     CommandBody: params.msg.body,
+468:     From: params.msg.from,
+469:     To: params.msg.to,
+470:     SessionKey: params.route.sessionKey,
+471:     AccountId: params.route.accountId,
+472:     MessageSid: params.msg.id,
+473:     ReplyToId: params.msg.replyToId,
+474:     ReplyToBody: params.msg.replyToBody,
+475:     ReplyToSender: params.msg.replyToSender,
+476:     MediaPath: params.msg.mediaPath,
+477:     MediaUrl: params.msg.mediaUrl,
+478:     MediaType: params.msg.mediaType,
+479:     ChatType: params.msg.chatType,
+480:     ConversationLabel: params.msg.chatType === "group" ? conversationId : params.msg.from,
+481:     GroupSubject: params.msg.groupSubject,
+482:     GroupMembers: formatGroupMembers({
+483:       participants: params.msg.groupParticipants,
+484:       roster: params.groupMemberNames.get(params.groupHistoryKey),
+485:       fallbackE164: params.msg.senderE164,
+486:     }),
+487:     SenderName: params.msg.senderName,
+488:     SenderId: params.msg.senderJid?.trim() || params.msg.senderE164,
+489:     SenderE164: params.msg.senderE164,
+490:     CommandAuthorized: commandAuthorized,
+491:     WasMentioned: params.msg.wasMentioned,
+492:     ...(params.msg.location ? toLocationContext(params.msg.location) : {}),
+493:     Provider: "whatsapp",
+494:     Surface: "whatsapp",
+495:     OriginatingChannel: "whatsapp",
+496:     OriginatingTo: params.msg.from,
+497:   });
+498: 
+499:   // Multi-tenant: resolve channel sender to hub user identity (parity with
+500:   // telegram/signal/discord). Threads the resolved hub userId onto the context
+501:   // so downstream turn logic can scope per-user state (e.g. Google credentials).
+502:   if (!ctxPayload.ResolvedHubUserId && ctxPayload.SenderId) {
+503:     const resolvedUser = resolveChannelSenderIdentity("whatsapp", ctxPayload.SenderId);
+504:     if (resolvedUser) {
+505:       ctxPayload.ResolvedHubUserId = resolvedUser.userId;
+506:       logVerbose(
+507:         `whatsapp: resolved sender ${ctxPayload.SenderId} to hub user ${resolvedUser.userId}`,
+508:       );
+509:     }
+510:   }
+511: 
+
+src/web/auto-reply/monitor/process-message.ts:636-657
+636:   }
+637: 
+638:   let dispatchError: unknown = null;
+639:   let queuedFinal = false;
+640:   try {
+641:     const result = await dispatchReplyWithBufferedBlockDispatcher({
+642:       ctx: ctxPayload,
+643:       cfg: params.cfg,
+644:       replyResolver: params.replyResolver,
+645:       dispatcherOptions: {
+646:         ...prefixOptions,
+647:         responsePrefix,
+648:         onHeartbeatStrip: () => {
+649:           if (!didLogHeartbeatStrip) {
+650:             didLogHeartbeatStrip = true;
+651:             logVerbose("Stripped stray HEARTBEAT_OK token from web reply");
+652:           }
+653:         },
+654:         deliver: async (payload: ReplyPayload, info) => {
+655:           // Deduplicate media deliveries — same audio file should never be sent twice.
+656:           // This guards against the race where both tool-result and accumulated-block
+657:           // TTS paths both enqueue the same audio URL.
+
+src/routing/resolve-route.ts:487-507
+487:   // If channel sender is a mapped hub user and personal agents are enabled, derive personal agent ID
+488:   if (input.resolvedUserId && input.cfg.personalAgents?.enabled !== false) {
+489:     const personalAgentId = derivePersonalAgentId(input.resolvedUserId);
+490:     if (listAgentIds(input.cfg).includes(personalAgentId)) {
+491:       if (shouldLogDebug) {
+492:         logDebug(`[routing] match: matchedBy=personal agentId=${personalAgentId}`);
+493:       }
+494:       return choose(personalAgentId, "personal");
+495:     }
+496:   }
+497: 
+498:   // --- Default fallback: FAIL CLOSED ---
+499:   // No binding matched and no personal agent applies → return a no-agent route
+500:   // (silent) rather than the default agent. Falling back to the default agent is
+501:   // fail-OPEN: a routing miss (e.g. an accountId that doesn't match its intended
+502:   // `noAgent` binding) silently degrades into a fully-capable conversational agent
+503:   // replying on a line that was meant to stay silent — which leaked an owner's
+504:   // personal digests onto a customer line (2026-06-23 incident). To get a catch-all
+505:   // agent, configure an EXPLICIT binding (accountPattern "*" + agentId); the
+506:   // implicit default is intentionally gone.
+507:   return choose(null, "default");
+
+src/agents/in-flight-turns/recovery.ts:1-16
+1: /**
+2:  * In-flight Agent Turn recovery — boot-time + shutdown-time drain.
+3:  *
+4:  * Boot path: scan rows from prior gateway instances and send each affected
+5:  * chat a courtesy apology that the previous answer was interrupted. This is
+6:  * the v1 behavior — full auto-replay (re-invoking runEmbeddedPiAgent) needs
+7:  * a dispatch-pipeline integration (synthetic inbound replay) that is out of
+8:  * scope for the initial PR. The apology message at least closes the loop:
+9:  * the user knows the agent isn't ignoring them, and can re-send their message.
+10:  *
+11:  * Shutdown path: iterate this instance's currently-running rows, send the
+12:  * same apology, and clean up. If shutdown is rude (process crash, OOM) the
+13:  * apology never sends; the next boot will pick up the row via the boot path
+14:  * — making the system robust to either drain path partial-completing.
+15:  *
+16:  * See specs/2026-05-22-gateway-turn-recovery.md.
+
+src/agents/in-flight-turns/recovery.ts:95-131
+95:   const summary = { scanned: rows.length, apologized: 0, dropped: 0 };
+96:   if (rows.length === 0) {
+97:     return summary;
+98:   }
+99: 
+100:   const now = Date.now();
+101:   for (const row of rows) {
+102:     const isStale = now - row.startedAt > STALE_AFTER_MS;
+103:     const looped = row.recoveryAttempts >= MAX_RECOVERY_ATTEMPTS;
+104:     if (isStale || looped) {
+105:       deleteRow(row.id);
+106:       summary.dropped++;
+107:       log.info(
+108:         `dropped row ${row.id} (${isStale ? "stale" : "loop guard"}): ${row.channel}:${row.chatId} agent=${row.agentId}`,
+109:       );
+110:       continue;
+111:     }
+112:     markRecoveryAttempt(row.id);
+113:     const ok = await sendApology(deps.cfg, row);
+114:     if (ok) {
+115:       summary.apologized++;
+116:     }
+117:     // Whether or not the apology landed, the row's purpose is served — the
+118:     // user has been told (or we tried). Delete to keep the table small.
+119:     deleteRow(row.id);
+120:   }
+121: 
+122:   log.info(
+123:     `recovery scanned=${summary.scanned} apologized=${summary.apologized} dropped=${summary.dropped}`,
+124:   );
+125:   return summary;
+126: }
+127: 
+128: /**
+129:  * Shutdown drain — iterate this instance's running rows, send apology, mark
+130:  * interrupted. Bounded duration via the per-send timeout. If a send fails or
+131:  * we exit early, the row stays in DB and the next boot's recovery will pick
+
+src/agents/in-flight-turns/store.ts:18-40
+18:   `CREATE TABLE IF NOT EXISTS in_flight_turns (
+19:     id INTEGER PRIMARY KEY,
+20:     gateway_instance_id TEXT NOT NULL,
+21:     channel TEXT NOT NULL,
+22:     account_id TEXT NOT NULL,
+23:     chat_id TEXT NOT NULL,
+24:     agent_id TEXT NOT NULL,
+25:     session_id TEXT NOT NULL,
+26:     session_key TEXT,
+27:     user_message_id TEXT,
+28:     user_content TEXT NOT NULL,
+29:     language TEXT,
+30:     started_at INTEGER NOT NULL,
+31:     status TEXT NOT NULL,
+32:     recovery_attempts INTEGER NOT NULL DEFAULT 0,
+33:     last_recovery_at INTEGER
+34:   )`,
+35:   `CREATE INDEX IF NOT EXISTS idx_ift_chat ON in_flight_turns (channel, account_id, chat_id)`,
+36:   `CREATE INDEX IF NOT EXISTS idx_ift_instance ON in_flight_turns (gateway_instance_id)`,
+37: ];
+38: 
+39: export type TurnStatus = "running" | "interrupted";
+40: 
+
+src/agents/in-flight-turns/store.ts:65-78
+65:   sessionKey?: string | null;
+66:   userMessageId?: string | null;
+67:   userContent: string;
+68:   language?: string | null;
+69: }
+70: 
+71: type GlobalInFlightState = {
+72:   db: DatabaseSync | null;
+73:   instanceId: string;
+74: };
+75: 
+76: const STATE_SYMBOL = "__minion_in_flight_turns_state__";
+77: const stateGlobal = globalThis as unknown as Record<string, GlobalInFlightState | undefined>;
+78: const state: GlobalInFlightState = stateGlobal[STATE_SYMBOL] ?? {
+
+src/gateway/control-ui.ts:205-215
+205:   const url = new URL(urlRaw, "http://localhost");
+206:   const basePath = normalizeControlUiBasePath(opts?.basePath);
+207:   const pathname = url.pathname;
+208: 
+209:   if (!basePath) {
+210:     if (pathname === "/ui" || pathname.startsWith("/ui/")) {
+211:       applyControlUiSecurityHeaders(res);
+212:       respondNotFound(res);
+213:       return true;
+214:     }
+215:   }
+
+src/gateway/control-ui.ts:263-275
+263:     res.statusCode = 503;
+264:     res.setHeader("Content-Type", "text/plain; charset=utf-8");
+265:     res.end(
+266:       `Control UI assets not found at ${rootState.path}. Build them with \`pnpm ui:build\` (auto-installs UI deps), or update gateway.controlUi.root.`,
+267:     );
+268:     return true;
+269:   }
+270:   if (rootState?.kind === "missing") {
+271:     res.statusCode = 503;
+272:     res.setHeader("Content-Type", "text/plain; charset=utf-8");
+273:     res.end(
+274:       "Control UI assets not found. Build them with `pnpm ui:build` (auto-installs UI deps), or run `pnpm ui:dev` during development.",
+275:     );
+
+src/agents/models/tool-model-pin.ts:59-69
+59: export function shouldPinToolModel(channel: string | undefined): boolean {
+60:   if (process.env["MINION_DISABLE_TOOL_MODEL_PIN"] === "1") {
+61:     return false;
+62:   }
+63:   const ch = (channel ?? "").trim().toLowerCase();
+64:   if (!ch || ch === "cli" || ch === "main" || ch === "node") {
+65:     return false;
+66:   }
+67:   return true;
+68: }
+
+src/platform/cron/isolated-agent/run.ts:174-190
+174:   const defaultAgentId = resolveDefaultAgentId(params.cfg);
+175:   const requestedAgentId =
+176:     typeof params.agentId === "string" && params.agentId.trim()
+177:       ? params.agentId
+178:       : typeof params.job.agentId === "string" && params.job.agentId.trim()
+179:         ? params.job.agentId
+180:         : undefined;
+181:   const normalizedRequested = requestedAgentId ? normalizeAgentId(requestedAgentId) : undefined;
+182:   const agentConfigOverride = normalizedRequested
+183:     ? resolveAgentConfig(params.cfg, normalizedRequested)
+184:     : undefined;
+185:   const { model: overrideModel, ...agentOverrideRest } = agentConfigOverride ?? {};
+186:   // Use the requested agentId even when there is no explicit agent config entry.
+187:   // This ensures auth-profiles, workspace, and agentDir all resolve to the
+188:   // correct per-agent paths (e.g. ~/.openclaw/agents/<agentId>/agent/).
+189:   const agentId = normalizedRequested ?? defaultAgentId;
+190:   const agentCfg: AgentDefaultsConfig = Object.assign(
+
+src/platform/cron/isolated-agent/run.ts:460-501
+460:     });
+461:     const messageChannel = resolvedDelivery.channel;
+462:     const fallbackResult = await runWithModelFallback({
+463:       cfg: cfgWithAgentDefaults,
+464:       provider,
+465:       model,
+466:       agentDir,
+467:       fallbacksOverride: resolveAgentModelFallbacksOverride(params.cfg, agentId),
+468:       run: (providerOverride, modelOverride) => {
+469:         if (isCliProvider(providerOverride, cfgWithAgentDefaults)) {
+470:           const cliSessionId = getCliSessionId(cronSession.sessionEntry, providerOverride);
+471:           return runCliAgent({
+472:             sessionId: cronSession.sessionEntry.sessionId,
+473:             sessionKey: agentSessionKey,
+474:             agentId,
+475:             sessionFile,
+476:             workspaceDir,
+477:             config: cfgWithAgentDefaults,
+478:             prompt: commandBody,
+479:             provider: providerOverride,
+480:             model: modelOverride,
+481:             thinkLevel,
+482:             timeoutMs,
+483:             runId: cronSession.sessionEntry.sessionId,
+484:             cliSessionId,
+485:           });
+486:         }
+487:         return runEmbeddedPiAgent({
+488:           sessionId: cronSession.sessionEntry.sessionId,
+489:           sessionKey: agentSessionKey,
+490:           agentId,
+491:           messageChannel,
+492:           agentAccountId: resolvedDelivery.accountId,
+493:           sessionFile,
+494:           workspaceDir,
+495:           config: cfgWithAgentDefaults,
+496:           skillsSnapshot,
+497:           prompt: commandBody,
+498:           lane: params.lane ?? "cron",
+499:           provider: providerOverride,
+500:           model: modelOverride,
+501:           thinkLevel,
+
+src/drones/host.ts:28-42
+28:   // emit a *priced* agent.llm.usage (DroneEventInput carries no model/provider).
+29:   // Safe as per-host state: every call site builds a FRESH host per run
+30:   // (createGatewayDroneHost() per runDrone / per drones.run), so no cross-run race.
+31:   // ponytail: records the primary spec's provider/model — a rare credential
+32:   // fallback to a different provider would mislabel provider (token counts stay
+33:   // exact); the drone SDK's resolvedModel isn't surfaced on the event to do better.
+34:   let resolvedModel: { provider: string; model: string } | undefined;
+35: 
+36:   return {
+37:     async resolveApiKey(spec: DroneModelSpec) {
+38:       const auth = await resolveProvider(spec, config, agentDir);
+39:       resolvedModel = { provider: spec.provider, model: spec.model };
+40:       const apiKey = requireApiKey(auth, spec.provider);
+41:       return { apiKey, source: auth.source };
+42:     },
+
+src/drones/host.ts:75-102
+75: 
+76:       // Also emit a priced usage event on completion so DRONE llm cost surfaces in
+77:       // the reliability usage aggregate — which scans `agent.llm.usage` and keys on
+78:       // metadata.model/provider/tokens (src/events/usage-aggregate.ts). Without this,
+79:       // every drone (session-title, slug, gmail-label, TTS, outcome-billing,
+80:       // drone-summarize, the drones.run RPC / paperclip pipeline) was invisible to
+81:       // cost tracking. Emitted only on a successful end with usage + a known model;
+82:       // channel/source tag them as system-initiated "drone" origin in the breakdown.
+83:       if (input.event === "agent.run.end" && input.usage && resolvedModel) {
+84:         const u = input.usage;
+85:         const inTok = u.inputTokens ?? 0;
+86:         const outTok = u.outputTokens ?? 0;
+87:         const cacheTok = u.cacheReadTokens ?? 0;
+88:         emitEvent({
+89:           category: "agent",
+90:           severity: "info",
+91:           event: "agent.llm.usage",
+92:           message: `Drone LLM usage: ${input.droneId}`,
+93:           correlationId: input.correlationId,
+94:           metadata: {
+95:             kind: "drone",
+96:             droneId: input.droneId,
+97:             provider: resolvedModel.provider,
+98:             model: resolvedModel.model,
+99:             source: "system",
+100:             channel: "drone",
+101:             tokens: {
+102:               input: inTok,
+
+src/auto-reply/reply/abort.ts:230-246
+230: 
+231:   const abortKey = targetKey ?? auth.from ?? auth.to;
+232:   const requesterSessionKey = targetKey ?? ctx.SessionKey ?? abortKey;
+233: 
+234:   if (targetKey) {
+235:     const storePath = resolveStorePath(cfg.session?.store, { agentId });
+236:     const store = loadSessionStore(storePath);
+237:     const { entry, key } = resolveSessionEntryForKey(store, targetKey);
+238:     const sessionId = entry?.sessionId;
+239:     const aborted = sessionId ? abortEmbeddedPiRun(sessionId) : false;
+240:     const cleared = clearSessionQueues([key ?? targetKey, sessionId]);
+241:     if (cleared.followupCleared > 0 || cleared.laneCleared > 0) {
+242:       logVerbose(
+243:         `abort: cleared followups=${cleared.followupCleared} lane=${cleared.laneCleared} keys=${cleared.keys.join(",")}`,
+244:       );
+245:     }
+246:     if (entry && key) {
+
+src/gateway/server/ws-connection/message-handler.ts:378-387
+378:         const roleRaw = connectParams.role ?? "operator";
+379:         const role = roleRaw === "operator" || roleRaw === "node" ? roleRaw : null;
+380:         if (!role) {
+381:           markHandshakeFailure("invalid-role", {
+382:             role: roleRaw,
+383:           });
+384:           sendHandshakeErrorResponse(ErrorCodes.INVALID_REQUEST, "invalid role");
+385:           close(1008, "invalid role");
+386:           return;
+387:         }

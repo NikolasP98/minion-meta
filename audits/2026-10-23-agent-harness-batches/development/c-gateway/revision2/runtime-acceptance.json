@@ -1,0 +1,64 @@
+{
+  "evidenceKind": "executed assertions against actual native subprocesses and file-backed SQLite, with local provider transport stubs",
+  "sourceManifestSha256": "68edfa7e8587f33db1a7dd14026100df9c9ac241ced6d202144db69bf00c6d12",
+  "suggestionProof": {
+    "test": "extensions/alert-watcher/suggestion-recovery.test.ts",
+    "sourceSha256": "e0f9c5d19fb5cdcd14d69459926c59734275dccbe9af59383a946cb40be1cea8",
+    "successfulSuiteLog": "watcher-converged.log",
+    "barriers": [
+      {
+        "after": "committed suggestion admission",
+        "suggestionTransportInvocationsTotal": 0,
+        "recoveredSuggestionState": "indeterminate"
+      },
+      {
+        "after": "committed terminal suggestion receipt",
+        "suggestionTransportInvocationsTotal": 1,
+        "recoveredSuggestionState": "received"
+      },
+      {
+        "after": "committed recipient materialization",
+        "suggestionTransportInvocationsTotal": 1,
+        "recoveredSuggestionState": "received"
+      }
+    ],
+    "everyBarrier": {
+      "processKilled": "SIGKILL",
+      "recoveryProcess": "fresh Node process using actual watcher",
+      "complaints": 1,
+      "recipientReceipts": 1,
+      "confirmedRecipientSends": 1,
+      "pendingReplyRows": 1,
+      "secondSuggestionCalls": 0
+    },
+    "boundary": "native loader preserves compat exports and replaces complete only; per-instance SQLite write observation blocks after real commits, never fabricates persisted suggestion state"
+  },
+  "retentionProof": {
+    "finalTest": "extensions/alert-watcher/src/live-retention.test.ts",
+    "sourceSha256": "af04651d58d66e9bc3503490a0e1ec37e5ff051946bacc3f027b711ecec69e6a",
+    "finalSuiteLog": "settlement-compaction-final.log",
+    "covered": [
+      "all expired terminal outcomes during actual watcher tick",
+      "ten-receipt per-tick limit and next-tick progress",
+      "retry after tombstone fsync and raw unlink faults",
+      "partial orphan temp only, explicit uncertainty, preserved known accepted evidence",
+      "actual fresh process with watcher disabled",
+      "old tombstone without uncertainty field",
+      "legacy hash-only settlement evidence",
+      "new minimal hashed evidence without double hashing",
+      "stale backup cannot erase newer SQLite acceptance",
+      "tombstone settlement before a later work-redaction batch"
+    ]
+  },
+  "suppressionProof": {
+    "test": "extensions/alert-watcher/src/delivery-bridge.test.ts",
+    "actualMessageSendingCancel": true,
+    "durableState": "canceled",
+    "nextTickAcknowledgement": true,
+    "providerCalls": 0,
+    "firstSentCooldown": 0,
+    "pendingReplies": 0,
+    "mixedAcceptedSuppressedAndUncertainTruthRetained": true
+  },
+  "paidOrExternalCalls": 0
+}

@@ -8,8 +8,8 @@ typography, layers, and motion predictable.
 
 `contract.json` is the machine-readable authority. It contains:
 
-- the complete semantic color vocabulary for all 16 current Hub theme modes;
-- mode-aware success, warning, danger, and information triples;
+- the complete semantic color vocabulary for all current theme modes listed in [inventory.json](inventory.json);
+- theme-selected success, warning, danger, and information triples;
 - ten selectable accent/on-accent pairs that pass contrast as inseparable pairs;
 - typography, spacing, radius, control, shadow, motion, layer, and layout scales;
 - responsive page gutters and the compact/medium/wide boundaries;
@@ -24,7 +24,27 @@ pnpm --filter @minion-stack/design-tokens build
 
 The build fails when generated CSS is stale, a theme is incomplete, an alias
 points to an unknown token, or an essential text/action/status pair falls below
-WCAG AA contrast.
+WCAG AA contrast. Normal text uses the full primary/secondary/tertiary × canvas/surface1/surface2/surface3/overlay matrix; disabled text is separate.
+
+## Clinic themes
+
+`clinic-light` and `clinic-dark` provide a paired clinical workspace style:
+blue-tinted canvas and panels, cobalt actions, lilac branding, cyan/rose/mint
+chart colors, soft elevation, and a complete rounded radius scale. Select them
+in Hub under Settings → Appearance as **Clinic Light** and **Clinic Dark**.
+The independent accent preference continues to override the action pair.
+
+Both modes cover the complete semantic color, status, radius, shadow, typography,
+and categorical palette families. Foundations, responsive gutters, reduced motion,
+and aliases remain shared. See [inventory.json](inventory.json) for generated
+theme IDs and resolved token counts, and [contract.json](contract.json) for the
+foundation and alias definitions.
+
+Themes may select `statusRecipe` from `statusRecipes` (default: their `mode`)
+and supply `palettes` with all five categorical keys. Every generated selector
+emits all five categorical colors, including defaults for older presets, so
+theme switching cannot retain another theme's chart palette. Components still
+consume the same semantic token names.
 
 ## Install and import
 
@@ -53,6 +73,7 @@ Voxelized behavior remains consumer-owned and should target stable
 
 | Need | Use | Avoid |
 |---|---|---|
+| Page measure | `--page-max` (80rem) | route-local max-width literals |
 | Page background | `--color-canvas` | literal gray/black values |
 | Cards and panels | `--color-surface-1..3` | elevation guessed from opacity |
 | Modals/menus | `--color-overlay` and `--shadow-overlay` | bespoke shadow stacks |
@@ -81,11 +102,31 @@ The spacing scale is deliberately non-contiguous: `--space-0/0-5/1/2/3/4/6/8/12`
 exist; `--space-5/7/9/10/11/16` do not and will not resolve. Use the semantic
 spacing tokens when a gap has a role.
 
+## Generated inventory
+
+`inventory.json` records contract/utility digests, theme IDs, resolved token counts,
+accent options, typography roles and required contrast combinations. `generate`
+updates it; `check:generated` rejects drift. It is a source inventory, not an
+installed-package or deployment receipt. Consumer qualification records both
+archive hashes and the real installed package identity separately.
+
 ## Typography roles
 
 Use `.t-display`, `.t-heading`, `.t-title`, `.t-body`, `.t-label`, `.t-caption`,
 and `.t-mono`. `.t-telemetry` is the only sanctioned 10px role and is limited to
 non-essential, high-density telemetry—not prose, form help, or actions.
+The shared utility is the single owner of each role. Consumers must not redefine
+`.t-*` sizes; a documented density mode uses contract tokens instead.
+
+## Coarse-pointer targets
+
+Utilities apply the existing 44px target policy through stable primitive hooks.
+Button/IconButton (including links) and Toggle targets have minimum width and
+height 44px. Input and Select have minimum height 44px; Textarea's smallest existing
+minimum is 64px. Checkbox/Radio label targets have minimum height 44px while their
+marks stay compact. Fine-pointer sizes remain unchanged. Toggle keeps its visual
+track inside the larger target. Import utilities.css in every consumer; token
+variables alone do not supply these behaviors.
 
 ## Compatibility policy
 
@@ -111,7 +152,9 @@ utility classes there (in `@layer components`) alongside a README row.
 
 | Export | Purpose |
 |---|---|
+| `./audit` | Installed-artifact CSS custom-property audit engine for repository wrappers |
 | `./contract.json` | Canonical values and theme metadata for code/Figma tooling |
+| `./inventory.json` | Generated contract and utility inventory with source digests |
 | `./contract.schema.json` | JSON Schema for contract-aware tools |
 | `./tokens.css` | Generated Tailwind 4 `@theme` variables and theme-mode selectors |
 | `./utilities.css` | Semantic surface, typography, divider, hover, and coarse-pointer utilities |
