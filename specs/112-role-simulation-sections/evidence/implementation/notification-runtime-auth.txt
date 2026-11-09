@@ -1,0 +1,50 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.11 [39m[90m/home/nikolas/.cache/codex-work/hub-role-simulation-20261108[39m
+
+ [32m✓[39m src/server/db/notification-legacy-reconciliation.sql.integration.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 42439[2mms[22m[39m
+     [33m[2m✓[22m[39m runs the production runner from fresh and every exact historical prefix while preserving old values [33m 6034[2mms[22m[39m
+     [33m[2m✓[22m[39m restores the supported QA baseline and reaches zero pending migrations through the production runner [33m 2939[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects a premarked but omitted reconciliation as noncanonical migration evidence [33m 1011[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects altered catalogs and rows transactionally with a bounded conflict [33m 22642[2mms[22m[39m
+     [33m[2m✓[22m[39m kills classifier, ACL, FORCE-RLS, and transition-trigger source mutants transactionally [33m 4972[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects a transitive app-ledger membership without mutating the cluster role graph [33m 1400[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces exact app-ledger ACLs and organization RLS across independent sessions [33m 1223[2mms[22m[39m
+     [33m[2m✓[22m[39m allows only sending-to-terminal reminder transitions and preserves immutable identity [33m 1195[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps legacy sent rows as immutable claims without creating delivery effects [33m 935[2mms[22m[39m
+[90mstdout[2m | src/server/services/notifications/audience-projection.sql.integration.test.ts[2m > [22m[2mnative notification audience projection[2m > [22m[2mquarantines ten thousand and one recipients atomically without a partial receipt or candidate
+[22m[39mNOTIFICATION_AUDIENCE_PLAN_RECEIPT {"members":10001,"productionStatementCount":10,"plan":{"queryClass":"authority_bundle","chosenIndexes":["idx_org_members_org","idx_org_members_profile","join_request_pkey","notification_audience_candida_organization_id_event_id_reci_key","notification_events_pkey","notification_processing_health_idx","notification_projection_receipts_pkey","organization_members_pkey","profiles_pkey"],"fenceRowFilters":0,"maximumSourceRowsTimesLoops":10001,"sourceRemovedRows":27,"buffers":{"hit":70221,"read":0},"planningMs":75.643,"executionMs":172.451},"removedIndexNegatives":["idx_org_members_org"]}
+
+ [32m✓[39m src/server/services/notifications/audience-projection.sql.integration.test.ts [2m([22m[2m26 tests[22m[2m)[22m[33m 51299[2mms[22m[39m
+     [33m[2m✓[22m[39m projects requested joins through the actual scheduler, claim, authority, finalizer, receipt and privacy boundary [33m 933[2mms[22m[39m
+     [33m[2m✓[22m[39m projects the applicant exception, observes the immutable terminal receipt after erasure, and irreversibly cancels revoked managers [33m 809[2mms[22m[39m
+     [33m[2m✓[22m[39m quarantines invalid applicant identity with exact terminal attribution and no receipt or candidates [33m 575[2mms[22m[39m
+     [33m[2m✓[22m[39m denies claim, application and owner attempts to bypass the finalizer and deferred commit guard [33m 656[2mms[22m[39m
+     [33m[2m✓[22m[39m uses command tags to reject trigger-suppressed insert and cancellation writes without widening post-state reads [33m 722[2mms[22m[39m
+     [33m[2m✓[22m[39m rejects a stale event generation before any receipt or candidate write [33m 528[2mms[22m[39m
+     [33m[2m✓[22m[39m uses the command tag for exact claim-role quarantine while terminal SELECT remains denied [33m 853[2mms[22m[39m
+     [33m[2m✓[22m[39m admits the exact production projection catalog fingerprint after the full migration runner [33m 714[2mms[22m[39m
+     [33m[2m✓[22m[39m quarantines an exact 250-row batch atomically and rejects every malformed input boundary before effects [33m 1536[2mms[22m[39m
+     [33m[2m✓[22m[39m restores all quarantine scope settings across success, zero, savepoint error, rollback, timeout and physical connection reuse [33m 962[2mms[22m[39m
+     [33m[2m✓[22m[39m keeps the quarantine definer unreachable and rejects wrong organization, event, owner, generation, expiry and direct worker settlement [33m 925[2mms[22m[39m
+     [33m[2m✓[22m[39m serializes quarantine against renewal in both winner orders without stale terminal attribution [33m 1189[2mms[22m[39m
+     [33m[2m✓[22m[39m quarantines malformed projection claims through the dedicated projector transaction and clears its scope on pool reuse [33m 842[2mms[22m[39m
+     [33m[2m✓[22m[39m commits exactly ten thousand recipients with one finalized receipt and exact terminal attribution [33m 5457[2mms[22m[39m
+     [33m[2m✓[22m[39m quarantines ten thousand and one recipients atomically without a partial receipt or candidate [33m 2935[2mms[22m[39m
+     [33m[2m✓[22m[39m quarantines rule and per-recipient assignment cardinality overflow without partial audience state [33m 2667[2mms[22m[39m
+     [33m[2m✓[22m[39m revalidates unchanged authority and irreversibly cancels authority-digest drift even after access returns [33m 1360[2mms[22m[39m
+     [33m[2m✓[22m[39m cancels organization, request-state and request-deletion changes with exact finite reasons [33m 4379[2mms[22m[39m
+     [33m[2m✓[22m[39m leaves a ready candidate unchanged when bounded revalidation cannot acquire its row lock [33m 1493[2mms[22m[39m
+     [33m[2m✓[22m[39m classifies exact processing, superseded, pending, unattributed, corrupt-terminal and absent observations without replay [33m 7300[2mms[22m[39m
+     [33m[2m✓[22m[39m rolls back all audience rows when any canonical finalizer lock exceeds the bounded wait [33m 2147[2mms[22m[39m
+     [33m[2m✓[22m[39m restores pooled JIT state after projection commit and finalizer rollback [33m 1251[2mms[22m[39m
+     [33m[2m✓[22m[39m writes zero audience rows when runtime release or organization completion commits before projection [33m 2328[2mms[22m[39m
+     [33m[2m✓[22m[39m accepts fresh same-generation runtime heartbeat and organization renewal before final publication [33m 1279[2mms[22m[39m
+     [33m[2m✓[22m[39m rolls back when a runtime lease expires after admission while the authority statement is in progress [33m 1254[2mms[22m[39m
+     [33m[2m✓[22m[39m limits abandoned-operation cleanup to one exact tuple in a marked disposable child [33m 1163[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+[2m   Start at [22m 15:53:46
+[2m   Duration [22m 103.17s[2m (transform 6.35s, setup 65ms, import 9.02s, tests 93.74s, environment 0ms)[22m
+
+JSON report written to /tmp/notification-runtime-auth-proof-final.json
