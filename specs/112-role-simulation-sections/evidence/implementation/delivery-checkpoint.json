@@ -1,5 +1,5 @@
 {
-  "status": "Final-source CI green; owner-authorized release waits on GitHub review/admin choice; production not deployed",
+  "status": "Shipped: owner-authorized merge and matching production deployment complete; migration/schema and authenticated read-only verification passed",
   "hub": {
     "checkout": "/home/nikolas/.cache/codex-work/hub-role-simulation-20261108",
     "branch": "feat/112-role-simulation-section-access",
@@ -46,16 +46,33 @@
         "desktopRun": "42572220793"
       }
     },
-    "PRState": "Ready for review"
+    "PRState": "merged",
+    "mergeCommit": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+    "mergedAt": "2026-11-09T14:32:08Z",
+    "qualifiedSourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
+    "productionSourceHead": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+    "productionTree": "43043adce9bce6a95cf765e2211fe7ae833c7393",
+    "testedTreeEqualsMergedTree": true,
+    "postMergeCI": {
+      "run": "42635636172",
+      "url": "https://github.com/NikolasP98/minion_hub/actions/runs/42635636172",
+      "status": "completed",
+      "conclusion": "success",
+      "sourceHead": "206d9ae218efd4bf682d6c4063797c7441f4d52a"
+    }
   },
   "meta": {
     "checkout": "/home/nikolas/.cache/codex-work/meta-role-simulation-20261108",
     "branch": "feat/112-role-simulation-section-access",
     "draftPR": "https://github.com/NikolasP98/minion-meta/pull/974",
     "priorEvidenceCommit": "2413678b",
-    "finalEvidence": "This branch preserves historical full qualification and adds currentUI/sourcebound local receipts. Currentrelease remains pending until recorded.",
-    "latestPublishedBeforeThisReceipt": "5ce624bb2915c4f7c5b0a67f97ac01952bd0af15",
-    "validation": "Merged current dev to preserve all index entries; 310 specs/1084 proposals checked; CI42579187116 succeeded."
+    "finalEvidence": "Product release evidence is complete with explicit read-only verification boundaries. Parent still must sign/push the final companion metadata changes and verify their exact-commit CI.",
+    "latestPublishedBeforeThisReceipt": "cb816f548a3128eeabf41e57706092871e46ce37",
+    "validation": "Merged current dev to preserve all index entries; 310 specs/1084 proposals checked; CI42579187116 succeeded.",
+    "finalDocsCI": {
+      "status": "pending next evidence commit/push",
+      "boundary": "Previous metadataCI green receipt remains historical; no new run is inferred."
+    }
   },
   "signer": {
     "program": "/opt/1Password/op-ssh-sign",
@@ -63,35 +80,159 @@
     "status": "Recovered; configured signature succeeded on retry, no bypass",
     "previousError": "1Password: failed to fill whole buffer",
     "latestEvidenceAttempt": {
+      "result": "recovered",
+      "commit": "cb816f548a3128eeabf41e57706092871e46ce37",
+      "published": true,
+      "boundary": "Configured signature retry succeeded and was pushed; the earlier failed attempt is retained. No signing bypass."
+    },
+    "previousEvidenceAttempt": {
       "result": "failed",
       "error": "1Password: failed to fill whole buffer; fatal: failed to write commit object",
       "boundary": "Product source remains pushed; final CI evidence update remains staged and uncommitted. No signing bypass used."
     }
   },
   "resume": [
-    "Retry the configured signed evidence commit when 1Password is available; push and verify current meta CI. Do not disable signing.",
-    "Resolve the pending GitHub required-review/admin-override choice for Hub PR646; do not infer approval from elapsed time.",
-    "Recheck source/base and qualified tree; complete authorized merge and branch-triggered production deployment.",
-    "Repull explicit production env securely, verify migration/schema/runtime and exact deployed source; remove the temporary env afterward.",
-    "Use the pending authorized signed-in browser choice for production UI verification; do not infer runtime success from a document shell, preview or fixture-only browser matrix."
+    "Create the final configured signed metadata commit, push it, and verify exact-commit metadata CI. Do not bypass signing.",
+    "Complete the owner-authorized companion metadata merge after its gates pass; product source is already deployed."
   ],
   "qa": {
     "url": "http://127.0.0.1:5199/en/crm/customers",
     "state": "Final source71 local authenticated Finish restored Owner on fully loaded /es/pos/sell; frame/key badge removed. Current production behavior remains unproved.",
     "backend": "Guarded loopback Supabase/GoTrue/PostgreSQL; current runtime is development QA, not production.",
     "backendExpiresUTC": "2026-11-09T07:51:52Z",
-    "finalFinishEvidence": "ui-v6/browser-finish-final.json"
+    "finalFinishEvidence": "ui-v6/browser-finish-final.json",
+    "availabilityBoundary": "Historical loopback QA timer expired at the recorded timestamp; do not treat this as current production or current QA availability."
   },
   "previousQualifiedHead": "91baf2403e413444054c991ee78d1dfced5c48d2",
   "releaseAuthorization": {
     "ownerApprovedLatestUI": true,
     "ownerRequestedPushAndProductionVerification": true,
-    "source": "Direct current-session instructions confirmed by orchestrator; distinct from signing approval"
+    "source": "Direct current-session instructions confirmed by orchestrator; distinct from signing approval",
+    "ownerExpresslyApprovedMergeAndAdminOverride": true,
+    "mergeApprovalBoundary": "Direct current-session approval after GitHub required-review rejection; not inferred from prior release or signing approval."
   },
   "releaseProof": {
-    "merge": "Normal merge rejected by GitHub required-review rule; override-or-review choice pending",
-    "productionDeployment": "pending",
-    "authenticatedProductionVerification": "pending",
+    "merge": {
+      "result": "merged using expressly authorized admin override",
+      "pullRequest": 646,
+      "commit": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+      "mergedAt": "2026-11-09T14:32:08Z",
+      "tree": "43043adce9bce6a95cf765e2211fe7ae833c7393",
+      "testedTreeEqualsMergedTree": true,
+      "evidence": "production/release.json"
+    },
+    "productionDeployment": {
+      "provider": "Vercel",
+      "deploymentID": "dpl_3B3Q5eVoS9Tp2mVCSN9Ckk3Mn4fj",
+      "readyState": "READY",
+      "sourceHead": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+      "url": "minion-p649z8qqj-nikolasp98s-projects.vercel.app",
+      "alias": "hub.minion-ai.org",
+      "buildCommand": "bun run vercel-build",
+      "migration": "20261108010000",
+      "migrationAppliedAt": "2026-11-09T14:32:18Z",
+      "buildCompletedAt": "2026-11-09T14:36:17Z",
+      "evidence": "production/release.json",
+      "buildEvidence": "production/build-excerpt.txt"
+    },
+    "authenticatedProductionVerification": {
+      "status": "PASS bounded read-only production verification",
+      "evidence": "production/runtime.json",
+      "catalog": [
+        {
+          "kind": "authenticatedCatalog",
+          "status": 200,
+          "cacheControl": "private, no-store",
+          "active": false,
+          "eligible": true,
+          "roleCount": 5
+        },
+        {
+          "kind": "unauthenticatedBoundary",
+          "status": 401,
+          "cacheControl": "public, max-age=0, must-revalidate"
+        },
+        {
+          "kind": "homeRouteData",
+          "status": 200,
+          "cacheControl": "private, no-store",
+          "responseType": "data",
+          "nodeTypes": [
+            "data",
+            "data",
+            "data"
+          ]
+        },
+        {
+          "kind": "posSellRouteData",
+          "status": 200,
+          "cacheControl": "private, no-store",
+          "responseType": "data",
+          "nodeTypes": [
+            "data",
+            "data",
+            "data",
+            "data"
+          ]
+        }
+      ],
+      "rolePicker": {
+        "singleScreen": true,
+        "roleRadioCount": 5,
+        "briefRealDataWarning": true,
+        "initialApplyDisabled": true,
+        "selectingViewerEnabledApply": true,
+        "cancelled": true,
+        "roleApplied": false
+      },
+      "contextualAccess": {
+        "entryPoint": "Home navigation More menu: Page access",
+        "editorOpened": true,
+        "requestStatus": 200,
+        "errorVisible": false,
+        "unchangedReviewDisabled": true,
+        "cancelled": true,
+        "policyApplied": false
+      },
+      "POSGeometry": {
+        "checkedAt": "2026-11-09T15:07:52.976Z",
+        "path": "/en/pos/sell",
+        "documentStatus": 200,
+        "ready": "complete",
+        "search": [
+          {
+            "width": 240,
+            "height": 24,
+            "background": "rgba(0, 0, 0, 0)",
+            "borderBottom": "1px solid rgb(27, 27, 29)"
+          }
+        ],
+        "activity": [
+          {
+            "x": 745.46875,
+            "width": 82.53125
+          }
+        ],
+        "viewportWidth": 1440,
+        "documentScrollWidth": 1440,
+        "dialogsOpen": 0,
+        "frame": false,
+        "badge": false
+      },
+      "finalState": {
+        "checkedAt": "2026-11-09T15:09:01.453Z",
+        "status": 200,
+        "active": false,
+        "eligible": true,
+        "roleCount": 5,
+        "dialogsOpen": 0,
+        "frame": false,
+        "badge": false
+      },
+      "productionWritesReplayed": false,
+      "boundary": "Production Start/Replace/Finish and business-policy writes were not replayed. Those transitions are qualified by native/local browser proof on the identical deployed source tree.",
+      "privateScreenshotPublication": false
+    },
     "productionPreflight": {
       "result": "PASS read-only prerequisites",
       "evidence": "ui-v6/production-preflight.json",
@@ -109,6 +250,19 @@
       "productionAlias": "hub.minion-ai.org",
       "evidence": "ui-v6/production-before.json"
     },
-    "githubGateEvidence": "ui-v6/release-gate.json"
+    "githubGateEvidence": "ui-v6/release-gate.json",
+    "priorMergeGate": "Normal merge rejected by GitHub required-review rule; override-or-review choice pending",
+    "productionSchema": {
+      "passed": true,
+      "checkedAt": "2026-11-09T15:01:29.587Z",
+      "scope": "Applied migration; RLS/FORCE/no policies; browser/public denial; runtime CRUD; session/profile FK cascades; audit defaults and actual-actor trigger",
+      "evidence": "production/schema.json"
+    },
+    "runtimeLogRead": {
+      "query": "deployment-specific status-code5xx, last1h, limit100",
+      "matchingRows": 0,
+      "evidence": "production/runtime.json",
+      "boundary": "Bounded log query, not a claim of zero production errors outside that query."
+    }
   }
 }

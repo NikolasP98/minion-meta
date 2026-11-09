@@ -1,12 +1,12 @@
 ---
 id: 112-role-simulation-sections
 title: Organization role simulation and contextual section access
-stage: spec
-status: approved
+stage: done
+status: shipped
 verdict: approved
 pass: 4
 created: 2026-11-08
-updated: 2026-11-08
+updated: 2026-11-09
 repos: [minion_hub]
 tags: [security, auth, ui]
 ---
@@ -16,11 +16,11 @@ tags: [security, auth, ui]
 > Latest approved UI direction: [revision 6](ui-revision-6-viewport-footer.md) uses a subtle pulsing 1px viewport perimeter, a padded circular key badge on the avatar, a role-first selector and a separate Finish row enclosed by dividers. It supersedes the intermediate V5 avatar ring. Role replacement remains atomic and retains the original simulation lifetime.
 
 **Feature Branch**: `feat/112-role-simulation-section-access`, isolated Hub checkout `/home/nikolas/.cache/codex-work/hub-role-simulation-20261108`.
-**Created**: 2026-11-08. **Status**: Owner-approved for implementation; EGM feature and technical admission converged before code. The original implementation passed local and CI qualification on 91baf240. Latest signed source 71d3743d is locally qualified within the [recorded boundaries](evidence/implementation/ui-v6/README.md); exact-source release CI passed all 18 checks, with Vercel preview success. The owner approved the latest UI and requested production delivery. No deployment claim.
+**Created**: 2026-11-08. **Status**: Shipped on 2026-11-09 with bounded production verification. Owner-approved for implementation; EGM feature and technical admission converged before code. The original implementation passed local and CI qualification on 91baf240. Latest signed source 71d3743d is locally qualified within the [recorded boundaries](evidence/implementation/ui-v6/README.md); exact-source release CI passed all 18 checks, with Vercel preview success. The owner approved the latest UI and later expressly approved merge/admin override. Production now serves merge `206d9ae2`, whose tree equals the tested candidate; read-only verification boundaries are recorded below.
 **Input**: Owners/admins can simulate an active organization's roles from the avatar menu, reload under those rules, and move to a permitted page if needed. Authorized users can manage section RBAC from main pages. Evaluate context-menu placement through FigCraft and UX agents.
 **Owner clarification**: “Allow real changes, gated by the simulated role.” This settles live actions; the later implementation authorization below approves proceeding with this scope.
 
-**Owner implementation authorization**: “begin implementation with EGM like planned. SpecKit if needed” (2026-11-08), following review of the revision-4 FigCraft design. This authorized scoped implementation and the remaining review/planning work. On2026-11-09 the owner also approved the latest UI and requested push plus production verification; that direct release authorization is recorded separately in the [current checkpoint](evidence/implementation/ui-v6/qualification.json).
+**Owner implementation authorization**: “begin implementation with EGM like planned. SpecKit if needed” (2026-11-08), following review of the revision-4 FigCraft design. This authorized scoped implementation and the remaining review/planning work. On 2026-11-09 the owner also approved the latest UI and requested push plus production verification; that direct release authorization is recorded separately in the [current checkpoint](evidence/implementation/ui-v6/qualification.json).
 
 ## 0. Product
 
@@ -202,6 +202,16 @@ Original qualification checklist: focused authority and persistence tests; seede
 
 ## Latest release checkpoint
 
-[UI V6 qualification](evidence/implementation/ui-v6/README.md) binds the latest source, local receipts and screenshot boundaries. The owner authorized production delivery. CI on 71d3743d, approved merge, deployment and authenticated post-merge verification remain distinct recorded steps; none is inferred from prior green CI, a push, a Vercel preview or a successful document shell.
+[UI V6 qualification](evidence/implementation/ui-v6/README.md) binds the latest source, local receipts and screenshot boundaries. The owner authorized production delivery and expressly approved the merge/admin override. Exact-source CI, actual merge/deployment and authenticated post-merge reads are recorded separately; success is not inferred from a push, preview or document shell.
 
-The final [CI receipt](evidence/implementation/ui-v6/ci-release-final.json) confirms the qualified tree. [GitHub rejected normal merge](evidence/implementation/ui-v6/release-gate.json) under its one-review rule; the override-or-review choice remains pending. Production is not deployed.
+The final [CI receipt](evidence/implementation/ui-v6/ci-release-final.json) confirms the qualified tree. The [normal-merge rejection](evidence/implementation/ui-v6/release-gate.json) is historical; the owner subsequently approved the admin override.
+
+The owner explicitly approved merge and the admin override after GitHub rejected normal merge under its one-review rule. Hub PR 646 merged as `206d9ae218efd4bf682d6c4063797c7441f4d52a` at `2026-11-09T14:32:08Z`. Its tree `43043adce9bce6a95cf765e2211fe7ae833c7393` is identical to tested source `71d3743d`. Vercel production deployment `dpl_3B3Q5eVoS9Tp2mVCSN9Ckk3Mn4fj` is READY for `hub.minion-ai.org` on that merge commit. The production `bun run vercel-build` log records migration `20261108010000` applied at 14:32:18Z and build completion at 14:36:17Z. Post-merge CI 42635636172 succeeded. These events replace the earlier blocked release checkpoint; the failed normal merge receipt remains historical.
+
+Read-only production schema inspection passes: migration present; mode table RLS and FORCE RLS enabled; no browser policies or browser-role privileges; runtime CRUD privileges; expected session/profile cascade foreign keys; audit defaults and actual-actor attribution trigger.
+
+Authenticated production verification passes within a read-only boundary. The eligible five-role catalog returns 200 with private/no-store, and an unauthenticated request returns 401. Home and POS Sell route-data loaders return 200 type:data with no error nodes. The live role tray has five choices, a brief real-data warning, disabled initial Apply and enabled Apply after selecting Viewer; Cancel closes it without starting simulation. Home navigation More → Page access opens the actual editor through a 200 read; unchanged Review is disabled and Cancel closes it without a policy write. POS Sell is fully loaded with a 240×24 transparent underline search, right-aligned Activity and no horizontal overflow at 1440px. The final production session is inactive with no dialog, frame or key badge. No production Start, role replacement, Finish, business-data write or policy write was replayed. Those transitions remain qualified by local/native/CI evidence on the identical deployed tree.
+
+The [delivery checkpoint](evidence/implementation/delivery-checkpoint.json) holds current release state. Private production screenshots are not included in public evidence.
+
+Production evidence: [merged source, alias and post-merge CI](evidence/implementation/production/release.json), [migration/build excerpt](evidence/implementation/production/build-excerpt.txt), [schema protections](evidence/implementation/production/schema.json), and [authenticated read-only runtime](evidence/implementation/production/runtime.json).

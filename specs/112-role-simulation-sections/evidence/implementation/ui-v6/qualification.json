@@ -1,5 +1,5 @@
 {
-  "status": "Final-source CI and preview passed; normal merge blocked by required GitHub review; production not deployed",
+  "status": "Shipped: tested tree merged/deployed; production migration/schema and authenticated read-only checks passed; no production mutation replay",
   "sourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
   "sourceTree": "43043adce9bce6a95cf765e2211fe7ae833c7393",
   "hubPR": "https://github.com/NikolasP98/minion_hub/pull/646",
@@ -128,9 +128,27 @@
       "sourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
       "conclusion": "success"
     },
-    "merge": "Blocked by GitHub required-review rule; normal merge rejected; admin override choice pending",
-    "productionDeployment": "Not performed; production remains on prior source",
-    "authenticatedProductionVerification": "Pending authorized signed-in production browser access",
+    "merge": {
+      "commit": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+      "mergedAt": "2026-11-09T14:32:08Z",
+      "adminOverrideUsed": true,
+      "evidence": "../production/release.json"
+    },
+    "productionDeployment": {
+      "id": "dpl_3B3Q5eVoS9Tp2mVCSN9Ckk3Mn4fj",
+      "readyState": "READY",
+      "target": "production",
+      "alias": "hub.minion-ai.org",
+      "sourceHead": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+      "treeEqualsTestedCandidate": true,
+      "evidence": "../production/release.json"
+    },
+    "authenticatedProductionVerification": {
+      "result": "PASS bounded read-only checks",
+      "evidence": "../production/runtime.json",
+      "productionWritesReplayed": false,
+      "boundary": "Production Start/Replace/Finish and business-policy writes were not replayed. Those transitions are qualified by native/local browser proof on the identical deployed source tree."
+    },
     "productionPreflight": {
       "evidence": "production-preflight.json",
       "result": "PASS read-only prerequisites",
@@ -156,8 +174,27 @@
       "productionAlias": "hub.minion-ai.org",
       "boundary": "Read-only production-before state; the new feature has not yet been deployed."
     },
-    "hubPRState": "Ready for review; no longer draft per orchestrator",
-    "githubGateEvidence": "release-gate.json"
+    "hubPRState": "merged",
+    "githubGateEvidence": "release-gate.json",
+    "ownerExpresslyApprovedMergeAndAdminOverride": true,
+    "productionSchema": {
+      "passed": true,
+      "evidence": "../production/schema.json"
+    },
+    "productionBuild": {
+      "migration": "20261108010000",
+      "migrationAppliedAt": "2026-11-09T14:32:18Z",
+      "completedAt": "2026-11-09T14:36:17Z",
+      "evidence": "../production/build-excerpt.txt"
+    },
+    "postmergeCI": {
+      "run": "42635636172",
+      "status": "completed",
+      "conclusion": "success",
+      "jobsSuccessful": 9,
+      "PRonlyJobsSkipped": 1,
+      "evidence": "../production/release.json"
+    }
   },
   "qa": {
     "url": "http://127.0.0.1:5199/en/home",
@@ -323,5 +360,62 @@
     "criticalBrowserBoundary": "Actual components with synthetic identity/HTTP/WS, no real app server/auth provider/database or production runtime proof.",
     "qaConformanceBoundary": "Generic page-conformance comparison has no committed initial ledger; CI intentionally exits zero. Retained baseline comparison shows selected POS/account/settings/navigation metrics are unchanged or improved; this is not a full-fleet conformance pass.",
     "qaConformanceComparison": "ci-conformance-comparison.json"
-  }
+  },
+  "historicalReleaseCheckpoint": {
+    "status": "Final-source CI and preview passed; normal merge blocked by required GitHub review; production not deployed",
+    "release": {
+      "ownerApprovedLatestUI": true,
+      "ownerRequestedPushAndProductionVerification": true,
+      "authorizationSource": "Direct owner instructions in current session, confirmed by orchestrator; not inferred from prior signing approval.",
+      "CI": {
+        "run": "42577143704",
+        "url": "https://github.com/NikolasP98/minion_hub/actions/runs/42577143704",
+        "status": "completed",
+        "sourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
+        "progressNote": "All 18 check runs succeeded; Vercel commit status also succeeded.",
+        "conclusion": "success",
+        "checkRunsPassed": 18,
+        "evidence": "ci-release-final.json"
+      },
+      "desktop": {
+        "run": "42577143739",
+        "url": "https://github.com/NikolasP98/minion_hub/actions/runs/42577143739",
+        "status": "completed",
+        "sourceHead": "71d3743d020a518b95ad1a090b76ca46f16fd56f",
+        "conclusion": "success"
+      },
+      "merge": "Blocked by GitHub required-review rule; normal merge rejected; admin override choice pending",
+      "productionDeployment": "Not performed; production remains on prior source",
+      "authenticatedProductionVerification": "Pending authorized signed-in production browser access",
+      "productionPreflight": {
+        "evidence": "production-preflight.json",
+        "result": "PASS read-only prerequisites",
+        "checkedAt": "2026-11-09T07:18:39.205Z",
+        "runtimeBypassRLS": true,
+        "authSchemaAndSessionRead": true,
+        "migrationSessionFKPrivilege": true,
+        "requiredDatabaseRolesPresent": true,
+        "canonicalRolesPresent": true,
+        "orgIDColumnsAreText": true,
+        "roleSimulationMigrationAlreadyApplied": false,
+        "boundary": "This is read-only prerequisite proof, not migration execution, deployment or authenticated production behavior.",
+        "migrationPrivileges": {
+          "public_create": true,
+          "audit_alter_owner": true
+        }
+      },
+      "productionBefore": {
+        "evidence": "production-before.json",
+        "deploymentID": "dpl_CJCdPPxLHrcxToPxVVWryasiE9zP",
+        "readyState": "READY",
+        "sourceHead": "5f647e7c9db91f9a3ab0ad18c2dbf9d565dff38e",
+        "productionAlias": "hub.minion-ai.org",
+        "boundary": "Read-only production-before state; the new feature has not yet been deployed."
+      },
+      "hubPRState": "Ready for review; no longer draft per orchestrator",
+      "githubGateEvidence": "release-gate.json"
+    }
+  },
+  "deployedSourceHead": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+  "deployedTree": "43043adce9bce6a95cf765e2211fe7ae833c7393"
 }
