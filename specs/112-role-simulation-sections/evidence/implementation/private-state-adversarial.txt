@@ -1,0 +1,58 @@
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+REVOKE
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-role-simulation-20261108
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 1 skipped (2)
+   Start at  15:55:37
+   Duration  346ms (transform 90ms, setup 59ms, import 73ms, tests 48ms, environment 0ms)
+
+GRANT
+CREATE POLICY
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-role-simulation-20261108
+
+ ❯ src/server/db/rls-coverage.sql.integration.test.ts (2 tests | 1 failed | 1 skipped) 50ms
+     × every org table is forced-RLS with a current_org_id policy, or allowlisted 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/db/rls-coverage.sql.integration.test.ts > RLS coverage of org-scoped tables > every org table is forced-RLS with a current_org_id policy, or allowlisted
+AssertionError: Session mode must have forced RLS, no policies and no tenant/browser grants: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ src/server/db/rls-coverage.sql.integration.test.ts:74:7
+     72|       privateSessionControl,
+     73|       'Session mode must have forced RLS, no policies and no tenant/br…
+     74|     ).toBe(true);
+       |       ^
+     75|     const listed = new Set(allowlist.map((e) => e.table));
+     76|     expect([...uncovered].filter((t) => !listed.has(t))).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 1 skipped (2)
+   Start at  15:55:39
+   Duration  333ms (transform 74ms, setup 61ms, import 56ms, tests 50ms, environment 0ms)
+
+DROP POLICY
+REVOKE
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-role-simulation-20261108
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 1 skipped (2)
+   Start at  15:55:41
+   Duration  347ms (transform 89ms, setup 89ms, import 55ms, tests 43ms, environment 0ms)

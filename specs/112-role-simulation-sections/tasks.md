@@ -29,8 +29,10 @@ Branch: `feat/112-role-simulation-section-access`. Implementation tree: `/home/n
 
 ## Qualification and delivery
 
-- [ ] T013 Compile en/es localization; run focused security, route, mounted UI and migration/seed tests against exact candidate.
-- [ ] T014 Run `bun run check`, `bun run test`, `bun run build`, `bun run lint:design`, `bun run lint:tokens`, route contracts and `qa:check-pairing`; record failures accurately.
-- [ ] T015 Exercise real authenticated loopback QA with browser-harness, direct API/document/route-data tests across two orgs, restricted role, users:manage without settings:manage, zero pages, all four frame edges and contextual access; preserve screenshots/evidence.
-- [ ] T016 Independent Standards and Spec review; resolve defects and rerun affected checks.
+- [x] T013 Compile en/es localization; run focused security, route, mounted UI and migration/seed tests against exact candidate.
+- [x] T014 Run `bun run check`, `bun run test`, `bun run build`, `bun run lint:design`, `bun run lint:tokens`, route contracts and `qa:check-pairing`; record failures accurately.
+- [x] T015 Exercise real authenticated loopback QA with browser-harness, direct API/document/route-data tests across two orgs, restricted role, users:manage without settings:manage, zero pages, all four frame edges and contextual access; preserve screenshots/evidence.
+- [x] T016 Independent Standards and Spec review; resolve defects and rerun affected checks.
 - [ ] T017 Scope commits, open draft Hub PR to master with reviewable evidence; update meta spec/proposal status and open-items ledger for any material limitation. Human merge/deploy remain pending.
+
+Qualification checkpoint: final staged Hub tree `08ef834aac9b9a11799546b12456ac75703f0d70`. [Receipts](evidence/implementation/qualification.json) record final check with 0 errors and 0 warnings, full suite1,040 files and 9,273 tests plus 3 architecture checks, full Vercel build/boundary/canary, formatting for 148 files, design/token/pairing and native/seed/browser acceptance. T017 remains open: configured 1Password signing fails before the final 13-file repair/evidence commits can be published, so fresh final CI is still required. Draft PRs exist: [Hub #646](https://github.com/NikolasP98/minion_hub/pull/646) and [meta #974](https://github.com/NikolasP98/minion-meta/pull/974). No merge or production deployment.
