@@ -17,7 +17,7 @@ Branch: `feat/112-role-simulation-section-access`. Implementation tree: `/home/n
 
 ## Simulation UI
 
-- [x] T007 [P] Create single-screen `RoleSimulationDialog.svelte`, four-edge `SimulationFrame.svelte`; modify `ProfileMenu.svelte` and app layout with avatar-only Finish, actual-actor semantics, a11y/i18n.
+- [x] T007 [P] Create single-screen `RoleSimulationDialog.svelte`, V6 quiet pulsing `SimulationFrame.svelte` and active-only padded circular key badge; modify `ProfileMenu.svelte` and app layout with the role-first selector, separate avatar-only Finish, dividers, actual-actor semantics, a11y/i18n.
 - [x] T008 [P] Add browser generation admission, safe transition/pending-action integration, cross-tab reload and query/gateway retirement. Update layout fixtures and mounted interaction tests.
 
 ## Contextual section access
@@ -35,6 +35,15 @@ Branch: `feat/112-role-simulation-section-access`. Implementation tree: `/home/n
 - [x] T016 Independent Standards and Spec review; resolve defects and rerun affected checks.
 - [x] T017 Scope commits, open draft Hub PR to master with reviewable evidence; update meta spec/proposal status and open-items ledger for any material limitation. Human merge/deploy remain pending.
 
-Qualification checkpoint: final signed Hub commit `91baf240` (production implementation `2f1fa81b`; later delta is a native test fixture). [Receipts](evidence/implementation/qualification.json) record local type checking with 0 errors/warnings, 9,273 tests plus 3 architecture checks, full production build/boundary/canary, native/seed/browser acceptance, and the 8-case principal fixture follow-up. [Final CI](evidence/implementation/ci-final.json) confirms all 17 check runs and Vercel commit status succeeded on the exact final Hub SHA. Source and evidence are published in [Hub #646](https://github.com/NikolasP98/minion_hub/pull/646) and [meta #974](https://github.com/NikolasP98/minion-meta/pull/974). Implementation delivery is complete; human merge and production release remain pending.
+Historical qualification checkpoint: signed Hub commit `91baf240` (production implementation `2f1fa81b`; later delta is a native test fixture). [Receipts](evidence/implementation/qualification.json) record local type checking with 0 errors/warnings, 9,273 tests plus 3 architecture checks, full production build/boundary/canary, native/seed/browser acceptance, and the 8-case principal fixture follow-up. [Final CI](evidence/implementation/ci-final.json) confirms all 17 check runs and Vercel commit status succeeded on the exact final Hub SHA. Source and evidence are published in [Hub #646](https://github.com/NikolasP98/minion_hub/pull/646) and [meta #974](https://github.com/NikolasP98/minion-meta/pull/974). This earlier implementation checkpoint predates V5/V6. Current release work is listed below.
 
 UI follow-up (2026-11-09): [QA switching separation](evidence/implementation/qa-controls-followup/README.md) moves actual QA sign-ins to DEV and preserves the avatar as the single simulation entry/exit. Signed Hub `8cf5dc35` has local component/type/style and actual Owner → Staff frame/Finish proof. Fresh CI is pending; earlier final CI receipts remain historical.
+
+Revision 5 (2026-11-09): the owner selected the role-first option and requested dividers. [V5](ui-revision-5-role-first.md) supersedes the former frame/Finish-only interaction; atomic active-role replacement retains the original lifetime and actual actor. [POS toolbar scope](pos-sell-toolbar-adjustment.md) records the adjacent directly authorized UI adjustment.
+
+## UI V6 and authorized production delivery
+
+- [x] T018 Implement owner-selected role-first UI, dividers, atomic role editing, quiet pulsing viewport frame, final padded circular key badge, two-row footer and shared CompactSearch/POS alignment. Publish signed Hub 71d3743d. [Local receipts and capture boundaries](evidence/implementation/ui-v6/README.md) record 122 focused cases,2 connection-status cases,8 scoped native cases and type/style checks.
+- [x] T019 Record owner approval of the latest UI and explicit request to push and verify production. This release authorization is separate from signing approval.
+- [ ] T020 Complete exact-source CI 42577143704 and desktop 42577143739; record actual outcomes without reusing prior green receipts.
+- [ ] T021 Complete authorized merge, production deployment and authenticated post-merge verification; bind results to the released source.

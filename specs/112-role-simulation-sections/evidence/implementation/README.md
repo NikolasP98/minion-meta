@@ -1,6 +1,8 @@
 # Implementation qualification
 
-Latest UI follow-up: [separate QA account switching from role simulation](qa-controls-followup/README.md), signed source `8cf5dc35`. Local checks and Owner → Staff desktop/mobile proof pass; fresh CI is running. Earlier final-source receipts below describe the previously qualified source.
+Latest checkpoint: [UI V6 and authorized production delivery](ui-v6/README.md), signed source 71d3743d. Local role/footer/search and scoped native checks pass within their recorded boundaries. Exact-source CI and production verification are pending. Older receipts below remain historical.
+
+Earlier UI follow-up: [separate QA account switching from role simulation](qa-controls-followup/README.md), signed source `8cf5dc35`. Local checks and Owner → Staff desktop/mobile proof pass; fresh CI is running. Earlier final-source receipts below describe the previously qualified source.
 
 The guarded QA runtime uses loopback Supabase Auth and PostgreSQL. These receipts prove local behavior; they do not prove a merged or production deployment. [qualification.json](qualification.json) records the candidate, current gates and delivery boundary. Earlier receipts remain historical when a later source change supersedes them.
 
