@@ -1,8 +1,8 @@
 ---
 id: 2026-11-10-hub-crm-analyst-gateway-authentication-spec
 title: Restore CRM analyst gateway authentication within current CRM permissions
-stage: dev
-status: implementing
+stage: done
+status: shipped
 verdict: approved
 pass: 2
 created: 2026-11-10
@@ -15,19 +15,33 @@ proposal: 2026-11-10-hub-crm-analyst-gateway-authentication
 
 # Restore CRM analyst gateway authentication
 
-Implementation is in [Hub PR 650](https://github.com/NikolasP98/minion_hub/pull/650),
-final signed source `660ef0777844b56dc8df57eec3c169c5280126f4`, tree
-`bad85c8d3638983b8f8d81ca4b381383cd2a64bc`. Independent Standards and Spec reviews
-passed. The exact tree passed typecheck with zero errors/warnings, 9320 tests
-plus architecture3/3 and the production build, with zero unhandled errors.
-Configured 1Password signing recovered after owner authentication; the signed
-final cleanup is published. Fresh final-head CI, merge and production
-verification remain pending. No deployment is claimed.
+[Hub PR 650](https://github.com/NikolasP98/minion_hub/pull/650) is merged and
+production verified. Signed source `660ef0777844b56dc8df57eec3c169c5280126f4`
+and merge `df1ae0efcb2d6269b45d1385d2421ce75c1a05e3` share qualified tree
+`bad85c8d3638983b8f8d81ca4b381383cd2a64bc`. Full EGM and independent
+Standards/Spec reviews passed. Exact-source local qualification passed with
+zero type errors/warnings, 9320 tests plus301 declared skips, architecture3/3,
+zero unhandled errors and the production build. Final-head CI42865113752 passed
+all10jobs and all13PRchecks, including Vercel preview.
+
+Production deployment `dpl_4WTSivYaTbvaJd4rbt1SspDG9BSw` is READY, and the
+`hub.minion-ai.org` alias points to it on the exact merge source. At
+2026-11-10T17:59:49Z, bounded verification returned tool-permissions200 with
+CRM view, themes200 with nonempty analysis, and empty-body search400 after
+admission without embeddings. The affected user's actual assigned gateway
+executed `crm_conversation_themes({})` for their exact personal-agent session:
+HTTP200, valid inner aggregate, no inner error. No model turn or message was
+replayed, and no business data was written. Sanitized receipts are in
+`audits/2026-11-10-crm-analyst-auth/implementation/`. The temporary production
+credential file was removed. The restricted-role follow-up remains open.
 
 After reviewing this concrete implementation and its EGM/focused-check results,
 the owner requested: "I'm going to bed, lmk when theyre live." This authorizes
 normal merge, deployment and bounded production verification once qualification
 passes. It does not authorize ignoring failures or bypassing branch protections.
+After GitHub confirmed its separate-account review rule, the owner explicitly
+approved this PR650 exception: "Yes, merge #650 with the owner override after CI
+passes." The override does not waive failing checks or change protection settings.
 
 ## 0. Product
 
@@ -255,3 +269,21 @@ then restore globals/timers. The installed Vitest helper uses safe real timers
 and waits the tracked import graph. This adds one test-only file to the runtime
 repair's inventory; it changes no gateway production behavior and suppresses no
 error. Independent review and zero-unhandled-error final CI are required.
+
+### Production verification limits
+
+The actual gateway tool probe establishes the deployed adapter/principal/result
+path for the reported user. It does not replay the assistant's response, inspect
+exact emitted headers, or execute a semantic-search embedding. Empty-body search
+proves admission and the expected pre-embedding input rejection. Restricted-role
+privacy behavior is covered by synthetic regression tests; production customer
+roles were not changed. Post-merge CI42869942809 started on the identical tested
+tree and was still running at the initial production verification checkpoint;
+final-head PR CI had already passed all checks before merge.
+
+The first private verifier query incorrectly assumed `personal_agents.org_id`
+exists. It failed read-only with PostgreSQL42703 before any API probe. The
+verifier was corrected to use the canonical gateway organization and exact
+agent/profile/gateway assignment; the real Hub handler still resolves current
+membership and capabilities. The corrected verification passed all four probes.
+This diagnostic correction changed no product code or database.

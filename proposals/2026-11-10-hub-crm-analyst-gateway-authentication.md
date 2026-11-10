@@ -1,7 +1,7 @@
 ---
 id: 2026-11-10-hub-crm-analyst-gateway-authentication
 title: Restore authenticated CRM analyst tools without widening CRM access
-status: in-spec
+status: done
 created: 2026-11-10
 updated: 2026-11-10
 repos: [minion_hub]
@@ -101,22 +101,28 @@ organization settings, database schema, or gateway configuration change.
 ## Gates and delivery state
 
 - Investigation and read-only reproduction: complete.
-- Independent source review: recommends this narrow Hub-only repair, preserving
-  principal authority and rejecting unsupported restricted roles.
-- Owner decision: "I approve after you've passed it thu egm." Full EGM passed
-  with two consecutive clean feature and technical rounds; the conditional
-  implementation approval is satisfied. Actual reports are under
-  `audits/2026-11-10-crm-analyst-auth/egm/`.
-- Spec: approved for implementation after EGM. Security-tagged work keeps the
-  approval and merge gates required by root `AGENTS.md`.
-- Implementation is published in Hub PR 650; the final signed test/ledger cleanup
-  passed independent Standards/Spec review, typecheck zero errors/warnings,
-  9320 tests,architecture3/3 and production build. The configured signer recovered after
-  owner authentication and signed source660ef077 is published.
-- Fresh final-head CI is running; the earlier published-head CI had
-  all assertions pass but one unhandled test teardown import, repaired locally.
-- Merge and deployment: not started; no production repair is claimed.
-- No production configuration or data was changed during this investigation.
+- Full five-stage EGM passed, including two consecutive clean feature and
+  technical rounds. Independent Standards and Spec implementation reviews passed.
+- The owner's conditional implementation approval was satisfied. After all13PR
+  checks passed, the owner explicitly approved the PR650 administrative merge
+  exception required by GitHub's separate-account review rule. Protection
+  settings stayed unchanged.
+- Signed source `660ef0777844b56dc8df57eec3c169c5280126f4` passed exact-tree local
+  check/test/build and final-head CI42865113752 (all10jobs). The earlier fixture
+  teardown failure is historical and repaired without exception suppression.
+- Hub650 merged as `df1ae0efcb2d6269b45d1385d2421ce75c1a05e3`, tree
+  `bad85c8d3638983b8f8d81ca4b381383cd2a64bc`, identical to qualified source.
+- Vercel production `dpl_4WTSivYaTbvaJd4rbt1SspDG9BSw` is READY and serves
+  `hub.minion-ai.org` on that merge source. Direct Hub admission and the affected
+  user's actual gateway themes tool succeeded, with a valid nonempty aggregate
+  and no inner error. Search's empty-body request returned the expected400
+  without embedding. No model turn was replayed.
+- Sanitized receipts are in `audits/2026-11-10-crm-analyst-auth/implementation/`.
+  Private credentials/customer output were not committed; the temporary
+  production environment file was removed. No production roles, gateway config,
+  schema or business data were changed for this repair.
+- `proposals/2026-11-10-crm-conversation-restricted-role-support.md` stays open;
+  both runtime guards retain their matching `TODO(handoff)` pointers.
 
 ## Out of scope
 

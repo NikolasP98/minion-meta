@@ -39,14 +39,14 @@
     "enabled": true,
     "error": null,
     "unsignedFallback": false,
-    "lastAttempt": "after build freed memory; failed through unchanged configured signer",
+    "lastAttempt": "successful unchanged configured 1Password signer after owner authentication",
     "priorFailedAttempts": 4,
     "priorError": "1Password: failed to fill whole buffer",
     "successfulSourceCommit": "660ef0777844b56dc8df57eec3c169c5280126f4"
   },
-  "merged": false,
-  "deployed": false,
-  "productionVerified": false,
+  "merged": true,
+  "deployed": true,
+  "productionVerified": true,
   "stagedPatch": "/tmp/crm-auth-final-staged.patch",
   "stagedPatchSHA256": "6a08fa7660fb3791e250de354e9c857cc11de69636985b0a4b94562cc9b689d9",
   "files": {
@@ -85,12 +85,12 @@
     "exitCode": 0
   },
   "upstreamMasterVerified": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
-  "state": "final qualified source published; fresh CI pending",
+  "state": "Hub merged, production READY and affected actual gateway tool verified",
   "pendingUserInput": null,
   "coreSourceHeaderSupport": {
     "main": "50a3036ad7fac23710943e7eeadfe66b38d96fcd",
     "DEV": "d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
-    "verified": "both refs forward configured serverId through hubPost; installed running gateway version not established"
+    "verified": "Both refs forward serverId; actual running gateway tool succeeded. Exact emitted header not separately observed."
   },
   "publishedTree": "bad85c8d3638983b8f8d81ca4b381383cd2a64bc",
   "firstCI": {
@@ -101,11 +101,82 @@
     "unitUnhandledErrors": 1,
     "cause": "gateway.session.test.ts config dynamic import after environment teardown",
     "otherCIJobsPassed": 9,
-    "fix": "staged and locally49passed; new signed commit and freshCI required",
+    "fix": "committed660ef; final-head local suite and CI unit job passed with zero unhandled errors",
     "conclusion": "failure only from unit unhandled teardown; all other9jobs success"
   },
   "CI": {
     "publishedHead": "660ef0777844b56dc8df57eec3c169c5280126f4",
-    "state": "fresh final-head run pending"
+    "state": "all13PRchecks and10CIjobs passed",
+    "run": "42865113752",
+    "unitJob": "130001257383",
+    "unitPassed": 9320,
+    "declaredSkipped": 301,
+    "unitUnhandledErrors": 0,
+    "unitRawLogSHA256": "ab148042214e7fb99c679d348c686867e0516a02b019c0a3d75c4a919b3e1314",
+    "conclusion": "success"
+  },
+  "mergeOverrideAuthorization": {
+    "pr": 650,
+    "ownerAnswer": "Yes, merge #650 with the owner override after CI passes",
+    "condition": "all final-head CI checks pass",
+    "protectionSettingsChanged": false
+  },
+  "mergeCommit": "df1ae0efcb2d6269b45d1385d2421ce75c1a05e3",
+  "mergedTree": "bad85c8d3638983b8f8d81ca4b381383cd2a64bc",
+  "mergedAt": "2026-11-10T17:55:48Z",
+  "productionDeployment": {
+    "id": "dpl_4WTSivYaTbvaJd4rbt1SspDG9BSw",
+    "readyState": "READY",
+    "target": "production",
+    "createdAt": 1794333351342,
+    "buildingAt": 1794333352500,
+    "ready": 1794333537556,
+    "projectId": "prj_cU41rt0acJEPFT4VF0Yavd6BRfR8",
+    "source": "df1ae0efcb2d6269b45d1385d2421ce75c1a05e3",
+    "alias": "hub.minion-ai.org",
+    "aliasDeploymentId": "dpl_4WTSivYaTbvaJd4rbt1SspDG9BSw",
+    "aliasMatches": true,
+    "qualifiedTree": "bad85c8d3638983b8f8d81ca4b381383cd2a64bc",
+    "temporaryCredentialFileRemoved": true,
+    "productionRoleChanges": false,
+    "schemaMigrationsIntroduced": false,
+    "gatewayRestarted": false
+  },
+  "productionRuntime": {
+    "checkedAt": "2026-11-10T17:59:49.482Z",
+    "businessWrites": false,
+    "modelTurnReplayed": false,
+    "probes": [
+      {
+        "path": "query/tool-permissions",
+        "status": 200,
+        "crmView": true
+      },
+      {
+        "path": "crm-conversation-themes",
+        "status": 200,
+        "aggregateShape": true,
+        "hasAnalysis": true
+      },
+      {
+        "path": "search-crm-conversations",
+        "status": 400,
+        "expectedInputRejection": true
+      },
+      {
+        "path": "gateway/tools/invoke:crm_conversation_themes",
+        "status": 200,
+        "outerOk": true,
+        "aggregateShape": true,
+        "innerErrorCode": null,
+        "toolError": false
+      }
+    ],
+    "passed": true
+  },
+  "postMergeCI": {
+    "run": "42869942809",
+    "source": "df1ae0efcb2d6269b45d1385d2421ce75c1a05e3",
+    "state": "in_progress at initial production verification; identical qualified tree"
   }
 }

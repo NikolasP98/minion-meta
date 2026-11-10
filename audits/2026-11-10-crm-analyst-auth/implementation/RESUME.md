@@ -1,111 +1,73 @@
-# CRM analyst authentication release checkpoint
+# CRM analyst authentication delivery record
 
-Signing recovered after the owner authenticated on the retry. Signed final source
-`660ef0777844b56dc8df57eec3c169c5280126f4` is pushed; its tree equals qualified
-`bad85c8d3638983b8f8d81ca4b381383cd2a64bc`. Fresh final-head CI is pending. The
-pre-recovery details below remain historical provenance; no signer was bypassed.
+## Released source
 
-The owner requested the current fix through production after EGM passed, then
-said: "I'm going to bed, lmk when theyre live." Continue the scoped release
-after its checks pass. Do not repeat the implementation/release scope question.
-The current external blocker is the configured 1Password signer, not missing
-task authorization. Four normal signing attempts failed with
-`1Password: failed to fill whole buffer`; signing remains enabled and unchanged.
-An async request asks the owner to unlock/approve 1Password. No unsigned or
-alternate-signer fallback was used. No normal/administrative merge was attempted.
+Hub PR <https://github.com/NikolasP98/minion_hub/pull/650> merged at
+2026-11-10T17:55:48Z as `df1ae0efcb2d6269b45d1385d2421ce75c1a05e3`.
+Signed source `660ef0777844b56dc8df57eec3c169c5280126f4` and the real merge
+share qualified tree `bad85c8d3638983b8f8d81ca4b381383cd2a64bc`.
 
-## Exact ownership and source
+The owner authorized implementation/release after EGM, then explicitly approved
+"Yes, merge #650 with the owner override after CI passes" after GitHub's
+separate-account review requirement was confirmed. All13PRchecks passed before
+the administrative merge. Normal merge had been rejected solely by that review
+rule. Protection settings were unchanged.
 
-- Hub: `/home/nikolas/.cache/codex-work/hub-crm-analyst-auth-20261110`, branch
-  `fix/crm-analyst-gateway-authentication`, PR
-  <https://github.com/NikolasP98/minion_hub/pull/650>, draft.
-- Published signed Hub head: `b523d281b80e35391726c9d115ccebf6c5e668b4`.
-  Its tree is `e0795114885d45d577cd5ccfdbcc680e22d64072`.
-- Final staged tree: `bad85c8d3638983b8f8d81ca4b381383cd2a64bc`.
-  Three staged files add the test-only dynamic-import cleanup and move both
-  restricted-role handoff pointers to the dedicated open proposal. All runtime
-  authentication/permission logic is already in the published signed head.
-- The final working source equals the staged tree. `checkpoint.json` records
-  every scoped file hash. `/tmp/crm-auth-final-staged.patch` is a private backup;
-  the staged files themselves remain intact. Do not reset, stash or replace them.
-- Meta: `/home/nikolas/.cache/codex-work/meta-crm-analyst-auth-20261110`, same
-  feature branch, last signed commit `8f02893c7` (initial approved EGM design).
-  Later qualification, lifecycle/headings and follow-up ledger files are local
-  pending a signed commit. No meta PR has been opened for this fix yet.
-- Earlier role-simulation checkouts and shared root repositories are unrelated
-  working trees; preserve their work. Hub base/PR target is `master`; meta target
-  is `dev`, verified through the canonical fleet registry.
+Configured 1Password signing recovered after owner authentication. Source and
+meta evidence were signed through the unchanged configured signer. Four prior
+failures are historical; no unsigned or alternate-signer fallback was used.
+`signature-verification.json` distinguishes cryptographic verification against
+the configured public key from GitHub's existing factory-author account badge.
 
-## Qualification and limits
+## Qualification
 
-EGM full five-stage flow completed with actual fresh-context agents. Feature
-critique rounds 1–2 and technical rounds 2–3 were consecutive clean rounds after
-document repairs. Reports preserve exact reviewed paths/hashes and limitations.
-Independent Standards and Spec reviews passed both the initial implementation
-and the final actual three-file test/ledger delta.
+Full five-stage EGM passed, with two consecutive clean feature and technical
+rounds after document repairs. Independent Standards and Spec review passed the
+initial implementation and final fixture/ledger cleanup. Exact final-tree local
+checks passed: zero type errors/warnings, 9320 tests plus301 declared skips,
+zero unhandled errors, architecture3/3, and production build with client-boundary
+negative controls.
 
-Local runtime candidate `b523d281`: type check zero errors/warnings; 9320 tests
-passed,301 declared skips; architecture3/3; no unhandled-error exit. Final staged
-fixture/CRM lane49/49 passed with no unhandled errors. Final staged production
-build passed, Vercel adapter completed, client boundary2030modules/899artifacts/
-zero violations and both mutation canaries rejected. Optional/dynamic dependency
-tracing and Rolldown advisory output is preserved in the raw build receipt.
-Final exact staged-tree qualification completed with exit0: zero check errors/
-warnings; 9320 tests passed,301 declared skips,zero unhandled errors; architecture
-3/3. Readable receipt is `final-exact-tree-qualification.txt`; exact original bytes
-are preserved in `final-exact-tree-qualification.raw.log.gz`. Source stayed frozen at
-`bad85c8d3638983b8f8d81ca4b381383cd2a64bc`. No local check needs repeating unless
-the source/required environment changes or a new concrete failure justifies it.
+Final-head CI42865113752 passed all10jobs, including native PostgreSQL, seeded
+QA and full browser matrix. Vercel preview and all13PRchecks passed. Raw immutable
+logs and readable views are indexed in `log-provenance.json`.
 
-All text log views are normalized for readability and Git whitespace checks;
-immutable compressed originals and both raw/view SHA-256 values are cataloged in
-`log-provenance.json`. Checkpoint log hashes refer to original bytes, not views.
+First-run CI's unhandled fixture teardown import was repaired by waiting for
+tracked dynamic imports before restoring globals/timers. The exception was not
+suppressed. Earlier cross-checkout dependency/CSS collection trouble was resolved
+with this checkout's private frozen dependency install. These are closed defects.
 
-First CI run `42779301202` on published `b523d281` finished with all9320
-assertions passing,301 declared skips, but one unhandled EnvironmentTeardownError
-from `gateway.session.test.ts` after the config lazy import outlived its fixture.
-All nine other CI jobs passed, including check/build, native PostgreSQL, QA
-stack, browser security and critical journeys. The staged cleanup fixes that
-exact fixture lifetime: disconnect → await `vi.dynamicImportSettled()` while
-mocks/fake timers exist → restore globals/timers. It suppresses no exception.
-A new signed source commit and fresh final-head CI are still required.
+## Actual production proof
 
-The first local broad run used a cross-checkout node_modules symlink and failed
-frontend CSS collection. It was interrupted, not counted as a complete verdict.
-Only this clone's symlink was removed; a private frozen install fixed the issue,
-and the narrowed mounted51-case suite plus the full9320-case suite then passed.
-Dependencies and lock are unchanged. `.env` has only blank analytics build
-variables; no diagnostic production environment was loaded into tests/builds.
+Vercel deployment `dpl_4WTSivYaTbvaJd4rbt1SspDG9BSw` is READY on the exact
+merge commit. `hub.minion-ai.org` points to that deployment. At
+2026-11-10T17:59:49Z, the assigned gateway/principal returned permissions200 with
+CRM view, themes200 with nonempty analysis, and empty-body search400 before
+embedding. The actual gateway executed `crm_conversation_themes({})` in the
+affected user's exact personal-agent session: HTTP200, valid inner aggregate,
+no inner error. This proves the tool path, without replaying an assistant/model
+turn or writing business data. Exact emitted-header capture and semantic search
+embedding are not claimed. See the two production JSON receipts.
 
-## Resume steps
+The initial verifier query assumed a nonexistent personal-agent organization
+column and failed read-only before any API request. The private verifier was
+corrected to use the canonical gateway organization and exact agent assignment;
+the four probes then passed. No product or database change was needed.
 
-1. Verify current hashes/status against `checkpoint.json`. Obtain a functioning
-   configured 1Password signing session; do not disable `commit.gpgsign` or
-   replace `/opt/1Password/op-ssh-sign` to get past the failure.
-2. Commit the three staged files with
-   `test(gateway): settle session imports before tearing down fixtures`, then
-   push the existing feature branch. Confirm its tree equals the qualified
-   staged tree and record the new full source hash.
-3. Update PR650 validation details, wait for fresh exact-source CI with zero
-   unhandled errors, and finish the meta evidence commit/PR against `dev`.
-   Use `gh-axi` for GitHub work. Do not treat the earlier failed CI as green.
-4. Complete the owner-authorized merge/deployment flow after qualification.
-   Respect actual protection requirements; the older role-simulation release's
-   admin-override approval is not blanket approval for unrelated future work.
-5. Verify merged tree identity and the Vercel production alias/deployment source.
-   Then make bounded assigned-gateway/principal read-only probes: tool permissions
-   200, CRM themes200 with expected aggregate shape, empty-body search400 after
-   authentication/authorization without embeddings. Also invoke the actual gateway
-   tool as described in `gateway-runtime-verification-plan.md`; a manually supplied
-   header proves Hub admission, not the running gateway's transport. Do not replay
-   a model turn or accept a successful outer envelope containing an inner error.
-6. Record actual merge/deploy/runtime evidence and final spec lifecycle; merge
-   the meta evidence through its approved flow. The dedicated restricted-role
-   support proposal stays draft/open while the authentication repair can close.
-   Notify the owner here only once the production result is verified.
+Temporary production credentials were removed. Private transcripts, identity
+records and returned customer content stay outside git. No production role,
+configuration, schema or gateway restart change was part of this repair.
+Post-merge CI42869942809 was running on the identical qualified tree at initial
+production verification; the full final-head PR suite had passed before merge.
 
-No merge, production deployment, role expansion, token rotation, migration,
-message send or model replay was performed for this authentication repair.
-The earlier separately authorized FACES shared-knowledge permission remains a
-different completed configuration action. Private original conversation and
-principal receipts remain outside git; the temporary production env was removed.
+## Companion evidence and scope
+
+Meta PR <https://github.com/NikolasP98/minion-meta/pull/987> carries this evidence,
+the shipped spec and completed main proposal. Finish its signed final receipt
+commit, metadata/index checks, CI and normal merge against `dev`.
+
+The authentication repair is complete for unrestricted CRM roles. The dedicated
+`proposals/2026-11-10-crm-conversation-restricted-role-support.md` stays open;
+both product guards retain their `TODO(handoff)` pointers. Do not remove them
+without separately qualified owner filtering and sensitive-content handling.
+Preserve shared root repositories, earlier checkouts and unrelated PRs.
