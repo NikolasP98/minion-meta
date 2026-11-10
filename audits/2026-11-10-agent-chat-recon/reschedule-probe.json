@@ -1,0 +1,133 @@
+{
+  "sourceRef": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+  "sourceRoute": "src/routes/api/gateway/actions/booking-reschedule/+server.ts",
+  "method": "actual git-show route plus actual parseBody transpiled with installed TypeScript; installed Zod; mocked authorization/service/kit boundary",
+  "limits": "No native SQL, booking service, production effects or model involved. The injected service treats every requested start as available, so a retry proves route-level lack of idempotency, not that a specific same-slot native retry always creates again. Kit json/error wrappers are synthetic; actual Request/Response/Zod validation are used.",
+  "sources": {
+    "validate.source.ts": {
+      "sha256": "46a75777f87527a2b189abc39a751374e737c674ae16c8243ae59bb1ecf79d95"
+    },
+    "booking-reschedule.source.ts": {
+      "sha256": "f20e71539fd157d676246c34544b4a52bfbd7171ed47121b6e12128e550435ee"
+    }
+  },
+  "assertionsPassed": 5,
+  "results": [
+    {
+      "case": "preview nonexistent references",
+      "result": {
+        "status": 200,
+        "body": {
+          "preview": {
+            "action": "booking-reschedule",
+            "cancels": "synthetic-nonexistent-old",
+            "newStart": "2026-11-15T15:00:00.000Z",
+            "eventTypeId": "synthetic-nonexistent-event"
+          }
+        }
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "scheduling",
+          "action": "edit"
+        }
+      ],
+      "persistedCount": 0
+    },
+    {
+      "case": "create succeeds then cancellation throws",
+      "result": {
+        "thrown": true,
+        "status": null,
+        "message": "synthetic cancellation failure"
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "scheduling",
+          "action": "edit"
+        },
+        {
+          "step": "create",
+          "tenantId": "synthetic-org",
+          "eventTypeId": "synthetic-nonexistent-event",
+          "strictContactReference": null
+        },
+        {
+          "step": "cancel",
+          "tenantId": "synthetic-org",
+          "id": "synthetic-nonexistent-old",
+          "status": "cancelled"
+        }
+      ],
+      "persistedCount": 1
+    },
+    {
+      "case": "same confirmed request retried",
+      "result": {
+        "thrown": true,
+        "status": null,
+        "message": "synthetic cancellation failure"
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "scheduling",
+          "action": "edit"
+        },
+        {
+          "step": "create",
+          "tenantId": "synthetic-org",
+          "eventTypeId": "synthetic-nonexistent-event",
+          "strictContactReference": null
+        },
+        {
+          "step": "cancel",
+          "tenantId": "synthetic-org",
+          "id": "synthetic-nonexistent-old",
+          "status": "cancelled"
+        }
+      ],
+      "persistedCount": 2
+    },
+    {
+      "case": "denied authority positive control",
+      "result": {
+        "thrown": true,
+        "status": 403,
+        "message": "denied"
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "scheduling",
+          "action": "edit"
+        }
+      ],
+      "persistedCount": 2
+    },
+    {
+      "case": "unavailable new slot positive control",
+      "result": {
+        "thrown": true,
+        "status": 409,
+        "message": "new slot unavailable"
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "scheduling",
+          "action": "edit"
+        },
+        {
+          "step": "create",
+          "tenantId": "synthetic-org",
+          "eventTypeId": "synthetic-nonexistent-event",
+          "strictContactReference": null
+        }
+      ],
+      "persistedCount": 2
+    }
+  ]
+}
