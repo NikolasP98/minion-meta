@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T21:48:51.160Z",
+	"generatedAt": "2026-11-10T22:18:11.584Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6544,23 +6544,22 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 6
+				"specification": 9,
+				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [
 				"proposal:2026-09-29-hub-data-view-container"
 			],
-			"rationale": "Already in implementing status with a detailed AS-IS/TO-BE spec covering filter rule trees, grouping, and the catalog's Active-filter migration, so it is actionable now.",
+			"rationale": "This spec is detailed with explicit AS-IS/TO-BE/out-of-scope boundaries and is already mid-implementation, so continued execution is warranted.",
 			"evidence": [
 				"status: implementing",
-				"detailed operator semantics per column type and explicit out-of-scope boundaries",
-				"AS-IS cites exact file/line anchors in DataTable.svelte and ColumnFilter.svelte"
+				"detailed AS-IS inventory of DataTable.svelte toolbar/filter internals with explicit out-of-scope list"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T21:47:57.306Z"
+			"scoredAt": "2026-11-10T22:18:11.430Z"
 		},
 		{
 			"key": "spec:2026-10-10-hub-inbox-notifications-reminders-spec",
@@ -17085,22 +17084,22 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 5,
+				"implementation": 2
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "reframe",
 			"relatedKeys": [
 				"spec:2026-09-29-hub-table-toolbar-notion-filters-spec"
 			],
-			"rationale": "A well-documented AS-IS inventory for a large UI consolidation across 46 DataTable instances, but scope and sequencing versus the in-flight filters spec need resolution before execution.",
+			"rationale": "The proposal wants a new DataView component to own filter/group config that an already-implementing spec is adding to DataTable, so it needs resequencing rather than parallel execution.",
 			"evidence": [
-				"46 DataTable instances across 34 files, 4366-line component",
-				"depends on in-flight filters spec moving filter/group ownership"
+				"spec 2026-09-29-hub-table-toolbar-notion-filters-spec status is 'implementing' and already adds filter/group config to DataTable",
+				"proposal explicitly states it wants the new component to own that same filter/group configuration"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T21:47:57.306Z"
+			"scoredAt": "2026-11-10T22:18:11.430Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-uiux-consistency-followups",
@@ -17165,6 +17164,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T21:00:42.893Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-e8cac06",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ e8cac06",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-e8cac06.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "1ea424d043a6f67b9d06c5ab70075d973047b59f56a066cba0fdaa7f8b84ef5e",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 6,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Both findings are narrowly scoped, file:line-precise bug reports that are immediately actionable as small fixes.",
+			"evidence": [
+				"agent/lib/jev.sh:131 empty-catch silently ignores redirection failure and returns rc 0 despite file-write contract",
+				"agent/lib/jev.sh:56 tag parameter used unvalidated in filenames, risking path traversal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T22:18:11.430Z"
 		},
 		{
 			"key": "issue:minion-meta#472",
@@ -30048,38 +30079,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:48:30.364Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-factory-e8cac06",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ e8cac06",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-e8cac06.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "1ea424d043a6f67b9d06c5ab70075d973047b59f56a066cba0fdaa7f8b84ef5e",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two concrete, narrowly-scoped findings (silent error swallowing and unvalidated filename input) in a small shell script are clear and actionable.",
-			"evidence": [
-				"high: jev.sh:131 empty-catch silently ignores write failure, violating rc 0 contract",
-				"medium: jev.sh:56 tag parameter unvalidated in filenames, risk of path traversal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T21:47:57.306Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
