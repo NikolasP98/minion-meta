@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T08:47:30.237Z",
+	"generatedAt": "2026-11-10T09:18:30.629Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5443,8 +5443,8 @@
 			"repo": "minion_hub",
 			"title": "#650 fix(crm): restore CRM analyst access for permitted roles",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/650",
-			"sourceUpdatedAt": "2026-11-10T08:43:24Z",
-			"sourceFingerprint": "decd7635a2fd299985284673178b86f2065bb4be3626216e11ad7884b2a3cc93",
+			"sourceUpdatedAt": "2026-11-10T08:59:31Z",
+			"sourceFingerprint": "db320b180b098992d1386eec9e05ef485f6e8b4637514b7a978d84a634383374",
 			"score": 62,
 			"band": "medium",
 			"axes": {
@@ -5453,21 +5453,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 9,
 				"implementation": 7
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 7,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Fixes a real access-denial bug for permitted CRM roles with extensive review/test evidence but is still draft pending a tracked test cleanup and signer before merge.",
+			"rationale": "Access fix passed full review and test suites but remains blocked on a configured SSH signer and fresh final-head CI before it can land.",
 			"evidence": [
-				"EGM full five-stage review passed with independent Standards/Spec PASS",
-				"9,320 tests passed; async import teardown fix still awaiting tracked imports",
-				"Delivery blocked on configured SSH signer and fresh final-head CI"
+				"full local runtime-candidate suite 9,320 passed, EGM review passed",
+				"delivery blocked: final cleanup staged locally awaiting SSH signer, draft status"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T08:47:30.032Z"
+			"scoredAt": "2026-11-10T09:18:30.436Z"
 		},
 		{
 			"key": "pr:minion-meta#882",
@@ -5696,38 +5695,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T07:48:56.644Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-3c702b25845f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/services/gateway/platform-admin-methods.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3c702b25845f.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "a2c3b659abd4c7be73a8d13b4d515455672c79a8ee2d1070eba38353717db08a",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Diagnosis flags a potential privilege-escalation gap where UI surfaces using platform-admin methods may lack visibility gating, but the exact surfaces must be confirmed against spec 045 T037/T038 before execution.",
-			"evidence": [
-				"TODO(handoff): spec 045 T037/T038 hide (not lock) every surface behind this list",
-				"merged PR #622 in minion_hub@1f1ab6a"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T08:49:47.645Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7440051c7752",
@@ -8095,6 +8062,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T03:01:50.351Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-3c702b25845f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/services/gateway/platform-admin-methods.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3c702b25845f.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "a2c3b659abd4c7be73a8d13b4d515455672c79a8ee2d1070eba38353717db08a",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Flags a potential privilege-escalation gap in admin-only surfaces but the diagnosis is speculative ('likely lack...') and needs verification before actionable work.",
+			"evidence": [
+				"marker: 'hide (not lock) every surface behind this list'",
+				"diagnosis itself says the UI gating gap is only 'likely' present, not confirmed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T09:18:30.436Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-40a4a290126b",
@@ -13951,6 +13950,42 @@
 			"scoredAt": "2026-11-07T01:33:44.286Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f0206dc8b63e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/gateway-jwt.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f0206dc8b63e.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "511144b777d08e677ceff5d14c8575209e0d27af3fae5c1b6d5c39f504afbe9e",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-0bdce2ded97b",
+				"proposal:postmerge-minion-hub-4f60d3413457",
+				"proposal:postmerge-minion-hub-f19b0bbe4d0b"
+			],
+			"rationale": "Legacy JWT audience cleanup is part of the same spec 045 A4/T054 transition as the other flagged findings and touches the auth path.",
+			"evidence": [
+				"marker: 'drop with the legacy audience in spec 045 A4 (tasks T054)'",
+				"file is in the auth-adjacent gateway-jwt.service.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T09:18:30.436Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-site-d5d1a8c9d6a9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15663,42 +15698,6 @@
 			"scoredAt": "2026-11-07T08:18:08.131Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-0bdce2ded97b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/organization-provision.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0bdce2ded97b.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "f6f2b03ef131acb2c32aa2fa34a5aae3724fd64631cd123b837250bb51d066cb",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-4f60d3413457",
-				"proposal:postmerge-minion-hub-f0206dc8b63e",
-				"proposal:postmerge-minion-hub-f19b0bbe4d0b"
-			],
-			"rationale": "One of four TODO(handoff) markers tied to spec 045 A4's audience-flag removal (T054) spanning org-provision, PluginIframe, gateway-jwt, and the token route, which should become one cleanup goal.",
-			"evidence": [
-				"TODO(handoff): spec 045 A4 deletes the flag — make the audience unconditional there (T054)",
-				"merged PR #622 in minion_hub@1f1ab6a"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T08:49:47.645Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-274eede277fe",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -16057,42 +16056,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T04:19:08.186Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f0206dc8b63e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/gateway-jwt.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f0206dc8b63e.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "511144b777d08e677ceff5d14c8575209e0d27af3fae5c1b6d5c39f504afbe9e",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-0bdce2ded97b",
-				"proposal:postmerge-minion-hub-4f60d3413457",
-				"proposal:postmerge-minion-hub-f19b0bbe4d0b"
-			],
-			"rationale": "Third of four spec 045 A4/T054 markers (drop legacy JWT audience) sitting in the auth path, which belongs with the other three as one bundled cleanup goal.",
-			"evidence": [
-				"TODO(handoff): drop with the legacy audience in spec 045 A4 (T054)",
-				"merged PR #622 in minion_hub@1f1ab6a"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T08:49:47.645Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
@@ -24556,6 +24519,42 @@
 			"scoredAt": "2026-11-05T03:03:54.264Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-0bdce2ded97b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/organization-provision.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0bdce2ded97b.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "f6f2b03ef131acb2c32aa2fa34a5aae3724fd64631cd123b837250bb51d066cb",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-4f60d3413457",
+				"proposal:postmerge-minion-hub-f0206dc8b63e",
+				"proposal:postmerge-minion-hub-f19b0bbe4d0b"
+			],
+			"rationale": "This is one of several TODO(handoff) markers tied to the same spec 045 A4/T054 audience-flag removal and should be resolved as one goal.",
+			"evidence": [
+				"marker: 'spec 045 A4 deletes the flag — make the audience unconditional there (tasks T054)'",
+				"same merged PR #622 on minion_hub@1f1ab6a as the other A4-tagged findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T09:18:30.436Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-37ac95d53900",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32511,42 +32510,6 @@
 			"scoredAt": "2026-11-09T13:48:19.748Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-4f60d3413457",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/plugins/PluginIframe.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4f60d3413457.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "930c9d9480ad3d07931788747967a215cb0680f838768235470d00875eaf49a1",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-0bdce2ded97b",
-				"proposal:postmerge-minion-hub-f0206dc8b63e",
-				"proposal:postmerge-minion-hub-f19b0bbe4d0b"
-			],
-			"rationale": "Second of four spec 045 A4/T054 cleanup markers (drop with A4) that should be bundled into one audience-flag-removal goal rather than tracked separately.",
-			"evidence": [
-				"TODO(handoff): drop with A4 (T054)",
-				"merged PR #622 in minion_hub@1f1ab6a"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T08:49:47.645Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-4f854d1a7707",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36469,42 +36432,6 @@
 			"scoredAt": "2026-11-07T00:22:08.414Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-f19b0bbe4d0b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/token/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f19b0bbe4d0b.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "22bdbcf9a756b5202cecff70eb4bf926b57ebf808c7d451d02d05cdb68297df7",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-0bdce2ded97b",
-				"proposal:postmerge-minion-hub-4f60d3413457",
-				"proposal:postmerge-minion-hub-f0206dc8b63e"
-			],
-			"rationale": "Fourth of four spec 045 A4/T054 markers (delete token route) that should be grouped with the other three into one audience-flag-removal cleanup goal.",
-			"evidence": [
-				"TODO(handoff): delete this route in A4 (T054)",
-				"merged PR #622 in minion_hub@1f1ab6a"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T08:49:47.645Z"
-		},
-		{
 			"key": "spec:2026-08-17-hub-dead-mirrors-cleanup-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -37775,6 +37702,42 @@
 			"scoredAt": "2026-11-07T08:18:08.131Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-4f60d3413457",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/plugins/PluginIframe.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4f60d3413457.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "930c9d9480ad3d07931788747967a215cb0680f838768235470d00875eaf49a1",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-0bdce2ded97b",
+				"proposal:postmerge-minion-hub-f0206dc8b63e",
+				"proposal:postmerge-minion-hub-f19b0bbe4d0b"
+			],
+			"rationale": "Narrow single-file cleanup explicitly gated on the same spec 045 A4/T054 event as other findings; best resolved together.",
+			"evidence": [
+				"marker: 'drop with A4 (T054)'",
+				"diagnosis suggests checking A4 status before removing, same gate as related findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T09:18:30.436Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-7103ac983198",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -37805,6 +37768,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T03:17:42.985Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f19b0bbe4d0b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/servers/[id]/token/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f19b0bbe4d0b.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "22bdbcf9a756b5202cecff70eb4bf926b57ebf808c7d451d02d05cdb68297df7",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-0bdce2ded97b",
+				"proposal:postmerge-minion-hub-4f60d3413457",
+				"proposal:postmerge-minion-hub-f0206dc8b63e"
+			],
+			"rationale": "Dead-route deletion gated on the same A4/T054 milestone as the other proposals; grouping avoids four separate tiny PRs.",
+			"evidence": [
+				"marker: 'delete this route in A4 (T054)'",
+				"diagnosis recommends verifying no consumers before deleting, same A4 dependency as related items"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T09:18:30.436Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-a357d1f6520e",
