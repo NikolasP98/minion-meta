@@ -18,7 +18,9 @@ needed authentication. The actual failure occurs at Hub's gateway authentication
 boundary, before the CRM permission check. Anonymous machine identity reaches
 the handler, whose trusted-principal resolver returns 401. This proposal records the confirmed
 incident and a scoped repair for owner approval. No functional patch or deployment
-has been made for this incident.
+had been made at the initial investigation checkpoint. The owner subsequently
+conditionally approved implementation after EGM, which passed; current source
+and qualification state are recorded in the spawned spec.
 
 ## AS-IS
 
@@ -81,7 +83,8 @@ organization settings, database schema, or gateway configuration change.
    Return HTTP 403 with code `CRM_CONVERSATION_SCOPE_UNSUPPORTED` and a concise
    explanation that conversation analysis is unavailable for roles with record
    or sensitive-field restrictions. Preserve search's AI entitlement gate.
-3. At both guards, leave `TODO(handoff)` comments pointing here for the bounded
+3. At both guards, leave `TODO(handoff)` comments pointing to
+   `proposals/2026-11-10-crm-conversation-restricted-role-support.md` for the bounded
    follow-up: owner-filtered retrieval and qualified sensitive-field handling.
    Analysis already accepts an owner filter; semantic search needs a qualified
    owner-aware query. Do not treat this as permission to remove either guard.
@@ -106,7 +109,13 @@ organization settings, database schema, or gateway configuration change.
   `audits/2026-11-10-crm-analyst-auth/egm/`.
 - Spec: approved for implementation after EGM. Security-tagged work keeps the
   approval and merge gates required by root `AGENTS.md`.
-- Functional implementation, tests, merge, and deployment: not started.
+- Implementation is published in Hub PR 650; the final signed test/ledger cleanup
+  passed independent Standards/Spec review, typecheck zero errors/warnings,
+  9320 tests,architecture3/3 and production build. The configured signer recovered after
+  owner authentication and signed source660ef077 is published.
+- Fresh final-head CI is running; the earlier published-head CI had
+  all assertions pass but one unhandled test teardown import, repaired locally.
+- Merge and deployment: not started; no production repair is claimed.
 - No production configuration or data was changed during this investigation.
 
 ## Out of scope

@@ -1,8 +1,8 @@
 ---
 id: 2026-11-10-hub-crm-analyst-gateway-authentication-spec
 title: Restore CRM analyst gateway authentication within current CRM permissions
-stage: spec
-status: approved
+stage: dev
+status: implementing
 verdict: approved
 pass: 2
 created: 2026-11-10
@@ -15,7 +15,21 @@ proposal: 2026-11-10-hub-crm-analyst-gateway-authentication
 
 # Restore CRM analyst gateway authentication
 
-## Problem and outcome
+Implementation is in [Hub PR 650](https://github.com/NikolasP98/minion_hub/pull/650),
+final signed source `660ef0777844b56dc8df57eec3c169c5280126f4`, tree
+`bad85c8d3638983b8f8d81ca4b381383cd2a64bc`. Independent Standards and Spec reviews
+passed. The exact tree passed typecheck with zero errors/warnings, 9320 tests
+plus architecture3/3 and the production build, with zero unhandled errors.
+Configured 1Password signing recovered after owner authentication; the signed
+final cleanup is published. Fresh final-head CI, merge and production
+verification remain pending. No deployment is claimed.
+
+After reviewing this concrete implementation and its EGM/focused-check results,
+the owner requested: "I'm going to bed, lmk when theyre live." This authorizes
+normal merge, deployment and bounded production verification once qualification
+passes. It does not authorize ignoring failures or bypassing branch protections.
+
+## 0. Product
 
 A FACES Staff user asked the CRM analyst for customers' main pain points. The
 matching gateway chat records `crm_conversation_themes({})` failing with HTTP
@@ -78,7 +92,7 @@ the inspected feature head `71d3743d020a518b95ad1a090b76ca46f16fd56f`.
    principal resolver. No token rotation, new schema, migration, user messaging,
    model replay, gateway restart or production role change is part of this fix.
 
-## DELTA and acceptance matrix
+## Verification — DELTA and acceptance matrix
 
 | Case | Required result | Proof |
 |---|---|---|
@@ -94,7 +108,7 @@ the inspected feature head `71d3743d020a518b95ad1a090b76ca46f16fd56f`.
 | Search query absent | Existing 400; no embedding | Search handler test |
 | Deployed repair | Same assigned gateway can enter routes; permitted themes result | Bounded post-deploy read-only verification; not a model replay |
 
-## Alternatives and limits
+## Alternatives, out of scope, and limits
 
 - Broadly admit `/api/gateway/*`: rejected because unrelated handlers have
   different authority contracts. Only the two reviewed exact paths are added.
@@ -175,8 +189,8 @@ exactly this JSON body with HTTP 403, and tests assert exact body equality:
 
 This preserves the handlers' existing `error` field and adds the stable code.
 Search keeps its existing entitlement position. At each
-restriction guard add `TODO(handoff)` pointing to the originating proposal's
-limited-role support follow-up. Do not change service signatures or SQL.
+restriction guard add `TODO(handoff)` pointing to the dedicated limited-role
+support follow-up proposal below. Do not change service signatures or SQL.
 
 Run focused identity, both-handler and existing assistant-principal/hook suites.
 No dependencies, generated UI, localization, schema or gateway source change.
@@ -206,8 +220,10 @@ verification does not send messages or replay a model conversation.
 
 ### Limited-role support follow-up
 
-The originating proposal remains the open-items ledger for owner-filtered
-semantic retrieval and sensitive-field handling. Keep the new guards until
+The dedicated open-items ledger is
+`proposals/2026-11-10-crm-conversation-restricted-role-support.md`; it stays open
+when the authentication repair is shipped. Both guard comments point there.
+It tracks owner-filtered semantic retrieval and sensitive-field handling. Keep the new guards until
 those cases have a separately approved design and runtime privacy tests. This
 fix is complete for unrestricted roles when its named tests and deployed
 verification pass; limited-role support remains explicitly unavailable.
@@ -227,3 +243,15 @@ and its linked personas/standards are installed in this session's discovered EGM
 plugin bundle; the review report records their actual paths and completed reads.
 Post-code Standards review checks contributor rules and engineering invariants;
 Spec review checks this document's acceptance requirements and scope.
+
+### CI qualification repair
+
+The first candidate's CI assertions all passed (9320 plus301 declared skips),
+but Vitest correctly failed the job on an unhandled import that outlived
+`src/lib/services/gateway.session.test.ts`. Repair only that existing fixture's
+teardown: make `afterEach` async, disconnect first, await
+`vi.dynamicImportSettled()` while mocks/globals and fake timers remain installed,
+then restore globals/timers. The installed Vitest helper uses safe real timers
+and waits the tracked import graph. This adds one test-only file to the runtime
+repair's inventory; it changes no gateway production behavior and suppresses no
+error. Independent review and zero-unhandled-error final CI are required.
