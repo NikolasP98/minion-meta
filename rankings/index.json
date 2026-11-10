@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T17:59:19.320Z",
+	"generatedAt": "2026-11-10T18:49:04.481Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1131,6 +1131,43 @@
 			"scoredAt": "2026-11-09T08:57:47.424Z"
 		},
 		{
+			"key": "pr:minion (gateway)#369",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#369 fix(agents): confirm memory writes and prevent misleading assistant replies",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/369",
+			"sourceUpdatedAt": "2026-11-10T18:19:42Z",
+			"sourceFingerprint": "26af949f6171bf52209d0422fea2b4c1cbb081eb540f6e11d189cbd9745874d8",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#370",
+				"pr:minion (gateway)#371",
+				"spec:2026-11-10-agent-chat-contracts-followups-spec"
+			],
+			"rationale": "Extensively validated production hotfix is currently blocked from merge by a failing detect-secrets gate pending the dedicated audit PR.",
+			"evidence": [
+				"Production PR369 currently exposes a detect-secrets finding in synthetic credential regression fixtures",
+				"neither branch is to be merged with a failing security gate",
+				"final PR must pass the complete actual CI lanes before merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
+		},
+		{
 			"key": "spec:2026-10-03-readiness-money-precision-schedules-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1233,6 +1270,43 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T06:18:03.894Z"
+		},
+		{
+			"key": "spec:2026-11-10-agent-chat-contracts-followups-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Deliver remaining transcript-backed assistant contracts",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-10-agent-chat-contracts-followups-spec.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "968de421e9a0b2c64be2963041ce2a7905d0a25b0241504b95d7b9ba13e34736",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#369",
+				"pr:minion (gateway)#370",
+				"pr:minion_hub#651"
+			],
+			"rationale": "This is the actively-implementing spec driving the three in-flight PRs that deliver reliability, memory, and booking fixes across gateway and hub.",
+			"evidence": [
+				"Owner: ok, proceed with fixes, and lmk when they're live",
+				"status: implementing",
+				"Preserve prior authorization for the scoped Gateway guardrail release and its production exception"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
 		},
 		{
 			"key": "proposal:2026-10-02-hub-gateway-production-readiness-recon",
@@ -2410,6 +2484,42 @@
 			"scoredAt": "2026-11-05T17:48:16.339Z"
 		},
 		{
+			"key": "pr:minion_hub#651",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#651 fix(assistant): preserve stock amounts and reliably reconcile booking changes",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/651",
+			"sourceUpdatedAt": "2026-11-10T18:20:32Z",
+			"sourceFingerprint": "9a22d126edd36a28e3b342f76c161f53e9052cd0d07420cf56a94cb390055d26",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-11-10-agent-chat-contracts-followups-spec",
+				"pr:minion (gateway)#369"
+			],
+			"rationale": "Independently reviewed Hub fixes are release-ordered ahead of the gateway deploy and only need real CI to merge.",
+			"evidence": [
+				"independent Standards/Spec review passed",
+				"Hub PR #651 is released first, then this immutable Docker release/deploy must prove exact SHA/digest",
+				"This PR must pass actual GitHub CI on the final source before merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
+		},
+		{
 			"key": "proposal:2026-08-28-factory-infra-product-failure-taxonomy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2807,6 +2917,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T07:48:56.644Z"
+		},
+		{
+			"key": "pr:minion (gateway)#370",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#370 fix(agents): preserve reliable replies and acknowledged memory in development",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/370",
+			"sourceUpdatedAt": "2026-11-10T18:23:29Z",
+			"sourceFingerprint": "d49e679e91eeec99b45674aae23572b22db431a982c444d6524be0a6a31d736d",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#369",
+				"pr:minion (gateway)#371"
+			],
+			"rationale": "DEV-branch parity of PR369's fixes is similarly blocked on the same unresolved security gate before it can merge.",
+			"evidence": [
+				"183 tests across all 10 changed regression files pass",
+				"neither branch is to be merged with a failing security gate",
+				"current actual CI remains required"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
 		},
 		{
 			"key": "pr:minion_hub#340",
@@ -3840,6 +3986,43 @@
 			"scoredAt": "2026-11-04T07:49:32.808Z"
 		},
 		{
+			"key": "pr:minion (gateway)#371",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#371 fix(ci): audit synthetic credential fixtures without weakening secret scans",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/371",
+			"sourceUpdatedAt": "2026-11-10T18:27:01Z",
+			"sourceFingerprint": "736608934660e8441318795ba2157f3c465fa94abdc3f30a7779e63f9c9dd068",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#369",
+				"pr:minion (gateway)#370",
+				"spec:2026-11-10-agent-fixture-secret-audit-spec"
+			],
+			"rationale": "This draft audit is the sole blocking prerequisite for merging the two higher-impact gateway PRs, so it should move forward first.",
+			"evidence": [
+				"Dedicated draft audit for the synthetic fixture and public-checksum findings exposed by agent release PR369 and DEV parity PR370",
+				"Classification of all historical snapshots...independent review...remain required",
+				"This initial documentation record changes no scanner rule or baseline and is not merge-ready"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
+		},
+		{
 			"key": "pr:minion_hub#647",
 			"kind": "pr",
 			"stage": "development",
@@ -4198,6 +4381,43 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T07:18:02.629Z"
+		},
+		{
+			"key": "spec:2026-11-10-agent-fixture-secret-audit-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Qualify synthetic credential fixtures through a dedicated secret audit",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-10-agent-fixture-secret-audit-spec.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "0bba1c27f302861067cfad7efca699646dd96d79d2e2de542e90e7655f95e4d9",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#371",
+				"pr:minion (gateway)#369",
+				"pr:minion (gateway)#370"
+			],
+			"rationale": "Governs the mandatory detect-secrets classification that both gateway PRs are blocked on before they can merge.",
+			"evidence": [
+				"Actual production PR369 and development PR370 fail detect-secrets",
+				"No scanner skip, broad exclusion or unsigned source is permitted",
+				"dedicated audit PR371...classifies only reviewed public checksums and synthetic fixture values"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -11323,6 +11543,42 @@
 			"scoredAt": "2026-11-04T05:17:31.935Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-88cec9c1e71b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/crm-conversation-themes/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-88cec9c1e71b.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "b3977795cc64494975c4689ed0c5fadfa1d4812b49576ec9933fd75e1b5ddf7e",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d9076c262af0",
+				"proposal:2026-11-10-crm-conversation-restricted-role-support"
+			],
+			"rationale": "This is the same owner/sensitive-field scoping design work as the paired search-conversations TODO and the restricted-role-support proposal, and should become one grouped goal.",
+			"evidence": [
+				"TODO(handoff): Keep restricted roles denied until scoped retrieval/masking is",
+				"Merged from handoff-minion-hub-2300667990",
+				"Fix direction: Implement role-scoped retrieval... Add integration tests verifying restricted roles see only their scoped data"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11388,6 +11644,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d9076c262af0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/search-crm-conversations/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d9076c262af0.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "58932e4a25e478b4a522f2f9ed4dbb9f36544932aad4b7c68a3f9e3803e3f2b6",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-88cec9c1e71b",
+				"proposal:2026-11-10-crm-conversation-restricted-role-support"
+			],
+			"rationale": "Same underlying owner/sensitive-field scoping design as the paired themes-endpoint TODO and the restricted-role-support proposal; should be merged into one goal.",
+			"evidence": [
+				"TODO(handoff): Keep restricted roles denied until scoped retrieval/masking is",
+				"Fix direction: Implement scoped retrieval by adding role-to-data-filter mappings",
+				"Add test cases for each role to confirm no data leakage"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fc192ff88fe3",
@@ -18431,6 +18723,42 @@
 			"scoredAt": "2026-11-05T06:18:18.520Z"
 		},
 		{
+			"key": "proposal:2026-11-06-agent-transcript-evals-and-runtime-improvements",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Evaluate real agent traces and correct date, outcome, access, and completion behavior",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "424840ec040aac37015d951aabc0f66d1e68e267636421e7266bdc6147c78d87",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-11-10-agent-chat-contracts-followups-spec",
+				"spec:2026-11-10-agent-fixture-secret-audit-spec"
+			],
+			"rationale": "Most delta items (memory, finance, booking, receipts) already moved into active specs/PRs, leaving only the credential-scope and memory-provenance items unassigned.",
+			"evidence": [
+				"status: in-spec",
+				"Scope and sanitize (audit F12)... no credential rotation is authorized by this audit",
+				"candidate eval seeds are agent-reviewed and human-unreviewed; they are not an executed benchmark"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
+		},
+		{
 			"key": "proposal:handoff-minion-factory-1093105314",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23343,41 +23671,6 @@
 			"scoredAt": "2026-11-06T20:17:53.879Z"
 		},
 		{
-			"key": "pr:minion-meta#987",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#987 spec(hub): qualify CRM analyst gateway authentication repair",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/987",
-			"sourceUpdatedAt": "2026-11-10T17:29:57Z",
-			"sourceFingerprint": "c02f2fee47afcb2b0c233d2b35b5dd97e80ddebe41299a6fb7fbd08c34462404",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#650"
-			],
-			"rationale": "This is the meta-repo spec record for the exact same CRM auth repair as pr:minion_hub#650, so the two should be tracked and executed as one goal rather than ranked independently.",
-			"evidence": [
-				"Record the approved CRM analyst authentication repair... for Hub PR #650",
-				"The signed Hub source is 660ef0777844b56dc8df57eec3c169c5280126f4; its tree matches the candidate that passed...",
-				"Fresh final-head CI is running. No production result is claimed yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T17:48:07.915Z"
-		},
-		{
 			"key": "proposal:2026-08-18-base-attention-queue-responsive-runs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23508,6 +23801,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T07:48:56.644Z"
+		},
+		{
+			"key": "proposal:2026-11-10-crm-conversation-restricted-role-support",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Support CRM conversation analysis within record and sensitive-field restrictions",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-10-crm-conversation-restricted-role-support.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "991b79df4b87196356cfc14eac9af6780e9eabf51818bcfbf2d2b20dd951ac23",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-88cec9c1e71b",
+				"proposal:postmerge-minion-hub-d9076c262af0"
+			],
+			"rationale": "Requires a separately approved owner/sensitive-field design before either existing denial guard can be removed, so it is not yet implementation-ready.",
+			"evidence": [
+				"Design both retrieval paths' owner and sensitive-field contracts before removing either guard",
+				"Current guards remain in place until that evidence exists",
+				"This capture does not authorize implementation, permission expansion or production configuration changes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1480236091",
@@ -25641,41 +25970,6 @@
 			"scoredAt": "2026-11-07T04:18:13.377Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-88cec9c1e71b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/crm-conversation-themes/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-88cec9c1e71b.md",
-			"sourceUpdatedAt": "2026-11-10",
-			"sourceFingerprint": "e5e373ff7d4317fc242ee96bbe845539433668927567126fdfbca98007ea26ed",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-d9076c262af0"
-			],
-			"rationale": "This TODO-handoff and its sibling in search-crm-conversations share the same PR, same marker text, and the same role-scoped-retrieval fix, so they should become one goal rather than two overlapping ones.",
-			"evidence": [
-				"TODO(handoff): Keep restricted roles denied until scoped retrieval/masking is",
-				"same merged PR #650 on minion_hub@df1ae0e as the related finding",
-				"current behavior is a safe blanket deny, not an active vulnerability"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T17:59:19.131Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-96f1290718f8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25706,41 +26000,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T00:22:08.414Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-d9076c262af0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/search-crm-conversations/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d9076c262af0.md",
-			"sourceUpdatedAt": "2026-11-10",
-			"sourceFingerprint": "dc843a396246b7663671fe6c73da2c71a77d10807c031aad4230fd4b31e65b2a",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-88cec9c1e71b"
-			],
-			"rationale": "Same PR #650, same TODO(handoff) marker, and same role-scoped-retrieval fix direction as the conversation-themes finding, so these two endpoints should be addressed as a single goal.",
-			"evidence": [
-				"TODO(handoff): Keep restricted roles denied until scoped retrieval/masking is",
-				"merged PR https://github.com/NikolasP98/minion_hub/pull/650",
-				"fix direction calls for role-to-filter mappings and field masking, shared with the sibling endpoint"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T17:59:19.131Z"
 		},
 		{
 			"key": "spec:2026-08-21-hub-datatable-server-mode-test-gap-spec",
@@ -27885,6 +28144,39 @@
 			"scoredAt": "2026-11-10T06:47:42.235Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "3828d1c8303a5b9eeef3e0b287d22e450f8705ed5ce340470a970ccde909c88d",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles many unrelated TODO markers across disparate files and topics into a single ledger entry that cannot be executed as one coherent unit of work.",
+			"evidence": [
+				"Filed automatically by the factory handoff-ledger sweep",
+				"markers span auth gating, invoice races, payment credentials, error scrubbing, and scheduling edge cases",
+				"Approving sends it into the spec pipeline to resolve the open end below"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T18:49:04.296Z"
+		},
+		{
 			"key": "run:minion (gateway)#31686911500",
 			"kind": "run",
 			"stage": "testing",
@@ -29681,38 +29973,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T09:48:48.932Z"
-		},
-		{
-			"key": "run:minion_hub#42869942809",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/42869942809",
-			"sourceUpdatedAt": "2026-11-10T17:55:55Z",
-			"sourceFingerprint": "e201c73ac9f88fd9b941d166c22cb23e8b66caa2a6e3b06695e46670fe75eca7",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress automated CI run on master, not a scoped work item, so it resolves on its own and isn't an actionable goal.",
-			"evidence": [
-				"status in_progress, triggered by push on master",
-				"kind run / stage testing with no associated spec or task description"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T17:59:19.131Z"
 		},
 		{
 			"key": "issue:minion-meta#574",
@@ -46081,39 +46341,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T03:00:39.631Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-10",
-			"sourceFingerprint": "f01052f1a456a7f86b98326d9f321624d93ad2acb358d48df7cf26f8888bedb9",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated sweep listing lines from rankings/index.json itself, which are quoted candidate titles/summaries rather than actual code TODO(handoff) markers, making it non-actionable.",
-			"evidence": [
-				"source: handoff-sweep",
-				"markers point only to rankings/index.json, the ranking data file, not source code",
-				"list entries are truncated quoted text fragments, not concrete tasks"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T13:47:50.004Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
