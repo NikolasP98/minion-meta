@@ -130,6 +130,13 @@ overlap. Today, toasts are already under every modal drawer.
    - Tooltip: focus does not move;
    - Combobox: typing filters while the list stays open and the input keeps focus.
    They run in real Chromium in the storybook vitest project.
+   The play functions are typed TypeScript in `src/lib/stories/Overlays/top-layer-play.ts`.
+   The clip and cover boxes get their geometry from plain CSS in `top-layer-play.css`,
+   because the vitest lane runs without the Tailwind plugin, so utility classes have no
+   geometry there. The overflow box also sets `contain: layout`, which makes it the
+   containing block of fixed-strategy panels (Tooltip, Combobox) as well, so that
+   `overflow: hidden` really clips them. All 9 new stories fail against the old components
+   and pass with the change.
 6. The existing happy-dom tests (`Popover.viewport.test.ts`, `floating-layer.mounted.test.ts`)
    stay green. They prove Escape and focus return and the suppression rule with the new
    attribute present.
