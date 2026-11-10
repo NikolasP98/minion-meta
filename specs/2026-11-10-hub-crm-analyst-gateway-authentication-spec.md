@@ -277,9 +277,9 @@ path for the reported user. It does not replay the assistant's response, inspect
 exact emitted headers, or execute a semantic-search embedding. Empty-body search
 proves admission and the expected pre-embedding input rejection. Restricted-role
 privacy behavior is covered by synthetic regression tests; production customer
-roles were not changed. Post-merge CI42869942809 started on the identical tested
-tree and was still running at the initial production verification checkpoint;
-final-head PR CI had already passed all checks before merge.
+roles were not changed. Post-merge CI42869942809 also passed on the identical tested tree; see
+`audits/2026-11-10-crm-analyst-auth/implementation/postmerge-ci.json`. Final-head PR CI had already passed all
+checks before merge.
 
 The first private verifier query incorrectly assumed `personal_agents.org_id`
 exists. It failed read-only with PostgreSQL42703 before any API probe. The

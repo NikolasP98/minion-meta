@@ -57,14 +57,15 @@ the four probes then passed. No product or database change was needed.
 Temporary production credentials were removed. Private transcripts, identity
 records and returned customer content stay outside git. No production role,
 configuration, schema or gateway restart change was part of this repair.
-Post-merge CI42869942809 was running on the identical qualified tree at initial
-production verification; the full final-head PR suite had passed before merge.
+Post-merge CI42869942809 also passed on the identical qualified tree. Both
+pre-merge and post-merge CI are successful; see `postmerge-ci.json`.
 
 ## Companion evidence and scope
 
 Meta PR <https://github.com/NikolasP98/minion-meta/pull/987> carries this evidence,
-the shipped spec and completed main proposal. Finish its signed final receipt
-commit, metadata/index checks, CI and normal merge against `dev`.
+the shipped spec and completed main proposal. Its final receipts are signed
+and its spec/proposal indexes are validated against current `dev`. GitHub
+records the companion PR check and merge state.
 
 The authentication repair is complete for unrestricted CRM roles. The dedicated
 `proposals/2026-11-10-crm-conversation-restricted-role-support.md` stays open;
