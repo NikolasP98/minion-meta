@@ -1,0 +1,72 @@
+Bounded normalized view; immutable original: production-build.raw.log.gz
+
+$ paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide && NODE_OPTIONS=--max-old-space-size=6144 vite build && bun run test:client-build-boundary && bun run test:client-build-boundary-canary
+ℹ [paraglide] Compiling inlang project at "./project.inlang".
+Using existing cloned repo
+ℹ [paraglide] Successfully compiled the project.
+... 2966 middle log lines omitted from this view; immutable full log is preserved ...
+.svelte-kit/output/server/entries/pages/(app)/pos/sell/_page.svelte.js                                             113.83 kB │ gzip:  28.30 kB
+.svelte-kit/output/server/entries/pages/(app)/crm/settings/_page.svelte.js                                         114.24 kB │ gzip:  16.05 kB
+.svelte-kit/output/server/index.js                                                                                 123.29 kB │ gzip:  31.24 kB
+.svelte-kit/output/server/entries/pages/(app)/team/_page.svelte.js                                                 126.31 kB │ gzip:  24.75 kB
+.svelte-kit/output/server/chunks/server2.js                                                                        132.10 kB │ gzip:  34.79 kB
+.svelte-kit/output/server/entries/pages/(app)/_layout.svelte.js                                                    155.45 kB │ gzip:  33.73 kB
+.svelte-kit/output/server/entries/pages/(app)/agents/workshop/_id_/_page.svelte.js                                 166.89 kB │ gzip:  36.71 kB
+.svelte-kit/output/server/entries/pages/(app)/flow-editor/_id_/_page.svelte.js                                     196.36 kB │ gzip:  34.26 kB
+.svelte-kit/output/server/chunks/calendar-prefs.svelte.js                                                          210.60 kB │ gzip:  52.92 kB
+.svelte-kit/output/server/chunks/modules.js                                                                        222.28 kB │ gzip:  23.75 kB
+.svelte-kit/output/server/chunks/settings.js                                                                       227.02 kB │ gzip:  61.15 kB
+.svelte-kit/output/server/entries/pages/(app)/home/_page.svelte.js                                                 271.82 kB │ gzip:  53.20 kB
+.svelte-kit/output/server/entries/pages/(app)/reliability/_page.svelte.js                                          275.71 kB │ gzip:  57.61 kB
+.svelte-kit/output/server/chunks/pulse-digest.authority.js                                                         295.14 kB │ gzip: 104.06 kB
+.svelte-kit/output/server/entries/pages/(app)/agents/_page.svelte.js                                               319.73 kB │ gzip:  61.29 kB
+.svelte-kit/output/server/chunks/messages2.js                                                                      386.59 kB │ gzip: 100.72 kB
+.svelte-kit/output/server/entries/hooks.server.js                                                                  667.53 kB │ gzip:  62.66 kB
+.svelte-kit/output/server/chunks/ui.js                                                                             734.56 kB │ gzip: 131.41 kB
+.svelte-kit/output/server/chunks/messages.js                                                                     8,079.84 kB │ gzip: 472.90 kB
+
+[PLUGIN_TIMINGS] Your build spent significant time in plugin `vite-plugin-sveltekit-guard`. See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.
+
+✓ built in 1m 14s
+
+Run npm run preview to preview your production build locally.
+
+> Using @sveltejs/adapter-vercel
+  Warning: The following modules failed to locate dependencies that may (or may not) be required for your app to work:
+  node_modules/resend/dist/index.mjs
+    - @react-email/render
+  node_modules/ws/lib/buffer-util.js
+    - bufferutil
+  node_modules/ws/lib/validation.js
+    - utf-8-validate
+  node_modules/@sentry/sveltekit/build/esm/vite/svelteConfig.js
+    - file:///svelte.config.ts
+  node_modules/@sentry/sveltekit/build/cjs/vite/svelteConfig.js
+    - file:///svelte.config.ts
+  node_modules/resend/dist/index.cjs
+    - @react-email/render
+  node_modules/debug/src/node.js
+    - supports-color
+  node_modules/@neon-rs/load/dist/index.js
+    - /index.node
+  node_modules/rollup/dist/es/shared/node-entry.js
+    - fsevents
+  node_modules/@babel/core/lib/config/files/module-types.js
+    - @babel/preset-typescript
+    - @babel/preset-typescript/package.json
+  node_modules/vite/dist/node/chunks/node.js
+    - yaml
+    - tsx/cjs/api
+    - @vitejs/devtools/integration
+    - @vitejs/devtools/config
+  node_modules/vite/dist/client/client.mjs
+    - @vite/env
+  node_modules/rollup/dist/shared/fsevents-importer.js
+    - fsevents
+  node_modules/esbuild/lib/main.js
+    - pnpapi
+  ✔ done
+$ node scripts/qc/assert-client-build-boundary.mjs
+{"label":"SvelteKit client","modules":2030,"artifacts":899,"violations":0,"rollupModules":4930,"rollupGraphSha256":"a153a1b448d7d066066b7e7bbb23531048e6eda52edb99922fa7283760d5bf4b","outputDirectories":38,"scannedBytes":24334238}
+$ node scripts/qc/assert-client-build-boundary-canary.mjs
+{"label":"Vite client boundary canary","rejectedMutations":["real bundled server module","real bundled private credential marker"]}
