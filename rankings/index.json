@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T07:47:51.521Z",
+	"generatedAt": "2026-11-10T08:17:51.576Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3872,6 +3872,39 @@
 			"scoredAt": "2026-11-09T08:48:30.364Z"
 		},
 		{
+			"key": "pr:minion_hub#650",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#650 fix(crm): restore CRM analyst access for permitted roles",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/650",
+			"sourceUpdatedAt": "2026-11-10T08:03:01Z",
+			"sourceFingerprint": "ffa6eae5522ee69f87513fa28be101394389831ed0936dc62fc4798214eed891",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A scoped auth fix for a real 401 regression affecting permitted CRM roles has passed extensive regression suites and is in final CI, making it ready for human merge review.",
+			"evidence": [
+				"Authentication regression 4 intended failures before repair then 19/19 passed",
+				"Restricted-scope regression final focused lane 171/171 passed",
+				"Full final check/test/build and CI are in progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T08:17:51.381Z"
+		},
+		{
 			"key": "pr:minion_site#29",
 			"kind": "pr",
 			"stage": "development",
@@ -4098,39 +4131,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T09:17:55.014Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-96528a1d8ee1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/internal/flows/[id]/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96528a1d8ee1.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "02d79ec46508c6a35dbcf961a095a2f3bf1753eea47908d25a73030e372e0d16",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Flagged tenant-isolation gap is a plausible multi-tenant security risk but needs a proper spec/backfill plan before execution, not a direct fix.",
-			"evidence": [
-				"marker: 'flows with a NULL tenant_id are never gated'",
-				"auto-diagnosis flags data-leakage/privilege-escalation risk",
-				"fix direction requires backfill + constraint + handler changes, not yet scoped"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:56:26.364Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
@@ -15860,6 +15860,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T20:17:38.249Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-96528a1d8ee1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/internal/flows/[id]/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96528a1d8ee1.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "02d79ec46508c6a35dbcf961a095a2f3bf1753eea47908d25a73030e372e0d16",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis only speculates a tenant-isolation gap for NULL tenant_id flows ('if the endpoint doesn't validate...') without confirming current enforcement, so scope needs verification before committing a fix.",
+			"evidence": [
+				"Marker: flows with a NULL tenant_id are never gated (aiEnabled true); backfill",
+				"diagnosis is conditional: 'If the endpoint doesn't validate that the requestor owns the tenant'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T08:17:51.381Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9f08fb1611b8",
@@ -41054,19 +41086,19 @@
 			},
 			"readiness": {
 				"specification": 5,
-				"implementation": 3
+				"implementation": 2
 			},
 			"confidence": 6,
-			"recommendation": "prune",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Cleanup TODO is explicitly gated on JWT plugin auth landing, which has not happened, so it is not actionable now.",
+			"rationale": "This cleanup is explicitly blocked on an unmerged JWT plugin-auth dependency, so it cannot be actioned now regardless of how clearly it is written up.",
 			"evidence": [
-				"TODO depends on 'plugin UIs get a JWT path (spec 043 R8)'",
-				"fix direction says convert to proposal if JWT work is deferred"
+				"TODO depends on plugin UIs getting a JWT path per spec 043 R8",
+				"diagnosis says to convert to formal proposal if JWT support is deferred"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:56:26.364Z"
+			"scoredAt": "2026-11-10T08:17:51.381Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-7b8cd069cbf5",
@@ -41253,19 +41285,19 @@
 			},
 			"readiness": {
 				"specification": 4,
-				"implementation": 3
+				"implementation": 2
 			},
 			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "TODO only becomes relevant once a third AI flow-node action exists, so acting now is premature.",
+			"rationale": "This is a hypothetical extensibility refactor gated on a third AI flow-node action that does not yet exist, so designing for it now is premature.",
 			"evidence": [
-				"marker: 'move to an ai flag... when a third AI action'",
-				"no third AI action currently indicated"
+				"TODO: move to an 'ai' flag on plugin flow-node manifests when a third AI action",
+				"diagnosis frames this as needed only once a third AI-powered action is added"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:56:26.364Z"
+			"scoredAt": "2026-11-10T08:17:51.381Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
