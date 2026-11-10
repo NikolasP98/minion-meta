@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-4081431351
 title: Handoff marker — .no-mistakes.yaml (minion-meta)
-status: draft
+status: review
 created: 2026-11-10
 updated: 2026-11-10
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-11-06-agent-transcript-evals-and-runtime-improvements
 ---
 
 # Handoff marker — .no-mistakes.yaml

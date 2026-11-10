@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-43187394
 title: Handoff marker — audits/2026-11-06-agent-transcript-review/code-review/repro.test.ts (minion-meta)
-status: draft
+status: review
 created: 2026-11-10
 updated: 2026-11-10
 repos: [minion-meta]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-11-06-agent-transcript-evals-and-runtime-improvements
 ---
 
 # Handoff marker — audits/2026-11-06-agent-transcript-review/code-review/repro.test.ts
