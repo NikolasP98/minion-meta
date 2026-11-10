@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T06:18:04.148Z",
+	"generatedAt": "2026-11-10T06:47:42.487Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2137,41 +2137,6 @@
 			"scoredAt": "2026-11-07T22:47:08.781Z"
 		},
 		{
-			"key": "proposal:2026-10-29-gateway-per-org-credentials-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Gateway per-org credentials — open ends deferred from spec 045",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-29-gateway-per-org-credentials-followups.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "59887299ed37d3b46f6d56d148fa69a07a621ed5c0fbf691df091a72b43ba1bc",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#363"
-			],
-			"rationale": "A well-specified security follow-up ledger with confirmed recurring open ends (e.g. members area credential gap) directly tied to the shared-token removal effort.",
-			"evidence": [
-				"confirmed still open at minion-site@c69986f per 2026-11-03 postmerge-discovery recurrence",
-				"six concrete numbered risks (R8, R5, R4, R6, R2, mcp audience) each with AS-IS/TO-BE/DELTA",
-				"directly follows from spec 045 which PR #363 implements"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T06:17:24.576Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-420076982",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2875,6 +2840,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T17:48:16.339Z"
+		},
+		{
+			"key": "pr:minion_hub#649",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#649 fix(pos): free follow-up appointments no longer count as unpaid",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/649",
+			"sourceUpdatedAt": "2026-11-10T06:31:35Z",
+			"sourceFingerprint": "4220fe27185d34b6df54ecc0bce860026782ed2187e68215c82e2ac0ab502516",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#986"
+			],
+			"rationale": "Fixes a concrete billing-correctness bug affecting a large share of bookings, backed by a linked spec and matching SQL/client implementation.",
+			"evidence": [
+				"111 of FACES' 285 services priced 0 were wrongly flagged unpaid",
+				"SQL (UNBILLED_BOOKING_WHERE) and client (chargeableRows) changed together",
+				"linked spec PR minion-meta#986"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T06:47:42.235Z"
 		},
 		{
 			"key": "proposal:2026-09-12-360-continuation-review-followups",
@@ -4799,6 +4799,39 @@
 			"scoredAt": "2026-11-10T03:18:20.478Z"
 		},
 		{
+			"key": "proposal:2026-10-29-gateway-per-org-credentials-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Gateway per-org credentials — open ends deferred from spec 045",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-29-gateway-per-org-credentials-followups.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "59887299ed37d3b46f6d56d148fa69a07a621ed5c0fbf691df091a72b43ba1bc",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles six distinct security follow-ups of differing scope and readiness, several explicitly noted as having no spec yet, so it needs to be split into separately specced goals rather than executed as one.",
+			"evidence": [
+				"R6: read methods have no org filter on shared gateways",
+				"R2: agents/skills/cron/sessions decentralization has no spec yet",
+				"R4: tailscale/trusted-proxy auth maps to admin by default"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T06:47:42.235Z"
+		},
+		{
 			"key": "proposal:2026-10-29-hub-org-entitlements-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5502,6 +5535,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T02:47:12.585Z"
+		},
+		{
+			"key": "pr:minion-meta#986",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#986 spec(hub): POS receivables ignore price-0 follow-ups",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/986",
+			"sourceUpdatedAt": "2026-11-10T06:27:34Z",
+			"sourceFingerprint": "ad6ec261080d328e083fe57eeac23e12f78ac2d39968ea979505ce74f7c40d8d",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#649"
+			],
+			"rationale": "This spec documents the same POS receivables fix as hub PR #649 and the two should be tracked and merged as one unit of work.",
+			"evidence": [
+				"Hotfix-sized spec from proposals/2026-11-10-faces-weekly-sync-backlog.md §1",
+				"111 of 285 are price 0",
+				"directly backs pr:minion_hub#649"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T06:47:42.235Z"
 		},
 		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
@@ -19421,38 +19489,6 @@
 			"scoredAt": "2026-11-08T08:17:44.430Z"
 		},
 		{
-			"key": "pr:minion_hub#648",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#648 feat(storybook): component workbench with every hub component, theme switcher and a working test lane",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/648",
-			"sourceUpdatedAt": "2026-11-09T05:45:32Z",
-			"sourceFingerprint": "ecf6f861c811e0158252c6df23b735c8fc0e7e9bc32a602942b2ac6b9ae4af55",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The PR explicitly carries the same commits as #645 and #647 and depends on those landing first before its own diff is actionable.",
-			"evidence": [
-				"Merge those first; this branch carries the same commits, so they drop out of the diff",
-				"1,359 entries across 14 groups"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-09T08:48:30.364Z"
-		},
-		{
 			"key": "pr:minion-meta#930",
 			"kind": "pr",
 			"stage": "development",
@@ -27781,6 +27817,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T08:18:08.131Z"
+		},
+		{
+			"key": "pr:minion_hub#648",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#648 feat(storybook): component workbench with every hub component, theme switcher and a working test lane",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/648",
+			"sourceUpdatedAt": "2026-11-10T06:43:37Z",
+			"sourceFingerprint": "504e62fa83dcfe978b51b472a7a0e07463766c395e3a50a288ab6fa8257328e9",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Storybook component workbench is thoroughly specified and already passes its full test lane, making it ready to merge as a dev-tooling improvement.",
+			"evidence": [
+				"1,359 entries across 14 groups with real-state variants",
+				"188 files / 1,171 tests, all green after fixture fixes",
+				"lint:design and lint:tokens pass, no governed debt"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T06:47:42.235Z"
 		},
 		{
 			"key": "run:minion (gateway)#31686911500",
