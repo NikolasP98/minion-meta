@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T17:48:08.109Z",
+	"generatedAt": "2026-11-10T17:59:19.320Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1411,8 +1411,8 @@
 			"band": "high",
 			"axes": {
 				"criticality": 8,
-				"importance": 8,
-				"impact": 6
+				"importance": 7,
+				"impact": 7
 			},
 			"readiness": {
 				"specification": 9,
@@ -1421,15 +1421,15 @@
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Blue/green slot-switch infra already caused a real production deploy failure and carries a documented risk of docker stack prune deleting the live service.",
+			"rationale": "A real production deploy failure already occurred while slot b was live and the controller/workflow path can silently prune the active production service, so the scoped slot-derivation guard (DELTA row 1) is a concrete, well-specified, high-risk fix.",
 			"evidence": [
-				"Status 2026-10-13: deploy-production.yml failed while slot b was live, fixed by hand",
-				"docker stack deploy --prune could delete the -b service carrying production",
-				"DELTA table gives concrete code changes with named tests"
+				"16:1xZ deploy-production.yml failed while slot b was live; released by hand via slot-switch.sh",
+				"docker stack deploy --prune could delete the -b service carrying production traffic",
+				"DELTA table gives a bounded fix with a named test fixture for row 1"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T17:48:01.796Z"
+			"scoredAt": "2026-11-10T17:59:19.131Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b8113b095cdf",
@@ -5402,41 +5402,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T08:18:13.127Z"
-		},
-		{
-			"key": "pr:minion_hub#650",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#650 fix(crm): restore CRM analyst access for permitted roles",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/650",
-			"sourceUpdatedAt": "2026-11-10T17:30:20Z",
-			"sourceFingerprint": "29b84e4a88b4dc63aac4403c767f3d70a26dbb9d15a4cc7ffacb2d3d91e562d7",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#987"
-			],
-			"rationale": "Fixes a production auth bug blocking legitimate CRM analyst access, with full EGM review and passing local test suite, now awaiting fresh CI on the signed head.",
-			"evidence": [
-				"CRM analyst tools rejected valid gateway credentials with 401 even when the user had CRM access",
-				"EGM full five-stage review passed, including two consecutive clean rounds",
-				"Fresh CI is running on this head. No merge or production deployment is claimed before those checks pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T17:48:07.915Z"
 		},
 		{
 			"key": "pr:minion-meta#882",
@@ -25676,6 +25641,41 @@
 			"scoredAt": "2026-11-07T04:18:13.377Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-88cec9c1e71b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/crm-conversation-themes/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-88cec9c1e71b.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "e5e373ff7d4317fc242ee96bbe845539433668927567126fdfbca98007ea26ed",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d9076c262af0"
+			],
+			"rationale": "This TODO-handoff and its sibling in search-crm-conversations share the same PR, same marker text, and the same role-scoped-retrieval fix, so they should become one goal rather than two overlapping ones.",
+			"evidence": [
+				"TODO(handoff): Keep restricted roles denied until scoped retrieval/masking is",
+				"same merged PR #650 on minion_hub@df1ae0e as the related finding",
+				"current behavior is a safe blanket deny, not an active vulnerability"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T17:59:19.131Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-96f1290718f8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25706,6 +25706,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T00:22:08.414Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d9076c262af0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/gateway/search-crm-conversations/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d9076c262af0.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "dc843a396246b7663671fe6c73da2c71a77d10807c031aad4230fd4b31e65b2a",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-88cec9c1e71b"
+			],
+			"rationale": "Same PR #650, same TODO(handoff) marker, and same role-scoped-retrieval fix direction as the conversation-themes finding, so these two endpoints should be addressed as a single goal.",
+			"evidence": [
+				"TODO(handoff): Keep restricted roles denied until scoped retrieval/masking is",
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/650",
+				"fix direction calls for role-to-filter mappings and field masking, shared with the sibling endpoint"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T17:59:19.131Z"
 		},
 		{
 			"key": "spec:2026-08-21-hub-datatable-server-mode-test-gap-spec",
@@ -29646,6 +29681,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T09:48:48.932Z"
+		},
+		{
+			"key": "run:minion_hub#42869942809",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/42869942809",
+			"sourceUpdatedAt": "2026-11-10T17:55:55Z",
+			"sourceFingerprint": "e201c73ac9f88fd9b941d166c22cb23e8b66caa2a6e3b06695e46670fe75eca7",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress automated CI run on master, not a scoped work item, so it resolves on its own and isn't an actionable goal.",
+			"evidence": [
+				"status in_progress, triggered by push on master",
+				"kind run / stage testing with no associated spec or task description"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T17:59:19.131Z"
 		},
 		{
 			"key": "issue:minion-meta#574",
@@ -37639,38 +37706,6 @@
 			"scoredAt": "2026-11-04T10:18:13.789Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-f2de5e0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ f2de5e0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f2de5e0.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "1fb11ec5ec82bfe0f2cce6bdac4febb1573f7dd6ae1c49943c69a29f40b4126d",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, precisely located config hygiene fix (externalize a hardcoded production IP) that is low-risk and immediately actionable.",
-			"evidence": [
-				"medium hardcoded-config finding at cutover.sh:6 and cutover.sh:9",
-				"Production host IP 152.53.91.108 hardcoded, should be env var"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T17:48:01.796Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -44003,6 +44038,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T03:17:43.502Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-f2de5e0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ f2de5e0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f2de5e0.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "1fb11ec5ec82bfe0f2cce6bdac4febb1573f7dd6ae1c49943c69a29f40b4126d",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Two medium hardcoded-IP findings in cutover.sh are low-risk cosmetic portability issues with a trivial, clearly bounded env-var fix.",
+			"evidence": [
+				"medium severity hardcoded-config finding at cutover.sh:6 and cutover.sh:9",
+				"fix is externalizing one IP to an env var"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T17:59:19.131Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
