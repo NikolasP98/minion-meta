@@ -1,0 +1,174 @@
+{
+  "sourceRef": "206d9ae218efd4bf682d6c4063797c7441f4d52a",
+  "route": "src/routes/api/gateway/actions/stock-entry-create/+server.ts",
+  "method": "Unmodified actual route, actual parseBody, actual stock.logic and entry-legs transpiled with installed TypeScript and Zod; authorization/createEntry/Kit adapters mocked.",
+  "scope": "Source composition proof only. No native DB, valuation, production write, or provider call. Synthetic FX settings only; no current exchange-rate claim. Draft-only agent contract preserved.",
+  "scenariosPassed": 5,
+  "sources": {
+    "validate.source.ts": {
+      "sha256": "46a75777f87527a2b189abc39a751374e737c674ae16c8243ae59bb1ecf79d95"
+    },
+    "entry-legs.source.ts": {
+      "sha256": "a059b69aad3e0030c76f9d4878a6c8c786ae5a3e1cffa5e45cf763a40382113d"
+    },
+    "stock.logic.source.ts": {
+      "sha256": "d173a478774ddf3285eb1d9e8778249b1192c1cd555d8a71c415ae23e1dbc08e"
+    },
+    "stock-entry-create.source.ts": {
+      "sha256": "eeec2e68a187dbc6bf7422f055f4f788c35570059436cd61e2c574d851c9ed40"
+    }
+  },
+  "results": [
+    {
+      "case": "USD preview",
+      "result": {
+        "status": 200,
+        "body": {
+          "preview": {
+            "action": "stock-entry-create",
+            "type": "receipt",
+            "partyId": null,
+            "note": null,
+            "lines": [
+              {
+                "itemId": "synthetic-item",
+                "qty": 20,
+                "rate": 100,
+                "toWarehouseId": "synthetic-warehouse"
+              }
+            ]
+          }
+        }
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "stock",
+          "action": "create"
+        }
+      ],
+      "createCalls": 0,
+      "conversionCalls": 0
+    },
+    {
+      "case": "USD confirmed draft",
+      "result": {
+        "status": 201,
+        "body": {
+          "entry": {
+            "id": "synthetic-draft-1",
+            "type": "receipt",
+            "partyId": null,
+            "note": null,
+            "lines": [
+              {
+                "itemId": "synthetic-item",
+                "qty": 20,
+                "rate": 100,
+                "toWarehouseId": "synthetic-warehouse"
+              }
+            ],
+            "status": "draft"
+          }
+        }
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "stock",
+          "action": "create"
+        },
+        {
+          "step": "actor",
+          "id": "synthetic-owner"
+        },
+        {
+          "step": "create",
+          "tenantId": "synthetic-org"
+        }
+      ],
+      "capturedInput": {
+        "type": "receipt",
+        "partyId": null,
+        "note": null,
+        "lines": [
+          {
+            "itemId": "synthetic-item",
+            "qty": 20,
+            "rate": 100,
+            "toWarehouseId": "synthetic-warehouse"
+          }
+        ]
+      },
+      "conversionCalls": 0
+    },
+    {
+      "case": "invalid zero qty rejected before create",
+      "result": {
+        "thrown": true,
+        "status": 400,
+        "message": "invalid body: lines.0.qty: Too small: expected number to be >0"
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "stock",
+          "action": "create"
+        }
+      ],
+      "createCalls": 1
+    },
+    {
+      "case": "missing rate accepted by preview schema",
+      "result": {
+        "status": 200,
+        "body": {
+          "preview": {
+            "action": "stock-entry-create",
+            "type": "receipt",
+            "partyId": null,
+            "note": null,
+            "lines": [
+              {
+                "itemId": "synthetic-item",
+                "qty": 20,
+                "toWarehouseId": "synthetic-warehouse"
+              }
+            ]
+          }
+        }
+      },
+      "calls": [
+        {
+          "step": "authority",
+          "module": "stock",
+          "action": "create"
+        }
+      ],
+      "note": "Rate is optional here; this proves preview acceptance, not that native draft creation/submission accepts every such line."
+    },
+    {
+      "case": "actual shared native conversion positive control",
+      "inputRate": 100,
+      "orgCurrency": "PEN",
+      "inputCurrency": "USD",
+      "syntheticFxRate": 3.75,
+      "result": {
+        "ok": true,
+        "lines": [
+          {
+            "itemId": "synthetic-item",
+            "qty": 20,
+            "rate": 375,
+            "toWarehouseId": "synthetic-warehouse"
+          }
+        ],
+        "metadata": {
+          "currency": "USD",
+          "fxRate": 3.75,
+          "fxUpdatedAt": "2026-11-10T00:00:00Z"
+        }
+      }
+    }
+  ]
+}

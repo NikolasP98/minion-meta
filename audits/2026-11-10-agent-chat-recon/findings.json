@@ -1,0 +1,225 @@
+{
+  "date": "2026-11-10",
+  "scope": "Minion user conversations; coding-agent sessions excluded",
+  "sources": {
+    "gatewayDEV": "d3e0fbf54fc657521df07c896ea7adce5ba1afcd",
+    "gatewayMain": "50a3036ad7fac23710943e7eeadfe66b38d96fcd",
+    "hubMaster": "206d9ae218efd4bf682d6c4063797c7441f4d52a"
+  },
+  "coverage": {
+    "retainedConversationLikeEpisodesReviewed": 74,
+    "since": "2026-10-01",
+    "snapshotCollected": "2026-11-06",
+    "latestRetainedMessage": "2026-11-03T19:21:28.364Z",
+    "snapshotMessageEvents": 43377,
+    "snapshotAgentGatewayCohorts": 41,
+    "freshSessionCollection": "Blocked: SSH timeout; local Tailscale BackendState Stopped",
+    "freshCanonicalGETs": 9,
+    "freshCanonicalRows": 0,
+    "canonicalFilter": "After retained max event timestamp; messages require nonnull agent_id; chat_messages queried by tenant. Null attribution excluded, so zero rows is not evidence of zero usage."
+  },
+  "findings": [
+    {
+      "id": "N01",
+      "priority": "High",
+      "status": "Current source gap",
+      "title": "Preserve stock currency and rate basis",
+      "observed": "A retained request explicitly specified USD and a line total; the assistant filled a numeric unit rate without currency. The current assistant form-fill catalog/adapter and Gateway tool schemas still lack currency. The native UI has currency controls, but the Hub agent action strips currency and bypasses the native API conversion path.",
+      "evidence": "Actual canonical route probes: USD preview omits currency; confirmed draft passes raw rate 100 with no currency/FX metadata. The existing shared helper produces 375 from the same synthetic USD rate at synthetic FX 3.75. No production valuation was tested.",
+      "action": "Thread explicit currency and unit/line-total basis through the form, Gateway tool, preview and action. Reuse native conversion and persist FX provenance; keep draft creation separate from posting.",
+      "acceptance": "USD and PEN; unit and line totals; missing FX; UI already in total mode; preserved earlier draft lines; preview/commit parity. Unsupported currency must be explicit.",
+      "prior": "Additional finding; adjacent to F06/F07 action closure.",
+      "trace": "c6e6da527369, physical lines 20-23; follow-up fe0caf8192ea 46-47. Private identifiers retained only in the evidence ledger.",
+      "sources": [
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/lib/assistant/catalog.ts#L11",
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/routes/api/gateway/actions/stock-entry-create/+server.ts#L18",
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/routes/api/stock/entries/+server.ts#L67",
+        "https://github.com/NikolasP98/minion-ai/blob/d3e0fbf54fc657521df07c896ea7adce5ba1afcd/src/agents/tools/hub/stock-entry-create-tool.ts#L34"
+      ]
+    },
+    {
+      "id": "N02",
+      "priority": "High",
+      "status": "Current source gap",
+      "title": "Make booking rescheduling atomic and validated",
+      "observed": "Create-booking preflight is fixed, but reschedule still returns a syntax-only preview, creates a replacement, then independently cancels the original. An existing native transactional reschedule service now exists.",
+      "evidence": "Five actual-route synthetic scenarios reproduced a successful create followed by cancellation failure, leaving a simulated replacement. Replay reaches create again. Authority denial and unavailable-slot controls pass. Native slot conflicts can prevent a particular duplicate; this is not a production duplicate claim.",
+      "action": "Specify move-versus-replacement semantics, use the appropriate atomic native service, validate original references, and return an idempotent effect receipt. Preview must describe the same effect as commit.",
+      "acceptance": "Failure between effects; missing/foreign original; same-resource overlapping move; invalid contact; linked payments/packages/series; retries after uncertain delivery.",
+      "prior": "Additional source finding adjacent to C03/F07, not a recurrence of the fixed create preview.",
+      "sources": [
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/routes/api/gateway/actions/booking-reschedule/+server.ts#L40",
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/server/services/scheduling-bookings.service.ts#L1408"
+      ]
+    },
+    {
+      "id": "N03",
+      "priority": "High",
+      "status": "Retained trace; new eval needed",
+      "title": "Reconcile summaries against received booking rows",
+      "observed": "A retained appointment answer reports 10 bookings and 3 no-shows after receiving 11 unique booking IDs and 4 no-shows, all within the requested local day. One already-returned slot disappears from the summary.",
+      "evidence": "A deterministic private receipt check deduplicates overlapping tool responses, verifies consistent duplicate IDs and local-day bounds, then compares the terminal aggregate. This proves summarization loss in that trace, not a current model failure or database population completeness.",
+      "action": "Compute and reconcile authoritative total/status aggregates, deduplicate by booking ID, keep scope/coverage explicit, and make totals agree with displayed rows. Count people only from stable authorized identity, never attendee display labels.",
+      "acceptance": "Overlapping result windows; multiple bookings per contact; equal display names; all statuses; repeated slots; capped data. Preserve current exact-count/truncation contracts.",
+      "prior": "Additional semantic finding distinct from C04 silent truncation and F01 date selection.",
+      "trace": "e16518e73706 request line43; tool receipts45/46/48/49/51/52/54/56/58; final59.",
+      "sources": [
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/routes/api/gateway/query/bookings/+server.ts#L15"
+      ]
+    },
+    {
+      "id": "R01",
+      "priority": "High",
+      "status": "Existing candidate; unmerged",
+      "title": "Adopt the reviewed Gateway guardrails",
+      "observed": "Fresh Gateway DEV is byte-for-byte the November 6 audit base. Reviewed memory/onboarding/DSML/redaction corrections have not entered DEV or the reviewed release files.",
+      "evidence": "Current source still supplies at most two messages to a four-message memory threshold; extraction capacity lacks reservation; bootstrap conflicts with ordinary-task guidance. Five sanitizer probes reproduce DSML and supported-secret gaps plus two passing controls.",
+      "action": "Recover and qualify the existing candidate commits and gates. Do not create a parallel implementation or assume the open production promotion PR includes these local corrections.",
+      "acceptance": "Exact candidate source, independent review, focused and full checks, actual CI, applicable human gates, immutable deployed identity and runtime checks.",
+      "prior": "C01/C02/C06/C07/C08; F02/F08/F12.",
+      "sources": [
+        "https://github.com/NikolasP98/minion-ai/blob/d3e0fbf54fc657521df07c896ea7adce5ba1afcd/src/agents/pi-embedded-runner/run/attempt.ts#L733",
+        "https://github.com/NikolasP98/minion-ai/blob/d3e0fbf54fc657521df07c896ea7adce5ba1afcd/src/memory/extract-memories.ts#L245",
+        "https://github.com/NikolasP98/minion-ai/blob/d3e0fbf54fc657521df07c896ea7adce5ba1afcd/src/channels/outbound-sanitizer.ts#L27"
+      ]
+    },
+    {
+      "id": "R02",
+      "priority": "High",
+      "status": "Partial protection",
+      "title": "Make completion depend on durable receipts",
+      "observed": "Error metadata, semantic isError and unknown-write stopping exist. Durable extracted-memory dispatch still returns void and swallows sink failures, so extraction telemetry does not prove storage.",
+      "evidence": "Current memory-service and memory-sink source. Open Gateway PR367 already covers fetch deadlines/in-flight protection but is unmerged and does not supply durable acknowledgment/idempotency.",
+      "action": "Separate extracted, queued, persisted and confirmed states; add durable acknowledgment and idempotency. Preserve current honest recovery and explicit-write preview/confirm contracts.",
+      "acceptance": "Sink failure; partial delivery; timeout after commit; duplicate retry; explicit remember recovery. No saved claim from a rejected or unknown receipt.",
+      "prior": "F04/F06; existing candidate ledger.",
+      "sources": [
+        "https://github.com/NikolasP98/minion-ai/blob/d3e0fbf54fc657521df07c896ea7adce5ba1afcd/src/memory/memory-service.ts#L42",
+        "https://github.com/NikolasP98/minion-ai/blob/d3e0fbf54fc657521df07c896ea7adce5ba1afcd/src/memory/memory-sink.ts#L64"
+      ]
+    },
+    {
+      "id": "R03",
+      "priority": "High",
+      "status": "Current contract gap",
+      "title": "Rank the metric the user requested",
+      "observed": "Finance selects top 15 invoice items by revenue. Returned quantities describe that revenue-selected subset; per-service cost/margin is absent. A volume winner can be excluded.",
+      "evidence": "Canonical finance route and service. This supports the contract gap behind the historical price-for-margin failure, not a new production reasoning incident.",
+      "action": "Expose explicit quantity/revenue/margin rankings with population, coverage, currency, period, cost provenance and tie/truncation semantics. Return unavailable when costs are insufficient.",
+      "acceptance": "Low-price quantity winner outside revenue top15; missing cost; POS-only sales; overlapping sources; ties at cap; sensitive-field masking.",
+      "prior": "F03; dates/all-time C05 already fixed.",
+      "sources": [
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/routes/api/gateway/query/finance/+server.ts#L44",
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/server/services/finance.service.ts#L1070"
+      ]
+    },
+    {
+      "id": "R04",
+      "priority": "Medium",
+      "status": "Current contract gap",
+      "title": "Complete booking prerequisite discovery",
+      "observed": "Booking creation needs eventTypeId/resource context, while catalog and POS reads return productId without a guaranteed service/event mapping. No dedicated typed event/resource/slot read was found.",
+      "evidence": "Canonical gateway query inventory, booking-create schema, catalog and POS projections. Other custom tool or form paths may exist; not every booking is claimed impossible.",
+      "action": "Provide permission-scoped service/event mappings, eligible resources, local timezone and availability reads. Preserve assignment and module authorization.",
+      "acceptance": "Named-service booking using only authorized typed tools; ambiguous names; inactive/foreign resources; no slots; explicit access denial.",
+      "prior": "F07; create preflight C03 already fixed.",
+      "sources": [
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/routes/api/gateway/actions/booking-create/+server.ts#L14",
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/routes/api/gateway/query/pos/+server.ts#L22"
+      ]
+    },
+    {
+      "id": "R05",
+      "priority": "Medium",
+      "status": "Known applied-fix boundary",
+      "title": "Reconcile interruptions after a run is claimed",
+      "observed": "Lost-ack pending-run recovery is merged, but reconnect still revokes claimed runs; a result arriving after binding invalidation is discarded.",
+      "evidence": "PR643 and canonical accepted-runs/runner source. This limit is already documented and is not a reason to undo pending-run recovery.",
+      "action": "Expose interrupted/unknown effect state and reconcile persisted receipts without automatically replaying a possibly committed write.",
+      "acceptance": "Reconnect during read, after commit before receipt, and across user/org/host identity change; no duplicate replay.",
+      "prior": "Existing November8 resume proposal and PR643.",
+      "sources": [
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/lib/assistant/accepted-runs.ts#L74",
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/lib/assistant/runner.ts#L77"
+      ]
+    },
+    {
+      "id": "R06",
+      "priority": "Medium",
+      "status": "Existing backlog",
+      "title": "Keep memory provenance and business tool scope explicit",
+      "observed": "Retained workshop speculation/heartbeat filler appears in injected memory. Extraction receives role/content without effect-receipt provenance. Policy machinery exists, but live business-profile restrictions could not be inspected.",
+      "evidence": "Retained traces and canonical extraction/tool-policy contracts. Causal storage path and current tenant configuration remain unproven.",
+      "action": "Distinguish user facts, plans, peer claims and confirmed effects; suppress duplicate filler and bound workshop goals. Apply existing business-tool policies and verify enforcement.",
+      "acceptance": "Unexecuted promise; peer opinion; duplicate heartbeat; explicit user correction; permitted business read versus unnecessary environment enumeration.",
+      "prior": "F09/F12. No historical credential rotation or new authority inferred.",
+      "sources": [
+        "https://github.com/NikolasP98/minion-ai/blob/d3e0fbf54fc657521df07c896ea7adce5ba1afcd/src/memory/extract-memories.ts#L24",
+        "https://github.com/NikolasP98/minion-ai/blob/d3e0fbf54fc657521df07c896ea7adce5ba1afcd/src/agents/tool-governance/tool-policy.ts#L279"
+      ]
+    },
+    {
+      "id": "R07",
+      "priority": "Medium",
+      "status": "Guidance fixed; data access incomplete",
+      "title": "Read Minion release notes on demand",
+      "observed": "An October12 changelog request received upstream OpenClaw notes and an unsupported installed-version claim. Current changelog guidance explicitly forbids that substitution, but its existing TODO says actual release notes are not supplied.",
+      "evidence": "Current changelog manifest and its regression assertion; existing open-end3 of the JEV/context-router proposal. No current recurrence was tested.",
+      "action": "Complete the existing on-demand Hub release-notes read, retaining product/source identity and separate runtime-version receipts. Do not re-file missing guidance.",
+      "acceptance": "Current Minion page with upstream distractors; notes unavailable; installed version unknown; user asks for response rather than an upgrade.",
+      "prior": "Historical additional trace, partly addressed; existing October12 proposal owns data-read gap.",
+      "sources": [
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/lib/assistant/turn-router.ts#L125",
+        "https://github.com/NikolasP98/minion_hub/blob/206d9ae218efd4bf682d6c4063797c7441f4d52a/src/lib/state/features/assistant-context.test.ts#L168"
+      ]
+    }
+  ],
+  "alreadyApplied": [
+    {
+      "title": "Booking create preview",
+      "behavior": "Native semantic preflight, strict contacts and commit revalidation.",
+      "qualification": "C03; Hub PR637"
+    },
+    {
+      "title": "Booking count and truncation",
+      "behavior": "Exact filtered total plus returned/truncated/count mode.",
+      "qualification": "C04; Hub PR637"
+    },
+    {
+      "title": "Finance dates and local buckets",
+      "behavior": "Strict dates, intentional all-time and business timezone.",
+      "qualification": "C05/F01; finance scope only"
+    },
+    {
+      "title": "Tool error handling",
+      "behavior": "Structured code/status/retryable and semantic isError.",
+      "qualification": "F04; preserve existing behavior"
+    },
+    {
+      "title": "Personal-agent loop bounds",
+      "behavior": "40-call limit, permanent-error block, discovery/error/result limits, one recovery.",
+      "qualification": "F05; not every agent profile"
+    },
+    {
+      "title": "Catalog ties and honest scope",
+      "behavior": "Sale price explicitly separated from cost/revenue; tied maxima preserved.",
+      "qualification": "F11; not margin/volume analytics"
+    },
+    {
+      "title": "Pending chat recovery",
+      "behavior": "Lost chat.send ack recovery merged.",
+      "qualification": "Hub PR643; claimed runs remain separate"
+    },
+    {
+      "title": "Navigation and changelog guidance",
+      "behavior": "Navigation is a proposed link; current release prompt rejects other products.",
+      "qualification": "Historical Team/changelog errors; no current recurrence claim"
+    }
+  ],
+  "limits": [
+    "Recent cohort is a heuristic sample from four personal-agent cohorts, not every user or an unbiased failure rate.",
+    "Only targeted UI feedback and continuations were followed; the entire historical corpus was mechanically scanned in the earlier audit, not semantically rereviewed today.",
+    "Current canonical source, synthetic route behavior, retained chat behavior and deployed runtime are separate evidence classes.",
+    "No production effects, outbound messages, model calls, deployments or product source changes were performed."
+  ]
+}
