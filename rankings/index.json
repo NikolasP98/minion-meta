@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T03:18:20.689Z",
+	"generatedAt": "2026-11-10T03:47:35.701Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11358,38 +11358,6 @@
 			"scoredAt": "2026-11-04T05:17:31.935Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/unbilled.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-69f97a2d64c9.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "f4d049961a8a5d0ffede8f888b721a1d3d7ae3b1f256de20d566426fe28fb435",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A missing index causes O(n*m) anti-join scans on pos_ticket_lines that worsen with ticket volume, and the fix (add index, update migration + schema) is already scoped.",
-			"evidence": [
-				"TODO(handoff) notes anti-join has no index on pos_ticket_lines",
-				"fix direction specifies adding a DB index and updating migration + Drizzle schema"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T03:17:32.382Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-cfb9f10ced2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18602,6 +18570,38 @@
 			"scoredAt": "2026-11-06T21:02:45.554Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/unbilled.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-69f97a2d64c9.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "f4d049961a8a5d0ffede8f888b721a1d3d7ae3b1f256de20d566426fe28fb435",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, well-diagnosed performance defect (missing index causing O(n*m) anti-join scans on unbilled account lookups) with a concrete fix direction.",
+			"evidence": [
+				"anti-join on pos_ticket_lines forces full table scans for every unbilled account lookup",
+				"fix direction: add DB index on join column, update migration and Drizzle schema"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T03:47:35.463Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-763d076153d2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22265,38 +22265,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:53:27.632Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b993a41e7c7.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "a023b726001aad6e3328cac8fa38d5fbeb9bb0ee835f2000d278b2dcb7e695ff",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The unrouted callback marker is confirmed but the auto-diagnosis never completed, leaving scope and fix path unclear.",
-			"evidence": [
-				"TODO(handoff): onArtifactCallback/onChoice are NOT routed",
-				"diagnosis section only contains unfinished tool-call stubs, no actual findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T03:17:32.382Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-93789f3a94af",
@@ -27449,6 +27417,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T13:48:19.748Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b993a41e7c7.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "a023b726001aad6e3328cac8fa38d5fbeb9bb0ee835f2000d278b2dcb7e695ff",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The TODO correctly flags that onArtifactCallback/onChoice are not routed, but the auto-diagnosis stalled at unexecuted read calls without reaching a concrete fix, so it needs further investigation before execution.",
+			"evidence": [
+				"marker text: 'TODO(handoff): onArtifactCallback/onChoice are NOT routed'",
+				"diagnosis section contains only unexecuted Read tool-call stubs, no conclusion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T03:47:35.463Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-91262d537ce6",
@@ -45026,6 +45026,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
+		},
+		{
+			"key": "issue:minion-meta#985",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#985 [monitor:unstick] rank board goals run 2249b633: batch 2 provider JSON failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/985",
+			"sourceUpdatedAt": "2026-11-10T03:17:27Z",
+			"sourceFingerprint": "ce2baf0dd970afd1c73a3b04ef3cf98c313f8ee5e925dee4db23bc8b31cb41bc",
+			"score": 15,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Transient provider JSON parse failure during ranking batch 2, explicitly characterized as a one-off transient fault that is safe to retry, not an actionable work item.",
+			"evidence": [
+				"described as 'transient provider-output fault... not a spec or box problem'",
+				"recommendation in the alert itself: 'safe to retry as-is'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T03:47:35.463Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-184419011",
