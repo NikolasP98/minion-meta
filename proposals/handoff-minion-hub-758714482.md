@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-758714482
 title: Handoff marker — src/routes/api/gateway/search-crm-conversations/+server.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-11-10
 updated: 2026-11-10
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: postmerge-minion-hub-d9076c262af0
 ---
 
 # Handoff marker — src/routes/api/gateway/search-crm-conversations/+server.ts

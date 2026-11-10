@@ -40,3 +40,9 @@ The `TODO(handoff)` marker at `src/routes/api/gateway/crm-conversation-themes/+s
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/650
 - file: `src/routes/api/gateway/crm-conversation-themes/+server.ts`
 - checked: 2026-11-10
+
+## Merged from handoff-minion-hub-2300667990
+
+The factory handoff-ledger sweep independently filed the same `TODO(handoff)`
+marker from the live `master` branch (not pinned to a commit):
+https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/gateway/crm-conversation-themes/+server.ts#L26
