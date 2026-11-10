@@ -33,83 +33,73 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4127
 - `NikolasP98/minion-meta@dev rankings/index.json:4160` — scope word-frequency/sentiment/win-index rollups by owner",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4160
-- `NikolasP98/minion-meta@dev rankings/index.json:5725` — spec 045 T037/T038 hide (not lock) every surface behind this list",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5725
-- `NikolasP98/minion-meta@dev rankings/index.json:6806` — paidAmount sums every non-void line regardless of status",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6806
-- `NikolasP98/minion-meta@dev rankings/index.json:8124` — online payment link (Culqi / Mercado Pago) — no credentials yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8124
-- `NikolasP98/minion-meta@dev rankings/index.json:8156` — that till-side draw happens on CLICK, not on submit",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8156
-- `NikolasP98/minion-meta@dev rankings/index.json:8288` — the existing provider JSON reader is not byte bounded before res.json()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8288
-- `NikolasP98/minion-meta@dev rankings/index.json:11319` — Replace this bounded best-effort fan-out with the durable",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11319
-- `NikolasP98/minion-meta@dev rankings/index.json:13946` — Replace raw upstream error messages with an approved safe RPC projection",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13946
-- `NikolasP98/minion-meta@dev rankings/index.json:14110` — comment pointing at this proposal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14110
-- `NikolasP98/minion-meta@dev rankings/index.json:14239` — a full per-handler audit of the remaining requireAdmin'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14239
-- `NikolasP98/minion-meta@dev rankings/index.json:14303` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14303
-- `NikolasP98/minion-meta@dev rankings/index.json:15694` — spec 045 A4 deletes the flag — make the audience unconditional there (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15694
-- `NikolasP98/minion-meta@dev rankings/index.json:15825` — the confirmed root cause (QA-stack app logs) was'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15825
-- `NikolasP98/minion-meta@dev rankings/index.json:16090` — drop with the legacy audience in spec 045 A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16090
-- `NikolasP98/minion-meta@dev rankings/index.json:16122` — host error-log scrubbing is separate from the sanitized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16122
-- `NikolasP98/minion-meta@dev rankings/index.json:18629` — spec §3.2b allows a reschedule outside working hours",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18629
-- `NikolasP98/minion-meta@dev rankings/index.json:19310` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19310
-- `NikolasP98/minion-meta@dev rankings/index.json:22228` — Complete Back/history/mobile qualification after the owner",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22228
-- `NikolasP98/minion-meta@dev rankings/index.json:22494` — Reconcile uploaded blobs after failed/concurrent import creation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22494
-- `NikolasP98/minion-meta@dev rankings/index.json:23736` — \"reopened mid-exit — cancel the pending close\"",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23736
-- `NikolasP98/minion-meta@dev rankings/index.json:23868` — prompt-driven protocol instead of native tool_use — replace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23868
-- `NikolasP98/minion-meta@dev rankings/index.json:24615` — see appointment-overdue.ts — same unwired deep-link param",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24615
-- `NikolasP98/minion-meta@dev rankings/index.json:25471` — HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25471
-- `NikolasP98/minion-meta@dev rankings/index.json:25537` — HC-028 hand-rolled wizard modal... no Escape path at all",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25537
-- `NikolasP98/minion-meta@dev rankings/index.json:25636` — the gateway's strict AgentEntrySchema has no per-agent session object",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25636
-- `NikolasP98/minion-meta@dev rankings/index.json:27478` — onArtifactCallback/onChoice are NOT routed'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27478
-- `NikolasP98/minion-meta@dev rankings/index.json:27510` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27510
-- `NikolasP98/minion-meta@dev rankings/index.json:27578` — plan button gated on pos:create, but server-side",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27578
-- `NikolasP98/minion-meta@dev rankings/index.json:28988` — tagOptions is the FILTER's list — the event-scope registry ...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28988
-- `NikolasP98/minion-meta@dev rankings/index.json:29020` — Price cell still formats with formatMoney's PEN",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29020
-- `NikolasP98/minion-meta@dev rankings/index.json:29120` — the dialog names the VISIT's service titles, not every",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29120
-- `NikolasP98/minion-meta@dev rankings/index.json:32438` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32438
-- `NikolasP98/minion-meta@dev rankings/index.json:32542` — drop with A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32542
-- `NikolasP98/minion-meta@dev rankings/index.json:32714` — the assistant opens this party form via ?new=1, but POST",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32714
-- `NikolasP98/minion-meta@dev rankings/index.json:32987` — Historical receipt/tombstone retention and missing-owner recovery need",
+- `NikolasP98/minion-meta@dev rankings/index.json:6773` — paidAmount sums every non-void line regardless of status",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6773
+- `NikolasP98/minion-meta@dev rankings/index.json:8123` — online payment link (Culqi / Mercado Pago) — no credentials yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8123
+- `NikolasP98/minion-meta@dev rankings/index.json:8155` — that till-side draw happens on CLICK, not on submit",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8155
+- `NikolasP98/minion-meta@dev rankings/index.json:8287` — the existing provider JSON reader is not byte bounded before res.json()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8287
+- `NikolasP98/minion-meta@dev rankings/index.json:11318` — Replace this bounded best-effort fan-out with the durable",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11318
+- `NikolasP98/minion-meta@dev rankings/index.json:13945` — Replace raw upstream error messages with an approved safe RPC projection",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13945
+- `NikolasP98/minion-meta@dev rankings/index.json:14145` — comment pointing at this proposal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14145
+- `NikolasP98/minion-meta@dev rankings/index.json:14274` — a full per-handler audit of the remaining requireAdmin'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14274
+- `NikolasP98/minion-meta@dev rankings/index.json:14338` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14338
+- `NikolasP98/minion-meta@dev rankings/index.json:15824` — the confirmed root cause (QA-stack app logs) was'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15824
+- `NikolasP98/minion-meta@dev rankings/index.json:16085` — host error-log scrubbing is separate from the sanitized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16085
+- `NikolasP98/minion-meta@dev rankings/index.json:18592` — spec §3.2b allows a reschedule outside working hours",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18592
+- `NikolasP98/minion-meta@dev rankings/index.json:19273` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19273
+- `NikolasP98/minion-meta@dev rankings/index.json:22191` — Complete Back/history/mobile qualification after the owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22191
+- `NikolasP98/minion-meta@dev rankings/index.json:22457` — Reconcile uploaded blobs after failed/concurrent import creation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22457
+- `NikolasP98/minion-meta@dev rankings/index.json:23699` — \"reopened mid-exit — cancel the pending close\"",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23699
+- `NikolasP98/minion-meta@dev rankings/index.json:23831` — prompt-driven protocol instead of native tool_use — replace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L23831
+- `NikolasP98/minion-meta@dev rankings/index.json:24614` — see appointment-overdue.ts — same unwired deep-link param",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24614
+- `NikolasP98/minion-meta@dev rankings/index.json:25470` — HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25470
+- `NikolasP98/minion-meta@dev rankings/index.json:25536` — HC-028 hand-rolled wizard modal... no Escape path at all",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25536
+- `NikolasP98/minion-meta@dev rankings/index.json:25635` — the gateway's strict AgentEntrySchema has no per-agent session object",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25635
+- `NikolasP98/minion-meta@dev rankings/index.json:27477` — onArtifactCallback/onChoice are NOT routed'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27477
+- `NikolasP98/minion-meta@dev rankings/index.json:27509` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27509
+- `NikolasP98/minion-meta@dev rankings/index.json:27577` — plan button gated on pos:create, but server-side",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27577
+- `NikolasP98/minion-meta@dev rankings/index.json:28954` — tagOptions is the FILTER's list — the event-scope registry ...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28954
+- `NikolasP98/minion-meta@dev rankings/index.json:28986` — Price cell still formats with formatMoney's PEN",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28986
+- `NikolasP98/minion-meta@dev rankings/index.json:29086` — the dialog names the VISIT's service titles, not every",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29086
+- `NikolasP98/minion-meta@dev rankings/index.json:32404` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32404
+- `NikolasP98/minion-meta@dev rankings/index.json:32644` — the assistant opens this party form via ?new=1, but POST",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32644
+- `NikolasP98/minion-meta@dev rankings/index.json:32917` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32917
+- `NikolasP98/minion-meta@dev rankings/index.json:32987` — Legacy receipts cannot reconstruct a complete source manifest",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32987
-- `NikolasP98/minion-meta@dev rankings/index.json:33057` — Legacy receipts cannot reconstruct a complete source manifest",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33057
-- `NikolasP98/minion-meta@dev rankings/index.json:34159` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34159
-- `NikolasP98/minion-meta@dev rankings/index.json:36500` — delete this route in A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36500
-- `NikolasP98/minion-meta@dev rankings/index.json:40962` — UI-002 — this test and \"Staff and event-type filters narrow the' (cut off)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40962
-- `NikolasP98/minion-meta@dev rankings/index.json:41497` — when attachment_links (spec S1) lands, delete this",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41497
-- `NikolasP98/minion-meta@dev rankings/index.json:45055` — SUPABASE_SERVICE_ROLE_KEY is generated by supabase start",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45055
+- `NikolasP98/minion-meta@dev rankings/index.json:34121` — a 'send me updates' list (newsletter or WhatsApp broadcast)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34121
+- `NikolasP98/minion-meta@dev rankings/index.json:40991` — UI-002 — this test and \"Staff and event-type filters narrow the' (cut off)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40991
+- `NikolasP98/minion-meta@dev rankings/index.json:41526` — when attachment_links (spec S1) lands, delete this",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41526
+- `NikolasP98/minion-meta@dev rankings/index.json:45052` — SUPABASE_SERVICE_ROLE_KEY is generated by supabase start",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45052
