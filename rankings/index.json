@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T07:18:00.512Z",
+	"generatedAt": "2026-11-10T07:47:51.521Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7578,6 +7578,38 @@
 			"scoredAt": "2026-11-06T20:45:45.915Z"
 		},
 		{
+			"key": "pr:minion_hub#649",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#649 fix(pos): free follow-up appointments no longer count as unpaid",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/649",
+			"sourceUpdatedAt": "2026-11-10T07:17:38Z",
+			"sourceFingerprint": "7d5b111922dcf620146db011f48c7a81cc7a48d0fe35233242546b992124090a",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Draft PR already implements a scoped billing-logic fix so free follow-up services stop showing as unpaid across badge, accounts, and charge flows.",
+			"evidence": [
+				"SQL UNBILLED_BOOKING_WHERE and client chargeableRows changed together per PR summary",
+				"tags: ui, logic, test; draft status with recent update"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T07:47:51.340Z"
+		},
+		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -10705,38 +10737,6 @@
 			"scoredAt": "2026-11-09T14:36:20.591Z"
 		},
 		{
-			"key": "pr:minion_hub#649",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#649 fix(pos): free follow-up appointments no longer count as unpaid",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/649",
-			"sourceUpdatedAt": "2026-11-10T07:13:44Z",
-			"sourceFingerprint": "281f185ecacccd8c6c7fcfec230b69d9e10fa639e823e972edebb0e1111b35be",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Already-coded draft PR fixing a concrete billing-accuracy bug (free services wrongly marked unpaid) with SQL and client changed together and tests.",
-			"evidence": [
-				"draft PR changes UNBILLED_BOOKING_WHERE SQL and chargeableRows client logic together",
-				"tagged ui, logic, test"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T07:18:00.280Z"
-		},
-		{
 			"key": "pr:minion-meta#884",
 			"kind": "pr",
 			"stage": "development",
@@ -11357,6 +11357,38 @@
 			"scoredAt": "2026-11-04T05:17:31.935Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/repair-verified-customer-metadata.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ab7a33dc7fa6.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "9eef569f85e26c08a0b8db01e2bacf73e8e05a29d881064a26f9c63f19c8dbe4",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The finding describes a real but narrow compliance gap (seven customers missing DOB) with two unresolved fix directions that need a team decision before the work can be bounded.",
+			"evidence": [
+				"Marker text: seven production-verified customers still have no DOB",
+				"Diagnosis proposes two unresolved approaches (external backfill vs re-verification) without a chosen direction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T07:47:51.340Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-cfb9f10ced2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11915,39 +11947,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T08:19:22.795Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ab7a33dc7fa6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/repair-verified-customer-metadata.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ab7a33dc7fa6.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "9eef569f85e26c08a0b8db01e2bacf73e8e05a29d881064a26f9c63f19c8dbe4",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Already-approved compliance gap affecting verified customer records with a concrete, bounded fix path.",
-			"evidence": [
-				"seven production-verified customers missing DOB, a KYC/compliance gap",
-				"proposal status is approved",
-				"fix direction specifies backfill vs re-verification tradeoff to decide"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
 			"key": "spec:2026-08-18-sdlc-transformation-roadmap",
@@ -28543,6 +28542,38 @@
 			"scoredAt": "2026-11-05T02:48:22.291Z"
 		},
 		{
+			"key": "proposal:2026-09-28-hub-table-open-modes-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Table open modes + bulk bar + stock detail — open ends",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-table-open-modes-followups.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "0af9d8885eede8b1d874ccfc81409e9553fc6fa4c97dc854dd5421f74ec1af92",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This omnibus ledger mixes already-resolved sub-items with a few genuinely open ones, so it should be split into a focused proposal for just the remaining open ends rather than tracked as one goal.",
+			"evidence": [
+				"Slice 2 status marks §1,2,3,4,6,7,8,9 as already addressed by hub branch feat/table-open-gaps",
+				"remaining §5 and new §10-11 are undifferentiated from resolved items in the same document"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T07:47:51.340Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-111011530",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -33613,39 +33644,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:49:41.203Z"
-		},
-		{
-			"key": "proposal:2026-09-28-hub-table-open-modes-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Table open modes + bulk bar + stock detail — open ends",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-table-open-modes-followups.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "0af9d8885eede8b1d874ccfc81409e9553fc6fa4c97dc854dd5421f74ec1af92",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A multi-item ledger mixing already-addressed work and unrelated items should be split into separate scoped goals.",
-			"evidence": [
-				"status note says §1-§4,6-9 are already addressed by branch feat/table-open-gaps",
-				"remaining §5, §10-11 are unrelated UX/view-transition and permission edge cases",
-				"§9 QA seed bug reproduces on untouched master, unrelated to this branch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T07:39:33.124Z"
 		},
 		{
 			"key": "proposal:2026-09-29-hub-table-filters-followups",
