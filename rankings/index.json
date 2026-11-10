@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T19:47:35.486Z",
+	"generatedAt": "2026-11-10T20:48:21.738Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6023,6 +6023,76 @@
 			"scoredAt": "2026-11-06T20:40:20.113Z"
 		},
 		{
+			"key": "pr:minion_hub#653",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#653 fix(ui): menus, popovers and tooltips always open above drawers and are never clipped",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/653",
+			"sourceUpdatedAt": "2026-11-10T19:51:46Z",
+			"sourceFingerprint": "ee19717fd4fe5b5ce797559100c6423d2dc3963aeb51b49c9861527e12d8eca4",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion-meta#992"
+			],
+			"rationale": "Well-specified, test-backed fix to shared overlay primitives but still a draft stacked on an unmerged storybook branch, and it is the implementation half of the paired spec PR.",
+			"evidence": [
+				"draft PR stacked on #648 feat/storybook, must be retargeted after merge",
+				"fixes clipping/stacking for Popover, Dropdown, Tooltip, Combobox via native top layer",
+				"Storybook play tests assert viewport containment, placement, and no-clip in modal/overflow contexts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T20:48:21.573Z"
+		},
+		{
+			"key": "pr:minion-meta#992",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#992 spec(hub): menus, popovers and tooltips open in the browser top layer",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/992",
+			"sourceUpdatedAt": "2026-11-10T19:47:59Z",
+			"sourceFingerprint": "01034338b8b9e6746870d09cf7e34e28cff61bca47adbee647f4902680703232",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#653"
+			],
+			"rationale": "This is the spec document for the same top-layer popover change implemented in hub PR #653, so the two should be tracked as one goal.",
+			"evidence": [
+				"spec records AS-IS anchors, invariants, and DELTA mapped to Storybook tests",
+				"implementation named explicitly as NikolasP98/minion_hub#653, itself a draft",
+				"both PRs are in draft status as of 2026-11-10"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T20:48:21.573Z"
+		},
+		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6729,6 +6799,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:37:32.631Z"
+		},
+		{
+			"key": "proposal:2026-10-13-hub-calendar-context-menu-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Calendar context menu + cancel/refund — open ends after S1/S2",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-calendar-context-menu-followups.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "440aabd8b672a77de50e49f40154bf3997a4f85339f06965bdc3a128367c03a6",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-8b315b355b71",
+				"spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec"
+			],
+			"rationale": "Concrete, well-scoped open ends from a shipped feature, including an RBAC visibility mismatch and a concurrency double-write risk on refunds, with specific fixes and file locations named.",
+			"evidence": [
+				"RBAC mismatch: cancel-paid entry gated on canEdit while the void endpoint requires pos:manage",
+				"concurrent double-void risk: status update lacks a WHERE status='submitted' guard",
+				"Postgres integration test and a mounted dialog test for the cancel flow are still missing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T20:48:21.573Z"
 		},
 		{
 			"key": "proposal:2026-10-18-assistant-navigation-confirmation",
@@ -13812,41 +13918,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T02:47:11.803Z"
-		},
-		{
-			"key": "proposal:2026-10-13-hub-calendar-context-menu-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Calendar context menu + cancel/refund — open ends after S1/S2",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-calendar-context-menu-followups.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "440aabd8b672a77de50e49f40154bf3997a4f85339f06965bdc3a128367c03a6",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec"
-			],
-			"rationale": "Nine heterogeneous follow-up items of mixed severity (RBAC gate mismatch, concurrent double-void race, missing tests, unverified UI rendering) are bundled into one ledger rather than scoped as separately sized fixes.",
-			"evidence": [
-				"item 3: RBAC mismatch causes 403 toast instead of hidden menu entry",
-				"item 8: double-void race risks duplicate refund writes with no guard",
-				"items 5/6: Postgres integration suite and mounted dialog test not run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T19:48:02.841Z"
 		},
 		{
 			"key": "proposal:2026-10-24-hub-collection-points-followups",
@@ -26033,40 +26104,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:44:33.255Z"
-		},
-		{
-			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Calendar context menus pre-populated, never empty; paid and unpaid items cancelable with an explicit refund",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "0e69badcc5a46c26f8e3f8e866249fec9e8ee9092be45a8db13b5a00819184a7",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:2026-10-13-hub-calendar-context-menu-followups"
-			],
-			"rationale": "The related proposal confirms this spec's work already shipped as hub PRs #516 and #517, so the spec itself is satisfied and remaining gaps are tracked separately.",
-			"evidence": [
-				"proposal states 'Shipped as hub PRs #516 (server...) and #517 (UI...)'",
-				"spec AS-IS is anchored to origin/master @ c49b536b as a pre-change baseline"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T19:48:02.841Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -41528,39 +41565,6 @@
 			"scoredAt": "2026-11-04T22:48:27.901Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-8b315b355b71",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/calendar-context-menu.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b315b355b71.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "383eb5c1c70620131fc81f689e104709b69fe93e3367ef7296bbe17657096eee",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The auto-generated diagnosis itself states the TODO marker text is truncated and unclear, so the scope of this single-file handoff item is not yet actionable.",
-			"evidence": [
-				"marker text cuts off mid-sentence: 'an open instalment plan with nothing left to sell (the'",
-				"diagnosis explicitly asks for clarification before suggesting a fix",
-				"single TODO(handoff) marker in one file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T20:18:09.951Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-a5a65f6d6dac",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -44530,6 +44534,41 @@
 			"scoredAt": "2026-11-07T04:18:13.377Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-8b315b355b71",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/calendar-context-menu.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b315b355b71.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "383eb5c1c70620131fc81f689e104709b69fe93e3367ef7296bbe17657096eee",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-10-13-hub-calendar-context-menu-followups"
+			],
+			"rationale": "The auto-filed diagnosis never completes and only poses clarifying questions, and the underlying gap it points at is already tracked with a clearer fix direction in the 2026-10-13 followups proposal.",
+			"evidence": [
+				"diagnosis section asks the reader to confirm basic facts rather than stating a finding",
+				"marker text is truncated and the file was never actually read in the finding",
+				"same instalment-plan-loses-charge gap is item 1 of the 2026-10-13 followups proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T20:48:21.573Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9288d166a192",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -44760,6 +44799,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T16:17:38.313Z"
+		},
+		{
+			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Calendar context menus pre-populated, never empty; paid and unpaid items cancelable with an explicit refund",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "0e69badcc5a46c26f8e3f8e866249fec9e8ee9092be45a8db13b5a00819184a7",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-10-13-hub-calendar-context-menu-followups"
+			],
+			"rationale": "The spec's TO-BE behavior was already shipped as hub PRs #516 and #517, so the goal as stated is satisfied and remaining gaps live in the separate followups proposal.",
+			"evidence": [
+				"followups proposal states work 'Shipped as hub PRs #516 (server) and #517 (UI)'",
+				"status field still reads 'implementing' though delivery is complete",
+				"detailed AS-IS/TO-BE invariants (I1-I6) with no outstanding delta beyond the followups ledger"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T20:48:21.573Z"
 		},
 		{
 			"key": "pr:minion-meta#991",
