@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-10T17:18:04.809Z",
+	"generatedAt": "2026-11-10T17:48:08.109Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4264,39 +4264,6 @@
 			"scoredAt": "2026-11-09T08:51:12.204Z"
 		},
 		{
-			"key": "proposal:2026-10-13-hub-first-paint-performance",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved proposal with precise measured AS-IS data pinpoints that both-locale Paraglide shipping and render-blocking CSS dominate a 3.2-7.7s FCP across all pages, giving a clear, bounded, high-impact fix target.",
-			"evidence": [
-				"FCP ≈3.2s on login, up to 7.7s on appointments while server TTFB is 0.42s",
-				"Paraglide messages barrel is 246.5KB br / 59% of first-paint JS, shipping both en and es to every visitor",
-				"status: approved; ssr=false identified as root cause with exact file/line"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-03T17:17:54.374Z"
-		},
-		{
 			"key": "spec:2026-08-17-sdlc-phase-gates-scoring-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -5443,8 +5410,8 @@
 			"repo": "minion_hub",
 			"title": "#650 fix(crm): restore CRM analyst access for permitted roles",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/650",
-			"sourceUpdatedAt": "2026-11-10T08:59:31Z",
-			"sourceFingerprint": "db320b180b098992d1386eec9e05ef485f6e8b4637514b7a978d84a634383374",
+			"sourceUpdatedAt": "2026-11-10T17:30:20Z",
+			"sourceFingerprint": "29b84e4a88b4dc63aac4403c767f3d70a26dbb9d15a4cc7ffacb2d3d91e562d7",
 			"score": 62,
 			"band": "medium",
 			"axes": {
@@ -5454,19 +5421,22 @@
 			},
 			"readiness": {
 				"specification": 9,
-				"implementation": 7
+				"implementation": 8
 			},
 			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Access fix passed full review and test suites but remains blocked on a configured SSH signer and fresh final-head CI before it can land.",
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#987"
+			],
+			"rationale": "Fixes a production auth bug blocking legitimate CRM analyst access, with full EGM review and passing local test suite, now awaiting fresh CI on the signed head.",
 			"evidence": [
-				"full local runtime-candidate suite 9,320 passed, EGM review passed",
-				"delivery blocked: final cleanup staged locally awaiting SSH signer, draft status"
+				"CRM analyst tools rejected valid gateway credentials with 401 even when the user had CRM access",
+				"EGM full five-stage review passed, including two consecutive clean rounds",
+				"Fresh CI is running on this head. No merge or production deployment is claimed before those checks pass"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T09:18:30.436Z"
+			"scoredAt": "2026-11-10T17:48:07.915Z"
 		},
 		{
 			"key": "pr:minion-meta#882",
@@ -7739,6 +7709,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T23:47:30.063Z"
+		},
+		{
+			"key": "proposal:2026-10-13-hub-first-paint-performance",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Thoroughly measured first-paint regression affecting all hub visitors, with a specific root cause (disabled SSR plus a dual-locale 246.5KB Paraglide bundle) and concrete, scoped fixes already identified and approved.",
+			"evidence": [
+				"FCP ≈3.2 s on /en/login (n=6) and 3.5–5.7 s on authenticated POS pages, INP 200–300 ms",
+				"src/routes/+layout.ts line 17: export const ssr = false",
+				"Blocker #1 alone is 59% of the first-paint JS and 56% of the decompressed parse volume"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T17:48:07.915Z"
 		},
 		{
 			"key": "proposal:2026-10-21-windows-release-qualification-timing",
@@ -23373,6 +23376,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:17:53.879Z"
+		},
+		{
+			"key": "pr:minion-meta#987",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#987 spec(hub): qualify CRM analyst gateway authentication repair",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/987",
+			"sourceUpdatedAt": "2026-11-10T17:29:57Z",
+			"sourceFingerprint": "c02f2fee47afcb2b0c233d2b35b5dd97e80ddebe41299a6fb7fbd08c34462404",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#650"
+			],
+			"rationale": "This is the meta-repo spec record for the exact same CRM auth repair as pr:minion_hub#650, so the two should be tracked and executed as one goal rather than ranked independently.",
+			"evidence": [
+				"Record the approved CRM analyst authentication repair... for Hub PR #650",
+				"The signed Hub source is 660ef0777844b56dc8df57eec3c169c5280126f4; its tree matches the candidate that passed...",
+				"Fresh final-head CI is running. No production result is claimed yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-10T17:48:07.915Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-attention-queue-responsive-runs",
