@@ -1,0 +1,69 @@
+--- a/minion_hub/src/routes/api/gateway/actions/stock-entry-create/+server.ts
++++ b/minion_hub/src/routes/api/gateway/actions/stock-entry-create/+server.ts
+@@ -15,6 +15,7 @@
+ 	toWarehouseId: z.string().min(1).nullable().optional(),
+ });
+ 
++// TODO(handoff): N01: preserve currency/rate basis and reuse native FX conversion; see transcript proposal November 10 recon. proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ const bodySchema = z.object({
+ 	confirm: z.boolean(),
+ 	type: z.enum(ENTRY_TYPES),
+--- a/minion_hub/src/lib/assistant/catalog.ts
++++ b/minion_hub/src/lib/assistant/catalog.ts
+@@ -8,6 +8,7 @@
+  */
+ import type { FormDef } from './forms';
+ 
++// TODO(handoff): N01: expose currency/rate basis in assistant stock fields; see transcript proposal November 10 recon. proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ export const STOCK_ENTRY_FORM: FormDef = {
+   id: 'stock_entry',
+   title: 'New stock entry',
+--- a/minion_hub/src/routes/(app)/stock/entries/new/PageBody.svelte
++++ b/minion_hub/src/routes/(app)/stock/entries/new/PageBody.svelte
+@@ -363,6 +363,7 @@
+     }
+   }
+ 
++// TODO(handoff): N01: preserve current currency/rateMode when interpreting fills; see transcript proposal November 10 recon. proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+   // ── Assistant fill tool ──────────────────────────────────────────────────
+   // Entity fields arrive as free text; resolve them against what the page has
+   // loaded (typo-tolerant, see $lib/assistant/fuzzy). `item` always appends a
+--- a/minion_hub/src/routes/api/gateway/actions/booking-reschedule/+server.ts
++++ b/minion_hub/src/routes/api/gateway/actions/booking-reschedule/+server.ts
+@@ -37,6 +37,7 @@
+ 	const { ctx } = await requireAssistantCapability(locals, url, 'scheduling', 'edit');
+ 	const b = await parseBody(request, bodySchema);
+ 
++// TODO(handoff): N02: validate preview and use atomic move/replacement with effect receipts; see transcript proposal November 10 recon. proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ 	if (!b.confirm) {
+ 		return json({
+ 			preview: {
+--- a/minion_hub/src/routes/api/gateway/query/bookings/+server.ts
++++ b/minion_hub/src/routes/api/gateway/query/bookings/+server.ts
+@@ -49,5 +49,6 @@
+     crmContactId: contact ?? undefined,
+     maskAttendeePii: capabilities.fieldLevel('scheduling') < SENSITIVE_FIELD_LEVEL,
+   });
++// TODO(handoff): N03: reconcile summaries against scoped unique IDs and exact totals; add retained counterexample eval, see transcript proposal November 10 recon. proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+   return json(result);
+ };
+--- a/minion_hub/src/routes/api/gateway/query/finance/+server.ts
++++ b/minion_hub/src/routes/api/gateway/query/finance/+server.ts
+@@ -35,6 +35,7 @@
+  * `locals.user`, which is unset for gateway/server-token callers, so it would
+  * silently apply the wrong default here).
+  */
++// TODO(handoff): R03: explicit ranking metric/coverage required; revenue top15 is not quantity/margin top, see transcript proposal November 10 recon. proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ export const GET: RequestHandler = async ({ locals, url }) => {
+   const { ctx, capabilities } = await requireAssistantCapability(locals, url, 'finance', 'view');
+   const { timezone } = await getFinSettings(ctx);
+--- a/minion/src/agents/tools/hub/stock-entry-create-tool.ts
++++ b/minion/src/agents/tools/hub/stock-entry-create-tool.ts
+@@ -21,6 +21,7 @@
+   ),
+ });
+ 
++// TODO(handoff): N01: thread currency/rate basis into typed payload and preview; see transcript proposal November 10 recon. proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ const StockEntryCreateSchema = Type.Object({
+   type: Type.Union(
+     [
