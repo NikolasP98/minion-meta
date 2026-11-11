@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-11T12:18:42.416Z",
+	"generatedAt": "2026-11-11T12:47:49.382Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -43663,20 +43663,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 2
 			},
 			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The actual ranking task succeeded and only the git push hit transient GitHub 5xx errors, which is a known-safe-to-retry infra blip rather than a real defect.",
+			"rationale": "This is a transient GitHub push-500 infra fault with task work already completed successfully, requiring only a retry rather than any code or spec action.",
 			"evidence": [
-				"1323 goals scored (1 changed), ranking index updated/pruned/valid",
-				"Failure is entirely at git push: 3/3 attempts rejected ... Internal Server Error"
+				"ranking index updated/pruned/valid",
+				"3/3 attempts rejected by GitHub with Internal Server Error",
+				"Diagnosis: transient infra fault (GitHub remote instability), not a task or spec failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T12:47:21.517Z"
+			"scoredAt": "2026-11-11T12:47:49.175Z"
 		},
 		{
 			"key": "issue:minion-meta#960",
