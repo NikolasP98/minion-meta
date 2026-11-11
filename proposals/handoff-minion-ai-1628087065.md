@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-1628087065
 title: Handoff marker — src/memory/memory-sink.ts (minion-ai)
-status: draft
+status: review
 created: 2026-11-11
 updated: 2026-11-11
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-11-06-agent-transcript-evals-and-runtime-improvements
 ---
 
 # Handoff marker — src/memory/memory-sink.ts

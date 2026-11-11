@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-ai-3885968168
 title: Handoff marker — src/agents/pi-embedded/pi-embedded-subscribe.handlers.messages.ts (minion-ai)
-status: draft
+status: review
 created: 2026-11-11
 updated: 2026-11-11
 repos: [minion-ai]
 tags: [handoff-sweep]
+duplicate_candidate: 2026-11-06-agent-transcript-evals-and-runtime-improvements
 ---
 
 # Handoff marker — src/agents/pi-embedded/pi-embedded-subscribe.handlers.messages.ts
