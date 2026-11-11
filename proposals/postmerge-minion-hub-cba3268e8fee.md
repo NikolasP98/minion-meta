@@ -40,3 +40,11 @@ The `TODO(handoff)` marker at `src/server/services/scheduling-bookings-assistant
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/651
 - file: `src/server/services/scheduling-bookings-assistant-reschedule.test.ts`
 - checked: 2026-11-11
+
+## Also flagged by (merged)
+
+The factory handoff-ledger sweep independently flagged the same marker as
+`handoff-minion-hub-291620745` (now a tombstone, merged here):
+
+- `NikolasP98/minion_hub@master src/server/services/scheduling-bookings-assistant-reschedule.test.ts:26` — qualify this assistant route under actual app_ledger role/GUC/RLS
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/scheduling-bookings-assistant-reschedule.test.ts#L26

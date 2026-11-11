@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-291620745
 title: Handoff marker — src/server/services/scheduling-bookings-assistant-reschedule.test.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-cba3268e8fee
 created: 2026-11-11
 updated: 2026-11-11
 repos: [minion-hub]
