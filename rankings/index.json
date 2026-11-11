@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-11T09:48:24.638Z",
+	"generatedAt": "2026-11-11T10:19:38.397Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4138,6 +4138,41 @@
 			"scoredAt": "2026-11-07T11:47:09.501Z"
 		},
 		{
+			"key": "spec:2026-10-21-windows-qualification-kernel-containment-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Kernel-contained Windows qualification with native infrastructure proof",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-21-windows-qualification-kernel-containment-spec.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "d32a1ba7dd73a71b8195ec49d07106016db19eae16132a4b70d7f2c4666fc6ef",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-21-windows-qualification-kernel-containment",
+				"proposal:2026-10-21-windows-release-qualification-timing"
+			],
+			"rationale": "This is the actively implementing spec for the Windows qualification pipeline blocking release, with a rigorous invariant-preserving design already in progress.",
+			"evidence": [
+				"status: implementing",
+				"detailed native Job Object containment plan (CREATE_SUSPENDED, IsProcessInJob verification) with preserved ten-invocation/74-assertion gates"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T10:19:38.246Z"
+		},
+		{
 			"key": "spec:2026-11-10-agent-fixture-secret-audit-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -6455,41 +6490,6 @@
 			"scoredAt": "2026-11-08T05:47:12.028Z"
 		},
 		{
-			"key": "spec:2026-10-21-windows-qualification-kernel-containment-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion",
-			"title": "Kernel-contained Windows qualification with native infrastructure proof",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-21-windows-qualification-kernel-containment-spec.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "d32a1ba7dd73a71b8195ec49d07106016db19eae16132a4b70d7f2c4666fc6ef",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-21-windows-release-qualification-timing",
-				"proposal:2026-10-21-windows-qualification-kernel-containment"
-			],
-			"rationale": "Actively implementing spec with detailed AS-IS evidence and a bounded invariant-preserving DELTA that is the current blocking gate for release #339.",
-			"evidence": [
-				"status implementing, detailed API-level DELTA (Job Object, STARTUPINFOEX, IsProcessInJob)",
-				"AS-IS cites exact failing CI run 39560356777 with reproducible unknown-service-process evidence"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
-		},
-		{
 			"key": "issue:minion-meta#608",
 			"kind": "issue",
 			"stage": "proposal",
@@ -7893,14 +7893,14 @@
 			"scoredAt": "2026-11-10T17:48:07.915Z"
 		},
 		{
-			"key": "proposal:2026-10-21-windows-release-qualification-timing",
+			"key": "proposal:2026-10-21-dev-compose-rollback-alias",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion",
-			"title": "Make Windows release qualification deterministic without weakening assertions",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-release-qualification-timing.md",
+			"title": "Repair DEV Compose rollback image aliases",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-dev-compose-rollback-alias.md",
 			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "86466ec86b185ea35956f2003456232d396c72475889ecb5c65b87b69ead7301",
+			"sourceFingerprint": "1f68c1c4a5bf00a502cf1b0ea06d2ca2f91ea87c17a1f2be274549db02843444",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -7909,22 +7909,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 6
+				"specification": 7,
+				"implementation": 3
 			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
-			],
-			"rationale": "A distinct, well-reproduced timing/flakiness defect in three specific test files is still blocking full Windows qualification for PR #342's release.",
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Rollback alias creation silently fails on mixed-case repo names due to a suppressed docker tag error, risking an unusable rollback path during a real incident.",
 			"evidence": [
-				"Full Windows shard 2 run 39546077771 failed exactly these 3 unchanged test files with real timing evidence",
-				"prepared hotfix already passes focused suites (29+74+1 tests) pending native qualification"
+				"Docker rejected ghcr.io/NikolasP98/minion-ai:dev-rollback-protopi because repository name must be lowercase",
+				"deploy-production.yml line 450 tags the image and suppresses failure with `|| true`"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
+			"scoredAt": "2026-11-11T10:19:38.246Z"
 		},
 		{
 			"key": "proposal:2026-10-22-whatsapp-member-agents-followups",
@@ -10176,6 +10174,40 @@
 			"scoredAt": "2026-11-04T15:48:02.308Z"
 		},
 		{
+			"key": "proposal:2026-10-21-windows-release-qualification-timing",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Make Windows release qualification deterministic without weakening assertions",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-release-qualification-timing.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "86466ec86b185ea35956f2003456232d396c72475889ecb5c65b87b69ead7301",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
+			],
+			"rationale": "The underlying test-flakiness hotfix for PR #342 is already prepared and passing focused suites, needing only full Windows qualification and merge approval to unblock production promotion.",
+			"evidence": [
+				"Prepared hotfix PR #342 changes exactly three test files; focused suites pass 29 + 74 + 1 tests",
+				"controlled delayed-read reproduction fails before and passes after the fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T10:19:38.246Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-142129245",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10400,40 +10432,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T03:17:42.985Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c14a5898d7d0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/SectionProseEditor.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c14a5898d7d0.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "6045ab7f8d8473186e20e4181098fa7ab32d0d85ccac2cb004b50628275c2c0e",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-f05b351ac858"
-			],
-			"rationale": "Approved, well-scoped fix for a real data-loss bug (stray clicks discard unsaved edits) with a concrete migration target and spec reference.",
-			"evidence": [
-				"marker: 'outside-click dismissal must be gated on unsaved slot.dirty edits (today a stray click discards them)'",
-				"status approved, references spec-hc028-overlay-dialog-contract"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
@@ -11112,40 +11110,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T15:48:02.308Z"
-		},
-		{
-			"key": "proposal:2026-10-21-windows-qualification-kernel-containment",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Qualify Windows test-process cleanup with kernel containment",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-kernel-containment.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "b2574b92bfe3406fdeb005c3ef10e1aee226dc9c2671e5022fb5aa845e223377",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
-			],
-			"rationale": "This proposal's redesign is already promoted into an actively-implementing spec in the same batch, making the proposal itself redundant.",
-			"evidence": [
-				"proposal status is in-spec",
-				"identical title/content exists as spec:2026-10-21-windows-qualification-kernel-containment-spec with status implementing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1049544011",
@@ -12631,6 +12595,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T20:47:23.563Z"
+		},
+		{
+			"key": "proposal:2026-10-21-windows-qualification-kernel-containment",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Qualify Windows test-process cleanup with kernel containment",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-kernel-containment.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "b2574b92bfe3406fdeb005c3ef10e1aee226dc9c2671e5022fb5aa845e223377",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
+			],
+			"rationale": "This proposal's design has already advanced into a companion spec with status implementing, making the proposal itself redundant as a standalone work item.",
+			"evidence": [
+				"proposal status: in-spec",
+				"a spec with the same title and status 'implementing' exists in this batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T10:19:38.246Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1092774507",
@@ -21994,38 +21992,6 @@
 			"scoredAt": "2026-11-05T06:18:18.520Z"
 		},
 		{
-			"key": "proposal:2026-10-21-dev-compose-rollback-alias",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Repair DEV Compose rollback image aliases",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-dev-compose-rollback-alias.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "1f68c1c4a5bf00a502cf1b0ea06d2ca2f91ea87c17a1f2be274549db02843444",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-evidenced DEV-only rollback-alias defect with concrete commit/line citations and a bounded DELTA plan ready for spec+implementation.",
-			"evidence": [
-				"workflow line 64/450/779 use a non-normalized repo name",
-				"DEV run 39543796081 showed Docker reject the mixed-case tag then fall back to lowercase pull"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-1229461031",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23397,6 +23363,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T02:57:32.878Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c14a5898d7d0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/SectionProseEditor.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c14a5898d7d0.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "6045ab7f8d8473186e20e4181098fa7ab32d0d85ccac2cb004b50628275c2c0e",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-f05b351ac858"
+			],
+			"rationale": "This HC-028 modal migration shares the same shared-Dialog design decisions (anchor API, dismissal guards) as the related RelationshipPrompt finding and should be solved as one goal.",
+			"evidence": [
+				"TODO marker: 'migrate to the shared Dialog (size=\"xl\")'",
+				"diagnosis: 'outside-click dismissal must be gated on unsaved slot.dirty edits (today a stray click discards them)'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T10:19:38.246Z"
 		},
 		{
 			"key": "spec:2026-08-31-roadmap-milestone-order-deviation-spec",
@@ -27653,6 +27653,76 @@
 			"scoredAt": "2026-11-05T07:17:16.377Z"
 		},
 		{
+			"key": "proposal:2026-10-21-windows-qualification-observer",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Correct Windows qualification observer identity and reviewed test count",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-observer.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "33b833b1051f3219f2d30bf7e4aa0237a3ec156ce55ab00cdffbdc3377eb64aa",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-10-21-windows-qualification-process-identity",
+				"proposal:2026-10-21-windows-qualification-kernel-containment"
+			],
+			"rationale": "A later proposal in this batch states its prepared fix PR #343 is already merged, so the observer self-inclusion bug this proposal targets appears already resolved.",
+			"evidence": [
+				"process-identity proposal AS-IS: 'Gateway PR #343 is merged at 85272bfb2dbd...'",
+				"this proposal's own status is 'review' with PR #343 as the prepared correction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T10:19:38.246Z"
+		},
+		{
+			"key": "proposal:2026-10-21-windows-qualification-process-identity",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Track Windows qualification process ownership by birth identity",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-process-identity.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "75e6290a3cefe43b3cc2ae34b0103a1aff3b7d5ea9e9e9a1620a4465018472a6",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-10-21-windows-qualification-observer",
+				"proposal:2026-10-21-windows-qualification-kernel-containment"
+			],
+			"rationale": "The kernel-containment proposal's AS-IS states PR #342's head already includes PR #344, indicating this PID-reuse fix is already incorporated and superseded by the subsequent containment work.",
+			"evidence": [
+				"kernel-containment AS-IS: 'PR #342 head eb56ae70...includes #344'",
+				"this proposal's own status is 'review' with PR #344 as the prepared correction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T10:19:38.246Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-2591946925",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30290,20 +30360,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 6
+				"specification": 7,
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Concrete, bounded accessibility contrast-ratio fix with a clear verification path (lint:design/lint:tokens) and approved status.",
+			"rationale": "A bounded, well-specified accessibility fix (WCAG contrast failure) with clear verification commands and approved status.",
 			"evidence": [
-				"marker cites specific color pair '#586e75 on --color-surface-3'",
-				"fix direction specifies exact verification commands"
+				"contrast ratio ~2.5:1 vs 4.5:1 required for WCAG AA",
+				"fix direction: adjust palette or add light-theme surface-3 variant, then run lint:design && lint:tokens"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
+			"scoredAt": "2026-11-11T10:19:38.246Z"
 		},
 		{
 			"key": "issue:minion-meta#574",
@@ -32289,76 +32359,6 @@
 			"scoredAt": "2026-11-05T06:18:18.520Z"
 		},
 		{
-			"key": "proposal:2026-10-21-windows-qualification-observer",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Correct Windows qualification observer identity and reviewed test count",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-observer.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "33b833b1051f3219f2d30bf7e4aa0237a3ec156ce55ab00cdffbdc3377eb64aa",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:2026-10-21-windows-qualification-process-identity",
-				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
-			],
-			"rationale": "The described observer self-inclusion fix was already merged via PR #343 and superseded by the subsequent kernel-containment redesign now active.",
-			"evidence": [
-				"process-identity proposal states 'Gateway PR #343 is merged'",
-				"kernel-containment spec AS-IS confirms PR #344/eb56ae70 already incorporates these fixes and moved on to a new failure mode"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
-		},
-		{
-			"key": "proposal:2026-10-21-windows-qualification-process-identity",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Track Windows qualification process ownership by birth identity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-process-identity.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "75e6290a3cefe43b3cc2ae34b0103a1aff3b7d5ea9e9e9a1620a4465018472a6",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:2026-10-21-windows-qualification-observer",
-				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
-			],
-			"rationale": "Its PID-reuse ownership fix was already merged via PR #344, and the active path forward is the kernel-containment redesign, not further PID-based patches.",
-			"evidence": [
-				"AS-IS states 'Gateway PR #343 is merged' and prepares PR #344",
-				"kernel-containment spec cites PR #344's merged test-file changes as current baseline"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-1778568796",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34017,19 +34017,19 @@
 				"specification": 5,
 				"implementation": 4
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-c14a5898d7d0"
 			],
-			"rationale": "Needs an unresolved design decision (Popover vs anchored Dialog) before it is bounded enough to execute as paid work.",
+			"rationale": "This finding needs an anchor-positioning API decision for the shared Dialog/Popover that overlaps directly with the sibling HC-028 modal-migration finding in this batch.",
 			"evidence": [
-				"marker: 'Needs a positioned-dialog decision (Popover vs Dialog with an anchor)'",
-				"shared Dialog has no anchor API today per AS-IS"
+				"TODO marker: 'the shared Dialog centres itself (auto margins) and has no anchor API'",
+				"'Needs a positioned-dialog decision (Popover vs Dialog with an anchor)'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T09:48:48.932Z"
+			"scoredAt": "2026-11-11T10:19:38.246Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f7a735ff23a5",
