@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-11T14:17:55.959Z",
+	"generatedAt": "2026-11-11T14:47:52.367Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -367,39 +367,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T07:42:10.731Z"
-		},
-		{
-			"key": "proposal:2026-09-08-platform-qc-remediation",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Platform QC follow-ups — authorization, durable execution, compatibility and release evidence",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-08-platform-qc-remediation.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "c6b1a9c74cb1c88501bdf7cab7136f69c4f6057e6b6f07a64a4b9388c23ac9de",
-			"score": 88,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 9,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Broad security/durability remediation across authorization, logging, flow execution, job effects, and shells is high-stakes but spans five large slices with only private, unaligned evidence and no implementation yet.",
-			"evidence": [
-				"private audit only, local working trees not aligned to audited revisions",
-				"covers 5 priority slices (HDS-01..07, A1-A9) across hub, gateway, langgraph-server, shells-bridge",
-				"draft status, authorizes no production action"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T14:47:42.523Z"
 		},
 		{
 			"key": "proposal:2026-10-11-hub-corpus-pipeline-scaling",
@@ -1166,6 +1133,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T18:49:04.296Z"
+		},
+		{
+			"key": "proposal:2026-09-08-platform-qc-remediation",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Platform QC follow-ups — authorization, durable execution, compatibility and release evidence",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-08-platform-qc-remediation.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "c6b1a9c74cb1c88501bdf7cab7136f69c4f6057e6b6f07a64a4b9388c23ac9de",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Covers multiple serious security/durability defects (authorization, secret logging, SQL injection, job idempotency) with named sites but relies on a private ungitignored report that cannot be independently verified here.",
+			"evidence": [
+				"private evidence at .lavish/minion-qc-2026-09-08/ is gitignored and not verifiable from this catalog",
+				"five distinct priority slices span auth, logging, flows, durable jobs, and shells across multiple repos",
+				"local working trees were explicitly not aligned to the audited revisions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T14:47:52.190Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-money-precision-schedules-spec",
