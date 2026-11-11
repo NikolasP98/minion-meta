@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-11T04:17:15.848Z",
+	"generatedAt": "2026-11-11T04:47:42.664Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -29509,39 +29509,6 @@
 			"scoredAt": "2026-11-11T02:56:08.197Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-factory-86254ea",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ 86254ea",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-86254ea.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "abc3af2d9ed1bc13d1787428fd9ee4893c85288a0e684732045fe5336bf0ff14",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Bundle of five concrete, file:line-scoped robustness findings (empty catches, unchecked access, hardcoded path) in factory tooling with clear, bounded fixes.",
-			"evidence": [
-				"runner/src/jev-sites.ts:149 empty-catch swallows shadow path failures",
-				"scripts/jev-shadow-report.mjs:147 unchecked tuple access",
-				"agent/hooks/claude-settings.json:9 hardcoded hook path"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T04:17:41.273Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-be019c6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29902,38 +29869,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T22:48:27.901Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/data-table/GroupByPicker.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bbd5a8516623.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "ef3687412ce81b8b9a5e917359cec02489f4b7677962e6741c4c9f760812f133",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear accessibility defect (close button as DOM sibling rather than child of dropdown trigger) with a specific, bounded fix direction already stated.",
-			"evidence": [
-				"GroupByPicker.svelte: close button × is sibling of Dropdown trigger",
-				"fix direction: nest × inside trigger or shared wrapper to preserve focus semantics"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T04:17:41.273Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d5e424e20df5",
@@ -32691,6 +32626,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T11:17:23.576Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-86254ea",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 86254ea",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-86254ea.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "abc3af2d9ed1bc13d1787428fd9ee4893c85288a0e684732045fe5336bf0ff14",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Bundles five concrete, file:line-anchored code-quality findings (hardcoded path, silent catches, unchecked access) in internal tooling that are small and independently fixable now.",
+			"evidence": [
+				"agent/hooks/claude-settings.json:9 hardcoded-config",
+				"runner/src/jev-sites.ts:149 empty-catch",
+				"scripts/jev-shadow-report.mjs:147 unchecked-access"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T04:47:42.514Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-09834583e2d0",
@@ -40013,40 +39981,6 @@
 			"scoredAt": "2026-11-04T05:48:39.288Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-66cd0246e677",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellableWizard.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66cd0246e677.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "6a933ebc251d1219840fbda37f8722a88fb0ad406fab1876c859edac8da227e9",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-f173c4e5b58a"
-			],
-			"rationale": "A vague, truncated TODO marker in SellableWizard.svelte with no concrete fix direction is better consolidated with the other SellableWizard finding from the same PR than executed alone.",
-			"evidence": [
-				"marker text truncated: 'other consumption-mapping surfaces (e.g.'",
-				"same repo@636c222 PR #412 as the other SellableWizard finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T04:17:41.273Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-67652157c786",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -40279,6 +40213,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T21:02:45.554Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/data-table/GroupByPicker.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bbd5a8516623.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "ef3687412ce81b8b9a5e917359cec02489f4b7677962e6741c4c9f760812f133",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-66cd0246e677",
+				"proposal:postmerge-minion-hub-f173c4e5b58a"
+			],
+			"rationale": "Clear, actionable accessibility fix (move close button from sibling to child of dropdown trigger) but scoped as one small component tweak best batched with the other PR #412 TODO findings.",
+			"evidence": [
+				"TODO(handoff) marker about Button sibling of Dropdown trigger",
+				"fix direction: nest button as child of trigger/wrapper for focus semantics",
+				"same merged PR https://github.com/NikolasP98/minion_hub/pull/412"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T04:47:42.514Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bcf72948ba44",
@@ -40572,16 +40542,18 @@
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-66cd0246e677"
+				"proposal:postmerge-minion-hub-66cd0246e677",
+				"proposal:postmerge-minion-hub-bbd5a8516623"
 			],
-			"rationale": "Dead/unintegrated modal in the same SellableWizard.svelte file from the same merged PR as another open TODO finding, warranting a single consolidated cleanup goal rather than two separate small tasks.",
+			"rationale": "Decision-needed dead-code TODO in the same SellableWizard.svelte file from the same merged PR #412, more efficiently resolved together with the other two postmerge findings than as a standalone goal.",
 			"evidence": [
-				"marker: 'modal presentation has no consumer today (page'",
-				"same repo@636c222 PR #412 file as the consumption-mapping TODO finding"
+				"TODO(handoff) marker 'modal presentation has no consumer today'",
+				"suggested fix: create proposal with AS-IS/TO-BE for wiring or deleting modal",
+				"same merged PR https://github.com/NikolasP98/minion_hub/pull/412"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T04:17:41.273Z"
+			"scoredAt": "2026-11-11T04:47:42.514Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ff94cf386ea4",
@@ -41825,6 +41797,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T22:48:27.901Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-66cd0246e677",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/pos/SellableWizard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-66cd0246e677.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "6a933ebc251d1219840fbda37f8722a88fb0ad406fab1876c859edac8da227e9",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-bbd5a8516623",
+				"proposal:postmerge-minion-hub-f173c4e5b58a"
+			],
+			"rationale": "A TODO-handoff cleanup in SellableWizard.svelte whose auto-diagnosis stub never completed, so it is best folded with the other two findings from the same merged PR #412 into a single hub-cleanup goal.",
+			"evidence": [
+				"TODO(handoff) marker 'other consumption-mapping surfaces'",
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/412",
+				"diagnosis text shows an unfinished tool-call stub, no fix direction given"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T04:47:42.514Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-753e08fe9f5a",
