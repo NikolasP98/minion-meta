@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-11T06:18:09.158Z",
+	"generatedAt": "2026-11-11T06:48:13.148Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5954,41 +5954,6 @@
 			"scoredAt": "2026-11-06T20:40:20.113Z"
 		},
 		{
-			"key": "pr:minion_hub#653",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#653 fix(ui): menus, popovers and tooltips always open above drawers and are never clipped",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/653",
-			"sourceUpdatedAt": "2026-11-10T19:51:46Z",
-			"sourceFingerprint": "ee19717fd4fe5b5ce797559100c6423d2dc3963aeb51b49c9861527e12d8eca4",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion-meta#992"
-			],
-			"rationale": "Well-specified, test-backed fix to shared overlay primitives but still a draft stacked on an unmerged storybook branch, and it is the implementation half of the paired spec PR.",
-			"evidence": [
-				"draft PR stacked on #648 feat/storybook, must be retargeted after merge",
-				"fixes clipping/stacking for Popover, Dropdown, Tooltip, Combobox via native top layer",
-				"Storybook play tests assert viewport containment, placement, and no-clip in modal/overflow contexts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T20:48:21.573Z"
-		},
-		{
 			"key": "pr:minion-meta#992",
 			"kind": "pr",
 			"stage": "development",
@@ -7429,40 +7394,6 @@
 			"scoredAt": "2026-11-09T03:17:38.174Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-f25d9dc6080e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/personal-agent-binding.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f25d9dc6080e.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "90453afb4a27618d336f2a0b5d17782fa804151d5c149fadb45a714b53c208f2",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-dd764fd1df5e"
-			],
-			"rationale": "Immutable single-org gateway binding blocks multi-tenant use but the proposed schema migration is a larger architectural change needing more scoping.",
-			"evidence": [
-				"A profile has one immutable gateway binding; concurrent multi-org",
-				"store (profile_id, org_id) -> gateway_binding instead of immutable"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T06:17:38.539Z"
-		},
-		{
 			"key": "spec:2026-09-02-hub-team-hr-module-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7734,6 +7665,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T07:47:51.340Z"
+		},
+		{
+			"key": "pr:minion_hub#653",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#653 fix(ui): menus, popovers and tooltips always open above drawers and are never clipped",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/653",
+			"sourceUpdatedAt": "2026-11-11T06:45:42Z",
+			"sourceFingerprint": "c36112b7e91915020bf6330be2002b3d72541f744459332db0268f88612d7072",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes a real cross-cutting UI bug where menus, popovers and tooltips were clipped or covered, with native top-layer implementation and nine proving stories.",
+			"evidence": [
+				"overflow:hidden container could previously clip panels; drawers could cover them",
+				"nine story IDs each asserting visibility/placement/focus",
+				"spec minion-meta#992"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T06:48:12.984Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -8473,23 +8437,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 6,
+				"implementation": 5
 			},
-			"confidence": 7,
+			"confidence": 5,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-d4a019b21d9a",
-				"proposal:postmerge-minion-hub-dd764fd1df5e"
-			],
-			"rationale": "Multi-transaction cancellation without atomicity risks real data inconsistency and has a concrete transactional fix.",
+			"relatedKeys": [],
+			"rationale": "A 'following' booking cancellation runs as N independent transactions, risking partial-failure data inconsistency in scheduling.",
 			"evidence": [
-				"a `following` cancel is N independent transactions, not one",
-				"wrap N cancel operations in a single database transaction"
+				"TODO(handoff): a following cancel is N independent transactions, not one",
+				"fix direction: wrap operations in db.transaction()"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T06:17:38.539Z"
+			"scoredAt": "2026-11-11T06:48:12.984Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
@@ -8508,23 +8469,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 6,
+				"implementation": 5
 			},
-			"confidence": 7,
+			"confidence": 5,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-dca03692bd9a",
-				"proposal:postmerge-minion-hub-f25d9dc6080e"
-			],
-			"rationale": "Unreversed payment state on ticket void breaks financial consistency (paid-to-date) and has a clear transactional fix.",
+			"relatedKeys": [],
+			"rationale": "Voiding an installment ticket fails to reverse the plan's paid-to-date, risking financial reconciliation inconsistencies.",
 			"evidence": [
-				"voiding an instalment ticket un-pays its plan (paid-to-date",
-				"should be transactional with the void itself"
+				"TODO(handoff): voiding an instalment ticket un-pays its plan (paid-to-date",
+				"fix direction: subtract ticket amount from paid_to_date transactionally with audit log"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T06:17:38.539Z"
+			"scoredAt": "2026-11-11T06:48:12.984Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ec4f70d3709c",
@@ -14904,6 +14862,38 @@
 			"scoredAt": "2026-11-07T04:18:13.377Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f25d9dc6080e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/personal-agent-binding.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f25d9dc6080e.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "90453afb4a27618d336f2a0b5d17782fa804151d5c149fadb45a714b53c208f2",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An immutable single gateway binding per profile blocks concurrent multi-org use, a real architectural limitation whose proposed schema migration isn't yet bounded for safe execution.",
+			"evidence": [
+				"TODO(handoff): A profile has one immutable gateway binding; concurrent multi-org",
+				"fix direction requires migrating profile_id->gateway_binding schema with backcompat concerns"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T06:48:12.984Z"
+		},
+		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -19409,6 +19399,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:58:19.649Z"
+		},
+		{
+			"key": "pr:minion_hub#648",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#648 feat(storybook): component workbench with every hub component, theme switcher and a working test lane",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/648",
+			"sourceUpdatedAt": "2026-11-11T06:37:59Z",
+			"sourceFingerprint": "22ead05ebb1a9ef7b6e47997f1779372c9625e4e2dfeedc2a3d47f91c99da302",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Large dev-tooling PR enabling component testing/governance that unblocks three stacked PRs, with evidence of a passing test lane.",
+			"evidence": [
+				"1,359 entries across 14 groups",
+				"test:storybook lane 188 files/1,171 tests green after fixture fixes",
+				"#652/#653/#654 stack on this branch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T06:48:12.984Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1536014697",
@@ -28352,41 +28375,6 @@
 			"scoredAt": "2026-11-07T08:19:22.795Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d4a019b21d9a.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "126a0dbd641e4078fe0512c08f46e715f03dac2c7bdc7e303d378da599811128",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-dca03692bd9a",
-				"proposal:postmerge-minion-hub-dd764fd1df5e"
-			],
-			"rationale": "A clear client-side permission-gating UX bug with a well-defined fix direction in a single merged PR's file.",
-			"evidence": [
-				"TODO(handoff): plan button gated on pos:create, but server-side",
-				"Fix direction: add client-side permission checks"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T06:17:38.539Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-e41a33a864a1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28585,39 +28573,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T08:18:08.131Z"
-		},
-		{
-			"key": "pr:minion_hub#648",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#648 feat(storybook): component workbench with every hub component, theme switcher and a working test lane",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/648",
-			"sourceUpdatedAt": "2026-11-10T06:43:37Z",
-			"sourceFingerprint": "504e62fa83dcfe978b51b472a7a0e07463766c395e3a50a288ab6fa8257328e9",
-			"score": 37,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Storybook component workbench is thoroughly specified and already passes its full test lane, making it ready to merge as a dev-tooling improvement.",
-			"evidence": [
-				"1,359 entries across 14 groups with real-state variants",
-				"188 files / 1,171 tests, all green after fixture fixes",
-				"lint:design and lint:tokens pass, no governed debt"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T06:47:42.235Z"
 		},
 		{
 			"key": "run:minion (gateway)#31686911500",
@@ -30292,6 +30247,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:15:29.537Z"
+		},
+		{
+			"key": "pr:minion_hub#654",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#654 fix(ui): calmer status colours, a real segmented language picker and quieter dots across POS, CRM, stock and settings",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/654",
+			"sourceUpdatedAt": "2026-11-11T06:42:28Z",
+			"sourceFingerprint": "30452bed2ca5088ee889c16e448419dea07ea94c66c6ed8c6ce1e8b5ec814a58",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Cosmetic consistency fixes across POS, CRM, stock and settings with passing design-lint and unit-test gates, but no functional urgency.",
+			"evidence": [
+				"lint:design/lint:tokens 0 violations",
+				"289 unit tests passed across crm/stock/pos/layout",
+				"spans POS, CRM, stock, settings surfaces"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T06:48:12.984Z"
 		},
 		{
 			"key": "pr:minion-meta#808",
@@ -33439,6 +33427,38 @@
 			"scoredAt": "2026-11-07T04:18:13.377Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-d4a019b21d9a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingDetailDrawer.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d4a019b21d9a.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "126a0dbd641e4078fe0512c08f46e715f03dac2c7bdc7e303d378da599811128",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Scoped, low-risk UX gap where a plan button isn't client-side gated on pos:create even though the server enforces it.",
+			"evidence": [
+				"TODO(handoff): plan button gated on pos:create, but server-side",
+				"approved proposal from post-merge discovery loop"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T06:48:12.984Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d5093998b234",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34026,6 +34046,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:37:27.443Z"
+		},
+		{
+			"key": "pr:minion_hub#652",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#652 feat(ui): chat boxes grow with your text natively and FAQ answers open one at a time",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/652",
+			"sourceUpdatedAt": "2026-11-11T06:45:38Z",
+			"sourceFingerprint": "a619cd04623006044c9b3741993d25b80e642392fa9dc874ac20f8978d4deabc",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, well-scoped UX polish for chat input growth and FAQ accordion behavior with stories/tests, though blocked on base PR retargeting.",
+			"evidence": [
+				"stacked on feat/storybook (#648), must retarget when base merges",
+				"new Doors/FaqPublic story with play test",
+				"spec linked at minion-meta#991"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T06:48:12.984Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
@@ -39028,40 +39081,6 @@
 			"scoredAt": "2026-11-06T20:56:55.368Z"
 		},
 		{
-			"key": "pr:minion_hub#652",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#652 feat(ui): chat boxes grow with your text natively and FAQ answers open one at a time",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/652",
-			"sourceUpdatedAt": "2026-11-10T19:25:53Z",
-			"sourceFingerprint": "4dcf3cc369c86354df231793aa5f70920ddb6d16a577fd16c36d78e621db23fd",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#991"
-			],
-			"rationale": "Minor UI polish PR with a linked spec and concrete implementation detail, but stacked on an unmerged base branch.",
-			"evidence": [
-				"base is feat/storybook (#648), retarget needed after merge",
-				"textarea autosize + FAQ one-open-at-a-time with stories/play test"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T19:47:35.315Z"
-		},
-		{
 			"key": "pr:minion-meta#834",
 			"kind": "pr",
 			"stage": "development",
@@ -40564,6 +40583,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:51:12.204Z"
+		},
+		{
+			"key": "pr:minion-meta#996",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#996 docs(specs): hub Storybook three layers, page layouts and unslop polish proposal",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/996",
+			"sourceUpdatedAt": "2026-11-11T06:34:23Z",
+			"sourceFingerprint": "614c75190a60ca43a34ea9d05f11662e6ffd31166450ad24cd1bd72b617764ef",
+			"score": 24,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Documentation-only spec PR tracking already in-flight hub work, currently lacking a board row because directory-spec support has not landed.",
+			"evidence": [
+				"spec has no board row until directory-spec support from #971 lands",
+				"tracks commits already present on hub feat/storybook"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T06:48:12.984Z"
 		},
 		{
 			"key": "issue:minion-meta#725",
