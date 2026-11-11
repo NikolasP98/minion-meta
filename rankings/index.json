@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-11T11:47:41.225Z",
+	"generatedAt": "2026-11-11T12:18:42.416Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2913,6 +2913,40 @@
 			"scoredAt": "2026-11-05T17:48:16.339Z"
 		},
 		{
+			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Infisical secret cache stored plaintext on disk (0600 only)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-pkg-infisical-cache-plaintext.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "a3e91af04253a3e0c05aedb9f102e14e27e0dbf330b09e0738d22ec6b623b92c",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"spec:2026-08-17-pkg-infisical-cache-plaintext-spec"
+			],
+			"rationale": "This security proposal already has a matching approved spec for the same fix, so they should be tracked as one goal rather than two.",
+			"evidence": [
+				"S1 shipped deleting the plaintext file but S2 cross-process caching is outstanding",
+				"cache previously held the full pre-narrowing Infisical response per handoff notes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T12:18:42.223Z"
+		},
+		{
 			"key": "proposal:2026-09-12-360-continuation-review-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3396,20 +3430,20 @@
 				"specification": 9,
 				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [
 				"proposal:2026-08-17-pkg-infisical-cache-plaintext"
 			],
-			"rationale": "Approved, evidence-rich security spec showing the cache stores the full unnarrowed vault master key and that 0600 mode fails on pre-existing files, with a scoped actionable remaining-slice plan.",
+			"rationale": "The approved spec names exact files, verified facts about master-key exposure, and slice-scoped gating, making continued implementation directly actionable.",
 			"evidence": [
-				"cache stores full Infisical response including MINION_SECRETS_KEY before narrowing per hierarchy.ts",
-				"mode:0600 verified empirically to not apply to pre-existing files",
-				"status: approved"
+				"cache held full pre-narrowing response per infisical.ts:67 citation",
+				"mode:0600 verified empirically not applied to pre-existing files",
+				"security tag forces mandatory human gate per gate conventions"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T12:17:40.511Z"
+			"scoredAt": "2026-11-11T12:18:42.223Z"
 		},
 		{
 			"key": "spec:2026-08-18-factory-worker-containment-spec",
@@ -7759,41 +7793,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-04T19:48:49.112Z"
-		},
-		{
-			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Infisical secret cache stored plaintext on disk (0600 only)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-17-pkg-infisical-cache-plaintext.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "a3e91af04253a3e0c05aedb9f102e14e27e0dbf330b09e0738d22ec6b623b92c",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"spec:2026-08-17-pkg-infisical-cache-plaintext-spec"
-			],
-			"rationale": "Status is already in-spec with S1 shipped and the detailed remaining work (S2/S3) carried by the approved sibling spec, making this proposal artifact redundant as a standalone goal.",
-			"evidence": [
-				"status: in-spec",
-				"handoff notes S1 shipped, S2 outstanding",
-				"references spec file by exact name for remaining scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T12:17:40.511Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-browser-verification-stage",
@@ -14695,6 +14694,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T09:18:13.880Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-302658e86e88",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/marketplace/AgentCreatorWizard.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-302658e86e88.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "b85ad1772674d44ad5d638db628848d563fcb636bb1de9ff53e8bff186bde913",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-234ac5245d15"
+			],
+			"rationale": "Same HC-028 Dialog migration as the sibling AgentCreateWizard finding, plus this one also lacks any Escape path, so combining avoids duplicated partial fixes.",
+			"evidence": [
+				"marker text: 'no Escape path at all'",
+				"references same spec-hc028-overlay-dialog-contract.md DELTA 2"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T12:18:42.223Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-531a2204dc23",
@@ -24323,38 +24356,6 @@
 			"scoredAt": "2026-11-07T08:19:22.795Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-fcb3411ee30e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/assistant/ui-blocks.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fcb3411ee30e.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "93cbb8799e721e0341e36b642d24fe9acaa848c34d392f852887c03ad952f866",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Replacing native tool_use with a prompt-driven protocol in the assistant UI-block layer is a significant architectural redesign described only at a high level, so it needs real scoping/spec work before execution.",
-			"evidence": [
-				"TODO(handoff): prompt-driven protocol instead of native tool_use — replace",
-				"also recurs via handoff-ledger sweep against branch master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T11:47:49.959Z"
-		},
-		{
 			"key": "spec:2026-08-19-gateway-client-error-hook-consumer-adoption-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -26033,19 +26034,19 @@
 				"specification": 6,
 				"implementation": 5
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-302658e86e88"
 			],
-			"rationale": "Same HC-028 shared-Dialog migration issue as the AgentCreatorWizard finding, so both should become one goal.",
+			"rationale": "This AgentCreateWizard finding and the AgentCreatorWizard finding cite the same HC-028 shared-Dialog migration and should be one goal.",
 			"evidence": [
-				"TODO(handoff): HC-028 hand-rolled wizard modal; migrate to the shared Dialog",
-				"references spec-hc028-overlay-dialog-contract.md DELTA 2"
+				"marker cites spec-hc028-overlay-dialog-contract.md DELTA 2",
+				"status: approved"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T11:47:49.959Z"
+			"scoredAt": "2026-11-11T12:18:42.223Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2b39bb2c6fb1",
@@ -26078,40 +26079,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T23:47:13.913Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-302658e86e88",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/marketplace/AgentCreatorWizard.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-302658e86e88.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "b85ad1772674d44ad5d638db628848d563fcb636bb1de9ff53e8bff186bde913",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-234ac5245d15"
-			],
-			"rationale": "Same HC-028 shared-Dialog migration issue as AgentCreateWizard, with an added a11y Escape-path gap, so both should merge into one goal.",
-			"evidence": [
-				"TODO(handoff): HC-028 hand-rolled wizard modal... no Escape path at all",
-				"same spec-hc028-overlay-dialog-contract.md DELTA 2 reference"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T11:47:49.959Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-559bcf211073",
@@ -26210,6 +26177,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-07T00:22:08.414Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fcb3411ee30e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/assistant/ui-blocks.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fcb3411ee30e.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "93cbb8799e721e0341e36b642d24fe9acaa848c34d392f852887c03ad952f866",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Swapping native tool_use for a prompt-driven protocol is a significant architecture change with no bounded design in this finding, so it needs its own spec before execution.",
+			"evidence": [
+				"marker text truncated at 'replace' with no design detail given",
+				"flagged twice (2026-09-02 scan and handoff-ledger merge) without added scoping"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T12:18:42.223Z"
 		},
 		{
 			"key": "spec:2026-08-21-hub-datatable-server-mode-test-gap-spec",
@@ -29657,38 +29656,6 @@
 			"scoredAt": "2026-11-11T02:56:08.197Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-be019c6",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ be019c6",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-be019c6.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "77569202c6f0f72305adb3ad8cadb073f77fde00ef016a48d87fcbe8da0395bf",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Four concrete file:line empty-catch findings give a bounded, low-risk error-handling fix set.",
-			"evidence": [
-				"4 medium empty-catch findings with exact file:line locations",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T11:47:49.959Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-152748b32645",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32800,6 +32767,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T04:47:42.514Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-be019c6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ be019c6",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-be019c6.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "77569202c6f0f72305adb3ad8cadb073f77fde00ef016a48d87fcbe8da0395bf",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Four empty-catch findings are each pinned to an exact file:line, making this a small bounded fix despite still being in draft.",
+			"evidence": [
+				"4 medium empty-catch findings with exact file:line locations",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T12:18:42.223Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-09834583e2d0",
@@ -40022,6 +40021,38 @@
 			"scoredAt": "2026-11-07T23:48:48.904Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/calendar-mobile.spec.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-315b73ded9bb.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "9829432eeb738ae680bbad7ea7ac3a41d303ebc88dc5e362c714d93a8f0e129c",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The auto-diagnosis admits the scanned TODO text was cut off mid-sentence, so the real blocker is unknown until someone reads the full comment.",
+			"evidence": [
+				"diagnosis: 'the scan cut it off mid-sentence'",
+				"marker text ends mid-phrase: 'narrow the'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T12:18:42.223Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-380ed33fff7f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41729,38 +41760,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:52:27.437Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/calendar-mobile.spec.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-315b73ded9bb.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "9829432eeb738ae680bbad7ea7ac3a41d303ebc88dc5e362c714d93a8f0e129c",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The marker text itself is truncated and the auto-diagnosis flags the handoff comment as possibly unclear, so the actual test gap needs clarification before it can be worked.",
-			"evidence": [
-				"Marker text: 'TODO(handoff): UI-002 — this test and \"Staff and event-type filters narrow the' (cut off)",
-				"diagnosis: 'the handoff comment itself may be unclear or the scan cut it off mid-sentence'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T11:47:49.959Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-489bd42e8ffa",
