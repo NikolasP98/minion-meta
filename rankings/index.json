@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-11T18:48:01.792Z",
+	"generatedAt": "2026-11-11T19:18:13.317Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4513,72 +4513,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:48:22.570Z"
-		},
-		{
-			"key": "pr:minion (gateway)#255",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#255 factory: Shell lifecycle S2: single archived-shell wake coordinator",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/255",
-			"sourceUpdatedAt": "2026-08-31T01:33:20Z",
-			"sourceFingerprint": "83b30419c6c617baa0daaa7622eeb7ad24cb0d3434a1e4379b92c58908e21dd2",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Security-tagged shell wake coordinator builds on merged persistence work with well-bounded failure/rollback scope.",
-			"evidence": [
-				"risk:high and topic:security tags",
-				"Gateway PR #216 already delivered Slice 1 shells.update persistence",
-				"Do not start Slice 3 invoke wiring"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T18:48:13.348Z"
-		},
-		{
-			"key": "pr:minion (gateway)#257",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#257 factory: Repository policy S3: gateway instruction parity and contradiction repair",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/257",
-			"sourceUpdatedAt": "2026-08-31T03:24:19Z",
-			"sourceFingerprint": "006d17de3aa33c2230615e0d6f1ec324696de4b02cd30249c9c3e3871426a253",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Instruction-parity repair is infra-wide (affects how all gateway work is read/followed) with a fail-closed safeguard if source conflicts arise.",
-			"evidence": [
-				"risk:high, topic:infra/docs",
-				"Meta S1-S2 already merged, Slice 3 scoped to four approved contradictions",
-				"fail closed and report discrepancy rather than improvising"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T18:48:13.348Z"
 		},
 		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
@@ -9991,20 +9925,19 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 8
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small bounded fix for a nondeterministic memory-reindex rollback failure that likely causes recurring CI flakiness across multiple channels.",
+			"rationale": "Eliminating a nondeterministic test rollback failure protects CI reliability across multiple channels and is a small, bounded fix tied to a specific tracked issue.",
 			"evidence": [
-				"title: eliminate nondeterministic atomic-reindex rollback failure",
-				"size: S",
-				"tagged across discord, telegram, voice-call, whatsapp-web channels"
+				"issue #249 nondeterministic atomic-reindex rollback failure",
+				"size: S, tagged across discord/telegram/voice-call/whatsapp-web channels"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T18:48:13.348Z"
+			"scoredAt": "2026-11-11T19:18:13.125Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -10808,6 +10741,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:29:50.178Z"
+		},
+		{
+			"key": "pr:minion (gateway)#255",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#255 factory: Shell lifecycle S2: single archived-shell wake coordinator",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/255",
+			"sourceUpdatedAt": "2026-08-31T01:33:20Z",
+			"sourceFingerprint": "83b30419c6c617baa0daaa7622eeb7ad24cb0d3434a1e4379b92c58908e21dd2",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Security-tagged shell wake coordinator with failure rollback is a meaningful reliability dependency for later invoke wiring, with a detailed but complex bounded spec.",
+			"evidence": [
+				"tags risk:high, topic:security",
+				"builds on merged PR #216 shells.update persistence, excludes Slice 3 invoke wiring"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T19:18:13.125Z"
 		},
 		{
 			"key": "pr:minion_hub#602",
@@ -18543,6 +18508,38 @@
 			"scoredAt": "2026-11-06T20:59:20.757Z"
 		},
 		{
+			"key": "pr:minion (gateway)#257",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#257 factory: Repository policy S3: gateway instruction parity and contradiction repair",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/257",
+			"sourceUpdatedAt": "2026-08-31T03:24:19Z",
+			"sourceFingerprint": "006d17de3aa33c2230615e0d6f1ec324696de4b02cd30249c9c3e3871426a253",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Cross-repo instruction-parity repair is cross-cutting for agent correctness but is docs/infra rather than runtime-critical, with a fail-closed guard if the spec conflicts.",
+			"evidence": [
+				"risk:high, topic:infra/docs tags",
+				"scoped to 4 approved contradictions, explicit fail-closed instruction if spec conflicts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T19:18:13.125Z"
+		},
+		{
 			"key": "pr:minion (gateway)#317",
 			"kind": "pr",
 			"stage": "development",
@@ -21931,38 +21928,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:49:41.203Z"
-		},
-		{
-			"key": "pr:minion (gateway)#254",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#254 factory: Nostr dispatch S2: buffered encrypted DM reply pipeline",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/254",
-			"sourceUpdatedAt": "2026-08-31T01:26:10Z",
-			"sourceFingerprint": "721731983240d89aa7de5581a174568e2141ff1fd542d67436112b37647f2956",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Bounded Slice 2 of a spec with Slice 1 already merged, giving a clear typed seam to wire the Nostr DM dispatch path.",
-			"evidence": [
-				"Gateway PR #229 delivered the typed fail-loud Slice 1 seam and intentionally left S2 unwired",
-				"exact spec commit cited with explicit do-not-start-Slice-3 boundary"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T18:48:13.348Z"
 		},
 		{
 			"key": "pr:minion (gateway)#322",
@@ -25460,6 +25425,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:43:14.177Z"
+		},
+		{
+			"key": "pr:minion (gateway)#254",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#254 factory: Nostr dispatch S2: buffered encrypted DM reply pipeline",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/254",
+			"sourceUpdatedAt": "2026-08-31T01:26:10Z",
+			"sourceFingerprint": "721731983240d89aa7de5581a174568e2141ff1fd542d67436112b37647f2956",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Bounded Slice 2 of a planned Nostr dispatch pipeline building on an already-merged Slice 1 seam, narrow in channel scope but clearly specified.",
+			"evidence": [
+				"Gateway PR #229 delivered Slice 1; this wires S2 dispatch",
+				"exact spec commit cited, S3 explicitly excluded"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-11T19:18:13.125Z"
 		},
 		{
 			"key": "pr:minion_hub#279",
@@ -29319,20 +29316,19 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Small, opt-in, default-off config slice already past draft into open status with a tightly bounded scope.",
+			"rationale": "Small, tightly bounded opt-in config change (default OFF, no secret expansion) that is further along than the other drafts (status open, size M).",
 			"evidence": [
 				"status: open (not draft)",
-				"size: M",
-				"explicit opt-in, default OFF, no secret handling expansion"
+				"explicit opt-in/default-off/no-secret-expansion scope, size M"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-04T18:48:13.348Z"
+			"scoredAt": "2026-11-11T19:18:13.125Z"
 		},
 		{
 			"key": "proposal:2026-08-18-factory-g0-ci-watch-auto-close",
