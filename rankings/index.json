@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-12T06:48:53.187Z",
+	"generatedAt": "2026-11-12T06:53:32.947Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7426,6 +7426,42 @@
 			"scoredAt": "2026-11-06T21:00:42.893Z"
 		},
 		{
+			"key": "proposal:2026-11-11-hub-door-dni-trust",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "A DNI typed into a public door can become a trusted party document after a reconcile",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-11-hub-door-dni-trust.md",
+			"sourceUpdatedAt": "2026-11-11",
+			"sourceFingerprint": "50b9ba54c0959c49b1c1ddafd8de7eff046ceeaa32a39231b5831730d1ae6858",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-1292855262",
+				"proposal:postmerge-minion-hub-313a43ef1d2a"
+			],
+			"rationale": "A well-specified AS-IS/TO-BE/DELTA proposal on the same reconcileParties DNI-trust bug duplicated by two other batch entries, so it should anchor one consolidated goal rather than three.",
+			"evidence": [
+				"reconcileParties mints parties from custom_fields.dni without checking source",
+				"TODO(handoff) already exists in contactIdByDni in doors-form.service.ts",
+				"test plan specified: door-created contact DNI must not be minted into a party by reconcile"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T06:53:32.758Z"
+		},
+		{
 			"key": "proposal:ci-minion-site-claude-code",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -7554,6 +7590,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T03:24:13.244Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-1292855262",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/doors-form.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1292855262.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "ae7925ab9680f04c37a0dc0681d597c323410a74a965810058a9df0d17ff7a80",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-11-11-hub-door-dni-trust",
+				"proposal:postmerge-minion-hub-313a43ef1d2a"
+			],
+			"rationale": "This is a bare one-line pointer to the exact same reconcileParties/doors-form.service.ts line already covered in depth by the sibling proposal and post-merge finding.",
+			"evidence": [
+				"marker at doors-form.service.ts:130 about reconcileParties minting parties from custom_fields.dni",
+				"same repo/file as proposal:2026-11-11-hub-door-dni-trust and the post-merge finding"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T06:53:32.758Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-4000616153",
@@ -7752,6 +7823,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T05:48:29.534Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-313a43ef1d2a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/doors-form.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-313a43ef1d2a.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "8f209bb3f32462e3740662280db82f80bf23f676aae3019e8a627984de66a5d7",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-11-11-hub-door-dni-trust",
+				"proposal:handoff-minion-hub-1292855262"
+			],
+			"rationale": "Adds a validation-focused fix direction for the same reconcileParties DNI issue already specified in the sibling proposal and marker, so it should merge rather than spawn parallel work.",
+			"evidence": [
+				"diagnosis: reconcileParties mints records without validating custom_fields->>'dni'",
+				"fix direction: validate DNI format and check duplicates before minting, same function as the sibling proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T06:53:32.758Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-3c702b25845f",
@@ -10539,40 +10645,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:36:20.591Z"
-		},
-		{
-			"key": "pr:minion_hub#655",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#655 feat(crm): form doors dedupe contacts by DNI and keep social handles",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/655",
-			"sourceUpdatedAt": "2026-11-12T01:19:08Z",
-			"sourceFingerprint": "d6f1ecc71f1dd1fd2eff8ac7e7ff7b884ff5812312547153a1bd8bfef82c1e62",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#997"
-			],
-			"rationale": "Well-specified CRM dedupe fix with passing tests and an addressed security review unblocks a client (FACES) door activation on merge.",
-			"evidence": [
-				"48/48 doors tests passing, bun run check 0/0",
-				"unblocks FACES door activation and faces-landing rollout after merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:18:47.243Z"
 		},
 		{
 			"key": "pr:minion-base#45",
@@ -41164,40 +41236,6 @@
 			"scoredAt": "2026-11-06T20:15:29.537Z"
 		},
 		{
-			"key": "pr:minion-meta#997",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#997 proposal(hub): door-typed DNI must not become a trusted party document",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/997",
-			"sourceUpdatedAt": "2026-11-12T01:09:40Z",
-			"sourceFingerprint": "2082333146d9259c4159a90322316ac3d2c7388ed5cbd8c8eaf37193366c3e23",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#655"
-			],
-			"rationale": "Proposal-only open-items ledger entry tracking a TODO in hub PR #655, whose disposition depends on that parent PR.",
-			"evidence": [
-				"ledger entry for TODO(handoff) in hub PR #655",
-				"proposal only, no code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:18:47.243Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41355,40 +41393,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T03:20:57.492Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-2670563229",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — test/ci/fixtures/pr371-ci.yml (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2670563229.md",
-			"sourceUpdatedAt": "2026-11-12",
-			"sourceFingerprint": "459363ea2362ef648132b63b4ebf98d90ad505e2e93be9cdb6b2e11ae10237ac",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:merge-scan-minion-ai-cc90bff"
-			],
-			"rationale": "Three vague CI-fixture TODO markers (Bun parity, macOS pause, lane-flags gate) in pr371-ci.yml overlap with the macOS-pause marker also flagged by the sibling merge-scan proposal on the same file.",
-			"evidence": [
-				"markers at test/ci/fixtures/pr371-ci.yml:509,1260,1390",
-				"reconciliation note flags overlap with three separate external roadmap/pause proposals"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T05:48:29.534Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3238987400",
@@ -45323,6 +45327,38 @@
 			"scoredAt": "2026-11-09T08:54:40.112Z"
 		},
 		{
+			"key": "run:minion_hub#43170675053",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43170675053",
+			"sourceUpdatedAt": "2026-11-12T06:48:14Z",
+			"sourceFingerprint": "82c1865867fedf7722af0225f0207bf448a9c7a955be819d27d351aec5e5f5f0",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on a push to master is a status to observe, not an actionable work item.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T06:53:32.758Z"
+		},
+		{
 			"key": "run:minion_site#31686953033",
 			"kind": "run",
 			"stage": "testing",
@@ -45487,6 +45523,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T03:18:47.243Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-2670563229",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — test/ci/fixtures/pr371-ci.yml (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2670563229.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "0f7086d34290290a9bddb9999d4c01feabf839cccf0589278fd51bd76aadbde9",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The markers originate from a CI test fixture file rather than real production config, making the findings non-actionable.",
+			"evidence": [
+				"file path is test/ci/fixtures/pr371-ci.yml",
+				"markers reference shadow-evidence parity and a paused macOS lane with no concrete scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T06:53:32.758Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3499950668",
@@ -47486,7 +47554,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-12",
-			"sourceFingerprint": "4ea80830210c3e40217abbaaa6fb2f38c15d6b09457baa718300c47aa5e94536",
+			"sourceFingerprint": "050744542f4a319fc70c12ab5335e2e1f2d2d2339231d42064cbc788129997e4",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -47498,17 +47566,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 6,
+			"confidence": 2,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The quoted 'markers' are business-domain text fragments (invoices, till-side draws, instalment voiding) pulled from stored ranking/evidence data in rankings/index.json rather than real TODO(handoff) comments in minion-meta source code.",
+			"rationale": "The listed markers are quoted excerpts from other proposals embedded inside the rankings data file itself, not genuine code TODOs, so this is self-referential sweep noise.",
 			"evidence": [
-				"quoted lines reference unrelated POS/billing domain concepts not present in minion-meta's codebase",
-				"source file is rankings/index.json, a generated data artifact, not application code"
+				"file is rankings/index.json, the ranking system's own output",
+				"marker text fragments match other proposals' TO-BE/evidence lines (e.g. 'paidAmount sums every non-void line')"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T05:48:29.534Z"
+			"scoredAt": "2026-11-12T06:53:32.758Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
