@@ -7,6 +7,7 @@ updated: 2026-11-12
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_from: [handoff-minion-hub-3731323415]
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/stories/Layouts/CrmContact.stories.svelte`
@@ -40,3 +41,10 @@ The `TODO(handoff)` marker at `src/lib/stories/Layouts/CrmContact.stories.svelte
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/648
 - file: `src/lib/stories/Layouts/CrmContact.stories.svelte`
 - checked: 2026-11-12
+
+## Merged from handoff-minion-hub-3731323415
+
+Same `TODO(handoff):` marker, filed by the handoff-ledger sweep against
+`NikolasP98/minion_hub@master` (pre-merge view of the same file/line). Direct
+source link for the marker:
+https://github.com/NikolasP98/minion_hub/blob/master/src/lib/stories/Layouts/CrmContact.stories.svelte#L3

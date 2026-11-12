@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-3731323415
 title: Handoff marker — src/lib/stories/Layouts/CrmContact.stories.svelte (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-d3f8d16a2e95
 created: 2026-11-12
 updated: 2026-11-12
 repos: [minion-hub]
