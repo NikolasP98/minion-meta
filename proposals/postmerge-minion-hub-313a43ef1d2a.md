@@ -1,7 +1,8 @@
 ---
 id: postmerge-minion-hub-313a43ef1d2a
 title: "Post-merge finding — todo-handoff in src/server/services/doors-form.service.ts (minion_hub)"
-status: draft
+status: merged
+merged_into: 2026-11-11-hub-door-dni-trust
 created: 2026-11-12
 updated: 2026-11-12
 repos: [minion-hub]

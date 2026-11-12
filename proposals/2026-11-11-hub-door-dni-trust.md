@@ -3,7 +3,7 @@ id: 2026-11-11-hub-door-dni-trust
 title: A DNI typed into a public door can become a trusted party document after a reconcile
 status: draft
 created: 2026-11-11
-updated: 2026-11-11
+updated: 2026-11-12
 repos: [minion_hub]
 effort: S
 source: hub PR 655 (feat/doors-form-no-field-cap) security review
@@ -46,3 +46,15 @@ a match key, until staff or a registry check confirms it.
 
 Phone-based matching. Its weakness is the same, already exists in `ensureCrmContact` for
 bookings, and is not changed here.
+
+## Related automated findings (merged 2026-11-12)
+
+Two machine-generated markers filed the same `TODO(handoff)` independently and are folded in
+here rather than tracked separately:
+
+- `handoff-minion-hub-1292855262` (handoff-sweep) — pins the marker to
+  `src/server/services/doors-form.service.ts:130`
+  (https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/doors-form.service.ts#L130).
+- `postmerge-minion-hub-313a43ef1d2a` (postmerge-discovery) — confirms the same marker at
+  `NikolasP98/minion_hub@c1e4974` (merged PR https://github.com/NikolasP98/minion_hub/pull/655),
+  checked 2026-11-12.
