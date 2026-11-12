@@ -76,3 +76,18 @@ role/revision/grantor and recheck on redemption. Do not make outstanding invite
 permissions change when the default changes. Keep Team administration, brain-wide
 administration, simulation eligibility and ownership as separate predicates.
 Use blank-role rank 10. Last administrator protection includes actual page access.
+
+## Concurrent PR reconciliation at implementation
+
+Read-only inspection on 2026-11-12 found all three PRs still open. No branch was
+merged into this candidate or assumed deployed.
+
+| PR | Inspected head | Reconciliation |
+| --- | --- | --- |
+| 630 | `6ab4cf74c5ace67fefa4dd823b2644e23d8f9d58` | Adds a modules installation step after RBAC and before external provisioning. This candidate preserves the provisioning result/step contract and completes local ownership/role assignment before those later steps. Retain that module step when resolving the overlapping provisioner. |
+| 602 | `3eed575597046cba95e6754eff229685fdd6ce71` | Older stacked page-access API changes overlap current transactional policy writers. Preserve this candidate's fresh ceilings, explicit role CRUD and revision/audit transactions. Any future catalog GET must use the model-aware catalog and explicit role-view authority; do not restore the older uncoordinated override writers. |
+| 544 | `ffeb86c099a26a174468b4913adb7aef8e31c9b4` | Delegated principal resolution calls the shared `resolveCapabilities(orgId, profileId)` contract, retained here with model-aware local role resolution. This inspection does not qualify the separate WhatsApp activation workflow. |
+
+These are merge-coordination constraints. Each PR's independent merge and release
+approval remains intact. Runtime checks in this task target the pinned Hub
+candidate, not these unmerged heads.

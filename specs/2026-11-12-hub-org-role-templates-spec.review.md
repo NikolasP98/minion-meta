@@ -8,8 +8,8 @@ created: 2026-11-12
 
 # Review: organization-owned roles and templates
 
-Technical review and owner security-spec approval are complete. Implementation
-and local runtime qualification are in progress in an isolated Hub checkout.
+Technical review and owner security-spec approval are complete. Implementation and local runtime qualification are complete in an isolated Hub
+checkout; final exact-head CI is in progress.
 Merge and deployment have not been performed.
 
 ## Pass 1 — Changes requested
@@ -68,3 +68,25 @@ and explicit role CRUD authority. The Manager template receives role view, creat
 edit and delete within that ceiling, as the owner confirmed with “Allow within
 their own limits”. Staff and Viewer receive no role CRUD. Team management remains
 separate. The canonical specification and plan contain the full amendment.
+
+
+## Final implementation review refinement
+
+Final independent review found rank-only legacy assignment and unverified legacy
+admission paths that did not implement the owner-approved complete grant ceiling.
+Those paths are being extended to fresh transactional actual/effective checks.
+Legacy keys and stored grants are preserved. Future unknown-grantor legacy links
+require reissue before admitting new members. This is an implementation correction
+to the existing approved security rule; final code qualification remains required.
+
+
+## Final source review and candidate
+
+Hub `99341e7074541360eadcf2dcd32e67494f3c65ad`, tree
+`0295df1eb209992cc5c9e3354754c29de93884bf`, passes independent Standards and Spec
+source review. Earlier legacy, object, recipient-union and management-rank gaps
+were reproduced and corrected; no source defect is accepted as unfinished.
+The [independent receipt](../audits/2026-11-12-org-role-templates/review-final.md)
+states the modeled scope and platform/identity boundaries. The
+[qualification ledger](../audits/2026-11-12-org-role-templates/qualification.md)
+keeps focused checks, full CI, browser evidence and release approval separate.

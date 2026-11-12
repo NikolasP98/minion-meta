@@ -115,19 +115,23 @@ column default `legacy` during the compatibility deployment; only the qualified
 new-org bootstrap writes `organization` explicitly. Unknown values and read
 errors deny permission resolution; they never imply unrestricted access.
 
-`legacy` organizations retain their global catalog, custom roles, invite behavior,
-rules, rank rules and role fallback. Existing data/page grants, assignments,
-catalogs and invitation semantics remain unchanged. Role CRUD authorization is
-intentionally separated from Team rights: `users:manage` no longer implies any
-`roles` capability. Legacy global Manager retains no default `roles` capabilities;
-the optional Manager template explicitly grants role CRUD. No existing permission
-row is rewritten. One narrowly scoped security correction also applies
-to role creation/duplication through the extended endpoint: it checks the real and
-simulated actor's complete capability, field, ownership and page ceiling. The
-historical ability to duplicate a lower-rank role with broader permissions than
-the actor is intentionally rejected. Valid legacy duplicate bodies remain
-compatible. This correction rewrites no existing permissions and must have
-positive/negative legacy regressions in the implementation candidate.
+`legacy` organizations retain their global catalog, custom roles, stored rules,
+ranks and membership fallback. Existing active data/page grants, assignments and
+catalogs remain unchanged; no existing permission row is rewritten. Role CRUD is
+separated from Team rights: `users:manage` does not imply any `roles` capability.
+Legacy global Manager retains no default role CRUD; the optional Manager template
+explicitly grants it.
+
+Future grants in both models enforce the owner's complete actual/effective
+ceiling, including recipient role unions, data scope/field/page and management
+rank effects, and existing private-Brain authority. This applies to role creation,
+duplication, permission edits, assignments and admission. Legacy invitation keys
+and the omitted-approval Staff default remain. New links record grantor/revision;
+older links without provenance require reissue before admitting a new member.
+Inactive re-admission installs exactly the verified role, clearing stale inactive
+assignments; existing-member replay preserves current assignments. Valid legacy
+duplicate bodies remain accepted. Native positive/negative regressions must prove
+the intended security tightening and preservation of existing active grants.
 
 `organization` organizations list and accept only their `org_roles` rows.
 Global built-in keys remain usable as legacy roles and as template source IDs,
@@ -352,7 +356,8 @@ Make membership/role assignment/use counting/request resolution transactional.
 DoD: default admission grants Administrator initially, custom-role admission
 restricts immediately, existing members cannot be promoted by link replay,
 cross-org/deleted-role/expired/revoked/exhausted invites fail without side effects.
-Concurrency cannot exceed max uses. Legacy invitations remain compatible.
+Concurrency cannot exceed max uses. Legacy role keys and the Staff approval
+default remain compatible; unverified older links require reissue as defined in §2.1.
 
 ### Slice 5 — Roles, templates and Team interface
 
@@ -394,7 +399,7 @@ required; this spec does not authorize production deployment.
 
 | Scenario | Required observable result |
 |---|---|
-| Existing FACES and other legacy org fixtures before/after migration | Same catalog, membership, existing module/page grants, record scope and field levels; role CRUD separation and stricter duplication follow §2.1 |
+| Existing FACES and other legacy org fixtures before/after migration | Same catalog, membership, existing module/page grants, record scope and field levels; future grant ceilings, role CRUD separation and invitation provenance follow §2.1 |
 | New organization through supported provisioning | One Administrator role; creator has available org features; no platform elevation |
 | New default member | Explicit Administrator assignment, same organization access as creator except ownership actions |
 | Narrow role created | No changes to current members; template itself grants nobody access |
@@ -461,3 +466,94 @@ column privileges and live-source-fenced RLS. A follow-on migration and the
 hardened notification protocol's native catalog/ACL tests must qualify that
 extension; schema or unit tests alone do not prove it safe. The rollout flag
 remains disabled until all readers and all these checks are qualified.
+
+
+## Final review: legacy grant-ceiling enforcement
+
+The owner's complete grant-ceiling rule applies to future grants in both role
+models. Existing legacy catalogs and stored grants remain intact; preserving
+legacy behavior does not authorize rank-only future grants. Legacy member-role
+replace/add and newly exposed fallback after removal must pass fresh actual and
+simulated full-authority checks in the policy-lock transaction. Admission must
+check the current grantor under the same coordinated profile/org lifecycle locks.
+
+New legacy invitations retain the existing role-key and omitted-approval Staff
+semantics while recording role revision and grantor provenance. Older invitations
+without that provenance fail closed for new members with an explicit reissue
+message. Already-member redemption remains a no-op. This is the necessary
+compatibility tightening for the approved security rule, not an exception to it.
+
+Native regressions must cover same/lower-rank broader module, owner, field or page
+grants, stale actual authority during simulation, last-explicit-role fallback
+escalation, legacy invitation provenance/revocation and allowed bounded grants.
+Denial must leave assignments, invitation uses and audit effects unchanged.
+
+
+## Brain object effects of role grants
+
+The approved complete asset ceiling includes the existing `brains` and
+`brain_access` effects of role keys. Matching only module, page and rank matrices
+is insufficient. Assignment, fallback exposure, invitation mint/redemption,
+approval and role permission edits must compare newly exposed Brain actions
+against transaction-current actual and simulated object authority. Preserve
+legitimate narrowing and do not broaden legacy bypasses or rewrite stored ACLs.
+
+Legacy Owner/Administrator role keys grant an unbounded private-Brain scope.
+Owning every current Brain, or an empty organization, does not prove authority
+to delegate that future scope. Explicit role ACLs are checked against exact-org
+Brain rows, ownership, user/role ACLs and the corresponding module actions.
+Adding Delete to an already writable role Brain is a new action requiring the
+same check. Invitation revisions include selected-role Brain ACL IDs and levels.
+
+The snapshot is bounded to 4,096 Brains and 65,536 role/user ACL rows per org;
+overflow returns 503 without mutation. Native regressions must exercise the real
+`canAccessBrain` predicate, legitimate matching grants, denied role-name/ACL
+escalation, equal-matrix fallback, policy action unlock, invitation ACL revision
+and serialized ACL revocation. Fixtures must declare all queried relations; no
+missing-table fallback may authorize a grant.
+
+
+Known recipient checks use the complete before/after OR role union plus retained
+creator, user and verified owned personal-agent rights. They include legacy
+membership fallback holders during permission edits. Personal-agent-derived
+effects are limited to the current gateway read and remember/edit operations;
+they do not lend new authority to a browser grantor. Inactive re-admission removes
+stale assignments and installs exactly the verified role, while already-member
+replay preserves existing assignments.
+
+Object snapshots include at most 65,536 matching personal-agent bindings; policy
+edits support at most 4,096 affected profiles and one million evaluated Brain
+cells. Overflow returns 503 and rolls back. Owned agent IDs require unambiguous
+persisted ownership, including case-folded lookup semantics; arbitrary caller IDs
+are not authority. Ordinary identity writers use immutable namespace-separated
+IDs and ACL creation requires a registered recipient. This source-proven boundary
+does not qualify arbitrary operator SQL/imports or corrupted runtime responses.
+Existing platform-account lifecycle privileges remain separately guarded; an
+organization Administrator or Team manager does not become a platform operator.
+
+
+## Complete recipient grant tuples
+
+Selected-role ceilings are followed by full recipient before/after checks for
+all assignments and every permission write/reset. Existing capability-builder
+semantics remain unchanged: action OR, least-restrictive record scope, MAX field
+tiers and page policy precedence. A hidden role's field tier or an unrelated
+unrestricted reader must not combine with a new grant to expose higher-tier
+reads/exports or unrestricted writes beyond the grantor. Effective static,
+custom and built-in page transitions include denial removal and inheritance.
+
+New role create/edit/delete or Team manage capability, or a rank increase while
+such capability is held, must have resulting recipient rank within both fresh
+grantor rank ceilings. A pre-held high rank without management must not become
+a higher-rank management grant through a lower role. Role view alone does not
+activate ranked writes. Preserve unrelated retained authority and actual
+narrowing. Read/export field and record-scope changes are checked independently.
+
+Generic data checks use the existing platform data-authority semantics; private
+Brain object checks use canonical actual pre-change roles and rules, including
+under simulation. Synthetic platform role-edit capabilities must not invent
+private-Brain scope inside the organization role editor. Separate platform
+account lifecycle privileges remain outside this organization-grant guarantee.
+Native field/scope/export/page/rank composition regressions and matching positive
+grants prove these invariants. The policy recipient and evaluation bounds apply
+to all role permission changes, with separate data/object evaluation budgets.
