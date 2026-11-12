@@ -8,9 +8,9 @@ created: 2026-11-12
 
 # Review: organization-owned roles and templates
 
-Technical review is complete. Human security-spec approval is pending; this
-sidecar deliberately does not mark the specification approved. Product code,
-runtime qualification, merge and deployment have not been performed.
+Technical review and owner security-spec approval are complete. Implementation
+and local runtime qualification are in progress in an isolated Hub checkout.
+Merge and deployment have not been performed.
 
 ## Pass 1 — Changes requested
 
@@ -45,14 +45,14 @@ or authorization to skip the human approval/merge gates.
 Initial instruction parity invocation could not resolve an installed parser in
 the isolated clone. Retried using the existing root dependencies through a local
 untracked symlink; the check passed. No package/lockfile edits were needed.
-Application tests are not claimed: this candidate changes planning artifacts only.
+Those checks qualify the planning artifacts. Product qualification is tracked
+separately in the canonical task list and implementation evidence.
 
 ## Approval and handoff
 
 The concrete design selects one local Administrator role for new organizations;
-current organizations remain legacy. Owner approval must be recorded in the board
-spec and this sidecar before T001 is checked and product code begins. The six
-implementation slices and all qualification tasks remain pending in
+current organizations remain legacy. Owner approval is recorded in the board
+spec and this sidecar. Implementation and qualification progress is tracked in
 `specs/113-org-role-templates/tasks.md`.
 
 ## Owner approval
@@ -60,3 +60,11 @@ implementation slices and all qualification tasks remain pending in
 On 2026-11-12 the owner replied “approved. Proceed.” and then “go on”.
 The reviewed specification is approved for implementation. This authorization
 does not replace the separate owner merge/release decision.
+
+## Owner-approved amendment
+
+The owner requires every access grant to stay within the actor's own permissions
+and explicit role CRUD authority. The Manager template receives role view, create,
+edit and delete within that ceiling, as the owner confirmed with “Allow within
+their own limits”. Staff and Viewer receive no role CRUD. Team management remains
+separate. The canonical specification and plan contain the full amendment.

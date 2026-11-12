@@ -22,6 +22,9 @@ from the updated Hub resolver. Preserve serialized role keys and legacy claims.
 
 - Spec, plan, tasks and evidence inventory exist before code.
 - Owner security/data spec approval recorded on 2026-11-12; product implementation may proceed.
+- The owner-approved implementation amendment separates role CRUD from Team
+  authority and limits every grant to fresh actual/effective permissions. Manager
+  template CRUD is explicitly authorized; no renewed spec approval is required.
 - Six slices map to the specification DELTA and each has an observable DoD.
 - UI changes require semantic tokens, Svelte 5, Paraglide compilation and both
   design/token gates. New API/page surfaces require central RBAC and route-manifest
@@ -42,11 +45,19 @@ without changing the existing interpretation of `source_role_key`. Template
 definitions are read-only code artifacts; instantiated matrices are independent
 `permission_rules` rows. Administrator rank 80, Manager 60, Staff 40, Viewer 10;
 blank rank 10; duplicate preserves rank. Every grant observes the real actor's
-capability and rank ceiling.
+complete capability, rank, record/ownership, field and page ceilings in both
+actual and effective authority. Administrator grants all role actions; Manager
+template grants role view/create/edit/delete without manage; Staff and Viewer
+templates grant none. Legacy global Manager retains no default roles capability.
 
 The role-creation API accepts strict discriminated template/duplicate/blank
 inputs. Maintain the existing legacy duplication body as a compatibility adapter.
-Role rename updates display name only. Default selection and all policy writes
+Role CRUD uses the explicit `roles` module independently of Team: view for the
+loader, create for template/blank/duplicate creation, edit for rename/permission
+writes, delete for deletion. Team-only authority implies no role action.
+Role rename updates display name only. Default selection requires both
+`users:manage` and `roles:edit`; assignment remains `users:manage` plus ceiling.
+Default selection and all policy writes
 use fresh authority, org advisory lock, revision checks, audit and invalidation.
 Invite creation freezes an explicit target role key/revision and grantor identity;
 redemption revalidates them, atomically admitting the member and consuming a use.
@@ -74,10 +85,19 @@ available throughout. A flag is not a substitute for implementation completeness
 The [inventory](research.md) is the starting boundary. In particular adapt
 `resolveMemberRoleKeys` callers in normal/fresh resolution, section access,
 simulation, assistant principals and notification audience/projection SQL.
-Distinguish `users:manage` from `brains:manage`; include page access in the
-new-model post-change recoverable-administrator predicate; preserve legacy edit outcomes. Keep ownership in the membership
+Distinguish `roles` CRUD, Team `users:manage` and Brain `brains:manage`. The
+new-model recoverable administrator needs `users:manage`, `roles:view`,
+`roles:edit`, sufficient rank and the actual role-edit/member-assignment page
+chains. Preserve legacy data grants and disclose the intentional separation of
+role CRUD from Team rights. Keep ownership in the membership
 relationship. Test normal, simulated, notification and delegated paths against the
-same fixtures, including a user who manages Team but cannot access Brains.
+same fixtures, including a user who manages Team but cannot access Brains or
+edit role permissions. Serialize Brain ACL replacement and visibility widening
+under org-policy and Brain-row locks. Revalidate active actor, current real and
+effective module permissions, owner scope and object write authority in the
+write/audit transaction; validate same-org recipients before replacement. Native
+regressions must prove role/ACL revocation defeats waiting share and visibility
+writes, including simulations with revoked actual authority.
 
 No changes to shared authentication packages or Site are planned: Hub uses
 Supabase GoTrue, while Site uses its own Better Auth session. Inspect actual shared

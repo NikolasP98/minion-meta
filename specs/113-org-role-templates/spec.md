@@ -43,6 +43,10 @@ not alter their role or consume another use.
   org-scoped, audited and subject to fresh delegation limits.
 - FR-006: At least one owner and one recoverable access administrator survive edits.
 - FR-007: Organization-admin access never becomes platform-superuser access.
+- FR-008: Role CRUD uses explicit `roles` capabilities independently of Team administration;
+  every grant remains within the actor's fresh actual and effective authority.
+- FR-009: Brain ACL and visibility grants revalidate module and per-object authority
+  in the same transaction as the write and audit.
 - SC-001: QA before/after comparison finds zero changes to legacy grants/scopes.
 - SC-002: New-org creator/default member exercise all enabled org modules in QA.
 - SC-003: Restricted-member UI, API, simulation and agent decisions agree.
@@ -66,6 +70,13 @@ retains Administrator access; the UI must explain this existing union behavior.
 Approval status: the owner approved this reviewed specification on 2026-11-12
 with “approved. Proceed.” and “go on”. Implementation is authorized; merge and
 production release remain separate human decisions.
+
+The owner amended this approved scope during implementation: all access grants
+are limited by the actor's own permissions, and role CRUD is separate from Team
+administration. They explicitly approved Manager-template role read/create/edit/delete
+within that ceiling; Staff and Viewer templates have no role CRUD. This amendment
+is authorized for implementation without another specification approval. It does
+not authorize merge or release.
 
 ## 1. AS-IS and source evidence
 
@@ -105,8 +116,20 @@ new-org bootstrap writes `organization` explicitly. Unknown values and read
 errors deny permission resolution; they never imply unrestricted access.
 
 `legacy` organizations retain their global catalog, custom roles, invite behavior,
-rules, rank rules and role fallback. Their application-visible behavior must not
-change. `organization` organizations list and accept only their `org_roles` rows.
+rules, rank rules and role fallback. Existing data/page grants, assignments,
+catalogs and invitation semantics remain unchanged. Role CRUD authorization is
+intentionally separated from Team rights: `users:manage` no longer implies any
+`roles` capability. Legacy global Manager retains no default `roles` capabilities;
+the optional Manager template explicitly grants role CRUD. No existing permission
+row is rewritten. One narrowly scoped security correction also applies
+to role creation/duplication through the extended endpoint: it checks the real and
+simulated actor's complete capability, field, ownership and page ceiling. The
+historical ability to duplicate a lower-rank role with broader permissions than
+the actor is intentionally rejected. Valid legacy duplicate bodies remain
+compatible. This correction rewrites no existing permissions and must have
+positive/negative legacy regressions in the implementation candidate.
+
+`organization` organizations list and accept only their `org_roles` rows.
 Global built-in keys remain usable as legacy roles and as template source IDs,
 but cannot be assigned directly in the new model.
 
@@ -141,7 +164,13 @@ organization's current overrides. A separate `duplicate` operation copies an
 existing local role's effective matrix, including page/section overrides and
 record/field restrictions. A blank role starts with every capability disabled and rank 10. Template ranks
 are Administrator 80, Manager 60, Staff 40 and Viewer 10; duplicate preserves the
-source rank. All paths enforce the real grantor's rank and capability ceiling.
+source rank. Administrator grants all `roles` actions. Manager grants `roles:view`,
+`roles:create`, `roles:edit` and `roles:delete`, with `roles:manage` disabled. Staff
+and Viewer grant no `roles` actions. Legacy global Manager defaults remain
+unchanged with no `roles` actions; template creation is an explicit choice.
+All paths enforce both the real and effective grantor's complete capability, rank,
+record/ownership, field and page ceilings. A simulation cannot provide a missing
+actual permission or make an over-ceiling grant valid.
 
 Instantiation copies a selected template version into an independent local role;
 later template edits must not mutate existing copies. Persist template ID/version
@@ -153,8 +182,12 @@ organization policy lock/revision discipline as the two permission editors.
 The existing `POST /api/roles` duplicate contract remains accepted for legacy
 callers. Add a strict discriminated creation contract for template, duplicate
 and blank sources. Template identifiers are not accepted as assignable role keys.
-Require live membership, active organization, `users:manage`, fresh grant/rank
-checks and source/target organization matching at every mutation boundary.
+Require live membership, an active organization, the operation-specific `roles`
+action, fresh complete grant/rank checks and source/target organization matching
+at every role mutation boundary. Creation requires `roles:create`; rename and
+permission edits require `roles:edit`; deletion requires `roles:delete`. Loading
+the role editor requires `roles:view`. None of these role operations additionally
+requires `users:manage`, except changing the admission default as specified below.
 
 ### 2.4 Admission and default roles
 
@@ -163,7 +196,10 @@ role at the approval/mint transaction; initially this is Administrator. Display 
 a join or generating a default-role invite. Explicit roles must belong to the
 target organization and be within the grantor's authority. Changing the default
 affects future admissions only and must be an explicit audited administrator
-action. It does not change current member assignments.
+action requiring both `users:manage` and `roles:edit`, fresh authority and revision
+checks. It does not change current member assignments. Assigning or removing a
+member's role and approving or minting an admission require `users:manage` and the
+complete fresh delegation ceiling; role CRUD alone cannot administer Team.
 
 Resolve the selected default to an explicit local role key when an invite is
 created or a pending request is approved. Persist the selected role and grantor
@@ -186,7 +222,12 @@ All organization features available to today's organization admin must work for
 the seeded local Administrator. Use separate predicates, with legacy role-name
 semantics retained only for legacy organizations:
 
-- Team/role editing: `users:manage`, fresh grant/rank ceiling and relevant page access.
+- Role catalog/editor read: `roles:view`; role creation: `roles:create`; role or
+  permission editing: `roles:edit`; role deletion: `roles:delete`. Preserve the
+  separate `roles:manage` action without inferring CRUD from Team rights. Apply
+  fresh actual/effective complete delegation ceilings and relevant page access.
+- Team membership/assignment: `users:manage`, fresh complete grant/rank ceiling
+  and relevant page access. Default-role changes also require `roles:edit`.
 - Simulation eligibility: real `users:manage` plus the real grant/rank ceiling;
   candidate/effective authority is always intersected with the actual actor.
 - Brain-wide object administration: `brains:view` AND `brains:manage`; this never
@@ -198,7 +239,8 @@ semantics retained only for legacy organizations:
 
 For organization-model organizations only, at least one active, non-simulated
 real member must be a recoverable access
-administrator: effective `users:manage`, rank at least the highest current local
+administrator: effective `users:manage`, `roles:view` and `roles:edit`, rank at
+least the highest current local
 role rank, and allowed access through the actual role-editing AND member-assignment
 page/redirect chains. Use the shared route/page policy evaluator to include explicit
 native/custom page and section denials; do not test only the capability bit.
@@ -209,7 +251,8 @@ post-change matrix and actual page paths before committing.
 The default role cannot be deleted until the default is changed. Role deletion
 also rejects live references in memberships, explicit invites and per-object
 access grants. For the new model, keep last-owner protection based on actual ownership.
-Legacy organizations retain their existing last-owner and permission-edit behavior;
+Legacy organizations retain their existing last-owner protection and policy-edit
+outcomes when the actor passes the operation-specific role capability check;
 the new recoverable-administrator rejection rules do not apply to them.
 
 Shared authority resolution must return the same answer for normal cached loads,
@@ -217,6 +260,17 @@ fresh write transactions, simulation, notification audiences, assistant principa
 and delegated jobs. Include the role model/default/catalog changes in simulation
 revisions and cache invalidation. A simulation cannot widen the real actor's access.
 Multi-role grants continue to combine by OR.
+
+Brain ACL replacement and visibility widening are access grants. Serialize them
+under the organization policy lock and the target Brain row lock. In the same
+transaction, require an active, non-pending-deletion actor and fresh real AND
+effective `brains:view`/`brains:edit`, respect owner-scoped module restrictions,
+and require current per-object write authority in both identities. Being able to
+manage Team or edit a role does not establish object write authority. Validate
+recipient role/user/agent references against the exact target organization before
+replacing ACL rows. Commit the grant and audit together. Concurrent role or ACL
+revocation must win against a waiting stale share or visibility write, including
+a simulation whose real actor has lost access.
 
 ### 2.6 Data and page layers
 
@@ -277,9 +331,15 @@ last administrator/owner checks, brain administration, simulation and audit.
 DoD: rename preserves stable-key references; template copies stay unchanged after
 template revision; duplicate preserves explicit page denials; concurrent removal
 or downgrade of new-model last administrators cannot lock the org out. A legacy
-permission-edit regression must retain the pre-change result. Restricted role
+permission-edit regression with an authorized actor must retain the pre-change
+result. Restricted role
 cannot grant a higher rank or capability. Both page/data editors show the same
-matrix and revisions. Verify normal, simulated and delegated authority parity.
+matrix and revisions. Role CRUD and Team permissions authorize independent
+operations; Manager-template CRUD is allowed within the ceiling, while Staff,
+Viewer and Team-only actors cannot change role permissions. Default changes
+require both capabilities. Verify normal, simulated and delegated authority parity.
+Brain grants must reject foreign recipients and stale object/module permissions
+without ACL, visibility or audit side effects.
 
 ### Slice 4 — Admission through local roles
 
@@ -303,12 +363,17 @@ semantic tokens and Svelte 5 components. New organizations show Roles and
 Templates as separate concepts, one Administrator initially, a Create role flow
 with template/duplicate/blank sources, local role naming, and a clearly labeled
 default for new members. Team selects active local roles only. Existing
-organizations retain their legacy role controls and gain template creation.
+organizations retain their legacy catalog controls, subject to the explicit role
+CRUD capabilities, and gain template creation.
 
 DoD: keyboard-accessible creation and assignment; name conflicts and failed saves
 retain input; default-role admission consequence and fixed invite role are visible; no template in an
 assignment selector; zero-member role creation changes no existing grants.
-Run `bun run lint:design` and `bun run lint:tokens` with no increased design debt.
+Show each role action only for its specific capability. Manager-template users
+can discover and use Roles without Team management; Team-only users cannot open
+the role editor or edit permissions. Org-scoped Settings links use route
+capabilities rather than platform-admin identity. Run `bun run lint:design` and
+`bun run lint:tokens` with no increased design debt.
 
 ### Slice 6 — Qualification and release evidence
 
@@ -329,7 +394,7 @@ required; this spec does not authorize production deployment.
 
 | Scenario | Required observable result |
 |---|---|
-| Existing FACES and other legacy org fixtures before/after migration | Same catalog, membership, module/page grants, record scope, field levels and permission-edit outcomes |
+| Existing FACES and other legacy org fixtures before/after migration | Same catalog, membership, existing module/page grants, record scope and field levels; role CRUD separation and stricter duplication follow §2.1 |
 | New organization through supported provisioning | One Administrator role; creator has available org features; no platform elevation |
 | New default member | Explicit Administrator assignment, same organization access as creator except ownership actions |
 | Narrow role created | No changes to current members; template itself grants nobody access |
@@ -341,6 +406,9 @@ required; this spec does not authorize production deployment.
 | Last access admin or owner concurrently removed/downgraded | One conflicting mutation fails; a valid recovery/admin and owner remain |
 | Invite replay/changed default/explicit role | No existing-member promotion; stored role/revision for every outstanding invite; changed default affects new invites only |
 | Simulation, notifications and delegated agent | Same fresh tenant/membership/role grants; no platform or cross-tenant widening |
+| Role CRUD versus Team authority | Explicit per-action role capabilities; Team-only emits no role CRUD; Manager template has CRUD within ceiling, legacy global Manager defaults to none |
+| Default-role mutation | Both `users:manage` and `roles:edit` required; either alone denies |
+| Brain ACL or visibility grant after revocation | Fresh real/effective module and object rights checked under shared locks; stale share/visibility denies with no grant or audit side effects |
 
 ## 5. Rollout, rollback and compatibility
 
@@ -367,11 +435,29 @@ transfer redesign and platform-operator role changes.
 
 Two spec review passes must inspect both Standards and Spec axes. Record their
 findings in the review sidecar and revise this artifact before requesting the
-human security approval. Status remains `review`, verdict `pending`, until the
-owner approves the concrete specification. Implementation has not started.
+human security approval. Both review passes and owner implementation approval
+were recorded on 2026-11-12. The later role-CRUD/grant-ceiling amendment above is
+also owner-approved. Implementation is in progress; exact-candidate independent
+review and the human merge/release decision remain required.
 
 Do not leave partially wired bootstrap, invite, simulation or agent consumers
 enabled. Any implementation handoff gap requires the in-code TODO(handoff) and
 proposal ledger required by AGENTS.md. The inventory and qualification criteria
 above are planned work, not claims that the behavior is already implemented.
 
+## Implementation review refinements (2026-11-12)
+
+Independent code review identified a cross-boundary account-deletion race.
+Implementation adds a durable `profiles.deletion_pending` admission fence and
+ordered profile lifecycle locks before organization-policy locks. Bootstrap,
+invitation redemption, request approval and privileged membership additions check
+that fence; global GoTrue deletion cannot race a new sole-administrator grant.
+Deletion failure retains the fence for an explicit retry. Existing ordinary
+profiles default false. The implementation candidate must qualify these locks
+against actual native transactions and the external auth boundary.
+
+The new local-role projection inputs also require minimal notification-worker
+column privileges and live-source-fenced RLS. A follow-on migration and the
+hardened notification protocol's native catalog/ACL tests must qualify that
+extension; schema or unit tests alone do not prove it safe. The rollout flag
+remains disabled until all readers and all these checks are qualified.

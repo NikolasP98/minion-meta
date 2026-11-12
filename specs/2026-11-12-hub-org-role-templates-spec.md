@@ -30,10 +30,10 @@ the AS-IS evidence, TO-BE invariants, DELTA, slices and acceptance scenarios.
 - [Tasks and approval boundary](113-org-role-templates/tasks.md)
 - [Source and creation-path inventory](113-org-role-templates/research.md)
 
-Two technical review passes precede owner security-spec approval. Product code
-and production configuration have not been changed. Verification requires legacy
-permission parity, native PostgreSQL failure/concurrency scenarios, browser QA,
-and Hub check/test/build plus design/token gates on the eventual candidate.
+The owner approved implementation after two technical review passes. Implementation
+is in an isolated Hub feature checkout. The later role CRUD and grant-ceiling
+requirements are recorded in the canonical specification. Full candidate qualification
+is in progress; merge and release remain separate owner decisions.
 
 ## Out of scope
 
