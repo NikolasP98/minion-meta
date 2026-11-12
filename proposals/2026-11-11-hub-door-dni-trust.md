@@ -13,10 +13,11 @@ source: hub PR 655 (feat/doors-form-no-field-cap) security review
 
 ## AS-IS
 
-Hub PR 655 lets form doors match an existing CRM contact by DNI. The DNI comes only from
-trusted sources: the linked party's `doc_number`, or `custom_fields.dni` on a contact whose
-`source` does not start with `door:`. An anonymous submission writes its DNI and handles only
-onto a contact that the submission itself created (`source = door:<slug>`).
+Hub PR 655 lets form doors match an existing CRM contact by DNI. A trusted DNI matches on its
+own: the linked party's `doc_number`, or `custom_fields.dni` on a contact whose `source` does not
+start with `door:`. A DNI typed into an earlier door submission matches only when the name also
+agrees. A DNI is written only onto a contact that the submission itself created
+(`source = door:<slug>`); a matched contact only receives social handles it lacks.
 
 `reconcileParties` (`src/server/services/party.service.ts`) mints and links parties from
 `crm_contacts.custom_fields->>'dni'` and does not check `source`. Suppose a reconcile runs after
