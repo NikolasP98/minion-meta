@@ -1,0 +1,67 @@
+Normalized view; immutable original: identity-red.raw.log.gz
+
+RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-crm-analyst-auth-20261110
+
+ ❯ src/server/auth/resolve-identity-crm.test.ts (19 tests | 4 failed) 64ms
+     × admits the configured gateway credential on the exact route 40ms
+     × selects and caches each configured identity when two gateways share a token 3ms
+     × admits the configured gateway credential on the exact route 2ms
+     × selects and caches each configured identity when two gateways share a token 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/auth/resolve-identity-crm.test.ts > CRM machine identity: '/api/gateway/crm-conversation-themes' > admits the configured gateway credential on the exact route
+ FAIL  src/server/auth/resolve-identity-crm.test.ts > CRM machine identity: '/api/gateway/search-crm-conversations' > admits the configured gateway credential on the exact route
+AssertionError: expected { locals: {}, bypassGate: false } to deeply equal { bypassGate: true, locals: { …(2) } }
+
+- Expected
++ Received
+
+  {
+-   "bypassGate": true,
+-   "locals": {
+-     "serverId": "20000000-0000-4000-8000-000000000001",
+-     "tenantCtx": {
+-       "db": {},
+-       "tenantId": "10000000-0000-4000-8000-000000000001",
+-     },
+-   },
++   "bypassGate": false,
++   "locals": {},
+  }
+
+ ❯ src/server/auth/resolve-identity-crm.test.ts:91:20
+     89|   it('admits the configured gateway credential on the exact route', as…
+     90|     const result = await resolveIdentity(eventFor(path) as never);
+     91|     expect(result).toEqual({
+       |                    ^
+     92|       bypassGate: true,
+     93|       locals: { serverId: GATEWAY, tenantCtx: { db: legacyDb, tenantId…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/server/auth/resolve-identity-crm.test.ts > CRM machine identity: '/api/gateway/crm-conversation-themes' > selects and caches each configured identity when two gateways share a token
+ FAIL  src/server/auth/resolve-identity-crm.test.ts > CRM machine identity: '/api/gateway/search-crm-conversations' > selects and caches each configured identity when two gateways share a token
+AssertionError: expected undefined to be '10000000-0000-4000-8000-000000000001' // Object.is equality
+
+- Expected:
+"10000000-0000-4000-8000-000000000001"
+
++ Received:
+undefined
+
+ ❯ src/server/auth/resolve-identity-crm.test.ts:106:44
+    104|     const other = await resolveIdentity(eventFor(path, token, OTHER_GA…
+    105|     const ownAgain = await resolveIdentity(eventFor(path) as never);
+    106|     expect(own.locals.tenantCtx?.tenantId).toBe(ORG);
+       |                                            ^
+    107|     expect(other.locals.tenantCtx?.tenantId).toBe(OTHER_ORG);
+    108|     expect(ownAgain.locals.tenantCtx?.tenantId).toBe(ORG);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 15 passed (19)
+   Start at  02:54:14
+   Duration  4.00s (transform 2.26s, setup 46ms, import 3.72s, tests 64ms, environment 0ms)

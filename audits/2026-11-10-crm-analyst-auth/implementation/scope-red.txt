@@ -1,0 +1,43 @@
+Normalized view; immutable original: scope-red.raw.log.gz
+
+RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-crm-analyst-auth-20261110
+
+ ❯ src/routes/api/gateway/crm-conversations.test.ts (22 tests | 6 failed) 71ms
+     × rejects 'owner-only' before parsing input or accessing data 8ms
+     × rejects 'masked sensitive fields' before parsing input or accessing data 2ms
+     × rejects 'both restrictions' before parsing input or accessing data 3ms
+     × rejects 'owner-only' before parsing input or accessing data 1ms
+     × rejects 'masked sensitive fields' before parsing input or accessing data 2ms
+     × rejects 'both restrictions' before parsing input or accessing data 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/routes/api/gateway/crm-conversations.test.ts > CRM conversation permissions: 'crm-conversation-themes' > rejects 'owner-only' before parsing input or accessing data
+ FAIL  src/routes/api/gateway/crm-conversations.test.ts > CRM conversation permissions: 'crm-conversation-themes' > rejects 'masked sensitive fields' before parsing input or accessing data
+ FAIL  src/routes/api/gateway/crm-conversations.test.ts > CRM conversation permissions: 'crm-conversation-themes' > rejects 'both restrictions' before parsing input or accessing data
+ FAIL  src/routes/api/gateway/crm-conversations.test.ts > CRM conversation permissions: 'search-crm-conversations' > rejects 'owner-only' before parsing input or accessing data
+ FAIL  src/routes/api/gateway/crm-conversations.test.ts > CRM conversation permissions: 'search-crm-conversations' > rejects 'masked sensitive fields' before parsing input or accessing data
+ FAIL  src/routes/api/gateway/crm-conversations.test.ts > CRM conversation permissions: 'search-crm-conversations' > rejects 'both restrictions' before parsing input or accessing data
+AssertionError: expected 200 to be 403 // Object.is equality
+
+- Expected
++ Received
+
+- 403
++ 200
+
+ ❯ src/routes/api/gateway/crm-conversations.test.ts:117:29
+    115|     const parse = vi.spyOn(event.request, 'json');
+    116|     const response = await post(event as never);
+    117|     expect(response.status).toBe(403);
+       |                             ^
+    118|     expect(await response.json()).toEqual(unsupportedScope);
+    119|     expect(parse).not.toHaveBeenCalled();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 16 passed (22)
+   Start at  02:55:36
+   Duration  436ms (transform 106ms, setup 53ms, import 124ms, tests 71ms, environment 0ms)
