@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-12T07:43:45.299Z",
+	"generatedAt": "2026-11-12T07:48:03.411Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6723,6 +6723,39 @@
 			"scoredAt": "2026-11-06T20:15:29.537Z"
 		},
 		{
+			"key": "pr:minion_hub#656",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#656 feat(rbac): let organizations create roles from templates within their own access",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/656",
+			"sourceUpdatedAt": "2026-11-12T07:43:46Z",
+			"sourceFingerprint": "43bcccca2110d30401c51b7506ba7c606d20bd75befb64bd6a45bd7da36bb72d",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Strategically important RBAC/org-role feature with an approved spec and broad future impact, but explicitly incomplete on final checks, browser QA, and owner merge decision.",
+			"evidence": [
+				"ORG_ROLE_TEMPLATES_ENABLED defaults to false; does not request automatic merge or production activation",
+				"Checklist unchecked: exact final check/test/build and remaining browser qualification",
+				"Exact final check, complete Vitest/architecture suite and production build remain in progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T07:48:03.190Z"
+		},
+		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -12027,8 +12060,8 @@
 			"repo": "minion_hub",
 			"title": "#653 fix(ui): menus, popovers and tooltips always open above drawers and are never clipped",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/653",
-			"sourceUpdatedAt": "2026-11-12T07:40:03Z",
-			"sourceFingerprint": "34d58ff4ed7d9b1bd287c6bb4f2e2900d7d632ad14cf8cdc5bf9e4b538f6b460",
+			"sourceUpdatedAt": "2026-11-12T07:43:01Z",
+			"sourceFingerprint": "a46215f14cf0ab4a1028c9de3400250071699c7a910bc03dced39f47778c6ec1",
 			"score": 51,
 			"band": "medium",
 			"axes": {
@@ -12037,23 +12070,23 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 9,
+				"implementation": 7
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#652",
-				"pr:minion_hub#654"
+				"pr:minion_hub#652"
 			],
-			"rationale": "Fixes a real clipping/z-index bug across widely-used overlay primitives (popover, dropdown, tooltip, combobox) with a referenced spec and a detailed story/test matrix.",
+			"rationale": "Fixes a cross-cutting overlay clipping/z-index bug affecting menus, popovers, tooltips and comboboxes app-wide, with a detailed spec and extensive play-test coverage, though it is also stacked on an unmerged base.",
 			"evidence": [
-				"menus, popovers and tooltips always open above drawers and are never clipped",
-				"nine story ids each asserting viewport/placement/hit-testing"
+				"Spec: specs/2026-11-10-hub-native-popover-top-layer-spec.md",
+				"9 story/play tests covering modal, overflow, and nested cases",
+				"Stacked on feat/storybook (#648)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T07:43:45.085Z"
+			"scoredAt": "2026-11-12T07:48:03.190Z"
 		},
 		{
 			"key": "pr:minion-meta#885",
@@ -34401,41 +34434,6 @@
 			"scoredAt": "2026-11-12T03:18:47.243Z"
 		},
 		{
-			"key": "pr:minion_hub#652",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#652 feat(ui): chat boxes grow with your text natively and FAQ answers open one at a time",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/652",
-			"sourceUpdatedAt": "2026-11-12T07:39:57Z",
-			"sourceFingerprint": "61a8db520c97a9dce6c7648ca045f060131597a0042c53868aea9f1b8d2c1f1d",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#653",
-				"pr:minion_hub#654"
-			],
-			"rationale": "Draft UI polish (textarea growth, FAQ accordion) stacked on an unmerged base branch, so it cannot land independently yet.",
-			"evidence": [
-				"stacked PR: base is feat/storybook (#648)",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T07:43:45.085Z"
-		},
-		{
 			"key": "pr:minion-meta#827",
 			"kind": "pr",
 			"stage": "development",
@@ -39366,6 +39364,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T20:56:55.368Z"
+		},
+		{
+			"key": "pr:minion_hub#652",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#652 feat(ui): chat boxes grow with your text natively and FAQ answers open one at a time",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/652",
+			"sourceUpdatedAt": "2026-11-12T07:42:57Z",
+			"sourceFingerprint": "f324ab94a1f8aa1e56100ea9af6ee6719a41f822fe6277301de806d95d854358",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#653"
+			],
+			"rationale": "Well-specified minor UX polish (textarea growth, FAQ accordion) but stacked on an unmerged base branch so it cannot land yet.",
+			"evidence": [
+				"Stacked PR: base is feat/storybook (#648); retarget when it merges",
+				"draft status, stories added for AiPromptInput/ChatInput/FaqPublic"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T07:48:03.190Z"
 		},
 		{
 			"key": "pr:minion_hub#654",
