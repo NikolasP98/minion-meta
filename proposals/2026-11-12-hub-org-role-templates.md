@@ -42,7 +42,9 @@ New organizations show one Administrator role and an optional role-template
 gallery. Manager, Staff and Viewer do not become active roles until the user
 creates an organization role from a template. The ownership relationship remains
 separate from ordinary permissions. Existing organizations retain their current
-catalogs, assignments, rules, and effective permissions, including FACES.
+catalogs, assignments and active business/page grants, including FACES. Future
+grants obey the approved complete ceiling, and role CRUD uses explicit permissions
+separate from Team administration.
 
 "Everything" means all available features and data in the member's organization,
 including organization administration. Authentication, membership admission,
@@ -62,9 +64,9 @@ must match those of today's organization administrator.
    invitation behavior, last-administrator protection and cross-tenant denial.
 
 See [the implementation spec](../specs/2026-11-12-hub-org-role-templates-spec.md)
-for slices and acceptance evidence. Implementation is in draft Hub PR 656; final
-legacy grant-ceiling corrections and exact-candidate qualification remain in
-progress. No production activation has occurred.
+for slices and acceptance evidence. Implementation and qualification are complete in Hub PR 656 at `99341e7`; all
+18 PR checks pass. Owner merge/release approval and production activation remain
+pending.
 
 ## Out of scope
 

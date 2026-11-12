@@ -2,7 +2,7 @@
 id: 2026-11-12-hub-org-role-templates-spec
 title: Organization-owned roles with an unrestricted Administrator starting point
 stage: test
-status: review
+status: approved
 pass: 2
 created: 2026-11-12
 updated: 2026-11-12
@@ -33,7 +33,7 @@ the AS-IS evidence, TO-BE invariants, DELTA, slices and acceptance scenarios.
 The owner approved implementation after two technical review passes. Implementation
 is in an isolated Hub feature checkout. The later role CRUD and grant-ceiling
 requirements are recorded in the canonical specification. Source Standards/Spec review and focused qualification pass at Hub `99341e7`.
-Exact-head CI is running. The [qualification receipt](../audits/2026-11-12-org-role-templates/qualification.md)
+All 18 exact-head PR checks pass. The [qualification receipt](../audits/2026-11-12-org-role-templates/qualification.md)
 records source, schema, tests and browser provenance. Merge and release remain
 separate owner decisions.
 

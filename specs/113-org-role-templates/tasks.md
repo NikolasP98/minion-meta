@@ -2,10 +2,10 @@
 
 **Input:** [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md).
 **State:** Owner approved implementation and the role CRUD amendment on 2026-11-12.
-Implementation is in draft [Hub PR 656](https://github.com/NikolasP98/minion_hub/pull/656),
+Implementation is ready in [Hub PR 656](https://github.com/NikolasP98/minion_hub/pull/656),
 source `99341e7074541360eadcf2dcd32e67494f3c65ad`, tree
 `0295df1eb209992cc5c9e3354754c29de93884bf`. Source review passes Standards and
-Spec; local check has zero errors/warnings. Exact-head CI is running in
+Spec; local check has zero errors/warnings. All 18 exact-head PR checks pass; CI receipt:
 [43193428656](https://github.com/NikolasP98/minion_hub/actions/runs/43193428656).
 Paths below are relative to `minion_hub/` unless marked meta.
 
@@ -84,9 +84,9 @@ Paths below are relative to `minion_hub/` unless marked meta.
 
 ## US3 and final qualification
 
-- [ ] T022 Run all fixture/native integration cases and exact-candidate Hub
+- [x] T022 Run all fixture/native integration cases and exact-candidate Hub
   check/test/build; verify seed/migration pairing and shared consumer compatibility.
-- [ ] T023 Capture source/schema/test/browser manifest and review Standards and
+- [x] T023 Capture source/schema/test/browser manifest and review Standards and
   Spec independently; document all remaining gaps with the required handoff ledger.
 - [ ] T024 Obtain owner merge/release decision for the concrete candidate; only
   then enable new-model creation after compatible readers and migrations are live.
@@ -100,8 +100,9 @@ administration. T007–T017 can be developed in isolated slices but remain disab
 until the UI and complete qualification pass. T024 is a separate human decision.
 Checked implementation tasks refer to the committed candidate above. Source
 implementation has no accepted open defect in the reviewed current permission
-model. Shared-consumer native evidence and the full 9,575-case unit suite pass; T022
-remains open until all exact-head CI/browser checks complete. T023 evidence is assembled in
+model. Shared-consumer native evidence and the full 9,575-case unit suite pass.
+T022/T023 are complete: full unit, native, build and browser gates pass. Evidence
+is assembled in
 [audits](../../audits/2026-11-12-org-role-templates/qualification.md), with the
 independent source review and separate CI/release boundaries recorded there.
 
@@ -110,7 +111,7 @@ cases, 22 native policy cases and 10 native principal cases; 32 generic data/ran
 helper cases, 24 Brain helper cases, 8 assignment API cases, 23 policy cases and
 58 join/API/action cases. Existing RBAC, bootstrap, Brain-grant/lifecycle and
 notification projection receipts remain separately identified; exact-head full
-CI requalifies their interactions. Local check: zero errors/warnings. Native
+CI requalified their interactions. Local check: zero errors/warnings. Native
 manifest/report/principal and bypass inventory contracts: 32 passing tests.
 The nine changed UI/message files match the browser-qualified capture source.
 These results do not replace owner release approval or post-release verification.

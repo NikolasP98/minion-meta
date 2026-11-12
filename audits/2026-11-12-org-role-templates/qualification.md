@@ -1,6 +1,6 @@
 # Organization role templates qualification
 
-State: source complete in draft [Hub PR 656](https://github.com/NikolasP98/minion_hub/pull/656), commit `99341e7074541360eadcf2dcd32e67494f3c65ad`, tree `0295df1eb209992cc5c9e3354754c29de93884bf`. Independent Standards/Spec source review passes; local check reports zero errors/warnings and the four native evidence/inventory contract suites pass 32 tests. Exact-head full CI is in progress. No merge, production migration, production worker action or flag activation has occurred.
+State: source complete and ready in [Hub PR 656](https://github.com/NikolasP98/minion_hub/pull/656), commit `99341e7074541360eadcf2dcd32e67494f3c65ad`, tree `0295df1eb209992cc5c9e3354754c29de93884bf`. Independent Standards/Spec source review passes; local check reports zero errors/warnings and the four native evidence/inventory contract suites pass 32 tests. Exact-head full CI and all 18 PR checks pass. No merge, production migration, production worker action or flag activation has occurred.
 
 ## Scope and authority
 
@@ -51,12 +51,46 @@ Turning provisioning off does not permit removing new-model metadata or deployin
 | Actual principal resolution and Brain access | `tests/role113-agent-principal-native.json` | 10 native passed, original cases retained |
 | Earlier unchanged capability-builder suite | `tests/role113-legacy-assignment-final.txt` | 66 RBAC cases passed as part of the 110-case legacy correction run |
 | Exact-head full unit/architecture | `tests/993-ci-unit-summary.txt` | 9,575 passed, 307 expected skips; architecture 3 passed |
-| Exact-head full CI | [run 43193428656](https://github.com/NikolasP98/minion_hub/actions/runs/43193428656) | In progress |
+| Exact-head full CI | [run 43193428656](https://github.com/NikolasP98/minion_hub/actions/runs/43193428656) | Success: 18 PR checks, zero failures |
 
-Native evidence guards pin all 63 role, 43 admission, 22 policy and 10 principal behavior names, rejecting missing or skipped assertions. Other required native suites remain in their existing lanes. The complete final CI will requalify all interactions, including bootstrap, lifecycle, notification projection, seed idempotency/schema drift, the package build and browser sweeps.
+Native evidence guards pin all 63 role, 43 admission, 22 policy and 10 principal behavior names, rejecting missing or skipped assertions. Other required native suites remain in their existing lanes. The complete final CI passed all interactions, including bootstrap, lifecycle, notification projection, seed idempotency/schema drift, the package build and browser sweeps.
 
-The earlier candidate `d6102318` passed full CI (run 43183072920): 9,514 unit tests, 307 expected skips, architecture 3, full package build and all native/browser gates. That is historical evidence only. A local full-unit attempt before the cold-import fixes failed three tests across two route files because imports exceeded the 5-second behavior deadline and spilled a mock call. Their cold imports now run in bounded beforeAll hooks; all six focused behavior cases pass. No behavior assertion was removed. A local adapter build of superseded source was stopped while preparing the security correction; its Vite success is not represented as a full build. Final full-build evidence must come from exact-head CI.
+The earlier candidate `d6102318` passed full CI (run 43183072920): 9,514 unit tests, 307 expected skips, architecture 3, full package build and all native/browser gates. That is historical evidence only. A local full-unit attempt before the cold-import fixes failed three tests across two route files because imports exceeded the 5-second behavior deadline and spilled a mock call. Their cold imports now run in bounded beforeAll hooks; all six focused behavior cases pass. No behavior assertion was removed. A local adapter build of superseded source was stopped while preparing the security correction; its Vite success is not represented as a full build. Final full-build evidence is the passing exact-head CI package build.
 
 All nine changed UI/message files have identical Git blobs at browser capture source `d6102318` and final candidate `99341e7`; see `source.json`. The new backend boundaries are separately exercised by the final native/API suites and full CI. No new visual behavior is inferred solely from screenshots.
 
 No source defect is accepted as an unfinished handoff. Owner merge/release and post-release checks are pending. The release requires the documented notification maintenance ordering and retains new-org creation disabled until approval. Native fixtures and preview/CI readiness do not prove production deployment or runtime activation.
+
+
+## Target-branch integration
+
+CI checked the pull-request merge `fa35baf85ca4c81dac636f73112b644f18be4f3b`,
+tree `9ef3ee8c26fbc5126b494330965a60191b2a5608`, against target base
+`bb3b78f8cf00d19de4887ed1da983e3aad1ff174`. The source branch retains its
+original base provenance. Incoming target changes merge cleanly; every feature
+product-source file is identical in that integration except the two message
+catalogs, which add unrelated target strings. Every feature message value is
+unchanged. Source review covers the feature code; full CI qualifies the integrated
+tree. A later target change requires checking the final merge candidate again.
+
+
+## Final disposition
+
+CI run 43193428656 completed successfully for source `99341e7`; all ten CI jobs
+and all eighteen PR checks pass. The unit lane passed 9,575 tests (307 expected
+non-lane skips) and architecture 3. The required QA native lane passed 327 tests
+across 30 files with zero skips; the seed contract passed 275. The page conformance
+and critical-journeys browser sweeps pass, as do the four desktop installer
+platforms and Vercel preview status. See `ci-run.json`, `ci-jobs.json` and
+`ci-checks.json`; raw GitHub state confirms Vercel SUCCESS even where gh-axi's
+summary still labels that status pending.
+
+Both task-owned PostgreSQL containers are stopped. The shared local QA backend
+was neither reset nor stopped by this cleanup. Canonical QA seed fixtures remain;
+temporary browser roles and owned legacy/Auth fixtures were removed.
+
+The Hub and spec PRs are ready for owner review. Source implementation and
+qualification are complete. The only remaining workflow steps are the separate
+owner merge/release decision and authorized production rollout/post-release
+verification. No merge, production schema change, worker change or flag activation
+was performed by this task.
