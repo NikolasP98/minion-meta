@@ -35,14 +35,14 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L3967
 - `NikolasP98/minion-meta@dev rankings/index.json:6524` — paidAmount sums every non-void line regardless of status",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6524
-- `NikolasP98/minion-meta@dev rankings/index.json:7878` — that till-side draw happens on CLICK, not on submit",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7878
-- `NikolasP98/minion-meta@dev rankings/index.json:8010` — the existing provider JSON reader is not byte bounded before res.json()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8010
-- `NikolasP98/minion-meta@dev rankings/index.json:8078` — a following cancel is N independent transactions, not one",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8078
-- `NikolasP98/minion-meta@dev rankings/index.json:8110` — voiding an instalment ticket un-pays its plan (paid-to-date",
+- `NikolasP98/minion-meta@dev rankings/index.json:7910` — that till-side draw happens on CLICK, not on submit",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L7910
+- `NikolasP98/minion-meta@dev rankings/index.json:8042` — the existing provider JSON reader is not byte bounded before res.json()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8042
+- `NikolasP98/minion-meta@dev rankings/index.json:8110` — a following cancel is N independent transactions, not one",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8110
+- `NikolasP98/minion-meta@dev rankings/index.json:8142` — voiding an instalment ticket un-pays its plan (paid-to-date",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8142
 - `NikolasP98/minion-meta@dev rankings/index.json:11284` — Replace this bounded best-effort fan-out with the durable",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11284
 - `NikolasP98/minion-meta@dev rankings/index.json:11351` — Keep restricted roles denied until scoped retrieval/masking is",
@@ -79,15 +79,15 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29845
 - `NikolasP98/minion-meta@dev rankings/index.json:29877` — the dialog names the VISIT's service titles, not every",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29877
-- `NikolasP98/minion-meta@dev rankings/index.json:33189` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33189
-- `NikolasP98/minion-meta@dev rankings/index.json:33431` — the assistant opens this party form via ?new=1, but POST",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33431
-- `NikolasP98/minion-meta@dev rankings/index.json:33771` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33771
-- `NikolasP98/minion-meta@dev rankings/index.json:33804` — plan button gated on pos:create, but server-side",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33804
-- `NikolasP98/minion-meta@dev rankings/index.json:33873` — Legacy receipts cannot reconstruct a complete source manifest",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33873
-- `NikolasP98/minion-meta@dev rankings/index.json:42548` — when attachment_links (spec S1) lands, delete this",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42548
+- `NikolasP98/minion-meta@dev rankings/index.json:33223` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33223
+- `NikolasP98/minion-meta@dev rankings/index.json:33465` — the assistant opens this party form via ?new=1, but POST",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33465
+- `NikolasP98/minion-meta@dev rankings/index.json:33805` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33805
+- `NikolasP98/minion-meta@dev rankings/index.json:33838` — plan button gated on pos:create, but server-side",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33838
+- `NikolasP98/minion-meta@dev rankings/index.json:33907` — Legacy receipts cannot reconstruct a complete source manifest",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33907
+- `NikolasP98/minion-meta@dev rankings/index.json:42519` — when attachment_links (spec S1) lands, delete this",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42519

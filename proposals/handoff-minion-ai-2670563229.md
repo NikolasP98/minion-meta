@@ -33,15 +33,3 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-ai/blob/DEV/test/ci/fixtures/pr371-ci.yml#L1260
 - `NikolasP98/minion-ai@DEV test/ci/fixtures/pr371-ci.yml:1390` — Check the lane-flags resolver result in this named gate, preserving
   https://github.com/NikolasP98/minion-ai/blob/DEV/test/ci/fixtures/pr371-ci.yml#L1390
-
-<!-- Reconciliation note (2026-11-12): test/ci/fixtures/pr371-ci.yml is the
-     frozen CI fixture for the PR371 baseline-transition work described in
-     2026-11-06-agent-transcript-evals-and-runtime-improvements ("November 10
-     secret-scan qualification addendum"), which explicitly states
-     "implementation must carry exact-site TODO(handoff) pointers here."
-     Precedent: handoff-minion-ai-975979439 (.github/scripts/agent-fixture-audit.mjs,
-     the sibling fixture-audit script) already points to the same proposal.
-     Flagging for human confirmation rather than auto-merging since the three
-     markers here (Bun 1.4 parity, macOS pause, lane-flags gate) may also
-     overlap individually with 2026-08-22-ci-compute-savings-bun-test-roadmap,
-     2026-10-21-gateway-macos-ci-pause, and 2026-10-21-ci-lane-auto-followups. -->
