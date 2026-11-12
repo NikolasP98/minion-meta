@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-12T05:17:27.632Z",
+	"generatedAt": "2026-11-12T05:48:29.727Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7787,6 +7787,38 @@
 			"scoredAt": "2026-11-12T03:31:00.872Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-70414b7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 70414b7",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-70414b7.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "65819f3fa23951475cb6095199f50231a52f1c7c3804d7284773f50dfe7db398",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Includes a high-severity bug where invalidToolProtocol state is checked but never set, plus an unchecked-access crash risk in the reply guard, both with precise file:line evidence but reconciliation flags likely overlap with a broader existing spec needing human confirmation.",
+			"evidence": [
+				"high: src/agents/pi-embedded/pi-embedded-subscribe.ts:723 detection logic not wired to state flag",
+				"high: src/auto-reply/reply/reply-output-guard.ts:25 unchecked .text access can crash at runtime"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T05:48:29.534Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-3c702b25845f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9512,38 +9544,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T03:33:45.519Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-70414b7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 70414b7",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-70414b7.md",
-			"sourceUpdatedAt": "2026-11-11",
-			"sourceFingerprint": "d26bb3b71e5208dc24e540df0182c8165cfeaf627d95f09e4438fef8830fdb1d",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Contains a high-severity missing-handoff bug (invalidToolProtocol never set) plus several unchecked-access crash risks with precise file:line locations.",
-			"evidence": [
-				"invalidToolProtocol is checked but never set to true",
-				"Accessing .text on result of redactReplyTextWithLineDirectives() without null check will crash at runtime"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T09:48:24.460Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b4c1ff54fd37",
@@ -30273,6 +30273,40 @@
 			"scoredAt": "2026-11-12T03:48:16.564Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-cc90bff",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ cc90bff",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-cc90bff.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "144b9e0d78ef73f1c2b22f682c9f92d476e19e3437d8cbc333e23c2b68047a67",
+			"score": 35,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:handoff-minion-ai-2670563229"
+			],
+			"rationale": "Empty-catch swallowing git errors in the fixture-audit script and a missing TODO(handoff) marker on the disabled iOS job sit alongside the same pr371-ci.yml macOS-pause marker flagged in the sibling handoff proposal.",
+			"evidence": [
+				".github/scripts/agent-fixture-audit.mjs:53 empty-catch swallows git errors",
+				"test/ci/fixtures/pr371-ci.yml:1597 iOS job disabled without TODO(handoff) while macOS job at ~1310 has one"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T05:48:29.534Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -37028,38 +37062,6 @@
 			"scoredAt": "2026-11-09T14:41:57.198Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-12",
-			"sourceFingerprint": "d60c814455ea27cbad6bb91d2a5e78b3d89391cdb361f44a2d61ed4fb51be918",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Sixteen unrelated marker snippets are bundled from rankings/index.json itself, which is this ranking system's own data file, suggesting the sweep is matching historical finding text rather than live code TODOs.",
-			"evidence": [
-				"source file is rankings/index.json, the ranking index's own output artifact",
-				"markers span POS invoice sums, JSON byte-bounding, role masking, RPC error projection, and gateway binding with no single coherent scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:32:39.104Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3518589653",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -37090,38 +37092,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:41:57.198Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-cc90bff",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ cc90bff",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-cc90bff.md",
-			"sourceUpdatedAt": "2026-11-12",
-			"sourceFingerprint": "b21490399d5afb9a048a2557d9bd4f4be64f03e6f32c3353bc670812b4c3fba1",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two bounded, low-risk CI tooling fixes with clear file:line evidence make this straightforward to execute now.",
-			"evidence": [
-				"optionalBlob swallows all git errors silently",
-				"iOS job disabled with if: false lacks TODO(handoff) marker"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:36:50.962Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-f4c1a23",
@@ -41385,7 +41355,7 @@
 			"title": "Handoff marker — test/ci/fixtures/pr371-ci.yml (minion-ai)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2670563229.md",
 			"sourceUpdatedAt": "2026-11-12",
-			"sourceFingerprint": "c622aa1167b24bb4e300a2397d72a843657c672e295d124f6cf559414620c361",
+			"sourceFingerprint": "459363ea2362ef648132b63b4ebf98d90ad505e2e93be9cdb6b2e11ae10237ac",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -41397,18 +41367,19 @@
 				"specification": 3,
 				"implementation": 2
 			},
-			"confidence": 3,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:handoff-minion-ai-2877399286"
+				"proposal:merge-scan-minion-ai-cc90bff"
 			],
-			"rationale": "These three CI markers (Bun 1.4 parity, macOS paused, lane-flags gate) live in a test fixture but duplicate the live workflow markers in the related key, so they should resolve as one goal.",
+			"rationale": "Three vague CI-fixture TODO markers (Bun parity, macOS pause, lane-flags gate) in pr371-ci.yml overlap with the macOS-pause marker also flagged by the sibling merge-scan proposal on the same file.",
 			"evidence": [
-				"test/ci/fixtures/pr371-ci.yml carries identical marker text/line numbers to .github/workflows/ci.yml"
+				"markers at test/ci/fixtures/pr371-ci.yml:509,1260,1390",
+				"reconciliation note flags overlap with three separate external roadmap/pause proposals"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:20:57.492Z"
+			"scoredAt": "2026-11-12T05:48:29.534Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3238987400",
@@ -47497,6 +47468,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T03:31:00.872Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "4ea80830210c3e40217abbaaa6fb2f38c15d6b09457baa718300c47aa5e94536",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The quoted 'markers' are business-domain text fragments (invoices, till-side draws, instalment voiding) pulled from stored ranking/evidence data in rankings/index.json rather than real TODO(handoff) comments in minion-meta source code.",
+			"evidence": [
+				"quoted lines reference unrelated POS/billing domain concepts not present in minion-meta's codebase",
+				"source file is rankings/index.json, a generated data artifact, not application code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T05:48:29.534Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
