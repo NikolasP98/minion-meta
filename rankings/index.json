@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-12T08:47:56.846Z",
+	"generatedAt": "2026-11-12T09:18:17.713Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2485,6 +2485,39 @@
 			"scoredAt": "2026-11-11T20:18:52.809Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Post-merge review of the 2026-09-16 hub/meta merges — findings ledger",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-post-merge-review-findings.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "b4ad64eeaff0ca6cec583bb5704e6ea78dd898451be4f0498b72c64e313644c6",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Ledger of security/correctness findings from a real post-merge review, several already fixed via in-flight PRs, with remaining items (role-escalation, dev-backend secret leakage) still open and actionable.",
+			"evidence": [
+				"every invitee gets manager (incl. pos:manage) via legacyRoleKey bug",
+				"dev:local strips only Supabase/Turso keys; other creds reach the DEV app",
+				"several items marked '→ PR' already in flight"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T09:18:17.518Z"
+		},
+		{
 			"key": "spec:2026-10-03-hub-calendar-temporal-readiness-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3571,39 +3604,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:39:28.662Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-post-merge-review-findings",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Post-merge review of the 2026-09-16 hub/meta merges — findings ledger",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-post-merge-review-findings.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "b4ad64eeaff0ca6cec583bb5704e6ea78dd898451be4f0498b72c64e313644c6",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved ledger still lists multiple unresolved security and correctness findings spanning several hub modules, including an unauthenticated public write and a missing org check.",
-			"evidence": [
-				"\"Public booking is an unauthenticated write with no rate limit\" (Open)",
-				"\"Walk-in partyId stamped on the ticket without an org check\" (Open)",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T08:47:54.993Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
@@ -11188,39 +11188,6 @@
 			"scoredAt": "2026-11-07T01:33:44.286Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-f696097",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ f696097",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f696097.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "1153c4fc8268f5d1d7562333eb708872ec82a33f448a8ae2c4ffaf944d0f5cd4",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Multiple high-severity unchecked .returning()[0] accesses in hr.service.ts can throw TypeErrors in live HR flows, alongside several unvalidated-input endpoints.",
-			"evidence": [
-				"high unchecked-access hr.service.ts:230,315,370,564",
-				"\"update branch correctly checks on line 356\" implying insert branches don't",
-				"medium unvalidated-input in HR holiday/leave endpoints"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T08:47:54.993Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-183fe9a77973",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13787,6 +13754,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T03:36:50.962Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-f696097",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ f696097",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f696097.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "1153c4fc8268f5d1d7562333eb708872ec82a33f448a8ae2c4ffaf944d0f5cd4",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple high-severity unchecked-access findings in hr.service.ts risk runtime crashes on empty insert/returning results, plus several unvalidated-input endpoints, all clearly located and boundedly fixable.",
+			"evidence": [
+				"4 high-severity unchecked .returning()[0] destructures in hr.service.ts",
+				"dayOff.get() called without null check risking TypeError",
+				"several medium unvalidated-input query params across HR endpoints"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T09:18:17.518Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-12f7ab774cda",
@@ -23918,39 +23918,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-05T10:17:42.368Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-18215ee1e8fc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-18215ee1e8fc.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "2f8d6b5800f24d3b7155442494123184146032f69ebb563449b84e77e4a89f3e",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved finding names a concrete, shared Dialog.svelte reopen-during-close bug with a specific diagnosis and fix direction already provided.",
-			"evidence": [
-				"TODO(handoff): \"reopened mid-exit — cancel the pending close\"",
-				"status: approved",
-				"fix direction: cancel pending CSS transition or reset DOM state on reopen"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T08:47:54.993Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-39a05376c28e",
@@ -37124,6 +37091,38 @@
 			"scoredAt": "2026-11-06T21:01:45.382Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-18215ee1e8fc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-18215ee1e8fc.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "2f8d6b5800f24d3b7155442494123184146032f69ebb563449b84e77e4a89f3e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-diagnosed UX glitch in a shared Dialog component with a clear, bounded fix direction already provided.",
+			"evidence": [
+				"reopen mid-exit fails to cancel pending CSS close transition",
+				"diagnosis includes concrete fix direction (cancel transition / reset DOM state)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T09:18:17.518Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-6e3297fea67e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -40949,6 +40948,38 @@
 			"scoredAt": "2026-11-09T08:51:12.204Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-1df0a92",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 1df0a92",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-1df0a92.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "2c28ad57267a55cd14a1b01b207e1d2553fc27f8355bbbde309a9e87ae2d86ee",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Narrow null-check crash risk confined to a test fixture helper, clearly specified and trivially fixable.",
+			"evidence": [
+				"click_selector calls getBoundingClientRect() without null check on querySelector result",
+				"file is a test fixture (tests/fixtures/overlay-native/verify.py)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-12T09:18:17.518Z"
+		},
+		{
 			"key": "issue:minion-meta#725",
 			"kind": "issue",
 			"stage": "proposal",
@@ -41797,38 +41828,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-06T21:00:42.893Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-0f5a066",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Minor documentation-contract gap (missing in-code TODO handoff marker) is low risk but easy to fix.",
-			"evidence": [
-				"medium severity missing-handoff finding at resources/+page.server.ts:1",
-				"scope is a single documented open end from a prior proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T09:17:37.767Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
@@ -44915,14 +44914,14 @@
 			"scoredAt": "2026-11-10T17:59:19.131Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-1df0a92",
+			"key": "proposal:merge-scan-minion-hub-0f5a066",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 1df0a92",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-1df0a92.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "2c28ad57267a55cd14a1b01b207e1d2553fc27f8355bbbde309a9e87ae2d86ee",
+			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -44931,20 +44930,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 7
+				"specification": 7,
+				"implementation": 8
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The single medium finding is confined to a test-fixture script rather than production code and the proposal is still in draft, so its priority should be reconsidered before committing resources.",
+			"rationale": "Single low-severity process-compliance gap (missing TODO(handoff) marker) with a clear, trivial, bounded fix.",
 			"evidence": [
-				"finding: medium, tests/fixtures/overlay-native/verify.py:20",
-				"status: draft"
+				"medium severity, missing-handoff finding at resources/+page.server.ts:1",
+				"draft status, single-file scope"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-05T08:47:54.993Z"
+			"scoredAt": "2026-11-12T09:18:17.518Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-77445c0",
