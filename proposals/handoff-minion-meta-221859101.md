@@ -65,29 +65,27 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22475
 - `NikolasP98/minion-meta@dev rankings/index.json:22705` — Reconcile uploaded blobs after failed/concurrent import creation",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22705
-- `NikolasP98/minion-meta@dev rankings/index.json:24857` — see appointment-overdue.ts — same unwired deep-link param",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24857
-- `NikolasP98/minion-meta@dev rankings/index.json:25934` — the gateway's strict AgentEntrySchema has no per-agent session object",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25934
-- `NikolasP98/minion-meta@dev rankings/index.json:28198` — onArtifactCallback/onChoice are NOT routed'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28198
-- `NikolasP98/minion-meta@dev rankings/index.json:29746` — tagOptions is the FILTER's list — the event-scope registry ...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29746
-- `NikolasP98/minion-meta@dev rankings/index.json:29810` — Price cell still formats with formatMoney's PEN",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29810
-- `NikolasP98/minion-meta@dev rankings/index.json:29842` — the dialog names the VISIT's service titles, not every",
+- `NikolasP98/minion-meta@dev rankings/index.json:24889` — see appointment-overdue.ts — same unwired deep-link param",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24889
+- `NikolasP98/minion-meta@dev rankings/index.json:25966` — the gateway's strict AgentEntrySchema has no per-agent session object",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25966
+- `NikolasP98/minion-meta@dev rankings/index.json:28230` — onArtifactCallback/onChoice are NOT routed'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28230
+- `NikolasP98/minion-meta@dev rankings/index.json:29778` — tagOptions is the FILTER's list — the event-scope registry ...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29778
+- `NikolasP98/minion-meta@dev rankings/index.json:29842` — Price cell still formats with formatMoney's PEN",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29842
-- `NikolasP98/minion-meta@dev rankings/index.json:33090` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33090
-- `NikolasP98/minion-meta@dev rankings/index.json:33332` — the assistant opens this party form via ?new=1, but POST",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33332
-- `NikolasP98/minion-meta@dev rankings/index.json:33672` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33672
-- `NikolasP98/minion-meta@dev rankings/index.json:33705` — plan button gated on pos:create, but server-side",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33705
-- `NikolasP98/minion-meta@dev rankings/index.json:33774` — Legacy receipts cannot reconstruct a complete source manifest",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33774
-- `NikolasP98/minion-meta@dev rankings/index.json:41635` — ContactChat opens a Supabase realtime channel; without PUBLIC_SUPABASE_*",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41635
-- `NikolasP98/minion-meta@dev rankings/index.json:42551` — when attachment_links (spec S1) lands, delete this",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42551
+- `NikolasP98/minion-meta@dev rankings/index.json:29874` — the dialog names the VISIT's service titles, not every",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29874
+- `NikolasP98/minion-meta@dev rankings/index.json:33122` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33122
+- `NikolasP98/minion-meta@dev rankings/index.json:33364` — the assistant opens this party form via ?new=1, but POST",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33364
+- `NikolasP98/minion-meta@dev rankings/index.json:33704` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33704
+- `NikolasP98/minion-meta@dev rankings/index.json:33737` — plan button gated on pos:create, but server-side",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33737
+- `NikolasP98/minion-meta@dev rankings/index.json:33806` — Legacy receipts cannot reconstruct a complete source manifest",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33806
+- `NikolasP98/minion-meta@dev rankings/index.json:42516` — when attachment_links (spec S1) lands, delete this",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42516
