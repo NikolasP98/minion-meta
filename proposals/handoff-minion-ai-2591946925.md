@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-11)
 
-- `NikolasP98/minion-ai@DEV src/auto-reply/reply/get-reply-run.ts:203` — Reconcile nominal no-tool routing with the actual embedded
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/auto-reply/reply/get-reply-run.ts#L203
+- `NikolasP98/minion-ai@DEV src/auto-reply/reply/get-reply-run.ts:204` — Reconcile nominal no-tool routing with the actual embedded
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/auto-reply/reply/get-reply-run.ts#L204
