@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-d3f8d16a2e95
 title: "Post-merge finding — todo-handoff in src/lib/stories/Layouts/CrmContact.stories.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-11-12
 updated: 2026-11-12
 repos: [minion-hub]
