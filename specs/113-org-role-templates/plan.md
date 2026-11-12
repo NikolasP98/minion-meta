@@ -1,7 +1,7 @@
 # Implementation plan: organization-owned roles
 
 **Date:** 2026-11-12. **Specification:** [spec.md](spec.md).
-**State:** Planned; implementation blocked on owner security-spec approval.
+**State:** Implementation authorized by owner on 2026-11-12.
 **Target:** Hub feature branches against `master`; meta artifacts against `dev`.
 
 ## Summary and technical context
@@ -21,7 +21,7 @@ from the updated Hub resolver. Preserve serialized role keys and legacy claims.
 ## Constitution check
 
 - Spec, plan, tasks and evidence inventory exist before code.
-- Security/data approval is pending; product implementation cannot begin yet.
+- Owner security/data spec approval recorded on 2026-11-12; product implementation may proceed.
 - Six slices map to the specification DELTA and each has an observable DoD.
 - UI changes require semantic tokens, Svelte 5, Paraglide compilation and both
   design/token gates. New API/page surfaces require central RBAC and route-manifest

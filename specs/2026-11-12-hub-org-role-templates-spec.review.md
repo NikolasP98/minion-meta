@@ -1,7 +1,7 @@
 ---
 spec: 2026-11-12-hub-org-role-templates-spec
 pass: 2
-verdict: pending
+verdict: approved
 reviewer: codex-independent-role-spec-review
 created: 2026-11-12
 ---
@@ -54,3 +54,9 @@ current organizations remain legacy. Owner approval must be recorded in the boar
 spec and this sidecar before T001 is checked and product code begins. The six
 implementation slices and all qualification tasks remain pending in
 `specs/113-org-role-templates/tasks.md`.
+
+## Owner approval
+
+On 2026-11-12 the owner replied “approved. Proceed.” and then “go on”.
+The reviewed specification is approved for implementation. This authorization
+does not replace the separate owner merge/release decision.

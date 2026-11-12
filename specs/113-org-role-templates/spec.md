@@ -2,7 +2,7 @@
 
 **Feature branch:** `113-org-role-templates` (implementation branches are slice-scoped)
 **Created:** 2026-11-12
-**Status:** Awaiting owner security-spec approval; no product implementation started.
+**Status:** Approved by owner on 2026-11-12; implementation starting.
 **Input:** New organizations begin unrestricted; old seeded roles become templates.
 
 ## User scenarios and acceptance
@@ -63,10 +63,9 @@ Administrator assignment with a narrower role takes effect across pages, APIs
 and delegated agent actions. Adding a narrower role alongside Administrator
 retains Administrator access; the UI must explain this existing union behavior.
 
-Approval status: the request authorizes preparation of this change. The human
-security-spec approval required by AGENTS.md is pending. Do not promote this
-artifact to approved or start product implementation until that approval is
-recorded. Merge and production release remain separate human decisions.
+Approval status: the owner approved this reviewed specification on 2026-11-12
+with “approved. Proceed.” and “go on”. Implementation is authorized; merge and
+production release remain separate human decisions.
 
 ## 1. AS-IS and source evidence
 

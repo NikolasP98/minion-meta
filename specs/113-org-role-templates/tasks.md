@@ -1,12 +1,12 @@
 # Tasks: organization-owned roles
 
 **Input:** [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md).
-**State:** All implementation tasks pending. Owner security-spec approval required.
+**State:** Owner approved implementation on 2026-11-12. Remaining implementation tasks are pending.
 Paths below are relative to `minion_hub/` unless marked meta.
 
 ## Approval and foundations
 
-- [ ] T001 Record owner approval in the meta board spec and review sidecar.
+- [x] T001 Record owner approval in the meta board spec and review sidecar.
 - [ ] T002 Verify the target branch against the pinned source/creation inventory
   in `research.md`; reconcile open provisioning/navigation/WhatsApp PRs.
 - [ ] T003 Add additive model/default/provenance migration under
