@@ -1,0 +1,79 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-org-role-templates-20261112
+
+stdout | src/server/services/section-access.sql.integration.test.ts > organization-local page and data policy integration
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'drop cascades to 12 other objects',
+  detail: 'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.organizations\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.profiles\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.organization_members\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.member_roles\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.permission_roles\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.org_roles\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.permission_rules\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.app_nav_config\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.brains\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.brain_access\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.personal_agents\n' +
+    'drop cascades to table qc_section_access_001e361408d840c68d5bf80ab883e824.doc_audit_log',
+  file: 'dependency.c',
+  line: '1165',
+  routine: 'reportDependentObjects'
+}
+
+ × src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > does not lend synthetic platform role-edit authority to canonical private Brain grants 582ms
+   → promise resolved "{ ok: true, …(2) }" instead of rejecting
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > rejects a Brain edit action activated through the recipient verified personal agent
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > rejects new Brain actions activated through recipient user authority
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > rejects new Brain actions activated through recipient creator authority
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > rejects new Brain actions activated through recipient other-role authority
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > rejects new Brain actions activated through recipient fallback authority
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > rejects adding delete to an already writable role Brain outside the editor object authority
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > allows an object-authorized editor to grant a matching Brain action
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > allows a pure Brain action revocation without authority over retained private objects
+ ↓ src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > rejects inherited Brain action reset that would unlock a foreign private role grant
+ ↓ src/server/services/section-access.sql.integration.test.ts > section policy against concurrent PostgreSQL transactions > serializes independent first overrides and commits exactly one with its audit
+ ↓ src/server/services/section-access.sql.integration.test.ts > section policy against concurrent PostgreSQL transactions > serializes whole-nav removal and rejects a queued policy for the deleted target
+ ↓ src/server/services/section-access.sql.integration.test.ts > section policy against concurrent PostgreSQL transactions > serializes custom-role removal and rejects a queued override for the deleted catalog key
+ ↓ src/server/services/section-access.sql.integration.test.ts > section policy against concurrent PostgreSQL transactions > uses the same advisory key for the exported coordinator
+ ↓ src/server/services/section-access.sql.integration.test.ts > organization-local page and data policy integration > lists only organization roles in both policy editors
+ ↓ src/server/services/section-access.sql.integration.test.ts > organization-local page and data policy integration > rejects denying the final access administrator its management page and rolls back the policy
+ ↓ src/server/services/section-access.sql.integration.test.ts > organization-local page and data policy integration > rejects removing final users manage permission while legacy edits stay unchanged
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/section-access.sql.integration.test.ts > private Brain effects of role policy edits > does not lend synthetic platform role-edit authority to canonical private Brain grants
+AssertionError: promise resolved "{ ok: true, …(2) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "ok": true,
++   "revision": "72a91a1cd4d8ebf0ea4255fbb2d26321c2065e8456a06cdb12f633904a8d1dc4",
++   "revisions": {
++     "brains": "72a91a1cd4d8ebf0ea4255fbb2d26321c2065e8456a06cdb12f633904a8d1dc4",
++   },
+  }
+
+ ❯ src/server/services/section-access.sql.integration.test.ts:234:6
+    232|         caps: { ...brainEdit, manage: true },
+    233|       }),
+    234|     ).rejects.toMatchObject({ status: 403 });
+       |      ^
+    235|     expect(
+    236|       await app`select can_manage from permission_rules where role_key…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 16 skipped (17)
+   Start at  04:19:22
+   Duration  30.30s (transform 23.91s, setup 45ms, import 29.39s, tests 684ms, environment 0ms)
+

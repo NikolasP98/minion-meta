@@ -43,13 +43,13 @@ Turning provisioning off does not permit removing new-model metadata or deployin
 
 | Check | Evidence | Result |
 | --- | --- | --- |
-| Local `bun run check` with declared public analytics env keys | `tests/role113-complete-final-check.log` | 0 errors, 0 warnings |
-| Native manifest/report/principal and bypass inventory contracts | `tests/role113-complete-final-contracts.log` | 32 passed across 4 files |
+| Local `bun run check` with declared public analytics env keys | `tests/role113-complete-final-check.txt` | 0 errors, 0 warnings |
+| Native manifest/report/principal and bypass inventory contracts | `tests/role113-complete-final-contracts.txt` | 32 passed across 4 files |
 | Full target-data/rank and asset helpers, role assignments/API | `tests/role113-recipient-composition-final.json` | 127 passed, including 63 native role cases |
 | Policy persistence and recipient effects | `tests/role113-complete-policy-final.json` | 45 passed, including 22 native policy cases |
-| Admission, service/API and action feedback | `tests/role113-brain-agent-admission-green.log` | 101 passed, including 43 native admission cases |
+| Admission, service/API and action feedback | `tests/role113-brain-agent-admission-green.txt` | 101 passed, including 43 native admission cases |
 | Actual principal resolution and Brain access | `tests/role113-agent-principal-native.json` | 10 native passed, original cases retained |
-| Earlier unchanged capability-builder suite | `tests/role113-legacy-assignment-final.log` | 66 RBAC cases passed as part of the 110-case legacy correction run |
+| Earlier unchanged capability-builder suite | `tests/role113-legacy-assignment-final.txt` | 66 RBAC cases passed as part of the 110-case legacy correction run |
 | Exact-head full unit/architecture | `tests/993-ci-unit-summary.txt` | 9,575 passed, 307 expected skips; architecture 3 passed |
 | Exact-head full CI | [run 43193428656](https://github.com/NikolasP98/minion_hub/actions/runs/43193428656) | In progress |
 
