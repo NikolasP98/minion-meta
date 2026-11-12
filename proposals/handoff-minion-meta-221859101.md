@@ -43,49 +43,49 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8109
 - `NikolasP98/minion-meta@dev rankings/index.json:8141` — voiding an instalment ticket un-pays its plan (paid-to-date",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8141
-- `NikolasP98/minion-meta@dev rankings/index.json:11284` — Replace this bounded best-effort fan-out with the durable",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11284
-- `NikolasP98/minion-meta@dev rankings/index.json:11351` — Keep restricted roles denied until scoped retrieval/masking is",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11351
-- `NikolasP98/minion-meta@dev rankings/index.json:11486` — Keep restricted roles denied until scoped retrieval/masking is",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11486
-- `NikolasP98/minion-meta@dev rankings/index.json:14016` — Replace raw upstream error messages with an approved safe RPC projection",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14016
-- `NikolasP98/minion-meta@dev rankings/index.json:14216` — comment pointing at this proposal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14216
-- `NikolasP98/minion-meta@dev rankings/index.json:14543` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14543
-- `NikolasP98/minion-meta@dev rankings/index.json:14576` — A profile has one immutable gateway binding; concurrent multi-org",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14576
-- `NikolasP98/minion-meta@dev rankings/index.json:16148` — host error-log scrubbing is separate from the sanitized",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16148
-- `NikolasP98/minion-meta@dev rankings/index.json:19410` — a date already held by a manual holiday is skipped silently",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19410
-- `NikolasP98/minion-meta@dev rankings/index.json:22476` — Complete Back/history/mobile qualification after the owner",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22476
-- `NikolasP98/minion-meta@dev rankings/index.json:22706` — Reconcile uploaded blobs after failed/concurrent import creation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22706
-- `NikolasP98/minion-meta@dev rankings/index.json:24890` — see appointment-overdue.ts — same unwired deep-link param",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24890
-- `NikolasP98/minion-meta@dev rankings/index.json:25999` — the gateway's strict AgentEntrySchema has no per-agent session object",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25999
-- `NikolasP98/minion-meta@dev rankings/index.json:28263` — onArtifactCallback/onChoice are NOT routed'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28263
-- `NikolasP98/minion-meta@dev rankings/index.json:29810` — tagOptions is the FILTER's list — the event-scope registry ...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29810
-- `NikolasP98/minion-meta@dev rankings/index.json:29874` — Price cell still formats with formatMoney's PEN",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29874
-- `NikolasP98/minion-meta@dev rankings/index.json:29906` — the dialog names the VISIT's service titles, not every",
+- `NikolasP98/minion-meta@dev rankings/index.json:11285` — Replace this bounded best-effort fan-out with the durable",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11285
+- `NikolasP98/minion-meta@dev rankings/index.json:11352` — Keep restricted roles denied until scoped retrieval/masking is",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11352
+- `NikolasP98/minion-meta@dev rankings/index.json:11487` — Keep restricted roles denied until scoped retrieval/masking is",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11487
+- `NikolasP98/minion-meta@dev rankings/index.json:13982` — Replace raw upstream error messages with an approved safe RPC projection",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13982
+- `NikolasP98/minion-meta@dev rankings/index.json:14182` — comment pointing at this proposal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14182
+- `NikolasP98/minion-meta@dev rankings/index.json:14509` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14509
+- `NikolasP98/minion-meta@dev rankings/index.json:14542` — A profile has one immutable gateway binding; concurrent multi-org",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14542
+- `NikolasP98/minion-meta@dev rankings/index.json:16114` — host error-log scrubbing is separate from the sanitized",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16114
+- `NikolasP98/minion-meta@dev rankings/index.json:19408` — a date already held by a manual holiday is skipped silently",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19408
+- `NikolasP98/minion-meta@dev rankings/index.json:22474` — Complete Back/history/mobile qualification after the owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22474
+- `NikolasP98/minion-meta@dev rankings/index.json:22704` — Reconcile uploaded blobs after failed/concurrent import creation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22704
+- `NikolasP98/minion-meta@dev rankings/index.json:24888` — see appointment-overdue.ts — same unwired deep-link param",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24888
+- `NikolasP98/minion-meta@dev rankings/index.json:25997` — the gateway's strict AgentEntrySchema has no per-agent session object",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25997
+- `NikolasP98/minion-meta@dev rankings/index.json:28295` — onArtifactCallback/onChoice are NOT routed'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28295
+- `NikolasP98/minion-meta@dev rankings/index.json:29842` — tagOptions is the FILTER's list — the event-scope registry ...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29842
+- `NikolasP98/minion-meta@dev rankings/index.json:29906` — Price cell still formats with formatMoney's PEN",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29906
-- `NikolasP98/minion-meta@dev rankings/index.json:33188` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33188
-- `NikolasP98/minion-meta@dev rankings/index.json:33430` — the assistant opens this party form via ?new=1, but POST",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33430
-- `NikolasP98/minion-meta@dev rankings/index.json:33770` — Historical receipt/tombstone retention and missing-owner recovery need",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33770
-- `NikolasP98/minion-meta@dev rankings/index.json:33803` — plan button gated on pos:create, but server-side",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33803
-- `NikolasP98/minion-meta@dev rankings/index.json:33872` — Legacy receipts cannot reconstruct a complete source manifest",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33872
-- `NikolasP98/minion-meta@dev rankings/index.json:42551` — when attachment_links (spec S1) lands, delete this",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42551
+- `NikolasP98/minion-meta@dev rankings/index.json:29938` — the dialog names the VISIT's service titles, not every",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29938
+- `NikolasP98/minion-meta@dev rankings/index.json:33220` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33220
+- `NikolasP98/minion-meta@dev rankings/index.json:33462` — the assistant opens this party form via ?new=1, but POST",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33462
+- `NikolasP98/minion-meta@dev rankings/index.json:33802` — Historical receipt/tombstone retention and missing-owner recovery need",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33802
+- `NikolasP98/minion-meta@dev rankings/index.json:33835` — plan button gated on pos:create, but server-side",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33835
+- `NikolasP98/minion-meta@dev rankings/index.json:33904` — Legacy receipts cannot reconstruct a complete source manifest",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33904
+- `NikolasP98/minion-meta@dev rankings/index.json:42546` — when attachment_links (spec S1) lands, delete this",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42546
