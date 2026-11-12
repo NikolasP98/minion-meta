@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-12)
 
-- `NikolasP98/minion-ai@DEV .github/scripts/agent-fixture-audit.mjs:288` — Retire the PR371 classification/PR372 technical/PR369 adoption proof only after release and independent review;
-  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/scripts/agent-fixture-audit.mjs#L288
+- `NikolasP98/minion-ai@DEV .github/scripts/agent-fixture-audit.mjs:492` — Retire the PR371 classification/PR372 history/PR373 combined-source/PR369 adoption proof only after release and independent review;
+  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/scripts/agent-fixture-audit.mjs#L492

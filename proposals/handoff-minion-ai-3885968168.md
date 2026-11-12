@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-12)
 
-- `NikolasP98/minion-ai@DEV src/agents/pi-embedded/pi-embedded-subscribe.handlers.messages.ts:246` — Complete independent review and release qualification after signer recovery;
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded/pi-embedded-subscribe.handlers.messages.ts#L246
+- `NikolasP98/minion-ai@DEV src/agents/pi-embedded/pi-embedded-subscribe.handlers.messages.ts:253` — Complete independent review and release qualification after signer recovery;
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/agents/pi-embedded/pi-embedded-subscribe.handlers.messages.ts#L253
