@@ -37,7 +37,7 @@ The original shared legacy QA Owner encountered an unrelated encrypted gateway-t
 
 Use the [Hub rollout procedure](https://github.com/NikolasP98/minion_hub/blob/feat/113-org-role-foundations/docs/organization-role-templates.md#rollout-order). A planned notification maintenance window is required: drain and stop an active old worker before the new source ACL migration, apply both migrations in order, deploy compatible readers/worker with provisioning disabled, qualify the existing worker resume, and enable new-org creation last after owner approval. A deployment does not authorize first worker activation.
 
-Turning provisioning off does not permit removing new-model metadata or deploying incompatible readers. There is no zero-interruption claim. Merge/release and post-release verification remain pending owner approval under Hub AGENTS.md.
+Turning provisioning off does not permit removing new-model metadata or deploying incompatible readers. There is no zero-interruption claim. Owner merge/release approval was received on 2026-11-12. Production preflight and subsequent execution are recorded in [release.md](release.md); post-release verification remains pending.
 
 ## Final candidate gates
 
@@ -59,7 +59,7 @@ The earlier candidate `d6102318` passed full CI (run 43183072920): 9,514 unit te
 
 All nine changed UI/message files have identical Git blobs at browser capture source `d6102318` and final candidate `99341e7`; see `source.json`. The new backend boundaries are separately exercised by the final native/API suites and full CI. No new visual behavior is inferred solely from screenshots.
 
-No source defect is accepted as an unfinished handoff. Owner merge/release and post-release checks are pending. The release requires the documented notification maintenance ordering and retains new-org creation disabled until approval. Native fixtures and preview/CI readiness do not prove production deployment or runtime activation.
+No source defect is accepted as an unfinished handoff. Owner merge/release is approved; execution and post-release checks remain pending. The release requires the documented notification maintenance ordering and retains new-org creation disabled until approval. Native fixtures and preview/CI readiness do not prove production deployment or runtime activation.
 
 
 ## Target-branch integration
@@ -89,8 +89,7 @@ Both task-owned PostgreSQL containers are stopped. The shared local QA backend
 was neither reset nor stopped by this cleanup. Canonical QA seed fixtures remain;
 temporary browser roles and owned legacy/Auth fixtures were removed.
 
-The Hub and spec PRs are ready for owner review. Source implementation and
+The Hub and spec PRs received owner release approval on 2026-11-12. Source implementation and
 qualification are complete. The only remaining workflow steps are the separate
-owner merge/release decision and authorized production rollout/post-release
-verification. No merge, production schema change, worker change or flag activation
+approved production rollout and post-release verification. No merge, production schema change, worker change or flag activation
 was performed by this task.

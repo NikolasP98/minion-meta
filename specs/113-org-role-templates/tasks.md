@@ -88,8 +88,8 @@ Paths below are relative to `minion_hub/` unless marked meta.
   check/test/build; verify seed/migration pairing and shared consumer compatibility.
 - [x] T023 Capture source/schema/test/browser manifest and review Standards and
   Spec independently; document all remaining gaps with the required handoff ledger.
-- [ ] T024 Obtain owner merge/release decision for the concrete candidate; only
-  then enable new-model creation after compatible readers and migrations are live.
+- [x] T024 Owner approved merge/release of the concrete candidate on 2026-11-12.
+  Activation remains sequenced after compatible readers, migrations and runtime checks.
 - [ ] T025 Verify one deliberately created synthetic new organization and a
   read-only legacy sample after release; record exact results and cleanup plan.
 

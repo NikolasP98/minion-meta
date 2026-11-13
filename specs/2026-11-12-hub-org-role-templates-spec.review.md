@@ -90,3 +90,11 @@ The [independent receipt](../audits/2026-11-12-org-role-templates/review-final.m
 states the modeled scope and platform/identity boundaries. The
 [qualification ledger](../audits/2026-11-12-org-role-templates/qualification.md)
 keeps focused checks, full CI, browser evidence and release approval separate.
+
+
+## Owner release approval
+
+On 2026-11-12 the owner replied “approved” to the concrete Hub PR 656 and
+companion spec PR 1003 merge/rollout request. The approved rollout keeps first
+notification worker activation excluded and enables new-org provisioning last.
+See [release evidence](../audits/2026-11-12-org-role-templates/release.md).
