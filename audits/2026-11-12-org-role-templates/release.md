@@ -33,3 +33,9 @@ Production read-only preflight repeated at 2026-11-13 18:34 UTC: both feature mi
 Independent Standards and Spec integration review passes for `da51646c`; receipt `review-integration-da516.md` verifies all 111 feature source files and the exact semantic catalog merge. The first local type-check after merging master failed because the checkout still had the earlier dependency install and generated translations: Storybook modules and incoming Door messages were missing locally. The exact-head CI independently passed its fresh-install Svelte/typecheck step. The local frozen-lockfile install and translation regeneration are being refreshed before repeating that check.
 
 Local qualification after the frozen dependency install and translation regeneration passes with zero errors and zero warnings (`tests/da516-check.txt`). Current-head CI's full check/build lane passes. Independent Standards and Spec review of the bounded native postflight plan also passes, with the exact helper and source/compiled/target defaults pinned. The planned check exercises canonical bootstrap in a transaction that always rolls back; it does not qualify HTTP/external provisioning or the activation flag. No production SQL writes have yet been executed.
+
+## Qualified merge
+
+All eighteen current-head PR checks passed. CI run 43483986196 completed successfully. Its merge checkout `e7b44d9e06f76e8ffbfa55d74c1139f8c93cfe74` has tree `6abb578eae04c69e9a220b97ab37bf02715de6b1`.
+
+The administrator squash merge completed at 2026-11-13 19:06:32 UTC, commit `960f352f7bcf6db4f2a244cc2929017979722f87`. Its tree is exactly the qualified tree above. Production deployment is pending; provisioning remains disabled. Immediate premerge read-only verification at 19:06 UTC reconfirmed all four legacy organizations, unchanged five RBAC-data hashes, no outbox records and a never-started worker singleton.

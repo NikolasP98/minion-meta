@@ -1,11 +1,11 @@
 ---
 id: 2026-11-12-hub-org-role-templates-spec
 title: Organization-owned roles with an unrestricted Administrator starting point
-stage: test
-status: approved
+stage: deploy
+status: merged
 pass: 2
 created: 2026-11-12
-updated: 2026-11-12
+updated: 2026-11-13
 repos: [minion_hub]
 proposal: 2026-11-12-hub-org-role-templates
 verdict: approved
