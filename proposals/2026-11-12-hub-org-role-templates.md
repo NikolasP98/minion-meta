@@ -1,9 +1,9 @@
 ---
 id: 2026-11-12-hub-org-role-templates
 title: New organizations start with Administrator and build roles from templates
-status: in-spec
+status: done
 created: 2026-11-12
-updated: 2026-11-12
+updated: 2026-11-13
 repos: [minion_hub]
 spawned_spec: 2026-11-12-hub-org-role-templates-spec
 tags: [security, data, auth]
@@ -64,9 +64,7 @@ must match those of today's organization administrator.
    invitation behavior, last-administrator protection and cross-tenant denial.
 
 See [the implementation spec](../specs/2026-11-12-hub-org-role-templates-spec.md)
-for slices and acceptance evidence. Implementation and qualification are complete in Hub PR 656 at `99341e7`; all
-18 PR checks pass. Owner merge/release approval and production activation remain
-pending.
+for slices and acceptance evidence. Hub PR 656 is released at `960f352f`; all eighteen checks passed on the identical qualified tree. Owner-approved production migrations, deployment, bounded runtime checks and new-org activation are complete.
 
 ## Out of scope
 
@@ -74,3 +72,7 @@ No automatic migration or permission expansion for existing organizations. No
 conversion of FACES roles, Catalog/POS permission split, tenant-isolation bypass,
 or platform-superuser assignment. No production migration before qualification
 and the separate human merge/release decision.
+
+## Delivered
+
+[Hub PR 656](https://github.com/NikolasP98/minion_hub/pull/656) is merged, deployed and enabled for new organizations. Existing organizations retain their catalogs and assignments. The [release ledger](../audits/2026-11-12-org-role-templates/release.md) records qualification and runtime boundaries.

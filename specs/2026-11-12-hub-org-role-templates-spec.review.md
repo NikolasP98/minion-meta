@@ -98,3 +98,7 @@ On 2026-11-12 the owner replied “approved” to the concrete Hub PR 656 and
 companion spec PR 1003 merge/rollout request. The approved rollout keeps first
 notification worker activation excluded and enables new-org provisioning last.
 See [release evidence](../audits/2026-11-12-org-role-templates/release.md).
+
+## Release completed
+
+The owner explicitly authorized the administrator merge on 2026-11-13. Integration Standards/Spec review passes at `da51646c`; all eighteen PR checks pass. Hub `960f352f` is deployed with the identical tree, both migrations applied and provisioning enabled. The [release ledger](../audits/2026-11-12-org-role-templates/release.md) records the native bootstrap rollback, unchanged legacy role data and live deployment/flag checks, with full HTTP/external provisioning explicitly outside the production proof.

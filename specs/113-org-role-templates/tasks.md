@@ -1,12 +1,7 @@
 # Tasks: organization-owned roles
 
 **Input:** [spec.md](spec.md), [plan.md](plan.md), [research.md](research.md).
-**State:** Owner approved implementation and the role CRUD amendment on 2026-11-12.
-Implementation is ready in [Hub PR 656](https://github.com/NikolasP98/minion_hub/pull/656),
-source `99341e7074541360eadcf2dcd32e67494f3c65ad`, tree
-`0295df1eb209992cc5c9e3354754c29de93884bf`. Source review passes Standards and
-Spec; local check has zero errors/warnings. All 18 exact-head PR checks pass; CI receipt:
-[43193428656](https://github.com/NikolasP98/minion_hub/actions/runs/43193428656).
+**State:** Released on 2026-11-13 in [Hub PR 656](https://github.com/NikolasP98/minion_hub/pull/656), production commit `960f352f7bcf6db4f2a244cc2929017979722f87`, exact qualified tree `6abb578eae04c69e9a220b97ab37bf02715de6b1`. Standards and Spec review pass; local check has zero errors/warnings. All eighteen current-candidate PR checks pass ([CI 43483986196](https://github.com/NikolasP98/minion_hub/actions/runs/43483986196)). Both migrations and bounded runtime verification pass; new-org provisioning is enabled.
 Paths below are relative to `minion_hub/` unless marked meta.
 
 ## Approval and foundations
@@ -90,7 +85,7 @@ Paths below are relative to `minion_hub/` unless marked meta.
   Spec independently; document all remaining gaps with the required handoff ledger.
 - [x] T024 Owner approved merge/release of the concrete candidate on 2026-11-12.
   Activation remains sequenced after compatible readers, migrations and runtime checks.
-- [ ] T025 Verify one deliberately created synthetic new organization and a
+- [x] T025 Verify one deliberately created synthetic new organization and a
   read-only legacy sample after release; record exact results and cleanup plan.
 
 ## Dependencies
@@ -115,3 +110,7 @@ CI requalified their interactions. Local check: zero errors/warnings. Native
 manifest/report/principal and bypass inventory contracts: 32 passing tests.
 The nine changed UI/message files match the browser-qualified capture source.
 These results do not replace owner release approval or post-release verification.
+
+## Production completion
+
+Released 2026-11-13 at Hub `960f352f`, exact qualified tree `6abb578e`. T025 used the canonical bootstrap against production inside one mandatory rolled-back transaction, plus read-only legacy role data comparison. It verified one Administrator/default/assignment, all 24 explicit rules and retry preservation; no synthetic organization remains. Live source/flag and anonymous API identity checks pass. Full HTTP/external provisioning was not exercised. See the release ledger.

@@ -1,6 +1,6 @@
 # Organization role templates qualification
 
-State: source complete and ready in [Hub PR 656](https://github.com/NikolasP98/minion_hub/pull/656), commit `99341e7074541360eadcf2dcd32e67494f3c65ad`, tree `0295df1eb209992cc5c9e3354754c29de93884bf`. Independent Standards/Spec source review passes; local check reports zero errors/warnings and the four native evidence/inventory contract suites pass 32 tests. Exact-head full CI and all 18 PR checks pass. No merge, production migration, production worker action or flag activation has occurred.
+State: released to production at Hub `960f352f7bcf6db4f2a244cc2929017979722f87`, tree `6abb578eae04c69e9a220b97ab37bf02715de6b1`, identical to qualified source `da51646cbe5bc4d03b52feec566a8be4a332217f`. All eighteen PR checks pass; independent Standards/Spec integration review passes. Both migrations are applied, new-org provisioning is enabled and the live deployment is `dpl_CwemnoXcW8gTrM5MBMKnJNQMSPoS`. Existing role data and assignments are unchanged. See [release evidence](release.md) for native bootstrap rollback, legacy parity, flag/deployment identity and the explicit HTTP/external-provisioning limits.
 
 ## Scope and authority
 
@@ -33,13 +33,13 @@ The original shared legacy QA Owner encountered an unrelated encrypted gateway-t
 
 `browser/` contains settled screenshots and machine readbacks. Earlier transient blank screenshots are excluded. `files.json` records hashes and byte sizes.
 
-## Rollout and remaining human gates
+## Rollout and owner approval
 
 Use the [Hub rollout procedure](https://github.com/NikolasP98/minion_hub/blob/feat/113-org-role-foundations/docs/organization-role-templates.md#rollout-order). A planned notification maintenance window is required: drain and stop an active old worker before the new source ACL migration, apply both migrations in order, deploy compatible readers/worker with provisioning disabled, qualify the existing worker resume, and enable new-org creation last after owner approval. A deployment does not authorize first worker activation.
 
-Turning provisioning off does not permit removing new-model metadata or deploying incompatible readers. There is no zero-interruption claim. Owner merge/release approval was received on 2026-11-12. Production preflight and subsequent execution are recorded in [release.md](release.md); post-release verification remains pending.
+Turning provisioning off does not permit removing new-model metadata or deploying incompatible readers. There is no zero-interruption claim. Owner merge/release approval was received on 2026-11-12. Production preflight and subsequent execution are recorded in [release.md](release.md); bounded post-release verification is complete.
 
-## Final candidate gates
+## Historical feature-candidate gates (99341e7)
 
 | Check | Evidence | Result |
 | --- | --- | --- |
@@ -57,9 +57,9 @@ Native evidence guards pin all 63 role, 43 admission, 22 policy and 10 principal
 
 The earlier candidate `d6102318` passed full CI (run 43183072920): 9,514 unit tests, 307 expected skips, architecture 3, full package build and all native/browser gates. That is historical evidence only. A local full-unit attempt before the cold-import fixes failed three tests across two route files because imports exceeded the 5-second behavior deadline and spilled a mock call. Their cold imports now run in bounded beforeAll hooks; all six focused behavior cases pass. No behavior assertion was removed. A local adapter build of superseded source was stopped while preparing the security correction; its Vite success is not represented as a full build. Final full-build evidence is the passing exact-head CI package build.
 
-All nine changed UI/message files have identical Git blobs at browser capture source `d6102318` and final candidate `99341e7`; see `source.json`. The new backend boundaries are separately exercised by the final native/API suites and full CI. No new visual behavior is inferred solely from screenshots.
+All nine UI/message files were identical between browser capture `d6102318` and feature candidate `99341e7`. The released integration retains all seven component blobs and every feature message value; incoming target translations are retained as the exact semantic union. See `source.json` and `integration-da516.json`. The new backend boundaries are separately exercised by the final native/API suites and full CI. No new visual behavior is inferred solely from screenshots.
 
-No source defect is accepted as an unfinished handoff. Owner merge/release is approved; execution and post-release checks remain pending. The release requires the documented notification maintenance ordering and retains new-org creation disabled until approval. Native fixtures and preview/CI readiness do not prove production deployment or runtime activation.
+No source defect is accepted as an unfinished handoff. Owner merge/release is approved; execution and bounded post-release checks are complete; see [release.md](release.md). The release requires the documented notification maintenance ordering and retains new-org creation disabled until approval. Native fixtures and preview/CI readiness do not prove production deployment or runtime activation.
 
 
 ## Target-branch integration
@@ -76,20 +76,6 @@ tree. A later target change requires checking the final merge candidate again.
 
 ## Final disposition
 
-CI run 43193428656 completed successfully for source `99341e7`; all ten CI jobs
-and all eighteen PR checks pass. The unit lane passed 9,575 tests (307 expected
-non-lane skips) and architecture 3. The required QA native lane passed 327 tests
-across 30 files with zero skips; the seed contract passed 275. The page conformance
-and critical-journeys browser sweeps pass, as do the four desktop installer
-platforms and Vercel preview status. See `ci-run.json`, `ci-jobs.json` and
-`ci-checks.json`; raw GitHub state confirms Vercel SUCCESS even where gh-axi's
-summary still labels that status pending.
+The approved Hub release is merged, deployed and enabled. Current-head CI passed 9,589 unit tests (307 expected non-lane skips), 327 native tests with zero skips, the 275-test seed contract, 245 critical browser journeys, page conformance, complete build and all four desktop installers. The local check passed with zero errors and warnings.
 
-Both task-owned PostgreSQL containers are stopped. The shared local QA backend
-was neither reset nor stopped by this cleanup. Canonical QA seed fixtures remain;
-temporary browser roles and owned legacy/Auth fixtures were removed.
-
-The Hub and spec PRs received owner release approval on 2026-11-12. Source implementation and
-qualification are complete. The only remaining workflow steps are the separate
-approved production rollout and post-release verification. No merge, production schema change, worker change or flag activation
-was performed by this task.
+Production catalog/fence, canonical bootstrap with verified rollback, legacy data parity and deployment/configuration checks pass. The exact synthetic bootstrap produced one Administrator, one assignment and 24 explicit rules and preserved them on retry. All four existing organizations remain legacy; no first worker activation occurred. Evidence is in [release.md](release.md). Full HTTP/external provisioning was not exercised in production.

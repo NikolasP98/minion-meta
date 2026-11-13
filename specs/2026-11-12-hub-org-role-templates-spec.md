@@ -1,8 +1,8 @@
 ---
 id: 2026-11-12-hub-org-role-templates-spec
 title: Organization-owned roles with an unrestricted Administrator starting point
-stage: deploy
-status: merged
+stage: done
+status: shipped
 pass: 2
 created: 2026-11-12
 updated: 2026-11-13
@@ -30,14 +30,13 @@ the AS-IS evidence, TO-BE invariants, DELTA, slices and acceptance scenarios.
 - [Tasks and approval boundary](113-org-role-templates/tasks.md)
 - [Source and creation-path inventory](113-org-role-templates/research.md)
 
-The owner approved implementation after two technical review passes. Implementation
-is in an isolated Hub feature checkout. The later role CRUD and grant-ceiling
-requirements are recorded in the canonical specification. Source Standards/Spec review and focused qualification pass at Hub `99341e7`.
-All 18 exact-head PR checks pass. The [qualification receipt](../audits/2026-11-12-org-role-templates/qualification.md)
-records source, schema, tests and browser provenance. Merge and release remain
-separate owner decisions.
+The owner approved implementation and the separate administrator merge/release. Source and integration Standards/Spec reviews pass at `da51646c`, and the deployed commit `960f352f` has the identical qualified tree. All eighteen PR checks pass. The [qualification receipt](../audits/2026-11-12-org-role-templates/qualification.md) and [release ledger](../audits/2026-11-12-org-role-templates/release.md) record source, schema, browser, native bootstrap/legacy checks and production activation.
 
 ## Out of scope
 
 Existing-org migration, FACES permission changes, Catalog/POS splitting,
 platform-superuser access and a new personal-organization signup flow.
+
+## Release
+
+Hub PR 656 merged at `960f352f` and is live with provisioning enabled. Both migrations, native bootstrap rollback, legacy parity and live deployment/flag readbacks pass. All eighteen current-candidate PR checks pass. See the [release ledger](../audits/2026-11-12-org-role-templates/release.md) for exact identities and proof limits.
