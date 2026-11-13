@@ -1,13 +1,14 @@
 ---
 id: 2026-11-13-doors-site-sdk-low-boilerplate
 title: A site connects a lead form to a Minion door in minutes, not 800 lines
-status: draft
+status: in-spec
 created: 2026-11-13
 updated: 2026-11-13
 repos: [minion_hub, minion-meta]
 effort: L
 value: 8
 tags: [crm, security]
+spawned_spec: 2026-11-13-doors-site-sdk-spec
 source: FACES /modelos integration (hub PR 657, faces-landing PRs 10-12)
 ---
 
@@ -131,8 +132,25 @@ lines. A and D are security work: human approval and human merge.
 - The FACES `/modelos` page runs on the package and its two proxy routes are deleted.
 - Two visitors behind one site no longer share a rate-limit bucket.
 
-## Open questions for the owner
+## Owner decisions (2026-11-13)
 
-1. Is DNS proof of domain ownership required, or is an org admin typing the domain enough? Typing
-   is enough for CORS safety (it only widens who may post to that org's own doors).
-2. Should API keys belong to the organization or to a user inside it?
+- Line count: "Please consider strategies to lower the line count even more" → see below.
+- API keys: "Yes, it should belong to the ORG."
+- Domain proof: not answered; the spec assumes an org admin typing the origin is enough.
+
+## Getting below 300 lines (added after the owner's reply)
+
+The 300 lines that remained were the form itself: markup, drop zones, country inputs, face guides,
+the conditional field and three languages. They only stay on the site because a door cannot
+describe them. Move them into the door and render them from one place:
+
+| Strategy | What moves to the hub | Site lines left |
+|---|---|---|
+| Sections, conditional fields, country-aware phone and document inputs, photo guides become door settings | Layout and behaviour | 0 for these |
+| Translations of labels and options on the door | The site's es/en/pt copies | 0 |
+| One `<minion-door slug>` element that renders any door from its public definition, shared with the hosted page | The whole form component | 2 |
+| Styling by CSS variables that default to the page's own font and colours | Theme code | 0 to 15 |
+| Events (`submitted`, `error`) instead of site-side result handling | Success and error states | 0 to 5 |
+
+Result for FACES: a page wrapper plus two lines, under 60 lines in total (818 today). The spec is
+`specs/114-doors-site-sdk/`.
