@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-13T19:17:35.385Z",
+	"generatedAt": "2026-11-13T19:47:50.400Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2612,39 +2612,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T07:18:44.940Z"
-		},
-		{
-			"key": "pr:minion-meta#1003",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1003 spec(hub): new organizations start with Administrator and create roles from templates",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1003",
-			"sourceUpdatedAt": "2026-11-13T19:07:18Z",
-			"sourceFingerprint": "c95d870b2602eebc6aace80be38cf4d178aaabfc328d0ef739c4f11dd439590f",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Org-role foundation spec/PR has full test and CI evidence and only needs the already-flagged human merge/release approval.",
-			"evidence": [
-				"Exact-head unit suite: 9575 passed; QA native: 327 passed",
-				"CI checks merge fa35baf8 against target bb3b78f8, all jobs pass",
-				"Separate owner merge/release approval and post-release verification remain pending"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T19:10:02.637Z"
 		},
 		{
 			"key": "pr:minion-meta#887",
@@ -26201,6 +26168,76 @@
 			"scoredAt": "2026-11-11T06:18:08.985Z"
 		},
 		{
+			"key": "issue:minion-meta#1011",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1011 [monitor:unstick] rank run 31fcfc9b: both ranking providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1011",
+			"sourceUpdatedAt": "2026-11-13T19:17:29Z",
+			"sourceFingerprint": "b93ca389d2047a0ca5ee0fed890d4c5d086fbd2df5801c1df481828be0f7713b",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1012"
+			],
+			"rationale": "Transient provider-availability fault in the ranking pipeline, duplicated with #1012 and best handled as one recurring-fault classification task.",
+			"evidence": [
+				"both ranking providers failed on batch 1",
+				"near-identical failure in run 4eac9305 ~22min earlier",
+				"recommendation: retry; candidate for host classifier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-13T19:47:50.232Z"
+		},
+		{
+			"key": "issue:minion-meta#1012",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1012 [monitor:unstick] rank run 4eac9305: both ranking providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1012",
+			"sourceUpdatedAt": "2026-11-13T19:17:30Z",
+			"sourceFingerprint": "8dfadfafc3baa9add62e0e2170ad4399997b601e0c1c1b059849172663d9888b",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1011"
+			],
+			"rationale": "Same recurring both-providers-failed fault as #1011, filed ~22 minutes apart, should be consolidated rather than triaged separately.",
+			"evidence": [
+				"both ranking providers failed on batch 1",
+				"near-identical failure in run 31fcfc9b ~22min later",
+				"2/1426 candidates pending at failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-13T19:47:50.232Z"
+		},
+		{
 			"key": "issue:minion-meta#321",
 			"kind": "issue",
 			"stage": "proposal",
@@ -45357,38 +45394,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
-		},
-		{
-			"key": "run:minion_hub#43489045718",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43489045718",
-			"sourceUpdatedAt": "2026-11-13T19:06:49Z",
-			"sourceFingerprint": "33027e079aa89fbc1d4f1dea0599f2561756e62b54de6ee474a6b81e6442daba",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine CI workflow run triggered by a master push is automated infrastructure activity, not a plannable goal.",
-			"evidence": [
-				"push on master",
-				"status in_progress, kind run/testing stage"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T19:10:02.637Z"
 		},
 		{
 			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
