@@ -1,0 +1,94 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-org-role-templates-20261112
+
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects private Brain role ACL grants beyond the actor in both role models
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects legacy Admin private-Brain bypass even for an equal-rank full-module grantor
+stdout | src/server/services/join/organization-admission.sql.integration.test.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'drop cascades to 13 other objects',
+  detail: 'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.organizations\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.org_roles\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.permission_roles\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.profiles\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.organization_members\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.member_roles\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.permission_rules\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.app_nav_config\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.join_link\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.join_request\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.doc_audit_log\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.brains\n' +
+    'drop cascades to table role_admission_7ed274565ce74b508b1ef3bd6d9eb484.brain_access',
+  file: 'dependency.c',
+  line: '1165',
+  routine: 'reportDependentObjects'
+}
+
+ × src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects private Brain user ACLs reactivated by admission of their named recipient 460ms
+   → promise resolved "{ organizationId: '1f1e6725-748a-4bd…' }" instead of rejecting
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > allows private Brain role grants from the asset creator in both role models
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects selected private Brain ACL expansion after minting even when the grantor owns the new asset
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > intersects private Brain grants with the current simulated object authority
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > serializes private Brain access revocation before redemption and keeps use and approval unchanged
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > admits a permitted legacy built-in role with verified grantor provenance and one atomic use
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a legacy invitation without recorded grantor authority while preserving existing-member replay
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a legacy admin invitation beyond the actual grantor page, record or field authority
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > approves an omitted legacy role as Staff only within the fresh reviewer ceiling
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > revalidates legacy grantor membership and capability revocation before redemption without consuming use
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > checks both the admitted and current simulated legacy grantor authority
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects legacy role expansion after minting and leaves the request pending after a denied approval
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > retains the legacy membership-role fallback when a verified grantor has no explicit assignments
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > completes verified legacy admission with a one-connection pool and never changes an existing member
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a pending-deletion legacy admission before either membership write
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects pending-deletion targets without granting membership or consuming an invite
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a pending-deletion grantor when minting or redeeming their invite
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > keeps requests pending when their target profile is fenced for deletion
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > intersects invite grant authority with the active simulated role
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > freezes the default local role when minting and does not adopt a later default
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > admits the selected local role and consumes exactly one use atomically
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > retains raw JSON navigation section denials on the Drizzle-initialized shared pool
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > replaying an invite never promotes an existing member or consumes another use
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > serializes concurrent redemptions so a one-use link admits only one new member
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects an invite whose role permissions changed after minting
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects an invite after the original grantor loses grant authority
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects foreign and built-in role keys without minting an invite
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > accepts a future-dated invite when the mixed pool returns timestamp strings
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects revoked and expired links without creating membership or consuming use
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rolls back membership, role and use when audit insertion fails
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > approves a pending request atomically using the current default local role
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > does not resolve a request from another organization
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > leaves a pending request unresolved when membership admission rolls back
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects private Brain user ACLs reactivated by admission of their named recipient
+AssertionError: promise resolved "{ organizationId: '1f1e6725-748a-4bd…' }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "organizationId": "1f1e6725-748a-4bd6-8855-f298898171a2",
+  }
+
+ ❯ src/server/services/join/organization-admission.sql.integration.test.ts:159:72
+    157|     await db`insert into ${db(tables.brainAccess)} values(${brain},${o…
+    158|     const link = await mint(reader, 1);
+    159|     await expect(consumeOrganizationInvite(link.token, user(), tables)…
+       |                                                                        ^
+    160|       status: 403,
+    161|     });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 34 skipped (35)
+   Start at  03:59:12
+   Duration  31.73s (transform 25.47s, setup 51ms, import 30.91s, tests 593ms, environment 0ms)
+

@@ -1,0 +1,77 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-org-role-templates-20261112
+
+----------------xx··xx··-----------------------------------
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/organization-role-admin.sql.integration.test.ts > organization-local role administration (native PostgreSQL) > recipient role union data deltas > does not activate hidden PII metadata through an otherwise masked role grant
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ src/server/services/organization-role-admin.sql.integration.test.ts:472:72
+    470|       await dataUnionFixture('field');
+    471|       expect((await memberCaps()).can('crm', 'view')).toBe(false);
+    472|       await expect(addMemberRole(org, member, 'custom-granted', owner)…
+       |                                                                        ^
+    473|         status: 403,
+    474|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/server/services/organization-role-admin.sql.integration.test.ts > organization-local role administration (native PostgreSQL) > recipient role union data deltas > does not combine unrestricted read with a newly granted owner-only edit into unrestricted edits
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ src/server/services/organization-role-admin.sql.integration.test.ts:483:72
+    481|       expect((await memberCaps()).ownerScoped('crm')).toBe(false);
+    482|       expect((await memberCaps()).can('crm', 'edit')).toBe(false);
+    483|       await expect(addMemberRole(org, member, 'custom-granted', owner)…
+       |                                                                        ^
+    484|         status: 403,
+    485|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/server/services/organization-role-admin.sql.integration.test.ts > organization-local role administration (native PostgreSQL) > recipient role union data deltas > caps the field union by the fresh simulation even if the real actor could grant it
+ FAIL  src/server/services/organization-role-admin.sql.integration.test.ts > organization-local role administration (native PostgreSQL) > recipient role union data deltas > caps the scope union by the fresh simulation even if the real actor could grant it
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ src/server/services/organization-role-admin.sql.integration.test.ts:527:10
+    525|             () => addMemberRole(org, member, 'custom-granted', owner),
+    526|           ),
+    527|         ).rejects.toMatchObject({ status: 403 });
+       |          ^
+    528|         expect(await assignments(member)).toEqual([{ role_key: 'custom…
+    529|         expect(await db`select * from doc_audit_log`).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed | 51 skipped (59)
+   Start at  04:28:37
+   Duration  32.82s (transform 25.45s, setup 45ms, import 30.88s, tests 1.73s, environment 0ms)
+
