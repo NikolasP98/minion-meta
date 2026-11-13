@@ -6,7 +6,7 @@ status: draft
 pass: 1
 created: 2026-11-13
 updated: 2026-11-13
-repos: [minion_hub, minion-meta]
+repos: [minion_hub]
 proposal: 2026-11-13-doors-site-sdk-low-boilerplate
 type: feature
 related: [2026-11-13-hub-form-door-files-multiselect-tags-spec, 2026-10-24-hub-collection-points-spec]
@@ -37,7 +37,7 @@ Steps are in [quickstart.md](114-doors-site-sdk/quickstart.md). Nothing is verif
 
 ## Out of scope
 
-Browser-direct uploads above 4 MB, `minion doors push`, captcha, DNS proof of domain ownership,
+Browser-direct uploads above 4 MB, `minion doors push`, a published client package, an iframe embed, captcha, DNS proof of domain ownership,
 key scopes beyond door submit, custom guide images, framework wrapper components.
 
 ## Human gates

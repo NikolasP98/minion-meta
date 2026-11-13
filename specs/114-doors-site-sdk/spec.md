@@ -8,6 +8,8 @@
 
 **Tags**: crm, security, data — human gates at approval AND merge (Constitution V)
 
+**Review**: EGM stages 5–7 on 2026-11-13 changed this spec (see `plan.md` § Review record).
+
 **Input**: Owner: "Find ways to improve the MINION Doors SDK so that sites that want to capture leads via forms can set it up with minimal boilerplate, easy to set up. We might even need an API Key generator or a native way to link a domain to an org." Follow-ups: "Please consider strategies to lower the line count even more"; on key ownership: "Yes, it should belong to the ORG." Source proposal: `proposals/2026-11-13-doors-site-sdk-low-boilerplate.md`.
 
 ## AS-IS → TO-BE → DELTA
@@ -15,7 +17,7 @@
 ### AS-IS (evidence: FACES `/modelos`, shipped 2026-11-13 in hub PR 657 and faces-landing PRs 10–12)
 
 - A door exposes three public endpoints (`submit`, `upload`, `click` under `/api/doors/public/<slug>/`) and a hosted page `/d/<slug>`. A page on another domain cannot call them from the browser: no cross-origin answer exists.
-- The FACES site therefore carries 818 lines for one form: a field list and second validation (`src/lib/form/modelos.ts`, 160), two server routes that forward the submission and each file (35 + 43), the page with drop zones, country inputs and error mapping (477), and a shared helper (103). It also copies the hub's list of accepted file types by hand.
+- The FACES site therefore carries 1,108 lines for one form. Code, 847: `src/lib/form/modelos.ts` 160, `src/routes/modelos/+page.server.ts` 35, `upload/+server.ts` 43, `+page.svelte` 477, `CountryInput.svelte` 62, `FaceGuide.svelte` 42, `data/countries.ts` 28. Translations, 261: the `modelos` block of `src/lib/i18n/{es,en,pt}.ts`, 87 lines each. (Counted with `wc -l` on `faces-landing` `master`, 2026-11-13. `src/lib/form/hub.ts` belongs to `/intake` and is not counted.) It also copies the hub's list of accepted file types by hand.
 - The door's field list cannot be read from outside. The production door was created with a SQL insert so that both lists matched.
 - A form door has no sections, no conditional fields, no country-aware phone or document input and no photo guides; a site that wants them must build its own form.
 - `submit` allows 5 per minute and `upload` 40 per minute per IP per door, keyed on the caller's address. Behind a site's server that address is the site's server, so all visitors share one bucket (read in `submit/+server.ts` and `upload/+server.ts`; not observed failing in production).
@@ -28,10 +30,12 @@ A site owner adds a script tag and one element naming the door. The form appears
 
 ### Invariants (must NOT change)
 
-- A request from an origin that is not linked to the door's organization, and that carries no valid key, is treated exactly as today.
+- A request with no `Origin` header, or with the hub's own origin, and no key, is treated exactly as today (this is how the hosted page and server-side callers such as the current FACES site call the hub).
+- **Deliberate tightening (owner to confirm at approval)**: a browser request whose `Origin` is a foreign site that is not allowed for that door is refused with `403`. Today such a request is processed although the browser cannot read the answer. Submit additionally requires a JSON content type.
 - The hub re-validates every submission against the stored door config; no response, log line or error carries a submitted value.
 - Rate limits, the honeypot, the consent rule, file claiming, contact matching and tagging behave as today.
-- The hosted page `/d/<slug>` keeps working and renders the same form as the embedded element.
+- The hosted page `/d/<slug>` keeps working. A door whose configuration uses none of the new settings keeps today's renderer for one release; a door that uses them renders with the same component as the embedded element.
+- A door is embeddable only when its own "Allow embedding on our sites" switch is on (default off), in addition to the organization's allowed sites.
 - Existing doors with today's config keep working without edits.
 
 ### DELTA
@@ -42,11 +46,11 @@ A site owner adds a script tag and one element naming the door. The form appears
 | D2 | Public door endpoints answer cross-origin requests for the door organization's allowed sites only | US1 scenarios 2, 4 |
 | D3 | A door's public form definition is readable by slug | US1 scenario 2, FR-006 |
 | D4 | An embeddable element renders, validates, uploads and submits a form door | US1 scenario 2; SC-001 |
-| D5 | Form doors gain sections, conditional fields, country-aware phone and document inputs, photo guides | US2 |
+| D5 | Form doors gain sections, conditional fields, number fields, country-aware phone and document inputs, photo guides, a per-door embedding switch | US2 |
+| D5a | Public paths tolerate a configuration they cannot read (answer "not found" instead of failing) before any door uses new settings | FR-019a |
 | D6 | Organizations create, scope and revoke API keys; a key holder may submit for a visitor | US3 |
-| D7 | A headless client package covers config, upload and submit for custom-built forms | US3 scenario 4 |
-| D8 | Door labels can be translated; the element picks the page language | US4 |
-| D9 | FACES `/modelos` runs on the element; its proxy routes and copied lists are deleted | US4 scenario 3; SC-002 |
+| D7 | Door labels can be translated; the element picks the page language | US4 |
+| D8 | FACES `/modelos` runs on the element; its proxy routes and copied lists are deleted | US4 scenario 3; SC-002 |
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -63,7 +67,7 @@ An organization admin lists their site in the hub. Their web developer pastes a 
 1. **Given** an org admin, **When** they add `https://www.example.com` to Allowed sites, **Then** it is saved, listed, and removable; a member without the org-settings permission can neither see the editor nor change the list.
 2. **Given** a linked site and an active form door, **When** a visitor completes the embedded form, **Then** the submission, files, contact and tags are stored as from the hosted page, and the visitor sees the door's success message.
 3. **Given** an entry that is not a valid `https` origin (a path, a wildcard, plain `http` other than localhost), **When** the admin saves, **Then** it is refused with a message naming the problem.
-4. **Given** a site that is not linked, **When** its page embeds the element, **Then** the browser blocks the calls, the element shows "this site is not allowed to use this form", and nothing is stored.
+4. **Given** a site that is not linked, or a door whose embedding switch is off, **When** a page embeds the element, **Then** the hub refuses with a readable "not allowed" answer, the element shows "this site is not allowed to use this form", and nothing is stored.
 5. **Given** a door that is switched off or missing, **When** the element loads, **Then** it shows a neutral "form unavailable" message and makes no further calls.
 6. **Given** validation errors from the hub, **When** the visitor submits, **Then** each field shows its message, focus moves to the first one, and typed values and uploaded files are kept.
 
@@ -90,7 +94,7 @@ A hub user edits a form door and groups fields into titled sections, makes a fie
 
 ### User Story 3 - Server-side callers use an organization API key (Priority: P3)
 
-An org admin creates a named API key limited to submitting to doors. A site that must keep its own server step sends the key and the visitor's address; the hub counts the rate limit against the visitor. Developers who build their own form use a small client package instead of hand-written calls.
+An org admin creates a named API key limited to submitting to doors. A site that must keep its own server step sends the key and the visitor's address; the hub counts the rate limit against the visitor, under a ceiling per key.
 
 **Why this priority**: needed only by sites that cannot go browser-direct; the embed covers the common case.
 
@@ -101,7 +105,7 @@ An org admin creates a named API key limited to submitting to doors. A site that
 1. **Given** an org admin, **When** they create a key, **Then** the secret is shown once, and afterwards only its name, prefix, scopes, creation date and last-used time are visible.
 2. **Given** a valid key with the door-submit scope, **When** a server submits to a door of the same organization with a visitor address, **Then** the rate limit is counted for that visitor address and the submission is stored.
 3. **Given** a revoked key, a key of another organization, or a key without the scope, **When** it is used, **Then** the call is refused, nothing is stored, and the forwarded address is ignored.
-4. **Given** the client package, **When** a developer calls config, upload and submit for a slug, **Then** they get the form definition, a file id, and a typed result (ok, invalid with per-field codes, too many, not found, not allowed, too large, unavailable).
+4. **Given** a key, **When** it is sent from a browser on another site, **Then** the browser refuses to send it (the hub does not allow the header cross-origin).
 
 ---
 
@@ -140,7 +144,8 @@ A hub user adds English and Portuguese labels to a Spanish door. The element sho
 
 - **FR-001**: Org admins MUST be able to list, add and remove allowed sites for their organization (at most 20).
 - **FR-002**: An allowed site MUST be an exact web origin: `https` scheme and host, optional port, no path, no wildcard; `http` only for `localhost` and `127.0.0.1`. Entries are stored normalised (lower case, no trailing slash).
-- **FR-003**: Public door endpoints MUST answer cross-origin browser requests when, and only when, the request origin is an allowed site of the organization that owns the door.
+- **FR-003**: Public door endpoints MUST answer cross-origin browser requests when, and only when, the request origin is an allowed site of the organization that owns the door AND the door's embedding switch is on. Any other foreign origin MUST be refused before anything is stored.
+- **FR-003a**: Each form door MUST have an "Allow embedding on our sites" switch, off by default; the editor MUST say that scripts on the embedding page can read what visitors type.
 - **FR-004**: Changes to allowed sites MUST take effect within one minute.
 - **FR-005**: Adding or removing a site and creating or revoking a key MUST be recorded with who did it and when.
 
@@ -156,32 +161,32 @@ A hub user adds English and Portuguese labels to a Spanish door. The element sho
 - **FR-010**: The element MUST inherit the page's font and expose named colours, radius and spacing for styling by the site; it MUST be usable by keyboard and screen reader (labels, error association, focus on first error, live status for uploads).
 - **FR-011**: The element MUST announce `ready`, `submitted` and `error` to the page so the site can react (for example, analytics or a redirect), without exposing submitted values in the announcement.
 - **FR-012**: The element MUST carry campaign attribution (campaign parameters and referrer) the same way the hosted page does.
-- **FR-013**: The hosted page and the element MUST render from the same form definition and produce the same stored submission for the same answers.
+- **FR-013**: The hosted page and the element MUST read the same form definition and produce the same stored submission for the same answers. The hub's validation is the authority; the element's own checks are a convenience.
 
 **Richer form configuration**
 
 - **FR-014**: Door editors MUST be able to define sections (title, optional help) and assign fields to them.
-- **FR-015**: Door editors MUST be able to make a field visible only when one other choice field equals one of chosen options. Hidden fields are not required and their values are discarded; the hub enforces the same rule.
+- **FR-015**: Door editors MUST be able to make a field visible only when one other choice field (single choice: equals; multiple choice: includes any; checkbox: ticked) matches chosen options. Hidden fields are not required and their values are discarded; the hub enforces the same rule. The controlling field cannot itself be conditional, and a phone or email field that the door relies on to identify the contact cannot be conditional.
+- **FR-015a**: A number field type with optional minimum and maximum MUST exist (for example, age 18–99).
+- **FR-015b**: Choice options MAY carry a short description shown under the option; fields MAY be marked half width so two sit side by side on wide screens.
 - **FR-016**: Phone fields MUST offer an optional country picker placed inside the input, on its left, adding the dialling code; the list covers every country of the Americas and Europe plus common others, with a configurable default.
-- **FR-017**: A document field type MUST exist with a country picker; for the default country it applies that country's rule (Peru: 8 digits); for others it stores the country code and the document.
+- **FR-017**: A document field type MUST exist with a country picker. A country with a known rule applies it (Peru: 8 digits). The door's default country stores the bare document; any other country stores the country code and the document.
+- **FR-017a**: A phone number with a non-default country MUST match an existing contact only on the full international number, never on its last digits; a document of a non-default country MUST NOT be used to match an existing contact.
 - **FR-018**: Image file fields MUST accept an optional position guide from a fixed set (front, left and right profile, left and right three-quarter).
 - **FR-019**: Doors saved before this feature MUST load, render, validate and submit unchanged.
+- **FR-019a**: A door whose stored configuration a running version cannot read MUST answer "not found" on public paths instead of an error, and this behaviour MUST be in production before any door is saved with new settings.
 
 **Organization API keys**
 
 - **FR-020**: Org admins MUST be able to create a named key with scopes, see it once, list keys with prefix, scopes, created and last-used times, and revoke a key. Keys belong to the organization, not to the person who created them, and survive that person leaving.
 - **FR-021**: Only a non-reversible form of the key MUST be stored.
-- **FR-022**: A valid key with the door-submit scope MUST allow submit and upload to doors of its organization from any origin, and MUST allow the caller to state the visitor's address for rate limiting. Without a valid key a stated visitor address MUST be ignored.
+- **FR-022**: A valid key with the door-submit scope MUST allow reading the definition, submit and upload for doors of its organization from servers, and MUST allow the caller to state the visitor's address for rate limiting. A ceiling per key MUST always apply as well. Without a valid key a stated visitor address MUST be ignored. Keys MUST NOT be usable from a browser on another site.
 - **FR-023**: Invalid, revoked, wrong-organization or wrong-scope keys MUST be refused with one indistinguishable answer, and attempts MUST be rate limited.
-
-**Client package**
-
-- **FR-024**: A published package MUST offer config, upload and submit for a slug with typed results and default messages in Spanish, English and Portuguese, usable in browsers (linked site) and on servers (with a key).
 
 **Translations and FACES**
 
-- **FR-025**: Door editors MUST be able to add translations for labels, option labels, help texts, section titles, consent text and success message; stored answers always use the door's canonical options.
-- **FR-026**: The FACES `/modelos` page MUST be rebuilt on the element with no loss of behaviour, and the replaced site code removed.
+- **FR-025**: A door has a base language (default Spanish). Door editors MUST be able to add translations (English, Portuguese, Spanish) for labels, option labels and descriptions, help texts, section titles, consent text and success message; stored answers always use the door's canonical options. A page language such as `es-PE` uses `es`; an unsupported language uses the base language.
+- **FR-026**: The FACES `/modelos` page MUST be rebuilt on the element and the replaced site code removed. Accepted differences: error messages use the element's standard wording instead of the page's field-specific copy; layout follows the element's sections and half-width rule. Everything else (fields, age range, conditional niche, country pickers, guided photos, treatment descriptions, three languages, stored result) is kept.
 
 ### Key Entities
 
@@ -195,19 +200,20 @@ A hub user adds English and Portuguese labels to a Spanish door. The element sho
 ### Measurable Outcomes
 
 - **SC-001**: A developer with a linked site puts a working lead form on a page by adding two lines, in under five minutes, with no server code.
-- **SC-002**: The FACES site's code for the casting form drops from 818 lines to under 60 (page wrapper, the two lines, and site-specific styling), with the same stored result in the CRM.
-- **SC-003**: Two visitors of one linked site submitting in the same minute are counted separately; six submissions from six visitors in one minute all succeed.
-- **SC-004**: A request from an unlinked origin or with a bad key stores nothing, in 100% of tested cases.
-- **SC-005**: Every form door that existed before the change renders and submits identically afterwards (checked on the production doors `faces-historia-clinica` and `faces-modelos`).
-- **SC-006**: The embedded form passes keyboard-only completion and has no critical accessibility findings.
-- **SC-007**: The script a site loads is under 60 KB compressed.
+- **SC-002**: The FACES site's code and translations for the casting form drop from 1,108 lines to under 100 (page wrapper with its title texts in three languages, the two lines, and site-specific styling), counted with `wc -l` on the same paths, with the same stored result in the CRM.
+- **SC-003**: Two visitors of one linked site submitting in the same minute are counted separately; six submissions from six visitor addresses in one minute all succeed (verified with a route test that varies the caller address, and once in production from two networks).
+- **SC-004**: A request carrying a foreign, unlisted `Origin`, or a bad key, stores nothing, in 100% of tested cases (including a request with no content type).
+- **SC-005**: Every form door that existed before the change keeps today's renderer and produces the same stored submission for the same answers (fixtures of the two production door configs, `faces-historia-clinica` and `faces-modelos`, in the validation tests).
+- **SC-006**: The embedded form can be completed with the keyboard alone, and an automated accessibility scan (axe) of the test page reports no critical or serious issue.
+- **SC-007**: The script a site loads is under 60 KB compressed (the build fails above it).
 
 ## Assumptions
 
 - Domain ownership is not proven by DNS in this version: an org admin typing the origin is enough, because a listed origin can only post to that organization's own doors. (Owner was asked; no objection recorded. DNS proof can be added later without changing the model.)
 - Keys belong to the organization (owner decision, 2026-11-13).
 - One conditional rule per field, on one other choice field; no nested logic.
-- Files keep the 4 MB limit in this feature. Browser-direct uploads that raise it, a zero-config `minion doors push` command, and framework-specific wrapper components are out of scope and stay in the proposal.
+- Files keep the 4 MB limit in this feature. Browser-direct uploads that raise it, a zero-config `minion doors push` command, a published headless client package, and framework-specific wrapper components are out of scope and stay in the proposal (the client package was cut after review: nothing in this feature consumes it).
+- An embedded form runs inside the host page: scripts on that page can read what visitors type. That is why embedding is a per-door switch, off by default, and clinical doors should stay hosted.
 - No captcha; the honeypot and rate limits remain the spam controls.
 - The first key scope is door submit only; reading submissions or contacts by key is out of scope.
 - Photo guides are a fixed built-in set of face drawings; custom guide images are out of scope.

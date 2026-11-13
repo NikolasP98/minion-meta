@@ -11,7 +11,7 @@
 | removed_by | text null | |
 | removed_at | timestamptz null | soft delete (FR-005) |
 
-Unique `(org_id, origin) where removed_at is null`. At most 20 live rows per org (service check). Index on `(origin) where removed_at is null` for the preflight lookup.
+Unique `(org_id, origin) where removed_at is null` (also serves the lookup, which is always by organization). At most 20 live rows per org (service check; a race can exceed it by one, accepted). Grants to `app_ledger`: select, insert, update — no delete (rows are soft-deleted to keep the trail).
 
 ## org_api_keys (new, hub migration)
 | Column | Type | Notes |
@@ -28,7 +28,7 @@ Unique `(org_id, origin) where removed_at is null`. At most 20 live rows per org
 | revoked_by | text null | |
 | revoked_at | timestamptz null | |
 
-At most 20 non-revoked keys per org.
+At most 20 non-revoked keys per org. Grants: select, insert, update — no delete.
 
 State: `active → revoked` (terminal). A key never becomes active again.
 
@@ -38,30 +38,38 @@ Both tables need a Drizzle mirror (`src/server/db/pg-org-integrations-schema.ts`
 ```ts
 config: {
   // existing: fields, consentText, consentRequired, successMessage?, tagIds?
-  sections?: { id: string /* FORM_KEY_RE */; title: string; help?: string }[]   // ≤ 12
+  embed?: boolean                        // default false: the door may be embedded on the org's allowed sites
+  baseLocale?: 'es' | 'en' | 'pt'        // language of the door's own text, default 'es'
+  sections?: { id: string /* FORM_KEY_RE */; title: string; help?: string }[]   // ≤ 12; rendered in this order
   defaultCountry?: string                // ISO 3166 alpha-2 from countries.ts, default 'PE'
-  locales?: ('es' | 'en' | 'pt')[]       // languages with translations; the door's own text is the fallback
   translations?: Record<locale, {
     title?: string; description?: string; consentText?: string; successMessage?: string
     sections?: Record<sectionId, { title?: string; help?: string }>
-    fields?: Record<fieldKey, { label?: string; help?: string; options?: Record<canonicalOption, string> }>
+    fields?: Record<fieldKey, { label?: string; help?: string; options?: Record<canonicalOption, string>; optionHelp?: Record<canonicalOption, string> }>
   }>
 }
 field: {
   // existing: key, label, type, required, options?, accept?, maxFiles?
-  type: … | 'document'
-  section?: string            // must name a section id
+  type: … | 'document' | 'number'
+  min?: number; max?: number  // number only; integers
+  optionHelp?: Record<option, string>   // select/multiselect: short description under the option, ≤ 200
+  width?: 'half'              // two half fields share a row on wide screens
+  section?: string            // must name a section id; fields render in config order inside their section, unsectioned fields first
   help?: string               // ≤ 300
-  showIf?: { field: string; in: string[] }   // field must be an earlier select/multiselect/checkbox; values ⊆ its options ('true' for checkbox)
+  showIf?: { field: string; in: string[] }   // controller: an earlier select (equals), multiselect (includes any) or checkbox (in: ['true']); values ⊆ its options
   country?: boolean           // phone only: show the country picker
   guide?: 'front' | 'profile-left' | 'profile-right' | 'three-quarter-left' | 'three-quarter-right'   // file + accept:'image' + maxFiles 1 only
 }
 ```
 Validation rules (isomorphic, `form.ts`):
-- A field whose `showIf` is not satisfied is not required and its value is dropped before storage.
+- A field whose `showIf` is not satisfied is not required and its value is dropped before storage; visibility is evaluated on the validated values. Files already uploaded for a field that ends hidden are simply not claimed (the existing sweeper removes them).
+- `number`: integer, within `min`/`max` when set; stored as a string of digits.
+- The available languages of a door are `baseLocale` plus the keys of `translations`. A requested language is reduced to its primary tag (`es-PE` → `es`); unsupported → `baseLocale`.
 - `phone` with `country`: `^\+[0-9]{1,3} [0-9]{6,14}$`. Without it: today's rule.
-- `document`: default country with a known rule (PE: `^[0-9]{8}$`) stores the bare value; any other country stores `CC value` matching `^[A-Z]{2} [0-9A-Z]{5,15}$`.
-- Config errors added to `superRefine`: `unknown_section`, `bad_show_if`, `guide_needs_single_image`, `unknown_translation_key`.
+- `document`: the picked country must be in `countries.ts`. A country with a known rule applies it (PE: `^[0-9]{8}$`); otherwise `^[0-9A-Z]{5,15}$`. Stored bare when the country is the door's `defaultCountry`, else as `CC value`; the `CC` form with the default country is rejected. Only a bare (default-country) document feeds the contact's document and may match an existing contact; a `CC value` document is kept in the submission only.
+- Contact matching (`crm-contact-ensure.ts`): a phone whose dialling code is not the default country's matches only on the full number, never on the last nine digits.
+- Config errors added to `superRefine`: `unknown_section`, `bad_show_if` (unknown or later controller, controller has its own `showIf`, values not among its options), `show_if_on_contact_field` (a phone or email field that satisfies `needs_contact_field` cannot be conditional), `guide_needs_single_image`, `bad_number_range`, `unknown_translation_key`.
+- Reading: every public path uses `readFormConfig` (`safeParse`); a config that does not parse is treated as a missing door (S0).
 
 ## Public form definition (response of the public read) — see `contracts/public-api.md`
 Projection of the config without `tagIds`, follow-up, statistics or notification settings, plus `id` (needed for attribution, `doors-form.service.ts:70-73`) and upload limits.
