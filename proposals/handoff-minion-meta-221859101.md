@@ -87,5 +87,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33618
 - `NikolasP98/minion-meta@dev rankings/index.json:33687` — Legacy receipts cannot reconstruct a complete source manifest",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33687
-- `NikolasP98/minion-meta@dev rankings/index.json:42588` — when attachment_links (spec S1) lands, delete this",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42588
+- `NikolasP98/minion-meta@dev rankings/index.json:42556` — when attachment_links (spec S1) lands, delete this",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42556
