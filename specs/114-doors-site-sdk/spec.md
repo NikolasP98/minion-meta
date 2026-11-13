@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-13
 
-**Status**: Draft
+**Status**: Parked 2026-11-13 after slice S0 (owner decision; see `plan.md`)
 
 **Tags**: crm, security, data — human gates at approval AND merge (Constitution V)
 

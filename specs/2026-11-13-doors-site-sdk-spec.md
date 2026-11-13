@@ -15,6 +15,10 @@ tags: [crm, security, data]
 
 # A lead form on any site with two lines — Doors site SDK
 
+## Status
+
+Parked on 2026-11-13 by the owner after slice S0 (hub PR 659). The FACES form stays hosted on its own site as built. The owner's later direction is a hub-hosted form builder on a customer subdomain with DNS validation; see the proposal.
+
 ## 0. Product
 
 A site puts a Minion form door on a page with one script tag and one `<minion-door slug>` element.

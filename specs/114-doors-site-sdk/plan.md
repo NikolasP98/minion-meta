@@ -4,6 +4,10 @@
 
 **Date**: 2026-11-13 (revised after EGM stages 5–7) · **Repos and PR bases**: `minion_hub` → `master`; `faces-landing` → `master`; this directory → `minion-meta` `dev` · **Tags**: crm, security, data
 
+> **PARKED 2026-11-13 (owner decision).** Owner: "for now, I want the form hosted on the original domain, like its currently set up. Eventually, we can consider a form builder to embed into a subdomain like modelos.facesculptors.net. This would need DNS validation."
+> Effect: the FACES form stays as built (site-hosted, server-forwarded). Only slice S0 (tolerant config reader, hub PR 659) goes ahead. Slices S1–S6 are not to be built now. Partial, unreviewed work for S1 and S2 is kept on local branches `feat/doors-allowed-sites` and `feat/doors-embed` (worktrees `~/.cache/claude-tmp/hub-doors-s1`, `-s2`; not pushed).
+> The direction the owner named for later is different from this design: a hub-hosted form on the customer's own subdomain, proven by DNS. That needs no cross-origin access and no embedded script, so the allowed-sites and element slices should be re-examined, not resumed as written.
+
 ## Summary
 
 Move the lead form out of site code and into the door. The hub gains: allowed sites per organization, a per-door embedding switch, and cross-origin answers for that combination only; a public read of a form door's definition; a dependency-light renderer compiled as the `<minion-door>` element; a richer form configuration; translations; organization API keys for server-side callers. The FACES `/modelos` page is rebuilt on the element.

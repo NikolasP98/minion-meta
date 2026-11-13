@@ -138,6 +138,14 @@ lines. A and D are security work: human approval and human merge.
 - API keys: "Yes, it should belong to the ORG."
 - Domain proof: not answered; the spec assumes an org admin typing the origin is enough.
 
+## Owner direction, 2026-11-13 (supersedes the embed-first order below)
+
+> for now, I want the form hosted on the original domain, like its currently set up. Eventually, we can consider a form builder to embed into a subdomain like modelos.facesculptors.net. This would need DNS validation.
+
+- Now: nothing changes for sites. FACES keeps its own page and server forwarding. Only the tolerant config reader (hub PR 659) ships.
+- Later, to be specified separately: a form builder in the hub whose forms are served by the hub on a subdomain the customer points at it (for example `modelos.facesculptors.net`), with DNS validation of the domain before it is activated. This is same-origin hosting: no cross-origin access, no script on customer pages. It needs custom domains on the hub's hosting, certificate issuance, a domain-to-organization table with a verification state, and the richer form settings from spec 114 (sections, conditional fields, country inputs, photo guides, translations), which carry over.
+- The cross-origin embed (allowed sites, `<minion-door>`) and organization API keys in spec 114 are parked, not rejected.
+
 ## Getting below 300 lines (added after the owner's reply)
 
 The 300 lines that remained were the form itself: markup, drop zones, country inputs, face guides,
