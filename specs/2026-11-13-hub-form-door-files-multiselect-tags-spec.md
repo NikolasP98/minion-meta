@@ -73,7 +73,25 @@ use for leads.
 | Upload refusals and stored row shape (I1, I6) | `doors-form.service.test.ts` "uploadDoorFile", `upload/server.test.ts` |
 | Claim scope and rollback (I3, I4) | `doors-form.service.test.ts` "door tags and files"; the statement planned with `EXPLAIN` on the production schema |
 | Tag scope (I5) | same file, tag SQL + params |
-| End to end on a real database and bucket | preview run on hub #657 before merge (open) |
+| End to end on a real database and bucket | see Verification |
+
+## Verification
+
+- Unit: hub doors tests 67/67 (`form.test.ts`, `doors-form.service.test.ts`,
+  `upload/server.test.ts`); `bun run check`, `lint:design`, `lint:tokens` clean.
+- Live, 2026-11-13: the branch run locally against the production database and bucket (hub
+  previews have no database env), door `faces-modelos` of the FACES org.
+  - Upload refusals: PDF on a photo field and an executable on the any-file field →
+    `mime_not_allowed`; a text field key → `invalid_field`.
+  - Seven uploads then a submit → one new contact (`source = door:faces-modelos`), tag
+    `Modelo`, 7 attachment links, DNI + Instagram on the contact.
+  - A made-up file id → `invalid` on that field, no contact or submission written. Replaying
+    claimed ids → `invalid` on every file field.
+  - Second and third submissions with the same phone → the same contact reused (1 contact,
+    18 links), TikTok handle added.
+  - facesculptors.net `/modelos` server routes (faces-landing #10) driven against that hub:
+    upload proxy and form action both stored through to the hub.
+- Not verified: the hub `/d/<slug>` page and the editor in a browser; a real phone (HEIC).
 
 ## Out of scope / open ends
 
