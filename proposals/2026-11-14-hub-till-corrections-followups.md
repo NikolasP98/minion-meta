@@ -77,6 +77,50 @@ read-only queries on the FACES org on 2026-11-13/14.
   the first statement of a session-port connection (what `scripts/repair-service-sale-stock.ts`
   does in preview mode).
 
+### 7. The stock repair books its correction on the day it runs
+
+- AS-IS: `repostTicketStock` cancels a sale's movement and posts a new one. Both land on the run
+  day (`stk_entries.posted_at` and the ledger rows are written with the current time). Cost of
+  goods is summed by `posted_at`, so the supplies given back lower the cost of the run month, not
+  of the sale month. Product lines net to zero unless the item's average cost changed.
+- TO-BE: a correction can be booked on the sale's own date, or the cost report shows corrections
+  apart from the month's sales.
+- DELTA: owner decision; a backdated post changes the shared stock-posting code.
+
+### 8. "Your role cannot void" does not name who can
+
+- AS-IS: the guided void (slice S5) tells a user without `pos:manage` which permission is needed.
+  Spec task T038 asked for the names of the roles that hold it.
+- TO-BE: the message lists the org's roles holding `pos:manage`.
+- DELTA: load those role names with the sale page; one string with a list.
+
+### 9. Void and charge again has not run against a database
+
+- AS-IS: slices S4 and S5 are proved by unit tests and a mounted test of the sale page. No QA sale
+  was voided and charged again end to end. The document-issuing flow does not take the sale's row
+  lock that the swap takes.
+- TO-BE: one recorded QA run: swap, refused swap, void with each refund choice, till pre-filled,
+  charge again, appointment shows paid once, supplies deducted once.
+- DELTA: a QA stack with a seeded sale; the emit flow takes the same lock.
+
+### 10. A product swap is not shown on the sale (`TODO(handoff)` on the sale page)
+
+- AS-IS: `swapTicketLineProduct` writes an audit row (`pos_ticket`, `line.<id>.product`). The sale
+  page does not read the audit log, so "Cambiado de X a Y por <name>, <date>" (spec 120, US4
+  scenario 2) is not visible. No shared history component exists in the hub.
+- TO-BE: the sale page lists its corrections.
+- DELTA: load the sale's audit rows in the page loader; render them under the lines.
+
+### 11. Smaller review notes left open (EGM stage 9, 2026-11-14)
+
+- The out-of-stock refusal does not name the short item, though the server sends it.
+- The agenda marker renders even when a host passes its own `block` snippet (no caller does today).
+- With a custom hover-field order that does not end in `actions`, the products section sits
+  mid-card.
+- The till hand-off drops a ticket-level discount (the till never writes one).
+- Whether a FACES re-charge needs the client's document re-picked was not checked: the hand-off
+  carries name and party, not the document number (same as the agenda hand-off).
+
 ## Out of scope
 
 - Changing a line's price or quantity after submit.
