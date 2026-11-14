@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T20:17:20.714Z",
+	"generatedAt": "2026-11-14T20:21:27.684Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1367,41 +1367,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:49:41.203Z"
-		},
-		{
-			"key": "pr:minion_hub#660",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#660 fix(pos): a void refunds once",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/660",
-			"sourceUpdatedAt": "2026-11-14T15:01:25Z",
-			"sourceFingerprint": "9762f594ba6cb5a94f0a4b6ac75eba0c17a77ec07a41ef77411d431b795b9ec1",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#661",
-				"pr:minion-meta#1035"
-			],
-			"rationale": "Closes a concurrency race that could refund the same POS ticket twice, proven with integration tests that failed before the fix and pass after.",
-			"evidence": [
-				"locks the ticket row FOR UPDATE and rechecks status before any refund write",
-				"29/29 integration tests pass against disposable Postgres"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:18:01.297Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
@@ -2845,40 +2810,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
-		},
-		{
-			"key": "pr:minion_hub#664",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#664 fix(appointments): actions wait for the data they act on",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/664",
-			"sourceUpdatedAt": "2026-11-14T15:23:42Z",
-			"sourceFingerprint": "2ee0f05620d1feea140c79037bcfd4fd02330b3708bd39aaeedaf03d1e293911",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#662"
-			],
-			"rationale": "Fixes a concrete user-facing race where fast clicking between appointments could cancel/complete the wrong one, is well tested, and is the prerequisite slice unblocking #662.",
-			"evidence": [
-				"\"a fast click from appointment A to B could cancel or complete A, and a late reload of A could replace B on screen\"",
-				"132 of 133 tests pass, unrelated timeout isolated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:48:25.830Z"
 		},
 		{
 			"key": "pr:minion_hub#665",
@@ -6236,41 +6167,6 @@
 			"scoredAt": "2026-11-14T15:18:01.297Z"
 		},
 		{
-			"key": "pr:minion_hub#661",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#661 fix(pos): a voided instalment reopens its plan",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/661",
-			"sourceUpdatedAt": "2026-11-14T15:09:38Z",
-			"sourceFingerprint": "6f10e4b51f4026d680c58c0b10d551cc5069015538c4d23562850564b6f1548a",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#660",
-				"pr:minion-meta#1035"
-			],
-			"rationale": "Fixes a settled installment plan that stayed unpayable and uncancellable after a void, stacked on #660 and backed by race-condition tests.",
-			"evidence": [
-				"reopens a settled plan when its unvoided lines no longer cover the total",
-				"33/33 integration tests pass including a void-vs-settle race"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:18:01.297Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8935,38 +8831,6 @@
 			"evidence": [
 				"TODO(handoff): a following cancel is N independent transactions, not one",
 				"fix direction: wrap operations in db.transaction()"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T06:48:12.984Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-dd764fd1df5e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dd764fd1df5e.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "dc133844c054182ce72c917ac47150b5d2200b7e43ae60a8689d844b136c499b",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Voiding an installment ticket fails to reverse the plan's paid-to-date, risking financial reconciliation inconsistencies.",
-			"evidence": [
-				"TODO(handoff): voiding an instalment ticket un-pays its plan (paid-to-date",
-				"fix direction: subtract ticket amount from paid_to_date transactionally with audit log"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -39654,6 +39518,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T09:18:30.436Z"
+		},
+		{
+			"key": "run:minion_hub#43636873150",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43636873150",
+			"sourceUpdatedAt": "2026-11-14T20:19:35Z",
+			"sourceFingerprint": "e02527f3102717fcc8cbaa696c0c96c954f7bf7ca68d64823f3c68a8891525ce",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"run:minion_hub#43636873179"
+			],
+			"rationale": "An in-progress storybook-deploy CI run on master has no actionable scope beyond waiting for completion.",
+			"evidence": [
+				"stage testing, status in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:21:27.473Z"
+		},
+		{
+			"key": "run:minion_hub#43636873179",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43636873179",
+			"sourceUpdatedAt": "2026-11-14T20:19:46Z",
+			"sourceFingerprint": "64f8c739b8c38a8407854df0f7685df40483c76088e273f8ef83d44317333606",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"run:minion_hub#43636873150"
+			],
+			"rationale": "An in-progress general CI run on master has no actionable scope beyond waiting for completion.",
+			"evidence": [
+				"stage testing, status in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:21:27.473Z"
 		},
 		{
 			"key": "issue:minion-meta#1014",
