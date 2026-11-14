@@ -91,6 +91,21 @@ None. Each slice is self-contained; S2 and S4 share one function, created in S2.
 - [ ] T039 [P] [US5] Add the strings to `messages/es.json` and `messages/en.json`; `bun run i18n:compile`
 - [ ] T040 [US5] Browser check on a QA sale: void with refund, till pre-filled at charged prices, charge again, visit shows paid once and its supplies are not deducted twice; one void refusal path; leaving the till keeps the pre-filled sale. Run touched tests, `bun run check`, design gates; open the draft PR `feat(pos): void and re-ring a sale in one guided step`
 
+## Readiness decisions (EGM stage 9, 2026-11-14) — these override the task text above
+
+**S1**
+- T003 + T006 are one step. The bundle lookup runs only when the sale has an unlinked service line with no `redemptionId`; it reads `finProductComponents` for those product ids (same table `resolvePackageSpecs` reads, `pos.service.ts:1161–1193`). Sales without such a line add no query, so their mock sequences stay as they are. `src/server/services/pos.packages.test.ts` (137, 195, 276) has the same sequences and is updated in the same step.
+- T004: the `accrueConsumption` mock in `scheduling-bookings-ticket-link.test.ts:38` must forward its arguments, and the preamble line row gains `qty`.
+- T005 is replaced: no new database harness. The sell → schedule → complete proof is the mocked unit tests of T003/T004 plus the quickstart check on the QA sale after deploy (T041).
+- T007: `quantity` applies to the default-recipe path only. When the scheduling dialog sends adjusted `consumption` lines they are taken as given (they are what staff typed). `qty` is a numeric string; convert with `Number`.
+- T008: import `getEntry` (`stock.service.ts:621`) and add it to the mocks of both test files; a `null` result is treated like a cancelled entry.
+
+**S2**
+- T013 splits: (a) exported read-only `previewTicketRepost(ctx, ticketId)` returning `{ oldByItem, newByItem }` in stock units (sum by item; convert with `consumptionToStockQty`, `stock.logic.ts:424`, loading `unitsPerStockUom` for the items involved) and the pure `planRepost(oldByItem, newByItem, opts)` with a tolerance of 0.0001; (b) claim, cancel, post. The claim is a new conditional update, not `stampTicketStock`. When the cancel fails the stamp is restored with the warning it had before.
+- T012: `no_stock_entry` is added as step 1b of the sequence (a sale with no live movement is refused, never posted). T008 comes before T012.
+- T014: the void's final lookup is wrapped in try/catch, ignores drafts and an entry already cancelled, skips when the void already recorded `void_stock_failed` for the same entry, and writes its own warning with a separate update. It never turns a committed void into an error response.
+- T015/T016 depend on `previewTicketRepost` only. `--apply` runs as actor `{ id: null, name: 'repair-120' }`. Script context follows `scripts/stock-optional-fields-to-custom.ts:268`.
+
 ## Phase 8: Polish
 
 - [ ] T041 After each merge, verify prod from `origin/master` and the commit status `Vercel: success`, then run the slice's quickstart check as the QA user
