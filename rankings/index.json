@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T21:17:36.555Z",
+	"generatedAt": "2026-11-14T21:48:33.384Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -969,6 +969,41 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
+			"key": "pr:minion_hub#672",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#672 fix(assistant): a role that sees masked client details can't use rescheduling to guess them",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/672",
+			"sourceUpdatedAt": "2026-11-14T21:20:44Z",
+			"sourceFingerprint": "2b2ebd2f6aab29215e975ad0a6b5844eaf8d98044282612e3f256cf4fb00ccb5",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-11-14-hub-assistant-reschedule-masked-pii-oracle-spec"
+			],
+			"rationale": "Closes a confirmed PII-guessing oracle flagged by automated security review, with a precise spec and full passing test suite, already open for review.",
+			"evidence": [
+				"status open (not draft), 38/38 new tests pass",
+				"403 added before any booking read for masked principals",
+				"spec NikolasP98/minion-meta#1037 referenced"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:48:33.163Z"
+		},
+		{
 			"key": "proposal:2026-10-12-hub-micro-debloat",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1064,6 +1099,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-10-19T03:27:16.894Z"
+		},
+		{
+			"key": "spec:2026-11-14-hub-assistant-reschedule-masked-pii-oracle-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Assistant reschedule cannot be used to guess a client's masked email, phone or notes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-14-hub-assistant-reschedule-masked-pii-oracle-spec.md",
+			"sourceUpdatedAt": "2026-11-14",
+			"sourceFingerprint": "890d514b0ce65e4555390a9a523006ba643689d1cc16f0ab36d337e19bc0e4f2",
+			"score": 80,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#672"
+			],
+			"rationale": "Precise security spec already backed by an open PR with a full passing test suite, tracking the same masked-PII oracle fix.",
+			"evidence": [
+				"status implementing, matches pr:minion_hub#672",
+				"new 403 tests fail on old route and pass on new one",
+				"targeted vitest file passes 38/38, bun run check 0 errors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-gateway-lifecycle-spec",
@@ -1840,6 +1910,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T09:07:16.478Z"
+		},
+		{
+			"key": "pr:minion_hub#669",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#669 fix(pos): a treatment's supplies leave stock once, when the appointment is completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/669",
+			"sourceUpdatedAt": "2026-11-14T21:23:01Z",
+			"sourceFingerprint": "f68d78c388415cc4406ba524c7a5eedb063277824cf02b7691f98c3e18ddf987",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#670",
+				"pr:minion_hub#671"
+			],
+			"rationale": "Production stock double-deduction bug confirmed by FACES reception with specific sale IDs, and the PR has 883 passing tests and a clean check.",
+			"evidence": [
+				"9 FACES sales affected (POS-2026-00113, POS-2026-00110)",
+				"883 tests pass across pos*/scheduling/stock routes",
+				"bun run check clean in changed files"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-deploy-cloudflare-workers",
@@ -2743,6 +2849,42 @@
 			"scoredAt": "2026-11-14T05:18:09.117Z"
 		},
 		{
+			"key": "pr:minion_hub#670",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#670 fix(stock): give back supplies that prepaid treatments removed at the sale",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/670",
+			"sourceUpdatedAt": "2026-11-14T21:22:53Z",
+			"sourceFingerprint": "916dd54e760b6848ffa5d8a641d4283bb210c887388a092c36cecefeb7ff9033",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#669",
+				"pr:minion_hub#671"
+			],
+			"rationale": "Repairs real production stock shortfall caused by the bug #669 fixes, with a read-only preview already run against production data.",
+			"evidence": [
+				"Preview on production lists 13 sales and totals short by item",
+				"--apply gated, exits 1 if anything still planned",
+				"stacked on #669, reused by #671"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:48:33.163Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3501,41 +3643,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T04:48:06.046Z"
-		},
-		{
-			"key": "pr:minion_hub#669",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#669 fix(pos): a treatment's supplies leave stock once, when the appointment is completed",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/669",
-			"sourceUpdatedAt": "2026-11-14T18:35:08Z",
-			"sourceFingerprint": "f761c405ef19fac07b41d1efd9022a998313f4253f5649b4ac9f250cc4c2866f",
-			"score": 67,
-			"band": "medium",
-			"axes": {
-				"criticality": 8,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1036"
-			],
-			"rationale": "Fixes a live double-deduction/missed-deduction stock bug affecting nine real FACES sales, with tests passing and scope clearly bounded to slice S1.",
-			"evidence": [
-				"nine FACES sales affected, POS-2026-00113 and POS-2026-00110 cited",
-				"883 tests pass across pos/scheduling/stock suites",
-				"repair script and other slices explicitly deferred"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T18:47:14.866Z"
 		},
 		{
 			"key": "proposal:2026-10-03-notification-recon",
@@ -9688,42 +9795,6 @@
 			"scoredAt": "2026-11-11T19:18:13.125Z"
 		},
 		{
-			"key": "pr:minion_hub#670",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#670 fix(stock): give back supplies that prepaid treatments removed at the sale",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/670",
-			"sourceUpdatedAt": "2026-11-14T19:10:58Z",
-			"sourceFingerprint": "e526eeaeec2a1ef501248d69db2f92968a207bed2991966992f7e54392d58d88",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#671",
-				"pr:minion-meta#1036"
-			],
-			"rationale": "Concrete production stock discrepancy with a preview-verified repair script, though a known race window is explicitly deferred.",
-			"evidence": [
-				"13 production sales confirmed short by preview query",
-				"repostTicketStock refuses void/no-movement/unnamed-drift sales",
-				"Known race window logged as TODO(handoff) and proposal item 1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11451,6 +11522,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T06:48:52.986Z"
+		},
+		{
+			"key": "proposal:2026-11-10-faces-weekly-sync-backlog",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "FACES weekly sync (2026-11-10) — receivables noise, client lookup, campaign attribution, variable consumption",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-10-faces-weekly-sync-backlog.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "8078c6b858865caece7fc86250b3262919dc42a55c4cdf2a2701aeb5355f2cb9",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles 11 unrelated staff requests of mixed severity into one draft triage note without a single verifiable outcome, so it needs to be split into separate specs before it is actionable.",
+			"evidence": [
+				"11 distinct triage items with different verdicts and sizes",
+				"past priced slice shows ~127 genuinely unlinked October appointments",
+				"status draft, join-key for invoice probe still unconfirmed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1895569552",
@@ -17591,8 +17695,8 @@
 			"repo": "minion_hub",
 			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
-			"sourceUpdatedAt": "2026-11-14T19:19:18Z",
-			"sourceFingerprint": "b92dc7d44698e99077c325f7b53a18451b8e24ee731c41b00ef01cd377d8ecec",
+			"sourceUpdatedAt": "2026-11-14T21:42:49Z",
+			"sourceFingerprint": "c637a97745680b66cea44257021b57c0bf9710adea4c62f51e2ad38343014425",
 			"score": 46,
 			"band": "low",
 			"axes": {
@@ -17601,21 +17705,24 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 8
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-tested server-side POS line-swap PR with enumerated refusal codes is ready to move toward review/merge.",
+			"relatedKeys": [
+				"pr:minion_hub#670",
+				"pr:minion_hub#673"
+			],
+			"rationale": "Useful correction workflow for a recurring reception mistake, well-scoped with explicit refusal codes, but not database-verified and has known test flakiness in batch runs.",
 			"evidence": [
-				"97 tests pass in pos.tickets.test.ts plus 11 new swap tests",
-				"stacked on #670 with spec 120-till-corrections slice S4",
-				"known limits and failure races documented in code"
+				"97 tests pass, 11 new for the swap",
+				"5 tests fail only when run in the same batch, pass alone",
+				"not run against a database; known stock-shortcut limit noted"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:47:37.677Z"
+			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -24669,38 +24776,6 @@
 			"scoredAt": "2026-11-12T04:48:06.046Z"
 		},
 		{
-			"key": "proposal:2026-10-09-native-formatting-coverage",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Establish meaningful iOS and shared Swift formatting coverage",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-native-formatting-coverage.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "f1d6a3dac7a76a7b940b962c14484476e186e7aeaf0c6b077e72963ae1a25a94",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A no-op formatting gate was removed leaving a documented gap, but establishing real iOS/shared coverage is scoped future work without urgent production risk.",
-			"evidence": [
-				"verified run exited zero while formatting no files",
-				"GW030 removes the no-op phase; native SwiftLint/build/tests remain"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T21:17:04.696Z"
-		},
-		{
 			"key": "proposal:2026-10-10-hub-pos-stock-fix-batch",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25809,6 +25884,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:56:10.852Z"
+		},
+		{
+			"key": "pr:minion_hub#673",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#673 feat(pos): the agenda shows the products sold with a visit",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/673",
+			"sourceUpdatedAt": "2026-11-14T21:32:40Z",
+			"sourceFingerprint": "f2aca9aa9dca3e9bfb934811d8ad69a51b455e2623db545d24cdb360371dbc8f",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#671"
+			],
+			"rationale": "Low-urgency visibility improvement with a clear AS-IS/TO-BE/DELTA and storybook-verified behavior, but not checked against production data.",
+			"evidence": [
+				"25 unit tests pass; storybook browser check confirms the hover card text",
+				"no FigCraft design frame exists for this page",
+				"not checked against production data"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-msteams-large-upload",
@@ -28592,6 +28702,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T07:47:51.340Z"
+		},
+		{
+			"key": "proposal:2026-10-09-native-formatting-coverage",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Establish meaningful iOS and shared Swift formatting coverage",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-native-formatting-coverage.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "f1d6a3dac7a76a7b940b962c14484476e186e7aeaf0c6b077e72963ae1a25a94",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Fixes a false-green CI formatting gate for iOS/shared Swift but has no production impact and no implementation has started.",
+			"evidence": [
+				"verified run exited zero while formatting no files",
+				"status review, no code changes yet",
+				"scope limited to iOS/shared Swift formatting"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "proposal:2026-10-14-hub-global-class-selector-lint",
@@ -39247,40 +39390,6 @@
 			"scoredAt": "2026-11-10T09:18:30.436Z"
 		},
 		{
-			"key": "run:minion_hub#43639864283",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43639864283",
-			"sourceUpdatedAt": "2026-11-14T20:53:35Z",
-			"sourceFingerprint": "8067858b842d253d77697f6a628e6611634638a84b4dd0e5ac93463285cd20a3",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion_hub#43639864246"
-			],
-			"rationale": "In-progress CI run on master is routine and not yet actionable until completion status is known.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:55:41.389Z"
-		},
-		{
 			"key": "issue:minion-meta#1014",
 			"kind": "issue",
 			"stage": "proposal",
@@ -43051,6 +43160,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:40:44.251Z"
+		},
+		{
+			"key": "proposal:2026-11-11-hub-storybook-contact-chat-realtime-stub",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Storybook CRM contact layout throws from the chat panel's realtime channel",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-11-hub-storybook-contact-chat-realtime-stub.md",
+			"sourceUpdatedAt": "2026-11-11",
+			"sourceFingerprint": "d33fe77d364de0ade8185267ebfdae7c000b31ccd3d527466300a61610abd393",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Well-scoped but narrow dev-tooling fix (Storybook-only uncaught error) with no production impact and no implementation started.",
+			"evidence": [
+				"story logs uncaught error but play tests still pass",
+				"two concrete implementation options given",
+				"out of scope explicitly excludes two other live-data layouts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1509650200",
@@ -48698,7 +48840,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "31c6706ee85cd2df40916617357cf320011c707cb791f56e06fdf8af02cf3a40",
+			"sourceFingerprint": "2bf5171f75e625eac0d2cb51cff3d68ca0c275f29b43c509109430146e9542ef",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -48708,19 +48850,20 @@
 			},
 			"readiness": {
 				"specification": 1,
-				"implementation": 1
+				"implementation": 0
 			},
-			"confidence": 7,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The quoted 'markers' are fragments of rationale strings inside a generated ranking-output JSON file, not actual TODO(handoff) code comments, so there is no genuine open end to resolve.",
+			"rationale": "The listed markers point at line numbers inside rankings/index.json, a generated data artifact rather than source code, so this sweep result is not actionable work.",
 			"evidence": [
-				"file is rankings/index.json, a generated data artifact, not source code",
-				"quoted lines are prior ranking-entry rationale strings (e.g. 'a realized accrual is counted via (source, source_id, status)')"
+				"all markers cite rankings/index.json lines, not application source files",
+				"marker text matches ranking-evidence phrasing rather than code TODOs",
+				"no code location or build/test evidence given"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:17:36.314Z"
+			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
