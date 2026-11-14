@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T20:24:16.675Z",
+	"generatedAt": "2026-11-14T20:47:43.045Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1098,14 +1098,14 @@
 			"scoredAt": "2026-11-09T08:57:47.424Z"
 		},
 		{
-			"key": "pr:minion (gateway)#368",
+			"key": "pr:minion_hub#665",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#368 train: promote DEV → main (2026-11-07)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/368",
-			"sourceUpdatedAt": "2026-11-13T22:14:59Z",
-			"sourceFingerprint": "7660436d49a8f65b7cf73e72cabe21e512f86ecf79e5cb44d33ba4c15355bbea",
+			"repo": "minion_hub",
+			"title": "#665 fix(pos): a shift closes once",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/665",
+			"sourceUpdatedAt": "2026-11-14T20:23:42Z",
+			"sourceFingerprint": "842b7424f17c25b07916a74b8d1b392e29213c4355800b93e44da18b15634cf0",
 			"score": 78,
 			"band": "high",
 			"axes": {
@@ -1114,20 +1114,21 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 7
+				"specification": 9,
+				"implementation": 9
 			},
 			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This is the production release gate for the gateway with a concrete checklist and commits ready to promote.",
+			"rationale": "Fixes a race condition letting a shift close twice or absorb stray payments, with locking changes and 129+30 passing tests validating financial correctness.",
 			"evidence": [
-				"Weekly promotion train; merging deploys to production",
-				"2 commits ready; explicit review-PASS and no-unaddressed-finding checklist"
+				"two concurrent closes: exactly one wins, other gets no_open_shift",
+				"129 tests pass across 7 files; 30/30 SQL integration tests pass",
+				"shift row taken FOR UPDATE with 5s lock timeout"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T05:18:09.117Z"
+			"scoredAt": "2026-11-14T20:47:42.827Z"
 		},
 		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
@@ -2105,14 +2106,14 @@
 			"scoredAt": "2026-11-11T08:18:29.459Z"
 		},
 		{
-			"key": "pr:minion (gateway)#379",
+			"key": "pr:minion (gateway)#368",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion (gateway)",
-			"title": "#379 fix(gateway): a retried run ends once with its real result",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/379",
-			"sourceUpdatedAt": "2026-11-14T18:49:03Z",
-			"sourceFingerprint": "1f5f3952d32ff542745bbb1be4040614dabc8408adcab0d4b328aca1f2454a61",
+			"title": "#368 train: promote DEV → main (2026-11-07)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/368",
+			"sourceUpdatedAt": "2026-11-14T20:22:52Z",
+			"sourceFingerprint": "bf8adea3ba202f1ff4f1dd95e5d3c97115a2411c56907fe4fa951f0b34d11e45",
 			"score": 71,
 			"band": "high",
 			"axes": {
@@ -2121,56 +2122,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 7,
 				"implementation": 7
 			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1035"
-			],
-			"rationale": "Well-specified, tested fix for false error/end reporting on retried runs, ready pending its stacked predecessor #378.",
-			"evidence": [
-				"Fixes false error/end events on retried runs per spec 119-gateway-run-lifecycle-truth",
-				"10 new tests in agent-run-terminal.test.ts",
-				"Merge after #378 (stacked)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
-		},
-		{
-			"key": "pr:minion_hub#665",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#665 fix(pos): a shift closes once",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/665",
-			"sourceUpdatedAt": "2026-11-14T20:20:35Z",
-			"sourceFingerprint": "78974ef3157b104a8778f238817af7df629f4caa1fb038302ffb02ad9ba957eb",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Draft PR fixes a shift-close race/financial-correctness bug with row locking, backed by passing integration and unit tests plus clean lint/type gates.",
+			"rationale": "The weekly production promotion train has 2 ready commits awaiting checklist sign-off, making it a time-sensitive release gate.",
 			"evidence": [
-				"closeShift takes FOR UPDATE lock and only closes an open shift, loser gets 409",
-				"129 unit tests + 30/30 SQL integration tests pass",
-				"bun run check shows only pre-existing unrelated env errors"
+				"2 commits ready",
+				"Merging deploys to production",
+				"checklist requires review PASS and no unaddressed Critical/High finding"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:24:16.458Z"
+			"scoredAt": "2026-11-14T20:47:42.827Z"
 		},
 		{
 			"key": "pr:minion-meta#900",
@@ -6060,40 +6026,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:31:58.264Z"
-		},
-		{
-			"key": "pr:minion (gateway)#378",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#378 fix(gateway): no restart apology for turns that already ended",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/378",
-			"sourceUpdatedAt": "2026-11-14T15:13:07Z",
-			"sourceFingerprint": "45c8cc3331b6c9bfd226e1ef916a7a374bd0c6be4f999199cea79e112301d421",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1035"
-			],
-			"rationale": "Fixes a reproducible customer-facing restart-apology bug on deploys with extensive passing tests and a referenced spec, ready to merge.",
-			"evidence": [
-				"in-flight row leaked on error-reply/failover/cache-hit exits, now deleted in finally for every exit",
-				"78 tests across 7 files pass, tsgo and check rc=0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:18:01.297Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -23196,38 +23128,6 @@
 			"scoredAt": "2026-11-09T08:59:26.091Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/533616ce95a50b6810a4d5f70629d5ded2508e13",
-			"sourceUpdatedAt": "2026-11-13T22:14:56Z",
-			"sourceFingerprint": "eb22d0cc45f9cdce3b9dec4ebae04af9dabb33b604689f550d19bfa1569fc0df",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Deployment-health candidate is only a CI audit-fix commit message with no stated scope or outcome to act on.",
-			"evidence": [
-				"Summary references merged PR #375 verifying CI audit evidence",
-				"Only tag present is 'deployment'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T05:18:09.117Z"
-		},
-		{
 			"key": "issue:minion-meta#1019",
 			"kind": "issue",
 			"stage": "proposal",
@@ -37228,6 +37128,38 @@
 			"scoredAt": "2026-11-09T14:43:14.177Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/4d13f613da73333f89a9d3b45812ac60816e2439",
+			"sourceUpdatedAt": "2026-11-14T20:22:06Z",
+			"sourceFingerprint": "d818180b7ebb77e3050eeffd586cb70e21e642207987e0c701975f85e2de723c",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a deployment-health marker for an already-merged fix (#379), representing completed work rather than an open actionable goal.",
+			"evidence": [
+				"Merge pull request #379 ... fix(gateway): a retried run ends once with its real result",
+				"status: unknown, kind: deploy"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:47:42.827Z"
+		},
+		{
 			"key": "issue:minion-meta#444",
 			"kind": "issue",
 			"stage": "proposal",
@@ -37926,21 +37858,21 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 6,
+				"implementation": 7
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "A draft perf-observer infra PR with no user-visible behavior change and several pending verification gates, so it's useful but not urgent.",
+			"rationale": "The startup-regression-attribution problem is plausible but the delivered XL observer/benchmark harness is explicitly inactive unless manually injected, so it produces no production effect as scoped.",
 			"evidence": [
-				"status: draft",
-				"User-visible/Behavior Changes: None",
-				"What you did not verify: hosted execution, production launcher identity, calibration, deployment"
+				"observer and recovery seams are inactive unless explicitly injected",
+				"size: XL tag",
+				"benchmark-only markers absent from production dist"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T20:47:04.660Z"
+			"scoredAt": "2026-11-14T20:47:42.827Z"
 		},
 		{
 			"key": "pr:minion_hub#358",
@@ -49083,38 +49015,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
-		},
-		{
-			"key": "run:minion_hub#43637079807",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43637079807",
-			"sourceUpdatedAt": "2026-11-14T20:22:01Z",
-			"sourceFingerprint": "a213049335e2032548f533afb6565c9b52e59d473d8603989cf3e3d3e4cdb3ab",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status, not a scoped unit of work to rank.",
-			"evidence": [
-				"storybook-deploy triggered by push on master",
-				"status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:24:16.458Z"
 		},
 		{
 			"key": "run:minion_hub#43637079922",
