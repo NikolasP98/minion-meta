@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-14)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/ConsumptionConfirmDialog.svelte:99` — the defaults read posts stk_consumption item ids
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/ConsumptionConfirmDialog.svelte#L99
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/ConsumptionConfirmDialog.svelte:100` — the defaults read posts stk_consumption item ids
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/ConsumptionConfirmDialog.svelte#L100

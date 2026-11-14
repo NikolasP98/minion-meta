@@ -38,7 +38,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2081
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2191` — a drag cannot cross the runway's visible edge — there is no
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2191
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3012` — a drop reclassifies only for a custom column (its
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3012
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3093` — the agenda lists every booking in bookings — the whole
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3093
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3024` — a drop reclassifies only for a custom column (its
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3024
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3105` — the agenda lists every booking in bookings — the whole
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3105
