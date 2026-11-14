@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T06:20:25.245Z",
+	"generatedAt": "2026-11-14T06:48:00.097Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4344,38 +4344,6 @@
 			"scoredAt": "2026-11-09T14:39:28.662Z"
 		},
 		{
-			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The proposal documents a measured production cost problem (4k tokens/turn, misrouted searches) with a fully specified AS-IS/TO-BE/DELTA including file paths and named tests.",
-			"evidence": [
-				"measured envelope cost of ~16,096 chars (~4,000 tokens) per turn on production",
-				"delta table lists concrete files and corresponding test files per change"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T06:17:37.071Z"
-		},
-		{
 			"key": "proposal:2026-10-12-hub-onboarding-org-user",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4914,6 +4882,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:56:31.400Z"
+		},
+		{
+			"key": "issue:minion-meta#1029",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1029 [monitor:unstick] rank job b6892a8b (minion-meta): hard crash validating issue #485 relatedKeys",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1029",
+			"sourceUpdatedAt": "2026-11-14T05:18:26Z",
+			"sourceFingerprint": "9768fedecdd20b289432cacb3a6c3f73ee6af60a440cdf219932079f59a2f444",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:minion-meta#1028"
+			],
+			"rationale": "A hard crash in validateAgentScore with an exact file/line and root cause will keep breaking rank jobs on every retry until issue #485's relatedKeys data or the validator is fixed.",
+			"evidence": [
+				"'uncaught exception in scripts/ranking-contract.mjs:99 validateAgentScore'",
+				"'issue:minion-meta#485.relatedKeys contains an unavailable key'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T06:47:59.891Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -5612,6 +5614,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T05:47:12.028Z"
+		},
+		{
+			"key": "proposal:2026-10-12-hub-assistant-jev-context-router",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub assistant — JEV turn router, open ends and threshold calibration",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-12-hub-assistant-jev-context-router.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "5833854f579cebaf0d513ac4177ac2fe3669d6d7ce7b47374de83c194e98f29e",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-16-hub-sandbox-builder-context-engineering"
+			],
+			"rationale": "A measured, test-backed fix cuts a ~4,000-token envelope sent on every hub assistant turn in production, with a concrete DELTA table and named test files as evidence.",
+			"evidence": [
+				"'≈16,096 chars ≈ 4,000 tokens... every turn, including thanks!'",
+				"DELTA lists turn-router.test.ts, assistant-router.service.test.ts (15 cases), live probe"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T06:47:59.891Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-0173b6586d14",
@@ -14081,6 +14117,40 @@
 			"scoredAt": "2026-11-11T09:18:13.880Z"
 		},
 		{
+			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Sandbox builder — programmatic context engineering (defaults, lint-as-feedback, JEV style cards, pi context pruning)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-16-hub-sandbox-builder-context-engineering.md",
+			"sourceUpdatedAt": "2026-10-16",
+			"sourceFingerprint": "95afc3b5d30009d8f2f8f2eba3f273ad62bd8aa4e2d504eb510b4daa1f6688bf",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-10-12-hub-assistant-jev-context-router"
+			],
+			"rationale": "The AS-IS diagnosis (ugly chart defaults, unchecked dataset guesses, transcript bloat) is concrete but the four proposed mechanisms are still design rationale with no cited tests or built code yet.",
+			"evidence": [
+				"'catch (e) {} ... drew zeros'",
+				"S1 description truncated mid-sentence with no implementation evidence cited"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T06:47:59.891Z"
+		},
+		{
 			"key": "proposal:2026-10-22-agent-decision-and-proactivity-experiments",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17568,38 +17638,6 @@
 			"scoredAt": "2026-11-12T10:19:03.049Z"
 		},
 		{
-			"key": "proposal:2026-10-16-hub-sandbox-builder-context-engineering",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Sandbox builder — programmatic context engineering (defaults, lint-as-feedback, JEV style cards, pi context pruning)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-16-hub-sandbox-builder-context-engineering.md",
-			"sourceUpdatedAt": "2026-10-16",
-			"sourceFingerprint": "95afc3b5d30009d8f2f8f2eba3f273ad62bd8aa4e2d504eb510b4daa1f6688bf",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Owner-directed, concretely scoped into four bounded mechanisms with specific files, though less proven via tests than the sibling JEV router proposal.",
-			"evidence": [
-				"owner verbatim ask specifies scope and explicitly warns against over-engineering",
-				"AS-IS section cites exact files/lines (bridge.ts:98-109, pruner.ts:137, tools.ts:391-408)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T06:17:37.071Z"
-		},
-		{
 			"key": "proposal:2026-11-06-agent-transcript-evals-and-runtime-improvements",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18740,6 +18778,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:44:33.255Z"
+		},
+		{
+			"key": "issue:minion-meta#1028",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1028 [monitor:unstick] rank job 3f84d596 (minion-meta): provider fallback exhausted at batch 13",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1028",
+			"sourceUpdatedAt": "2026-11-14T05:18:25Z",
+			"sourceFingerprint": "6de4eb22797e634e00c8f6a507b7f9255775854700ece34ff921e74384ce5ed9",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"issue:minion-meta#1029"
+			],
+			"rationale": "A recurring transient provider-fallback failure in the rank job has a clear, bounded fix (add a host-classifier signature) already named in the report.",
+			"evidence": [
+				"'this exact failure text now recurs across 3 runs in ~2.5h'",
+				"'worth adding a host-classifier signature for bounded providers exhausted / invalid JSON'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T06:47:59.891Z"
 		},
 		{
 			"key": "issue:minion-meta#321",
@@ -24944,10 +25016,10 @@
 			"kind": "issue",
 			"stage": "proposal",
 			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 114688 new commit(s) available",
+			"title": "#264 Upstream sync: 115607 new commit(s) available",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-11-11T06:14:54Z",
-			"sourceFingerprint": "9671ad5449ed908f71b4bf9e9542e461cfc3751666f3edde3972464b27c5d0d4",
+			"sourceUpdatedAt": "2026-11-14T06:14:04Z",
+			"sourceFingerprint": "032c1e7c9f1e81c25a9ebe2446c0e77edafbbc1dcac050172f3a0af7600bc595",
 			"score": 38,
 			"band": "low",
 			"axes": {
@@ -24957,19 +25029,19 @@
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 1
+				"implementation": 2
 			},
 			"confidence": 4,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "An automated sync tracker listing 114,688 unrelated upstream commits is too large and unscoped to execute as a single actionable unit.",
+			"rationale": "A single issue dumping 115,607 raw upstream commits is not a verifiable unit of work and needs an automated sync/merge process instead of manual triage.",
 			"evidence": [
-				"Title states 114688 new commit(s) available",
-				"Summary is a raw commit dump spanning dozens of unrelated fixes/features with no defined subset"
+				"title: '115607 new commit(s) available'",
+				"body is a raw commit log with no scope or outcome stated"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T06:18:08.985Z"
+			"scoredAt": "2026-11-14T06:47:59.891Z"
 		},
 		{
 			"key": "issue:minion-meta#1011",
@@ -28729,6 +28801,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T08:18:29.459Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A clearly scoped, approved handoff item asks for one bounded integration test covering scheduling merge-target wiring that unit tests don't exercise.",
+			"evidence": [
+				"'TODO(handoff): the PREDICATE is covered here, the WIRING is not — no test'",
+				"'a single happy-path integration test + one edge case ... covers the handoff'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T06:47:59.891Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-58cff194d6b6",
@@ -33171,38 +33275,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T13:48:19.748Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/merge-target.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-551c45cff1cc.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "c567a75b7ac37a07e20b842f045b416da80854e44b23d6868d2b6042125548e4",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, narrowly-scoped handoff item with a clear definition of done requiring one integration test for an untested wiring path.",
-			"evidence": [
-				"status is approved with explicit definition of done",
-				"diagnosis names exact file and the untested integration gap (merge-target.test.ts)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T06:17:37.071Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-574186478082",
