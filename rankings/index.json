@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T18:17:17.419Z",
+	"generatedAt": "2026-11-14T18:47:15.087Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3639,6 +3639,41 @@
 			"scoredAt": "2026-11-12T04:48:06.046Z"
 		},
 		{
+			"key": "pr:minion_hub#669",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#669 fix(pos): a treatment's supplies leave stock once, when the appointment is completed",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/669",
+			"sourceUpdatedAt": "2026-11-14T18:35:08Z",
+			"sourceFingerprint": "f761c405ef19fac07b41d1efd9022a998313f4253f5649b4ac9f250cc4c2866f",
+			"score": 67,
+			"band": "medium",
+			"axes": {
+				"criticality": 8,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1036"
+			],
+			"rationale": "Fixes a live double-deduction/missed-deduction stock bug affecting nine real FACES sales, with tests passing and scope clearly bounded to slice S1.",
+			"evidence": [
+				"nine FACES sales affected, POS-2026-00113 and POS-2026-00110 cited",
+				"883 tests pass across pos/scheduling/stock suites",
+				"repair script and other slices explicitly deferred"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T18:47:14.866Z"
+		},
+		{
 			"key": "proposal:2026-10-03-notification-recon",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3937,6 +3972,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:48:30.364Z"
+		},
+		{
+			"key": "pr:minion-meta#1036",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1036 spec(120): till corrections — stock follows the appointment, products on the agenda, product swap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1036",
+			"sourceUpdatedAt": "2026-11-14T18:45:40Z",
+			"sourceFingerprint": "90b2d507ef0132771f7b5d16ed95a1bae75ee8ae11ad9fc818d524b1634c123e",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#669"
+			],
+			"rationale": "Spec-only PR defining the five-slice till-corrections plan that gates the data-sensitive repair (S2) behind owner approval, directly supporting the in-flight S1 fix.",
+			"evidence": [
+				"tagged data because S2 changes production stock, requiring owner approval before merge",
+				"no code in this PR; evidence drawn from read-only prod queries",
+				"five slices scoped against minion_hub master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T18:47:14.866Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-309dbe0",
@@ -11549,38 +11619,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T17:18:04.627Z"
-		},
-		{
-			"key": "pr:minion-meta#1036",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1036 spec(120): till corrections — stock follows the appointment, products on the agenda, product swap",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1036",
-			"sourceUpdatedAt": "2026-11-14T15:32:58Z",
-			"sourceFingerprint": "664831760042f1144a4bd180358b5d85a461f51850397cd690675becc84f9d1a",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-scoped spec for a confirmed double stock-issuance bug and two POS/agenda gaps, but it is spec-only with no code and one slice tagged data pending owner approval.",
-			"evidence": [
-				"\"a treatment sold without an appointment issues its supplies at the sale and again when the appointment is completed. 12 lines on 9 FACES sales\"",
-				"\"Tagged data (S2 changes production stock): owner approves the spec before code\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:48:25.830Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
