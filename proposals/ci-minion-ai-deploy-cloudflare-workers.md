@@ -53,13 +53,3 @@ Deploy Workers	UNKNOWN STEP	2026-11-13T23:05:17.0635988Z [command]/usr/bin/git s
 Deploy Workers	UNKNOWN STEP	2026-11-13T23:05:17.1065493Z Cleaning up orphan processes
 Deploy Workers	UNKNOWN STEP	2026-11-13T23:05:17.1384957Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
 ```
-
-## Diagnosis (auto)
-
-**Root cause**: Wrangler deploy requires Node.js v22.12.0+, but the GitHub Actions runner has v20.20.2.
-
-**Location**: `.github/workflows/` file with the "Deploy Workers" step (using `actions/setup-node@v4`).
-
-**Fix**: Add `node-version: '22'` to the `actions/setup-node` action, or specify the exact version v22.12.0+. The workflow is currently defaulting to deprecated Node 20.
-
-**Also**: Empty `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_API_TOKEN` env vars suggest secrets may not be configured in the repo, but the version mismatch is the blocking error.
