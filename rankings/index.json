@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T21:57:59.256Z",
+	"generatedAt": "2026-11-14T22:17:35.102Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7355,42 +7355,6 @@
 			"scoredAt": "2026-11-14T10:48:43.276Z"
 		},
 		{
-			"key": "pr:minion-meta#1036",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1036 spec(120): till corrections — stock follows the appointment, products on the agenda, product swap",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1036",
-			"sourceUpdatedAt": "2026-11-14T19:11:03Z",
-			"sourceFingerprint": "0b2c7e49d9924a1033b2029b410a38f73653f0a3abc68e7faf5e2e40adf2112c",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#670",
-				"pr:minion_hub#671"
-			],
-			"rationale": "Planning artifact behind already-in-progress FACES till corrections; owner approval of this spec is the explicit gate for the production-affecting repair.",
-			"evidence": [
-				"Tagged data: S2 changes production stock, owner approves spec before code/merge/repair",
-				"Five slices against minion_hub master",
-				"Slices S2 and S4 already implemented as PR #670 and #671"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12532,6 +12496,42 @@
 			"scoredAt": "2026-11-10T17:18:04.627Z"
 		},
 		{
+			"key": "pr:minion-meta#1036",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1036 spec(120): till corrections — stock follows the appointment, products on the agenda, product swap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1036",
+			"sourceUpdatedAt": "2026-11-14T22:03:18Z",
+			"sourceFingerprint": "2e5bbbcfe2ce00cfb83f21803f39be101e2be103362b9c7ae5adc1d4fdd1d0e1",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#671",
+				"pr:minion_hub#674"
+			],
+			"rationale": "The gating spec for the till-corrections slice set, already driving two in-flight implementation PRs, needs owner approval to keep the pipeline moving.",
+			"evidence": [
+				"defines 5 slices against minion_hub master including S4/S5 implemented in #671 and #674",
+				"tags S2 as data-affecting, requiring owner approval before code/merge/run",
+				"no code in this PR; evidence drawn from read-only prod queries"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T22:17:34.849Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1637616237",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14095,6 +14095,78 @@
 			"scoredAt": "2026-11-14T10:48:43.276Z"
 		},
 		{
+			"key": "pr:minion_hub#671",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
+			"sourceUpdatedAt": "2026-11-14T22:06:06Z",
+			"sourceFingerprint": "ce698c7099f1f1de39c6d7cb884e67652fb6610cbeb26e63342f18a9505db932",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#674",
+				"pr:minion-meta#1036"
+			],
+			"rationale": "A scoped, well-tested server-side fix for a real till-correction pain with documented refusal paths, ready to land behind its spec.",
+			"evidence": [
+				"97 tests pass in pos.tickets.test.ts plus 11 new swap tests and 9 route tests",
+				"stacked on #670, spec NikolasP98/minion-meta#1036 slice S4",
+				"not run against a database; swap not shown in sale history"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T22:17:34.849Z"
+		},
+		{
+			"key": "pr:minion_hub#674",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
+			"sourceUpdatedAt": "2026-11-14T22:06:06Z",
+			"sourceFingerprint": "579dab502c4ca5da3ddbd3e44e8f262756207dcaf5b4e82f510f4a06ddc963ff",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#671",
+				"pr:minion-meta#1036"
+			],
+			"rationale": "Completes the till-correction flow for cases the swap alone can't fix, with solid test coverage and post-review guard fixes already applied.",
+			"evidence": [
+				"57 tests pass across sell-charge-handoff v4, sell-session, and calendar-context-menu cases",
+				"4 passing page.swap.mounted.test.ts cases cover the void-and-recharge flow",
+				"EGM stage 9 review fixes already incorporated (package/instalment guard, pre-void catalogue check)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T22:17:34.849Z"
+		},
+		{
 			"key": "pr:minion-meta#1008",
 			"kind": "pr",
 			"stage": "development",
@@ -15385,39 +15457,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:48:30.364Z"
-		},
-		{
-			"key": "pr:minion_hub#674",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
-			"sourceUpdatedAt": "2026-11-14T21:51:36Z",
-			"sourceFingerprint": "7680941ebda8ca52ecf93842844c1319e37e8448428f9dc068a4a59cd3089084",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Clear AS-IS/TO-BE delta with passing unit/mount tests, though it is stacked on an unmerged PR and lacks end-to-end DB verification.",
-			"evidence": [
-				"57 tests pass plus 4 page.swap.mounted.test.ts cases",
-				"stacked on #671; retarget to master after #671 merges",
-				"Not done: no end-to-end run against a database"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:57:59.031Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -17679,42 +17718,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:48:30.364Z"
-		},
-		{
-			"key": "pr:minion_hub#671",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
-			"sourceUpdatedAt": "2026-11-14T21:42:49Z",
-			"sourceFingerprint": "c637a97745680b66cea44257021b57c0bf9710adea4c62f51e2ad38343014425",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#670",
-				"pr:minion_hub#673"
-			],
-			"rationale": "Useful correction workflow for a recurring reception mistake, well-scoped with explicit refusal codes, but not database-verified and has known test flakiness in batch runs.",
-			"evidence": [
-				"97 tests pass, 11 new for the swap",
-				"5 tests fail only when run in the same batch, pass alone",
-				"not run against a database; known stock-shortcut limit noted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -46710,6 +46713,39 @@
 			"scoredAt": "2026-11-14T06:06:54.639Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-14",
+			"sourceFingerprint": "b650d89ba899221679e8d877a1d89b52610b3fcaa78c61cd9d6d24c011b04868",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated sweep bundling roughly 18 unrelated quoted text fragments from a data file into one proposal, with no coherent single scope to execute.",
+			"evidence": [
+				"markers span unrelated topics: capability gating, accrual counting, click-vs-submit timing, RUC verification cutoffs",
+				"all markers point at lines inside rankings/index.json, a generated data file rather than source code with real TODO comments",
+				"definition of done depends on the sweep itself detecting zero remaining markers, not on a defined deliverable"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T22:17:34.849Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2278437967",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -48825,39 +48861,6 @@
 			"scoredAt": "2026-11-14T06:06:54.639Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "2bf5171f75e625eac0d2cb51cff3d68ca0c275f29b43c509109430146e9542ef",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 0
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers point at line numbers inside rankings/index.json, a generated data artifact rather than source code, so this sweep result is not actionable work.",
-			"evidence": [
-				"all markers cite rankings/index.json lines, not application source files",
-				"marker text matches ranking-evidence phrasing rather than code TODOs",
-				"no code location or build/test evidence given"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:48:33.163Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-3236367837",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -49140,37 +49143,6 @@
 			"recommendation": "prune",
 			"relatedKeys": [],
 			"rationale": "An in-progress CI run is an automated status artifact, not an actionable goal.",
-			"evidence": [
-				"stage testing, status in_progress, push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:57:59.031Z"
-		},
-		{
-			"key": "run:minion_hub#43645310976",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43645310976",
-			"sourceUpdatedAt": "2026-11-14T21:55:05Z",
-			"sourceFingerprint": "3eac987a64d53546a7f4e99fe9644b34df011e046f19abe9a48b7a7d458951ff",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress storybook-deploy CI run is an automated status artifact, not an actionable goal.",
 			"evidence": [
 				"stage testing, status in_progress, push on master"
 			],
