@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T21:48:33.384Z",
+	"generatedAt": "2026-11-14T21:57:59.256Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -969,41 +969,6 @@
 			"scoredAt": "2026-08-31T07:46:38.665Z"
 		},
 		{
-			"key": "pr:minion_hub#672",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#672 fix(assistant): a role that sees masked client details can't use rescheduling to guess them",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/672",
-			"sourceUpdatedAt": "2026-11-14T21:20:44Z",
-			"sourceFingerprint": "2b2ebd2f6aab29215e975ad0a6b5844eaf8d98044282612e3f256cf4fb00ccb5",
-			"score": 80,
-			"band": "high",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"spec:2026-11-14-hub-assistant-reschedule-masked-pii-oracle-spec"
-			],
-			"rationale": "Closes a confirmed PII-guessing oracle flagged by automated security review, with a precise spec and full passing test suite, already open for review.",
-			"evidence": [
-				"status open (not draft), 38/38 new tests pass",
-				"403 added before any booking read for masked principals",
-				"spec NikolasP98/minion-meta#1037 referenced"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:48:33.163Z"
-		},
-		{
 			"key": "proposal:2026-10-12-hub-micro-debloat",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1948,6 +1913,38 @@
 			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
+			"key": "pr:minion_hub#670",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#670 fix(stock): give back supplies that prepaid treatments removed at the sale",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/670",
+			"sourceUpdatedAt": "2026-11-14T21:50:11Z",
+			"sourceFingerprint": "587956ddf6b757823f9e8453d7f4aa91495fb3ca48024a864292d846085351f9",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A scoped repair script with a verified production preview shows real stock drift across 13 sales and 6 items that needs correction.",
+			"evidence": [
+				"preview on production lists 13 sales with negative stock differences across 6 items",
+				"repair-service-sale-stock.ts supports preview and --apply with exit-code guard"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:57:59.031Z"
+		},
+		{
 			"key": "proposal:ci-minion-ai-deploy-cloudflare-workers",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2847,42 +2844,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
-		},
-		{
-			"key": "pr:minion_hub#670",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#670 fix(stock): give back supplies that prepaid treatments removed at the sale",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/670",
-			"sourceUpdatedAt": "2026-11-14T21:22:53Z",
-			"sourceFingerprint": "916dd54e760b6848ffa5d8a641d4283bb210c887388a092c36cecefeb7ff9033",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#669",
-				"pr:minion_hub#671"
-			],
-			"rationale": "Repairs real production stock shortfall caused by the bug #669 fixes, with a read-only preview already run against production data.",
-			"evidence": [
-				"Preview on production lists 13 sales and totals short by item",
-				"--apply gated, exits 1 if anything still planned",
-				"stacked on #669, reused by #671"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -8736,6 +8697,38 @@
 			"scoredAt": "2026-11-14T12:17:27.451Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "9cbbdebbbd1eb4be1eec75e10c3533391b97ac36e4e147f2013210f4fd8502cc",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved finding with a precise, bounded fix (add missing DROP COLUMN/CONSTRAINT DDL or revert) addressing concrete schema drift risk.",
+			"evidence": [
+				"status approved",
+				"marker names exact missing DDL: drop stk_items.fin_product_id + stk_items_org_fin_product_uniq"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:57:59.031Z"
+		},
+		{
 			"key": "spec:2026-10-03-gw022a-config-recovery-factory-amendment",
 			"kind": "spec",
 			"stage": "spec",
@@ -8986,21 +8979,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 4,
+				"implementation": 3
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "Concrete multi-file findings include runtime-crash-risk unchecked-access bugs and masked errors across many hub source files, with clear file:line specificity.",
+			"rationale": "The scan bundles over a dozen unrelated empty-catch and unchecked-access findings across many files into one proposal, which is too heterogeneous to execute as a single goal.",
 			"evidence": [
-				"high: c.tag_ids spread without null check throws at runtime in crm/customers/+page.svelte:61",
-				"high: b.startTime passed without null check crashes fmtBooking() in [contactId]/+page.svelte:891",
-				"status: draft, commit range e98422b..25e2bb7"
+				"15+ findings spanning upload.ts, BookingEditForm.svelte, customers +page.svelte, and multiple integration test files",
+				"findings mix severities (high/medium) and unrelated root causes"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T21:47:33.364Z"
+			"scoredAt": "2026-11-14T21:57:59.031Z"
 		},
 		{
 			"key": "spec:2026-09-02-hub-team-hr-module-spec",
@@ -10178,39 +10170,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:16:14.756Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "9cbbdebbbd1eb4be1eec75e10c3533391b97ac36e4e147f2013210f4fd8502cc",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved migration intended to retire a column is missing its actual DROP statements, leaving schema drift between stated intent and live database state.",
-			"evidence": [
-				"status: approved",
-				"migration file exists but DROP COLUMN/DROP CONSTRAINT statements are missing",
-				"fix direction specifies verifying code usage before completing or reverting the migration"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T21:47:33.364Z"
 		},
 		{
 			"key": "proposal:2026-09-02-gateway-client-tools-webmcp-bridge",
@@ -15426,6 +15385,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:48:30.364Z"
+		},
+		{
+			"key": "pr:minion_hub#674",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
+			"sourceUpdatedAt": "2026-11-14T21:51:36Z",
+			"sourceFingerprint": "7680941ebda8ca52ecf93842844c1319e37e8448428f9dc068a4a59cd3089084",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clear AS-IS/TO-BE delta with passing unit/mount tests, though it is stacked on an unmerged PR and lacks end-to-end DB verification.",
+			"evidence": [
+				"57 tests pass plus 4 page.swap.mounted.test.ts cases",
+				"stacked on #671; retarget to master after #671 merges",
+				"Not done: no end-to-end run against a database"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:57:59.031Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-updateserver-tenant-scope",
@@ -26673,6 +26665,38 @@
 			"scoredAt": "2026-11-10T03:47:35.463Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8c6ed5b4021d.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "fbf0b49f7defde96baf86e012b61f2ef19445c9effe36ad308bda37d4cb6daf1",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The finding itself is a scoped UI drag bug, but the reconciliation note flags it as a likely duplicate of another ledger needing human adjudication before work proceeds.",
+			"evidence": [
+				"reconciliation note flags possible duplicate of handoff-minion-hub-1194287278",
+				"status is review, not approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:57:59.031Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9cd4a3e7f998",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30063,38 +30087,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T10:49:43.766Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8c6ed5b4021d.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "fbf0b49f7defde96baf86e012b61f2ef19445c9effe36ad308bda37d4cb6daf1",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A scoped UI drag bug with a clear diagnosis, but the reconciliation note flags it as a likely duplicate of a ledger proposal not present in this batch, so dedup should be resolved before action.",
-			"evidence": [
-				"Reconciliation note 2026-10-10: possible duplicate of handoff-minion-hub-1194287278",
-				"status: review, flagged rather than merged pending human decision"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T21:47:33.364Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f91a16126171",
@@ -49123,6 +49115,68 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
+		},
+		{
+			"key": "run:minion_hub#43645310970",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43645310970",
+			"sourceUpdatedAt": "2026-11-14T21:55:05Z",
+			"sourceFingerprint": "ad7db623f881b501d9fba9b998d4d6c72959ffc7187d3855badca25f71440cb2",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run is an automated status artifact, not an actionable goal.",
+			"evidence": [
+				"stage testing, status in_progress, push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:57:59.031Z"
+		},
+		{
+			"key": "run:minion_hub#43645310976",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43645310976",
+			"sourceUpdatedAt": "2026-11-14T21:55:05Z",
+			"sourceFingerprint": "3eac987a64d53546a7f4e99fe9644b34df011e046f19abe9a48b7a7d458951ff",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress storybook-deploy CI run is an automated status artifact, not an actionable goal.",
+			"evidence": [
+				"stage testing, status in_progress, push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:57:59.031Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
