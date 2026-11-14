@@ -116,6 +116,18 @@ None. Each slice is self-contained; S2 and S4 share one function, created in S2.
 - The component cannot be mounted in tests (`BookingCalendar.svelte:2086`). Proof = `productsForVisit` unit test plus a browser check.
 - Owner rule (FigCraft demo first): T023/T024 wait for the owner to validate the as-is/to-be demo. T020–T022 and T025 do not.
 
+**S4** (EGM stage 9, 2026-11-14)
+- Order: every refusal is checked before the line changes. The sale's stock is previewed unchanged first (`planRepost` with no allowed item; any difference is `stock_drift`). If the rebuild still fails after the line changed (a void or another correction won the race), the line and the visit's product row are put back and the error is returned.
+- A sale with no stock movement: when neither product resolves to a stock item, the line is swapped and the rebuild is skipped; when either does, the swap is refused `stock_drift`.
+- `negative_stock` is a preflight on the replacement's items (`checkStockShortfalls`), skipped when there is no default warehouse. An item both products consume is not netted out.
+- `sched_booking_products`: the row moves to the new product; when the visit already carries it, the old row is deleted (unique per visit).
+- The replacement must be active and `kind = 'product'`. A line with modifiers is refused `stock_drift`.
+- "Document" for the guard: status other than `error` and environment other than `beta`. `assertTicketMutable` is unchanged; the caller computes the flag.
+- Audit: `recordAuditInTx`, refType `pos_ticket`, refId the sale, field `line.<lineId>.product`.
+- The error body carries code and message only; the contract's extra fields are not sent.
+- Statuses: `period_locked` 423; `line_changed`, `line_not_product`, `price_differs`, `stock_drift`, `no_stock_entry`, `negative_stock` 409.
+- UI (T031) waits for the owner's decision on the FigCraft demo. It also needs the stock warning and a link to the stock movement on the sale page, which exist only on the sell page today.
+
 ## Phase 8: Polish
 
 - [ ] T041 After each merge, verify prod from `origin/master` and the commit status `Vercel: success`, then run the slice's quickstart check as the QA user
