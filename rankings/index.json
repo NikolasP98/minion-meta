@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T15:18:01.527Z",
+	"generatedAt": "2026-11-14T15:48:26.029Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2777,6 +2777,108 @@
 			"scoredAt": "2026-11-14T05:18:09.117Z"
 		},
 		{
+			"key": "pr:minion_hub#664",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#664 fix(appointments): actions wait for the data they act on",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/664",
+			"sourceUpdatedAt": "2026-11-14T15:23:42Z",
+			"sourceFingerprint": "2ee0f05620d1feea140c79037bcfd4fd02330b3708bd39aaeedaf03d1e293911",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#662"
+			],
+			"rationale": "Fixes a concrete user-facing race where fast clicking between appointments could cancel/complete the wrong one, is well tested, and is the prerequisite slice unblocking #662.",
+			"evidence": [
+				"\"a fast click from appointment A to B could cancel or complete A, and a late reload of A could replace B on screen\"",
+				"132 of 133 tests pass, unrelated timeout isolated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T15:48:25.830Z"
+		},
+		{
+			"key": "pr:minion_hub#665",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#665 fix(pos): a shift closes once",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/665",
+			"sourceUpdatedAt": "2026-11-14T15:25:38Z",
+			"sourceFingerprint": "01fad48ed9cd22a84a6908fe9c9c59c0739257b929462d9e6505fad2634c273f",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#667"
+			],
+			"rationale": "Prevents a shift from closing twice or recording wrong totals under concurrency, a financial data-integrity fix with strong SQL-integration evidence.",
+			"evidence": [
+				"\"A shift could be closed twice (two tabs, a double click)...\"",
+				"30/30 SQL integration tests pass on disposable Postgres"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T15:48:25.830Z"
+		},
+		{
+			"key": "pr:minion_hub#667",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#667 fix(pos): a repeated charge returns the first ticket",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/667",
+			"sourceUpdatedAt": "2026-11-14T15:34:31Z",
+			"sourceFingerprint": "93ab5c05469dd29ecec984623d78a6f7b34a584c3ed2c8ac686b078c2403624c",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#665"
+			],
+			"rationale": "Prevents double-charging customers on a lost network reply by returning the original ticket on replay, well tested though explicitly missing SQL-integration coverage and stacked after #665.",
+			"evidence": [
+				"\"the till sold the cart a second time. Now the second press returns the first ticket\"",
+				"\"There is no SQL integration test for the replay\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T15:48:25.830Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4920,6 +5022,40 @@
 			"scoredAt": "2026-11-14T06:47:59.891Z"
 		},
 		{
+			"key": "pr:minion_hub#668",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#668 fix(pos): one live tax document per ticket",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/668",
+			"sourceUpdatedAt": "2026-11-14T15:37:45Z",
+			"sourceFingerprint": "dd14a72b13d2ad4cd4994053b770471a04f78a71d3077253194f2c3c231faed6",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#666"
+			],
+			"rationale": "Closes a race that could create two live tax documents per sale (legal/compliance risk) but requires an owner-run production migration and check query before merge.",
+			"evidence": [
+				"\"Data gate: this PR contains a migration that the OWNER must apply\"",
+				"\"could create two live tax documents for one sale, each with its own number\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T15:48:25.830Z"
+		},
+		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -6070,8 +6206,8 @@
 			"repo": "minion_hub",
 			"title": "#662 fix(scheduling): closed appointments stay closed and free their paid service",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/662",
-			"sourceUpdatedAt": "2026-11-14T15:12:25Z",
-			"sourceFingerprint": "c561c2691b893c7749bedf2db505a2159658606c2f8da101b66c9fc5db1613ec",
+			"sourceUpdatedAt": "2026-11-14T15:16:25Z",
+			"sourceFingerprint": "15235a938ed0bb85575811c731fe93958f017e629205da27705744630512e312",
 			"score": 60,
 			"band": "medium",
 			"axes": {
@@ -6080,22 +6216,54 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 7,
+			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion-meta#1035"
+				"pr:minion_hub#664"
 			],
-			"rationale": "Introduces a user-facing behavior change (closed appointments become permanently locked) that the PR itself flags as needing owner approval, and depends on an unmerged prerequisite PR.",
+			"rationale": "Closes a real data-integrity gap (closed appointments reopenable, no-shows wrongly freeing paid service) with tests, but is explicitly sequenced after slice 1.",
 			"evidence": [
-				"PR text lists two product decisions for the owner to approve",
-				"PR states it must merge after the unmerged slice 1 PR"
+				"\"Merge after the slice 1 PR... the drawer guard from slice 1 has to be live first\"",
+				"\"before this PR the status board could drag a closed card back to a live column\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:18:01.297Z"
+			"scoredAt": "2026-11-14T15:48:25.830Z"
+		},
+		{
+			"key": "pr:minion_hub#666",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#666 fix(hub): a send that died no longer stays in progress",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/666",
+			"sourceUpdatedAt": "2026-11-14T15:33:31Z",
+			"sourceFingerprint": "a541ec0c6798afe5b66792253237473a42e5f1bc8f7fe2e5dbb589b4d9f5ec63",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Adds a sweep to recover reminders, follow-ups, and tax emissions permanently stuck in-progress after a crash/redeploy, with cross-system tests passing.",
+			"evidence": [
+				"\"the row stays in progress forever: left out of activity counts, excluded from retry, ticket can no longer be corrected\"",
+				"72/72 unit tests, 11/11 SQL integration tests pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T15:48:25.830Z"
 		},
 		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
@@ -11319,6 +11487,38 @@
 			"scoredAt": "2026-11-09T14:36:20.591Z"
 		},
 		{
+			"key": "pr:minion_hub#663",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#663 fix(hub): decisions apply once and the assistant follows workflow rules",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/663",
+			"sourceUpdatedAt": "2026-11-14T15:19:33Z",
+			"sourceFingerprint": "037f143d5d1136efb4e16086e5867e5d383408f583367322b06ac7de2d2d778c",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Fixes real double-decision races in join/leave approvals with passing tests, though the assistant-workflow part is currently inert since no workflow is configured in production.",
+			"evidence": [
+				"\"Production has no workflow defined (workflow_defs is empty, read 2026-11-14), so this changes nothing for anyone today\"",
+				"deny route now answers 409 already_decided; 53/53 tests pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T15:48:25.830Z"
+		},
+		{
 			"key": "pr:minion-base#45",
 			"kind": "pr",
 			"stage": "development",
@@ -11349,6 +11549,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T17:18:04.627Z"
+		},
+		{
+			"key": "pr:minion-meta#1036",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1036 spec(120): till corrections — stock follows the appointment, products on the agenda, product swap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1036",
+			"sourceUpdatedAt": "2026-11-14T15:32:58Z",
+			"sourceFingerprint": "664831760042f1144a4bd180358b5d85a461f51850397cd690675becc84f9d1a",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-scoped spec for a confirmed double stock-issuance bug and two POS/agenda gaps, but it is spec-only with no code and one slice tagged data pending owner approval.",
+			"evidence": [
+				"\"a treatment sold without an appointment issues its supplies at the sale and again when the appointment is completed. 12 lines on 9 FACES sales\"",
+				"\"Tagged data (S2 changes production stock): owner approves the spec before code\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T15:48:25.830Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
