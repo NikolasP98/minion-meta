@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T20:55:41.620Z",
+	"generatedAt": "2026-11-14T21:17:36.555Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6136,7 +6136,7 @@
 			"title": "Handoff marker — src/routes/(app)/pos/sell/PageBody.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-207753540.md",
 			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "3a69e45bb4a10e6678d52c139a74083314fe3041300192a1eef91619a37cfa31",
+			"sourceFingerprint": "be318f926f11401317931d85153e1f7e72dc0d5c6d0e40926d46e0a6326aa648",
 			"score": 60,
 			"band": "medium",
 			"axes": {
@@ -6145,21 +6145,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 4
+				"specification": 5,
+				"implementation": 5
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "POS sell flow has three distinct markers touching timing of till draws and a null product id post, but the quoted fragments are incomplete sentences that need scoping before paid work.",
+			"rationale": "Markers describe real POS financial-correctness bugs (null finProductId posted, till-draw timing) touching every sell transaction, but the fix scope per marker isn't fully specified.",
 			"evidence": [
-				"till-side draw happens on CLICK, not on submit",
-				"synthetic line posts finProductId: null",
-				"cites HS-011 in hub-gateway-production-readiness-recon.md"
+				"PageBody.svelte:526 'synthetic line posts finProductId: null'",
+				"PageBody.svelte:471 'till-side draw happens on CLICK, not on submit'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T06:04:15.775Z"
+			"scoredAt": "2026-11-14T21:17:36.314Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3654382814",
@@ -7937,39 +7936,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:04:15.775Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-2557316487",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2557316487.md",
-			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "8e2cb00e753db5f7dafe01baea66e1dcd4a6edac422d3dbafd6072fb36d29ab4",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Booking status handler has an unresolved two-transaction race and missing all-or-nothing status change, a real data-integrity risk but underspecified for direct execution.",
-			"evidence": [
-				"read and moveGroup are two transactions, so a visit",
-				"an all-or-nothing variant needs setBookingStatus",
-				"status change persistence marker at line 367"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T06:05:08.720Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-4000616153",
@@ -11584,6 +11550,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:04:15.775Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-2557316487",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/api/scheduling/bookings/_handlers.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2557316487.md",
+			"sourceUpdatedAt": "2026-11-14",
+			"sourceFingerprint": "99646ac251ad4dd5b1c3b46554a9e50c20f40f571fc4d1f2fdc2254903ad0976",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Transaction-atomicity gaps in booking status/group-move handling risk inconsistent scheduling state, but each marker needs scoping before it's directly actionable.",
+			"evidence": [
+				"_handlers.ts:584 'this read and moveGroup are two transactions, so a visit...'",
+				"_handlers.ts:368 'Persist realization admission with the status change'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:17:36.314Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3693488587",
@@ -15547,38 +15545,6 @@
 			"evidence": [
 				"marker at pi-embedded-subscribe.handlers.messages.ts:253 ties review completion to signer recovery",
 				"status review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T06:01:09.056Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-648930682",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/agents/pi-embedded-runner/run.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-648930682.md",
-			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "e842a46c54f176ad3dac1d840b011d340fd69c6deda1b3628a9c1679b1d1bed9",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Two markers cover a provider-fallback budget cap and preserving server-derived sender context, both plausible correctness gaps but underspecified individually.",
-			"evidence": [
-				"marker: 'Share this budget across outer provider fallback invocations for a request-wide cap'",
-				"marker: 'Preserve server-derived resolved-user/sender context'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -21448,6 +21414,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:01:09.056Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-648930682",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/agents/pi-embedded-runner/run.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-648930682.md",
+			"sourceUpdatedAt": "2026-11-14",
+			"sourceFingerprint": "53b51258eb545bdacd0fd96ecdc9047a19e07c8d140325a510f204c5c28c5466",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Two concrete code TODOs about fallback budget sharing and context preservation, but the definition of done is generic and scope/acceptance criteria are underspecified for direct execution.",
+			"evidence": [
+				"run.ts:151 'Share this budget across outer provider fallback invocations for a request-wide cap'",
+				"run.ts:629 'Preserve server-derived resolved-user/sender context'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T21:17:36.314Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1649151658",
@@ -39249,40 +39247,6 @@
 			"scoredAt": "2026-11-10T09:18:30.436Z"
 		},
 		{
-			"key": "run:minion_hub#43639864246",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43639864246",
-			"sourceUpdatedAt": "2026-11-14T20:53:30Z",
-			"sourceFingerprint": "9e878459c2ecf2355f241b9eea561ca88fc11ba73bcc5495bffbdd652c8321bc",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion_hub#43639864283"
-			],
-			"rationale": "In-progress storybook-deploy CI run on master has no indication of failure or blocking issue yet.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:55:41.389Z"
-		},
-		{
 			"key": "run:minion_hub#43639864283",
 			"kind": "run",
 			"stage": "testing",
@@ -48734,7 +48698,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "19b14208e82e1d848bdfc0e2d30dbe202af8274cc2393d7dade1655ff35cb08d",
+			"sourceFingerprint": "31c6706ee85cd2df40916617357cf320011c707cb791f56e06fdf8af02cf3a40",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -48746,17 +48710,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Markers are quoted fragments scraped from the ranking system's own generated index file rather than genuine source TODOs, making this sweep noise rather than real work.",
+			"rationale": "The quoted 'markers' are fragments of rationale strings inside a generated ranking-output JSON file, not actual TODO(handoff) code comments, so there is no genuine open end to resolve.",
 			"evidence": [
-				"target file is rankings/index.json, the generated ranking output itself",
-				"quoted markers are disparate unrelated data snippets with no single coherent problem"
+				"file is rankings/index.json, a generated data artifact, not source code",
+				"quoted lines are prior ranking-entry rationale strings (e.g. 'a realized accrual is counted via (source, source_id, status)')"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:24:16.458Z"
+			"scoredAt": "2026-11-14T21:17:36.314Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
