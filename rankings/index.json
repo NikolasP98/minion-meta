@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T20:47:43.045Z",
+	"generatedAt": "2026-11-14T20:55:41.620Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1096,39 +1096,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:57:47.424Z"
-		},
-		{
-			"key": "pr:minion_hub#665",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#665 fix(pos): a shift closes once",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/665",
-			"sourceUpdatedAt": "2026-11-14T20:23:42Z",
-			"sourceFingerprint": "842b7424f17c25b07916a74b8d1b392e29213c4355800b93e44da18b15634cf0",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes a race condition letting a shift close twice or absorb stray payments, with locking changes and 129+30 passing tests validating financial correctness.",
-			"evidence": [
-				"two concurrent closes: exactly one wins, other gets no_open_shift",
-				"129 tests pass across 7 files; 30/30 SQL integration tests pass",
-				"shift row taken FOR UPDATE with 5s lock timeout"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:47:42.827Z"
 		},
 		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
@@ -2774,40 +2741,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
-		},
-		{
-			"key": "pr:minion_hub#667",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#667 fix(pos): a repeated charge returns the first ticket",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/667",
-			"sourceUpdatedAt": "2026-11-14T15:34:31Z",
-			"sourceFingerprint": "93ab5c05469dd29ecec984623d78a6f7b34a584c3ed2c8ac686b078c2403624c",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#665"
-			],
-			"rationale": "Prevents double-charging customers on a lost network reply by returning the original ticket on replay, well tested though explicitly missing SQL-integration coverage and stacked after #665.",
-			"evidence": [
-				"\"the till sold the cart a second time. Now the second press returns the first ticket\"",
-				"\"There is no SQL integration test for the replay\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:48:25.830Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -39316,6 +39249,74 @@
 			"scoredAt": "2026-11-10T09:18:30.436Z"
 		},
 		{
+			"key": "run:minion_hub#43639864246",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43639864246",
+			"sourceUpdatedAt": "2026-11-14T20:53:30Z",
+			"sourceFingerprint": "9e878459c2ecf2355f241b9eea561ca88fc11ba73bcc5495bffbdd652c8321bc",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"run:minion_hub#43639864283"
+			],
+			"rationale": "In-progress storybook-deploy CI run on master has no indication of failure or blocking issue yet.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:55:41.389Z"
+		},
+		{
+			"key": "run:minion_hub#43639864283",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43639864283",
+			"sourceUpdatedAt": "2026-11-14T20:53:35Z",
+			"sourceFingerprint": "8067858b842d253d77697f6a628e6611634638a84b4dd0e5ac93463285cd20a3",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"run:minion_hub#43639864246"
+			],
+			"rationale": "In-progress CI run on master is routine and not yet actionable until completion status is known.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:55:41.389Z"
+		},
+		{
 			"key": "issue:minion-meta#1014",
 			"kind": "issue",
 			"stage": "proposal",
@@ -49015,38 +49016,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
-		},
-		{
-			"key": "run:minion_hub#43637079922",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43637079922",
-			"sourceUpdatedAt": "2026-11-14T20:21:58Z",
-			"sourceFingerprint": "6febcf75aac179475dc6f8260289dc4820d9b0fc3c078b175b07c4302831d688",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run status, not a scoped unit of work to rank.",
-			"evidence": [
-				"CI run triggered by push on master",
-				"status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:24:16.458Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
