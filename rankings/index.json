@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T19:18:33.510Z",
+	"generatedAt": "2026-11-14T19:47:37.908Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3065,19 +3065,19 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 7
+				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Backups and retention pruning silently never run because the scheduler has zero call sites, a clear data-safety gap with a bounded fix.",
+			"rationale": "The hub backup/retention scheduler has zero call sites so backups silently never run, a data-loss risk with a clear two-option fix.",
 			"evidence": [
-				"startBackupScheduler() has zero call sites anywhere in the repo",
-				"no error or log indicates backups/pruning never run"
+				"startBackupScheduler() is exported but has zero call sites anywhere in the repo",
+				"backups and unified_events/chat retention pruning never run, silently, with no error or log"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T19:47:06.786Z"
+			"scoredAt": "2026-11-14T19:47:37.677Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-shared-ui-boundaries",
@@ -18027,6 +18027,39 @@
 			"scoredAt": "2026-11-09T08:48:30.364Z"
 		},
 		{
+			"key": "pr:minion_hub#671",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
+			"sourceUpdatedAt": "2026-11-14T19:19:18Z",
+			"sourceFingerprint": "b92dc7d44698e99077c325f7b53a18451b8e24ee731c41b00ef01cd377d8ecec",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-tested server-side POS line-swap PR with enumerated refusal codes is ready to move toward review/merge.",
+			"evidence": [
+				"97 tests pass in pos.tickets.test.ts plus 11 new swap tests",
+				"stacked on #670 with spec 120-till-corrections slice S4",
+				"known limits and failure races documented in code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:47:37.677Z"
+		},
+		{
 			"key": "pr:minion-meta#839",
 			"kind": "pr",
 			"stage": "development",
@@ -24360,42 +24393,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:55:16.325Z"
-		},
-		{
-			"key": "pr:minion_hub#671",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
-			"sourceUpdatedAt": "2026-11-14T19:13:39Z",
-			"sourceFingerprint": "93e37b6970c6e5c8e7269c6c0dc4b2be63ee72fb4be47bb07d7843df23cf4b56",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#670",
-				"pr:minion-meta#1036"
-			],
-			"rationale": "Useful feature with broad refusal-path coverage, but the main success path with a real stock movement is untested and the UI trigger isn't built yet.",
-			"evidence": [
-				"Not run against a database; successful swap with stock movement uncovered by its own test",
-				"UI action deferred pending owner decision",
-				"Stacked on #670"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-759780196",
@@ -48038,38 +48035,6 @@
 			"scoredAt": "2026-11-14T06:06:31.078Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-2f3c914",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 2f3c914",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-2f3c914.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "2732434b2fe9ae12690a0f1b603f5fefc3ff99d6b4f48a1fe277b7c9cf1b13fb",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A single medium-severity hardcoded-constant nit in a test file is low-consequence cleanup, not a goal worth tracking.",
-			"evidence": [
-				"medium severity hardcoded-config finding",
-				"single bullet: timeout value should be a named constant"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T19:47:06.786Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-04976b77c87e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -48815,6 +48780,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:13:10.662Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-2f3c914",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 2f3c914",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-2f3c914.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "2732434b2fe9ae12690a0f1b603f5fefc3ff99d6b4f48a1fe277b7c9cf1b13fb",
+			"score": 13,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single automated finding about a hardcoded timeout constant is a trivial, low-stakes cleanup not urgent on its own.",
+			"evidence": [
+				"medium hardcoded-config finding at server.maintenance-timer-ownership.e2e.test.ts:156",
+				"machine-generated from merge-scan commit range bb06e3a..2f3c914"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:47:37.677Z"
 		},
 		{
 			"key": "issue:minion-meta#1006",
