@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T20:21:27.684Z",
+	"generatedAt": "2026-11-14T20:24:16.675Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2140,6 +2140,39 @@
 			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
+			"key": "pr:minion_hub#665",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#665 fix(pos): a shift closes once",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/665",
+			"sourceUpdatedAt": "2026-11-14T20:20:35Z",
+			"sourceFingerprint": "78974ef3157b104a8778f238817af7df629f4caa1fb038302ffb02ad9ba957eb",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Draft PR fixes a shift-close race/financial-correctness bug with row locking, backed by passing integration and unit tests plus clean lint/type gates.",
+			"evidence": [
+				"closeShift takes FOR UPDATE lock and only closes an open shift, loser gets 409",
+				"129 unit tests + 30/30 SQL integration tests pass",
+				"bun run check shows only pre-existing unrelated env errors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:24:16.458Z"
+		},
+		{
 			"key": "pr:minion-meta#900",
 			"kind": "pr",
 			"stage": "development",
@@ -2376,41 +2409,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T06:48:52.986Z"
-		},
-		{
-			"key": "pr:minion_hub#668",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#668 fix(pos): one live tax document per ticket",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/668",
-			"sourceUpdatedAt": "2026-11-14T18:51:47Z",
-			"sourceFingerprint": "5f8e4db14735368d3246d4ddba63287101b17eecfec635e3311b61eb88e3cd0d",
-			"score": 70,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#666"
-			],
-			"rationale": "Well-gated fix for a genuine duplicate-tax-document race, with an owner-verifiable pre-check and solid concurrency tests.",
-			"evidence": [
-				"Unique index pos_emissions_org_ticket_live_uniq prevents duplicate live docs",
-				"Owner must run 0-row check query before applying migration",
-				"Concurrent integration test leaves exactly one live row"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-infra-product-failure-taxonomy",
@@ -2810,40 +2808,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
-		},
-		{
-			"key": "pr:minion_hub#665",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#665 fix(pos): a shift closes once",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/665",
-			"sourceUpdatedAt": "2026-11-14T15:25:38Z",
-			"sourceFingerprint": "01fad48ed9cd22a84a6908fe9c9c59c0739257b929462d9e6505fad2634c273f",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#667"
-			],
-			"rationale": "Prevents a shift from closing twice or recording wrong totals under concurrency, a financial data-integrity fix with strong SQL-integration evidence.",
-			"evidence": [
-				"\"A shift could be closed twice (two tabs, a double click)...\"",
-				"30/30 SQL integration tests pass on disposable Postgres"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:48:25.830Z"
 		},
 		{
 			"key": "pr:minion_hub#667",
@@ -3973,41 +3937,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:48:30.364Z"
-		},
-		{
-			"key": "pr:minion_hub#666",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#666 fix(hub): a send that died no longer stays in progress",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/666",
-			"sourceUpdatedAt": "2026-11-14T18:51:42Z",
-			"sourceFingerprint": "92589671c06b92571b3c7d9583077067b7e005b4ede089ab6afa90dc8e528bf4",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#668"
-			],
-			"rationale": "Cross-org bug with clear fix, thorough passing tests, ready to merge.",
-			"evidence": [
-				"Stale sends excluded from retries/activity counts, emissions stuck as emitted",
-				"72/72 vitest and 11/11 integration tests passed",
-				"Guarded final writes prevent overwrite of reaped rows"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-309dbe0",
@@ -7425,41 +7354,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-13T06:17:37.984Z"
-		},
-		{
-			"key": "pr:minion_hub#662",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#662 fix(scheduling): closed appointments stay closed and free their paid service",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/662",
-			"sourceUpdatedAt": "2026-11-14T18:51:44Z",
-			"sourceFingerprint": "dcd4fdd331ab35e25fd1df9bb288e988cf113053eedf63307231de5622eea4c2",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#1035"
-			],
-			"rationale": "Solid implementation but requires owner sign-off on two explicitly stated product-behavior decisions before merge.",
-			"evidence": [
-				"Two product decisions for the owner to approve",
-				"Depends on slice 1 PR for drawer guard",
-				"Spec 116-pos-booking-state-hardening slice 5"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -11497,38 +11391,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:36:20.591Z"
-		},
-		{
-			"key": "pr:minion_hub#663",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#663 fix(hub): decisions apply once and the assistant follows workflow rules",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/663",
-			"sourceUpdatedAt": "2026-11-14T15:19:33Z",
-			"sourceFingerprint": "037f143d5d1136efb4e16086e5867e5d383408f583367322b06ac7de2d2d778c",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes real double-decision races in join/leave approvals with passing tests, though the assistant-workflow part is currently inert since no workflow is configured in production.",
-			"evidence": [
-				"\"Production has no workflow defined (workflow_defs is empty, read 2026-11-14), so this changes nothing for anyone today\"",
-				"deny route now answers 409 already_decided; 53/53 tests pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:48:25.830Z"
 		},
 		{
 			"key": "pr:minion-base#45",
@@ -15928,7 +15790,7 @@
 			"title": "Handoff marker — src/server/services/pos-accounts.service.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3818988565.md",
 			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "250809e091a85ed8a6896ec5866c4e62e7f6d9677bafd0ea2657789362b2e135",
+			"sourceFingerprint": "5b158bf7bd92998e29904b44d67b74165ec222bc7e02f5e336634d222beefbb2",
 			"score": 48,
 			"band": "low",
 			"axes": {
@@ -15937,19 +15799,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 2
+				"specification": 3,
+				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Cancelling an installment plan leaving already-paid lines in an inconsistent state is a financial data-integrity gap with real consequence.",
+			"rationale": "Flags a plausible billing-correctness gap in cancelled instalment plans, but the truncated marker lacks enough detail to scope the fix now.",
 			"evidence": [
-				"marker: 'cancelling a plan leaves its already-paid instalment lines'"
+				"marker: 'cancelling a plan leaves its already-paid instalment lines'",
+				"single marker, status review, repo pos-accounts.service.ts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T06:05:32.788Z"
+			"scoredAt": "2026-11-14T20:24:16.458Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-451854561",
@@ -18156,38 +18019,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T18:49:04.296Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-1194287278",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
-			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "15be91991644e158430f61ad3f554b5c699b65125d1536ec33d909314288e969",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Eight distinct, mostly-truncated UI/interaction markers are bundled into one draft proposal against a single large component, which is too broad a unit to execute safely as one goal.",
-			"evidence": [
-				"8 separate markers at distinct line numbers in BookingCalendar.svelte",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T06:02:18.680Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2083867420",
@@ -23132,6 +22963,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:59:56.562Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-1194287278",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
+			"sourceUpdatedAt": "2026-11-14",
+			"sourceFingerprint": "7d5d014f369fe2e5aa922c2821f9bc0b43fa60f71c2fa4f73d1547cdfb7f204c",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles eight unrelated TODO markers scattered across one large file into a single proposal, so it can't produce one coherent actionable outcome as framed.",
+			"evidence": [
+				"8 distinct markers spanning lines 269-3105 covering drag/drop, RBAC, tag registry",
+				"draft status with no unifying problem statement beyond raw comment excerpts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:24:16.458Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3443913000",
@@ -33132,6 +32995,38 @@
 			"scoredAt": "2026-11-14T06:01:09.056Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-168406530",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/scheduling/ConsumptionConfirmDialog.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-168406530.md",
+			"sourceUpdatedAt": "2026-11-14",
+			"sourceFingerprint": "9391055c6499f037b66ff5f0fa0884cef8ad0ae05de71aa48afbcbbd137f0d17",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single narrow marker in review stage, but the excerpt is too truncated to confirm the actual defect or desired outcome.",
+			"evidence": [
+				"single marker at line 100, status review",
+				"marker text truncated: 'the defaults read posts stk_consumption item ids'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:24:16.458Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1708310858",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36553,37 +36448,6 @@
 			"scoredAt": "2026-11-14T05:59:56.562Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-168406530",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/scheduling/ConsumptionConfirmDialog.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-168406530.md",
-			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "5c8dd1d463a852ab652c46eff1c3db316d9051642f46d1303300e40f64470d43",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Marker text describing the scheduling consumption dialog defaults bug is truncated and too vague to determine the actual defect.",
-			"evidence": [
-				"the defaults read posts stk_consumption item ids"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T06:03:17.936Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2746481724",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39518,74 +39382,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T09:18:30.436Z"
-		},
-		{
-			"key": "run:minion_hub#43636873150",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43636873150",
-			"sourceUpdatedAt": "2026-11-14T20:19:35Z",
-			"sourceFingerprint": "e02527f3102717fcc8cbaa696c0c96c954f7bf7ca68d64823f3c68a8891525ce",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion_hub#43636873179"
-			],
-			"rationale": "An in-progress storybook-deploy CI run on master has no actionable scope beyond waiting for completion.",
-			"evidence": [
-				"stage testing, status in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:21:27.473Z"
-		},
-		{
-			"key": "run:minion_hub#43636873179",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43636873179",
-			"sourceUpdatedAt": "2026-11-14T20:19:46Z",
-			"sourceFingerprint": "64f8c739b8c38a8407854df0f7685df40483c76088e273f8ef83d44317333606",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"run:minion_hub#43636873150"
-			],
-			"rationale": "An in-progress general CI run on master has no actionable scope beyond waiting for completion.",
-			"evidence": [
-				"stage testing, status in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:21:27.473Z"
 		},
 		{
 			"key": "issue:minion-meta#1014",
@@ -49005,7 +48801,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-14",
-			"sourceFingerprint": "3e5478b5b77b9ac147954ab49b91d6a60911e5189267fc9e7c4a32cc368f5fcc",
+			"sourceFingerprint": "19b14208e82e1d848bdfc0e2d30dbe202af8274cc2393d7dade1655ff35cb08d",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -49017,17 +48813,17 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 3,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is the handoff-sweep scanning its own generated rankings/index.json, mistaking prior ranking rationale/evidence text for real TODO markers in source code.",
+			"rationale": "Markers are quoted fragments scraped from the ranking system's own generated index file rather than genuine source TODOs, making this sweep noise rather than real work.",
 			"evidence": [
-				"Target file is rankings/index.json itself, a ranking-system artifact, not product source",
-				"Quoted 'markers' are evidence/rationale fragments from earlier ranking entries, not actual TODO(handoff) comments"
+				"target file is rankings/index.json, the generated ranking output itself",
+				"quoted markers are disparate unrelated data snippets with no single coherent problem"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T17:47:19.346Z"
+			"scoredAt": "2026-11-14T20:24:16.458Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
@@ -49287,6 +49083,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
+		},
+		{
+			"key": "run:minion_hub#43637079807",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43637079807",
+			"sourceUpdatedAt": "2026-11-14T20:22:01Z",
+			"sourceFingerprint": "a213049335e2032548f533afb6565c9b52e59d473d8603989cf3e3d3e4cdb3ab",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status, not a scoped unit of work to rank.",
+			"evidence": [
+				"storybook-deploy triggered by push on master",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:24:16.458Z"
+		},
+		{
+			"key": "run:minion_hub#43637079922",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43637079922",
+			"sourceUpdatedAt": "2026-11-14T20:21:58Z",
+			"sourceFingerprint": "6febcf75aac179475dc6f8260289dc4820d9b0fc3c078b175b07c4302831d688",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run status, not a scoped unit of work to rank.",
+			"evidence": [
+				"CI run triggered by push on master",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T20:24:16.458Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
