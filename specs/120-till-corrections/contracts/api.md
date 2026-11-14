@@ -4,28 +4,29 @@
 
 Gate: module `pos` enabled; capability `pos` `edit`.
 
-Request: `{ "productId": "<uuid>" }`
+Request: `{ "productId": "<uuid>", "expectedProductId": "<uuid of the product the user saw>" }`
 
-| Result | Status | Body |
-|---|---|---|
-| Swapped | 200 | `{ ok: true, ticket, stockWarning }` |
-| Sale or line not found | 404 | `not_found` |
-| Sale is void | 409 | `already_void` |
-| Line is not a product | 409 | `line_not_product` |
-| Unit price differs | 409 | `price_differs`, `{ oldUnitPrice, newUnitPrice }` |
-| Legally valid document exists | 409 | `document_issued` |
-| New product out of stock | 409 | `negative_stock`, `{ items: [{ itemName, requested, available }] }` |
+| Result | Status | Body | Next step shown |
+|---|---|---|---|
+| Swapped | 200 | `{ ok: true, ticket, stockWarning }` | — |
+| Sale or line not found | 404 | `not_found` | — |
+| Sale is void | 409 | `ticket_void` | none offered |
+| Line is not a product | 409 | `line_not_product` | — |
+| Line holds another product now | 409 | `line_changed`, `{ currentProductId }` | reload the line |
+| Out of stock | 409 | `negative_stock`, `{ items: [{ itemName, requested, available }] }` | choose another product |
+| Catalogue price differs | 409 | `price_differs`, `{ oldUnitPrice, newUnitPrice }` | guided correction |
+| Legally valid document | 409 | `emitted` | guided correction |
+| Other stock would change | 409 | `stock_drift`, `{ items }` | guided correction |
+| Month closed by accounting | 409 | `period_locked` | ask accounting to reopen |
+| Reconciled to an invoice | 409 | `reconciled` | undo the reconciliation first |
+| Another change in progress | 409 | `operation_conflict` | retry |
 
-`price_differs` and `document_issued` are the two answers the UI turns into "Anular y volver a
-cobrar". `negative_stock` offers another product.
+## Calendar bookings payload (existing load, extended)
 
-## Calendar window payload (existing load, extended)
-
-Each ticket gains:
+Each entry of `CalendarBooking.tickets` gains:
 
 ```ts
 products: { description: string; qty: number; total: number }[]
-partyId: string | null   // only if not already present
 ```
 
 ## scripts/repair-service-sale-stock.ts

@@ -23,7 +23,8 @@ A sale with treatments only stays at "no movement" for its whole life.
 
 ## Validation rules
 
-- Swap: sale `submitted`; line `kind = 'product'`; new product active, different from the current
-  one, same unit price; stock available for the new product's recipe.
-- Repair: organisation given explicitly; a sale is repaired only when its product quantities are
-  unchanged by the repost.
+- Swap: sale `submitted` and mutable (`assertTicketMutable`); line `kind = 'product'`; new product
+  active, different from the current one, catalogue unit price equal to the old product's; stock
+  available for the new product's recipe; line still holds `expectedProductId`.
+- Rebuild: only items in `allowedItemIds` may change; nothing may increase except
+  `allowIncreaseItemIds`; the stamp must still equal the movement that was read.

@@ -60,3 +60,23 @@ All findings are from hub `origin/master` `21825676` and read-only prod queries 
 
 - All 104 FACES documents are `environment = 'beta'`. "Legally valid" = an accepted document in a
   non-beta environment. No such row can exist until production emission is enabled.
+
+## R8. Changes after review (2026-11-14)
+
+- **R1 revised**: decide by kind. Product → always issue. Service → issue only when it has no
+  appointment and is a redeemed session (`redemptionId`) or a bundle; otherwise nothing.
+  `bookAndLinkTicketLine` (`scheduling-bookings.service.ts:747`) passes the line `qty` as the
+  accrual `quantity` (`AccrueInput.quantity`, default 1).
+- **R2 revised**: see plan.md "Rebuild sequence". `postTicketStock` (`pos.service.ts:1019`) must
+  load the stamped entry's status and continue when it is `cancelled`.
+- **R3 revised**: candidates = submitted sales with a live `pos` movement and at least one
+  treatment line whose recipe shares an item with that movement. Comparison in stock units.
+- **R4 revised**: extend `bookingTicketLinks` (`pos-accounts.service.ts`, near 598) with the
+  product lines of the linked tickets. `listTicketsForCalendar` stays as is.
+- **R5 revised**: handoff version 4 adds `unitPrice`, `discount` and `bookingId: string | null`;
+  staging uses them instead of the catalogue price. The void action with refund choice
+  (`appointments/PageBody.svelte:844–847`) is extracted into a shared component.
+- **R6 revised**: swap guards reuse `assertTicketMutable` (`pos/tender-correction.ts:26`) with
+  `emitted` computed over non-beta, non-error emissions and `fiscal: true`.
+- **Prod facts**: 0 linked product lines; 13 grants, 1 redemption, 0 redemption lines; 0 item
+  components; 0 plans; 1 organisation with sales; 0 draft `pos` movements.

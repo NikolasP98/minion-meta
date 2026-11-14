@@ -7,7 +7,7 @@ Work in a clean hub clone (never the owner's local checkout). After `bun install
 
 ```bash
 bun run test src/server/services/pos.tickets.test.ts
-HUB_TEST_DB_URL=... bun run test src/server/services/scheduling-bookings-accrual.test.ts
+bun run test src/server/services/scheduling-bookings-ticket-link.test.ts
 ```
 
 Expected: a mixed sale issues the product only; sell → schedule → complete issues the recipe once.
