@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T23:17:18.717Z",
+	"generatedAt": "2026-11-14T23:47:18.982Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7322,41 +7322,6 @@
 			"scoredAt": "2026-11-14T22:47:15.687Z"
 		},
 		{
-			"key": "pr:minion_hub#674",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
-			"sourceUpdatedAt": "2026-11-14T22:23:46Z",
-			"sourceFingerprint": "82de9497de212ab9c484e21272f60e6b81a013ad8ca4e0464ae29c96b336b67e",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#671"
-			],
-			"rationale": "Completes the till-correction flow for cases #671 cannot cover, with post-review fixes and tests but still no end-to-end DB verification.",
-			"evidence": [
-				"Stacked on #671; retarget to master after #671 merges",
-				"57 handoff/session tests pass and 9 mounted-page cases after EGM stage 9 review fixes",
-				"No end-to-end run against a database for void-refund-charge-again flow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T22:47:15.687Z"
-		},
-		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -14162,6 +14127,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T10:48:43.276Z"
+		},
+		{
+			"key": "pr:minion_hub#674",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
+			"sourceUpdatedAt": "2026-11-14T23:23:00Z",
+			"sourceFingerprint": "180aefadd808aba7afda073af5f1d79f5a5f00e9869b4f99ae30083a99863007",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Draft PR implements a spec-defined void-and-recharge POS flow with passing unit tests and a real seeded-DB run that surfaced and fixed a cart-key bug, leaving it ready to merge once retargeted after #671.",
+			"evidence": [
+				"stacked on #671; retarget to master after #671 merges",
+				"page.swap.mounted.test.ts now has 9 cases; 57 other tests pass",
+				"real database run found and fixed a bug (72aeb109) and verified stock/refund outcomes"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T23:47:18.777Z"
 		},
 		{
 			"key": "pr:minion-meta#1008",
