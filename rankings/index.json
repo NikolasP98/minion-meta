@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T18:47:15.087Z",
+	"generatedAt": "2026-11-14T19:18:33.510Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2140,6 +2140,41 @@
 			"scoredAt": "2026-11-11T08:18:29.459Z"
 		},
 		{
+			"key": "pr:minion (gateway)#379",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#379 fix(gateway): a retried run ends once with its real result",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/379",
+			"sourceUpdatedAt": "2026-11-14T18:49:03Z",
+			"sourceFingerprint": "1f5f3952d32ff542745bbb1be4040614dabc8408adcab0d4b328aca1f2454a61",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1035"
+			],
+			"rationale": "Well-specified, tested fix for false error/end reporting on retried runs, ready pending its stacked predecessor #378.",
+			"evidence": [
+				"Fixes false error/end events on retried runs per spec 119-gateway-run-lifecycle-truth",
+				"10 new tests in agent-run-terminal.test.ts",
+				"Merge after #378 (stacked)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
+		},
+		{
 			"key": "pr:minion-meta#900",
 			"kind": "pr",
 			"stage": "development",
@@ -2376,6 +2411,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T06:48:52.986Z"
+		},
+		{
+			"key": "pr:minion_hub#668",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#668 fix(pos): one live tax document per ticket",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/668",
+			"sourceUpdatedAt": "2026-11-14T18:51:47Z",
+			"sourceFingerprint": "5f8e4db14735368d3246d4ddba63287101b17eecfec635e3311b61eb88e3cd0d",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#666"
+			],
+			"rationale": "Well-gated fix for a genuine duplicate-tax-document race, with an owner-verifiable pre-check and solid concurrency tests.",
+			"evidence": [
+				"Unique index pos_emissions_org_ticket_live_uniq prevents duplicate live docs",
+				"Owner must run 0-row check query before applying migration",
+				"Concurrent integration test leaves exactly one live row"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-infra-product-failure-taxonomy",
@@ -3974,39 +4044,39 @@
 			"scoredAt": "2026-11-09T08:48:30.364Z"
 		},
 		{
-			"key": "pr:minion-meta#1036",
+			"key": "pr:minion_hub#666",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1036 spec(120): till corrections — stock follows the appointment, products on the agenda, product swap",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1036",
-			"sourceUpdatedAt": "2026-11-14T18:45:40Z",
-			"sourceFingerprint": "90b2d507ef0132771f7b5d16ed95a1bae75ee8ae11ad9fc818d524b1634c123e",
+			"repo": "minion_hub",
+			"title": "#666 fix(hub): a send that died no longer stays in progress",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/666",
+			"sourceUpdatedAt": "2026-11-14T18:51:42Z",
+			"sourceFingerprint": "92589671c06b92571b3c7d9583077067b7e005b4ede089ab6afa90dc8e528bf4",
 			"score": 65,
 			"band": "medium",
 			"axes": {
 				"criticality": 7,
-				"importance": 7,
-				"impact": 5
+				"importance": 6,
+				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 6
+				"specification": 8,
+				"implementation": 8
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#669"
+				"pr:minion_hub#668"
 			],
-			"rationale": "Spec-only PR defining the five-slice till-corrections plan that gates the data-sensitive repair (S2) behind owner approval, directly supporting the in-flight S1 fix.",
+			"rationale": "Cross-org bug with clear fix, thorough passing tests, ready to merge.",
 			"evidence": [
-				"tagged data because S2 changes production stock, requiring owner approval before merge",
-				"no code in this PR; evidence drawn from read-only prod queries",
-				"five slices scoped against minion_hub master"
+				"Stale sends excluded from retries/activity counts, emissions stuck as emitted",
+				"72/72 vitest and 11/11 integration tests passed",
+				"Guarded final writes prevent overwrite of reaped rows"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T18:47:14.866Z"
+			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-309dbe0",
@@ -5092,40 +5162,6 @@
 			"scoredAt": "2026-11-14T06:47:59.891Z"
 		},
 		{
-			"key": "pr:minion_hub#668",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#668 fix(pos): one live tax document per ticket",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/668",
-			"sourceUpdatedAt": "2026-11-14T15:37:45Z",
-			"sourceFingerprint": "dd14a72b13d2ad4cd4994053b770471a04f78a71d3077253194f2c3c231faed6",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#666"
-			],
-			"rationale": "Closes a race that could create two live tax documents per sale (legal/compliance risk) but requires an owner-run production migration and check query before merge.",
-			"evidence": [
-				"\"Data gate: this PR contains a migration that the OWNER must apply\"",
-				"\"could create two live tax documents for one sale, each with its own number\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:48:25.830Z"
-		},
-		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -5585,41 +5621,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
-		},
-		{
-			"key": "pr:minion-meta#1035",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1035 docs(specs): 116–119 — state hardening from the implicit state machine audit",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1035",
-			"sourceUpdatedAt": "2026-11-14T15:00:24Z",
-			"sourceFingerprint": "d5c41a978b7017433cc62e8c3059f7fde7ebf199c08605d4a4a21cf54cfa5e94",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#378",
-				"pr:minion_hub#660"
-			],
-			"rationale": "Documents four twice-reviewed specs from an owner-requested audit that already underpin the other PRs in this batch, so merging it preserves spec-first traceability.",
-			"evidence": [
-				"spec 116 and 119 are cited directly by PRs #660/#661/#662 and #378",
-				"each spec is at pass 2 after EGM review reports"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:18:01.297Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -6270,72 +6271,6 @@
 			"scoredAt": "2026-11-14T15:18:01.297Z"
 		},
 		{
-			"key": "pr:minion_hub#662",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#662 fix(scheduling): closed appointments stay closed and free their paid service",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/662",
-			"sourceUpdatedAt": "2026-11-14T15:16:25Z",
-			"sourceFingerprint": "15235a938ed0bb85575811c731fe93958f017e629205da27705744630512e312",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#664"
-			],
-			"rationale": "Closes a real data-integrity gap (closed appointments reopenable, no-shows wrongly freeing paid service) with tests, but is explicitly sequenced after slice 1.",
-			"evidence": [
-				"\"Merge after the slice 1 PR... the drawer guard from slice 1 has to be live first\"",
-				"\"before this PR the status board could drag a closed card back to a live column\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:48:25.830Z"
-		},
-		{
-			"key": "pr:minion_hub#666",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#666 fix(hub): a send that died no longer stays in progress",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/666",
-			"sourceUpdatedAt": "2026-11-14T15:33:31Z",
-			"sourceFingerprint": "a541ec0c6798afe5b66792253237473a42e5f1bc8f7fe2e5dbb589b4d9f5ec63",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Adds a sweep to recover reminders, follow-ups, and tax emissions permanently stuck in-progress after a crash/redeploy, with cross-system tests passing.",
-			"evidence": [
-				"\"the row stays in progress forever: left out of activity counts, excluded from retry, ticket can no longer be corrected\"",
-				"72/72 unit tests, 11/11 SQL integration tests pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T15:48:25.830Z"
-		},
-		{
 			"key": "proposal:2026-08-17-factory-postmerge-discovery-loop",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6898,6 +6833,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
+		},
+		{
+			"key": "pr:minion-meta#1035",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1035 docs(specs): 116–119 — state hardening from the implicit state machine audit",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1035",
+			"sourceUpdatedAt": "2026-11-14T18:48:50Z",
+			"sourceFingerprint": "6d6b4dbbe0ad37f67ecda7e6d1f2897b4bc51e863fe0b54d26d85b7f65da54de",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#662",
+				"pr:minion (gateway)#379"
+			],
+			"rationale": "Foundational spec bundle behind several progressing fixes, but one of its four specs (117) has changes requested due to a production data gap.",
+			"evidence": [
+				"Spec 117 changes requested: production user_agents has 0 rows",
+				"Specs 116/118/119 at pass 2 after EGM reviews",
+				"No proposal preceded these specs per audit process"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:2026-10-24-hub-collection-points-followups",
@@ -7560,6 +7531,41 @@
 			"scoredAt": "2026-11-13T06:17:37.984Z"
 		},
 		{
+			"key": "pr:minion_hub#662",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#662 fix(scheduling): closed appointments stay closed and free their paid service",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/662",
+			"sourceUpdatedAt": "2026-11-14T18:51:44Z",
+			"sourceFingerprint": "dcd4fdd331ab35e25fd1df9bb288e988cf113053eedf63307231de5622eea4c2",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#1035"
+			],
+			"rationale": "Solid implementation but requires owner sign-off on two explicitly stated product-behavior decisions before merge.",
+			"evidence": [
+				"Two product decisions for the owner to approve",
+				"Depends on slice 1 PR for drawer guard",
+				"Spec 116-pos-booking-state-hardening slice 5"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
+		},
+		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -7625,6 +7631,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T10:48:43.276Z"
+		},
+		{
+			"key": "pr:minion-meta#1036",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1036 spec(120): till corrections — stock follows the appointment, products on the agenda, product swap",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1036",
+			"sourceUpdatedAt": "2026-11-14T19:11:03Z",
+			"sourceFingerprint": "0b2c7e49d9924a1033b2029b410a38f73653f0a3abc68e7faf5e2e40adf2112c",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#670",
+				"pr:minion_hub#671"
+			],
+			"rationale": "Planning artifact behind already-in-progress FACES till corrections; owner approval of this spec is the explicit gate for the production-affecting repair.",
+			"evidence": [
+				"Tagged data: S2 changes production stock, owner approves spec before code/merge/repair",
+				"Five slices against minion_hub master",
+				"Slices S2 and S4 already implemented as PR #670 and #671"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -10055,6 +10097,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T19:18:13.125Z"
+		},
+		{
+			"key": "pr:minion_hub#670",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#670 fix(stock): give back supplies that prepaid treatments removed at the sale",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/670",
+			"sourceUpdatedAt": "2026-11-14T19:10:58Z",
+			"sourceFingerprint": "e526eeaeec2a1ef501248d69db2f92968a207bed2991966992f7e54392d58d88",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#671",
+				"pr:minion-meta#1036"
+			],
+			"rationale": "Concrete production stock discrepancy with a preview-verified repair script, though a known race window is explicitly deferred.",
+			"evidence": [
+				"13 production sales confirmed short by preview query",
+				"repostTicketStock refuses void/no-movement/unnamed-drift sales",
+				"Known race window logged as TODO(handoff) and proposal item 1"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
@@ -22033,38 +22111,6 @@
 			"scoredAt": "2026-11-14T06:11:45.428Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-bb06e3a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ bb06e3a",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-bb06e3a.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "f701c0742b4c35a43bdd3fb16da8b15931ff41e7037dc7c69d09fa6bc328f9ea",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Five specific file:line unchecked-access findings in CI test/fixture code give a clear, bounded null-check fix that protects CI reliability.",
-			"evidence": [
-				"high unchecked-access at test/ci/ci-workflow.test.ts:322",
-				"four similar findings across dispatch-purpose-fixture.ts and security-scope-workflow.test.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T18:47:16.974Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-24d84a5a0c20",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22161,38 +22207,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T10:49:43.766Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-676808e46687",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-676808e46687.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "a31281fcaa54b58546b46db009e417b1870b47817a7f9ea0b2a4a913aa583a13",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Already-approved finding with a precise diagnosis and fix direction for a drag-and-drop delegation bug in the booking calendar.",
-			"evidence": [
-				"TODO(handoff) marker at BookingCalendar.svelte notes ondragover/ondrop live on ancestor .track",
-				"status is approved with clear fix direction to move handlers to slot elements"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T18:47:16.974Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-68c035f5b627",
@@ -24348,6 +24362,42 @@
 			"scoredAt": "2026-11-14T05:55:16.325Z"
 		},
 		{
+			"key": "pr:minion_hub#671",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
+			"sourceUpdatedAt": "2026-11-14T19:13:39Z",
+			"sourceFingerprint": "93e37b6970c6e5c8e7269c6c0dc4b2be63ee72fb4be47bb07d7843df23cf4b56",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#670",
+				"pr:minion-meta#1036"
+			],
+			"rationale": "Useful feature with broad refusal-path coverage, but the main success path with a real stock movement is untested and the UI trigger isn't built yet.",
+			"evidence": [
+				"Not run against a database; successful swap with stock movement uncovered by its own test",
+				"UI action deferred pending owner decision",
+				"Stacked on #670"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-759780196",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24605,6 +24655,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-08T07:17:37.351Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-676808e46687",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-676808e46687.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "a31281fcaa54b58546b46db009e417b1870b47817a7f9ea0b2a4a913aa583a13",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already-approved, well-diagnosed UI bug with a clear bounded fix direction.",
+			"evidence": [
+				"ondragover/ondrop delegated to ancestor .track instead of slot elements",
+				"status: approved",
+				"Clear fix direction: attach handlers in slot rendering loop"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-749c9f202140",
@@ -36963,6 +37046,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:11:45.428Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-bb06e3a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ bb06e3a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-bb06e3a.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "f701c0742b4c35a43bdd3fb16da8b15931ff41e7037dc7c69d09fa6bc328f9ea",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Low-risk, well-localized null-check fixes in test/CI helper files that are quick to apply.",
+			"evidence": [
+				"5 unchecked-access findings, all in test/ci files",
+				"Each cites exact file:line and the missing null check"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-f4c1a23",
