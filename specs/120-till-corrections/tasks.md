@@ -106,6 +106,16 @@ None. Each slice is self-contained; S2 and S4 share one function, created in S2.
 - T014: the void's final lookup is wrapped in try/catch, ignores drafts and an entry already cancelled, skips when the void already recorded `void_stock_failed` for the same entry, and writes its own warning with a separate update. It never turns a committed void into an error response.
 - T015/T016 depend on `previewTicketRepost` only. `--apply` runs as actor `{ id: null, name: 'repair-120' }`. Script context follows `scripts/stock-optional-fields-to-custom.ts:268`.
 
+**S3** (EGM stage 9, second pass, 2026-11-14)
+- T020: one additional statement, `ticket_id in (linked ticket ids) and kind = 'product'`, skipped when no ticket is linked. Two statements per window at most, whatever the number of appointments. `qty` and `total` are numeric strings; convert with `Number`. New test file `src/server/services/pos-accounts-booking-links.test.ts`.
+- T021: `products` is required on the server type and optional on `CalendarBooking.tickets`; readers use `?? []`. No existing fixture changes.
+- T022: `productsForVisit(members: ReadonlyArray<Pick<CalendarBooking, 'tickets'>>)`; each ticket counted once; cancelled and no-show members count (their sale is still live). One row per sale line, no merging. A sale that charged two separate visits shows on both.
+- T023: there is no hover-card snippet in the POS page. The section goes into both default cards of the shared `src/lib/components/scheduling/BookingCalendar.svelte` (`defaultBookingCard`, `defaultVisitCard`), rendered only when the list is non-empty. It is a fixed section, not a new hover field. The scheduling calendar receives `tickets: []`, so it shows nothing there.
+- T024: the block is inline in the same file. The marker goes on the time-grid block only; month chip, agenda row, table and board do not get it.
+- T025 runs before T023/T024 (the code calls the compiled messages). Texts: `pos_calendar_products` "Productos" / "Products"; `pos_calendar_gift` "regalo" / "gift"; `pos_calendar_products_marker` "Con productos" / "Has products". Row format `1 × Faja L (regalo)`; a line is a gift when its total is 0.
+- The component cannot be mounted in tests (`BookingCalendar.svelte:2086`). Proof = `productsForVisit` unit test plus a browser check.
+- Owner rule (FigCraft demo first): T023/T024 wait for the owner to validate the as-is/to-be demo. T020–T022 and T025 do not.
+
 ## Phase 8: Polish
 
 - [ ] T041 After each merge, verify prod from `origin/master` and the commit status `Vercel: success`, then run the slice's quickstart check as the QA user
