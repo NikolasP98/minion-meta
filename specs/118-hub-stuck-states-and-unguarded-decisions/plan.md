@@ -1,6 +1,6 @@
 # Implementation Plan: Stuck sends and unguarded decisions
 
-**Spec**: [spec.md](./spec.md) | **Date**: 2026-11-14 | **Repo**: `minion_hub`, PR base `master` | Evidence with code quotes: [egm/evidence.md](./egm/evidence.md)
+**Spec**: [spec.md](./spec.md) | **Date**: 2026-11-14, pass 2 | **Repo**: `minion_hub`, PR base `master` | Evidence: [egm/evidence.md](./egm/evidence.md), critique: [egm/critic_report.md](./egm/critic_report.md)
 
 ## Summary
 
@@ -10,68 +10,78 @@ Three slices, one draft PR each. Slices 1 and 2 are code only. Slice 3 adds one 
 |---|---|---|
 | 1 | `fix(hub): decisions apply once and the assistant follows workflow rules` | none |
 | 2 | `fix(hub): a send that died no longer stays in progress` | none |
-| 3 | `fix(pos): one live tax document per ticket` | `data`: owner applies the migration and merges |
+| 3 | `fix(pos): one live tax document per ticket` | `data`: owner applies the migration and merges. Branch stacked on slice 2; merge after it |
 
 ## Technical context
 
-Bun, SvelteKit 2, Drizzle over Postgres, vitest. Never run the whole suite; run named files. Tests here are mock-db or PGlite unit tests (named per slice); the one real-Postgres suite touched is none. Patterns to copy: compare-and-set in `src/server/services/workflow.service.ts:174-183`; `isUniqueViolation` already imported in `pos-emission.service.ts:19` with a swallowing catch at `:317-327`; isolated `try/catch` per job in `src/routes/api/jobs/tick/+server.ts:45-58`.
+Bun, SvelteKit 2, Drizzle 0.45 over Postgres, vitest. Never run the whole suite; run named files. Real-Postgres POS tests use the disposable-Postgres harness of `src/server/services/pos-money.sql.integration.test.ts` (see spec 116's plan). Patterns: compare-and-set in `src/server/services/workflow.service.ts:174-183`; cross-organisation statement on `getCoreDb()` as `listFollowUpOrgIds` does (`doors-followup.service.ts:87-93`); one isolated `try/catch` per job in `src/routes/api/jobs/tick/+server.ts:45-58`; walking `.cause` to find the Postgres error code (`pos-categories.service.ts:31-33`).
 
 ## Constitution check
 
-I this directory. II AS-IS rows A1–A8 with anchors and a production read. III three PRs from clones `~/.cache/claude-tmp/hub-118-{a,b}`. IV no surface added. V slice 3 is `data`.
+I this directory. II rows A1–A8 with anchors and a production read. III three PRs from clones `~/.cache/claude-tmp/hub-118-{a,b}`. IV no surface added. V slice 3 is `data`.
 
 ## Technical Plan
 
 ### Slice 1 — decisions
 
-- `src/server/services/join/requests.service.ts` deny (`:104-112`): add `.eq('status', 'pending')`. Zero rows stays a silent no-op, as the existing comment says.
-- `src/server/services/hr.service.ts` `decideLeaveRequest` (`:693-711`): add `eq(hrLeaveRequests.status, row.req.status)` and the organisation predicate to the update's `WHERE`, `.returning()`, and throw `new HrRuleError('bad_transition', …)` when nothing came back.
-- `src/routes/api/gateway/actions/order-update-status/+server.ts:30` and `ticket-update/+server.ts:47-53`: pass `{ ...actor, role: null }` as the workflow actor argument of `setOrderStatus` / `updateIssue`. A workflow refusal is already a 409 through the routes' existing error mapping; confirm and add the mapping if the action route swallows it as 400.
+- **Join deny** (`src/server/services/join/requests.service.ts:104-112`, supabase-js on the service role): add `.eq('status', 'pending').select('id')`; when no row comes back throw `new JoinRequestConflictError('already_decided')` (new class in the same file). `src/routes/api/join-requests/[id]/deny/+server.ts` maps it to `error(409, 'already_decided')`.
+- **Leave decision** (`src/server/services/hr.service.ts:693-711`): the update's `WHERE` becomes `and(eq(id), eq(orgId, ctx.tenantId), eq(status, row.req.status))` with `.returning()`; when nothing comes back throw `new HrRuleError('bad_transition', 'This request was already decided.')`. `hrTry` already maps it.
+- **Assistant actions**: `src/routes/api/gateway/actions/order-update-status/+server.ts:30` passes `{ ...actor, role: null }` as the sixth argument of `setOrderStatus`; `ticket-update/+server.ts:47-53` passes the same as `updateIssue`'s workflow actor. No error-mapping change: `assertStatusChangeInTx` throws SvelteKit `error(409)` and both routes rethrow it. A null role is never admin (`workflow.service.ts:51`).
 
-### Slice 2 — reapers
+### Slice 2 — sweep and guarded final writes
 
-- `reminders.service.ts`, top of `processOrgReminders` after the enabled check (`:87`): one `withOrgCore` update `set status='failed', error='stale_claim' where org and status='sending' and created_at < now() - interval '15 minutes'`. The transition trigger allows it and `sent_at` stays null.
-- `doors-followup.service.ts`, in `runOrg` before `dueCandidates` (`:194-203`): the same update on `crm_door_followups`. Add `and status = 'sending'` to the final update (`:175-185`).
-- `pos.service.ts` `emitShiftTickets` (`:465`), before `listUnemittedTickets`: update `pos_emissions set status='error', response_description='stale_pending' where org and status='pending' and updated_at < now() - interval '15 minutes'` limited to the shift's tickets. `pos-emission.service.ts` `runBetaEmission` (`:202`, `:211`): add `eq(status, 'pending')` to both result writes so a late provider answer cannot overwrite a reaped row.
-- The 15-minute limit is one exported constant per service.
+- New `src/server/services/stale-sends.service.ts` exporting `STALE_SEND_MINUTES = 15` and `reapStaleSends(): Promise<{ reminders: number; followups: number; emissions: number }>`. Three statements on `getCoreDb()`, no organisation filter:
+  - `update sched_reminders set status='failed', error='stale_claim' where status='sending' and created_at < now() - interval '15 minutes'`
+  - `update crm_door_followups set status='failed', error='stale_claim' where status='sending' and created_at < now() - interval '15 minutes'`
+  - `update pos_emissions set status='error', response_description='stale_pending', updated_at=now() where status='pending' and updated_at < now() - interval '15 minutes'`
+- `src/routes/api/jobs/tick/+server.ts`: call it in its own `try/catch` beside the inbox-rules and follow-up calls, on every tick.
+- Guarded final writes: `reminders.service.ts` `finalize` (`:192-209`) adds `eq(schedReminders.status, 'sending')`; `doors-followup.service.ts` final update (`:175-185`) adds `and status = 'sending'`; `pos-emission.service.ts` `runBetaEmission` result writes (`:202`, `:211`) add `eq(posEmissions.status, 'pending')`.
+- Nothing changes in `emitShiftTickets`: once a row is `error`, the existing history page counts it as retriable and shows "Reintentar".
 
 ### Slice 3 — one live emission per ticket
 
-- Migration `supabase/migrations/<timestamp>_pos_emissions_one_live_per_ticket.sql`: `create unique index if not exists pos_emissions_org_ticket_live_uniq on public.pos_emissions (org_id, ticket_id) where status <> 'error';` Production has no duplicate today (read 2026-11-14), so the build succeeds; the PR body repeats the check query for the owner to run first.
-- Drizzle index in `src/server/db/pg-pos-schema.ts` beside `:252-258`; update `src/server/db/pg-pos-schema.test.ts`.
-- `triggerShadowEmission` (`pos-emission.service.ts:288-327`): the duplicate insert fails inside the transaction that allocated the number, so the number rolls back; make sure the existing catch treats `isUniqueViolation` on this index as "already being emitted" and returns without an error row.
+- Migration `supabase/migrations/20261114120000_pos_emissions_one_live_per_ticket.sql`: `create unique index if not exists pos_emissions_org_ticket_live_uniq on public.pos_emissions (org_id, ticket_id) where status <> 'error';`
+- Drizzle: the same index in `src/server/db/pg-pos-schema.ts` beside `:252-258`. No schema-test change (that test asserts columns only).
+- `pos-emission.service.ts`, catch at `:317-327`: new private `isLivePerTicketViolation(e)` that walks `e` and up to four `.cause` levels for `code === '23505'` and `constraint_name === 'pos_emissions_org_ticket_live_uniq'`; when true, return silently (the ticket is already being emitted); otherwise the existing `console.error` stays. `isUniqueViolation` is not changed (it is in a frozen export list).
+- `emitShiftTickets` still counts a swallowed duplicate in `queued`; accepted (the number shown in the close dialog can read one high in a race).
 
 ## Alternatives considered
 
-- **Lease columns and a generic reaper like `bg_jobs`.** Rejected: three tables would each need a migration; `created_at`/`updated_at` already record the claim time, and the volume is zero today.
-- **Re-send reaped reminders.** Rejected: it breaks "a failed send is never retried" and risks a duplicate message when the send had in fact gone out.
-- **A row lock for the leave decision.** Rejected: it would also lock the joined employee row; compare-and-set is one predicate.
-- **Advisory lock per ticket for emission instead of an index.** Rejected: the index is the guarantee that survives every future caller.
+- **Sweep inside the reminders tick, the follow-up run and the shift retry (pass 1).** Rejected: organisations with the feature switched off are never swept, and the shift retry button is hidden exactly when every row is stuck `pending`.
+- **Lease columns like `bg_jobs`.** Rejected: three migrations; the claim time is already recorded.
+- **Re-send reaped reminders.** Rejected: breaks "a failed send is never retried".
+- **A row lock for the leave decision.** Rejected: compare-and-set is one predicate.
+- **Advisory lock per ticket for emission.** Rejected: the index holds for every future caller.
 
 ## Risks & Mitigations
 
 | Risk | Mitigation |
 |---|---|
-| A slow but live send is reaped at 15 minutes | Final writes are status-guarded, so the late result is dropped, not mixed; the limit is far above a send's duration |
+| A live send is reaped | Functions are capped at 300 s; final writes are status-guarded so a late result is dropped |
 | A reaped emission is emitted twice | Shadow mode only; flagged for the owner |
-| The assistant loses a transition it used | Only role-gated ones; the refusal is a clear 409; production has no evidence of such use (owner can grant a role later) |
-| The index build fails on duplicates | Check query in the PR; `if not exists`; none today |
+| The assistant loses a transition it used | Only where a workflow is enabled; production has none (read 2026-11-14) |
+| The index build fails on duplicates | None today; check query in the PR; `if not exists` |
+| Driver errors are wrapped and the duplicate is logged as an error | The helper walks `.cause` |
 
 ## Verification
 
-Per slice: failing test first; `bunx prettier --check`; named vitest files; `bun run check` under the gate lock. After deploy: the SC-004 count query.
+Per slice: failing test first; `bunx prettier --check`; named vitest files; `bun run check` under the gate lock. SQL integration tests run locally only with a disposable Postgres, else first in CI (say so in the PR). After deploy: the SC-004 count query.
 
 ## Detailed Implementation Plan
 
 ### Slice 1
-- M `src/server/services/join/requests.service.ts`, `src/server/services/join/requests.service.test.ts`
-- M `src/server/services/hr.service.ts`; C `src/server/services/hr.service.leave-decision.test.ts` (mock-db, as `hr.service.enrol.test.ts`)
-- M `src/routes/api/gateway/actions/order-update-status/+server.ts`, `ticket-update/+server.ts`; M `src/routes/api/gateway/actions/actions.server.test.ts`; extend `src/server/services/direct-status-workflow.test.ts` with the no-role case
+- M `src/server/services/join/requests.service.ts`; M `src/server/services/join/requests.service.test.ts` (rebuild its `update` mock as a chainable thenable that records filters; cases: pending → denied; already approved → throws, filters include `status = pending`); M `src/routes/api/join-requests/[id]/deny/+server.ts` and its `server.test.ts` (409)
+- M `src/server/services/hr.service.ts`; C `src/server/services/hr.service.leave-decision.test.ts` (mock-db as `hr.service.enrol.test.ts`: stale status → `bad_transition`; fresh → row returned)
+- M `src/routes/api/gateway/actions/order-update-status/+server.ts`, `ticket-update/+server.ts`; M `src/routes/api/gateway/actions/actions.server.test.ts` (mock `$server/services/sales.service` including `ORDER_STATUSES`; assert the sixth argument equals the actor with `role: null`; a rejected `{ status: 409 }` propagates; same for the ticket action); M `src/server/services/direct-status-workflow.test.ts` (no-role actor: disallowed jump refused, open transition allowed)
 
 ### Slice 2
-- M `src/server/services/reminders.service.ts`; C `src/server/services/reminders-reaper.test.ts`
+- C `src/server/services/stale-sends.service.ts`, `stale-sends.service.test.ts`
+- M `src/routes/api/jobs/tick/+server.ts`, `server.test.ts`
+- M `src/server/services/reminders.service.ts`; C `src/server/services/reminders-finalize.test.ts` (mock `getReminderConfig`, `withOrgCore`, `gatewayCall`, `composeReminder`; assert the rendered `WHERE` of the final write contains `status = 'sending'`)
+- M `src/server/db/notification-legacy-reconciliation.sql.integration.test.ts` (one case: `sending → failed` with `error = 'stale_claim'` passes the trigger)
 - M `src/server/services/doors-followup.service.ts`, `doors-followup.service.test.ts`
-- M `src/server/services/pos.service.ts`, `pos-emission.service.ts`; M `pos.service.emission.test.ts`, `pos-emission.service.test.ts`, and `pos.shifts.test.ts` if its mock sequences shift
+- M `src/server/services/pos-emission.service.ts`, `pos-emission.service.test.ts` (render the `where` of the result write)
 
 ### Slice 3 (branch from slice 2's branch)
-- C the migration; M `src/server/db/pg-pos-schema.ts`, `pg-pos-schema.test.ts`, `pos-emission.service.ts`, `pos-emission.service.test.ts`
+- C the migration; M `src/server/db/pg-pos-schema.ts`, `src/server/services/pos-emission.service.ts`
+- C `src/server/services/pos-emission.sql.integration.test.ts` on the `pos-money` harness (fixture gains `pos_emissions`, `pos_series` and the new index): two concurrent `triggerShadowEmission` calls → one non-error row and `next_number` advanced by 1; `error` row plus retry → new row; late result write on a reaped row changes nothing

@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-14
 
-**Status**: Draft
+**Status**: Draft, pass 2 (revised after the EGM design critique of 2026-11-14, `egm/critic_report.md`)
 
 **Input**: Owner, 2026-11-14, on the audit report's row "Reminders and tax emission stuck in progress; join, sales-order and leave requests unguarded": "address these as well". Follows the 2026-11-11 audit and spec 116.
 
@@ -31,7 +31,7 @@ An admin who denies a join request that was just approved, two managers deciding
 
 **Acceptance Scenarios**:
 
-1. **Given** an approved join request, **When** deny is called, **Then** nothing changes and the request stays approved.
+1. **Given** an approved join request, **When** deny is called, **Then** nothing changes, the request stays approved, and the admin is told it was already decided (409).
 2. **Given** a pending leave request, **When** approve and reject race, **Then** exactly one succeeds and the other is refused with `bad_transition`.
 3. **Given** a sales order in `invoiced` and a workflow that does not allow `invoiced → draft`, **When** the assistant's order-status action asks for `draft`, **Then** it is refused with 409, as the app's own route does.
 4. **Given** a support ticket and a workflow with a role-gated transition, **When** the assistant's ticket-update action asks for it, **Then** it is refused; open transitions still work.
@@ -50,7 +50,7 @@ When the server is redeployed in the middle of sending a reminder, a door follow
 
 1. **Given** a reminder in `sending` for more than 15 minutes, **When** the reminders tick runs for that organisation, **Then** it becomes `failed` with error `stale_claim` and shows in the activity counts.
 2. **Given** a door follow-up in `sending` for more than 15 minutes, **When** the jobs tick runs, **Then** it becomes `failed` with error `stale_claim`.
-3. **Given** a tax emission in `pending` for more than 15 minutes, **When** staff press "Reintentar" for the shift, **Then** it becomes `error` with description `stale_pending` and the ticket is emitted again.
+3. **Given** a tax emission in `pending` for more than 15 minutes, **When** the jobs tick runs, **Then** it becomes `error` with description `stale_pending`; the shift history then offers "Reintentar" for it, and the ticket can be corrected or emitted again.
 4. **Given** a row in progress for less than the limit, **When** the tick runs, **Then** it is untouched.
 
 ---
@@ -80,12 +80,12 @@ Closing a shift and pressing "Reintentar" or "Emitir ahora" at the same moment p
 
 ### Functional Requirements
 
-- **FR-001**: Denying a join request MUST only apply to a request still `pending`.
+- **FR-001**: Denying a join request MUST only apply to a request still `pending`, and MUST answer 409 when it changed nothing.
 - **FR-002**: Deciding a leave request MUST write only if the request still has the status the decision was checked against, and MUST fail with `bad_transition` otherwise.
 - **FR-003**: The assistant's order-status and ticket-update actions MUST pass through the same workflow check as the app's routes, with no role.
-- **FR-004**: The reminders tick MUST mark reminders `sending` for more than 15 minutes as `failed` with error `stale_claim`, per organisation, before selecting new work.
-- **FR-005**: The door follow-up run MUST do the same for follow-ups, and its final status write MUST apply only to a row still `sending`.
-- **FR-006**: The shift emission retry MUST mark emissions `pending` for more than 15 minutes as `error` with description `stale_pending` before selecting tickets. The provider-result write MUST apply only to a row still `pending`.
+- **FR-004**: The jobs tick MUST, for every organisation and whether or not the feature is switched on, mark reminders and door follow-ups `sending` for more than 15 minutes as `failed` with error `stale_claim`, and emissions `pending` for more than 15 minutes as `error` with description `stale_pending`.
+- **FR-005**: The final status write of a reminder and of a follow-up MUST apply only to a row still `sending`.
+- **FR-006**: The provider-result write of an emission MUST apply only to a row still `pending`.
 - **FR-007**: The database MUST allow at most one emission per organisation and ticket whose status is not `error`; a second trigger MUST do nothing and MUST NOT consume a document number.
 
 ## AS-IS (hub `21825676`, static read; full quotes in `egm/evidence.md`)
@@ -106,7 +106,7 @@ Closing a shift and pressing "Reintentar" or "Emitir ahora" at the same moment p
 - I1: a join request that was approved is never stored as denied.
 - I2: a leave request's stored status is the one the successful caller was told.
 - I3: the assistant cannot make a status jump on an order or ticket that the app refuses.
-- I4: no reminder, follow-up or emission stays in progress longer than the limit plus one tick or one retry.
+- I4: no reminder, follow-up or emission stays in progress longer than the limit plus one jobs tick.
 - I5: at most one live emission per ticket.
 - Unchanged: "a failed send is never retried"; approve; the app's own routes; emission in shadow mode; reminder timing.
 
@@ -117,10 +117,10 @@ Closing a shift and pressing "Reintentar" or "Emitir ahora" at the same moment p
 | D1 | Deny adds the `pending` predicate | 1 | `join/requests.service.test.ts`: deny after approve changes nothing |
 | D2 | Leave decision compare-and-set | 1 | new `hr.service.leave-decision.test.ts`: stale status → `bad_transition`, no write |
 | D3 | Both assistant actions pass `{ ...actor, role: null }` as the workflow actor | 1 | `direct-status-workflow.test.ts` pattern: disallowed jump refused 409; open transition allowed; `actions.server.test.ts` |
-| D4 | Reminders reaper | 2 | new `reminders-reaper.test.ts`: stale → failed/`stale_claim`; fresh untouched |
-| D5 | Follow-up reaper and guarded final write | 2 | `doors-followup.service.test.ts` |
-| D6 | Emission stale-pending sweep in the retry; guarded result write | 2 | `pos.service.emission.test.ts`, `pos-emission.service.test.ts` |
-| D7 | Partial unique index + swallowed duplicate | 3 | `pos-emission.service.test.ts`: unique violation → no row, number rolled back; `pg-pos-schema.test.ts` |
+| D4 | One cross-organisation sweep in the jobs tick for the three tables | 2 | new `stale-sends.service.test.ts` (rendered SQL per table); `routes/api/jobs/tick/server.test.ts` (sweep isolated from the other jobs); `notification-legacy-reconciliation.sql.integration.test.ts` (the reminders trigger accepts `sending → failed` with an error) |
+| D5 | Guarded final writes for reminders and follow-ups | 2 | `doors-followup.service.test.ts`; new `reminders-finalize.test.ts` |
+| D6 | Guarded emission result write | 2, 3 | `pos-emission.sql.integration.test.ts`: a late result on a reaped row changes nothing |
+| D7 | Partial unique index + silent duplicate | 3 | `pos-emission.sql.integration.test.ts`: two concurrent triggers → one live row and the series advances by exactly 1; an `error` row plus a retry → a new row |
 
 ## Success Criteria *(mandatory)*
 
@@ -134,7 +134,9 @@ Closing a shift and pressing "Reintentar" or "Emitir ahora" at the same moment p
 - **Not re-sending a reminder after a reschedule stays as is.** The audit said rescheduling never re-plans reminders; that was wrong for stages that have not fired. Sending a 24-hour reminder a second time after an appointment is moved is a product choice, left out.
 - **The assistant gets no role.** Passing no role means it can only take open workflow transitions. Giving it the member's organisation role is a design choice left for later.
 - **A reaped emission can be emitted twice** if the provider had accepted it before the crash. Accepted while emission is in shadow mode; must be revisited before live emission.
-- Limits are fixed at 15 minutes: longer than any send (the reminder path includes a model call and a channel send) and short enough to show the same day.
+- The limit is 15 minutes. Hub functions are capped at 300 seconds (`src/routes/api/jobs/tick/+server.ts:31-32`), so a row older than 15 minutes belongs to an invocation that no longer exists.
+- Where a workflow is enabled the assistant loses every jump that is not a defined transition, not only role-gated ones. That is the intent. Production has no workflow defined at all (`workflow_defs` is empty, read 2026-11-14), so this changes nothing for anyone today.
+- A workflow refusal and a stale write both answer 409 to the assistant with different bodies; the assistant should re-read and retry only on `stale`.
 - No UI change, no new route, no new string.
 
 ## Out of scope

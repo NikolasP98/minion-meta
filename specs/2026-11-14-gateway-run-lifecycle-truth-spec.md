@@ -3,7 +3,7 @@ id: 2026-11-14-gateway-run-lifecycle-truth-spec
 title: A run reports its real outcome (no false restart apology, no error for a retried run)
 stage: spec
 status: review
-pass: 1
+pass: 2
 created: 2026-11-14
 updated: 2026-11-14
 repos: [minion]

@@ -1,15 +1,14 @@
 # Tasks: A run reports its real outcome
 
-Spec: [spec.md](./spec.md) · Plan: [plan.md](./plan.md). One draft PR per slice against gateway `DEV`.
+Spec: [spec.md](./spec.md) · Plan: [plan.md](./plan.md) (pass 2). One draft PR per slice against gateway `DEV`.
 
 ## Slice 1 — in-flight record (US1; D1, D2)
-- [ ] T101 Failing tests: table empty after an error-reply return, a thrown failover, a cache hit; stale row dropped at drain
-- [ ] T102 Move the insert; unconditional delete in `finally`; drain staleness filter
+- [ ] T101 Failing tests: no row without the parameter; with it, table empty after an error-reply return and a thrown failover
+- [ ] T102 `recordInFlightTurn` parameter passed by the reply runner (not heartbeats) and the follow-up runner; insert moved before proactive compaction; unconditional delete in `finally`
 - [ ] T103 Named vitest files, `test/ci`, `pnpm check`, `pnpm tsgo`; draft PR
 
-## Slice 2 — one terminal event per run (US2; D3–D5)
-- [ ] T201 Trace every caller of `runEmbeddedPiAgent` / `runCliAgent` and every consumer of lifecycle phases (gateway and hub); stop and report if one cannot be wrapped
-- [ ] T202 Failing tests: helper unit test; fail-then-succeed → one `end`; all fail → one `error`; throw before start → one `error`; web chat receives the retry's answer; sub-agent outcome ok
-- [ ] T203 Attempt phases renamed; helper; owners wrapped; CLI per-candidate emissions removed
-- [ ] T204 Gates; draft PR
-- [ ] T205 Dev-gateway check of SC-002 and a forced first-attempt failure in web chat
+## Slice 2 — one terminal event per run (US2; D3–D5) — stacked on slice 1
+- [ ] T201 Failing tests: helper unit tests; flag-on attempt phases; fail-then-succeed → one `end`; single failed attempt → one `error`; throw before start → one `error`; web chat receives the retry's answer; sub-agent outcome ok
+- [ ] T202 `deferRunTerminal` flag; `agent-run-terminal.ts`; five owners wrapped; CLI per-candidate emissions replaced
+- [ ] T203 Gates; draft PR naming slice 1 as its base
+- [ ] T204 Dev-gateway check (restart after failing turns sends no apology; forced first-attempt failure shows the answer)

@@ -4,7 +4,7 @@
 
 **Created**: 2026-11-14
 
-**Status**: Draft
+**Status**: Draft, pass 2 (revised after the EGM design critique of 2026-11-14, `egm/critic_report.md`)
 
 **Input**: Owner, 2026-11-14, on the audit report's gateway row, the two items left uncovered in the screenshot: "retry shown as an error" and "false 'server restarted' messages": "address these as well". Follows the 2026-11-11 audit.
 
@@ -34,7 +34,7 @@ A customer on WhatsApp or Telegram only receives "my server restarted, please re
 1. **Given** a turn whose first model failed and whose fallback answered, **When** the gateway shuts down later, **Then** no apology is sent for it.
 2. **Given** a turn answered from the cache, or ended with an error reply, or timed out, **When** the turn returns, **Then** no row remains.
 3. **Given** a turn still running when the gateway receives the stop signal, **When** the shutdown drain runs, **Then** that customer gets the apology, as today.
-4. **Given** a row older than 30 minutes left by an older build, **When** the shutdown drain runs, **Then** it is deleted without an apology.
+4. **Given** an internal run that is not a customer's message (scheduled job, memory flush, sub-agent, heartbeat), **When** the gateway stops in the middle of it, **Then** nobody receives an apology.
 
 ---
 
@@ -50,7 +50,7 @@ A person chatting in the hub sees the answer when a retry succeeds, and an error
 
 1. **Given** a run whose first attempt fails and whose retry succeeds, **When** events flow to a web chat client, **Then** the client receives the answer and one final "done", and no error.
 2. **Given** the same run for a sub-agent, **When** it ends, **Then** the parent is told it succeeded.
-3. **Given** a run whose every attempt fails, **When** it ends, **Then** the client receives exactly one error.
+3. **Given** a run whose every attempt fails, or whose only attempt fails with nothing to retry, **When** it ends, **Then** the client receives exactly one error with the text the user would have been shown.
 4. **Given** a run that fails before any attempt starts (unknown model, no usable credential), **When** it ends, **Then** the web chat receives a final error and stops showing the spinner.
 5. **Given** an attempt that times out and is retried, **When** the retry succeeds, **Then** no premature "done" is announced for the timed-out attempt.
 
@@ -66,10 +66,10 @@ A person chatting in the hub sees the answer when a retry succeeds, and an error
 ### Functional Requirements
 
 - **FR-001**: The in-flight record of a turn MUST be removed whenever the turn function returns or throws, whatever the outcome. Only process death may leave it.
-- **FR-002**: The record MUST NOT be created for a turn that ends before the model is called (configuration errors, cache hits).
-- **FR-003**: The shutdown drain MUST ignore and delete records older than the same 30-minute limit the boot recovery uses.
-- **FR-004**: An attempt that may be retried MUST NOT emit the run-level terminal lifecycle phases `end` or `error`.
-- **FR-005**: Every run MUST emit exactly one terminal lifecycle event, after its last attempt, carrying its real outcome, including when it fails before any attempt starts.
+- **FR-002**: The record MUST NOT be created for a turn that ends before any model call (configuration errors, cache hits), and MUST exist during the proactive compaction that precedes the first attempt.
+- **FR-003**: The record MUST be created only for turns that answer a customer's message; internal runs MUST NOT create one.
+- **FR-004**: For runs whose owner opts in, an attempt MUST NOT emit the run-level terminal lifecycle phases `end` or `error`; it emits `attempt_end` or `attempt_error`. Callers that do not opt in (model probes, the public extension export) keep today's behaviour.
+- **FR-005**: Every opted-in run MUST emit exactly one terminal lifecycle event after its last attempt. The outcome is `error` when the last attempt ended in error or the run threw or reported a failure, and `end` otherwise; `end` carries the aborted flag.
 - **FR-006**: Consumers that act on a run's end (web chat final, sub-agent outcome, streaming HTTP endpoints, `agent.wait`) MUST keep reacting to `end` and `error` only.
 - **FR-007**: Attempt-level outcomes MUST stay observable as non-terminal lifecycle phases, and the reliability event recorded per failed attempt MUST stay.
 
@@ -88,12 +88,12 @@ A person chatting in the hub sees the answer when a retry succeeds, and an error
 | A9 | A "terminal emitted once" guard exists only for the CLI-provider branch and only per model candidate | `src/auto-reply/reply/agent-runner-execution.ts:182-255` |
 | A10 | A web chat run that throws before any attempt emits no lifecycle event and no chat final; the client waits forever | `run.ts:307`, `:340`, `:365`, `:495-506`; `agent-runner-execution.ts:466`, `:584-589`; `src/gateway/server-methods/chat/handlers.ts:354-398` |
 
-Known unknowns: whether the agent SDK fires `agent_end` before a prompt error is thrown; which of the other callers of the run function (`followup-runner.ts:142`, `platform/cron/isolated-agent/run.ts:502`, `agent-runner-memory.ts:115`) have a consumer waiting for a terminal event; what the shutdown's 1.5-second budget does to a drain loop still sending.
+Known unknowns: whether the agent SDK fires `agent_end` before a prompt error is thrown; what the shutdown's 1.5-second budget does to a drain loop still sending. Closed in review: every caller's run id does have consumers that wait for a terminal event (run context and sequence cleanup in `server-chat.ts:514-520`; the per-session busy flag in `agent-job.ts:121-143`, read by Telegram), so a caller that defers must emit. The run function also returns normally when its last attempt failed with nothing to retry (`run.ts:1081-1296`), so "returned" does not mean "succeeded".
 
 ## TO-BE (invariants)
 
 - I1: an in-flight record exists only while its turn function is executing.
-- I2: per run id, consumers see `start`, any number of attempt-level phases, then exactly one of `end` or `error`.
+- I2: per run of an opted-in owner, consumers see zero or more `start`, any number of attempt-level phases, then exactly one of `end` or `error`.
 - I3: a client that received a run's `start` always receives its terminal event.
 - Unchanged: event payload fields other than the phase name of attempt-level events; the apology text and channel; boot recovery; `agent.wait` semantics; the reliability event per failed attempt.
 
@@ -101,10 +101,10 @@ Known unknowns: whether the agent SDK fires `agent_end` before a prompt error is
 
 | # | Transition | Slice | Proving test |
 |---|---|---|---|
-| D1 | Row created just before the `try`; deleted unconditionally in `finally` | 1 | runner test with a real store on a temp path: table empty after an error-reply return, a thrown failover and a cache hit |
-| D2 | Shutdown drain applies the 30-minute limit | 1 | `recovery.test.ts`: stale row deleted without a send |
-| D3 | Attempt handler emits `attempt_end` / `attempt_error` instead of `end` / `error` | 2 | `pi-embedded-subscribe` lifecycle test |
-| D4 | The run's owner emits the single terminal event, with a `finally` backstop | 2 | `agent-runner` test: fail-then-succeed → one `end`; all fail → one `error`; throw before start → one `error` |
+| D1 | Row created just before proactive compaction; deleted unconditionally in `finally` | 1 | runner test with a real store on a temp path: table empty after an error-reply return, a thrown failover and a cache hit |
+| D2 | Row only for customer turns (opt-in parameter) | 1 | runner test: no row without the parameter; row present during the run with it |
+| D3 | With the opt-in flag the attempt handler emits `attempt_end` / `attempt_error`; without it, `end` / `error` as today | 2 | `pi-embedded-subscribe` lifecycle test |
+| D4 | The run's owner emits the single terminal event from the last attempt's outcome, with a `finally` backstop | 2 | helper and `agent-runner` tests: fail-then-succeed → one `end`; single failed attempt with no fallback → one `error`; all fail → one `error`; throw before start → one `error`; aborted → `end` with the aborted flag |
 | D5 | Web chat and sub-agent consumers see the real outcome | 2 | `server-chat.agent-events.test.ts`: retry delivers deltas and one `done`; registry test: outcome ok |
 
 ## Success Criteria *(mandatory)*
@@ -116,7 +116,8 @@ Known unknowns: whether the agent SDK fires `agent_end` before a prompt error is
 
 ## Assumptions
 
-- Renaming the attempt-level phases is safe for clients: every consumer found matches `end` and `error` exactly, so unknown phases are ignored. The hub is checked for the same before merge.
+- Renaming the attempt-level phases is safe for clients: every gateway consumer matches `end` and `error` exactly, and the hub never reads a lifecycle phase (it reads chat `state` and tool phases, `minion_hub` `src/lib/services/gateway.svelte.ts:1362-1553`).
+- **Intended behaviour changes:** a sub-agent that timed out is now reported to its parent as timed out (today the attempt's `end` carries no aborted flag, so it reads as success). Between two model candidates there is a short gap with no in-flight record; a stop in that gap sends no apology.
 - No protocol type change in `@minion-stack/shared` is needed if the lifecycle phase is typed as a string there; if it is a closed union, the two new names are added and the hub, site and paperclip adapter are rebuilt (cross-project impact, stated in the plan).
 - Gateway tests are run by file; the full suite is never run.
 

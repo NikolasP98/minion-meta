@@ -3,7 +3,7 @@ id: 2026-11-14-hub-stuck-states-and-unguarded-decisions-spec
 title: Stuck sends and unguarded decisions (reminders, follow-ups, tax emission, join, leave, assistant actions)
 stage: spec
 status: review
-pass: 1
+pass: 2
 created: 2026-11-14
 updated: 2026-11-14
 repos: [minion_hub]
