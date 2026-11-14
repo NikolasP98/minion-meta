@@ -68,7 +68,7 @@ A person chatting in the hub sees the answer when a retry succeeds, and an error
 - **FR-001**: The in-flight record of a turn MUST be removed whenever the turn function returns or throws, whatever the outcome. Only process death may leave it.
 - **FR-002**: The record MUST NOT be created for a turn that ends before any model call (configuration errors, cache hits), and MUST exist during the proactive compaction that precedes the first attempt.
 - **FR-003**: The record MUST be created only for turns that answer a customer's message; internal runs MUST NOT create one.
-- **FR-004**: For runs whose owner opts in, an attempt MUST NOT emit the run-level terminal lifecycle phases `end` or `error`; it emits `attempt_end` or `attempt_error`. Callers that do not opt in (model probes, the public extension export) keep today's behaviour.
+- **FR-004**: For runs whose owner opts in (by wrapping the run with the terminal helper, which marks the run id), an attempt MUST NOT emit the run-level terminal lifecycle phases `end` or `error`; it emits `attempt_end` or `attempt_error`. Callers that do not opt in (model probes, the public extension export) keep today's behaviour.
 - **FR-005**: Every opted-in run MUST emit exactly one terminal lifecycle event after its last attempt. The outcome is `error` when the last attempt ended in error or the run threw or reported a failure, and `end` otherwise; `end` carries the aborted flag.
 - **FR-006**: Consumers that act on a run's end (web chat final, sub-agent outcome, streaming HTTP endpoints, `agent.wait`) MUST keep reacting to `end` and `error` only.
 - **FR-007**: Attempt-level outcomes MUST stay observable as non-terminal lifecycle phases, and the reliability event recorded per failed attempt MUST stay.

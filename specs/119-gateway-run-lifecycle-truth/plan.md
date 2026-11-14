@@ -30,14 +30,15 @@ I this directory. II rows A1–A10 with anchors; static read stated. III two PRs
 
 ### Slice 2 — one terminal event per run
 
-1. `subscribeEmbeddedPiSession` params (and `runEmbeddedPiAgent`, which forwards them) gain `deferRunTerminal?: boolean`. In `src/agents/pi-embedded/pi-embedded-subscribe.handlers.lifecycle.ts`, when it is true, `handleAgentEnd` emits `phase: "attempt_error"` where it emits `"error"` (`:42-50`, `:67-73`) and `phase: "attempt_end"` where it emits `"end"` (`:74-86`), same data. When false, nothing changes. The reliability event (`:54-66`) is unchanged.
+1. Deferral is a property of the run id, not a parameter. `src/infra/agent-events.ts` gains `markRunTerminalDeferred(runId)`, `unmarkRunTerminalDeferred(runId)` and `isRunTerminalDeferred(runId)` over a module-level `Set`. In `src/agents/pi-embedded/pi-embedded-subscribe.handlers.lifecycle.ts`, when `isRunTerminalDeferred(ctx.params.runId)` is true, `handleAgentEnd` emits `phase: "attempt_error"` where it emits `"error"` (`:42-50`, `:67-73`) and `phase: "attempt_end"` where it emits `"end"` (`:74-86`), same data. Otherwise nothing changes. The reliability event (`:54-66`) is unchanged. **No parameter is forwarded and `src/agents/pi-embedded-runner/run/attempt.ts` is not edited**: that file is pinned by hash in `.github/scripts/agent-fixture-audit.mjs` and changing it needs a separate, human-gated security update (found during implementation, 2026-11-14).
 2. New `src/infra/agent-run-terminal.ts` exporting `withRunTerminal<T>(runId, opts, fn)`:
+   - calls `markRunTerminalDeferred(runId)` on entry and `unmarkRunTerminalDeferred(runId)` in `finally` (after emitting);
    - registers an `onAgentEvent` listener for that run id that remembers the last attempt-level phase and its error text; unregisters in `finally`;
    - `fn` receives `report(outcome)` so an owner can state a failure that is returned, not thrown (`{ status: "error", error }`), or an abort (`{ status: "ok", aborted: true }`);
    - after `fn` returns: outcome is the reported one if any, else `error` with the remembered text when the last attempt-level phase was `attempt_error`, else `end`; emits one lifecycle event with `startedAt`, `endedAt`, `error` or `aborted`;
    - on throw: emits `error` with the message, rethrows;
    - a local boolean guarantees at most one emission; a `finally` backstop emits `error` if nothing was emitted. No shared set.
-3. Owners (each passes `deferRunTerminal: true` to the run function and wraps its outermost retry scope):
+3. Owners (each wraps its outermost retry scope with the helper; nothing is passed to the run function):
    - `src/auto-reply/reply/agent-runner-execution.ts`: wrap the whole `while (true)` (`:108-591`) for both branches; delete the per-candidate CLI emissions (`:224-254`) and emit `attempt_error` there instead when a CLI candidate fails. The failure returns (`:446`, `:456`, `:494`, `:504`, `:550`, `:584`) call `report({ status: "error", error: <the user-facing payload text of that return> })`.
    - `src/cli/commands/agent.ts:541-615`: replace the `lifecycleEnded` bookkeeping and backstop with the helper around `runWithModelFallback`.
    - `src/auto-reply/reply/followup-runner.ts:130-194`, `src/auto-reply/reply/agent-runner-memory.ts:99-133`, `src/platform/cron/isolated-agent/run.ts:477-524`: wrap `runWithModelFallback` with the helper.
@@ -47,6 +48,7 @@ I this directory. II rows A1–A10 with anchors; static read stated. III two PRs
 
 ## Alternatives considered
 
+- **An opt-in `deferRunTerminal` parameter forwarded through the run function (pass 2, first draft).** Rejected during implementation: forwarding it means editing the hash-pinned `attempt.ts`.
 - **Rename unconditionally and wrap every caller (pass 1).** Rejected: a missed caller (the public extension export cannot be wrapped) would never emit a terminal event, leaving run context and the per-session busy flag set for the life of the process.
 - **"Normal return means success" (pass 1).** Wrong: the run function returns normally after a failed last attempt.
 - **Copy `agent.wait`'s 15-second grace window into the chat handler and the sub-agent registry.** A real error shows 15 seconds late; a premature `end` and the spinner-forever path stay.
@@ -77,6 +79,6 @@ Per slice: failing test first; named vitest files; `test/ci`; `pnpm check`; `pnp
 
 ### Slice 2 (branch from slice 1's branch)
 - C `src/infra/agent-run-terminal.ts`, `agent-run-terminal.test.ts` (return → `end`; last phase `attempt_error` → `error` with its text; reported failure → `error`; reported abort → `end` with aborted; throw → `error` and rethrow; never twice; listener removed)
-- M `src/agents/pi-embedded/pi-embedded-subscribe.handlers.lifecycle.ts` and the subscribe/run params types; M `src/agents/pi-embedded/pi-embedded-subscribe.lifecycle-billing-error.e2e.test.ts` (flag off: unchanged; flag on: `attempt_error`)
+- M `src/infra/agent-events.ts`, `src/agents/pi-embedded/pi-embedded-subscribe.handlers.lifecycle.ts` (no params type change, no `attempt.ts` change); M `src/agents/pi-embedded/pi-embedded-subscribe.lifecycle-billing-error.e2e.test.ts` (flag off: unchanged; flag on: `attempt_error`)
 - M `src/auto-reply/reply/agent-runner-execution.ts`, `followup-runner.ts`, `agent-runner-memory.ts`, `src/platform/cron/isolated-agent/run.ts`, `src/cli/commands/agent.ts`
 - M tests: `src/auto-reply/reply/agent-runner.runreplyagent.test.ts`, `agent-runner.misc.runreplyagent.test.ts`; `src/gateway/server-core/server-chat.agent-events.test.ts` (an `attempt_error` followed by deltas and `end` delivers the deltas and one `done`); one sub-agent registry test (outcome ok after `attempt_error` then `end`); `src/gateway/server-methods/server-methods.test.ts` stays green
