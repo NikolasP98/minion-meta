@@ -27,59 +27,59 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-14)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:5139` — 'Gate constrained capabilities before component mounting, audit token/method authority'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5139
-- `NikolasP98/minion-meta@dev rankings/index.json:5646` — a realized accrual is counted via (source, source_id, status)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5646
-- `NikolasP98/minion-meta@dev rankings/index.json:5680` — paidAmount sums every non-void line of the member regardless",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5680
-- `NikolasP98/minion-meta@dev rankings/index.json:8186` — that till-side draw happens on CLICK, not on submit",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8186
-- `NikolasP98/minion-meta@dev rankings/index.json:8483` — a following cancel is N independent transactions, not one",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8483
-- `NikolasP98/minion-meta@dev rankings/index.json:8515` — voiding an instalment ticket un-pays its plan (paid-to-date",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8515
-- `NikolasP98/minion-meta@dev rankings/index.json:8582` — scope word-frequency/sentiment/win-index rollups by owner",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8582
-- `NikolasP98/minion-meta@dev rankings/index.json:10026` — 'provider JSON reader is not byte bounded before res.json()'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10026
-- `NikolasP98/minion-meta@dev rankings/index.json:11732` — Replace this bounded best-effort fan-out with the durable",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11732
-- `NikolasP98/minion-meta@dev rankings/index.json:11799` — Keep restricted roles denied until scoped retrieval/masking is",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11799
-- `NikolasP98/minion-meta@dev rankings/index.json:11934` — Keep restricted roles denied until scoped retrieval/masking is",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11934
-- `NikolasP98/minion-meta@dev rankings/index.json:14079` — comment pointing at this proposal",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14079
-- `NikolasP98/minion-meta@dev rankings/index.json:14472` — A profile has one immutable gateway binding; concurrent multi-org",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14472
-- `NikolasP98/minion-meta@dev rankings/index.json:21684` — Complete Back/history/mobile qualification after the owner",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21684
-- `NikolasP98/minion-meta@dev rankings/index.json:24159` — see appointment-overdue.ts — same unwired deep-link param",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24159
-- `NikolasP98/minion-meta@dev rankings/index.json:24318` — 'RUC parties created BEFORE 2026-09-17 are unverified'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24318
-- `NikolasP98/minion-meta@dev rankings/index.json:26477` — onArtifactCallback/onChoice are NOT routed'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26477
-- `NikolasP98/minion-meta@dev rankings/index.json:26577` — 'Add an explicitly reviewed indeterminate recovery policy'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26577
-- `NikolasP98/minion-meta@dev rankings/index.json:28861` — the PREDICATE is covered here, the WIRING is not — no test'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28861
-- `NikolasP98/minion-meta@dev rankings/index.json:28893` — the dialog names the VISIT's service titles, not every",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28893
-- `NikolasP98/minion-meta@dev rankings/index.json:33166` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33166
-- `NikolasP98/minion-meta@dev rankings/index.json:33230` — nothing links here with these params yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33230
-- `NikolasP98/minion-meta@dev rankings/index.json:33472` — the assistant opens this party form via ?new=1, but POST",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33472
-- `NikolasP98/minion-meta@dev rankings/index.json:33810` — plan button gated on pos:create, but server-side",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33810
-- `NikolasP98/minion-meta@dev rankings/index.json:38895` — --apply is intentionally unimplemented. Building it"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38895
-- `NikolasP98/minion-meta@dev rankings/index.json:41277` — 'add-only; rename / deactivate / max-days edits need a modal'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41277
-- `NikolasP98/minion-meta@dev rankings/index.json:43473` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43473
-- `NikolasP98/minion-meta@dev rankings/index.json:43505` — the owner also asked for \"custom select columns\" to be",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43505
+- `NikolasP98/minion-meta@dev rankings/index.json:5310` — 'Gate constrained capabilities before component mounting, audit token/method authority'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5310
+- `NikolasP98/minion-meta@dev rankings/index.json:5852` — a realized accrual is counted via (source, source_id, status)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5852
+- `NikolasP98/minion-meta@dev rankings/index.json:5886` — paidAmount sums every non-void line of the member regardless",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5886
+- `NikolasP98/minion-meta@dev rankings/index.json:8527` — that till-side draw happens on CLICK, not on submit",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8527
+- `NikolasP98/minion-meta@dev rankings/index.json:8824` — a following cancel is N independent transactions, not one",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8824
+- `NikolasP98/minion-meta@dev rankings/index.json:8856` — voiding an instalment ticket un-pays its plan (paid-to-date",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8856
+- `NikolasP98/minion-meta@dev rankings/index.json:8923` — scope word-frequency/sentiment/win-index rollups by owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8923
+- `NikolasP98/minion-meta@dev rankings/index.json:10367` — 'provider JSON reader is not byte bounded before res.json()'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10367
+- `NikolasP98/minion-meta@dev rankings/index.json:12137` — Replace this bounded best-effort fan-out with the durable",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12137
+- `NikolasP98/minion-meta@dev rankings/index.json:12204` — Keep restricted roles denied until scoped retrieval/masking is",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12204
+- `NikolasP98/minion-meta@dev rankings/index.json:12339` — Keep restricted roles denied until scoped retrieval/masking is",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12339
+- `NikolasP98/minion-meta@dev rankings/index.json:14484` — comment pointing at this proposal",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14484
+- `NikolasP98/minion-meta@dev rankings/index.json:14877` — A profile has one immutable gateway binding; concurrent multi-org",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14877
+- `NikolasP98/minion-meta@dev rankings/index.json:22089` — Complete Back/history/mobile qualification after the owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22089
+- `NikolasP98/minion-meta@dev rankings/index.json:24564` — see appointment-overdue.ts — same unwired deep-link param",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24564
+- `NikolasP98/minion-meta@dev rankings/index.json:24723` — 'RUC parties created BEFORE 2026-09-17 are unverified'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L24723
+- `NikolasP98/minion-meta@dev rankings/index.json:26882` — onArtifactCallback/onChoice are NOT routed'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26882
+- `NikolasP98/minion-meta@dev rankings/index.json:26982` — 'Add an explicitly reviewed indeterminate recovery policy'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26982
+- `NikolasP98/minion-meta@dev rankings/index.json:29266` — the PREDICATE is covered here, the WIRING is not — no test'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29266
+- `NikolasP98/minion-meta@dev rankings/index.json:29298` — the dialog names the VISIT's service titles, not every",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29298
+- `NikolasP98/minion-meta@dev rankings/index.json:33571` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33571
+- `NikolasP98/minion-meta@dev rankings/index.json:33635` — nothing links here with these params yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33635
+- `NikolasP98/minion-meta@dev rankings/index.json:33877` — the assistant opens this party form via ?new=1, but POST",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L33877
+- `NikolasP98/minion-meta@dev rankings/index.json:34215` — plan button gated on pos:create, but server-side",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34215
+- `NikolasP98/minion-meta@dev rankings/index.json:39300` — --apply is intentionally unimplemented. Building it"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39300
+- `NikolasP98/minion-meta@dev rankings/index.json:41682` — 'add-only; rename / deactivate / max-days edits need a modal'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41682
+- `NikolasP98/minion-meta@dev rankings/index.json:43878` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43878
+- `NikolasP98/minion-meta@dev rankings/index.json:43910` — the owner also asked for \"custom select columns\" to be",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43910
