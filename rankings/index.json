@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T22:17:35.102Z",
+	"generatedAt": "2026-11-14T22:47:15.932Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7288,6 +7288,75 @@
 			"scoredAt": "2026-11-13T06:17:37.984Z"
 		},
 		{
+			"key": "pr:minion_hub#671",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
+			"sourceUpdatedAt": "2026-11-14T22:23:56Z",
+			"sourceFingerprint": "b0fda339f4c919f22070ab8e284d91b35d7e6e8e68c4385b16b236ef810a1465",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#674"
+			],
+			"rationale": "Fixes a real POS correction gap with guard checks and tests, though unverified against a live database.",
+			"evidence": [
+				"97 tests pass in pos.tickets.test.ts plus 11 new swap tests and 9 route tests",
+				"Not run against a database; successful swap with stock movement lacks a dedicated test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T22:47:15.687Z"
+		},
+		{
+			"key": "pr:minion_hub#674",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
+			"sourceUpdatedAt": "2026-11-14T22:23:46Z",
+			"sourceFingerprint": "82de9497de212ab9c484e21272f60e6b81a013ad8ca4e0464ae29c96b336b67e",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#671"
+			],
+			"rationale": "Completes the till-correction flow for cases #671 cannot cover, with post-review fixes and tests but still no end-to-end DB verification.",
+			"evidence": [
+				"Stacked on #671; retarget to master after #671 merges",
+				"57 handoff/session tests pass and 9 mounted-page cases after EGM stage 9 review fixes",
+				"No end-to-end run against a database for void-refund-charge-again flow"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T22:47:15.687Z"
+		},
+		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -14093,78 +14162,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T10:48:43.276Z"
-		},
-		{
-			"key": "pr:minion_hub#671",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
-			"sourceUpdatedAt": "2026-11-14T22:06:06Z",
-			"sourceFingerprint": "ce698c7099f1f1de39c6d7cb884e67652fb6610cbeb26e63342f18a9505db932",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#674",
-				"pr:minion-meta#1036"
-			],
-			"rationale": "A scoped, well-tested server-side fix for a real till-correction pain with documented refusal paths, ready to land behind its spec.",
-			"evidence": [
-				"97 tests pass in pos.tickets.test.ts plus 11 new swap tests and 9 route tests",
-				"stacked on #670, spec NikolasP98/minion-meta#1036 slice S4",
-				"not run against a database; swap not shown in sale history"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T22:17:34.849Z"
-		},
-		{
-			"key": "pr:minion_hub#674",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
-			"sourceUpdatedAt": "2026-11-14T22:06:06Z",
-			"sourceFingerprint": "579dab502c4ca5da3ddbd3e44e8f262756207dcaf5b4e82f510f4a06ddc963ff",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#671",
-				"pr:minion-meta#1036"
-			],
-			"rationale": "Completes the till-correction flow for cases the swap alone can't fix, with solid test coverage and post-review guard fixes already applied.",
-			"evidence": [
-				"57 tests pass across sell-charge-handoff v4, sell-session, and calendar-context-menu cases",
-				"4 passing page.swap.mounted.test.ts cases cover the void-and-recharge flow",
-				"EGM stage 9 review fixes already incorporated (package/instalment guard, pre-void catalogue check)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T22:17:34.849Z"
 		},
 		{
 			"key": "pr:minion-meta#1008",
@@ -49118,37 +49115,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
-		},
-		{
-			"key": "run:minion_hub#43645310970",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43645310970",
-			"sourceUpdatedAt": "2026-11-14T21:55:05Z",
-			"sourceFingerprint": "ad7db623f881b501d9fba9b998d4d6c72959ffc7187d3855badca25f71440cb2",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run is an automated status artifact, not an actionable goal.",
-			"evidence": [
-				"stage testing, status in_progress, push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:57:59.031Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
