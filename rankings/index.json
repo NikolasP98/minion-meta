@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-14T22:47:15.932Z",
+	"generatedAt": "2026-11-14T23:17:18.717Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2239,39 +2239,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:19:09.642Z"
-		},
-		{
-			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Restore typed assistant analytics and persisted brain delegation after security containment",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-09-assistant-query-delegation-restoration.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "e1f89bf3a2f8862be34092b4d99a32da51757c174ea881e478e660088b4eaf98",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Restoring typed analytics and gateway brain delegation after a security containment is strategically central and well-scoped, but requires persisted assignment infrastructure and tests not yet built, so execution isn't yet actionable.",
-			"evidence": [
-				"raw /api/gateway/query always returns 503 ASSISTANT_SQL_DISABLED",
-				"brains table persists agent/org but no gateway assignment yet",
-				"requires replacing raw SQL with versioned server-owned operations"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T22:47:08.781Z"
 		},
 		{
 			"key": "proposal:2026-10-09-performance-release-qualification",
@@ -6628,6 +6595,39 @@
 			"scoredAt": "2026-11-14T19:18:33.263Z"
 		},
 		{
+			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Restore typed assistant analytics and persisted brain delegation after security containment",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-09-assistant-query-delegation-restoration.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "e1f89bf3a2f8862be34092b4d99a32da51757c174ea881e478e660088b4eaf98",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Well-specified multi-part restoration of SQL query and brain-delegation capability after security containment, but implementation requires new versioned query infra, persisted assignment lifecycle, and deployed-boundary tests not yet built.",
+			"evidence": [
+				"raw /api/gateway/query returns 503 ASSISTANT_SQL_DISABLED with no re-enable flag",
+				"gateway brain calls return ASSISTANT_BRAIN_ASSIGNMENT_REQUIRED pending persisted assignment lifecycle",
+				"remaining acceptance must verify deployed PostgREST/JWT/pooler/RLS boundaries"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-14T23:17:18.482Z"
+		},
+		{
 			"key": "proposal:2026-10-24-hub-collection-points-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9900,19 +9900,19 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 5
+				"implementation": 6
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Legacy run.sh still allows the develop agent to forge human-facing PR signals via inherited GH_TOKEN, but containment-v2 already solves this structurally and the proposal itself is undecided between accelerating rollout or patching run.sh.",
+			"rationale": "Legacy run.sh still exposes GH_TOKEN to develop-agent subprocesses allowing forged PR signals, and a tested structural fix (containment-v2) already exists to accelerate.",
 			"evidence": [
-				"develop agent can run gh pr ready/comment itself",
-				"containment-v2 already refuses start when GitHub credential present"
+				"GH_TOKEN inherited by model process and self-test in agent/run.sh",
+				"containment-v2 already refuses start with GitHub credential present (agent/factory-develop.sh:120)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-07T22:47:08.781Z"
+			"scoredAt": "2026-11-14T23:17:18.482Z"
 		},
 		{
 			"key": "proposal:2026-10-03-readiness-current-org-getter",
