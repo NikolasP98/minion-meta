@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-15T08:47:41.072Z",
+	"generatedAt": "2026-11-15T09:17:12.070Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1373,6 +1373,39 @@
 			"scoredAt": "2026-11-10T18:49:04.296Z"
 		},
 		{
+			"key": "pr:minion_hub#644",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#644 fix(dev): devtools launcher sits beside the avatar instead of on top of it (unblocks master qa-stack)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/644",
+			"sourceUpdatedAt": "2026-11-08T08:52:35Z",
+			"sourceFingerprint": "00983cd577ec662558b09138c43a67af048d992fc4858b448c5f6b965ec7173b",
+			"score": 77,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "PR fixes a z-index conflict breaking the qa-stack smoke on master itself, blocking CI for all PRs, with gates already passing on this tree.",
+			"evidence": [
+				"master itself fails qa-stack smoke since 50c9d4e1",
+				"devtools launcher z-index 100000 intercepts avatar click per Playwright error",
+				"check/tests/lint gates reported green on this PR"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T09:17:11.861Z"
+		},
+		{
 			"key": "proposal:2026-10-02-hub-gateway-production-readiness-recon",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1774,40 +1807,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T06:18:03.894Z"
-		},
-		{
-			"key": "pr:minion_hub#644",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#644 fix(dev): devtools launcher sits beside the avatar instead of on top of it (unblocks master qa-stack)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/644",
-			"sourceUpdatedAt": "2026-11-08T08:52:35Z",
-			"sourceFingerprint": "00983cd577ec662558b09138c43a67af048d992fc4858b448c5f6b965ec7173b",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"run:minion_hub#42465619321"
-			],
-			"rationale": "Fixes a root-caused CI-blocking regression on master (qa-stack smoke failing for every PR) with gates and tests already passing in-tree.",
-			"evidence": [
-				"\"the qa-stack smoke ... fails on master itself (and therefore on every PR)\"",
-				"\"bun run check → 0 errors ... layout component tests → 50 passed\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T09:07:16.478Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-825707600",
