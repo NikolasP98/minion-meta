@@ -1,12 +1,13 @@
 ---
 id: 2026-11-11-hub-storybook-contact-chat-realtime-stub
 title: Storybook CRM contact layout throws from the chat panel's realtime channel
-status: draft
+status: review
 created: 2026-11-11
-updated: 2026-11-11
+updated: 2026-11-15
 repos: [minion_hub]
 effort: S
 source: spec 2026-11-10-hub-storybook-layers-layouts
+duplicate_candidate: postmerge-minion-hub-d3f8d16a2e95
 ---
 
 # Storybook CRM contact layout throws from the chat panel's realtime channel
@@ -39,3 +40,10 @@ Test: the story's play function asserts that no `pageerror` fires.
 
 The `/pos/appointments` and assistant/chat-home layouts. Both were skipped because they fetch
 live data on mount. They need the same kind of injection before they can get a layout story.
+
+## Reconciliation note (2026-11-15)
+
+Same defect as `postmerge-minion-hub-d3f8d16a2e95` (same `TODO(handoff)` marker, same file,
+same PR #648, same root cause). That proposal is richer in root-cause framing but already
+`status: approved`, so this sweep cannot retire it per the no-touch-approved rule. Flagging
+this proposal for a human to pick the canonical and close out the other side manually.
