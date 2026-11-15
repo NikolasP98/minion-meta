@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-15T11:17:06.530Z",
+	"generatedAt": "2026-11-15T11:47:47.184Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1601,41 +1601,6 @@
 			"scoredAt": "2026-11-12T18:19:24.890Z"
 		},
 		{
-			"key": "proposal:2026-10-17-agent-dynamic-tools",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Discover current authorized tools and answer catalog questions directly",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-17-agent-dynamic-tools.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "5a92edd2880d198f48ea83e2e1db5b767205c615eccfe4c3110c74e982b73f33",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-17-agent-dynamic-tools-spec",
-				"proposal:2026-10-18-assistant-navigation-confirmation"
-			],
-			"rationale": "Core dynamic-tools fix has active hub/gateway PRs but PR333 is blocked pending owner-authorized security-baseline exception, so paid work cannot proceed now.",
-			"evidence": [
-				"Gateway PR333 blocked by rule against self-allowlisting secret-scan findings, pending owner authorization",
-				"Extensive open lifecycle follow-ups (budget, cancellation, model qualification) still unresolved despite 'approved' status"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T11:17:42.562Z"
-		},
-		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -1702,41 +1667,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:56:31.400Z"
-		},
-		{
-			"key": "spec:2026-10-17-agent-dynamic-tools-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion",
-			"title": "Current tools and answer-first business queries",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-17-agent-dynamic-tools-spec.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "c00e85cb2277bfa4ddbdb89bf84b3b05cbf13afc4bff6094125b5b66b603fb6d",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-17-agent-dynamic-tools",
-				"spec:2026-10-18-assistant-navigation-confirmation-spec"
-			],
-			"rationale": "Well-specified cross-repo tool-catalog contract with concrete invariants and active 'implementing' status backed by linked PRs.",
-			"evidence": [
-				"Defines versioned GET /api/gateway/query/tool-catalog contract with revision hashing and schema validation",
-				"Status 'implementing' with source baselines pinned to specific gateway/hub commits"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T11:17:42.562Z"
 		},
 		{
 			"key": "spec:2026-10-24-hub-collection-points-spec",
@@ -2841,6 +2771,41 @@
 			"scoredAt": "2026-11-10T03:18:20.478Z"
 		},
 		{
+			"key": "proposal:2026-10-18-assistant-navigation-confirmation",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Keep assistant navigation under user control",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-18-assistant-navigation-confirmation.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "a199d2f34c3bfb51d36e037684b95ae9288607cc05b4b45e5fb615f209eda3f6",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-18-assistant-navigation-confirmation-spec",
+				"proposal:2026-10-17-agent-dynamic-tools"
+			],
+			"rationale": "Bounded, clearly specified fix for the assistant falsely claiming navigation and for untrusted model-triggered page changes, with no external blocker noted.",
+			"evidence": [
+				"Hub permits model-generated navigation fences and native browser tool calls to change the page, and its message renderer can label an unexecuted fence as Opened",
+				"Automatic navigation... and changes to gateway CI resource allocation are out of scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T11:47:46.937Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-1167132208",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3459,6 +3424,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T04:48:06.046Z"
+		},
+		{
+			"key": "spec:2026-10-18-assistant-navigation-confirmation-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "User-confirmed assistant navigation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-18-assistant-navigation-confirmation-spec.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "381cb9fea597e95589694261626125b4bf95821c465fb31f3e30d64a4f776488",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-18-assistant-navigation-confirmation",
+				"spec:2026-10-17-agent-dynamic-tools-spec"
+			],
+			"rationale": "Highly detailed DELTA/invariant table and verification plan make this navigation-safety fix immediately actionable with no stated blocker.",
+			"evidence": [
+				"hub.navigate validates a visible, permitted internal destination and returns a proposal with navigated:false",
+				"Run focused tool/runner/rendering tests...bun run check, bun run test, bun run build"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T11:47:46.937Z"
 		},
 		{
 			"key": "pr:minion_hub#606",
@@ -4570,6 +4570,41 @@
 			"scoredAt": "2026-11-10T03:18:20.478Z"
 		},
 		{
+			"key": "proposal:2026-10-17-agent-dynamic-tools",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Discover current authorized tools and answer catalog questions directly",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-17-agent-dynamic-tools.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "5a92edd2880d198f48ea83e2e1db5b767205c615eccfe4c3110c74e982b73f33",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-17-agent-dynamic-tools-spec",
+				"proposal:2026-10-18-assistant-navigation-confirmation"
+			],
+			"rationale": "Dynamic-tool/answer-first work is extensively specified and partly drafted but its gateway PR remains blocked pending owner-authorized security baseline change.",
+			"evidence": [
+				"PR333 remains blocked by the repository rule that an implementation branch cannot allowlist its own secret-scan findings",
+				"Selection defaults remain shadow pending task-quality evaluation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T11:47:46.937Z"
+		},
+		{
 			"key": "proposal:2026-10-29-gateway-per-org-credentials-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5041,6 +5076,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:56:31.400Z"
+		},
+		{
+			"key": "spec:2026-10-17-agent-dynamic-tools-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Current tools and answer-first business queries",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-17-agent-dynamic-tools-spec.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "c00e85cb2277bfa4ddbdb89bf84b3b05cbf13afc4bff6094125b5b66b603fb6d",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-10-17-agent-dynamic-tools",
+				"spec:2026-10-18-assistant-navigation-confirmation-spec"
+			],
+			"rationale": "Technical contract for dynamic tool discovery is detailed and in the implementing stage but downstream rollout is gated on an unresolved owner-authorization step.",
+			"evidence": [
+				"Gateway accepts only supported schemaVersion, bounded declarations, unique safe tool names...",
+				"status: implementing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T11:47:46.937Z"
 		},
 		{
 			"key": "issue:minion-meta#1029",
@@ -6223,41 +6293,6 @@
 			"scoredAt": "2026-11-10T20:48:21.573Z"
 		},
 		{
-			"key": "proposal:2026-10-18-assistant-navigation-confirmation",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Keep assistant navigation under user control",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-18-assistant-navigation-confirmation.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "a199d2f34c3bfb51d36e037684b95ae9288607cc05b4b45e5fb615f209eda3f6",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-18-assistant-navigation-confirmation-spec",
-				"proposal:2026-10-17-agent-dynamic-tools"
-			],
-			"rationale": "Addresses a real trust gap where the UI can claim navigation occurred without execution, but no implementation PR is cited yet.",
-			"evidence": [
-				"MarkdownMessage.svelte can synthesize 'Opened' text independent of actual execution results",
-				"Native document.modelContext path bypasses the legacy dispatcher guard, leaving a known gap"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T11:17:42.562Z"
-		},
-		{
 			"key": "proposal:ci-minion-ai-deploy-gateway-devprd-channels",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6550,41 +6585,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T14:43:14.177Z"
-		},
-		{
-			"key": "spec:2026-10-18-assistant-navigation-confirmation-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "User-confirmed assistant navigation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-18-assistant-navigation-confirmation-spec.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "381cb9fea597e95589694261626125b4bf95821c465fb31f3e30d64a4f776488",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-18-assistant-navigation-confirmation",
-				"spec:2026-10-17-agent-dynamic-tools-spec"
-			],
-			"rationale": "Clear invariant-driven spec replacing automatic navigation with a user-click-gated proposal, already in implementation with a required two-pass review gate.",
-			"evidence": [
-				"Specifies hub.navigate must return navigated:false/requiresUserAction:true instead of invoking goto",
-				"DELTA table enumerates exact boundary changes (tool, rendering, batch execution, prompts) with verification steps"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T11:17:42.562Z"
 		},
 		{
 			"key": "pr:minion_hub#544",
