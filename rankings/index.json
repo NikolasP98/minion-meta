@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-15T19:17:07.508Z",
+	"generatedAt": "2026-11-15T19:47:12.412Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4435,39 +4435,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T18:19:24.890Z"
-		},
-		{
-			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Replace the temporary SUNAT-SUSII overlay with provider-neutral invoice source references",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-20-hub-finance-provider-source-refs.md",
-			"sourceUpdatedAt": "2026-10-04",
-			"sourceFingerprint": "75dd4f5c8ded872a1d84d1fd42c692a1bf5582d7d52890f4d334ca673513837f",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A financial data-integrity gap with 3,996 invoices at risk of duplication/misattribution has a clear schema proposal and definition of done but still needs schema/migration work before it's actionable.",
-			"evidence": [
-				"3,996 SUSII invoices, 924 SIRE documents with 909 matches",
-				"canonical row still labelled provider='susii' after retirement",
-				"TODO(handoff) marker at finance.service.ts:82 confirms open end"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T19:17:09.139Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-gate-weakening-detector",
@@ -12785,6 +12752,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T22:17:34.849Z"
+		},
+		{
+			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Replace the temporary SUNAT-SUSII overlay with provider-neutral invoice source references",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-08-20-hub-finance-provider-source-refs.md",
+			"sourceUpdatedAt": "2026-10-04",
+			"sourceFingerprint": "75dd4f5c8ded872a1d84d1fd42c692a1bf5582d7d52890f4d334ca673513837f",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified schema migration replacing a temporary metadata overlay with a proper provider-neutral table, backed by concrete invoice-matching counts and a clear definition of done.",
+			"evidence": [
+				"3,996 SUSII invoices, 924 SIRE documents with 909 matched",
+				"unique (org_id, provider, provider_ref) and (invoice_id, provider) constraints specified",
+				"tests enumerated for SIRE-first, SUSII-first, repeated sync, unmatched docs, retirement"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T19:47:12.189Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3818988565",
