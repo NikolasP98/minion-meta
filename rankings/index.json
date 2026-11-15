@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-15T07:18:11.633Z",
+	"generatedAt": "2026-11-15T07:47:36.472Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -14183,14 +14183,14 @@
 			"scoredAt": "2026-11-14T10:49:43.766Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
+			"key": "proposal:postmerge-minion-hub-99075985a806",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/state/features/notifications.svelte.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b2d5d528651.md",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-99075985a806.md",
 			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "9e2774c4d3d8db20a36eaf964c39001db885486059fdcb4d907b1134bf40fe64",
+			"sourceFingerprint": "0f576f571148bc4258411d658851d9055c1355a1f63a4ce4406ab7707f2084ea",
 			"score": 50,
 			"band": "medium",
 			"axes": {
@@ -14199,20 +14199,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 5,
+				"implementation": 4
 			},
-			"confidence": 5,
-			"recommendation": "execute",
+			"confidence": 4,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Timezone-unsafe dedup key causes real notification correctness issues for multi-org/cross-timezone users.",
+			"rationale": "A skipped whatsapp-logged-out case could leave stale channels in rule matching, but the fix direction depends on first locating an unverified spec slice, making it less immediately actionable.",
 			"evidence": [
-				"guard key uses the BROWSER's local date, not the org's",
-				"breaks across timezones and at midnight boundaries"
+				"TODO(handoff): `channel.whatsapp_logged_out` (spec Slice 4) is SKIPPED — no",
+				"Fix direction's first step is locating the spec file to confirm intended behavior"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T07:17:37.351Z"
+			"scoredAt": "2026-11-15T07:47:36.262Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f0206dc8b63e",
@@ -18234,6 +18234,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T03:47:35.463Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/state/features/notifications.svelte.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8b2d5d528651.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "9e2774c4d3d8db20a36eaf964c39001db885486059fdcb4d907b1134bf40fe64",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Timezone-dependent dedup key causes real cross-timezone/multi-org correctness bugs and has a concrete fallback fix (UTC timestamp) even though the ideal org-TZ source is unresolved.",
+			"evidence": [
+				"TODO(handoff): the guard key uses the BROWSER's local date, not the org's",
+				"Fix direction offers both an ideal (org TZ) and a simple fallback (Date.UTC) path"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T07:47:36.262Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-pos-appointments-fork-spec",
@@ -24537,38 +24569,6 @@
 			"scoredAt": "2026-11-14T10:49:43.766Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-563d320153c1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/visit-unpaid.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-563d320153c1.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "1e3e92903b04f7c1ef14065e23d307f71dea75fcb7c2fdf4deff4ffb079f18a0",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, bounded fix for a missing notification deep-link parameter with a known mirroring pattern to follow.",
-			"evidence": [
-				"TODO(handoff): see appointment-overdue.ts — same unwired deep-link param",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T07:17:37.351Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-676808e46687",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -24631,38 +24631,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:15:16.476Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-99075985a806",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/index.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-99075985a806.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "0f576f571148bc4258411d658851d9055c1355a1f63a4ce4406ab7707f2084ea",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Unimplemented WhatsApp logged-out handling leaves stale channels active in inbox rule matching.",
-			"evidence": [
-				"channel.whatsapp_logged_out (spec Slice 4) is SKIPPED",
-				"potentially leaving stale or unreachable channels active in rules evaluation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T07:17:37.351Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9b86db24576e",
@@ -29402,6 +29370,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:47:59.891Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-563d320153c1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/visit-unpaid.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-563d320153c1.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "1e3e92903b04f7c1ef14065e23d307f71dea75fcb7c2fdf4deff4ffb079f18a0",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Deep-link param gap breaks notification-to-appointment navigation but has a clear, bounded fix pattern to mirror from a sibling file.",
+			"evidence": [
+				"TODO(handoff): see appointment-overdue.ts — same unwired deep-link param.",
+				"Definition of done and fix direction both point to a concrete sibling-file pattern to copy"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T07:47:36.262Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-58cff194d6b6",
