@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-15T07:47:36.472Z",
+	"generatedAt": "2026-11-15T08:17:53.196Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -23232,20 +23232,20 @@
 			},
 			"readiness": {
 				"specification": 5,
-				"implementation": 3
+				"implementation": 2
 			},
 			"confidence": 5,
 			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "Missing org business-hours/timezone data touches the shared @minion-stack/db schema used by multiple consumers and the proposal itself says it needs a proper spec, not a hotfix.",
+			"rationale": "The finding itself states this needs a shared-schema spec rather than a direct fix, so the current TODO-handoff framing should be reframed into a proper spec task.",
 			"evidence": [
-				"TODO notes no org business-hours/timezone table exists yet",
-				"proposal states this should be a spec task since it touches shared schema",
-				"affects daily-feed scheduling across multi-org deployments"
+				"diagnosis: 'This should be a spec task, not a hotfix — it touches shared schema and affects all consumers'",
+				"no org_business_hours table exists yet per marker text",
+				"merged PR #479, checked 2026-10-11"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T07:47:23.075Z"
+			"scoredAt": "2026-11-15T08:17:52.998Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-91262d537ce6",
@@ -27124,6 +27124,39 @@
 			"scoredAt": "2026-11-14T14:47:18.145Z"
 		},
 		{
+			"key": "pr:minion-meta#971",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#971 design(figcraft): FigCraft masters + demo-first UI process",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/971",
+			"sourceUpdatedAt": "2026-11-08T07:34:07Z",
+			"sourceFingerprint": "c05df992bf222b3aad32a24efb4e4e3aa047be4f60887eefed1f68d4e6e61b3c",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Draft PR ships FigCraft UI-process masters with passing checks, giving hub/site a concrete, already-validated design workflow.",
+			"evidence": [
+				"spec-index.mjs test suite 68/68 passed with byte-identical regeneration",
+				"draft status with checks green",
+				"168 tokens + 5,549 prototype links captured for hub master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T08:17:52.998Z"
+		},
+		{
 			"key": "proposal:2026-10-14-hub-daily-dashboard",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29212,39 +29245,6 @@
 			"scoredAt": "2026-11-11T22:17:55.682Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-152748b32645",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/appointment-overdue.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-152748b32645.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "0217f5beeb5fdac4fdc802ba407078a23a175b7c4af3341b0e993103939f278f",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The unwired ?booking= deep-link param affects shareable appointment links but the diagnosis is auto-generated and no investigation or scoping has occurred yet.",
-			"evidence": [
-				"TODO(handoff) marker found in merged PR #479",
-				"fix direction is a generic auto-diagnosis, not a verified scope",
-				"no implementation evidence beyond marker extraction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T07:47:23.075Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-2164a4547ea3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30412,39 +30412,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-13T20:18:46.563Z"
-		},
-		{
-			"key": "pr:minion-meta#971",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#971 design(figcraft): FigCraft masters + demo-first UI process",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/971",
-			"sourceUpdatedAt": "2026-11-08T07:34:07Z",
-			"sourceFingerprint": "c05df992bf222b3aad32a24efb4e4e3aa047be4f60887eefed1f68d4e6e61b3c",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "This establishes the governing demo-first UI design process referenced by the hub/site UI contract with all stated checks already passing.",
-			"evidence": [
-				"68/68 spec-index tests pass and regeneration is byte-identical",
-				"piiscan.py gate blocks unclean production captures",
-				"FACES production previews explicitly deferred to a follow-up"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-08T07:47:23.075Z"
 		},
 		{
 			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
@@ -33703,6 +33670,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:52:27.437Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-152748b32645",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/inbox/rules/appointment-overdue.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-152748b32645.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "0217f5beeb5fdac4fdc802ba407078a23a175b7c4af3341b0e993103939f278f",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Approved TODO handoff has a clear fix direction but no bounded execution evidence yet, so readiness is still low despite a reasonable UX impact.",
+			"evidence": [
+				"TODO(handoff) marker in appointment-overdue.ts from merged PR #479",
+				"diagnosis proposes parsing ?booking= and wiring to initial state",
+				"status approved, checked 2026-10-11"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-15T08:17:52.998Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-249dc0b349bf",
