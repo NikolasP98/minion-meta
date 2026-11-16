@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T04:17:45.143Z",
+	"generatedAt": "2026-11-16T04:24:01.550Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2471,40 +2471,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T20:18:52.809Z"
-		},
-		{
-			"key": "pr:minion_hub#659",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#659 fix(crm): a form door with settings this version cannot read answers not found, not an error",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/659",
-			"sourceUpdatedAt": "2026-11-13T21:18:25Z",
-			"sourceFingerprint": "042727bd55f772b194631b2a5af0532ce508960448a78b5bf40cb71632ad7a92",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1013"
-			],
-			"rationale": "Fixes a 500-error regression in form doors and is explicitly a hard prerequisite for later rollout slices.",
-			"evidence": [
-				"Summary states this must be merged and live before any later slice (FR-019a)",
-				"79 tests passed across 12 files covering the new not-found behavior"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T05:18:09.117Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -12758,6 +12724,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T10:19:38.246Z"
+		},
+		{
+			"key": "proposal:2026-11-13-doors-site-sdk-low-boilerplate",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "A site connects a lead form to a Minion door in minutes, not 800 lines",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-13-doors-site-sdk-low-boilerplate.md",
+			"sourceUpdatedAt": "2026-11-13",
+			"sourceFingerprint": "417dc6c5bd585e6343f7f493f8514035d92ba7bb70e593833f620b4e565bd92d",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"spec:2026-11-13-doors-site-sdk-spec"
+			],
+			"rationale": "Concrete owner problem with detailed AS-IS evidence and a staged TO-BE, but no production incident and overlaps the parked spec that already captures slice S0.",
+			"evidence": [
+				"door only offers three public endpoints and no shared package",
+				"rate limit counts the wrong address behind a proxy",
+				"hub has no API keys or domain records for an org"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:24:01.321Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1637616237",
@@ -23157,6 +23158,41 @@
 			"scoredAt": "2026-11-09T08:59:26.091Z"
 		},
 		{
+			"key": "spec:2026-11-13-doors-site-sdk-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "A lead form on any site with two lines — Doors site SDK",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-13-doors-site-sdk-spec.md",
+			"sourceUpdatedAt": "2026-11-13",
+			"sourceFingerprint": "6e09b602cc6a9ddccf36d244175a28d820ad36a2c5c29cfde141cbef4135812f",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-11-13-doors-site-sdk-low-boilerplate"
+			],
+			"rationale": "Well-structured Spec Kit artifact but explicitly parked by the owner pending a different direction (hub-hosted form builder), so execution now would be superseded work.",
+			"evidence": [
+				"Status: Parked on 2026-11-13 by the owner after slice S0 (hub PR 659)",
+				"owner's later direction is a hub-hosted form builder on a customer subdomain",
+				"Nothing is verified yet: this spec precedes the code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:24:01.321Z"
+		},
+		{
 			"key": "issue:minion-meta#1019",
 			"kind": "issue",
 			"stage": "proposal",
@@ -24728,40 +24764,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T17:18:04.627Z"
-		},
-		{
-			"key": "pr:minion-meta#1013",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1013 proposal: a site connects a lead form to a Minion door with little code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1013",
-			"sourceUpdatedAt": "2026-11-13T21:24:44Z",
-			"sourceFingerprint": "6d1665798a038951ffe7b00a8d68f230760e8991e95e4337cbccbe0c68bc8ee4",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#659"
-			],
-			"rationale": "Proposal-only document with no code and two unresolved owner questions, so it isn't actionable yet.",
-			"evidence": [
-				"Proposal only, no code",
-				"Two open questions for the owner are at the end of the file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T05:18:09.117Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -47721,6 +47723,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
+		},
+		{
+			"key": "run:minion_hub#43803606139",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43803606139",
+			"sourceUpdatedAt": "2026-11-16T04:21:26Z",
+			"sourceFingerprint": "7b84b3a6423ced871db4f9e6b20e999cf49e95ffc0743f9021253fcb7adc8c01",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run with no indication of failure or blocking issue, not an actionable goal.",
+			"evidence": [
+				"storybook-deploy push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:24:01.321Z"
+		},
+		{
+			"key": "run:minion_hub#43803606158",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43803606158",
+			"sourceUpdatedAt": "2026-11-16T04:21:27Z",
+			"sourceFingerprint": "f77848174243cb5b66d7cc1d9bbc7590deb77b1ae7dc8fafe7773a0e455efcf9",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run with no indication of failure or blocking issue, not an actionable goal.",
+			"evidence": [
+				"CI push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:24:01.321Z"
 		},
 		{
 			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
