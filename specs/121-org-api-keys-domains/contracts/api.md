@@ -22,7 +22,7 @@ curl -X POST https://hub.minion-ai.org/api/doors/public/my-door/submit \
 
 A server-side upload of a `text/plain` file must send `origin: https://hub.minion-ai.org` or use `application/octet-stream` (unchanged behaviour).
 
-## Settings endpoints (new; permission `settings:manage`, otherwise `403 forbidden`)
+## Settings endpoints (new; permission `settings:manage`, otherwise status `403` from the hub's existing guards, whose body is a message and not a stable code)
 
 **Keys (S1)**
 
