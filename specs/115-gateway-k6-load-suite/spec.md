@@ -199,9 +199,16 @@ baseline table: `test/load/README.md` in the gateway repo.
   dropped connections. Live gateways answered `/health` 200 before every profile and at the end.
 - **`/health` memory growth (owner-flagged):** on the workstation, RSS rose 511 → 645 MB
   during a 30 s probe flood and was 439 MB after the soak. On the netcup replica, heap used
-  after a forced GC was 320 MB idle, 321 MB after two floods (764,591 requests) and 322 MB
-  after the whole suite; RSS 453 → 468 MB. Retained memory did not grow, so the workstation
-  rise is uncollected garbage, not a leak. No code change was made for it.
+  after a forced GC stayed at 320–322 MB across two floods (764,591 requests) and the whole
+  suite, so the probe itself retains nothing. No code change was made for it.
+- **Correction (2026-11-16): the 11-14 replica run was blind to the production leak.** It
+  enabled no plugins, so config validation never reached the per-plugin schema path. Re-run
+  with the 13 plugins the live gateways enable, `churn` ×2, heap used after forced GC:
+  shipped image 360 → 444 → 501 MB; shipped + `OPENCLAW_CONFIG_CACHE_MS=10000` 357 → 363 →
+  366 MB; gateway #364 applied 356 → 360 → 360 MB. The replica runner now enables those
+  plugins and fails on retained heap growth > 40 MB (fails on the shipped image at 82 MB).
+- **Permanent fix:** gateway #364 merged to `DEV` (`f374bee489`); hotfix PR gateway #382
+  carries it to `main` (production). Spec: `specs/046-gateway-memory-leak`.
 - **Finding:** handshake time scales with simultaneous connects (25 at once → p95 89 ms; 50 at
   once → p95 248 ms on 2 CPUs).
 - **Finding, not fixed here:** the built gateway logs `free-tier API unavailable: ENOENT …
