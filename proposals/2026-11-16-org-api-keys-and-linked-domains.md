@@ -32,7 +32,7 @@ and no record of a domain it owns; forms are served only on the hub's own addres
 ## TO-BE
 
 An organization admin creates and revokes API keys on a Developers settings page. A server that
-sends a key may state its visitor's address, so limits count per visitor. An admin links a
+sends a key is identified as that organization and gets its own limit; its submissions record the key. An admin links a
 subdomain by adding one DNS record; the hub checks it by itself, and the subdomain then serves that
 organization's form pages and nothing else.
 

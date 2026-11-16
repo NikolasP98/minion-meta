@@ -18,7 +18,7 @@ tags: [crm, security, data]
 ## 0. Product
 
 An organization admin creates and revokes API keys; a server that sends a key with a form
-submission may state its visitor's address so rate limits count per visitor. An admin links a
+submission gets its own limit instead of the one shared by its address. An admin links a
 subdomain with one DNS record that the hub checks by itself; the subdomain then serves that
 organization's form pages and nothing else of the hub.
 

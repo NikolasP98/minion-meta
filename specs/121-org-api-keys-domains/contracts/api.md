@@ -1,48 +1,50 @@
 # Contract
 
-## Public door endpoints (changed)
+Errors are `{ "error": "<code>" }` with the status shown.
 
-`POST /api/doors/public/{slug}/submit` and `POST /api/doors/public/{slug}/upload?field=&name=` keep their bodies and answers. New, optional request headers:
+## Public door endpoints (changed in S1)
 
-| Header | Meaning |
-|---|---|
-| `Authorization: Bearer mk_<prefix>_<secret>` | organization API key |
-| `x-minion-visitor-ip: <IPv4 or IPv6>` | the visitor's address; honoured only with a valid key |
+`POST /api/doors/public/{slug}/submit` and `POST /api/doors/public/{slug}/upload?field=&name=` keep their bodies and answers. New, optional request header: `Authorization: Bearer mk_<prefix>_<secret>`. Any other `Authorization` value is ignored.
 
-New answers:
-
-| Status | Body | When |
+| Status | Code | When |
 |---|---|---|
-| `401` | `{ "error": "unauthorized" }` | key malformed, unknown, revoked, or of another organization than the door |
-| `400` | `{ "error": "invalid_visitor" }` | valid key, visitor header present but not an IP address |
-| `429` | `{ "error": "too_many" }` | as today; also the per-key ceiling and more than 10 wrong keys per minute from one address |
+| `401` | `unauthorized` | key malformed, unknown, revoked, or of another organization than the door; decided before the body is read |
+| `429` | `too_many` | as today; with a key: more than 60 submissions or 240 uploads per minute for that key |
 
-Without `Authorization` both headers are ignored and nothing changes. On a linked host the three door endpoints (`submit`, `upload`, `click`) answer `404 not_found` for a door of another organization.
-
-Example:
+With a valid key the address-based limits do not apply. A slug that matches no active door answers `404 not_found`, with or without a key.
 
 ```bash
 curl -X POST https://hub.minion-ai.org/api/doors/public/my-door/submit \
   -H 'content-type: application/json' \
   -H 'authorization: Bearer mk_1a2b3c4d_…' \
-  -H 'x-minion-visitor-ip: 203.0.113.7' \
   -d '{"values":{"nombre":"…"},"consent":true}'
 ```
 
-## Settings endpoints (new; `settings:manage`)
+A server-side upload of a `text/plain` file must send `origin: https://hub.minion-ai.org` or use `application/octet-stream` (unchanged behaviour).
+
+## Settings endpoints (new; permission `settings:manage`, otherwise `403 forbidden`)
+
+**Keys (S1)**
 
 | Call | Body → answer | Errors |
 |---|---|---|
-| `GET /api/settings/api-keys` | → `{ keys: [{ id, name, prefix, createdAt, createdByName, lastUsedAt, revokedAt }] }` | |
-| `POST /api/settings/api-keys` | `{ name }` → `{ id, name, prefix, key }` (`key` only here) | `invalid_name`, `limit_reached` |
-| `DELETE /api/settings/api-keys/{id}` | → `{ ok: true }` (revoke; repeat is ok) | `not_found` |
+| `GET /api/settings/api-keys` | → `{ keys: [Key] }` | |
+| `POST /api/settings/api-keys` | `{ name }` → `201` `{ ...Key, key }` (`key` only here) | `400 invalid_name`, `409 limit_reached` |
+| `DELETE /api/settings/api-keys/{id}` | → `{ ok: true }` (revoke; repeat is ok) | `404 not_found` |
+
+`Key` = `{ id, name, prefix, createdAt, createdByName, lastUsedAt, revokedAt, revokedByName }`. A name is null when the person no longer exists.
+
+**Domains (S2)**
+
+| Call | Body → answer | Errors |
+|---|---|---|
 | `GET /api/settings/domains` | → `{ available, domains: [Domain] }` | |
-| `POST /api/settings/domains` | `{ host }` → `Domain` | `invalid_host`, `duplicate`, `limit_reached`, `not_available` |
-| `POST /api/settings/domains/{id}/check` | → `Domain` | `not_found`, `too_many`, `taken`, `provider_error` |
-| `DELETE /api/settings/domains/{id}` | → `{ ok: true }` | `not_found`, `provider_error` (row stays, retry) |
+| `POST /api/settings/domains` | `{ host }` → `201` `Domain` | `400 invalid_host`, `400 too_short`, `400 reserved`, `409 duplicate`, `409 limit_reached`, `429 too_many`, `503 not_available` |
+| `POST /api/settings/domains/{id}/check` | → `Domain` (the stored one when checked less than 10 s ago) | `404 not_found`, `409 capacity`, `502 dns_error`, `502 provider_error`, `503 not_available` |
+| `DELETE /api/settings/domains/{id}` | → `{ ok: true }` | `404 not_found`, `502 provider_error` (row stays, retry) |
 
-`Domain` = `{ id, host, status: 'waiting_dns'|'needs_record'|'issuing'|'active', records: [{ type, name, value, found }], found?: string, checkedAt, activatedAt }`. `records[0]` is always the routing record; a hosting challenge adds a second.
+`Domain` = `{ id, host, status: 'waiting_dns'|'needs_record'|'issuing'|'active', records: [{ type, name, value }], found: string|null, checkedAt, activatedAt }`. `name` is the full host name. `records[0]` is the routing record; a hosting challenge adds a second. `found` is what the routing name points to when it is not the expected value. Statuses are derived as in `data-model.md`.
 
-## Linked hosts
+## Other hosts (S2)
 
-On an active linked host only these paths are served: `/d/{slug}` (and its locale-prefixed forms), `/api/doors/public/…`, and the static files those pages load. Everything else: `404`.
+On a host that is not one of the hub's own, the application serves only the routes `/d/[slug]` (with or without locale prefix) and `POST /api/doors/public/[slug]/{submit,upload,click}`, and only for a door of the organization whose active domain the host is. Everything else that reaches the application: `404`. Keys work on linked hosts as on the hub; a key refusal (`401`) comes before the host check.
