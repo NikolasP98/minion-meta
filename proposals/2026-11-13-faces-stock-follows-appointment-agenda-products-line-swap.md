@@ -1,9 +1,9 @@
 ---
 id: 2026-11-13-faces-stock-follows-appointment-agenda-products-line-swap
 title: FACES till feedback (2026-11-13) — stock is deducted at sale and again at the appointment, gift products missing from the agenda, no way to fix a wrong size
-status: in-spec
+status: merged
 created: 2026-11-13
-updated: 2026-11-14
+updated: 2026-11-16
 repos: [minion_hub]
 value: 9
 effort: M

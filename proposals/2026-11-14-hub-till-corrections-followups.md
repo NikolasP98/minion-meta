@@ -3,7 +3,7 @@ id: 2026-11-14-hub-till-corrections-followups
 title: Till corrections (spec 120) — open ends and follow-ups
 status: draft
 created: 2026-11-14
-updated: 2026-11-14
+updated: 2026-11-16
 repos: [minion_hub]
 value: 5
 effort: M

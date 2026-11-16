@@ -1,14 +1,14 @@
 ---
 id: 2026-11-14-hub-till-corrections-spec
 title: Till corrections — stock follows the appointment, products on the agenda, product swap
-stage: spec
-status: review
+stage: deploy
+status: shipped
 pass: 1
 created: 2026-11-14
-updated: 2026-11-14
+updated: 2026-11-16
 repos: [minion_hub]
 proposal: 2026-11-13-faces-stock-follows-appointment-agenda-products-line-swap
-verdict: pending
+verdict: approved
 type: fix
 tags: [data]
 ---
@@ -37,3 +37,17 @@ Price or quantity changes after validation, credit notes, treatment-line swaps.
 
 Tagged `data`: a one-time repair changes production stock. Owner approves this spec before code,
 merges, and runs the repair.
+
+## Shipped (2026-11-16)
+
+All five hub slices are merged to `master` and deployed (`c6c2d573`, commit status
+`Vercel: success`): #669 (S1), #670 (S2), #673 (S3), #671 (S4), #674 (S5). The owner directed the
+merges ("keep going until all's live", 2026-11-14 and 2026-11-16); `verdict: approved` records
+that.
+
+Stage stays `deploy`, not `done`, because one step is open: the owner runs the one-time repair
+(`scripts/repair-service-sale-stock.ts --org <FACES org id> --apply`) after confirming the two
+no-show syringes are on the shelf. A read-only check on 2026-11-16 found 13 affected sales, all
+from before S1 went live, and no submitted sale after it yet, so S1 has not been exercised in
+production. Details and the remaining tasks are in `specs/120-till-corrections/tasks.md`.
+

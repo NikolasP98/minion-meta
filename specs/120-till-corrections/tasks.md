@@ -75,7 +75,7 @@ None. Each slice is self-contained; S2 and S4 share one function, created in S2.
 - [x] T030 [US4] Add a route test beside it: 401 without a session, 403 without `pos:edit`, 409 bodies carry the fields in `contracts/api.md`
 - [x] T031 [US4] Invoke `ui-design-governance`; in `src/routes/(app)/pos/tickets/[id]/PageBody.svelte` add "Cambiar producto" on product lines of a non-void sale (absent on treatment lines), opening a dialog that reuses the till's product picker filtered to active products; each refusal shows its reason and the next step from `contracts/api.md`; on success show the change optimistically (the hub's `createOptimistic()` helper), link the new stock movement, and show "Cambiado de X a Y por <name>, <date>" from the audit row on the line
 - [x] T032 [P] [US4] Add the strings to `messages/es.json` and `messages/en.json`; `bun run i18n:compile`
-- [ ] T033 [US4] Run in the foreground: touched tests, `bun run check`, design gates; browser check on a QA sale; open the draft PR `feat(pos): swap a wrong product on a validated sale`. Until S5 ships, the three "guided correction" refusals tell the user to void the sale from the agenda and charge again
+- [x] T033 [US4] Run in the foreground: touched tests, `bun run check`, design gates; browser check on a QA sale; open the draft PR `feat(pos): swap a wrong product on a validated sale`. Until S5 ships, the three "guided correction" refusals tell the user to void the sale from the agenda and charge again
 
 ## Phase 7: User Story 5 — When a swap is not enough, the app does the correction with you (P3) — slice S5
 
@@ -89,7 +89,7 @@ None. Each slice is self-contained; S2 and S4 share one function, created in S2.
 - [x] T037 [US5] In the swap dialog, on `price_differs`, `emitted` or `stock_drift`, show the explanation and "Anular y volver a cobrar"; on confirm run the extracted void, then stage a version 4 handoff with the sale's lines (charged price, discount, appointment id, replacement applied), same party and customer name, and go to `/pos/sell`. Nothing is sent before the confirm. Each void refusal (`no_open_shift`, `period_locked`, `reconciled`, `package_in_use`) shows its reason and next step and leaves the sale untouched
 - [ ] T038 [US5] Without `pos:manage`, show that the user's role cannot void and name the roles that can (read from the org's roles holding `pos:manage`); no dead-end error
 - [x] T039 [P] [US5] Add the strings to `messages/es.json` and `messages/en.json`; `bun run i18n:compile`
-- [ ] T040 [US5] Browser check on a QA sale: void with refund, till pre-filled at charged prices, charge again, visit shows paid once and its supplies are not deducted twice; one void refusal path; leaving the till keeps the pre-filled sale. Run touched tests, `bun run check`, design gates; open the draft PR `feat(pos): void and re-ring a sale in one guided step`
+- [x] T040 [US5] Browser check on a QA sale: void with refund, till pre-filled at charged prices, charge again, visit shows paid once and its supplies are not deducted twice; one void refusal path; leaving the till keeps the pre-filled sale. Run touched tests, `bun run check`, design gates; open the draft PR `feat(pos): void and re-ring a sale in one guided step`
 
 ## Readiness decisions (EGM stage 9, 2026-11-14) — these override the task text above
 
@@ -130,10 +130,10 @@ None. Each slice is self-contained; S2 and S4 share one function, created in S2.
 
 ## Phase 8: Polish
 
-- [ ] T041 After each merge, verify prod from `origin/master` and the commit status `Vercel: success`, then run the slice's quickstart check as the QA user
+- [x] T041 After each merge, verify prod from `origin/master` and the commit status `Vercel: success`, then run the slice's quickstart check as the QA user
 - [ ] T042 After S1 is live, once a week for two weeks, query prod read-only: every completed appointment with a recipe has exactly one submitted `booking`-sourced issue, and no `pos`-sourced movement after the release contains an item that only a treatment line of its sale consumes (SC-001)
 - [x] T043 File the follow-up proposals named in spec "Out of scope" in `minion-meta` `proposals/` (products-only sales on the agenda; quantity above 1 charged from an appointment; one live movement per sale constraint)
-- [ ] T044 Update the board stub `specs/2026-11-14-hub-till-corrections-spec.md` (`stage`, `status`, PR numbers) and the proposal status in `minion-meta` as slices merge; record any open end as `TODO(handoff)` plus a `proposals/` entry
+- [x] T044 Update the board stub `specs/2026-11-14-hub-till-corrections-spec.md` (`stage`, `status`, PR numbers) and the proposal status in `minion-meta` as slices merge; record any open end as `TODO(handoff)` plus a `proposals/` entry
 
 ## Dependencies
 
@@ -191,4 +191,22 @@ hub #671 and #674:
 - A void that could not return its stock stops before the till.
 
 Left open: follow-ups proposal items 8, 9, 10, 11.
+
+## Shipped and verified (2026-11-16)
+
+- Merged and deployed: hub #669, #670, #673, #671, #674. `master` `c6c2d573`, commit status
+  `Vercel: success`.
+- T033, T040: run on the local seeded QA stack on 2026-11-14 (real Postgres, headless browser):
+  swap; void and charge again with a product of another price and a cash refund; re-charge in the
+  till; a treatment sold without an appointment moves no stock. The run found and fixed a crash in
+  the till's cart when a sale holds the same product twice (#674). Results are in #674's body.
+- Database lanes `pos-money`, `job-stock-concurrency`, `pos-emission`, `pos-categories`: 64 of 64
+  on the QA stack; the full CI ran them again on each PR.
+- T041: read-only production check on 2026-11-16: 13 affected sales (POS-2026-00027 to -00147),
+  all before S1 went live; 0 submitted sales since, so S1 is not yet exercised in production.
+- Not proven on a live page: the agenda's "Corregir venta" menu entry and the hover card's
+  products on a charged visit (unit tests and Storybook only).
+
+Open: T005 (replaced by unit tests), T038 (names the permission, not the roles), T042 (weekly
+query for two weeks), and the owner's repair run (`--apply`), which is not a task of this list.
 
