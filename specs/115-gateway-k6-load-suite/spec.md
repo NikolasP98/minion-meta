@@ -207,8 +207,12 @@ baseline table: `test/load/README.md` in the gateway repo.
   shipped image 360 → 444 → 501 MB; shipped + `OPENCLAW_CONFIG_CACHE_MS=10000` 357 → 363 →
   366 MB; gateway #364 applied 356 → 360 → 360 MB. The replica runner now enables those
   plugins and fails on retained heap growth > 40 MB (fails on the shipped image at 82 MB).
-- **Permanent fix:** gateway #364 merged to `DEV` (`f374bee489`); hotfix PR gateway #382
-  carries it to `main` (production). Spec: `specs/046-gateway-memory-leak`.
+- **Permanent fix:** gateway #364 merged to `DEV` (`f374bee489`) and promoted to `main` by train
+  #368 (`2a9d46f5a`, after #383 merged `main` into `DEV`); hotfix #382 closed unused. Live
+  2026-11-16 21:48 UTC in image `sha256:92962057…` on both gateways (0 compiled files with the
+  old comparison, 15 with the fix). Memory at restart: 847 / 787 MiB. `OPENCLAW_CONFIG_CACHE_MS`
+  is still set; remove it once a day of flat memory confirms the fix live.
+  Spec: `specs/046-gateway-memory-leak`.
 - **Finding:** handshake time scales with simultaneous connects (25 at once → p95 89 ms; 50 at
   once → p95 248 ms on 2 CPUs).
 - **Finding, not fixed here:** the built gateway logs `free-tier API unavailable: ENOENT …
