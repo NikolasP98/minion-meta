@@ -1,10 +1,11 @@
 ---
 id: ci-minion-ai-deploy-cloudflare-workers
 title: CI red — Deploy Cloudflare Workers on minion-ai main
-status: draft
+status: merged
 created: 2026-11-14
-updated: 2026-11-14
+updated: 2026-11-16
 repos: []
+merged_into: 2026-11-13-cloudflare-worker-deploy-readiness
 ---
 
 # CI red — Deploy Cloudflare Workers on NikolasP98/minion-ai@main
@@ -19,7 +20,7 @@ green, or the workflow is deliberately removed/disabled with rationale.
 ## Latest failure
 
 - run: https://github.com/NikolasP98/minion-ai/actions/runs/43524329080
-- checked: 2026-11-14
+- checked: 2026-11-16
 
 ```
 Deploy Workers	UNKNOWN STEP	2026-11-13T23:05:16.6167002Z ^[[36;1m  --config wrangler.toml \^[[0m
