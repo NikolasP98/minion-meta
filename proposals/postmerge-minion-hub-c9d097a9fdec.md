@@ -39,9 +39,14 @@ Incomplete audit logging in POS swaps is a compliance risk — if one side of th
 2. Ensure both the initiating action and its completion/compensation are logged with matching audit IDs
 3. Add integration tests that verify audit entries appear in pairs and timestamp correctly
 
+
 ## Latest occurrence
 
-- repo: `NikolasP98/minion_hub@2ca4d34`
-- merged PR: https://github.com/NikolasP98/minion_hub/pull/671
+- repo: `NikolasP98/minion_hub@c6c2d57`
+- merged PR: https://github.com/NikolasP98/minion_hub/pull/674
 - file: `src/routes/(app)/pos/tickets/[id]/PageBody.svelte`
 - checked: 2026-11-16
+
+Marker text:
+
+    TODO(handoff): a swap is recorded in the audit log but this
