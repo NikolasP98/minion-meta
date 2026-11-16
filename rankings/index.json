@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T07:17:46.506Z",
+	"generatedAt": "2026-11-16T07:36:10.944Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4319,74 +4319,6 @@
 			"scoredAt": "2026-11-14T05:21:00.094Z"
 		},
 		{
-			"key": "pr:minion_hub#674",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
-			"sourceUpdatedAt": "2026-11-16T07:13:20Z",
-			"sourceFingerprint": "27211570edcd3b1001ff0bccd4af434b3ba777c2c7c8dd226757b301cc9eec94",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#671"
-			],
-			"rationale": "Completes the till-correction workflow and was verified end-to-end against a real seeded database, including a bug found and fixed during that run.",
-			"evidence": [
-				"real QA run on seeded Supabase container exercised swap and void-and-recharge flows",
-				"each_key_duplicate bug found and fixed (72aeb109) during the real-DB run",
-				"57+4 tests pass across handoff, mounted-page, and context-menu suites"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:17:46.299Z"
-		},
-		{
-			"key": "pr:minion_hub#680",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#680 feat(settings): organization API keys for form doors",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/680",
-			"sourceUpdatedAt": "2026-11-16T07:09:24Z",
-			"sourceFingerprint": "c84c9982f46e090f132f68e8a5f4f4993618d908c7301a6c06fc919949da3134",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Security/data-tagged API-key infrastructure for form doors is thoroughly specified and already verified against a real seeded Postgres instance with RLS and rate-limit checks.",
-			"evidence": [
-				"migration applied through production runner and seeded on real Postgres",
-				"83 tests pass across key service, caller, door endpoints, and RLS inventory",
-				"browser-verified key create/revoke, per-key rate limits, and 401/403/404 paths"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:17:46.299Z"
-		},
-		{
 			"key": "pr:minion_site#29",
 			"kind": "pr",
 			"stage": "development",
@@ -6065,6 +5997,41 @@
 			"scoredAt": "2026-11-14T06:14:15.908Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-2d1970af997e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2d1970af997e.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "576ddf3a4881c68aae0e89f249f1a6e52acfc5a9682d466788b144c0bf047bf6",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#674"
+			],
+			"rationale": "Approved finding on a real race condition between POS void and rebuild that risks double-counted or corrupted revenue data, with a plausible fix direction but no chosen approach yet.",
+			"evidence": [
+				"TODO(handoff): a rebuild that read the sale before the void committed",
+				"Fix direction offers transaction isolation or event-driven reconciliation, not yet decided",
+				"Status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:36:10.693Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-c4ef8f310a4a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6762,6 +6729,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
+		},
+		{
+			"key": "pr:minion_hub#674",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
+			"sourceUpdatedAt": "2026-11-16T07:16:38Z",
+			"sourceFingerprint": "baed65181aec7f5a5d0547c61c34c943a5d152f171c3b948c7f500b9c048761e",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-2d1970af997e"
+			],
+			"rationale": "Stacked POS void-and-recharge feature has detailed AS-IS/TO-BE/DELTA, passing tests, and a documented real-database QA run with a bug already found and fixed.",
+			"evidence": [
+				"57+4 tests pass; bun run check only baseline errors",
+				"Real-seeded-DB QA run validated void/recharge and fixed an each_key_duplicate bug (72aeb109)",
+				"Stacked on #671; needs retarget to master after #671 merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:36:10.693Z"
 		},
 		{
 			"key": "pr:minion_hub#678",
@@ -8117,38 +8119,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:14:15.908Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-2d1970af997e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2d1970af997e.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "dc6c6c3e160064c392a742fa2da30c8e4236433b1d0979dce72bae1bf40ec831",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Flags a plausible void/rebuild race affecting POS audit and revenue data, but only an auto-diagnosis exists with no concrete spec or fix in progress.",
-			"evidence": [
-				"TODO(handoff) marker in pos.service.ts describing a rebuild reading sale data before a void commits",
-				"diagnosis offers a fix direction but no code changes made"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:01:42.264Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-3c702b25845f",
@@ -49603,14 +49573,14 @@
 			"scoredAt": "2026-11-09T08:54:40.112Z"
 		},
 		{
-			"key": "run:minion_hub#43820472282",
+			"key": "run:minion_hub#43824649633",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43820472282",
-			"sourceUpdatedAt": "2026-11-16T06:58:31Z",
-			"sourceFingerprint": "7f68e41f70c754e401648a6f726bc3ce67547e08b694e2902421f0ddd6fa66a6",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43824649633",
+			"sourceUpdatedAt": "2026-11-16T07:32:59Z",
+			"sourceFingerprint": "2a8eef9e0bc528befbe1a4b268abdf9b774ccf46ae50730ed334914eab4afee5",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -49625,14 +49595,44 @@
 			"confidence": 2,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run on master triggered by push, not an actionable goal.",
+			"rationale": "Routine in-progress CI deploy run on master, not an actionable goal.",
 			"evidence": [
-				"push on master",
-				"status in_progress"
+				"storybook-deploy, push on master, in_progress"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:01:42.264Z"
+			"scoredAt": "2026-11-16T07:36:10.693Z"
+		},
+		{
+			"key": "run:minion_hub#43824650347",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43824650347",
+			"sourceUpdatedAt": "2026-11-16T07:33:00Z",
+			"sourceFingerprint": "5530427640b80cdb101a073760a0e81165f5145a49d1e85e692d08dd6340efb5",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run on master, not an actionable goal.",
+			"evidence": [
+				"CI, push on master, in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:36:10.693Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
