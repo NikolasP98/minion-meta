@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T04:24:01.550Z",
+	"generatedAt": "2026-11-16T04:47:46.194Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3971,6 +3971,78 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-13T20:18:46.563Z"
+		},
+		{
+			"key": "pr:minion (gateway)#380",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#380 fix(gateway): a person can only open their own conversations",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/380",
+			"sourceUpdatedAt": "2026-11-16T04:23:46Z",
+			"sourceFingerprint": "1a95f6306b9d8ec9ca103607e2126034f285651554f0bc3e94d65f99af2887ea",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#381",
+				"pr:minion-meta#1035"
+			],
+			"rationale": "A gated, spec-referenced permission fix with passing tests that has no current production effect but is a named precursor to enabling user tokens.",
+			"evidence": [
+				"Named test files 108/108, test/ci 300/300, pnpm tsgo 0",
+				"Effect in production today: None — no gateways validate user tokens yet",
+				"Spec 117 pass 3, slice 3 of 4"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:47:45.969Z"
+		},
+		{
+			"key": "pr:minion (gateway)#381",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#381 fix(gateway): chat is delivered only to its owner",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/381",
+			"sourceUpdatedAt": "2026-11-16T04:23:47Z",
+			"sourceFingerprint": "7eeacb684a79570ebfff2910ab0d4f5aa6552a7e035060a2c808998046cf0ff1",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#380",
+				"pr:minion-meta#1035"
+			],
+			"rationale": "Final slice of the same security spec, gated and tested, must merge after slice 3 and shares its readiness profile.",
+			"evidence": [
+				"Merge after the slice 3 PR (this branch contains it)",
+				"Named test files 82/82, test/ci 300/300, pnpm check 0 errors",
+				"Effect in production today: None, same reason as slice 3"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:47:45.969Z"
 		},
 		{
 			"key": "proposal:2026-08-22-factory-dev-staging-daily-production-promotion",
@@ -10002,8 +10074,8 @@
 			"repo": "minion-meta",
 			"title": "#1035 docs(specs): 116–119 — state hardening from the implicit state machine audit",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1035",
-			"sourceUpdatedAt": "2026-11-16T04:00:04Z",
-			"sourceFingerprint": "6c50cf12cc16c732d761c332e34ea3fea0216dfb8ad3db00b0ec454272f67266",
+			"sourceUpdatedAt": "2026-11-16T04:24:22Z",
+			"sourceFingerprint": "bd20f3651e19accdad30e5a75270eaeca74b4f3b821c9435c928df2040cb9f05",
 			"score": 54,
 			"band": "medium",
 			"axes": {
@@ -10012,24 +10084,24 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 3
 			},
 			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"pr:minion_hub#678",
-				"pr:minion_hub#679"
+				"pr:minion (gateway)#380",
+				"pr:minion (gateway)#381"
 			],
-			"rationale": "Foundational four-spec state-hardening batch where one spec (117) is already flagged changes-requested due to a production data gap, so downstream implementation readiness is uneven.",
+			"rationale": "Four reviewed specs lay useful groundwork for hub and gateway hardening, but spec 117 is explicitly flagged as needing changes before its dev work can proceed.",
 			"evidence": [
-				"spec 117 changes requested: production user_agents table has 0 rows, which would break the designed fail-closed filter",
-				"batch covers hub POS/appointments, gateway chat events, hub second tier, and gateway restart apology across two repos",
-				"no proposal preceded these specs; the audit itself is the investigation"
+				"Spec 117: 'Changes requested by review' — production user_agents has 0 rows, breaking the designed fail-closed filter",
+				"No defect was reproduced on a running system; evidence is code reading plus read-only counts",
+				"116 and 118 are pass 2 with hub draft PRs being opened per slice"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:17:44.921Z"
+			"scoredAt": "2026-11-16T04:47:45.969Z"
 		},
 		{
 			"key": "pr:minion-meta#885",
@@ -47240,6 +47312,39 @@
 			"scoredAt": "2026-11-16T03:00:56.032Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "2281fa511664764b8247d6d2d59313e5c7a89318071dfc75a8ccb7d3b400d99e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This bundles over a dozen unrelated quoted strings from a generated rankings data file into one proposal with no single coherent scope or verifiable outcome.",
+			"evidence": [
+				"Markers point at lines inside rankings/index.json, a generated ranking artifact, not source code",
+				"17+ disparate marker lines spanning unrelated domains (auth, accounting, stock, sentiment) bundled as one item",
+				"Definition of done only requires removing a comment, with no described engineering outcome"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:47:45.969Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -47723,38 +47828,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
-		},
-		{
-			"key": "run:minion_hub#43803606139",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43803606139",
-			"sourceUpdatedAt": "2026-11-16T04:21:26Z",
-			"sourceFingerprint": "7b84b3a6423ced871db4f9e6b20e999cf49e95ffc0743f9021253fcb7adc8c01",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run with no indication of failure or blocking issue, not an actionable goal.",
-			"evidence": [
-				"storybook-deploy push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:24:01.321Z"
 		},
 		{
 			"key": "run:minion_hub#43803606158",
@@ -49506,38 +49579,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:42:20.749Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "b3b2a3dd9d7cf6c259cdccbd6bdfa280e45793b168ee865f914e5cc27de46490",
-			"score": 0,
-			"band": "low",
-			"axes": {
-				"criticality": 0,
-				"importance": 0,
-				"impact": 0
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted 'markers' are fragments of rationale/evidence text embedded in the ranking tool's own prior JSON output, not real TODO(handoff) comments needing resolution.",
-			"evidence": [
-				"source file is rankings/index.json itself",
-				"quoted lines are evidence/rationale strings like 'that till-side draw happens on CLICK, not on submit'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T03:00:56.032Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
