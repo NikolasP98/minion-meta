@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-16)
 
-- `NikolasP98/minion_hub@master src/lib/components/pos/SellCart.svelte:81` — the affordance is one-way — once opened, a line's discount
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/pos/SellCart.svelte#L81
+- `NikolasP98/minion_hub@master src/lib/components/pos/SellCart.svelte:95` — the affordance is one-way — once opened, a line's discount
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/pos/SellCart.svelte#L95
