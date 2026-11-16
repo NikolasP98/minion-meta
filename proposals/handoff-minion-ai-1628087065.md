@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-16)
 
-- `NikolasP98/minion-ai@DEV src/memory/memory-sink.ts:166` — This remote KG deletion mirror is unbounded/unacknowledged;
-  https://github.com/NikolasP98/minion-ai/blob/DEV/src/memory/memory-sink.ts#L166
+- `NikolasP98/minion-ai@DEV src/memory/memory-sink.ts:167` — This remote KG deletion mirror is unbounded/unacknowledged;
+  https://github.com/NikolasP98/minion-ai/blob/DEV/src/memory/memory-sink.ts#L167

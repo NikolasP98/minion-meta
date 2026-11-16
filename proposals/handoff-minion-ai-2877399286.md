@@ -27,9 +27,9 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-16)
 
-- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:509` — Reach Bun 1.4 parity before promoting it from shadow evidence
-  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L509
-- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:1260` — macOS PAUSED (owner, 2026-10-21) while Mac releases are on hold;
-  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L1260
-- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:1390` — Check the lane-flags resolver result in this named gate, preserving
-  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L1390
+- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:526` — Reach Bun 1.4 parity before promoting it from shadow evidence
+  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L526
+- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:1279` — macOS PAUSED (owner, 2026-10-21) while Mac releases are on hold;
+  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L1279
+- `NikolasP98/minion-ai@DEV .github/workflows/ci.yml:1430` — Check the lane-flags resolver result in this named gate, preserving
+  https://github.com/NikolasP98/minion-ai/blob/DEV/.github/workflows/ci.yml#L1430
