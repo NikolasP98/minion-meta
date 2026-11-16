@@ -1,10 +1,11 @@
 ---
 id: ci-minion-ai-deploy-cloudflare-workers
 title: CI red — Deploy Cloudflare Workers on minion-ai main
-status: draft
+status: merged
 created: 2026-11-14
 updated: 2026-11-16
 repos: []
+merged_into: 2026-11-13-cloudflare-worker-deploy-readiness
 ---
 
 # CI red — Deploy Cloudflare Workers on NikolasP98/minion-ai@main

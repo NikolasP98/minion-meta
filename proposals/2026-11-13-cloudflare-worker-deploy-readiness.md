@@ -3,7 +3,7 @@ id: 2026-11-13-cloudflare-worker-deploy-readiness
 title: Make Cloudflare worker deployment validate readiness and report measured results
 status: draft
 created: 2026-11-13
-updated: 2026-11-13
+updated: 2026-11-16
 repos: [minion, minion-meta]
 tags: [security]
 source: agent-chat-release-2026-11-13
@@ -53,3 +53,7 @@ No current Gateway/source/frozen-contract change, expansion of the release fence
 ## Open items
 
 Owner-approved Cloudflare account/configuration route, reviewed compatibility/readiness spec, implementation, actual worker CI/deployment identity and honest benchmark qualification remain open. Normally signed [draft PR376](https://github.com/NikolasP98/minion-ai/pull/376), head `1209ac30642d801686a6b2ee825a47ef44f3cac9`, targets DEV and adds nine handoff comment lines only. Executable lines and parsed YAML semantics are unchanged; it is unmerged and implements no Node, configuration, credential or deployment fix. The draft PR and this proposal grant no implementation or account-change authority.
+
+## Merged content from ci-minion-ai-deploy-cloudflare-workers
+
+The factory CI-watch auto-filed a separate red-CI ticket (`ci-minion-ai-deploy-cloudflare-workers`) for this same workflow. As of its last check (2026-11-16) the latest completed run on the deploy branch was still the same failing run (`43524329080`) analyzed above — same `Deploy intent-classifier Worker` step, same empty `CLOUDFLARE_ACCOUNT_ID`/`CLOUDFLARE_API_TOKEN` bindings, same `Wrangler requires at least Node.js v22.12.0. You are using v20.20.2.` error, plus a GitHub Actions deprecation warning that `actions/checkout@v4`/`actions/setup-node@v4` targeting Node 20 are being forced onto Node 24 runners. No new root cause; merged here as confirmation that the failure is still unresolved and tracked by this proposal rather than a separate one.
