@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T06:17:23.037Z",
+	"generatedAt": "2026-11-16T06:47:55.998Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3704,39 +3704,6 @@
 			"scoredAt": "2026-11-09T08:48:30.364Z"
 		},
 		{
-			"key": "pr:minion_hub#670",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#670 fix(stock): give back supplies that prepaid treatments removed at the sale",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/670",
-			"sourceUpdatedAt": "2026-11-14T23:51:58Z",
-			"sourceFingerprint": "fb957cd8c26371a71b4671313bf6680a8d7c975ea2330d443697ad6ba64c4a47",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Production stock is already understated for six items and a guarded repair script with a preview run against FACES prod data is ready to apply.",
-			"evidence": [
-				"13 sales flagged whose live movement holds the wrong stock deduction",
-				"repostTicketStock refuses void sales and any unnamed drift",
-				"FACES prod preview shows totals like HA Saypha Volume -2, Toxina Botulinica Dysport -840"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T23:56:05.360Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3219321730",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4382,6 +4349,77 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:21:00.094Z"
+		},
+		{
+			"key": "pr:minion_hub#674",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
+			"sourceUpdatedAt": "2026-11-16T06:37:22Z",
+			"sourceFingerprint": "aab392e802107042563c0aa88ebd1124a6f76d30f404ea16af18644d2ae01114",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#671",
+				"pr:minion_hub#670"
+			],
+			"rationale": "Completes the till-corrections arc and is the most verified of the three, including a real seeded-database run that found and fixed a bug.",
+			"evidence": [
+				"local QA run against seeded Supabase found each_key_duplicate bug, fixed in 72aeb109",
+				"9 cases added after EGM review findings",
+				"stacked on #671, spec slice S5"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T06:47:55.767Z"
+		},
+		{
+			"key": "pr:minion_hub#680",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#680 feat(settings): organization API keys for form doors",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/680",
+			"sourceUpdatedAt": "2026-11-16T06:44:32Z",
+			"sourceFingerprint": "18183bff7d5b01f685b4d9678a24fff1b013611571f98637f92683ea70dda043",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1041"
+			],
+			"rationale": "Security/data-tagged org API key feature with extensive QA-stack verification of auth, rate limiting, and RLS behavior, ready for the required owner merge gate.",
+			"evidence": [
+				"83 tests pass plus manual QA checks for 401/403/404 and rate limits",
+				"migration is additive with forced RLS",
+				"tagged security and data: owner merge required"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T06:47:55.767Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -5620,6 +5658,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
+		},
+		{
+			"key": "pr:minion_hub#670",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#670 fix(stock): give back supplies that prepaid treatments removed at the sale",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/670",
+			"sourceUpdatedAt": "2026-11-16T06:37:19Z",
+			"sourceFingerprint": "3d848731640793e26f35e6b0cd3560c54dd884be6a7cdd0e9bad3a272cb258be",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#671"
+			],
+			"rationale": "Foundational stock-correction fix with a production preview run and a repair script that #671/#674 reuse.",
+			"evidence": [
+				"preview lists 13 sales / 6 items with stock drift",
+				"repair script has preview and --apply modes",
+				"stacked under by #671 and #674"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T06:47:55.767Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -7432,8 +7505,8 @@
 			"repo": "minion_hub",
 			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
-			"sourceUpdatedAt": "2026-11-14T22:23:56Z",
-			"sourceFingerprint": "b0fda339f4c919f22070ab8e284d91b35d7e6e8e68c4385b16b236ef810a1465",
+			"sourceUpdatedAt": "2026-11-16T06:37:20Z",
+			"sourceFingerprint": "f972c9fffb85a4febe3d1c019727f089819fb780f444b009107c27e98e3201cd",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -7445,19 +7518,21 @@
 				"specification": 8,
 				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
+				"pr:minion_hub#670",
 				"pr:minion_hub#674"
 			],
-			"rationale": "Fixes a real POS correction gap with guard checks and tests, though unverified against a live database.",
+			"rationale": "Well-specified, tested product-swap feature that removes a costly void/recharge workaround, though not yet exercised against a real database.",
 			"evidence": [
-				"97 tests pass in pos.tickets.test.ts plus 11 new swap tests and 9 route tests",
-				"Not run against a database; successful swap with stock movement lacks a dedicated test"
+				"97 tests pass across till/export areas",
+				"stacked on #670, spec minion-meta#1036 slice S4",
+				"swap with stock movement not covered by a dedicated test"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T22:47:15.687Z"
+			"scoredAt": "2026-11-16T06:47:55.767Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -12775,6 +12850,41 @@
 			"scoredAt": "2026-11-10T07:18:00.280Z"
 		},
 		{
+			"key": "pr:minion-meta#1041",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1041 spec(121): organization API keys and linked domains (base)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1041",
+			"sourceUpdatedAt": "2026-11-16T06:35:08Z",
+			"sourceFingerprint": "02eeb9a695e234ead9df24002a1c29c957ce43c98442d17df70797010e3fb3af",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#680"
+			],
+			"rationale": "Spec backing #680/S2 is still under active EGM review with named unverified items, so it isn't yet a finished, independently actionable artifact.",
+			"evidence": [
+				"review (EGM) is running, findings to be folded into plan.md",
+				"research.md R3/R6 marks hosting behavior unverified",
+				"S2 domain-linking slice has no implementation PR yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T06:47:55.767Z"
+		},
+		{
 			"key": "pr:minion-meta#836",
 			"kind": "pr",
 			"stage": "development",
@@ -14011,39 +14121,6 @@
 			"scoredAt": "2026-11-09T08:56:31.400Z"
 		},
 		{
-			"key": "pr:minion_hub#674",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
-			"sourceUpdatedAt": "2026-11-14T23:23:00Z",
-			"sourceFingerprint": "180aefadd808aba7afda073af5f1d79f5a5f00e9869b4f99ae30083a99863007",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Draft PR implements a spec-defined void-and-recharge POS flow with passing unit tests and a real seeded-DB run that surfaced and fixed a cart-key bug, leaving it ready to merge once retargeted after #671.",
-			"evidence": [
-				"stacked on #671; retarget to master after #671 merges",
-				"page.swap.mounted.test.ts now has 9 cases; 57 other tests pass",
-				"real database run found and fixed a bug (72aeb109) and verified stock/refund outcomes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T23:47:18.777Z"
-		},
-		{
 			"key": "pr:minion-meta#1008",
 			"kind": "pr",
 			"stage": "development",
@@ -14074,39 +14151,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T23:18:07.248Z"
-		},
-		{
-			"key": "pr:minion-meta#1041",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1041 spec(121): organization API keys and linked domains (base)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1041",
-			"sourceUpdatedAt": "2026-11-16T06:15:06Z",
-			"sourceFingerprint": "16c44b0975873bb1bce68b8f7dcca1db18b05c5bbd6407ccb51cb58b9cb39161",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Spec for security/data-tagged API keys and domain linking is drafted but has unresolved DNS/hosting verification gaps and a skipped design stage.",
-			"evidence": [
-				"status: draft",
-				"Not verified: hosting accepts customer host via hub's intermediate DNS",
-				"Skipped stage: no FigCraft as-is/to-be for new settings page"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T06:17:22.786Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
@@ -18657,39 +18701,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T16:18:37.030Z"
-		},
-		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 115977 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-11-15T06:12:44Z",
-			"sourceFingerprint": "49fb00b562cc63698af60e1f1221a0dbd677563cca9e2c5bb68f8e315767bd3c",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A raw dump of 115977 unreviewed upstream commits is not an actionable goal as written and needs to be reframed into scoped sync/triage tasks, even though one listed commit addresses an SSRF-blocked-address fix worth prioritizing.",
-			"evidence": [
-				"title states '115977 new commit(s) available'",
-				"commit list includes 'fix(browser): pages reach SSRF-blocked addresses ... (#198452)'",
-				"issue body is an unstructured commit log, not a scoped change description"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T06:17:21.274Z"
 		},
 		{
 			"key": "issue:minion_hub#205",
@@ -27415,6 +27426,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T08:18:29.459Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 116324 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-11-16T06:16:16Z",
+			"sourceFingerprint": "fec0f8e10eed5a6629501609e0e6d3c8f3dcbcdf4d5a991badcb5de5959aae96",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated upstream-sync commit dump with no defined scope or verifiable outcome, not an actionable goal on its own.",
+			"evidence": [
+				"title cites 116324 new commits with a raw commit-log dump",
+				"tagged upstream-sync with no scoped change description",
+				"no specification of which commits matter or why"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T06:47:55.767Z"
 		},
 		{
 			"key": "issue:minion-meta#1000",
