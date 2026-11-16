@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T03:17:10.905Z",
+	"generatedAt": "2026-11-16T03:47:52.286Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6649,38 +6649,6 @@
 			"scoredAt": "2026-11-11T08:47:54.520Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-519a349c5d17",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Shared schema file change across hub and site has concrete, bounded verification steps (migrations, type-check, shared-DB test) making it actionable now.",
-			"evidence": [
-				"unified-events.ts is consumed by both minion_hub and minion_site via @minion-stack/db",
-				"fix direction lists 4 concrete verification steps"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-09T03:17:38.174Z"
-		},
-		{
 			"key": "spec:2026-09-13-pos-scheduling-packages-payment-plans-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7524,19 +7492,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 4
+				"implementation": 3
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "CI-red proposal references a run checked over a month ago with no newer status update, so current failure state needs reconfirmation before dispatching work.",
+			"rationale": "CI is red on the minion-site deploy branch with a clear definition of done, but the actual failure log is empty in this record so the root cause and fix direction are unknown.",
 			"evidence": [
-				"checked: 2026-10-05, no update since",
-				"definition of done is clear: latest run on dev must be green or workflow retired"
+				"latest completed run on dev branch failed per factory CI watch",
+				"failure log block is empty, no error detail captured",
+				"definition of done is explicit: green run or deliberate removal"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-09T03:17:38.174Z"
+			"scoredAt": "2026-11-16T03:47:52.021Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-2934814273",
@@ -10154,6 +10123,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T06:48:52.986Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-519a349c5d17",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A shared database schema file consumed by both minion_hub and minion_site was touched in a merged PR, and the finding lays out concrete, boundable verification steps (migrations, type-check, dev-db test).",
+			"evidence": [
+				"unified-events.ts is consumed by both minion_hub and minion_site per AGENTS.md",
+				"merged PR #431 on minion_hub master touched this schema file",
+				"fix direction lists four concrete verification actions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T03:47:52.021Z"
 		},
 		{
 			"key": "spec:2026-09-16-hub-local-qa-stack-spec",
@@ -37286,6 +37288,42 @@
 			"scoredAt": "2026-11-14T20:47:42.827Z"
 		},
 		{
+			"key": "issue:minion-meta#1040",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1040 [monitor:unstick] rank run dc9112bf: provider fallback exhausted on batch 8",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1040",
+			"sourceUpdatedAt": "2026-11-16T03:17:32Z",
+			"sourceFingerprint": "a5c737f9254cc2e128e3ae82d04694b941e6eef509ae4a1206e4869c5f7fd698",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#892",
+				"issue:minion-meta#932"
+			],
+			"rationale": "This is the third near-identical monitor report of a transient dual-provider batch failure during ranking runs, so it should be consolidated with the other two into one classifier-rule goal rather than tracked separately.",
+			"evidence": [
+				"batch 8 primary+fallback both failed, exit 1",
+				"prior batches 1-7 succeeded, suggests transient provider issue",
+				"recommends adding a classifier rule for recurring pattern"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T03:47:52.021Z"
+		},
+		{
 			"key": "issue:minion-meta#444",
 			"kind": "issue",
 			"stage": "proposal",
@@ -37968,6 +38006,78 @@
 			"scoredAt": "2026-11-14T05:49:56.058Z"
 		},
 		{
+			"key": "issue:minion-meta#892",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#892 [monitor:unstick] Run 373637f6 (minion-meta rank): batch 11 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/892",
+			"sourceUpdatedAt": "2026-10-26T02:17:26Z",
+			"sourceFingerprint": "30fb37993dd74445c5c37339097c93d1bc26dc8fb9de5ccd7687f96eabec7153",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1040",
+				"issue:minion-meta#932"
+			],
+			"rationale": "Same dual-provider transient batch-failure pattern as two other open monitor issues in this batch, warranting consolidation into a single classifier/auto-retry goal.",
+			"evidence": [
+				"batch 11 of 11 prior clean batches failed on both providers",
+				"checkpointed progress means retry only needs ~154/1225 remaining",
+				"identical recommendation text to issues #1040 and #932"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T03:47:52.021Z"
+		},
+		{
+			"key": "issue:minion-meta#932",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#932 [monitor:unstick] rank run fc6ff2dd: both bounded providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/932",
+			"sourceUpdatedAt": "2026-11-02T02:17:25Z",
+			"sourceFingerprint": "b3b67098104f2d9f6b1e194d8e3dc27ccc585deb27dc3a6c9193819d1997d26b",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1040",
+				"issue:minion-meta#892"
+			],
+			"rationale": "A third occurrence of the identical dual-provider transient batch-failure signature; grouping with #1040 and #892 avoids three separate low-value tickets for the same fix.",
+			"evidence": [
+				"failed on batch 1 with only 6/1304 candidates pending",
+				"codex fallback logged two transient retries before exit 1",
+				"diagnosis explicitly flags this as a recurring candidate for a classifier rule"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T03:47:52.021Z"
+		},
+		{
 			"key": "pr:minion (gateway)#315",
 			"kind": "pr",
 			"stage": "development",
@@ -38334,6 +38444,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T23:56:52.091Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved, already-scoped finding that a TODO(handoff) marker in minion_hub's AGENTS.md still contains placeholder template text instead of real details, which is a bounded documentation fix.",
+			"evidence": [
+				"status is already approved",
+				"marker text shows the literal template placeholder <what, why, pointer>",
+				"fix direction specifies locating the TODO and filing a companion proposal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T03:47:52.021Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-de937a67722d",
@@ -44674,38 +44817,6 @@
 			"scoredAt": "2026-11-10T08:17:51.381Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Already approved and narrowly scoped to replacing a template TODO placeholder with concrete handoff details in one file.",
-			"evidence": [
-				"status: approved",
-				"marker is template placeholder text, not actual handoff detail"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-09T03:17:38.174Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -47704,74 +47815,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T16:17:50.570Z"
-		},
-		{
-			"key": "issue:minion-meta#892",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#892 [monitor:unstick] Run 373637f6 (minion-meta rank): batch 11 provider failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/892",
-			"sourceUpdatedAt": "2026-10-26T02:17:26Z",
-			"sourceFingerprint": "30fb37993dd74445c5c37339097c93d1bc26dc8fb9de5ccd7687f96eabec7153",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#932"
-			],
-			"rationale": "This is a second instance of a transient dual-provider batch failure that the diagnosis itself flags as a classifier-signature candidate once it recurs, so it should become one goal with #932 rather than two noise tickets.",
-			"evidence": [
-				"diagnosis: safe to retry, progress checkpointed per batch",
-				"diagnosis: recommends new classifier signature if pattern recurs across runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-09T03:17:38.174Z"
-		},
-		{
-			"key": "issue:minion-meta#932",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#932 [monitor:unstick] rank run fc6ff2dd: both bounded providers failed on batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/932",
-			"sourceUpdatedAt": "2026-11-02T02:17:25Z",
-			"sourceFingerprint": "b3b67098104f2d9f6b1e194d8e3dc27ccc585deb27dc3a6c9193819d1997d26b",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#892"
-			],
-			"rationale": "Same dual-provider transient batch failure pattern as #892 across a different run, best merged into one goal to build the suggested classifier signature.",
-			"evidence": [
-				"diagnosis: transient/infra fault, safe to retry as-is",
-				"diagnosis: good candidate for new host classifier signature if recurs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-09T03:17:38.174Z"
 		},
 		{
 			"key": "pr:minion-meta#561",
