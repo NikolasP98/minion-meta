@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T21:47:07.392Z",
+	"generatedAt": "2026-11-16T22:17:02.824Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -499,41 +499,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-08-31T08:01:35.926Z"
-		},
-		{
-			"key": "pr:minion (gateway)#382",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#382 fix(plugins): stop the gateway leaking memory on every config load (hotfix of #364)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/382",
-			"sourceUpdatedAt": "2026-11-16T05:33:48Z",
-			"sourceFingerprint": "2dfbbeaa1857ecc2f748ba0d555ecdabc15e5aef54fa538bcdd35c0c933fda3f",
-			"score": 85,
-			"band": "critical",
-			"axes": {
-				"criticality": 9,
-				"importance": 8,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"deploy:minion (gateway)",
-				"pr:minion (gateway)#368"
-			],
-			"rationale": "Hotfix with measured heap evidence directly removes the recurring production OOM risk on both live gateways.",
-			"evidence": [
-				"heap after load: 501MB without fix vs 360MB with fix",
-				"\"both live gateways still run the leaking code\" and rely only on a stopgap env var"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "pr:minion-meta#931",
@@ -2520,38 +2485,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:26:28.261Z"
-		},
-		{
-			"key": "pr:minion-meta#1030",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1030 docs(specs): 115 — gateway k6 load suite (spec, plan, tasks, results)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1030",
-			"sourceUpdatedAt": "2026-11-16T21:09:04Z",
-			"sourceFingerprint": "dc1d954ff5050fead953cd7d8ce8dd67996c0c71d42a3cc8b96ce31e34510bed",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The k6 load suite already produced documented results and surfaced a concrete production-blocking bug (missing migration SQL), so the spec/plan/tasks work is ready to land.",
-			"evidence": [
-				"bug the run surfaced: built gateway cannot start the free-tier API because its migration SQL is not shipped",
-				"Results of the 2026-11-14 runs are documented in specs/115-gateway-k6-load-suite/spec.md §Results"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T21:18:06.358Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -7162,6 +7095,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T18:19:24.890Z"
+		},
+		{
+			"key": "pr:minion-meta#1030",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1030 docs(specs): 115 — gateway k6 load suite (spec, plan, tasks, results)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1030",
+			"sourceUpdatedAt": "2026-11-16T21:52:25Z",
+			"sourceFingerprint": "c03f4177f152f1ed0e956426eabf0bc11e2a8addc97dffedd4e269cbc8f2cbc8",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Load-test spec surfaces a real migration-shipping bug but the PR is still draft and needs human review before the underlying fix is actioned.",
+			"evidence": [
+				"status: draft",
+				"Results in specs/115-gateway-k6-load-suite/spec.md §Results",
+				"surfaced bug: built gateway cannot start free-tier API because migration SQL is not shipped"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T22:17:02.632Z"
 		},
 		{
 			"key": "proposal:2026-08-20-dev-key-at-rest-audit",
