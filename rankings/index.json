@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T07:01:42.530Z",
+	"generatedAt": "2026-11-16T07:17:46.506Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3265,41 +3265,6 @@
 			"scoredAt": "2026-11-09T08:51:12.204Z"
 		},
 		{
-			"key": "pr:minion_hub#674",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
-			"sourceUpdatedAt": "2026-11-16T06:58:35Z",
-			"sourceFingerprint": "9131e2d90a9ed59ab099278cec3b3065fcb7d7582c9b9c515977e889c31be14a",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#671"
-			],
-			"rationale": "The void-and-recharge fallback was verified against a real seeded database, surfacing and fixing a live till crash, making it highly execution-ready.",
-			"evidence": [
-				"real DB run on seeded Supabase container found and fixed each_key_duplicate crash",
-				"61 total tests pass across the two mounted-page suites",
-				"stacked on #671, retargets master after merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:01:42.264Z"
-		},
-		{
 			"key": "pr:minion_hub#679",
 			"kind": "pr",
 			"stage": "development",
@@ -4354,14 +4319,14 @@
 			"scoredAt": "2026-11-14T05:21:00.094Z"
 		},
 		{
-			"key": "pr:minion_hub#680",
+			"key": "pr:minion_hub#674",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#680 feat(settings): organization API keys for form doors",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/680",
-			"sourceUpdatedAt": "2026-11-16T06:44:32Z",
-			"sourceFingerprint": "18183bff7d5b01f685b4d9678a24fff1b013611571f98637f92683ea70dda043",
+			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
+			"sourceUpdatedAt": "2026-11-16T07:13:20Z",
+			"sourceFingerprint": "27211570edcd3b1001ff0bccd4af434b3ba777c2c7c8dd226757b301cc9eec94",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -4371,22 +4336,55 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 9
 			},
 			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion-meta#1041"
+				"pr:minion_hub#671"
 			],
-			"rationale": "Security/data-tagged org API key feature with extensive QA-stack verification of auth, rate limiting, and RLS behavior, ready for the required owner merge gate.",
+			"rationale": "Completes the till-correction workflow and was verified end-to-end against a real seeded database, including a bug found and fixed during that run.",
 			"evidence": [
-				"83 tests pass plus manual QA checks for 401/403/404 and rate limits",
-				"migration is additive with forced RLS",
-				"tagged security and data: owner merge required"
+				"real QA run on seeded Supabase container exercised swap and void-and-recharge flows",
+				"each_key_duplicate bug found and fixed (72aeb109) during the real-DB run",
+				"57+4 tests pass across handoff, mounted-page, and context-menu suites"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T06:47:55.767Z"
+			"scoredAt": "2026-11-16T07:17:46.299Z"
+		},
+		{
+			"key": "pr:minion_hub#680",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#680 feat(settings): organization API keys for form doors",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/680",
+			"sourceUpdatedAt": "2026-11-16T07:09:24Z",
+			"sourceFingerprint": "c84c9982f46e090f132f68e8a5f4f4993618d908c7301a6c06fc919949da3134",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Security/data-tagged API-key infrastructure for form doors is thoroughly specified and already verified against a real seeded Postgres instance with RLS and rate-limit checks.",
+			"evidence": [
+				"migration applied through production runner and seeded on real Postgres",
+				"83 tests pass across key service, caller, door endpoints, and RLS inventory",
+				"browser-verified key create/revoke, per-key rate limits, and 401/403/404 paths"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:17:46.299Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -7431,6 +7429,41 @@
 			"scoredAt": "2026-11-13T06:17:37.984Z"
 		},
 		{
+			"key": "pr:minion_hub#671",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
+			"sourceUpdatedAt": "2026-11-16T07:01:48Z",
+			"sourceFingerprint": "f7104b07d060a59d5254f26a46c0d6be417fa518b55e1a5a85d9ae45527c70f3",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#674"
+			],
+			"rationale": "A scoped, well-tested server+UI fix for a real till-correction pain point that is the base for the stacked void-and-recharge PR.",
+			"evidence": [
+				"97 tests pass in pos.tickets.test.ts plus 11 new swap tests",
+				"page.swap.mounted.test.ts and swap-options.test.ts cover the added UI",
+				"stacked on #670, feeds #674"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:17:46.299Z"
+		},
+		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -9428,41 +9461,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
-		},
-		{
-			"key": "pr:minion_hub#671",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
-			"sourceUpdatedAt": "2026-11-16T06:58:35Z",
-			"sourceFingerprint": "970f240782a145635c5f9b398dd3a933efb31524172ef0c1590dc3c9f827ba71",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#674"
-			],
-			"rationale": "Well-specified POS line-swap correction with strong test coverage and a completed, reviewed UI, ready to land.",
-			"evidence": [
-				"97 tests pass in pos.tickets.test.ts including 11 new swap cases",
-				"UI review findings fixed in 262c329d",
-				"stacked on already-merged #670"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:01:42.264Z"
 		},
 		{
 			"key": "pr:minion-meta#882",
@@ -11794,6 +11792,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T02:54:24.972Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "6d15670a6d9eceea002a9412d2e3adfa5f291e5682d6ad0967e667dc27b5224c",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This sweep-filed proposal bundles over a dozen unrelated TODO(handoff) markers spanning security, booking, and billing concerns into one artifact with no single verifiable outcome, so it needs to be split into per-item specs rather than executed as one goal.",
+			"evidence": [
+				"lists markers like 'Keep restricted roles denied until scoped retrieval/masking is' appearing at two separate lines",
+				"includes unrelated concerns such as RUC party verification and till-draw click timing in the same file",
+				"no scope, dependency, or outcome is defined beyond 'remove the TODO comment'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:17:46.299Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-609333478",
@@ -47496,38 +47527,6 @@
 			"scoredAt": "2026-11-16T03:00:56.032Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "d2e9f8ad58f3678f3f49a136a6000aa86b1ae41e82bee19a03ac975a7e3ac4af",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Auto-filed sweep bundles 17+ unrelated TODO markers scattered across a huge unrelated data file into one artifact, which cannot be executed as a single coherent unit of work.",
-			"evidence": [
-				"markers span billing, ticketing, auth, provider-JSON, and workshop topics in one file",
-				"explicitly \"Filed automatically by the factory handoff-ledger sweep\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -49602,38 +49601,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
-		},
-		{
-			"key": "run:minion_hub#43820472250",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43820472250",
-			"sourceUpdatedAt": "2026-11-16T06:58:30Z",
-			"sourceFingerprint": "22cad27018fd98e97d25a26699d3e5e2f970d5cbb60f4649e5807df65085e8e4",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress storybook deploy run on master triggered by push, not an actionable goal.",
-			"evidence": [
-				"push on master",
-				"status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:01:42.264Z"
 		},
 		{
 			"key": "run:minion_hub#43820472282",
