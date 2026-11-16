@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T05:17:17.722Z",
+	"generatedAt": "2026-11-16T05:49:04.545Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -501,14 +501,14 @@
 			"scoredAt": "2026-08-31T08:01:35.926Z"
 		},
 		{
-			"key": "pr:minion (gateway)#364",
+			"key": "pr:minion (gateway)#382",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion (gateway)",
-			"title": "#364 fix(plugins): stop recompiling plugin config schemas on every config load",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/364",
-			"sourceUpdatedAt": "2026-11-01T23:55:20Z",
-			"sourceFingerprint": "427b3003c188b4abc33cc54b2cc218fbe1d7a316db9a78cc986ae902a5a28684",
+			"title": "#382 fix(plugins): stop the gateway leaking memory on every config load (hotfix of #364)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/382",
+			"sourceUpdatedAt": "2026-11-16T05:33:48Z",
+			"sourceFingerprint": "2dfbbeaa1857ecc2f748ba0d555ecdabc15e5aef54fa538bcdd35c0c933fda3f",
 			"score": 85,
 			"band": "critical",
 			"axes": {
@@ -523,17 +523,17 @@
 			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion-meta#931"
+				"deploy:minion (gateway)",
+				"pr:minion (gateway)#368"
 			],
-			"rationale": "Fixes a measured, recurring production OOM crash on both netcup gateways with a root-cause profile, a regression test, and a reversible interim mitigation already deployed.",
+			"rationale": "Hotfix with measured heap evidence directly removes the recurring production OOM risk on both live gateways.",
 			"evidence": [
-				"both netcup gateways OOM every 2-5 days (FACES, MINION)",
-				"heap profile: 173/186MB sampled bytes in ajv.compile via schema-validator",
-				"new schema-validator.test.ts covers the fix"
+				"heap after load: 501MB without fix vs 360MB with fix",
+				"\"both live gateways still run the leaking code\" and rely only on a stopgap env var"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-02T00:17:49.490Z"
+			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "pr:minion-meta#931",
@@ -1438,6 +1438,40 @@
 			"scoredAt": "2026-11-09T08:49:41.203Z"
 		},
 		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f374bee489acd25488ac22d79efe5ac7f9f45d33",
+			"sourceUpdatedAt": "2026-11-16T05:28:18Z",
+			"sourceFingerprint": "28c570631050270fa0cd2dafae34fc93d1eca146cb3084309d822d8503b38beb",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#382"
+			],
+			"rationale": "This is the same memory-leak fix whose production rollout is tracked as the #382 hotfix, so they represent one goal, not two.",
+			"evidence": [
+				"both gateways grew ~1GB/weekday and OOM-crashed every 2-5 days",
+				"fix (#364) is merged to DEV but production still runs on the leaking image per #382"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
+		},
+		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1900,39 +1934,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T08:18:29.459Z"
-		},
-		{
-			"key": "pr:minion (gateway)#368",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#368 train: promote DEV → main (2026-11-07)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/368",
-			"sourceUpdatedAt": "2026-11-14T20:22:52Z",
-			"sourceFingerprint": "bf8adea3ba202f1ff4f1dd95e5d3c97115a2411c56907fe4fa951f0b34d11e45",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The weekly production promotion train has 2 ready commits awaiting checklist sign-off, making it a time-sensitive release gate.",
-			"evidence": [
-				"2 commits ready",
-				"Merging deploys to production",
-				"checklist requires review PASS and no unaddressed Critical/High finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:47:42.827Z"
 		},
 		{
 			"key": "pr:minion-meta#900",
@@ -3970,6 +3971,42 @@
 			"scoredAt": "2026-11-10T18:49:04.296Z"
 		},
 		{
+			"key": "spec:2026-11-12-agent-current-attempt-output-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Qualify current-attempt output suppression through an exact runtime source",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-12-agent-current-attempt-output-spec.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "0fb8f331506b862cfd0c18f0105771793948471983e85fb650c64f75815a3853",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"spec:2026-11-11-agent-fixture-audit-portability-spec",
+				"spec:2026-11-12-agent-release-forward-base-spec",
+				"spec:2026-11-13-agent-audit-contents-read-proof-spec"
+			],
+			"rationale": "Fixes a real correctness bug where an aborted attempt can return stale successful output, but is part of the same fragmented PR369 release chain as the other specs.",
+			"evidence": [
+				"probe shows abort before message_end selects an earlier successful assistant, returning stale success/reasoning",
+				"part of chain extending 2026-11-11 and feeding 2026-11-13"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
+		},
+		{
 			"key": "pr:minion (gateway)#330",
 			"kind": "pr",
 			"stage": "development",
@@ -4583,6 +4620,39 @@
 			"scoredAt": "2026-11-10T06:18:03.894Z"
 		},
 		{
+			"key": "proposal:2026-11-06-agent-transcript-evals-and-runtime-improvements",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Evaluate real agent traces and correct date, outcome, access, and completion behavior",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md",
+			"sourceUpdatedAt": "2026-11-11",
+			"sourceFingerprint": "52b9de19221129dfb9b4b55633e73903738efd3e7b35bcdb83b17a3626de468a",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Bundles six distinct correctness/security deltas (secrets, outcomes, dates, booking, receipts, memory) under one proposal, which is too broad to size as a single delivery unit yet.",
+			"evidence": [
+				"\"environment enumeration ... persisted unmasked secret-bearing fields\"",
+				"6 separate DELTA items spanning unrelated subsystems",
+				"status in-spec, no PR yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
+		},
+		{
 			"key": "proposal:2026-11-11-hub-door-dni-trust",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5149,38 +5219,6 @@
 			"scoredAt": "2026-11-09T14:40:44.251Z"
 		},
 		{
-			"key": "proposal:ci-minion-ai-deploy-cloudflare-workers",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Deploy Cloudflare Workers on minion-ai main",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-ai-deploy-cloudflare-workers.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "bf52fca2e068e4e696ee88b45ada468f7ff332254ae0546fa5af94225c1cbdee",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Deploy workflow is red with a clear, bounded root cause (Node version below Wrangler's requirement) blocking releases.",
-			"evidence": [
-				"Wrangler requires at least Node.js v22.12.0. You are using v20.20.2",
-				"Process completed with exit code 1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T02:48:07.776Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1167132208",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5442,6 +5480,78 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:57:47.424Z"
+		},
+		{
+			"key": "spec:2026-11-12-agent-release-forward-base-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Restore working runners while qualifying the agent release on fixed main D585",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-12-agent-release-forward-base-spec.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "54572041bd5979a4c7a6777c8fbdd7eb9454c595a9caaa7f0c3986f2f4fb17cc",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"spec:2026-11-11-agent-fixture-audit-portability-spec",
+				"spec:2026-11-12-agent-current-attempt-output-spec",
+				"spec:2026-11-13-agent-audit-contents-read-proof-spec"
+			],
+			"rationale": "Addresses a CI-runner infra blocker (Blacksmith incompatible with the account) that is stalling the same PR369 release as the sibling specs.",
+			"evidence": [
+				"\"Blacksmith does not support this personal account\"; Docker run queued with no assigned runner",
+				"annotated pair passes 84/84 main consumers locally"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
+		},
+		{
+			"key": "spec:2026-11-13-agent-audit-contents-read-proof-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Verify the fixed agent audit source with contents-read Git proof",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-13-agent-audit-contents-read-proof-spec.md",
+			"sourceUpdatedAt": "2026-11-13",
+			"sourceFingerprint": "bc4f456cd7e3b13369dec2b641a8f510f92d5b4b2669e5b20802982ce4cac729",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"spec:2026-11-12-agent-release-forward-base-spec",
+				"spec:2026-11-12-agent-current-attempt-output-spec",
+				"spec:2026-11-11-agent-fixture-audit-portability-spec"
+			],
+			"rationale": "Fixes a CI token-permission gap (needs Pull requests read, token only has Contents read) that is the latest blocker in the same PR369 release chain.",
+			"evidence": [
+				"security job exits 1 on 'Audited fixture baseline transition rejected'",
+				"token has Actions/Contents/Metadata read but no Pull requests read"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "pr:minion_hub#466",
@@ -7383,40 +7493,6 @@
 			"scoredAt": "2026-11-12T18:19:24.890Z"
 		},
 		{
-			"key": "pr:minion-meta#1030",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1030 docs(specs): 115 — gateway k6 load suite (spec, plan, tasks, results)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1030",
-			"sourceUpdatedAt": "2026-11-14T08:30:52Z",
-			"sourceFingerprint": "710374372bcea62070a6c097985be5cbedf6449fa08380cc19789adc09dc322d",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#377"
-			],
-			"rationale": "This spec-kit PR documents completed load-test results and files a ledger proposal for a real build-time bug it surfaced (missing migration SQL blocking the free-tier API in the built gateway).",
-			"evidence": [
-				"records 2026-11-14 run results in spec.md §Results",
-				"proposes ledger entry for 'built gateway cannot start free-tier API, migration SQL not shipped'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T10:48:43.276Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8857,6 +8933,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:59:26.091Z"
+		},
+		{
+			"key": "spec:2026-11-11-agent-fixture-audit-portability-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Qualify portable audit fixtures through an exact technical source",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-11-agent-fixture-audit-portability-spec.md",
+			"sourceUpdatedAt": "2026-11-11",
+			"sourceFingerprint": "bd674bafe56e011755b794507b81a7a1d29f05d848b9fc274fadac8f8a01f014",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"spec:2026-11-12-agent-current-attempt-output-spec",
+				"spec:2026-11-12-agent-release-forward-base-spec",
+				"spec:2026-11-13-agent-audit-contents-read-proof-spec"
+			],
+			"rationale": "One of four sequential narrow specs each unblocking the next for the same stalled PR369 release, so they should be tracked as one release effort.",
+			"evidence": [
+				"reproduced test-portability defect: audit subset passed 52/57, full invocation 136/141",
+				"status implementing, extends two prior specs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "proposal:2026-09-20-hub-component-service-centralization",
@@ -13899,41 +14011,6 @@
 			"scoredAt": "2026-11-09T08:56:31.400Z"
 		},
 		{
-			"key": "pr:minion (gateway)#377",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#377 test(load): k6 load suite for the gateway",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/377",
-			"sourceUpdatedAt": "2026-11-14T08:31:10Z",
-			"sourceFingerprint": "d03c07bbaacceb8e360929edc79c1041f6a8115783b0352020548eccf92caa83",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1030"
-			],
-			"rationale": "The k6 load suite is fully built, loopback-safe, and already passed on both the workstation and a prod-image replica, so it's ready to land.",
-			"evidence": [
-				"ran successfully on workstation and netcup replica on 2026-11-14 with baseline recorded",
-				"oxfmt/oxlint checks passed",
-				"not yet wired into pnpm test or CI"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T10:48:43.276Z"
-		},
-		{
 			"key": "pr:minion_hub#674",
 			"kind": "pr",
 			"stage": "development",
@@ -17354,6 +17431,40 @@
 			"scoredAt": "2026-11-09T08:48:30.364Z"
 		},
 		{
+			"key": "pr:minion (gateway)#368",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#368 train: promote DEV → main (2026-11-07)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/368",
+			"sourceUpdatedAt": "2026-11-16T05:28:38Z",
+			"sourceFingerprint": "ee2e8e423a6ae7f3fcbb1cb58ba1f19c3ef55fe09f2747696a8f9a25911211d6",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#382"
+			],
+			"rationale": "Routine weekly DEV→main promotion train is open and ready pending its own review checklist.",
+			"evidence": [
+				"\"Weekly promotion train (Saturday 21:00). 2 commits ready.\"",
+				"status open"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
+		},
+		{
 			"key": "pr:minion_hub#645",
 			"kind": "pr",
 			"stage": "development",
@@ -17582,42 +17693,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T10:19:03.049Z"
-		},
-		{
-			"key": "proposal:2026-11-06-agent-transcript-evals-and-runtime-improvements",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Evaluate real agent traces and correct date, outcome, access, and completion behavior",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md",
-			"sourceUpdatedAt": "2026-11-10",
-			"sourceFingerprint": "424840ec040aac37015d951aabc0f66d1e68e267636421e7266bdc6147c78d87",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-11-10-agent-chat-contracts-followups-spec",
-				"spec:2026-11-10-agent-fixture-secret-audit-spec"
-			],
-			"rationale": "Most delta items (memory, finance, booking, receipts) already moved into active specs/PRs, leaving only the credential-scope and memory-provenance items unassigned.",
-			"evidence": [
-				"status: in-spec",
-				"Scope and sanitize (audit F12)... no credential rotation is authorized by this audit",
-				"candidate eval seeds are agent-reviewed and human-unreviewed; they are not an executed benchmark"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T18:49:04.296Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1194287278",
@@ -20916,14 +20991,14 @@
 			"scoredAt": "2026-11-12T18:19:24.890Z"
 		},
 		{
-			"key": "pr:minion-meta#998",
+			"key": "pr:minion-meta#1030",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-meta",
-			"title": "#998 docs(agents): record verified live conversation fixes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/998",
-			"sourceUpdatedAt": "2026-11-16T05:16:19Z",
-			"sourceFingerprint": "945cff09a20920d016057f4e9ed581292ccb245f2fd7dd1c25f72358ded5c5c9",
+			"title": "#1030 docs(specs): 115 — gateway k6 load suite (spec, plan, tasks, results)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1030",
+			"sourceUpdatedAt": "2026-11-16T05:33:21Z",
+			"sourceFingerprint": "5db00bde04fd5da32fbe2ef0d74cbecc0990d2bf460fe88a388890c4261a468f",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -20935,17 +21010,19 @@
 				"specification": 7,
 				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Metadata-only documentation PR recording already-deployed fixes, but final merge/CI gating is explicitly not yet proven.",
+			"relatedKeys": [
+				"pr:minion (gateway)#377"
+			],
+			"rationale": "Documents the load-suite results but also surfaces an unaddressed bug (migration SQL not shipped) that needs its own follow-up before this can be called done.",
 			"evidence": [
-				"record does not assert its own future merge",
-				"actual final-head PR CI must pass before normal merge"
+				"\"ledger proposal for a bug the run surfaced (migration SQL is not shipped)\"",
+				"status draft"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:17:17.487Z"
+			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -24837,6 +24914,40 @@
 			"scoredAt": "2026-11-11T19:18:13.125Z"
 		},
 		{
+			"key": "pr:minion (gateway)#377",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#377 test(load): k6 load suite for the gateway",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/377",
+			"sourceUpdatedAt": "2026-11-16T05:33:36Z",
+			"sourceFingerprint": "095864c9fc1f0999fe08a297284e6e6c036aa0e7c9e8cbf03be27dc615b60faa",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1030"
+			],
+			"rationale": "Load-test suite is scoped, isolated from prod paths, and already validated twice with passing thresholds.",
+			"evidence": [
+				"\"Run on 2026-11-14: all thresholds passed\" on workstation and netcup replica",
+				"refuses non-loopback targets unless ALLOW_REMOTE=1"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
+		},
+		{
 			"key": "pr:minion_hub#279",
 			"kind": "pr",
 			"stage": "development",
@@ -26346,6 +26457,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T10:19:38.246Z"
+		},
+		{
+			"key": "proposal:2026-11-13-cloudflare-worker-deploy-readiness",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Make Cloudflare worker deployment validate readiness and report measured results",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-13-cloudflare-worker-deploy-readiness.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "0a851f22636e4b53298b24f5f5d360efbb265bb5c88f49a31bf026d1014a173f",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Well-evidenced but ancillary (non-gateway) pipeline issue still at proposal/draft stage with no implementation started.",
+			"evidence": [
+				"Node20 vs Wrangler-required Node22.12 mismatch confirmed from actual job log",
+				"CF_ACCOUNT_ID/CF_API_TOKEN render empty in the run",
+				"before/after benchmark numbers are static, not measured"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1224301425",
@@ -37466,38 +37610,6 @@
 			"scoredAt": "2026-11-09T14:43:14.177Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/4d13f613da73333f89a9d3b45812ac60816e2439",
-			"sourceUpdatedAt": "2026-11-14T20:22:06Z",
-			"sourceFingerprint": "d818180b7ebb77e3050eeffd586cb70e21e642207987e0c701975f85e2de723c",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 8
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a deployment-health marker for an already-merged fix (#379), representing completed work rather than an open actionable goal.",
-			"evidence": [
-				"Merge pull request #379 ... fix(gateway): a retried run ends once with its real result",
-				"status: unknown, kind: deploy"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:47:42.827Z"
-		},
-		{
 			"key": "issue:minion-meta#1040",
 			"kind": "issue",
 			"stage": "proposal",
@@ -39927,6 +40039,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-10T09:18:30.436Z"
+		},
+		{
+			"key": "run:minion (gateway)#43810445822",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/43810445822",
+			"sourceUpdatedAt": "2026-11-16T05:33:00Z",
+			"sourceFingerprint": "90455e3a52cc2ddfb2d71b91a24f08b49a95353fb783a993c89218b82e87fb3b",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 5
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on DEV has no outcome evidence yet to justify any other action.",
+			"evidence": [
+				"status: in_progress",
+				"push on DEV"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T05:49:04.309Z"
 		},
 		{
 			"key": "issue:minion-meta#1014",
@@ -47351,7 +47495,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "2281fa511664764b8247d6d2d59313e5c7a89318071dfc75a8ccb7d3b400d99e",
+			"sourceFingerprint": "d2e9f8ad58f3678f3f49a136a6000aa86b1ae41e82bee19a03ac975a7e3ac4af",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -47360,21 +47504,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 3,
-			"recommendation": "prune",
+			"confidence": 4,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "This bundles over a dozen unrelated quoted strings from a generated rankings data file into one proposal with no single coherent scope or verifiable outcome.",
+			"rationale": "Auto-filed sweep bundles 17+ unrelated TODO markers scattered across a huge unrelated data file into one artifact, which cannot be executed as a single coherent unit of work.",
 			"evidence": [
-				"Markers point at lines inside rankings/index.json, a generated ranking artifact, not source code",
-				"17+ disparate marker lines spanning unrelated domains (auth, accounting, stock, sentiment) bundled as one item",
-				"Definition of done only requires removing a comment, with no described engineering outcome"
+				"markers span billing, ticketing, auth, provider-JSON, and workshop topics in one file",
+				"explicitly \"Filed automatically by the factory handoff-ledger sweep\""
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:47:45.969Z"
+			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
