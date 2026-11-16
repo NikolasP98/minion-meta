@@ -1,7 +1,7 @@
 ---
 id: 2026-11-15-chat-privacy-followups
 title: Chat privacy follow-ups after spec 117
-status: open
+status: draft
 created: 2026-11-15
 updated: 2026-11-15
 repos: [minion, minion_hub]
