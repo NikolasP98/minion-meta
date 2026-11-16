@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T03:47:52.286Z",
+	"generatedAt": "2026-11-16T04:17:45.143Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3298,6 +3298,42 @@
 			"scoredAt": "2026-11-09T08:51:12.204Z"
 		},
 		{
+			"key": "pr:minion_hub#679",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#679 fix(chat): stored conversations are only readable by their owner",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/679",
+			"sourceUpdatedAt": "2026-11-16T04:12:43Z",
+			"sourceFingerprint": "85ebb57fe1c6663edd9da0424917f28e0697150827e1d81a3b78df9f23c2bebd",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#678",
+				"pr:minion-meta#1035"
+			],
+			"rationale": "Broad, heavily-tested route-level ownership enforcement that changes staff-visible access and explicitly flags the loss for owner sign-off.",
+			"evidence": [
+				"138/138 new tests plus 84/84 existing ratchets",
+				"non-admins lose access to stored sessions not belonging to their own assistant",
+				"depends on and must merge after #678"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:17:44.921Z"
+		},
+		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6545,14 +6581,14 @@
 			"scoredAt": "2026-11-14T05:18:09.117Z"
 		},
 		{
-			"key": "pr:minion-meta#1035",
+			"key": "pr:minion_hub#678",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1035 docs(specs): 116–119 — state hardening from the implicit state machine audit",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1035",
-			"sourceUpdatedAt": "2026-11-14T18:48:50Z",
-			"sourceFingerprint": "6d6b4dbbe0ad37f67ecda7e6d1f2897b4bc51e863fe0b54d26d85b7f65da54de",
+			"repo": "minion_hub",
+			"title": "#678 fix(gateway-auth): a member's token names their own assistant",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/678",
+			"sourceUpdatedAt": "2026-11-16T04:14:00Z",
+			"sourceFingerprint": "94612d324ed617d1bd90b399c56c43fdc2bf37340f8c1571ae5250fb6a637c85",
 			"score": 59,
 			"band": "medium",
 			"axes": {
@@ -6561,24 +6597,24 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
+			"confidence": 7,
+			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#662",
-				"pr:minion (gateway)#379"
+				"pr:minion_hub#679",
+				"pr:minion-meta#1035"
 			],
-			"rationale": "Foundational spec bundle behind several progressing fixes, but one of its four specs (117) has changes requested due to a production data gap.",
+			"rationale": "Narrow, well-tested security slice that adds a user's own assistant to their token and must land before spec 045 enforces per-user tokens.",
 			"evidence": [
-				"Spec 117 changes requested: production user_agents has 0 rows",
-				"Specs 116/118/119 at pass 2 after EGM reviews",
-				"No proposal preceded these specs per audit process"
+				"26/26 new tests plus 85/85 and 45/45 neighboring suites",
+				"must be deployed before spec 045 step T051",
+				"no visible production effect today since gateways don't validate user tokens yet"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
+			"scoredAt": "2026-11-16T04:17:44.921Z"
 		},
 		{
 			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
@@ -9992,6 +10028,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:16:14.756Z"
+		},
+		{
+			"key": "pr:minion-meta#1035",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1035 docs(specs): 116–119 — state hardening from the implicit state machine audit",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1035",
+			"sourceUpdatedAt": "2026-11-16T04:00:04Z",
+			"sourceFingerprint": "6c50cf12cc16c732d761c332e34ea3fea0216dfb8ad3db00b0ec454272f67266",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#678",
+				"pr:minion_hub#679"
+			],
+			"rationale": "Foundational four-spec state-hardening batch where one spec (117) is already flagged changes-requested due to a production data gap, so downstream implementation readiness is uneven.",
+			"evidence": [
+				"spec 117 changes requested: production user_agents table has 0 rows, which would break the designed fail-closed filter",
+				"batch covers hub POS/appointments, gateway chat events, hub second tier, and gateway restart apology across two repos",
+				"no proposal preceded these specs; the audit itself is the investigation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T04:17:44.921Z"
 		},
 		{
 			"key": "pr:minion-meta#885",
