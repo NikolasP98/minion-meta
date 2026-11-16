@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T07:42:44.121Z",
+	"generatedAt": "2026-11-16T07:47:42.637Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6731,41 +6731,6 @@
 			"scoredAt": "2026-11-14T05:18:09.117Z"
 		},
 		{
-			"key": "pr:minion_hub#674",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
-			"sourceUpdatedAt": "2026-11-16T07:16:38Z",
-			"sourceFingerprint": "baed65181aec7f5a5d0547c61c34c943a5d152f171c3b948c7f500b9c048761e",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-2d1970af997e"
-			],
-			"rationale": "Stacked POS void-and-recharge feature has detailed AS-IS/TO-BE/DELTA, passing tests, and a documented real-database QA run with a bug already found and fixed.",
-			"evidence": [
-				"57+4 tests pass; bun run check only baseline errors",
-				"Real-seeded-DB QA run validated void/recharge and fixed an each_key_duplicate bug (72aeb109)",
-				"Stacked on #671; needs retarget to master after #671 merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:36:10.693Z"
-		},
-		{
 			"key": "pr:minion_hub#678",
 			"kind": "pr",
 			"stage": "development",
@@ -8508,6 +8473,38 @@
 			"scoredAt": "2026-11-14T06:17:37.122Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c9d097a9fdec",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/tickets/[id]/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c9d097a9fdec.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "bfc7b142ecbfec7250f9291dbe9231a7c16da9bc048e7bd2d28079663f7471c4",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A recurring TODO(handoff) marker about incomplete audit logging on POS ticket swaps is a traceable compliance gap with a specific file and clear fix direction.",
+			"evidence": [
+				"TODO(handoff) marker in src/routes/(app)/pos/tickets/[id]/PageBody.svelte recurs across merged PR #671 and #674",
+				"diagnosis flags audit-trail inconsistency risk for payment swap operations"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:47:42.416Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-dba9eee424f4",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -10181,38 +10178,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:16:14.756Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c9d097a9fdec",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/tickets/[id]/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c9d097a9fdec.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "fa9d8639f74f7e6178e57acd563a7f3758c384be1b7c67612e5d451dde0d9864",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A truncated audit-logging TODO in a POS ticket swap flow is a plausible compliance gap but needs investigation of the missing clause before it can be scoped as actionable work.",
-			"evidence": [
-				"TODO(handoff) marker: 'a swap is recorded in the audit log but this' in PageBody.svelte",
-				"merged via PR #671 on minion_hub master, diagnosis flags incomplete audit trail for payment swaps"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:42:43.861Z"
 		},
 		{
 			"key": "pr:minion-meta#1035",
@@ -47461,38 +47426,6 @@
 			"scoredAt": "2026-11-16T03:00:56.032Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "8ba4a32f3277eb7fe8f2971f3809ed7804ca2945af6c8adfcddf814992b135b2",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The listed markers appear to be text fragments quoted inside a generated rankings data file rather than real code TODOs needing resolution.",
-			"evidence": [
-				"source cited is rankings/index.json, a generated data artifact, not application source",
-				"markers quote unrelated fragments (POS, RUC parties, provider JSON reader) suggesting incidental string matches"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:42:43.861Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -49405,6 +49338,38 @@
 			"scoredAt": "2026-11-16T02:57:06.171Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "f62d81735075f19201db79f1586b909f5777a11930ea5604cf00006a28e5ac3d",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The quoted markers are text fragments echoed inside the rankings/index.json aggregation file itself, not real TODOs in source code, making this non-actionable.",
+			"evidence": [
+				"all cited locations are within NikolasP98/minion-meta@dev rankings/index.json, the ranking output file",
+				"marker text matches phrasing from other findings' summaries rather than distinct code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:47:42.416Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3652542388",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -49575,8 +49540,8 @@
 			"repo": "minion (gateway)",
 			"title": "CI",
 			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/43825365722",
-			"sourceUpdatedAt": "2026-11-16T07:40:23Z",
-			"sourceFingerprint": "bf97acd03cfa434570cfe0a2c489054fa83ebe8386ba49a2abac2dc698b170e3",
+			"sourceUpdatedAt": "2026-11-16T07:42:47Z",
+			"sourceFingerprint": "ec89996a58cec928385f8367faa79578cc11402616d8671f0f97eb2b050142dc",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -49588,26 +49553,26 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 5,
+			"confidence": 8,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run, not a board-worthy goal.",
+			"rationale": "This is merely an in-progress CI workflow run, not a work item to rank.",
 			"evidence": [
-				"workflow_dispatch CI run on DEV branch, status in_progress"
+				"workflow_dispatch CI run status in_progress on DEV"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:42:43.861Z"
+			"scoredAt": "2026-11-16T07:47:42.416Z"
 		},
 		{
-			"key": "run:minion_hub#43825374690",
+			"key": "run:minion_hub#43825580415",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43825374690",
-			"sourceUpdatedAt": "2026-11-16T07:40:04Z",
-			"sourceFingerprint": "8877111fb53653a89e35d8f0c80081717e015aff0ff4e0652ed993510f2f5108",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43825580415",
+			"sourceUpdatedAt": "2026-11-16T07:41:53Z",
+			"sourceFingerprint": "20d6f2c20edd09216cee15cda62f001f6c6d0587a8480ffe9f0e9d21c44773e7",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -49619,47 +49584,16 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 5,
+			"confidence": 8,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run triggered by a push, not a board-worthy goal.",
+			"rationale": "This is merely an in-progress CI push run, not a work item to rank.",
 			"evidence": [
-				"CI run push on master, status in_progress"
+				"push CI run status in_progress on master"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:42:43.861Z"
-		},
-		{
-			"key": "run:minion_hub#43825374741",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43825374741",
-			"sourceUpdatedAt": "2026-11-16T07:39:43Z",
-			"sourceFingerprint": "432375cbed3ea228c2d878ecd0908d7bdd93b7b30a8b33c7b98dfa8c56c93098",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress storybook deploy run, not a board-worthy goal.",
-			"evidence": [
-				"storybook-deploy run push on master, status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T07:42:43.861Z"
+			"scoredAt": "2026-11-16T07:47:42.416Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
