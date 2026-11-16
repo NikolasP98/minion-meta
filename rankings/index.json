@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T20:47:00.678Z",
+	"generatedAt": "2026-11-16T21:18:06.560Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1429,40 +1429,6 @@
 			"scoredAt": "2026-11-16T10:19:54.006Z"
 		},
 		{
-			"key": "deploy:minion (gateway)",
-			"kind": "deploy",
-			"stage": "deployment",
-			"repo": "minion (gateway)",
-			"title": "minion (gateway) deployment health",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/f374bee489acd25488ac22d79efe5ac7f9f45d33",
-			"sourceUpdatedAt": "2026-11-16T05:28:18Z",
-			"sourceFingerprint": "28c570631050270fa0cd2dafae34fc93d1eca146cb3084309d822d8503b38beb",
-			"score": 75,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion (gateway)#382"
-			],
-			"rationale": "This is the same memory-leak fix whose production rollout is tracked as the #382 hotfix, so they represent one goal, not two.",
-			"evidence": [
-				"both gateways grew ~1GB/weekday and OOM-crashed every 2-5 days",
-				"fix (#364) is merged to DEV but production still runs on the leaking image per #382"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
-		},
-		{
 			"key": "proposal:2026-09-16-hub-stress-test-defects-scheduling-stock-pos",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -1658,6 +1624,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:20:25.051Z"
+		},
+		{
+			"key": "pr:minion (gateway)#368",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#368 train: promote DEV → main (2026-11-07)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/368",
+			"sourceUpdatedAt": "2026-11-16T21:08:41Z",
+			"sourceFingerprint": "396e0636f4e0da9e2c7213de48455f9ebf5e8e3a78025b6470c530b781b80668",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"deploy:minion (gateway)"
+			],
+			"rationale": "The weekly promotion train is the real production-deploy gate and is open with unconfirmed review checklist items.",
+			"evidence": [
+				"Weekly promotion train (Saturday 21:00), 2 commits ready",
+				"checklist requires confirming review PASS and no unaddressed Critical/High finding before merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T21:18:06.358Z"
 		},
 		{
 			"key": "pr:minion_hub#340",
@@ -2554,6 +2554,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:26:28.261Z"
+		},
+		{
+			"key": "pr:minion-meta#1030",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1030 docs(specs): 115 — gateway k6 load suite (spec, plan, tasks, results)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1030",
+			"sourceUpdatedAt": "2026-11-16T21:09:04Z",
+			"sourceFingerprint": "dc1d954ff5050fead953cd7d8ce8dd67996c0c71d42a3cc8b96ce31e34510bed",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The k6 load suite already produced documented results and surfaced a concrete production-blocking bug (missing migration SQL), so the spec/plan/tasks work is ready to land.",
+			"evidence": [
+				"bug the run surfaced: built gateway cannot start the free-tier API because its migration SQL is not shipped",
+				"Results of the 2026-11-14 runs are documented in specs/115-gateway-k6-load-suite/spec.md §Results"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T21:18:06.358Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -15495,6 +15527,38 @@
 			"scoredAt": "2026-11-16T02:48:07.776Z"
 		},
 		{
+			"key": "proposal:handoff-minion-ai-1628087065",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — src/memory/memory-sink.ts (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-1628087065.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "2ea13fdf4197c43e6b58217c963862c37bab364c9b60b0a52d2e456088e0a0ce",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The single marker describing an unbounded/unacknowledged KG deletion mirror is too vague to scope into actionable work as written.",
+			"evidence": [
+				"marker text: 'This remote KG deletion mirror is unbounded/unacknowledged'",
+				"single-line TODO(handoff) at memory-sink.ts:167 with no further scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T21:18:06.358Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-453435597",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17500,40 +17564,6 @@
 			"scoredAt": "2026-11-11T19:18:13.125Z"
 		},
 		{
-			"key": "pr:minion (gateway)#368",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#368 train: promote DEV → main (2026-11-07)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/368",
-			"sourceUpdatedAt": "2026-11-16T05:28:38Z",
-			"sourceFingerprint": "ee2e8e423a6ae7f3fcbb1cb58ba1f19c3ef55fe09f2747696a8f9a25911211d6",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#382"
-			],
-			"rationale": "Routine weekly DEV→main promotion train is open and ready pending its own review checklist.",
-			"evidence": [
-				"\"Weekly promotion train (Saturday 21:00). 2 commits ready.\"",
-				"status open"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
-		},
-		{
 			"key": "pr:minion-meta#839",
 			"kind": "pr",
 			"stage": "development",
@@ -17664,6 +17694,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T10:19:03.049Z"
+		},
+		{
+			"key": "proposal:handoff-minion-ai-2877399286",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "9c7b28dce0225ff3473c788d2b43aae7f404b7cce9c5a310ebeadf56a1cbcfd9",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The three CI markers have mixed readiness, with macOS explicitly paused by owner decision and Bun parity still pending more evidence, so the batch needs re-scoping rather than immediate execution.",
+			"evidence": [
+				"'Reach Bun 1.4 parity before promoting it from shadow evidence'",
+				"'macOS PAUSED (owner, 2026-10-21) while Mac releases are on hold'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T21:18:06.358Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1194287278",
@@ -20722,40 +20784,6 @@
 			"scoredAt": "2026-11-12T18:19:24.890Z"
 		},
 		{
-			"key": "pr:minion-meta#1030",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1030 docs(specs): 115 — gateway k6 load suite (spec, plan, tasks, results)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1030",
-			"sourceUpdatedAt": "2026-11-16T05:33:21Z",
-			"sourceFingerprint": "5db00bde04fd5da32fbe2ef0d74cbecc0990d2bf460fe88a388890c4261a468f",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#377"
-			],
-			"rationale": "Documents the load-suite results but also surfaces an unaddressed bug (migration SQL not shipped) that needs its own follow-up before this can be called done.",
-			"evidence": [
-				"\"ledger proposal for a bug the run surfaced (migration SQL is not shipped)\"",
-				"status draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
-		},
-		{
 			"key": "proposal:2026-08-29-hub-pos-bookings-stock-gate-drift",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20978,41 +21006,6 @@
 			"evidence": [
 				"marker: 'move transcript sanitization onto the canonical path'",
 				"src/agents/pi-embedded-runner/compact.ts:705"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T02:49:42.682Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-2877399286",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — .github/workflows/ci.yml (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-2877399286.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "3aa8b61d93a4c4b42e11da61d2863bf791a38c26d5c3081a89ae395afffe0387",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-2670563229"
-			],
-			"rationale": "Real CI workflow markers cover Bun 1.4 parity and a lane-flags gate check, but one item (macOS) is already deliberately paused by its owner.",
-			"evidence": [
-				"marker: 'macOS PAUSED (owner, 2026-10-21) while Mac releases are on hold'",
-				"marker: 'Reach Bun 1.4 parity before promoting it from shadow evidence'",
-				".github/workflows/ci.yml:509,1260,1390"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -23966,38 +23959,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:50:01.034Z"
-		},
-		{
-			"key": "proposal:handoff-minion-ai-1628087065",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Handoff marker — src/memory/memory-sink.ts (minion-ai)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-ai-1628087065.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "6c7c12f7fd3087c0b109355658d7c701b7e11bf76b94f7c26da811900e51e163",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An unbounded, unacknowledged remote KG deletion mirror in the memory sink is a plausible resource/correctness risk worth scoping further.",
-			"evidence": [
-				"This remote KG deletion mirror is unbounded/unacknowledged",
-				"file: src/memory/memory-sink.ts:166"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T02:48:07.776Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-602940411",
@@ -34794,6 +34755,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:28:49.704Z"
+		},
+		{
+			"key": "deploy:minion (gateway)",
+			"kind": "deploy",
+			"stage": "deployment",
+			"repo": "minion (gateway)",
+			"title": "minion (gateway) deployment health",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/commit/b87995498744d9c2cfed5776159d11d746a64f52",
+			"sourceUpdatedAt": "2026-11-16T21:08:16Z",
+			"sourceFingerprint": "ccbc5977ad9ac0d0d24507051d9509d3e70b7448ca049be79bef56104511d340",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"pr:minion (gateway)#368"
+			],
+			"rationale": "This is just a status snapshot of an already-merged train-sync commit, not an open decision.",
+			"evidence": [
+				"summary is a completed merge commit (#383) syncing main into DEV",
+				"status: unknown, no open issue described"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T21:18:06.358Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
@@ -48063,6 +48058,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
+		},
+		{
+			"key": "run:minion (gateway)#43956976085",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/43956976085",
+			"sourceUpdatedAt": "2026-11-16T21:12:39Z",
+			"sourceFingerprint": "36a8f9c4266def808d5caafc3670e5e51a30573ff51f7c4b9ace860ef09e8140",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated in-progress CI status entry, not an independent goal.",
+			"evidence": [
+				"CI run triggered by 'push on DEV'",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T21:18:06.358Z"
+		},
+		{
+			"key": "run:minion (gateway)#43956976167",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Docker Release",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/43956976167",
+			"sourceUpdatedAt": "2026-11-16T21:15:38Z",
+			"sourceFingerprint": "8addeb9c1bd2a6f2981d34bf4b9b19d7b74b44d600a2ae80ddd106666f3adc16",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated in-progress Docker Release run, not an independent goal.",
+			"evidence": [
+				"Docker Release run triggered by 'push on DEV'",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T21:18:06.358Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-mention-contrast-spec",
