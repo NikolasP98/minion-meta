@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-16T06:47:55.998Z",
+	"generatedAt": "2026-11-16T07:01:42.530Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2474,38 +2474,6 @@
 			"scoredAt": "2026-11-11T20:18:52.809Z"
 		},
 		{
-			"key": "run:minion_hub#43803606158",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43803606158",
-			"sourceUpdatedAt": "2026-11-16T04:50:06Z",
-			"sourceFingerprint": "6b3bbb89d03823339526ca23b479743b649a0bd87083fab6301be294690f032d",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 8,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A failing CI run on the protected master branch blocks all merges until fixed.",
-			"evidence": [
-				"status: failure",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:17:17.487Z"
-		},
-		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3295,6 +3263,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:51:12.204Z"
+		},
+		{
+			"key": "pr:minion_hub#674",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
+			"sourceUpdatedAt": "2026-11-16T06:58:35Z",
+			"sourceFingerprint": "9131e2d90a9ed59ab099278cec3b3065fcb7d7582c9b9c515977e889c31be14a",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#671"
+			],
+			"rationale": "The void-and-recharge fallback was verified against a real seeded database, surfacing and fixing a live till crash, making it highly execution-ready.",
+			"evidence": [
+				"real DB run on seeded Supabase container found and fixed each_key_duplicate crash",
+				"61 total tests pass across the two mounted-page suites",
+				"stacked on #671, retargets master after merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:01:42.264Z"
 		},
 		{
 			"key": "pr:minion_hub#679",
@@ -4349,42 +4352,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:21:00.094Z"
-		},
-		{
-			"key": "pr:minion_hub#674",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#674 feat(pos): void a sale and charge it again when a product swap is not enough",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/674",
-			"sourceUpdatedAt": "2026-11-16T06:37:22Z",
-			"sourceFingerprint": "aab392e802107042563c0aa88ebd1124a6f76d30f404ea16af18644d2ae01114",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#671",
-				"pr:minion_hub#670"
-			],
-			"rationale": "Completes the till-corrections arc and is the most verified of the three, including a real seeded-database run that found and fixed a bug.",
-			"evidence": [
-				"local QA run against seeded Supabase found each_key_duplicate bug, fixed in 72aeb109",
-				"9 cases added after EGM review findings",
-				"stacked on #671, spec slice S5"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T06:47:55.767Z"
 		},
 		{
 			"key": "pr:minion_hub#680",
@@ -5658,41 +5625,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
-		},
-		{
-			"key": "pr:minion_hub#670",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#670 fix(stock): give back supplies that prepaid treatments removed at the sale",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/670",
-			"sourceUpdatedAt": "2026-11-16T06:37:19Z",
-			"sourceFingerprint": "3d848731640793e26f35e6b0cd3560c54dd884be6a7cdd0e9bad3a272cb258be",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#671"
-			],
-			"rationale": "Foundational stock-correction fix with a production preview run and a repair script that #671/#674 reuse.",
-			"evidence": [
-				"preview lists 13 sales / 6 items with stock drift",
-				"repair script has preview and --apply modes",
-				"stacked under by #671 and #674"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T06:47:55.767Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -7499,42 +7431,6 @@
 			"scoredAt": "2026-11-13T06:17:37.984Z"
 		},
 		{
-			"key": "pr:minion_hub#671",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
-			"sourceUpdatedAt": "2026-11-16T06:37:20Z",
-			"sourceFingerprint": "f972c9fffb85a4febe3d1c019727f089819fb780f444b009107c27e98e3201cd",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#670",
-				"pr:minion_hub#674"
-			],
-			"rationale": "Well-specified, tested product-swap feature that removes a costly void/recharge workaround, though not yet exercised against a real database.",
-			"evidence": [
-				"97 tests pass across till/export areas",
-				"stacked on #670, spec minion-meta#1036 slice S4",
-				"swap with stock movement not covered by a dedicated test"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T06:47:55.767Z"
-		},
-		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -8188,6 +8084,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:14:15.908Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-2d1970af997e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2d1970af997e.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "dc6c6c3e160064c392a742fa2da30c8e4236433b1d0979dce72bae1bf40ec831",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Flags a plausible void/rebuild race affecting POS audit and revenue data, but only an auto-diagnosis exists with no concrete spec or fix in progress.",
+			"evidence": [
+				"TODO(handoff) marker in pos.service.ts describing a rebuild reading sale data before a void commits",
+				"diagnosis offers a fix direction but no code changes made"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:01:42.264Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-3c702b25845f",
@@ -9500,6 +9428,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:18:09.117Z"
+		},
+		{
+			"key": "pr:minion_hub#671",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#671 feat(pos): swap a product on a submitted sale for another of the same price",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/671",
+			"sourceUpdatedAt": "2026-11-16T06:58:35Z",
+			"sourceFingerprint": "970f240782a145635c5f9b398dd3a933efb31524172ef0c1590dc3c9f827ba71",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#674"
+			],
+			"rationale": "Well-specified POS line-swap correction with strong test coverage and a completed, reviewed UI, ready to land.",
+			"evidence": [
+				"97 tests pass in pos.tickets.test.ts including 11 new swap cases",
+				"UI review findings fixed in 262c329d",
+				"stacked on already-merged #670"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:01:42.264Z"
 		},
 		{
 			"key": "pr:minion-meta#882",
@@ -49639,6 +49602,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-09T08:54:40.112Z"
+		},
+		{
+			"key": "run:minion_hub#43820472250",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43820472250",
+			"sourceUpdatedAt": "2026-11-16T06:58:30Z",
+			"sourceFingerprint": "22cad27018fd98e97d25a26699d3e5e2f970d5cbb60f4649e5807df65085e8e4",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress storybook deploy run on master triggered by push, not an actionable goal.",
+			"evidence": [
+				"push on master",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:01:42.264Z"
+		},
+		{
+			"key": "run:minion_hub#43820472282",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/43820472282",
+			"sourceUpdatedAt": "2026-11-16T06:58:31Z",
+			"sourceFingerprint": "7f68e41f70c754e401648a6f726bc3ce67547e08b694e2902421f0ddd6fa66a6",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run on master triggered by push, not an actionable goal.",
+			"evidence": [
+				"push on master",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-16T07:01:42.264Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
