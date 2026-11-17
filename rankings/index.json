@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-17T20:47:19.607Z",
+	"generatedAt": "2026-11-17T21:17:37.855Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2550,6 +2550,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:26:28.261Z"
+		},
+		{
+			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Calendar context menus pre-populated, never empty; paid and unpaid items cancelable with an explicit refund",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "0e69badcc5a46c26f8e3f8e866249fec9e8ee9092be45a8db13b5a00819184a7",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-10-13-hub-calendar-context-menu-followups"
+			],
+			"rationale": "Core billing/refund invariants are rigorously specified and mostly shipped, with the remaining scope already captured as a standalone followups ledger, so this goal's status should be reconciled rather than tracked separately.",
+			"evidence": [
+				"status implementing with invariants I1-I6 fully specified",
+				"shipped as hub PRs #516 (server) and #517 (UI)",
+				"remaining gaps enumerated in proposal:2026-10-13-hub-calendar-context-menu-followups"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-17T21:17:37.653Z"
 		},
 		{
 			"key": "pr:minion_hub#681",
@@ -5494,6 +5529,41 @@
 			"scoredAt": "2026-11-14T06:47:59.891Z"
 		},
 		{
+			"key": "proposal:2026-10-13-hub-calendar-context-menu-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Calendar context menu + cancel/refund — open ends after S1/S2",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-calendar-context-menu-followups.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "440aabd8b672a77de50e49f40154bf3997a4f85339f06965bdc3a128367c03a6",
+			"score": 61,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec"
+			],
+			"rationale": "A well-specified, file/line-pointed ledger of concrete follow-ups (RBAC gap, concurrent double-void, missing charge entry) after a shipped billing feature.",
+			"evidence": [
+				"TODO(handoff) at calendar-context-menu.ts:105 for missing charge entry",
+				"concurrent double-void hardening item with no WHERE guard on status update",
+				"shipped as hub PRs #516 and #517"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-17T21:17:37.653Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-2144854174",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5967,42 +6037,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T04:17:59.915Z"
-		},
-		{
-			"key": "proposal:2026-10-13-hub-calendar-context-menu-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Calendar context menu + cancel/refund — open ends after S1/S2",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-calendar-context-menu-followups.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "440aabd8b672a77de50e49f40154bf3997a4f85339f06965bdc3a128367c03a6",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-8b315b355b71",
-				"spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec"
-			],
-			"rationale": "Concrete, well-scoped open ends from a shipped feature, including an RBAC visibility mismatch and a concurrency double-write risk on refunds, with specific fixes and file locations named.",
-			"evidence": [
-				"RBAC mismatch: cancel-paid entry gated on canEdit while the void endpoint requires pos:manage",
-				"concurrent double-void risk: status update lacks a WHERE status='submitted' guard",
-				"Postgres integration test and a mounted dialog test for the cancel flow are still missing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T20:48:21.573Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-825707600",
@@ -47920,7 +47954,7 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
 			"confidence": 3,
@@ -47928,15 +47962,15 @@
 			"relatedKeys": [
 				"proposal:2026-10-13-hub-calendar-context-menu-followups"
 			],
-			"rationale": "The auto-filed diagnosis never completes and only poses clarifying questions, and the underlying gap it points at is already tracked with a clearer fix direction in the 2026-10-13 followups proposal.",
+			"rationale": "This auto-filed finding targets the same TODO already tracked with full context and a fix direction in the followups ledger, and its own diagnosis never completed (ends in clarifying questions, not a plan).",
 			"evidence": [
-				"diagnosis section asks the reader to confirm basic facts rather than stating a finding",
-				"marker text is truncated and the file was never actually read in the finding",
-				"same instalment-plan-loses-charge gap is item 1 of the 2026-10-13 followups proposal"
+				"marker text is truncated '(the.' and unresolved",
+				"diagnosis section ends asking the user to confirm scope instead of concluding",
+				"same file/TODO covered by proposal:2026-10-13-hub-calendar-context-menu-followups item 1"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T20:48:21.573Z"
+			"scoredAt": "2026-11-17T21:17:37.653Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cb4eec61bb4f",
@@ -48097,41 +48131,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:27:42.973Z"
-		},
-		{
-			"key": "spec:2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Calendar context menus pre-populated, never empty; paid and unpaid items cancelable with an explicit refund",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-13-hub-calendar-context-menu-and-cancel-refund-spec.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "0e69badcc5a46c26f8e3f8e866249fec9e8ee9092be45a8db13b5a00819184a7",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:2026-10-13-hub-calendar-context-menu-followups"
-			],
-			"rationale": "The spec's TO-BE behavior was already shipped as hub PRs #516 and #517, so the goal as stated is satisfied and remaining gaps live in the separate followups proposal.",
-			"evidence": [
-				"followups proposal states work 'Shipped as hub PRs #516 (server) and #517 (UI)'",
-				"status field still reads 'implementing' though delivery is complete",
-				"detailed AS-IS/TO-BE invariants (I1-I6) with no outstanding delta beyond the followups ledger"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T20:48:21.573Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d371d2661bc2",
