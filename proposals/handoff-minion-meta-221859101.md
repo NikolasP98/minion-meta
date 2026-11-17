@@ -113,7 +113,7 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44506
 - `NikolasP98/minion-meta@dev rankings/index.json:44605` — brief-debloat-c §3 asked for this to be wrapped in [something]",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44605
-- `NikolasP98/minion-meta@dev rankings/index.json:47843` — additional custom fields lose their mailto link",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L47843
-- `NikolasP98/minion-meta@dev rankings/index.json:48105` — move to an ai flag on plugin flow-node manifests when a third AI action",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48105
+- `NikolasP98/minion-meta@dev rankings/index.json:47811` — additional custom fields lose their mailto link",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L47811
+- `NikolasP98/minion-meta@dev rankings/index.json:48073` — move to an ai flag on plugin flow-node manifests when a third AI action",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48073
