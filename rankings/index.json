@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-17T07:17:03.543Z",
+	"generatedAt": "2026-11-17T07:47:29.266Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8904,6 +8904,41 @@
 			"scoredAt": "2026-11-11T20:20:16.669Z"
 		},
 		{
+			"key": "spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Tables — configurable open mode (page/modal/tray), floating bulk bar; stock entries provenance + item detail restructure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "247add6b861c7ebd99c69cd5d7a6b3aa14fc0a092fb769e60d7e66de3135baa3",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-09-28-hub-stock-receipt-purchase-link"
+			],
+			"rationale": "Active, well-specified cross-table UX overhaul already has slice 1 merged and a defined Playwright/vitest verification path for the remaining slice.",
+			"evidence": [
+				"status: implementing, slice 1 done at commit 781a53b6",
+				"core touches DataTable, bulk bar, and stock/item detail across the hub",
+				"verification: record-peek.spec.ts + full vitest/svelte-check/lint:design"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-17T07:47:29.084Z"
+		},
+		{
 			"key": "issue:minion-meta#490",
 			"kind": "issue",
 			"stage": "proposal",
@@ -12839,40 +12874,6 @@
 			"scoredAt": "2026-11-16T14:18:24.410Z"
 		},
 		{
-			"key": "spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Tables — configurable open mode (page/modal/tray), floating bulk bar; stock entries provenance + item detail restructure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "247add6b861c7ebd99c69cd5d7a6b3aa14fc0a092fb769e60d7e66de3135baa3",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-09-28-hub-stock-receipt-purchase-link"
-			],
-			"rationale": "Broad, thoroughly specified cross-table UX overhaul already mid-implementation with a core slice committed and a defined verification plan.",
-			"evidence": [
-				"core slice already done at commit 781a53b6 on feat/table-open-modes-bulk-bar",
-				"status: implementing with Playwright record-peek.spec.ts verification plan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T07:18:00.280Z"
-		},
-		{
 			"key": "pr:minion-meta#1041",
 			"kind": "pr",
 			"stage": "development",
@@ -13259,20 +13260,21 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 7,
+				"implementation": 7
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Narrow, well-located security input-validation finding on an auth path with an exact fix pattern already present elsewhere in the code.",
+			"rationale": "Small, precisely located auth-validation gap with an explicit fail-closed fix pattern already proven elsewhere in the same file.",
 			"evidence": [
-				"auth-jwt.ts:133 assigns unvalidated aud claim into a string[] typed field",
-				"fix direction mirrors existing parseFeaturesClaim fail-closed pattern"
+				"auth-jwt.ts:133 aud claim assigned without string[] validation",
+				"fix direction mirrors existing parseFeaturesClaim pattern",
+				"severity rated medium by the scan"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T07:18:00.280Z"
+			"scoredAt": "2026-11-17T07:47:29.084Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bf747956e314",
@@ -24776,6 +24778,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T04:48:06.046Z"
+		},
+		{
+			"key": "proposal:2026-09-28-hub-stock-receipt-purchase-link",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Stock receipts have no purchase-record link — Document column is blind for receipts",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-stock-receipt-purchase-link.md",
+			"sourceUpdatedAt": "2026-09-28",
+			"sourceFingerprint": "d7a85a734e1ef6d7db941fa1f57df286ced0392c7bdabd939f7ad227f91668ce",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec"
+			],
+			"rationale": "Detailed AS-IS/TO-BE but the proposal itself says a data-model decision (new fin_purchases table vs reuse) must be made before a spec can even be written.",
+			"evidence": [
+				"\"needs a call before a spec is written\"",
+				"receipts have no metadata shape for purchase linkage today",
+				"attachments-tooltip fallback already covers the gap non-breakingly"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-17T07:47:29.084Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-pos-stock-fix-batch",
@@ -38325,40 +38362,6 @@
 			"scoredAt": "2026-11-16T10:19:54.006Z"
 		},
 		{
-			"key": "proposal:2026-09-28-hub-stock-receipt-purchase-link",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Stock receipts have no purchase-record link — Document column is blind for receipts",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-28-hub-stock-receipt-purchase-link.md",
-			"sourceUpdatedAt": "2026-09-28",
-			"sourceFingerprint": "d7a85a734e1ef6d7db941fa1f57df286ced0392c7bdabd939f7ad227f91668ce",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-09-28-hub-table-open-modes-bulk-bar-stock-detail-spec"
-			],
-			"rationale": "Gap is clearly described but explicitly blocked on an unresolved data-model decision, so it is not yet actionable.",
-			"evidence": [
-				"proposal states a call is needed on fin_purchases table vs reuse before a spec can be written",
-				"existing attachments-tooltip fallback already covers the gap as a workaround"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T07:18:00.280Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2928576328",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38527,6 +38530,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T03:47:52.021Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dc247fbe1f2a.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "2e8b0bdf7e426640a28d72151975fba59eea744540de959c43de485d96e3a3cf",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, narrowly-scoped duplicate-UI cleanup with a clear diagnosis and fix direction already identified by the post-merge scan.",
+			"evidence": [
+				"status: approved",
+				"diagnosis names exact duplication (search/category pills vs DataTable)",
+				"fix direction: remove duplicate UI, rely on DataTable filtering"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-17T07:47:29.084Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-de937a67722d",
@@ -44804,38 +44840,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:20:04.792Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/AgentMemoryPanel.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-dc247fbe1f2a.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "2e8b0bdf7e426640a28d72151975fba59eea744540de959c43de485d96e3a3cf",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, narrowly-scoped cleanup removing duplicate search/filter UI now superseded by DataTable's built-in filtering.",
-			"evidence": [
-				"TODO(handoff) marker flags duplicate search box + category pills vs DataTable",
-				"status: approved with a clear definition of done"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T07:18:00.280Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dec76f04d805",
