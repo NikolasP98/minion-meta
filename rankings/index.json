@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-17T04:18:00.096Z",
+	"generatedAt": "2026-11-17T04:47:01.209Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -24973,6 +24973,39 @@
 			"scoredAt": "2026-11-11T12:18:42.223Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-52c12f8f951d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/qa/seed/tenancy.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-52c12f8f951d.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "bac13b97d91755a3fff474693ea630fecfdd854cffd26ce32a93ba94a68515fb",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A clear, bounded fix (add seedNotOnboardedOrg fixture) with defined done-criteria improves onboarding test reliability in minion_hub.",
+			"evidence": [
+				"TODO(handoff) marker at scripts/qa/seed/tenancy.ts:221",
+				"independently flagged twice (postmerge + handoff-ledger sweeps)",
+				"fix direction specifies exact function and flag to add"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-17T04:47:01.007Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-78f81166a2c1",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38320,38 +38353,6 @@
 			"scoredAt": "2026-11-10T23:18:22.456Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-52c12f8f951d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/qa/seed/tenancy.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-52c12f8f951d.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "bac13b97d91755a3fff474693ea630fecfdd854cffd26ce32a93ba94a68515fb",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A concrete but low-urgency test-fixture gap for QA seeding, not a production or release blocker.",
-			"evidence": [
-				"TODO(handoff) marker in scripts/qa/seed/tenancy.ts flags missing not-yet-onboarded org fixture",
-				"fix direction specifies adding seedNotOnboardedOrg() with --include-not-onboarded flag"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-10T04:17:13.304Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-6510cf161973",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41822,6 +41823,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T07:18:44.940Z"
+		},
+		{
+			"key": "issue:minion-meta#1044",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1044 [monitor:unstick] rank board goals run 2ddbff49 failed: provider returned invalid JSON",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1044",
+			"sourceUpdatedAt": "2026-11-17T04:17:23Z",
+			"sourceFingerprint": "574a1d596cffe43d63fca47b15c2bf1b9d7d68ca91e475860add48c0e25982ce",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Monitor intake describes a transient provider JSON-parse failure on a near-complete ranking run, which is cheap to retry but not independently actionable as scoped.",
+			"evidence": [
+				"only 7/1470 candidates pending when it died",
+				"claude-provider batch-1 response failed JSON parsing, fell back to codex, still errored"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-17T04:47:01.007Z"
 		},
 		{
 			"key": "issue:minion-meta#337",
