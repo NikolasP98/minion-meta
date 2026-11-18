@@ -31,13 +31,3 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/stock-corrections.sql.integration.test.ts#L1262
 - `NikolasP98/minion_hub@master src/server/services/stock-corrections.sql.integration.test.ts:1284` — the F1 mapping cutover writer and its cutover_pending_sources census refusal do
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/stock-corrections.sql.integration.test.ts#L1284
-
-## Reconciliation note (2026-11-18)
-
-This marker's two lines each match an already-approved post-merge finding
-for the same file: line 1262 (`stock_only` entrypoint) matches
-`postmerge-minion-hub-2098497a143f`; line 1284 (F1 mapping cutover writer)
-matches `postmerge-minion-hub-38f498053ee8`. Both targets are `status:
-approved` and were left untouched. `duplicate_candidate` above points at the
-first; a human should confirm whether this marker is fully covered by the
-two approved findings or carries anything additional.
