@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-2098497a143f
 title: "Post-merge finding — todo-handoff in src/server/services/stock-corrections.sql.integration.test.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-11-18
 updated: 2026-11-18
 repos: [minion-hub]
