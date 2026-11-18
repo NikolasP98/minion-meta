@@ -37,9 +37,10 @@ related: [120-till-corrections]
   - a till sale of a product with a recipe issues the default;
   - recipe cost, invoice previews and service-issue previews use the default.
 - **Completing a booking** asks one question per group, "¿Cuál se usó?", as a row of buttons (one per option, default selected). Only the picked option's supplies are shown and posted. Picking a different option needs one click; the supplies under it keep their editable quantities.
-- **The catalog recipe editor** adds, on each supply row:
-  - "O…": add a substitute to that row.
-  - On each option: "Agregar a esta opción" (an item consumed together with the option's others) and "Usar como predeterminado".
+- **The catalog recipe editor** keeps each row's actions in one right-aligned column of lucide icon buttons, each with a tooltip:
+  - Split: add a substitute to that row ("Agregar sustituto").
+  - Trash2: remove the row.
+- Each option has a header line: "Opción N", then the "Predeterminado" badge or "☆ Usar como predeterminado", then "+ Agregar" on the right. "+ Agregar" adds an item consumed together with the option's others.
   - Deleting a supply works as today. A group left with one option shows as plain rows.
 - Invariants:
   - A recipe with no substitutes behaves exactly as today. Every existing row is unchanged.
@@ -54,7 +55,7 @@ related: [120-till-corrections]
 | booking reserve, product sale issue, invoice/service preview and recipe cost: all rows → default branch only | `recipe-choice.test.ts` "takes every default when nobody picks", "scopes choice groups per recipe"; the five readers call `defaultBranch` |
 | completion dialog: one row per item → one "¿Cuál se usó?" choice per group, only the pick posted | `consumption-lines.test.ts` "posts the default when nothing is picked" / "posts only the picked substitute" |
 | reservation that held both toxins → the unpicked one is released at completion | existing `realizeAccrualsInTx` branch "accrued but not consumed in the final issue → released" (unchanged) |
-| recipe editor: flat list → "O…" / "Agregar a esta opción" / "Usar como predeterminado" | `recipe-choice.test.ts` "or… on a lone row adds an option; on a shared row it nests", "make default swaps" |
+| recipe editor: flat list → option headers ("Opción N", default badge / "Usar como predeterminado", "+ Agregar") and right-aligned Split / Trash2 icon actions | `recipe-choice.test.ts` "or… on a lone row adds an option; on a shared row it nests", "make default swaps" |
 | incoherent substitute paths are refused at save | `choicePathError` tests; `updateSellable` throws `invalid_choice_path` (400) |
 
 ## User Scenarios & Testing *(mandatory)*
@@ -75,15 +76,15 @@ At completion of a Botox appointment, the operator sees "¿Cuál se usó? [Dyspo
 
 ### User Story 2 — Define substitutes in the catalog (Priority: P1)
 
-The owner opens "Botox Full Face" in the catalog, clicks "O…" on Dysport and picks INIBO. The recipe now reads "Uno de: Dysport 75 (Predeterminado) | INIBO 1". They set INIBO's quantity and, if INIBO is the usual, click "Usar como predeterminado".
+The owner opens "Botox Full Face" in the catalog, clicks the substitute (Split) icon on Dysport and picks INIBO. The recipe now reads "Uno de: Dysport 75 (Predeterminado) | INIBO 1". They set INIBO's quantity and, if INIBO is the usual, click "Usar como predeterminado".
 
-**Independent Test**: build `X + (Y | (W + Z))` from a flat recipe with three clicks ("O…" on Y → W; "Agregar a esta opción" on W's option → Z) and see it saved after reload.
+**Independent Test**: build `X + (Y | (W + Z))` from a flat recipe with three clicks (substitute icon on Y → W; "+ Agregar" on W's option → Z) and see it saved after reload.
 
 **Acceptance Scenarios**:
 
-1. **Given** a recipe `A + B`, **When** "O…" on B picks C, **Then** the recipe is `A + (B | C)` with B the default.
-2. **Given** `A + (B | C)`, **When** "Agregar a esta opción" on C's option picks D, **Then** the recipe is `A + (B | (C + D))`.
-3. **Given** `A + (B | (C + D))`, **When** "O…" on C picks E, **Then** the recipe is `A + (B | ((C | E) + D))`.
+1. **Given** a recipe `A + B`, **When** the substitute icon on B picks C, **Then** the recipe is `A + (B | C)` with B the default.
+2. **Given** `A + (B | C)`, **When** "+ Agregar" on C's option picks D, **Then** the recipe is `A + (B | (C + D))`.
+3. **Given** `A + (B | (C + D))`, **When** the substitute icon on C picks E, **Then** the recipe is `A + (B | ((C | E) + D))`.
 4. **Given** a group, **When** "Usar como predeterminado" on its second option, **Then** that option is reserved by new bookings and listed first.
 
 ### User Story 3 — Unattended paths use the default (Priority: P2)
