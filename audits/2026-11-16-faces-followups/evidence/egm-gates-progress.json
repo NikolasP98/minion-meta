@@ -1,0 +1,936 @@
+{
+  "status": "IN_PROGRESS_NOT_FINAL",
+  "ownerSpecApproval": "pending",
+  "items": [
+    {
+      "item": "F1",
+      "featureDir": "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation",
+      "targetSha256": "3939749b10c2f1013b66550d9e8e9fb969daa53c8861816010af663f840cb90f",
+      "fullFlowPasses": 2,
+      "critic": {
+        "verdict": "converged",
+        "cleanRounds": 3,
+        "cleanRoundNumbers": [
+          2,
+          3,
+          5
+        ],
+        "roundCapReached": false,
+        "lastCompletedRound": 5
+      },
+      "readiness": {
+        "verdict": "requires_remediation_or_review",
+        "cleanRounds": 0,
+        "cleanRoundNumbers": [],
+        "roundCapReached": false,
+        "lastCompletedRound": 4
+      },
+      "overallVerdict": "review_in_progress",
+      "reportPaths": [
+        "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation/egm/round1/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation/egm/round2/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation/egm/round3/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation/egm/round4/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation/egm/round5/consolidated_review_report.md"
+      ],
+      "remainingFindings": [
+        {
+          "id": "F1-R5-implementation-readiness-001",
+          "severity": "Major",
+          "scope": {
+            "target": "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation/design-review.md",
+            "lines": [
+              [
+                467,
+                475
+              ],
+              [
+                962,
+                966
+              ],
+              [
+                994,
+                996
+              ]
+            ],
+            "companions": [
+              "contracts/diagnostic-wire.md:18-26",
+              "contracts/source-explanation.md:21-25,53-55"
+            ]
+          },
+          "discrepancy": "The selected booking_group identity and membership query omit the resource boundary that defines an existing visit. SourceRef.id is only the opaque metadata.groupId; SourceValue.booking omits resourceId; derived membership queries only organization plus groupId and hashes only groupId plus members.",
+          "rationale": "Pinned scheduling-bookings.service.ts visitMembers reads the anchor resourceId at2195-2199 and constrains members by org, byte-equal metadata.groupId AND resourceId at2211-2215. Two valid opaque identical groupId strings on different resources therefore represent different existing visits but collide in the proposed graph node/output and can be merged by the documented query. The implementer must independently design a composite identity or collision refusal to preserve actual provenance; exact-key decoders currently provide neither. The zero-decision standard is not met for this new source-explanation path.",
+          "recommendation": "Specify the resource-qualified group identity and anchor-resource membership predicate in both strict wires and query/hash rules, include the necessary resource identity in safe booking/group facts, and define how multiple anchored groups with the same opaque groupId coexist. Alternatively explicitly refuse that collision before deriving a group. Add a same-org/two-resource/same-groupId vector proving separate membership, stable noncolliding graph refs/hashes and no cross-visit classification or projection matching.",
+          "proof": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/scheduling-bookings.service.ts",
+              "lines": [
+                [
+                  2190,
+                  2221
+                ]
+              ],
+              "facts": "visitMembers uses eq(schedBookings.resourceId,row.resourceId) in addition to same-org/groupId."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation/contracts/source-explanation.md",
+              "lines": [
+                [
+                  21,
+                  25
+                ],
+                [
+                  53,
+                  55
+                ]
+              ],
+              "facts": "Closed booking DTO lacks resourceId; booking_group has memberIds only; group ref.id and hash use groupId without resource."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/122-faces-stock-reconciliation/contracts/diagnostic-wire.md",
+              "lines": [
+                [
+                  18,
+                  26
+                ]
+              ],
+              "facts": "SourceRef identity restricts booking_group to the opaque groupId alone."
+            }
+          ],
+          "lens": "implementation-readiness",
+          "reviewedRound": 5,
+          "reviewedSha256": "3939749b10c2f1013b66550d9e8e9fb969daa53c8861816010af663f840cb90f",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F1-R4-CODEBASE-DETAILS-001",
+          "severity": "Blocker",
+          "scope": "design-review.md:906\u2013910; contracts/unchanged-facts.md:7\u20139; pinned src/server/db/pg-pos-schema.ts:123\u2013132",
+          "discrepancy": "The exact unchanged-facts scope selects same-org pos_ticket_lines whose product_id is an admitted garment product. The pinned table defines fin_product_id (Drizzle finProductId), not product_id; the sanitized meeting-case rows also carry fin_product_id.",
+          "rationale": "This is a nonexistent current column in a normative exact key-set predicate. A literal implementation fails before preview; silently substituting a guessed relation could omit source tickets from the approval and unchanged-payment digest. The native persona classifies contradictions to the code/nonexistent current references as Blocker.",
+          "recommendation": "Use pos_ticket_lines.fin_product_id in the exact key derivation and companion. Name the same-org relation for any booking-to-ticket expansion. Add a fixture in the existing mapping service/native behavior where an M sale is reached only through that column and assert its ticket, all lines and payments participate in the digest.",
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "9ff59f8ad9021d256990aecaef431539272acda9a7a39bcd1c6242bc9e685796",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F1-R4-CODEBASE-DETAILS-002",
+          "severity": "Major",
+          "scope": "design-review.md:478\u2013483, 868\u2013871; contracts/diagnostic-wire.md Reason; contracts/report.md ordered classification row2",
+          "discrepancy": "The mandatory mixed-discrepancy branch emits reason mixed_discrepancies, but the closed Reason union permits mixed_component_findings and excludes mixed_discrepancies. The later code-to-reason guidance does not resolve this conflicting literal.",
+          "rationale": "The selected strict decoder and literal ordered classifier cannot both be implemented as written for the required duplicate+variant fixture; either the classifier violates its TypeScript/wire contract or an implementer changes an unspecified code.",
+          "recommendation": "Select one canonical literal, update the union, ordered table and task/test vectors together, and assert the mixed-component report strict-decodes with that exact reason and repairEligible:false in the existing pure/CLI/native cases.",
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "9ff59f8ad9021d256990aecaef431539272acda9a7a39bcd1c6242bc9e685796",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F1-R4-CODEBASE-DETAILS-003",
+          "severity": "Major",
+          "scope": "design-review.md:443\u2013458, 494\u2013519, 829\u2013844; FeatureRange FR-002 as context; pinned src/server/db/pg-pos-schema.ts:170\u2013184 and pg-scheduling-schema.ts:209\u2013260",
+          "discrepancy": "The closed diagnostic report has no typed payment provenance/timing or booking/accrual source-state projection. SourceKind cannot name a POS payment, graph nodes expose only IDs/hash/availability, and only ledger movements carry a postedAt. Consequently the report cannot show the required payment-versus-fulfillment timeline, booking dates/status, open/released expectations and warnings from the actual sources; it can merely hash most of them.",
+          "rationale": "FR-002 and S1 promise a linked explanation of source payments, booking/group/package and expectation states, preserving D1 versus D2. The code already stores pos_payments.paid_at/amount and sched_bookings.start_time/status; the chosen closed wire omits their non-PII source facts, so T008 cannot produce the promised explanation without inventing an output extension. Hashes alone are not understandable timeline evidence.",
+          "recommendation": "Add a bounded closed source/timeline projection with exact payment IDs/dates and authorized monetary facts, booking dates/status, expectation states/actuals and typed warning codes; retain PII exclusions and same-org checks. Specify its source queries, null/unknown and ordering rules and add the D1 payment/D2 fulfillment plus open-versus-realized/released roundtrip vectors to existing suites.",
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "9ff59f8ad9021d256990aecaef431539272acda9a7a39bcd1c6242bc9e685796",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F1-R4-readiness-style-001",
+          "severity": "Major",
+          "scope": "design-review.md:478\u2013483,531,866\u2013878; contracts/diagnostic-wire.md Reason and contracts/report.md classification order 2",
+          "discrepancy": "The ordered classification table requires reason `mixed_discrepancies`, while the closed Reason union admits `mixed_component_findings` and never admits `mixed_discrepancies`.",
+          "rationale": "Two normative sections name the same unresolved mixed-component outcome differently. A strict report decoder cannot accept the literal decision-table result; the implementer must choose which contract to change, contrary to the zero-decision rule. This is terminology with executable consequences, not a stylistic synonym.",
+          "recommendation": "Use one exact reason code in the union, decision table, literal mapping, canonical companion files and decoder/native vectors. Prefer the already declared `mixed_component_findings` unless a deliberate schema change selects another code.",
+          "lens": "readiness-style",
+          "reviewedRound": 4,
+          "reviewedSha256": "9ff59f8ad9021d256990aecaef431539272acda9a7a39bcd1c6242bc9e685796",
+          "disposition": "preserved; any applied fix requires fresh review"
+        }
+      ]
+    },
+    {
+      "item": "F2",
+      "featureDir": "/home/nikolas/Documents/CODE/MINION/specs/123-faces-receipt-valuation",
+      "targetSha256": "5a411cca05c0827aa8901ee02f699fe348a701dd6f1be636bbeed28e353dceb2",
+      "fullFlowPasses": 2,
+      "critic": {
+        "verdict": "converged",
+        "cleanRounds": 4,
+        "cleanRoundNumbers": [
+          1,
+          2,
+          3,
+          5
+        ],
+        "roundCapReached": false,
+        "lastCompletedRound": 5
+      },
+      "readiness": {
+        "verdict": "requires_remediation_or_review",
+        "cleanRounds": 0,
+        "cleanRoundNumbers": [],
+        "roundCapReached": false,
+        "lastCompletedRound": 4
+      },
+      "overallVerdict": "review_in_progress",
+      "reportPaths": [
+        "/home/nikolas/Documents/CODE/MINION/specs/123-faces-receipt-valuation/egm/round1/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/123-faces-receipt-valuation/egm/round2/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/123-faces-receipt-valuation/egm/round3/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/123-faces-receipt-valuation/egm/round4/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/123-faces-receipt-valuation/egm/round5/consolidated_review_report.md"
+      ],
+      "remainingFindings": [
+        {
+          "id": "F2-R4-CODEBASE-DETAILS-001",
+          "severity": "Major",
+          "scope": "design-review.md:463\u2013468, 542\u2013543, 661\u2013664; contracts/command-envelope.md:10\u201315; pinned stock.service.ts:640\u2013646,1698\u20131713; pg-schema/stock.ts:154\u2013160",
+          "discrepancy": "EntryEvidence requires uom:string for every original receipt/issue and the support matrix demands a verified common stock UOM, but the original database column is nullable. Pinned linesToRows persists omitted UOM as null; insertSourcedIssueEntry passes no UOM when creating ordinary booking/POS issue lines. The contract does not distinguish raw nullable stored UOM from the separately verified normalized stockUom or define the null-source admission rule.",
+          "rationale": "The selected envelope explicitly includes current ordinary booking/POS issues. A literal source projection cannot serialize those source-created null UOMs, while substituting today's item UOM silently would turn missing historical unit evidence into an apparent stored fact. This is a missing source-shape/edge-case decision at the exact manifest boundary, not proof of any raw production row's UOM.",
+          "recommendation": "Preserve stored UOM as string|null in source evidence and define a separate verified normalized stock-UOM field/derivation. State the exact evidence required to admit a null stored UOM and refuse unknown historical conversions. Freeze source row hashes unchanged, define replacement UOM behavior explicitly and test genuine source-created null-UOM booking/POS/receipt lines plus changed-item-UOM refusal in existing suites.",
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "b0d9acb358114279158af6d45555e51b56e664fa9aa433441403bbfca2531c68",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F2-R4-CODEBASE-DETAILS-002",
+          "severity": "Major",
+          "scope": "design-review.md:420\u2013428, 744\u2013752, 893\u2013911; contracts/replay-report.md:3\u201313 and tasks.md:T003\u2013T008",
+          "discrepancy": "The first shipped discovery/replay interface remains a prose field inventory: its evidence manifest has no exact named type/strict schema for supplier-document/claimed-cost/approval evidence, and ReceiptDiscovery/ValuationReplayPlan/report outcomes have no complete wire type, nullability, canonical digest projection or fixed blocker mapping. The exact ReceiptChainManifestV1 later specified is an executable writer input and expressly cannot represent absent-document hypothetical diagnostics.",
+          "rationale": "T003 still asks the implementer to define the versioned types. A fresh engineer must choose how absent invoice, source numeric/UOM nulls, unsupported boundary, incomplete prefix, document verification and two report modes serialize and hash before T004/T008 can be implemented or strict contract tests written. These are required first-slice behavior choices under the supplied zero-decision implementation-readiness standard, rather than missing future implementation files.",
+          "recommendation": "Specify a complete closed diagnostic evidence-manifest and discovery/replay result union in the existing replay-report/pure-library contract: exact fields, source mappings, required/null states, owner evidence admission, supported/unsupported/incomplete variants, stable reason codes, ordering, canonical digest and numeric string rules. Keep writer command-envelope separate and bind T003\u2013T008/tests to those exact vectors, including absent invoice and nullable source UOM.",
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "b0d9acb358114279158af6d45555e51b56e664fa9aa433441403bbfca2531c68",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F2-R4-readiness-style-001",
+          "severity": "Major",
+          "scope": "design-review.md:411\u2013419,744\u2013752,899; data-model.md, contracts/replay-report.md and T003",
+          "discrepancy": "The read-only MVP names `ReceiptDiscovery` and `ValuationReplayPlan` as prose field sketches, and says the evidence manifest contains a claimed basis and `costBasisVerified` boolean, but supplies no closed input/output types, complete required/null fields, fixed blocker/coverage variants or exact report digest preimage. T003 still tells the implementer to define those types. The exact ReceiptChainManifestV1 in command-envelope.md governs the separate writer rather than these diagnostic artifacts.",
+          "rationale": "A fresh implementer must invent the diagnostic schema and the representation of unknown documentary facts, unsupported replay and incomplete reads. The text calls the report versioned but does not establish the wire terminology precisely enough to produce one unambiguous implementation under the readiness standard.",
+          "recommendation": "Specify the complete diagnostic evidence-manifest and discovery/replay report unions, exact fields/nullable states/limits/blocker codes, canonical digest inputs and exit consistency; make T003 implement those selected schemas and exact vectors. Retain useful hypothetical/ineligible reporting without fabricating an executable writer manifest.",
+          "lens": "readiness-style",
+          "reviewedRound": 4,
+          "reviewedSha256": "b0d9acb358114279158af6d45555e51b56e664fa9aa433441403bbfca2531c68",
+          "disposition": "preserved; any applied fix requires fresh review"
+        }
+      ]
+    },
+    {
+      "item": "F3",
+      "featureDir": "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow",
+      "targetSha256": "b69fcd7fe672bfc25aee41c344bc240ee3b49b9e780fbf04e4f6592ed9237c37",
+      "fullFlowPasses": 2,
+      "critic": {
+        "verdict": "clean_round",
+        "cleanRounds": 1,
+        "cleanRoundNumbers": [
+          5
+        ],
+        "roundCapReached": true,
+        "lastCompletedRound": 5
+      },
+      "readiness": {
+        "verdict": "requires_remediation_or_review",
+        "cleanRounds": 0,
+        "cleanRoundNumbers": [],
+        "roundCapReached": false,
+        "lastCompletedRound": 4
+      },
+      "overallVerdict": "review_in_progress",
+      "reportPaths": [
+        "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/egm/round1/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/egm/round2/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/egm/round3/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/egm/round4/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/egm/round5/consolidated_review_report.md"
+      ],
+      "remainingFindings": [
+        {
+          "id": "F3-R5-IMPLEMENTATION-READINESS-001",
+          "severity": "Major",
+          "scope": "design-review.md:152,235,306,943-1010; canonical research.md:27, plan.md:54, data-model.md:25 and contracts/workflow.md",
+          "discrepancy": "Standalone receipt replacement requires verified owner-approved period-policy evidence, but no executable representation or admission seam for that approval is selected. The closed preview/apply envelope contains request/reason/valuation and hashes only; StockValuationQualificationV1 attests denomination rather than period policy. The storage and file inventory likewise define no server-owned period-policy approval source/version. The technical contract defines which months to check but not how the service distinguishes an approved policy from an unverified one.",
+          "rationale": "A fresh implementer must choose between permanently returning policy_unverified, treating the future spec approval as a hardcoded software switch, adding an undocumented setting/evidence record, or incorrectly treating the unrelated valuation proof as policy approval. The missing technical mechanism prevents the required successful standalone-receipt scenario from being implemented under the zero-decision rule. Pending human approval itself is not the finding.",
+          "recommendation": "Select the exact server-controlled policy qualification mechanism and owner: its typed state/evidence reference/version, where it is read or statically qualified, the authority to enable it, its preview/policy hash placement and guarded revalidation. Alternatively explicitly select a fixed owner-approved release policy with no runtime configuration and define its qualification/admission constant. Add approved/unverified/changed-policy fixtures while preserving the existing owner gates.",
+          "proofs": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/design-review.md",
+              "lines": [
+                152,
+                152
+              ],
+              "fact": "Owner must approve a verified standalone-receipt period policy; missing policy blocks."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/design-review.md",
+              "lines": [
+                233,
+                237
+              ],
+              "fact": "Successful receipt replacement depends on policy approval and original/current month checks."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/design-review.md",
+              "lines": [
+                894,
+                904
+              ],
+              "fact": "The selected valuation proof is a distinct denomination attestation."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/design-review.md",
+              "lines": [
+                1008,
+                1010
+              ],
+              "fact": "Exact public hash/body contract has no policy-approval representation."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/pos/period-locks.ts",
+              "range": "full",
+              "fact": "Pinned source supplies month lock checks, not this new stock-policy approval mechanism."
+            }
+          ],
+          "lens": "implementation-readiness",
+          "reviewedRound": 5,
+          "reviewedSha256": "b69fcd7fe672bfc25aee41c344bc240ee3b49b9e780fbf04e4f6592ed9237c37",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F3-R4-CODEBASE-DETAILS-001",
+          "severity": "Major",
+          "scope": "design-review.md:626,871,1101,1227-1228; contracts/recovery-receipts.md known-key GET; contracts/workflow.md central admission; implementation-inventory.md:36-37",
+          "discrepancy": "The receipt/reload design promises collection and by-id reads for a POS-only stockless correction, but the executable RBAC change inventory selects ONLY preview/apply write exceptions. The existing apiReadCapability still maps both /api/stock/corrections and /api/stock/corrections/<id> to stock:view before either handler runs. Merely adding a GET handler or a screen-registry entry cannot implement the promised effect-sensitive read admission.",
+          "rationale": "Pinned hooks.server.ts:616-624 dispatches GET and HEAD through apiReadCapability; rbac.service.ts:879 registers /api/stock, and :991-997 selects the longest matching prefix and view. A cashier with pos:view+pos:edit and no stock:view can complete the allowed both-empty swap, lose its response, and then receive a central 403 during the mandatory saved-pointer status lookup. Its durable pointer remains unknown/blocked despite an applied receipt. The plan leaves the required read-gate delta undecided and its ONLY-write inventory contradicts the read contract.",
+          "recommendation": "Select exact apiReadCapability admission for the collection and canonical by-id correction paths, including the intended HEAD behavior, before the generic stock prefix. Keep service-side current principal/source/effect/finance/private-owner disclosure checks authoritative; preserve unrelated stock reads. Add hook-through-handler POS-only recovery and stock/private denial cases, and synchronize the workflow, recovery contract, task and file inventory.",
+          "proofs": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/hooks.server.ts",
+              "lines": [
+                616,
+                624
+              ],
+              "fact": "GET/HEAD use apiReadCapability before resolve(event)."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/rbac.service.ts",
+              "lines": [
+                879,
+                879
+              ],
+              "fact": "/api/stock is registered to stock."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/rbac.service.ts",
+              "lines": [
+                991,
+                997
+              ],
+              "fact": "apiReadCapability returns longest-prefix module view."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/design-review.md",
+              "lines": [
+                1227,
+                1228
+              ],
+              "fact": "Mandatory RBAC file actions enumerate ONLY preview/apply exceptions."
+            }
+          ],
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "ecd6d095b5d947363099953950a1d8feb2421a86437bc5d2bb47c00c304338b1",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F3-R4-CODEBASE-DETAILS-002",
+          "severity": "Major",
+          "scope": "design-review.md:245,1101,1229; plan.md Security/UI and tasks.md:T016; implementation-inventory.md route-design-manifest action",
+          "discrepancy": "The plan directs registration of the new correction API routes in route-design-manifest.ts, although that existing manifest models filesystem pages/screens and redirects, not HTTP API endpoints or method/capability contracts. No new page is selected, and no exact amendment to an existing screen entry is specified.",
+          "rationale": "Pinned RouteDesignMeta is ScreenDesignMeta|RedirectDesignMeta (route-design-manifest.ts:80-111). discoverPageEndpoints only recognizes +page entry files (route-contract-filesystem.ts:11-17,43-60), while validateFilesystemRouteCoverage rejects every metadata pattern with no page (route-design-validation.ts:297-315). Adding the three proposed +server-only API paths as directed would therefore fail the required page-manifest gate; that registry cannot replace API admission. The implementer must choose whether to add unsupported metadata, redesign the registry, or ignore the mandatory action.",
+          "recommendation": "Make the page-manifest action explicit: retain the existing ticket/stock-entry page registrations, and name any exact existing screen capture/state changes if required; mark no new page entries for the API-only additions. Put the selected API method/read/write checks in rbac.service.ts plus the actual route/hook contract tests. If a new API registry is intended, design it as a separate explicit scope change rather than delegating it to this correction implementation.",
+          "proofs": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/lib/routes/route-design-manifest.ts",
+              "lines": [
+                80,
+                111
+              ],
+              "fact": "Only screen and redirect metadata shapes exist."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/ui-audit/route-contract-filesystem.ts",
+              "lines": [
+                11,
+                17
+              ],
+              "fact": "The endpoint scanner contains +page files only."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/lib/routes/route-design-validation.ts",
+              "lines": [
+                297,
+                315
+              ],
+              "fact": "Metadata without a filesystem page yields filesystem.missing."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/124-stock-correction-workflow/design-review.md",
+              "lines": [
+                1101,
+                1101
+              ],
+              "fact": "T016 commands adding route contracts to the page design manifest."
+            }
+          ],
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "ecd6d095b5d947363099953950a1d8feb2421a86437bc5d2bb47c00c304338b1",
+          "disposition": "preserved; any applied fix requires fresh review"
+        }
+      ]
+    },
+    {
+      "item": "F4",
+      "featureDir": "/home/nikolas/Documents/CODE/MINION/specs/125-stock-readable-movements",
+      "targetSha256": "79bd1c56ca90fd0ccd61a81e9202624b22f9a5d4bf78e74d9c14a7c9a27127bc",
+      "fullFlowPasses": 2,
+      "critic": {
+        "verdict": "converged",
+        "cleanRounds": 3,
+        "cleanRoundNumbers": [
+          3,
+          4,
+          5
+        ],
+        "roundCapReached": false,
+        "lastCompletedRound": 5
+      },
+      "readiness": {
+        "verdict": "requires_remediation_or_review",
+        "cleanRounds": 0,
+        "cleanRoundNumbers": [],
+        "roundCapReached": false,
+        "lastCompletedRound": 4
+      },
+      "overallVerdict": "review_in_progress",
+      "reportPaths": [
+        "/home/nikolas/Documents/CODE/MINION/specs/125-stock-readable-movements/egm/round1/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/125-stock-readable-movements/egm/round2/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/125-stock-readable-movements/egm/round3/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/125-stock-readable-movements/egm/round4/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/125-stock-readable-movements/egm/round5/consolidated_review_report.md"
+      ],
+      "remainingFindings": [
+        {
+          "id": "F4-R5-IMPLEMENTATION-READINESS-001",
+          "severity": "Major",
+          "scope": "design-review.md:483-487,539-547,811-813; contracts/valuation-display.md:9-13 and existing entries PageBody/DataTable export seams",
+          "discrepancy": "The selected contract requires exact original line rate/value scalars and an unverified-denomination header in the existing global entries page-local CSV, but it never selects a CSV representation for those nested multi-item line facts. At the pinned source only the parent entry DataTable is exportable; its columns have no rate/amount scalar. Rates and calculated amounts are in the separate expanded plain line table, which has no exportable option. The new wire union retains lines nested under each parent, while the unchanged generic exporter exports only selected columns of the parent view.",
+          "rationale": "An implementer cannot satisfy the stated scalar-export oracle by replacing the two existing money formatters. They must independently choose a new parent scalar column/string aggregation, one CSV row per line, a separate nested-line export, or removal of the export requirement. Multi-item entries and current-page filters make these materially different output contracts; an unspecified choice can omit nonfirst values or destroy their item/UOM association.",
+          "recommendation": "Select the exact movement CSV shape and its owning PageBody path: row granularity, entry/line/item identity, quantity/UOM/rate/calculated-amount columns, null/unavailable encoding, ordering, current-page filtered parent membership and fallback behavior. If this slice preserves only the existing parent export, explicitly state that nested stock scalars are not exported and remove the contrary scalar/header assertion. Add a two-line different-rate/UOM export fixture and keep shared DataTable unchanged unless a separately reviewed API change is selected.",
+          "proofs": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/125-stock-readable-movements/design-review.md",
+              "lines": [
+                483,
+                487
+              ],
+              "fact": "Requires raw scalars in existing global CSV and an unverified-denomination header."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/125-stock-readable-movements/design-review.md",
+              "lines": [
+                539,
+                547
+              ],
+              "fact": "The selected entry response keeps per-line rates nested in LineWire arrays."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/routes/(app)/stock/entries/PageBody.svelte",
+              "lines": [
+                60,
+                100
+              ],
+              "fact": "Rate/amount are columns of the nested Line table."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/routes/(app)/stock/entries/PageBody.svelte",
+              "lines": [
+                270,
+                340
+              ],
+              "fact": "Parent table is exportable; expanded plain line table is not."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/lib/components/data-table/DataTable.svelte",
+              "lines": [
+                3159,
+                3185
+              ],
+              "fact": "Actual exporter builds one row per parent view item from that table's selected columns, without expanded-row traversal."
+            }
+          ],
+          "lens": "implementation-readiness",
+          "reviewedRound": 5,
+          "reviewedSha256": "79bd1c56ca90fd0ccd61a81e9202624b22f9a5d4bf78e74d9c14a7c9a27127bc",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F4-R4-codebase-details-001",
+          "severity": "Major",
+          "scope": "design-review.md:406,500,664; contracts/behavior.md Global entries page; stock.service.ts:476-488; entries/+page.server.ts:22-27,117-120; entries/PageBody.svelte:299-307",
+          "discrepancy": "The selected full-roster replacement defines warehouseCount as a same-org count(*) scalar without preserving the active-only warehouse predicate used by the current transfer-action gate. The existing loader calls listWarehouses(ctx) without includeArchived; that function adds archived_at IS NULL. A count filtered only by org includes archived warehouses.",
+          "rationale": "With one live warehouse and one archived warehouse, the specified same-org count is 2 while the pinned gate sees 1, exposing a Transfer action that the plan promises to preserve. The implementer must choose whether to preserve active-only transfer eligibility or broaden it; the exact count predicate and regression are missing from the selected implementation contract. This is a proposed-query/compatibility gap, not a claim that the future query already exists.",
+          "recommendation": "Specify warehouseCount as count(*) WHERE org_id=ctx.tenantId AND archived_at IS NULL, independently of page-qualified historical label dictionaries (which may include referenced archived warehouses). Add loader/mounted cases for one-active-plus-archived keeping Transfer hidden and two-active making it available.",
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "8bca7a319c5fd23374093996573158db54e41a5c3bdc441aa3b70f599af84e3c",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F4-R4-codebase-details-002",
+          "severity": "Major",
+          "scope": "design-review.md:358-367,512,612,777-780; immutable F7 7-target.md:839-859; pinned scripts/qc/native-postgres-manifest.ts:30-34 and native-postgres-report.ts:48-82; native-postgres-report.test.ts final added-passing-behavior test",
+          "discrepancy": "F4 requires exactly the six named native behaviors, explicitly forbids a seventh name, and selects minimumAssertions=6, but does not select exactAssertions:true or the F7-owned exact-count harness prerequisite. The pinned report checks assertionResults.length >= minimumAssertions plus required-name inclusion and intentionally accepts extra passing named assertions. Updating only the two test files named by F4 does not change that production report behavior.",
+          "rationale": "A report containing the six required names plus an unregistered seventh passing behavior is admitted by the pinned validator, so the prescribed complete-lane guard cannot enforce F4's six-name count contract. The immutable F7 support contract already supplies the additive, legacy-compatible exactAssertions mechanism and ownership; F4 has not wired its admission to it. This finding concerns executable qualification design, not a failing test result or already implemented dependency.",
+          "recommendation": "Make F7's shared native-exact-count implementation/qualification an explicit test-harness prerequisite and set exactAssertions:true on the new F4 admission with its six required names/minimumAssertions=6. Keep F7 ownership of the shared report/type delta and add F4-specific extra-seventh rejection while retaining unrelated legacy additive behavior. If exact total count is intentionally unnecessary, revise the no-seventh/exact-six claims consistently instead.",
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "8bca7a319c5fd23374093996573158db54e41a5c3bdc441aa3b70f599af84e3c",
+          "disposition": "preserved; any applied fix requires fresh review"
+        }
+      ]
+    },
+    {
+      "item": "F5",
+      "featureDir": "/home/nikolas/Documents/CODE/MINION/specs/126-booking-product-consistency",
+      "targetSha256": "03433da6f352e26fd35d83e2d28e1d055beb0ac6f1c4034b3e8fc9b4c2ee346c",
+      "fullFlowPasses": 2,
+      "critic": {
+        "verdict": "converged",
+        "cleanRounds": 5,
+        "cleanRoundNumbers": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "roundCapReached": false,
+        "lastCompletedRound": 5
+      },
+      "readiness": {
+        "verdict": "requires_remediation_or_review",
+        "cleanRounds": 0,
+        "cleanRoundNumbers": [],
+        "roundCapReached": false,
+        "lastCompletedRound": 4
+      },
+      "overallVerdict": "review_in_progress",
+      "reportPaths": [
+        "/home/nikolas/Documents/CODE/MINION/specs/126-booking-product-consistency/egm/round1/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/126-booking-product-consistency/egm/round2/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/126-booking-product-consistency/egm/round3/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/126-booking-product-consistency/egm/round4/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/126-booking-product-consistency/egm/round5/consolidated_review_report.md"
+      ],
+      "remainingFindings": [
+        {
+          "id": "F5-R4-implementation-readiness-01",
+          "severity": "Major",
+          "scope": "design-review.md:520-532, 761-762, 818; contracts/wire.md:83-95; implementation-inventory.md:19,76; selected POS PageBody actions/chargeOne callback",
+          "discrepancy": "The exact handoff implementation sequence selects drawer and context-menu chargeEvent, but does not select a migration for the separate direct Charge action and chargeOne callback. The general rule forbidding unknown financial actions is stated, yet the concrete instructions and mounted negative vectors identify the context-menu path only. The pinned PageBody actions slot at 1260-1267 uses completed && !b.paid and calls chargeOne; chargeOne at 673-682 directly constructs a single-service PayableEvent and calls chargeBooking, without the selected detail decoder/financial adapter or guarded product/plan selection. This remains a separate reachable till path even after the specified chargeEvent change.",
+          "rationale": "Denied or unavailable facets intentionally omit legacy paid aliases; leaving this exact slot on !b.paid interprets omission as unpaid. A fresh implementer must choose how to replace the callback and whether it uses the same visit anchor, product-only and plan policy. Updating the documented context menu and drawer alone does not implement the promised zero till callbacks for blocked financial state, and tests limited to the named stale context menu do not prove the direct action. This is an implementation-plan completeness finding, not a claim that proposed code has executed.",
+          "recommendation": "Explicitly migrate the actions(b) Charge condition to the declared financial facet and route its callback through the same versioned, decoded, guarded chargeEvent flow using the server-resolved anchor (or prescribe one equally exact shared handoff function for every caller). Remove/bypass the synthetic chargeOne implementation. Add actual mounted direct-action tests for denied/unavailable/missing/stale projection, admitted free/paid state, and grouped/product-only/plan cases, asserting zero chargeBooking calls on blocked input. Add these exact sites to the implementation inventory.",
+          "proof": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/routes/(app)/pos/appointments/PageBody.svelte",
+              "ranges": [
+                [
+                  629,
+                  682
+                ],
+                [
+                  823,
+                  845
+                ],
+                [
+                  1260,
+                  1267
+                ]
+              ],
+              "observation": "chargeOne directly calls chargeBooking; the completed-action condition is !b.paid. chargeEvent is an independent detail-fetching callback."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/126-booking-product-consistency/contracts/wire.md",
+              "ranges": [
+                [
+                  79,
+                  95
+                ]
+              ],
+              "observation": "Selected exact detail/adapter changes name drawer and chargeEvent; negative callback tests specifically include stale context menu, with no selected chargeOne/direct-slot migration."
+            }
+          ],
+          "lens": "implementation-readiness",
+          "reviewedRound": 4,
+          "reviewedSha256": "5985004a1dd2576c805508b711a4cd56d6270a2d2857be458a8e013e596314a8",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F5-R4-codebase-details-01",
+          "severity": "Major",
+          "scope": {
+            "target": "specs/126-booking-product-consistency/design-review.md",
+            "lines": [
+              516,
+              532
+            ],
+            "inventoryLines": [
+              761,
+              762
+            ],
+            "source": "src/routes/(app)/pos/appointments/PageBody.svelte",
+            "sourceLines": [
+              [
+                672,
+                681
+              ],
+              [
+                1260,
+                1267
+              ]
+            ]
+          },
+          "discrepancy": "The exact handoff instructions enumerate the drawer and PageBody chargeEvent but omit the separate existing chargeOne entry point and the completed-booking actions snippet. chargeOne calls chargeBooking directly, without fetching/decoding detail or consulting financialVisitRows. Its button is selected by completed && !b.paid && pos:edit. The new denied/unavailable projection omits the legacy paid alias, so retaining this concrete path treats undefined as unpaid and reaches the till without the guard selected for chargeEvent.",
+          "rationale": "The document requires zero chargeBooking calls for blocked financial facets and says no optional paid alias may drive an action, but its per-file sequence and named mounted vectors do not specify how this actual additional caller is closed. Implementing the explicitly named chargeEvent correction alone leaves a source-proven bypass and forces the implementer to discover/select a different handoff for the completed hover action. This is a missing code-path detail under the implementation-readiness zero-decision rule, not a claim of observed production exploitation.",
+          "recommendation": "Explicitly include chargeOne and actions(b) in wire.md, inventory and tasks: derive button readiness from current validated payment facets, replace/delegate chargeOne through the same versioned detail/financial adapter and guarded handoff used by chargeEvent, and avoid constructing a synthetic first service. Add actual mounted completed singleton/group hover-action cases for denied/unavailable/missing-version/stale/account-switch projections asserting zero chargeBooking/storage/navigation calls, plus the admitted positive case.",
+          "lens": "codebase-details",
+          "reviewedRound": 4,
+          "reviewedSha256": "5985004a1dd2576c805508b711a4cd56d6270a2d2857be458a8e013e596314a8",
+          "disposition": "preserved; any applied fix requires fresh review"
+        }
+      ]
+    },
+    {
+      "item": "F6",
+      "featureDir": "/home/nikolas/Documents/CODE/MINION/specs/127-faces-operations-agenda",
+      "targetSha256": "c22b26b12c82fa0cd1af70377702970b4d97152d4f640e990dc0df9f7f504288",
+      "fullFlowPasses": 2,
+      "critic": {
+        "verdict": "converged",
+        "cleanRounds": 3,
+        "cleanRoundNumbers": [
+          3,
+          4,
+          5
+        ],
+        "roundCapReached": false,
+        "lastCompletedRound": 5
+      },
+      "readiness": {
+        "verdict": "requires_remediation_or_review",
+        "cleanRounds": 0,
+        "cleanRoundNumbers": [],
+        "roundCapReached": false,
+        "lastCompletedRound": 4
+      },
+      "overallVerdict": "review_in_progress",
+      "reportPaths": [
+        "/home/nikolas/Documents/CODE/MINION/specs/127-faces-operations-agenda/egm/round1/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/127-faces-operations-agenda/egm/round2/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/127-faces-operations-agenda/egm/round3/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/127-faces-operations-agenda/egm/round4/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/127-faces-operations-agenda/egm/round5/consolidated_review_report.md"
+      ],
+      "remainingFindings": [
+        {
+          "id": "F6-R4-implementation-readiness-01",
+          "severity": "Major",
+          "scope": "design-review.md:404, 435-443, 693,710; contracts/canonical-access.md:25-27,56-64; section-access loadPolicyRows reuse",
+          "discrepancy": "The selected helper must reuse loadPolicyRows on the trusted outer role, while the same contract requires all navigation-document reads/writes to enter the nested app_ledger document scope and tests forbid privileged role document SQL. The actual loadPolicyRows is not a policy-only loader: it unconditionally SELECTs app_nav_config.value FOR SHARE at section-access.service.ts:147-150 on the transaction passed to it. The plan does not select a split, preloaded-nav parameter, or scoped document subphase for that reuse, so its literal helper sequence violates its own mandatory role separation.",
+          "rationale": "requireFreshPolicyActor and rolePolicyRevision need the authority rows, but a direct reuse also performs a navigation-document read under the privileged controller/server role. The implementer must decide which helper/signature/query flow to change before the documented same-backend/RLS proof can pass. Running the entire loader in app_ledger instead conflicts with the explicitly protected organization/profile/member ACL baseline. The source-backed role boundary is a material part of this security-tagged implementation, not an interchangeable style choice.",
+          "recommendation": "Select the exact factoring: extract or add a policy-only transaction loader for organizations/roles/rules plus fresh actor checks on the qualified outer role, and obtain any required nav document solely through an awaited withOrgCoreTransaction subphase on the same backend. Pass that admitted normalized nav into selector validation if needed; preserve existing section-access callers and their behavior explicitly. Update the helper signature or internal sequence and selected file actions accordingly, and require native instrumentation that every app_nav_config statement executes as app_ledger while policy/actor statements execute after restoration to the qualified outer role on success and rollback.",
+          "proof": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/section-access.service.ts",
+              "ranges": [
+                [
+                  118,
+                  157
+                ],
+                [
+                  162,
+                  225
+                ]
+              ],
+              "observation": "loadPolicyRows reads policy/catalog/rules AND app_nav_config FOR SHARE; requireFreshPolicyActor separately reads/locks profile/membership and uses policy/roles/rules."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/nav-config.service.ts",
+              "ranges": [
+                [
+                  39,
+                  62
+                ]
+              ],
+              "observation": "Existing write pattern scopes the document insert using withOrgCoreTransaction, then restores outer role for administrative policy helpers."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/127-faces-operations-agenda/contracts/canonical-access.md",
+              "ranges": [
+                [
+                  25,
+                  27
+                ],
+                [
+                  56,
+                  64
+                ]
+              ],
+              "observation": "New helper reuses actual loadPolicyRows, but later exact role contract mandates only nested app_ledger document access and no privileged role in document SQL."
+            }
+          ],
+          "lens": "implementation-readiness",
+          "reviewedRound": 4,
+          "reviewedSha256": "ed04f2edb8d03e39e83d756a3a212b63ce7154c4b924890a36d746896f9cf3f5",
+          "disposition": "preserved; any applied fix requires fresh review"
+        }
+      ]
+    },
+    {
+      "item": "F7",
+      "featureDir": "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit",
+      "targetSha256": "205a7881bc7712f5ef7cab290ac05e701d75847381547cc797d9efc9c685df57",
+      "fullFlowPasses": 2,
+      "critic": {
+        "verdict": "converged",
+        "cleanRounds": 2,
+        "cleanRoundNumbers": [
+          4,
+          5
+        ],
+        "roundCapReached": false,
+        "lastCompletedRound": 5
+      },
+      "readiness": {
+        "verdict": "requires_remediation_or_review",
+        "cleanRounds": 0,
+        "cleanRoundNumbers": [],
+        "roundCapReached": false,
+        "lastCompletedRound": 4
+      },
+      "overallVerdict": "review_in_progress",
+      "reportPaths": [
+        "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/egm/round1/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/egm/round2/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/egm/round3/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/egm/round4/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/egm/round5/consolidated_review_report.md"
+      ],
+      "remainingFindings": [
+        {
+          "id": "F7-R5-IMPLEMENTATION-READINESS-001",
+          "severity": "Major",
+          "scope": "design-review.md:229,317-322,353,440-442; plan.md:104-109 and data-model.md:7",
+          "discrepancy": "The audit promises constant-memory output and forbids retaining whole-org/unbounded result arrays, but its selected service returns AuditSummary containing residuals and its AuditRun/final manifest retains exact residual subject IDs. AuditSink has only writeSubject/writeProposal callbacks. Residual subjects can scale with the entire approved U (for example identityless badge contributors or legacy-voided list-only contributors), and U-minus-C residual IDs must remain explainable even though subject exports are C-only. No residual streaming/output schema, fixed residual cap/incomplete rule, or summary/manifest reference representation is selected.",
+          "rationale": "A fresh implementation must invent where and how to stream those potentially organization-sized residual lists, or retain them in the returned summary/manifest and violate the constant-memory contract. The 1,000,000-subject and 256-MiB output ceilings do not define an independent bounded-memory residual collection, and the 10,000 closure limit is per subject/pair rather than this run-wide list.",
+          "recommendation": "Select an exact residual delivery contract: e.g. an awaited typed residual sink with a named protected sorted output, counters/hash/file references in AuditSummary/manifest, cohort/complement tagging and inclusion in the existing total-byte cap. Alternatively select a fixed residual-memory bound whose limit+1 makes the whole run incomplete without silent truncation. Add a many-residual U-minus-C fixture proving exact IDs/control reconciliation, bounded live memory/backpressure and no complete manifest on limit/output failure.",
+          "proofs": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/design-review.md",
+              "lines": [
+                229,
+                230
+              ],
+              "fact": "Constant-memory output is an explicit technical goal."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/design-review.md",
+              "lines": [
+                317,
+                322
+              ],
+              "fact": "Only subject/proposal sinks are named; summary retains residuals and whole-org arrays are forbidden."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/design-review.md",
+              "lines": [
+                351,
+                353
+              ],
+              "fact": "AuditRun includes residual subject IDs."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/design-review.md",
+              "lines": [
+                432,
+                442
+              ],
+              "fact": "C-only exports, U-minus-C controls and large run limits leave run-wide residual delivery unspecified."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/pos/accounts/list.ts",
+              "lines": [
+                81,
+                119
+              ],
+              "fact": "List-only legacy voided versus badge and identity-required controls can produce many exact residual subjects."
+            }
+          ],
+          "lens": "implementation-readiness",
+          "reviewedRound": 5,
+          "reviewedSha256": "205a7881bc7712f5ef7cab290ac05e701d75847381547cc797d9efc9c685df57",
+          "disposition": "preserved; any applied fix requires fresh review"
+        },
+        {
+          "id": "F7-R4-readiness-style-001",
+          "severity": "Major",
+          "scope": "design-review.md:304 / plan.md:91, compared with design-review.md:504\u2013506 / contracts/authority-bridge.md:45\u201347",
+          "discrepancy": "The implementation plan says F1/F2 writers retain the existing locking resolver for transaction admission. The authority-bridge contract instead explicitly requires F1/F2/F3 mutation callers to switch to resolveFreshOperatorCapabilitiesForWriteInTransaction and preserves the existing resolver only for unrelated legacy callers.",
+          "rationale": "Existing locking resolver has a concrete meaning in this document and pinned source: resolveFreshCapabilitiesInTransaction, whose direct FOR SHARE/org reads the bridge contract identifies as infeasible under the baseline role. The contradictory shorthand forces a fresh implementer to choose which instruction to follow, contrary to the readiness standard's zero-decision rule. This is an inconsistent instruction, not a new request to change the chosen authority design.",
+          "recommendation": "Replace that sentence with the exact selected new write-adapter name and state that only unrelated legacy callers retain resolveFreshCapabilitiesInTransaction. Use the same distinction in all summary descriptions of existing/default locking behavior.",
+          "proofs": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/plan.md",
+              "lines": [
+                91
+              ],
+              "quote": "F1/F2 writers retain the existing locking resolver for transaction admission."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/128-faces-receivables-audit/contracts/authority-bridge.md",
+              "lines": [
+                45,
+                47
+              ],
+              "quote": "F1/F2/F3 mutation callers switch to this NEW write adapter, not the legacy FOR SHARE adapter that lacks baseline rights."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/rbac.service.ts",
+              "lines": [
+                1088,
+                1101,
+                1122
+              ],
+              "note": "Actual existing resolver reads membership and organizations with FOR SHARE; its name is not merely generic shorthand."
+            }
+          ],
+          "lens": "readiness-style",
+          "reviewedRound": 4,
+          "reviewedSha256": "5713ad8fa08e991c2e845184b638b2255f53be006c00312770042d743ccbd5d3",
+          "disposition": "preserved; any applied fix requires fresh review"
+        }
+      ]
+    },
+    {
+      "item": "F8",
+      "featureDir": "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups",
+      "targetSha256": "8868e42b58e55cbbe54651e7f42344eafa1ee1461253f775f7798a9201f18447",
+      "fullFlowPasses": 2,
+      "critic": {
+        "verdict": "converged",
+        "cleanRounds": 5,
+        "cleanRoundNumbers": [
+          1,
+          2,
+          3,
+          6,
+          7
+        ],
+        "roundCapReached": false,
+        "lastCompletedRound": 7
+      },
+      "readiness": {
+        "verdict": "requires_remediation_or_review",
+        "cleanRounds": 0,
+        "cleanRoundNumbers": [],
+        "roundCapReached": true,
+        "lastCompletedRound": 6
+      },
+      "overallVerdict": "review_in_progress",
+      "reportPaths": [
+        "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups/egm/round1/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups/egm/round2/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups/egm/round3/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups/egm/round4/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups/egm/round5/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups/egm/round6/consolidated_review_report.md",
+        "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups/egm/round7/consolidated_review_report.md"
+      ],
+      "remainingFindings": [
+        {
+          "id": "F8-R6-codebase-details-001",
+          "severity": "Major",
+          "scope": "design-review.md:407,419-427,774 (contracts/client-compatibility.md:11,23-31; implementation-inventory.md:33)",
+          "discrepancy": "Customer reconciliation requires fresh authorized loader contacts before releasing the unknown-outcome latch, but selects only clearPageCache() plus invalidate('crm:contacts') for that roster read. The existing server loader uses rankContactsPageCached, and the inventory provides no loader/API freshness-bypass change. Clearing the client page cache cannot bypass this server cache.",
+          "rationale": "The contract explicitly includes a merge committed successfully followed by failure of its postcommit cache invalidation. In that case the old server CRM page entry can remain valid. Re-running the customer loader can therefore return a successful, authorized but pre-merge cached contact list; even its own SWR path may serve stale rows. The fresh uncached duplicate-groups GET is independent and is not the customer roster baseline. Thus the specified reads cannot establish the fresh customer state required to transition into selection_required. This is a missing executable design contract, not a runtime failure claim.",
+          "recommendation": "Specify and inventory a bounded uncached authorized customer-roster reconciliation path, reusing existing rankContactsPage and preserving the same filters/page/module/owner/masking/custom-property projection. Define how the customer host installs and validates that fresh response for the current principal/generation before unlatching; HTTP cache:'no-store' alone is insufficient for the service cache. Add a regression with a warmed pre-merge server page cache, committed merge, failed invalidateTags and successful loader invalidation; require fresh authoritative contacts and keep confirmation blocked on stale/fallback data.",
+          "proofs": [
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/routes/(app)/crm/customers/+page.server.ts",
+              "lines": [
+                75,
+                105
+              ],
+              "fact": "The loader depends on crm:contacts, then calls rankContactsPageCached(ctx,filters) at line 98."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/crm-contacts.service.ts",
+              "lines": [
+                423,
+                468
+              ],
+              "fact": "rankContactsPage is the existing uncached query seam; rankContactsPageCached uses cached with ttl 2m and swr 1h at line 466."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/crm-cleanup.service.ts",
+              "lines": [
+                19,
+                21
+              ],
+              "fact": "bust delegates to invalidateTags for the CRM tag."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/server/services/crm-cleanup.service.ts",
+              "lines": [
+                527,
+                531
+              ],
+              "fact": "The merge transaction deletes losers and completes before awaiting bust(ctx.tenantId)."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/.local/faces-followups-2026-11-16/hub-source/src/routes/(app)/crm/customers/PageBody.svelte",
+              "lines": [
+                96,
+                118
+              ],
+              "fact": "clearPageCache increments the browser-side epoch and clears CustomerPageCache; its effect separately installs data.contacts from the loader."
+            },
+            {
+              "path": "/home/nikolas/Documents/CODE/MINION/specs/129-crm-profile-followups/contracts/client-compatibility.md",
+              "lines": [
+                11,
+                31
+              ],
+              "fact": "The selected recovery specifically covers postcommit cache-bust failure and requires fresh customer loader state plus fresh duplicate groups before releasing the latch."
+            }
+          ],
+          "lens": "codebase-details",
+          "reviewedRound": 6,
+          "reviewedSha256": "256652ca0a2c3911901dd9cc79fb956b63a94ebba110ab8fdd32aa459435cda8",
+          "disposition": "preserved; any applied fix requires fresh review"
+        }
+      ]
+    }
+  ]
+}
