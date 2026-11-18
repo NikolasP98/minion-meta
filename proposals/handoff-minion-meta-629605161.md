@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-meta-629605161
 title: Handoff marker — specs/123-faces-receipt-valuation/contracts/diagnostic-wire.md (minion-meta)
-status: draft
+status: merged
 created: 2026-11-18
 updated: 2026-11-18
 repos: [minion-meta]
 tags: [handoff-sweep]
+merged_into: 2026-11-17-faces-receipt-valuation-open-ends
 ---
 
 # Handoff marker — specs/123-faces-receipt-valuation/contracts/diagnostic-wire.md

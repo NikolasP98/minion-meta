@@ -7,6 +7,7 @@ updated: 2026-11-18
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_from: handoff-minion-hub-2156845369
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/api/crm/contacts/+server.ts`
@@ -49,3 +50,9 @@ I'll check the file and the referenced proposal to understand the issue.
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/681
 - file: `src/routes/api/crm/contacts/+server.ts`
 - checked: 2026-11-18
+
+## Merged content (from handoff-minion-hub-2156845369)
+
+Same marker, same file, filed the same day by the handoff-ledger sweep
+against `NikolasP98/minion_hub@master`. Direct line link:
+https://github.com/NikolasP98/minion_hub/blob/master/src/routes/api/crm/contacts/+server.ts#L77

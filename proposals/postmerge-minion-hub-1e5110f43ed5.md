@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-1e5110f43ed5
 title: "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/PageBody.svelte (minion_hub)"
-status: draft
+status: review
 created: 2026-11-18
 updated: 2026-11-18
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+duplicate_candidate: 2026-11-16-faces-stock-cash-crm-meeting-followups
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/(app)/crm/customers/PageBody.svelte`
@@ -40,3 +41,11 @@ The `TODO(handoff)` marker at `src/routes/(app)/crm/customers/PageBody.svelte` i
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/681
 - file: `src/routes/(app)/crm/customers/PageBody.svelte`
 - checked: 2026-11-18
+
+## Reconciliation note (2026-11-18)
+
+`2026-11-16-faces-stock-cash-crm-meeting-followups` (in-spec) §F8 already
+names this exact open end verbatim ("DataTable virtualization hid the merge
+dialog in happy-dom (TODO(handoff) in `customers/PageBody.svelte`)"). That
+proposal is in-spec and left this stage, so it was not edited or merged into
+— flagging here only so a human can close this finding once that spec lands.
