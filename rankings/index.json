@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-18T23:16:59.763Z",
+	"generatedAt": "2026-11-18T23:48:28.964Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16583,21 +16583,21 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 6
 			},
 			"confidence": 5,
-			"recommendation": "reevaluate",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "An approved TODO(handoff) on a POS settings endpoint describes an unrecovered root cause, so the real problem must be reconstructed before it is executable work.",
+			"rationale": "An already-approved TODO(handoff) leaves a POS settings root-cause investigation undocumented, violating the SDLC handoff-ledger rule with a clear, bounded fix path.",
 			"evidence": [
-				"marker text is an incomplete sentence about a confirmed root cause",
-				"status approved, tagged logic",
-				"affects POS settings endpoint"
+				"marker text is an incomplete sentence about a 'confirmed root cause'",
+				"status is already approved",
+				"fix direction names concrete steps (git blame, QA-stack logs)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-99fd34b5696d",
@@ -35036,20 +35036,23 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 5,
 				"implementation": 4
 			},
 			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An 11.8K-line baseline schema file bypassed diff scanning, but no concrete defect has been identified yet, just a review-visibility gap.",
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b37743db1fcc",
+				"proposal:postmerge-minion-hub-e10f8d3cc4ce"
+			],
+			"rationale": "An 11.8K-line schema file bypassed scanning due to GitHub patch API size limits, the same systemic gap affecting other large added files in this batch.",
 			"evidence": [
-				"11.8K-line file skipped diff scan",
-				"GitHub patch API size limit suspected"
+				"11.8K-line schema.sql not captured by diff scan",
+				"fix direction proposes replacing GitHub-patch scanning with local git diff"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b1533fc3bb8c",
@@ -35100,23 +35103,23 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 5,
 				"implementation": 4
 			},
 			"confidence": 4,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-e10f8d3cc4ce",
-				"proposal:postmerge-minion-hub-ff95288edb8a"
+				"proposal:postmerge-minion-hub-9e9d069dc1bc",
+				"proposal:postmerge-minion-hub-e10f8d3cc4ce"
 			],
-			"rationale": "Same PR #435 as two related catalog-fingerprint scan-gaps; one combined review covers the whole merge.",
+			"rationale": "A 2011-line notification-audience migration wasn't scanned due to GitHub's added-file patch limit, the same recurring gap as other large-file findings in this batch.",
 			"evidence": [
-				"same merged PR #435",
-				"2011-line migration bypassed diff scan"
+				"2011-line migration flagged status=added with no patch captured",
+				"fix direction proposes a direct repo-read fallback"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-de95b8a03fe5",
@@ -35151,41 +35154,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:17:37.122Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-e10f8d3cc4ce",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/server/services/notifications/projection/catalog-fingerprint.pg18.expected.json (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e10f8d3cc4ce.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "45d6a67906fb0703930d2f6d76d57eb4dd954b9323e83494ce2180eef4c8c219",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-b37743db1fcc",
-				"proposal:postmerge-minion-hub-ff95288edb8a"
-			],
-			"rationale": "One of three scan-gaps from PR #435's notification-projection merge, best verified together.",
-			"evidence": [
-				"same merged PR #435",
-				"3,792-line snapshot fixture unscanned"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-eac805beae4a",
@@ -35251,41 +35219,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T11:17:18.080Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ff95288edb8a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/server/services/notifications/projection/catalog-fingerprint.pg17.expected.json (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ff95288edb8a.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "08e60b69431e62d018f86245c0787fbf837ece8e305292f73a80cfe529a0a2b0",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-b37743db1fcc",
-				"proposal:postmerge-minion-hub-e10f8d3cc4ce"
-			],
-			"rationale": "Third scan-gap finding from PR #435's merge, grouped with the migration and sibling fixture findings.",
-			"evidence": [
-				"same merged PR #435",
-				"3,816-line snapshot fixture unscanned"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-ca055449de0c",
@@ -35797,41 +35730,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T23:48:15.734Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-e73000965c43",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/lib/money/decimal-oracle.py (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e73000965c43.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "a0418043c01ea2d4a4012c33981626688e5fe4ff54ba5ef14b76063b0b3866d0",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-a271953da5c9",
-				"proposal:postmerge-minion-hub-b6fd4bd15db2"
-			],
-			"rationale": "A Python file appearing in a TypeScript SvelteKit project is an anomaly that should be resolved alongside the other PR #431 decimal scan-gaps.",
-			"evidence": [
-				"Python file in a TS project (minion_hub)",
-				"same merged PR #431"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb35d494ee25",
@@ -38615,6 +38513,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T07:17:57.490Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-e73000965c43",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/lib/money/decimal-oracle.py (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e73000965c43.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "a0418043c01ea2d4a4012c33981626688e5fe4ff54ba5ef14b76063b0b3866d0",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a271953da5c9",
+				"proposal:postmerge-minion-hub-b6fd4bd15db2"
+			],
+			"rationale": "A Python file appearing in a TypeScript project is a mild anomaly worth checking, but it's the same PR #431 scan gap as its sibling decimal-module findings.",
+			"evidence": [
+				"Python file inside a SvelteKit/TypeScript project (minion_hub)",
+				"same PR #431 as decimal.test.ts and decimal-oracle.json"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "issue:minion-meta#1040",
@@ -45445,40 +45378,6 @@
 			"scoredAt": "2026-11-14T10:49:43.766Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-51431d943fcd",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/lib/records/overview-prefs.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-51431d943fcd.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "d5661e81ee409b9a26c8cb86e10ae787b52699498c8edf2c1f8b94a1002e33ef",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-7b8cd069cbf5"
-			],
-			"rationale": "Same PR #408 rename-driven scan-gap as its paired test-file finding, better verified as one task.",
-			"evidence": [
-				"same merged PR #408",
-				"rename likely caused zero-diff scan gap"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-753e08fe9f5a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -45541,40 +45440,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T23:56:05.360Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-7b8cd069cbf5",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/lib/records/overview-prefs.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7b8cd069cbf5.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "3ba32f52f230418b56892408b82fac0cf5fa3e7fb2f1daf6edb039a40f1b8e1b",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-51431d943fcd"
-			],
-			"rationale": "Companion test-file scan-gap from the same PR #408 rename, should be checked alongside its source file.",
-			"evidence": [
-				"same merged PR #408",
-				"test import risk noted but unconfirmed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-90633259e252",
@@ -45659,8 +45524,8 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 4
 			},
 			"confidence": 4,
 			"recommendation": "group",
@@ -45668,14 +45533,14 @@
 				"proposal:postmerge-minion-hub-b6fd4bd15db2",
 				"proposal:postmerge-minion-hub-e73000965c43"
 			],
-			"rationale": "Part of the same PR #431 money/decimal scan-gap trio and best verified as a single bundle.",
+			"rationale": "New test file in PR #431 with zero captured changes shares the same added-file scan gap as its two sibling findings from the same PR.",
 			"evidence": [
-				"same merged PR #431",
-				"changes=0 diff gap"
+				"PR #431 added file with changes=0",
+				"same PR as decimal-oracle.json and decimal-oracle.py findings"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a6c363e77855",
@@ -45726,8 +45591,8 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 4
 			},
 			"confidence": 4,
 			"recommendation": "group",
@@ -45735,14 +45600,14 @@
 				"proposal:postmerge-minion-hub-a271953da5c9",
 				"proposal:postmerge-minion-hub-e73000965c43"
 			],
-			"rationale": "Same PR #431 money/decimal trio; group with the test-file and python scan-gap findings.",
+			"rationale": "Same PR #431 added-file scan gap as its sibling decimal-module findings.",
 			"evidence": [
-				"same merged PR #431",
-				"new file, changes=0"
+				"PR #431, changes=0 on a new money-module file",
+				"diagnosis flags it as part of the same unscanned batch"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ba93210c90e8",
@@ -45977,14 +45842,14 @@
 			"scoredAt": "2026-11-14T06:17:37.122Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
+			"key": "proposal:postmerge-minion-hub-e10f8d3cc4ce",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/server/test-utils/fixtures/attachment-catalog.json (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-df5cae93bfc8.md",
+			"title": "Post-merge finding — scan-gap in src/server/services/notifications/projection/catalog-fingerprint.pg18.expected.json (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e10f8d3cc4ce.md",
 			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "f6dc935a59eb50cf96b77cf72ea1743061ca95f963f3b942859c8ac47970a6c3",
+			"sourceFingerprint": "45d6a67906fb0703930d2f6d76d57eb4dd954b9323e83494ce2180eef4c8c219",
 			"score": 23,
 			"band": "low",
 			"axes": {
@@ -45993,20 +45858,23 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 4
 			},
 			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A large unscanned test fixture needs a one-off content check and has no related candidates in this batch.",
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b37743db1fcc",
+				"proposal:postmerge-minion-hub-ff95288edb8a"
+			],
+			"rationale": "Same PR #435 large-diff scan gap as its sibling migration and pg17-fixture findings.",
 			"evidence": [
-				"4,026-change fixture file bypassed scan",
-				"PR #272"
+				"3,792-line fixture in PR #435, same root cause as the migration finding",
+				"fix direction suggests generating the fixture at test runtime instead"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T23:19:03.072Z"
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e1a5cc54b7e4",
@@ -46287,6 +46155,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:20:04.792Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ff95288edb8a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/server/services/notifications/projection/catalog-fingerprint.pg17.expected.json (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ff95288edb8a.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "08e60b69431e62d018f86245c0787fbf837ece8e305292f73a80cfe529a0a2b0",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b37743db1fcc",
+				"proposal:postmerge-minion-hub-e10f8d3cc4ce"
+			],
+			"rationale": "Same PR #435 scan gap as the migration and pg18-fixture findings from the same merge.",
+			"evidence": [
+				"3,816-line fixture in PR #435",
+				"same unscanned-large-file root cause as sibling findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-ea1bced2f3b0",
@@ -48850,6 +48753,40 @@
 			"scoredAt": "2026-11-18T05:48:14.440Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-51431d943fcd",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/lib/records/overview-prefs.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-51431d943fcd.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "d5661e81ee409b9a26c8cb86e10ae787b52699498c8edf2c1f8b94a1002e33ef",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-7b8cd069cbf5"
+			],
+			"rationale": "Rename-skip scan gap in a single preference file is low risk and pairs with its sibling test-file finding from the same PR.",
+			"evidence": [
+				"PR #408 shows zero diff changes for a renamed/modified file",
+				"fix direction is a simple git log --follow verification"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T23:48:28.733Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-656837531153",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -48950,6 +48887,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:23:57.768Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7b8cd069cbf5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/lib/records/overview-prefs.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7b8cd069cbf5.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "3ba32f52f230418b56892408b82fac0cf5fa3e7fb2f1daf6edb039a40f1b8e1b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-51431d943fcd"
+			],
+			"rationale": "Same PR #408 rename-skip gap as its sibling source-file finding, so the two should resolve together.",
+			"evidence": [
+				"same PR #408 and same rename-detection gap as overview-prefs.ts",
+				"test-file risk is limited to broken import paths"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-8b315b355b71",
@@ -49087,6 +49058,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T06:33:08.618Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-df5cae93bfc8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/server/test-utils/fixtures/attachment-catalog.json (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-df5cae93bfc8.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "f6dc935a59eb50cf96b77cf72ea1743061ca95f963f3b942859c8ac47970a6c3",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-9e9d069dc1bc",
+				"proposal:postmerge-minion-hub-b37743db1fcc"
+			],
+			"rationale": "A large unscanned test fixture is low-risk by itself, and the real fix is the scanner's size-limit handling rather than manually reviewing each individual fixture.",
+			"evidence": [
+				"4,026-change fixture bypassed the diff scan",
+				"fix direction questions whether static fixtures should be generated instead"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e55f94a51237",
