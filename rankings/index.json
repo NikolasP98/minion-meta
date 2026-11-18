@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-18T05:17:36.247Z",
+	"generatedAt": "2026-11-18T05:29:33.251Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1756,39 +1756,6 @@
 			"scoredAt": "2026-11-11T08:47:54.520Z"
 		},
 		{
-			"key": "pr:minion_hub#681",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#681 fix(crm): restricted staff can't overwrite or see masked contact data; tags stay in your org",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/681",
-			"sourceUpdatedAt": "2026-11-17T22:39:44Z",
-			"sourceFingerprint": "8defd54627954fa3edcb3d9692c738fae9ab6a96c077cb6bf579809570ecd352",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Fixes PII overwrite/leak and a silent DNI data-loss bug in CRM with 297 passing tests and a clean independent review.",
-			"evidence": [
-				"restricted staff could overwrite masked phone/email/DNI, now 403'd",
-				"profile editor was dropping stored dni/edad/fecha_nacimiento",
-				"297 tests across 41 files green, 0 blockers from Opus review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
-		},
-		{
 			"key": "spec:2026-10-03-notification-tenant-boundaries-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3453,43 +3420,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:17:44.921Z"
-		},
-		{
-			"key": "pr:minion_hub#683",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#683 feat(pos): read-only receivables audit for FACES with operator authority bridge",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/683",
-			"sourceUpdatedAt": "2026-11-17T22:41:07Z",
-			"sourceFingerprint": "d988c42c0e1511b9e6a7c2383a6b2850ba12e1c4702410f199e34b1b88805ab1",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#684",
-				"pr:minion_hub#685",
-				"pr:minion_hub#687"
-			],
-			"rationale": "Foundational read-only audit CLI and operator-authority bridge that three other stacked PRs depend on, with 8/8 native integration tests passing.",
-			"evidence": [
-				"explicitly the base for F3 then F2/F5/F1",
-				"SECURITY DEFINER bridge with EXECUTE revoked from PUBLIC",
-				"8/8 native qa-native integration tests pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -6440,6 +6370,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:17:44.921Z"
+		},
+		{
+			"key": "pr:minion_hub#683",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#683 feat(pos): read-only receivables audit for FACES with operator authority bridge",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/683",
+			"sourceUpdatedAt": "2026-11-18T05:27:24Z",
+			"sourceFingerprint": "7c15c268e6a6801c5ae73f4ec585d9cfe3b67b92115bd98df8ae91586e19e24a",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-11-17-hub-stock-correction-handoff"
+			],
+			"rationale": "This read-only audit CLI is the declared base for F3/F2/F5/F1 and is fully tested and reviewed, so merging it unblocks the rest of the FACES stack.",
+			"evidence": [
+				"Stack 1 of 3: base for F3, then F2/F5/F1. Merge first",
+				"210 focused unit tests pass; 8/8 native integration tests pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
 		},
 		{
 			"key": "pr:minion_hub#684",
@@ -9610,6 +9574,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:19:54.006Z"
+		},
+		{
+			"key": "proposal:2026-11-17-hub-stock-correction-handoff",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub stock correction workflow (spec 124) - open implementation ends (handoff ledger)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-17-hub-stock-correction-handoff.md",
+			"sourceUpdatedAt": "2026-11-17",
+			"sourceFingerprint": "febb7bf80b6d309e99bc631798a1402d730daab63f5643b97ba79ceca6132c11",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#683",
+				"proposal:2026-11-17-hub-faces-stock-reconciliation-handoff"
+			],
+			"rationale": "The correction engine is now substantially complete (13/13 native names, UI delegation done per pass 2 update) and serves as a dependency base for F1/F2 cutover work.",
+			"evidence": [
+				"Update 2026-11-17 (pass 2): swap routes delegate (T015)... native names 13/13 (T006)",
+				"central admission exception, native proof of 8 behaviors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b4c1ff54fd37",
@@ -14074,6 +14073,37 @@
 			"scoredAt": "2026-11-12T09:18:17.518Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-364356be46cf",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/crm/contacts/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-364356be46cf.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "7863dfb5c82ffde0755a17a4b55ebb3adcd6dcd1975a290b93116a9e76f01008",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "An uncached, unrated-limited whole-org query is a plausible performance/availability risk, but the finding is a single-line marker without defined scope or acceptance criteria.",
+			"evidence": [
+				"TODO(handoff): `fresh=1` is an uncached whole-org rank with no rate limit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-371c7c4e4606",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17700,8 +17730,8 @@
 			"repo": "minion_hub",
 			"title": "#682 feat(stock): readable, paged stock movements on entries, item ledger and overview",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/682",
-			"sourceUpdatedAt": "2026-11-17T22:40:21Z",
-			"sourceFingerprint": "e930bb7c72c4dfad2efc221195e7916831fe7ce3e42df8d6e07d1238b4e6dfc5",
+			"sourceUpdatedAt": "2026-11-18T05:25:15Z",
+			"sourceFingerprint": "7d6a252144532da628e8340c7ed52dcbe5d8d2a716acd7da450d99ec533be3bd",
 			"score": 46,
 			"band": "low",
 			"axes": {
@@ -17713,17 +17743,17 @@
 				"specification": 9,
 				"implementation": 9
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Read-only UX/pagination improvement to stock movements with no migrations, fully tested and reviewed.",
+			"rationale": "Read-only paging feature is tested (69 passing), reviewed with 0 blockers, and ready to merge with documented residual gaps.",
 			"evidence": [
-				"read-only, no migrations, 10 files/69 tests green",
-				"independent review found 0 blockers, fixed in 280588ef"
+				"Focused command: 10 files, 69 tests, green",
+				"Independent Opus review found 0 blockers"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
+			"scoredAt": "2026-11-18T05:29:33.027Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -20882,43 +20912,6 @@
 			"scoredAt": "2026-11-12T18:19:24.890Z"
 		},
 		{
-			"key": "pr:minion-meta#1046",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1046 docs(specs): 122–129 FACES meeting follow-ups — specs, evidence and handoff ledgers",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1046",
-			"sourceUpdatedAt": "2026-11-17T22:07:22Z",
-			"sourceFingerprint": "cc997b27c06d084438ae0e505883f8044df56bcd3e107d9114930c2e3b7e9bdf",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#683",
-				"pr:minion_hub#684",
-				"pr:minion_hub#687"
-			],
-			"rationale": "Packages the specs, evidence, and handoff ledgers for the FACES stack and is ready to merge alongside the code PRs.",
-			"evidence": [
-				"Maps 8 specs (122-129) to their hub PRs",
-				"Evidence scanned for PII/credentials with none found",
-				"Already drafted, docs-only change"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:17:49.039Z"
-		},
-		{
 			"key": "proposal:2026-08-29-hub-pos-bookings-stock-gate-drift",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21113,6 +21106,72 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:56:41.306Z"
+		},
+		{
+			"key": "proposal:2026-11-17-faces-receipt-valuation-open-ends",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "FACES receipt valuation (spec 123) - open implementation ends (handoff ledger)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-17-faces-receipt-valuation-open-ends.md",
+			"sourceUpdatedAt": "2026-11-17",
+			"sourceFingerprint": "353688db792ffbb5aba4821131ae4b935cda5846eb46d72f60e44c2cefce1fc0",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Core diagnostic/writer code is implemented but several assertions and an owner approval step remain before production use.",
+			"evidence": [
+				"Package-process bootstrap smoke... has not run against a real target",
+				"Owner actions: exact invoice/cost-basis evidence, period/rounding acceptance... No production command was run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
+		},
+		{
+			"key": "proposal:2026-11-17-hub-faces-stock-reconciliation-handoff",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "FACES stock reconciliation (spec 122) - open implementation ends (handoff ledger)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-17-hub-faces-stock-reconciliation-handoff.md",
+			"sourceUpdatedAt": "2026-11-17",
+			"sourceFingerprint": "4f8ade51426d4b20b1514bf64b982aa5de7cdec7a845fdfaa74a7507a9de0350",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-11-17-hub-stock-correction-handoff"
+			],
+			"rationale": "Multiple substantive items (native rehearsal, evidence production, dependency on F3's manifest engine) remain unresolved, limiting current actionability.",
+			"evidence": [
+				"Garment compensation rehearsal... is covered by pure tests only; no native run yet",
+				"Evidence files... are not produced; production diagnosis... are OWNER actions after F2 and F3 rollout"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-2877399286",
@@ -23996,6 +24055,42 @@
 			"scoredAt": "2026-11-16T14:50:01.034Z"
 		},
 		{
+			"key": "proposal:2026-11-16-faces-stock-cash-crm-meeting-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "FACES meeting follow-ups — reconcile stock, correct valuation, and complete operations views",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-16-faces-stock-cash-crm-meeting-followups.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "0f00e18a210783ad660e7913aad5ff4853546839f7b92c07f456aaf809b13dfa",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-11-17-hub-stock-correction-handoff",
+				"proposal:2026-11-17-hub-faces-stock-reconciliation-handoff",
+				"proposal:2026-11-17-faces-receipt-valuation-open-ends"
+			],
+			"rationale": "This umbrella tracker duplicates status already captured in the per-feature handoff ledgers in this same batch, so it should be consolidated with them rather than tracked separately.",
+			"evidence": [
+				"Eight separate feature directories are being prepared and independently reviewed",
+				"Planning / EGM review; no implementation (F3-F8 rows)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-1229461031",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25032,6 +25127,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:54:53.202Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-1e5110f43ed5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/crm/customers/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1e5110f43ed5.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "1af02901585698616b9fb8681d3aeecfb45b3b7eb2ba24904c18c58fc336a50f",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A real test-coverage gap in a core CRM merge dialog is identified with a clear fix direction, but no implementation has started.",
+			"evidence": [
+				"TODO(handoff): no mounted test for this host yet (DataTable virtualization in happy-dom hid the merge dialog)",
+				"Fix direction: Add an E2E test (Playwright)..."
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-234ac5245d15",
@@ -33342,6 +33469,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T03:48:16.564Z"
+		},
+		{
+			"key": "proposal:2026-11-17-hub-booking-product-consistency-handoff",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "FACES booking product consistency (spec 126) - open implementation ends (handoff ledger)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-17-hub-booking-product-consistency-handoff.md",
+			"sourceUpdatedAt": "2026-11-17",
+			"sourceFingerprint": "6f01adc2d3a01635ed7bff5fd739c5e4f89fc3a0a531b779356b4883360ad2d7",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Two concrete UI/data wiring gaps are documented with TODO(handoff) markers, but a finance-gating decision is explicitly left pending owner input.",
+			"evidence": [
+				"BookingsView.svelte still shows the stock estValue/realizedValue money chips",
+				"Owner decision pending (not changed): finance gating of payment actions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1778568796",
@@ -49665,7 +49824,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-18",
-			"sourceFingerprint": "60d1ef7d017ea6ed06a6d79e353c3975d6248416e24a59805eed819c17fb87de",
+			"sourceFingerprint": "063be28ef3763eeb33c6919a46f660a52aa7e80e2a4defc56cd07a6376a4fc11",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -49674,21 +49833,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 1,
+				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 7,
-			"recommendation": "reframe",
+			"confidence": 3,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "the markers are quoted fragments from previously-stored candidate summaries embedded inside this ranking data file itself, not genuine code TODOs in rankings logic.",
+			"rationale": "The listed markers are line excerpts from the rankings/index.json data file itself rather than real TODO(handoff) code comments, indicating a sweep false-positive rather than actionable work.",
 			"evidence": [
-				"target file is rankings/index.json, a generated ranking index not source code",
-				"quoted markers describe unrelated billing/scheduling/tenant text fragments",
-				"dozens of disjoint markers spanning unrelated domains in one data file"
+				"source: handoff-sweep",
+				"markers point into rankings/index.json lines containing quoted JSON fragments, not source TODO comments"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T02:31:05.451Z"
+			"scoredAt": "2026-11-18T05:29:33.027Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
@@ -49923,6 +50081,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
+		},
+		{
+			"key": "run:minion_hub#44244246714",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/44244246714",
+			"sourceUpdatedAt": "2026-11-18T05:26:25Z",
+			"sourceFingerprint": "01d38a23ad24a27c7db434b8c2a035d36d3e1554f0ae3826befc87725da0ae4c",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI run, not a work item to rank or prioritize.",
+			"evidence": [
+				"push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
+		},
+		{
+			"key": "run:minion_hub#44244246737",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/44244246737",
+			"sourceUpdatedAt": "2026-11-18T05:26:17Z",
+			"sourceFingerprint": "fa14d198caddbaeb4d526f7332a9685f04761920e7b2a7eddf012daaed870a68",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI deploy run, not a work item to rank or prioritize.",
+			"evidence": [
+				"push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T05:29:33.027Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
