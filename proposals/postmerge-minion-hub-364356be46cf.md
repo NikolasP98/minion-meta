@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-364356be46cf
 title: "Post-merge finding — todo-handoff in src/routes/api/crm/contacts/+server.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-11-18
 updated: 2026-11-18
 repos: [minion-hub]
