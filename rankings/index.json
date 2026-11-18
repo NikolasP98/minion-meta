@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-18T07:17:57.735Z",
+	"generatedAt": "2026-11-18T07:47:49.953Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1754,6 +1754,106 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T08:47:54.520Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-38f498053ee8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/stock-corrections.sql.integration.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-38f498053ee8.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "17efda4966d386e066829b70c71f1dd6b6a8ac2246906e65de6bb61d7d029a45",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-408424151"
+			],
+			"rationale": "Approved finding with a concrete diagnosis labels this a blocking data-integrity gap in the stock-correction cutover path with a clear fix direction.",
+			"evidence": [
+				"diagnosis: 'blocking data-integrity issue, not a polish task'",
+				"status: approved, merged PR #684 referenced"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T07:47:49.745Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-5568b40df863",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/nav-config.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5568b40df863.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "fde129db94a1a994eefd9b48f2026fc43c866cecc23a855cc5108edea5f39ead",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-2900193194"
+			],
+			"rationale": "Approved, well-specified fix for a potential cross-org RLS bypass in a multi-tenant nav-config transaction.",
+			"evidence": [
+				"diagnosis: 'risking cross-org data leaks—a data-isolation breach'",
+				"concrete fix: use getOrgTransactionDb(ctx.db).transaction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T07:47:49.745Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-a598e7c4b388",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a598e7c4b388.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "5ba3bc1796591a2a60740d21858e5b2879991ebf4f85a593f8b3e8e703cb0c8f",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved finding describes a real financial/inventory atomicity gap in POS processing with audit-risk consequences and a plausible fix direction.",
+			"evidence": [
+				"diagnosis: 'audit gaps and potential loss tracking errors'",
+				"fix direction: unify ticket and stock updates under one transaction/event"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T07:47:49.745Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-tenant-boundaries-spec",
@@ -5006,6 +5106,74 @@
 			"scoredAt": "2026-11-16T14:53:38.991Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2900193194",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/nav-config.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2900193194.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "5e124b6d184059444a47c63ced1fab9a1d4b179ab0fa2baf01e9c689a2eb7eaa",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-5568b40df863"
+			],
+			"rationale": "This draft duplicates the same nav-config.service.ts RLS transaction issue already filed as an approved, more thoroughly diagnosed post-merge finding.",
+			"evidence": [
+				"same file+line: nav-config.service.ts:36, RLS client requirement",
+				"postmerge-minion-hub-5568b40df863 covers identical marker and is already approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T07:47:49.745Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-408424151",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/stock-corrections.sql.integration.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-408424151.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "f7247b33dc50f9d2691e4d08df54434c9d94244e845562632beb63a5cb3a6d0c",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-38f498053ee8"
+			],
+			"rationale": "Shares the F1 mapping cutover marker on the same test file with an approved post-merge finding and should be consolidated rather than tracked separately.",
+			"evidence": [
+				"same file: stock-corrections.sql.integration.test.ts",
+				"F1 mapping cutover writer / cutover_pending_sources marker appears in both"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T07:47:49.745Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-679131984",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5068,38 +5236,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T08:18:29.459Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-5568b40df863",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/nav-config.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5568b40df863.md",
-			"sourceUpdatedAt": "2026-11-18",
-			"sourceFingerprint": "a4fcf37f1d232a9f3467d6c87eec61320271b30e8249fd6b47097cde7be70697",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A plain transaction bypassing RLS SET LOCAL in a multi-tenant nav-config service risks cross-org data leakage and has a concretely named, small-scope fix.",
-			"evidence": [
-				"TODO(handoff) names the exact bypass: plain transaction instead of getOrgTransactionDb",
-				"multi-tenant RLS isolation is a stated architecture invariant"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T07:17:14.112Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-a4e7e5bce6b1",
@@ -7698,6 +7834,38 @@
 			"scoredAt": "2026-11-18T02:23:21.466Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-2811467891",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/stock-corrections.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-2811467891.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "4a58d5b3d779f1608f07c7f09fe9f15bf02f95d0bb94b6f6f614b498735ae0ea",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Retry-wrapper gap for correction transactions risks partial-failure inconsistency but the one-line marker lacks enough scope detail to execute now.",
+			"evidence": [
+				"marker: retry wrapper covers ONLY correction transactions; participant wrappers keep...",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T07:47:49.745Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-4000616153",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8213,41 +8381,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T10:50:38.237Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-a598e7c4b388",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a598e7c4b388.md",
-			"sourceUpdatedAt": "2026-11-18",
-			"sourceFingerprint": "2462d41ef3c0451b8fb8797cd7d721e74e6bc9f59861cc421375ffefb2d45985",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#686",
-				"pr:minion_hub#687"
-			],
-			"rationale": "Flags a non-atomic ticket/stock-issue split in POS sales that overlaps with the stock-correction and booking-consistency work already active in the PR stack.",
-			"evidence": [
-				"TODO(handoff): ticket (money) and stock issue are still two separate operations",
-				"overlaps with active stock-correction-workflow PR stack"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T07:17:14.112Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ac3dd6e80c62",
@@ -16138,40 +16271,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:54:53.202Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-38f498053ee8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/stock-corrections.sql.integration.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-38f498053ee8.md",
-			"sourceUpdatedAt": "2026-11-18",
-			"sourceFingerprint": "d52321a145f616e9b1b8327f34bca0aee378b197e900c00cadae7e29f23b5093",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#687"
-			],
-			"rationale": "Describes an unfinished cutover-census refusal path that overlaps with the mapping-cutover pending-drafts guard already implemented in the active Faja M PR.",
-			"evidence": [
-				"TODO(handoff) marks F1 mapping cutover writer and census refusal as unfinished",
-				"PR 687 implements a cutover census pending-drafts refusal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T07:17:14.112Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-4cd4ed4c43ae",
@@ -37539,38 +37638,6 @@
 			"scoredAt": "2026-11-18T02:29:33.223Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-18",
-			"sourceFingerprint": "1e9a8b47dbdb28f96a1d511c80cc14701b7be2c6f59d3ebf555044f66617c7dd",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This proposal bundles over a dozen unrelated markers that appear to be raw data content of the rankings index file itself rather than a single coherent actionable issue.",
-			"evidence": [
-				"bundles 15+ unrelated markers under one key",
-				"markers read as literal content of rankings/index.json, the index file itself"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T06:48:05.826Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-bb06e3a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -48377,6 +48444,38 @@
 			"scoredAt": "2026-11-18T02:29:33.223Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "d0cc41063eb5356876069876e282da8c9530853e126bf8f5e1db89e968f7afea",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Every cited line is inside rankings/index.json's own stored JSON text quoting other proposals' markers, not a genuine code TODO, making this sweep hit non-actionable.",
+			"evidence": [
+				"all citations point to rankings/index.json lines",
+				"content is quoted proposal/marker text embedded in the index's historical data"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T07:47:49.745Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -50590,70 +50689,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
-		},
-		{
-			"key": "run:minion_hub#44257184136",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/44257184136",
-			"sourceUpdatedAt": "2026-11-18T07:13:29Z",
-			"sourceFingerprint": "0ee50ac656f05cea972f40a40375c163c64aeed3a48d9d8dbb5e60b075aad056",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI status ping, not a decision-worthy goal.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T07:17:57.490Z"
-		},
-		{
-			"key": "run:minion_hub#44257184156",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/44257184156",
-			"sourceUpdatedAt": "2026-11-18T07:13:28Z",
-			"sourceFingerprint": "a4b1dcf982268ae25ee64dc1da4f7fd089d49b92039dd3a9caa5b82fdf0252f0",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress storybook-deploy CI status ping, not a decision-worthy goal.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T07:17:57.490Z"
 		},
 		{
 			"key": "issue:minion-meta#420",
