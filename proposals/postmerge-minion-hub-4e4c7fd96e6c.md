@@ -7,6 +7,7 @@ updated: 2026-11-18
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_from: handoff-minion-hub-36782501
 ---
 
 # Post-merge finding — todo-handoff in `src/routes/(app)/stock/items/[id]/PageBody.svelte`
@@ -40,3 +41,9 @@ The `TODO(handoff)` marker at `src/routes/(app)/stock/items/[id]/PageBody.svelte
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/682
 - file: `src/routes/(app)/stock/items/[id]/PageBody.svelte`
 - checked: 2026-11-18
+
+## Merged content (from handoff-minion-hub-36782501)
+
+Same marker, same file, filed the same day by the handoff-ledger sweep
+against `NikolasP98/minion_hub@master`. Direct line link:
+https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/stock/items/[id]/PageBody.svelte#L153

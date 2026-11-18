@@ -7,6 +7,7 @@ updated: 2026-11-18
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_from: handoff-minion-hub-394396619
 ---
 
 # Post-merge finding — todo-handoff in `src/server/services/stock-entries-read.service.ts`
@@ -44,3 +45,9 @@ The `TODO(handoff)` marker at `src/server/services/stock-entries-read.service.ts
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/682
 - file: `src/server/services/stock-entries-read.service.ts`
 - checked: 2026-11-18
+
+## Merged content (from handoff-minion-hub-394396619)
+
+Same marker, same file, filed the same day by the handoff-ledger sweep
+against `NikolasP98/minion_hub@master`. Direct line link:
+https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/stock-entries-read.service.ts#L227

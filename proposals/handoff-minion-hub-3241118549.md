@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-3241118549
 title: Handoff marker — scripts/operator-bootstrap.smoke.ts (minion_hub)
-status: draft
+status: review
 created: 2026-11-18
 updated: 2026-11-18
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-94d4eedca2dc
 ---
 
 # Handoff marker — scripts/operator-bootstrap.smoke.ts
