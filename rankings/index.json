@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-18T02:47:06.545Z",
+	"generatedAt": "2026-11-18T03:17:02.266Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26570,6 +26570,39 @@
 			"scoredAt": "2026-11-11T11:19:13.655Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ f0ba8a3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f0ba8a3.md",
+			"sourceUpdatedAt": "2026-09-01",
+			"sourceFingerprint": "eb63e9bd660af5c072a36be65d89a79ffa35b517763263c7bd11938739d44bcd",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated merge-scan flags concrete unchecked-access defects in test files with exact file/line locations that are quick, low-risk fixes.",
+			"evidence": [
+				"high severity unchecked-access at contact-update.server.test.ts:189 and :305",
+				"high severity destructured row used without null check in crm-contacts.custom-fields.test.ts:179",
+				"medium finding masks undefined via String() coercion in test assertion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T03:17:02.003Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-18d28cf31dcf",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -43482,40 +43515,6 @@
 			"scoredAt": "2026-11-16T10:18:41.725Z"
 		},
 		{
-			"key": "issue:minion-meta#899",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#899 [monitor:unstick] rank board goals run 4f69e13a failed: both LLM providers exhausted on batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/899",
-			"sourceUpdatedAt": "2026-10-28T01:17:17Z",
-			"sourceFingerprint": "d0451ca1facb61f836c0d2efdded388bc61a30a67ebdbb4fc42708c7ea2e6f96",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#994"
-			],
-			"rationale": "Both-provider exhaustion on rank batch 1 is described as a transient, fast-failing infra fault matching #994's pattern, better consolidated into one classifier-signature goal.",
-			"evidence": [
-				"both bounded providers failing together points to a provider-side outage, not a bad spec or bad input",
-				"Recommendation: retry the run"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T02:48:46.022Z"
-		},
-		{
 			"key": "issue:minion-meta#933",
 			"kind": "issue",
 			"stage": "proposal",
@@ -43579,40 +43578,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T20:17:10.298Z"
-		},
-		{
-			"key": "issue:minion-meta#994",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#994 [monitor:unstick] run 42df492d (rank board goals) - transient provider failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/994",
-			"sourceUpdatedAt": "2026-11-11T02:17:15Z",
-			"sourceFingerprint": "40e41ac35b84ca3d346a23545533ce63d3e5007f9e644a60c1d2345f12090e92",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#899"
-			],
-			"rationale": "Same both-providers-transient-fail-on-rank-batch pattern as #899; grouping avoids duplicate manual triage of the same recurring infra fault.",
-			"evidence": [
-				"Both bounded providers failing together points to a provider-side outage or rate-limit window at run time",
-				"safe to retry the run as-is; no spec or code change indicated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T02:48:46.022Z"
 		},
 		{
 			"key": "pr:minion (gateway)#341",
@@ -44546,38 +44511,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T23:56:05.360Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ f0ba8a3",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f0ba8a3.md",
-			"sourceUpdatedAt": "2026-09-01",
-			"sourceFingerprint": "eb63e9bd660af5c072a36be65d89a79ffa35b517763263c7bd11938739d44bcd",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, well-located unchecked-array-access fixes confined to test files, low risk and quick to land despite inflated severity labels.",
-			"evidence": [
-				"\"res.rows[0] accessed without checking if rows array exists\" at contact-update.server.test.ts:189",
-				"\".find() result can be undefined; wrapping in String() masks test failure\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T03:03:40.244Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-02cb576f3102",
@@ -46741,6 +46674,41 @@
 			"scoredAt": "2026-11-14T10:48:43.276Z"
 		},
 		{
+			"key": "issue:minion-meta#899",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#899 [monitor:unstick] rank board goals run 4f69e13a failed: both LLM providers exhausted on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/899",
+			"sourceUpdatedAt": "2026-10-28T01:17:17Z",
+			"sourceFingerprint": "d0451ca1facb61f836c0d2efdded388bc61a30a67ebdbb4fc42708c7ea2e6f96",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#994"
+			],
+			"rationale": "Transient dual-provider infra failure on a retry-only ranking run with no code or spec defect indicated.",
+			"evidence": [
+				"exit code 1 after catalog built with 1272 goals",
+				"both claude and codex failed/invalid JSON on batch 1",
+				"diagnosis explicitly says transient infra fault, not spec/code bug"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T03:17:02.003Z"
+		},
+		{
 			"key": "issue:minion-meta#906",
 			"kind": "issue",
 			"stage": "proposal",
@@ -47208,6 +47176,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T22:17:49.039Z"
+		},
+		{
+			"key": "issue:minion-meta#994",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#994 [monitor:unstick] run 42df492d (rank board goals) - transient provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/994",
+			"sourceUpdatedAt": "2026-11-11T02:17:15Z",
+			"sourceFingerprint": "40e41ac35b84ca3d346a23545533ce63d3e5007f9e644a60c1d2345f12090e92",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#899"
+			],
+			"rationale": "Same transient dual-provider outage pattern as a near-identical prior monitor intake, safe to retry rather than act on.",
+			"evidence": [
+				"1403 goals ranked successfully before batch 1 failure",
+				"both bounded providers failed/retrying when run errored",
+				"recommendation explicitly says safe to retry, no spec/code change indicated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T03:17:02.003Z"
 		},
 		{
 			"key": "issue:minion-meta#995",
