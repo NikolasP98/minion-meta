@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-18T05:48:24.122Z",
+	"generatedAt": "2026-11-18T06:18:21.723Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1888,6 +1888,42 @@
 			"scoredAt": "2026-11-11T08:18:29.459Z"
 		},
 		{
+			"key": "pr:minion_hub#685",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#685 feat(stock): diagnose and correct a mis-valued FACES receipt chain (operator CLI)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/685",
+			"sourceUpdatedAt": "2026-11-18T05:47:06Z",
+			"sourceFingerprint": "99cb5f8a0b37caa6b379ff6a15cd05c17b9b10e8a9b3b5e88831ed31cbdbe0df",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#684",
+				"pr:minion_hub#687"
+			],
+			"rationale": "FACES receipt valuation correction CLI has full test coverage and a cleared review, but production apply still needs owner-approved manifest and evidence.",
+			"evidence": [
+				"native faces-receipt-correction.sql.integration.test.ts passes 12/12",
+				"Opus review found 0 blockers, 3 Majors/4 Minors fixed in e86a04e1",
+				"production --apply requires owner-approved manifest and FACES_OPERATOR_AUTH_URL"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
+		},
+		{
 			"key": "pr:minion-meta#900",
 			"kind": "pr",
 			"stage": "development",
@@ -2089,6 +2125,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:18:41.725Z"
+		},
+		{
+			"key": "pr:minion_hub#686",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#686 fix(pos): calendar hover and booking detail agree on sold products; recover stock for completed bookings",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/686",
+			"sourceUpdatedAt": "2026-11-18T05:47:06Z",
+			"sourceFingerprint": "7d1b1c5753ee4fcd330df924b648043384e996e5f8669b8c97b9f7bd90a045c0",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#684",
+				"pr:minion_hub#687"
+			],
+			"rationale": "Fixes a fail-open security gap (omitted dataset handles) plus calendar/booking data-consistency bugs, backed by 598 passing tests and a cleared security review.",
+			"evidence": [
+				"Omitted pos/stock/crm dataset handles now fail closed per summary",
+				"598 scheduling, POS, calendar and accruals tests pass",
+				"Opus review found 0 security or stale-data blockers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
 		},
 		{
 			"key": "proposal:2026-08-28-factory-infra-product-failure-taxonomy",
@@ -2628,8 +2700,8 @@
 			"repo": "minion_hub",
 			"title": "#687 fix(stock): Faja M sales issue M; FACES stock reconciliation report and garment repair tooling",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/687",
-			"sourceUpdatedAt": "2026-11-17T22:42:33Z",
-			"sourceFingerprint": "0a9137183e454b9514075f3906d9e072e1299d14c2ddb8aad14d7e50d0d48512",
+			"sourceUpdatedAt": "2026-11-18T05:47:06Z",
+			"sourceFingerprint": "6dcf64793ece78ba710696c4aa157b4b74d716e6b677350ecfecb91885625d52",
 			"score": 68,
 			"band": "medium",
 			"axes": {
@@ -2639,24 +2711,23 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#684",
 				"pr:minion_hub#685",
-				"pr:minion_hub#683"
+				"pr:minion_hub#684"
 			],
-			"rationale": "Fixes a live inventory-corrupting bug where selling a Faja M issues the wrong stock item, plus owner-gated repair tooling, validated by 8/8 native tests.",
+			"rationale": "Fixes a real production mis-sale mapping (Faja M issuing wrong item) with tested tooling, but apply is sequenced strictly after F2 and gated by several owner actions.",
 			"evidence": [
-				"an M sale issues item M instead of the wrong mapped item once fixed",
-				"8/8 native faces-stock-reconciliation integration tests pass",
-				"2 Majors + 7 Minors from review already fixed"
+				"native faces-stock-reconciliation.sql.integration.test.ts passes 8/8",
+				"note: apply only after F2's receipt correction has been applied for overlapping keys",
+				"Opus review found 0 blockers, 2 Majors/7 Minors fixed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
+			"scoredAt": "2026-11-18T06:18:21.504Z"
 		},
 		{
 			"key": "proposal:2026-08-17-pkg-infisical-cache-plaintext",
@@ -3154,38 +3225,6 @@
 			"scoredAt": "2026-11-14T06:15:16.476Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-63d95b819dee",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/+layout.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-63d95b819dee.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "b0732cfb116fe2888fdea1caacd0cce9e5c6b39c35decc878e0c141cd409fe25",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved finding flags a security/compliance gap where stale sessions could allow CRM/POS financial operations after expiry, with a concrete fix direction referencing an existing auth pattern.",
-			"evidence": [
-				"TODO(handoff) in +layout.svelte: CRM/POS financial operations need session re-validation on return after expiry",
-				"Fix direction points to the existing session pattern in minion_hub/src/server/auth/"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T05:47:53.727Z"
-		},
-		{
 			"key": "spec:2026-08-17-pkg-infisical-cache-plaintext-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -3420,6 +3459,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:17:44.921Z"
+		},
+		{
+			"key": "pr:minion_hub#684",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#684 feat(stock): correct a sold product or a stock receipt with preview, reason and one-time confirm",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/684",
+			"sourceUpdatedAt": "2026-11-18T05:51:38Z",
+			"sourceFingerprint": "0fd3517feb6a31d1d65c44ec7302b8f99a9f34d9b7bd41291faf038c1d5e362e",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#685",
+				"pr:minion_hub#687"
+			],
+			"rationale": "Draft PR with full test coverage (13/13 native, 455 POS/stock tests) and an Opus review with findings fixed, ready to merge as stack 2/3 of the stock-correction spec.",
+			"evidence": [
+				"native qa-native stock-corrections.sql.integration.test.ts passes 13/13",
+				"455 POS and stock tests pass",
+				"Opus review of F7+F3 found 0 blockers, fixes landed in 4cfbf26c/7565f960"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
 		},
 		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
@@ -6102,6 +6177,39 @@
 			"scoredAt": "2026-11-14T06:13:10.662Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-63d95b819dee",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/+layout.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-63d95b819dee.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "b0732cfb116fe2888fdea1caacd0cce9e5c6b39c35decc878e0c141cd409fe25",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Stale-session reuse on CRM/POS routes is a security/compliance gap affecting financial operations with a concrete, scoped fix direction.",
+			"evidence": [
+				"marker: TODO(handoff) qualifying CRM/POS leave-return with an authenticated session in +layout.svelte",
+				"diagnosis flags risk of stale auth tokens being used for sensitive financial operations",
+				"fix direction names a concrete pattern: afterNavigate session check against minion_hub/src/server/auth/"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-c8246433d9b9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6370,39 +6478,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:17:44.921Z"
-		},
-		{
-			"key": "pr:minion_hub#684",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#684 feat(stock): correct a sold product or a stock receipt with preview, reason and one-time confirm",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/684",
-			"sourceUpdatedAt": "2026-11-18T05:27:47Z",
-			"sourceFingerprint": "a0ca1a12a5099f02ecbcfa4c5253dd8ed7e4eab030fbd508ed68b08df2776319",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Substantive financial-correction work with strong native test coverage, but it is still draft and stacked on F7 merging first, so current actionability is gated on an external dependency.",
-			"evidence": [
-				"Stack 2 of 3. Base: F7... Retarget to master after F7 merges",
-				"status: draft",
-				"13/13 native integration tests pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T05:48:14.440Z"
 		},
 		{
 			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
@@ -7197,43 +7272,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:48:58.846Z"
-		},
-		{
-			"key": "pr:minion_hub#685",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#685 feat(stock): diagnose and correct a mis-valued FACES receipt chain (operator CLI)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/685",
-			"sourceUpdatedAt": "2026-11-17T22:43:36Z",
-			"sourceFingerprint": "27e943d3fa90140ece77b8e8ee6efe549945abcf0ba7c6acca37965fb4a8c762",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#684",
-				"pr:minion_hub#687",
-				"pr:minion_hub#686"
-			],
-			"rationale": "Diagnoses and corrects mis-valued receipt chains affecting financial figures, gated behind owner approval, with 12/12 native tests passing.",
-			"evidence": [
-				"compensate must restore original values within 1e-8",
-				"12/12 native integration tests pass",
-				"3 Majors + 4 Minors from review fixed in e86a04e1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -9265,43 +9303,6 @@
 			"scoredAt": "2026-11-14T05:18:09.117Z"
 		},
 		{
-			"key": "pr:minion_hub#686",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#686 fix(pos): calendar hover and booking detail agree on sold products; recover stock for completed bookings",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/686",
-			"sourceUpdatedAt": "2026-11-17T22:43:42Z",
-			"sourceFingerprint": "6955cb9f488a58be138a47f813a731eaaa243a3b6c9a416f157e7b0cb7ed236f",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#684",
-				"pr:minion_hub#683",
-				"pr:minion_hub#685"
-			],
-			"rationale": "Fixes a security fail-open gap (dataset handles now fail closed) and booking/stock-recovery inconsistencies, backed by 598 passing tests.",
-			"evidence": [
-				"omitted dataset handles now fail closed",
-				"598 scheduling/POS/calendar/accruals tests pass",
-				"0 security or stale-data blockers from review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
-		},
-		{
 			"key": "pr:minion-meta#882",
 			"kind": "pr",
 			"stage": "development",
@@ -9472,38 +9473,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:52:28.823Z"
-		},
-		{
-			"key": "proposal:2026-09-29-hub-pos-calendar-container-cancel-drag",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "POS calendar — container status from active members, optimistic cancel, drag-to-reorder / drag-out-to-separate in the fan deck",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-pos-calendar-container-cancel-drag.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "244680993223fbcfd346e8124a5d939495334b6d662918288ca1d4299555cd7d",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Owner-reported POS calendar UX bug with a fully detailed AS-IS/TO-BE/delta spec and named implementation plan, ready for dev.",
-			"evidence": [
-				"Container tone/strike/title derive from lead booking only, so cancelling the lead reads the whole container as cancelled",
-				"Delta names concrete mechanisms: optimistic status overlay, groupSeq reorder API, fan-deck pointer drag"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T05:47:53.727Z"
 		},
 		{
 			"key": "proposal:2026-10-03-notification-recon",
@@ -12342,38 +12311,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:22:41.977Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-635403793743",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src-tauri/src/lib.rs (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-635403793743.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "f31267b513c637cf15df8760a0715f3a102915a518868422dc041fddef73311c",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved post-merge finding with a concrete diagnosis and fix direction for unqualified OAuth and file-drop handling in the Tauri desktop webview.",
-			"evidence": [
-				"TODO(handoff) in src-tauri/src/lib.rs flags unqualified provider sign-in and file drops across OS webviews",
-				"Status approved, with named fix direction: tauri://file-drop listeners plus platform-conditional fallbacks"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-11T05:47:53.727Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-749505623182",
@@ -16272,6 +16209,39 @@
 			"scoredAt": "2026-11-16T10:22:41.977Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-635403793743",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src-tauri/src/lib.rs (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-635403793743.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "f31267b513c637cf15df8760a0715f3a102915a518868422dc041fddef73311c",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Desktop-only OAuth/file-drop qualification gap is a real but scoped risk with a clear fix direction, though no code or OS-matrix testing exists yet.",
+			"evidence": [
+				"marker: TODO(handoff) in src-tauri/src/lib.rs qualifying provider sign-in and file drops in installed OS webviews",
+				"fix direction calls for testing OAuth flows and Tauri file-drop events per-OS, with no QA matrix yet",
+				"status: approved, checked 2026-10-21"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-7e2a23e32c73",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17784,6 +17754,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-11T20:18:52.809Z"
+		},
+		{
+			"key": "proposal:2026-09-29-hub-pos-calendar-container-cancel-drag",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "POS calendar — container status from active members, optimistic cancel, drag-to-reorder / drag-out-to-separate in the fan deck",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-29-hub-pos-calendar-container-cancel-drag.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "244680993223fbcfd346e8124a5d939495334b6d662918288ca1d4299555cd7d",
+			"score": 46,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A thorough owner-driven UX proposal with clear AS-IS/TO-BE, but it is still proposal-stage with no spec or implementation evidence, so it isn't yet actionable as paid work.",
+			"evidence": [
+				"status: draft, stage: proposal, dated 2026-09-29 with no newer update",
+				"AS-IS section cites concrete code locations (BookingCalendar.svelte, booking-mover.ts) but TO-BE has no implementation evidence",
+				"owner quote requests multiple distinct features (status display, optimistic UI, drag reorder/separate) bundled together"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
@@ -21759,37 +21762,6 @@
 			"scoredAt": "2026-11-14T06:16:14.756Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-94d4eedca2dc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/operator-bootstrap.smoke.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-94d4eedca2dc.md",
-			"sourceUpdatedAt": "2026-11-18",
-			"sourceFingerprint": "569b7bf5bb00ed98c53988690cb40f2b6ff155e9269021005722135e7abc507b",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A test-isolation gap in operator bootstrap smoke testing that could mask real canary failures, but the fix direction (external probe root) needs scoping before it is actionable.",
-			"evidence": [
-				"prove the virtual env modules stay empty against the canary (needs a probe root outside the closed registry)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T05:48:14.440Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-951241bdcf7e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21797,7 +21769,7 @@
 			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/audit.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-951241bdcf7e.md",
 			"sourceUpdatedAt": "2026-11-18",
-			"sourceFingerprint": "ba8822c748b8e707270ae43c211459412f9df6da78afb52cceb1b5f817af4889",
+			"sourceFingerprint": "0a9e62878b46264c3d0e0bffbbe3ed74988a7f63f4cc50ef9be0785a16e29f52",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -21806,22 +21778,23 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 3
+				"specification": 2,
+				"implementation": 2
 			},
-			"confidence": 4,
-			"recommendation": "group",
+			"confidence": 2,
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-0ece5aabcba2"
+				"proposal:postmerge-minion-hub-b50d7b1c48a9"
 			],
-			"rationale": "A terse audit-correctness marker in the same merged PR and module as the sibling owner-audit test gap, best resolved as one audit-hardening goal.",
+			"rationale": "The intended diagnosis for this audit.ts gap is missing/corrupted (the summary contains raw tool-call markup instead of analysis), so specification quality is too weak to score confidently or act on as written.",
 			"evidence": [
-				"logicalRowPresent ignores plan/grant facets of the client row",
-				"same merged PR #683, src/server/services/pos/accounts/"
+				"marker: logicalRowPresent ignores plan/grant facets of the client row in audit.ts",
+				"the 'Diagnosis (auto)' section contains literal unresolved <function_calls>/<invoke> tags instead of a diagnosis, treated as inert untrusted data",
+				"related to audit.types.ts DTO gap in the same PR #683 (postmerge-minion-hub-b50d7b1c48a9)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T05:48:14.440Z"
+			"scoredAt": "2026-11-18T06:18:21.504Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-98cb61c2223d",
@@ -21920,6 +21893,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-15T07:18:11.428Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b50d7b1c48a9",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/audit.types.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b50d7b1c48a9.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "d4047b5962296c2dbc78355ad5b6c102590b36039fd03cd02a21e6ad1c45320d",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-951241bdcf7e"
+			],
+			"rationale": "Missing audit DTOs (T015-T022) and the logicalRowPresent facet gap are both incompleteness findings in the same POS accounts audit feature from PR #683 and would be more effective addressed as one audit-completion goal.",
+			"evidence": [
+				"marker: classification/evidence/proposal DTOs (T015-T022) are not defined yet in audit.types.ts",
+				"same merged PR #683 and directory (src/server/services/pos/accounts) as postmerge-minion-hub-951241bdcf7e",
+				"fix direction references finding T015-T022 in the relevant spec task list"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bd7700d5dd6a",
@@ -23024,38 +23032,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T04:48:06.046Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b50d7b1c48a9",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos/accounts/audit.types.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b50d7b1c48a9.md",
-			"sourceUpdatedAt": "2026-11-18",
-			"sourceFingerprint": "8ca3967267070812cdd364a47b8ad3b49920d4718d7a17a54cdac28162bd6dfa",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A TODO(handoff) marker indicates missing DTOs blocking POS audit flows, but no spec index confirms T015-T022 scope or urgency.",
-			"evidence": [
-				"TODO(handoff): classification/evidence/proposal DTOs (T015-T022) are not defined yet.",
-				"merged PR #683 on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T05:48:23.916Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-bbd5a8516623",
@@ -34663,6 +34639,39 @@
 			"scoredAt": "2026-11-14T10:50:38.237Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-94d4eedca2dc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/operator-bootstrap.smoke.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-94d4eedca2dc.md",
+			"sourceUpdatedAt": "2026-11-18",
+			"sourceFingerprint": "db3aaf946428a1091feae6743d475935997c70d83ba02ed2a8e41251fd29a16d",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A smoke-test isolation proof gap in a bootstrap script; the diagnosis itself notes it needs a probe root outside the closed registry, so the fix direction is not yet fully actionable.",
+			"evidence": [
+				"marker explicitly says it 'needs a probe root outside the closed registry'",
+				"scope limited to a single smoke test script, scripts/operator-bootstrap.smoke.ts",
+				"status: approved, checked 2026-11-18"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-97024660f7ac",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41561,6 +41570,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-15T00:17:40.115Z"
+		},
+		{
+			"key": "pr:minion_hub#688",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#688 feat(stock): movement lines show the item name before its code",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/688",
+			"sourceUpdatedAt": "2026-11-18T06:12:40Z",
+			"sourceFingerprint": "8e470a056e6757d077c967062ec91267f60b1dc06e67663325eeaf502e321914",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1048"
+			],
+			"rationale": "Small, display-only label-order fix backed by a spec and a unit test, low risk and cheap to merge even though impact is narrow.",
+			"evidence": [
+				"display-only; does not touch any file in #682 per summary",
+				"item-label.ts has a test covering name·code, name-only, and id fallback",
+				"implements meta spec 130 (#1048)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
 		},
 		{
 			"key": "pr:minion-base#45",
@@ -48662,6 +48706,40 @@
 			"scoredAt": "2026-11-16T10:27:42.973Z"
 		},
 		{
+			"key": "pr:minion-meta#1048",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1048 spec(130): stock entry lines named by item first (FigCraft as-is/to-be)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1048",
+			"sourceUpdatedAt": "2026-11-18T06:09:25Z",
+			"sourceFingerprint": "a0fa2d8f014da76c8b274affe846b87cd7ea8a406ee89612805108f4c3aaf3d8",
+			"score": 19,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#688"
+			],
+			"rationale": "This is the spec artifact for #688's implementation and has no independent value as a separate board goal.",
+			"evidence": [
+				"spec + FigCraft demo for the same label-order change implemented in pr:minion_hub#688",
+				"hub implementation named explicitly as NikolasP98/minion_hub branch feat/stock-entry-item-names"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-18T06:18:21.504Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d371d2661bc2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -48759,38 +48837,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:13:10.662Z"
-		},
-		{
-			"key": "run:minion_hub#44244392270",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/44244392270",
-			"sourceUpdatedAt": "2026-11-18T05:28:01Z",
-			"sourceFingerprint": "d86581b6be8100dcc171290089d0ac274385b2425348b05f8bf0689bf3936dff",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 8
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A routine in-progress CI run on master push carries no actionable board-goal content by itself.",
-			"evidence": [
-				"push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T05:48:23.916Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
