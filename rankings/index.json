@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-19T19:47:26.911Z",
+	"generatedAt": "2026-11-19T20:17:12.533Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1753,6 +1753,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:27:42.973Z"
+		},
+		{
+			"key": "pr:minion-meta#1055",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1055 spec(133): charging a service the client already has an appointment for",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1055",
+			"sourceUpdatedAt": "2026-11-19T20:14:40Z",
+			"sourceFingerprint": "53e6683f1f634dfcb5f24f950c6401adea078751e56959c6505a4f4d1998e62f",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Spec for a real production incident where double-charging/double-booking triple-reserved stock, but approval and plan/tasks are still pending so it is not yet actionable.",
+			"evidence": [
+				"FACES incident 2026-11-18 (POS-2026-00161) caused a duplicate appointment and triple stock reservation",
+				"tagged data: owner approval required before code",
+				"still owed: FigCraft demo, /speckit-plan, /speckit-tasks"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T20:17:12.305Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-38f498053ee8",
@@ -23425,39 +23458,6 @@
 			"scoredAt": "2026-11-15T00:17:40.115Z"
 		},
 		{
-			"key": "pr:minion_hub#691",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#691 feat(pos): marketing funnel page with CAC, LTV and customers that can be targeted",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/691",
-			"sourceUpdatedAt": "2026-11-19T19:45:21Z",
-			"sourceFingerprint": "5e296ec5f31e0c8fcacc0f0ebf9ff27cf5a42b2645b4938dc237590cb19fe4e8",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A read-only marketing funnel page with passing checks and a prod dry-run, but it's an untested draft (never opened in a browser, no FigCraft review) with known gaps like stale lead attribution and excluded invoices.",
-			"evidence": [
-				"draft status, page not opened in a browser",
-				"checks/tests pass; two queries run read-only on FACES prod",
-				"leads stop on 2026-07-17 in prod; tax-ledger invoices excluded on purpose"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T19:47:26.647Z"
-		},
-		{
 			"key": "pr:minion-meta#825",
 			"kind": "pr",
 			"stage": "development",
@@ -28343,6 +28343,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:28:49.704Z"
+		},
+		{
+			"key": "pr:minion_hub#691",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#691 feat(pos): marketing funnel page with CAC, LTV and customers that can be targeted",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/691",
+			"sourceUpdatedAt": "2026-11-19T19:52:27Z",
+			"sourceFingerprint": "127fc93d1c81fc1c7ef3ee429d68c495add4d4742a7ff08b9296b2d47a644269",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A read-only marketing funnel page with verified queries and passing checks but not yet opened in a browser or UX-reviewed, and lead data is stale since 2026-07-17.",
+			"evidence": [
+				"bun run check: 0 errors; vite build passes",
+				"not opened in a browser, no FigCraft as-is/to-be yet",
+				"leads stop on 2026-07-17 in prod"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T20:17:12.305Z"
 		},
 		{
 			"key": "pr:minion-meta#971",
