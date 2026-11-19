@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-19T03:16:53.055Z",
+	"generatedAt": "2026-11-19T03:48:21.893Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3144,38 +3144,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T02:33:36.399Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-factory-0290030",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-factory",
-			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Multiple high-severity findings sit directly in the factory's own rank.sh/reconcile.sh scripts, including unvalidated loop arithmetic that risks an infinite loop in the automation pipeline itself.",
-			"evidence": [
-				"FACTORY_RANK_BATCH_SIZE used in loop arithmetic without validation; non-numeric/zero causes infinite loop",
-				"jq '.candidates' output used in arithmetic without null validation, missing field silently becomes 0"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:36:50.962Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-e98422b",
@@ -10259,6 +10227,38 @@
 			"scoredAt": "2026-11-19T02:33:36.399Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-531a2204dc23",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/auth/authorize.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-531a2204dc23.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "5c0193bf11cdc6b3e3752576c7434ae7f155f9d353848398532505bc9e1c1468",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Approved handoff names a broad, unscoped 'full per-handler audit' of requireAdmin rather than a bounded fix, so it needs scoping before it's actionable.",
+			"evidence": [
+				"TODO(handoff): a full per-handler audit of the remaining requireAdmin",
+				"definition of done just says marker removed or rationale updated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-763d076153d2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14395,38 +14395,6 @@
 			"scoredAt": "2026-11-19T02:33:36.399Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-29ee60e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 29ee60e",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-29ee60e.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "0801b1505825de9297db2705ab04c8eb04746bef373cb47832e27eab50ba96d9",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Silent localStorage failures mean users lose chat session restoration/persistence with no indication, a real reliability gap in a live, shipped dashboard component.",
-			"evidence": [
-				"localStorage.getItem() silently fails during session restoration",
-				"localStorage.setItem() silently fails during session persistence"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:36:50.962Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-f696097",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15273,6 +15241,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T02:25:10.217Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-factory-0290030",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-factory",
+			"title": "Merge-scan deficiencies — minion-factory @ 0290030",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-factory-0290030.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "729cfb8e8fbffa51eda108a0cdaf20ea1a185e3fa14e233251d0d1eb2b75b549",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete file:line findings in the factory's own rank/discovery/reconcile tooling include an infinite-loop risk and unvalidated sed input worth fixing in core automation.",
+			"evidence": [
+				"FACTORY_RANK_BATCH_SIZE non-numeric/zero causes infinite loop in rank.sh:74",
+				"unescaped $today in sed replacement at discovery.sh:110 can break substitution"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-93789f3a94af",
@@ -18740,39 +18740,6 @@
 			"scoredAt": "2026-11-14T11:17:23.741Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-531a2204dc23",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/auth/authorize.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-531a2204dc23.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "5c0193bf11cdc6b3e3752576c7434ae7f155f9d353848398532505bc9e1c1468",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The admin-authorization audit is plausibly important but the marker text is truncated and the 'diagnosis' section contains fabricated tool-call syntax instead of real analysis, so scope and risk can't be verified.",
-			"evidence": [
-				"Marker text cuts off mid-sentence: 'a full per-handler audit of the remaining requireAdmin'",
-				"Diagnosis block contains injected fake function_calls/invoke syntax rather than actual findings",
-				"Merged PR #286 in NikolasP98/minion_hub@9a54027 (master)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:37:18.648Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-5ecd8380b71c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21532,6 +21499,38 @@
 			"scoredAt": "2026-11-14T05:56:41.306Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub POS accounts drawer — no pending-scheduling link",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-pos-accounts-drawer-pending-scheduling.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "c70060bb5440954eca9e388085dae23deb7bff3be162169053695ac91e687df1",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified, bounded UI follow-up closes a known gap where walk-in clients can't be scheduled from the account drawer.",
+			"evidence": [
+				"drawer has no pending-scheduling section while the list view does",
+				"QA report: walk-in service cannot be scheduled from drawer, ends up on wrong page"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
+		},
+		{
 			"key": "proposal:2026-10-03-readiness-flow-export-ownership",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22765,6 +22764,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T13:48:00.355Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d57706ece661",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/pos-sell-toolbar.spec.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57706ece661.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "65c867d7e600ca4533f724123b3a29b1f8c0361ca49623ca4935f7d29ca3ba56",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved handoff has a concrete diagnosis and fix direction for Button.svelte's unrestricted {...rest} spread bypassing the design-token contract.",
+			"evidence": [
+				"spreading {...rest} on Button bypasses the design-token contract",
+				"fix direction: allowlist class/id/event handlers, remove unrestricted spread"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-eb28a2fabfb9",
@@ -25190,70 +25221,6 @@
 			"scoredAt": "2026-11-19T02:35:20.901Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-355769a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 355769a",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-355769a.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "66f71d445700c60f4067ffeaaf69579acadbd20324de9aa18469cffee3153ca7",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Empty catches hide stock-accrual preview and CRM search failures and a booking page passes an unsanitized URL parameter, all in a live, business-relevant booking flow.",
-			"evidence": [
-				"Empty catch swallows errors from stock accrual preview fetch",
-				"contact value should be passed through URLSearchParams.set() to escape special characters"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:36:50.962Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 9d8d4a8",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-9d8d4a8.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "953cf0a82ddb9e967405609c3658be44a15dbeab6ee88862c90f582a6cda313c",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A missing null check on c.input can throw a TypeError and crash markdown message rendering, a simple bounded fix in a live, frequently-used chat component.",
-			"evidence": [
-				"Property c.input accessed without null check",
-				"accessing c.input.options throws TypeError"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:36:50.962Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-f97efb2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26367,39 +26334,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:23:57.768Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-d57706ece661",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/pos-sell-toolbar.spec.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57706ece661.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "65c867d7e600ca4533f724123b3a29b1f8c0361ca49623ca4935f7d29ca3ba56",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The finding clearly identifies a design-token contract violation in Button.svelte's unrestricted prop spread and names a bounded allowlist fix, making it actionable now.",
-			"evidence": [
-				"Diagnosis: Button.svelte spreads {...rest}, letting callers inject attributes that conflict with component internals",
-				"Fix direction given: allowlist only class/id/event handlers and update the type",
-				"Merged PR #423 in NikolasP98/minion_hub@67d95fb (master)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:37:18.648Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
@@ -28311,114 +28245,6 @@
 			"scoredAt": "2026-11-17T04:17:59.915Z"
 		},
 		{
-			"key": "issue:minion-meta#1000",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#1000 [monitor:unstick] rank run 97b27af7: provider JSON fallback failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1000",
-			"sourceUpdatedAt": "2026-11-12T01:17:31Z",
-			"sourceFingerprint": "66feb4f7f17f3ecb2edaee3ccace8a2c9fd82f244e5d08cbf1e923433601c980",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#1001",
-				"issue:minion-meta#1002",
-				"issue:minion-meta#938"
-			],
-			"rationale": "One of four near-identical monitor alerts for the same transient claude/codex JSON-fallback failure in rank batching, better consolidated into a single fix goal.",
-			"evidence": [
-				"same signature as later run f42f830d",
-				"recommendation: add dedicated host-classifier signature"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:18:47.243Z"
-		},
-		{
-			"key": "issue:minion-meta#1001",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#1001 [monitor:unstick] rank run b2fa8a4a: both bounded providers failed on batch 16",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1001",
-			"sourceUpdatedAt": "2026-11-12T02:17:38Z",
-			"sourceFingerprint": "a217fb2d901581441c0c8e54a8113905f00bea485fa305fde0a86552fcc3d194",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#1000",
-				"issue:minion-meta#1002",
-				"issue:minion-meta#938"
-			],
-			"rationale": "4th occurrence of an identical provider-fallback signature within ~90 minutes is strong evidence this should become one consolidated host-classifier/retry fix rather than four separate tickets.",
-			"evidence": [
-				"4th occurrence of this exact signature on minion-meta rank jobs in ~90 minutes",
-				"prior progress (15 batches/180 goals) preserved for retry"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:18:47.243Z"
-		},
-		{
-			"key": "issue:minion-meta#1002",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#1002 [monitor:unstick] rank run 253de766: both bounded providers failed on batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1002",
-			"sourceUpdatedAt": "2026-11-12T02:17:41Z",
-			"sourceFingerprint": "0096a6308ac1495cd5f86093070a61d1d265840e03ae2ec3e097dfe05136b998",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#1000",
-				"issue:minion-meta#1001",
-				"issue:minion-meta#938"
-			],
-			"rationale": "Part of a cluster of 4 identical-signature provider-fallback failures within 90 minutes, indicating a shared root cause worth one consolidated fix.",
-			"evidence": [
-				"cluster of 4 identical-signature failures within ~90 minutes",
-				"failed on batch 1, nothing committed yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:18:47.243Z"
-		},
-		{
 			"key": "issue:minion-meta#406",
 			"kind": "issue",
 			"stage": "proposal",
@@ -29814,38 +29640,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:53:38.991Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-pos-accounts-drawer-pending-scheduling",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub POS accounts drawer — no pending-scheduling link",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-pos-accounts-drawer-pending-scheduling.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "c70060bb5440954eca9e388085dae23deb7bff3be162169053695ac91e687df1",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified, low-risk UI follow-up whose prerequisite safety mechanism already shipped in the referenced PR.",
-			"evidence": [
-				"ClientAccountDrawer.svelte lacks the pending-scheduling link already present on the accounts list badge",
-				"prior PR already made /pos/appointments/new accept ticketId/lineId so a new link is safe by construction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:20:00.082Z"
 		},
 		{
 			"key": "proposal:2026-10-09-native-formatting-coverage",
@@ -35426,42 +35220,6 @@
 			"scoredAt": "2026-11-13T20:18:46.563Z"
 		},
 		{
-			"key": "issue:minion-meta#938",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#938 [monitor:unstick] rank run 58a7570e: provider fallback exhausted on batch 10/10",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/938",
-			"sourceUpdatedAt": "2026-11-05T02:17:24Z",
-			"sourceFingerprint": "23a5177d56c3f0ee92ad95b83888f6a16c77b679380d0b93e9c528a85720d0e8",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#1000",
-				"issue:minion-meta#1001",
-				"issue:minion-meta#1002"
-			],
-			"rationale": "Earlier occurrence (2026-11-05) of the same both-providers-failed-on-one-batch pattern reinforces that a host classifier and single-batch retry fix would address this whole recurring class.",
-			"evidence": [
-				"batches 1-9 succeeded, only batch 10/10 failed with both providers invalid",
-				"recommendation: add host classifier signature for transient provider-exhaustion class"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:18:47.243Z"
-		},
-		{
 			"key": "issue:minion-meta#975",
 			"kind": "issue",
 			"stage": "proposal",
@@ -37470,6 +37228,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:21:22.261Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-355769a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 355769a",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-355769a.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "66f71d445700c60f4067ffeaaf69579acadbd20324de9aa18469cffee3153ca7",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Empty-catch and unsanitized-URL-param findings in booking/CRM UI are small, concrete fixes that reduce silent failure modes.",
+			"evidence": [
+				"empty catch swallows CRM party search errors in BookingCreateForm.svelte:178",
+				"contact URL param not escaped via URLSearchParams.set() in bookings/+page.server.ts:11"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-bb286f8",
@@ -39749,6 +39539,114 @@
 			"scoredAt": "2026-11-18T08:48:42.067Z"
 		},
 		{
+			"key": "issue:minion-meta#1000",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1000 [monitor:unstick] rank run 97b27af7: provider JSON fallback failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1000",
+			"sourceUpdatedAt": "2026-11-12T01:17:31Z",
+			"sourceFingerprint": "66feb4f7f17f3ecb2edaee3ccace8a2c9fd82f244e5d08cbf1e923433601c980",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#999",
+				"issue:minion-meta#1001",
+				"issue:minion-meta#1002"
+			],
+			"rationale": "Transient provider JSON-parse failure during rank batching is part of a 4-occurrence cluster within ~90 minutes that should become one host-classifier goal rather than separate tickets.",
+			"evidence": [
+				"same signature as runs 999/1001/1002 within ~90 min",
+				"note: safe to retry, worth adding host classifier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
+		},
+		{
+			"key": "issue:minion-meta#1001",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1001 [monitor:unstick] rank run b2fa8a4a: both bounded providers failed on batch 16",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1001",
+			"sourceUpdatedAt": "2026-11-12T02:17:38Z",
+			"sourceFingerprint": "a217fb2d901581441c0c8e54a8113905f00bea485fa305fde0a86552fcc3d194",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1000",
+				"issue:minion-meta#999",
+				"issue:minion-meta#1002"
+			],
+			"rationale": "4th occurrence of identical claude-batch non-JSON-then-codex-fallback-then-exit-1 signature in ~90 minutes should be consolidated into a single provider-outage classifier goal.",
+			"evidence": [
+				"4th occurrence of this exact signature in last ~90 minutes",
+				"prior progress (15 batches) preserved, retry resumes near batch 16"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
+		},
+		{
+			"key": "issue:minion-meta#1002",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1002 [monitor:unstick] rank run 253de766: both bounded providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1002",
+			"sourceUpdatedAt": "2026-11-12T02:17:41Z",
+			"sourceFingerprint": "0096a6308ac1495cd5f86093070a61d1d265840e03ae2ec3e097dfe05136b998",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1000",
+				"issue:minion-meta#999",
+				"issue:minion-meta#1001"
+			],
+			"rationale": "Same batch-1 non-JSON provider failure cluster as 1000/999/1001 belongs in one consolidated host-classifier goal rather than a standalone ticket.",
+			"evidence": [
+				"part of a cluster of 4 identical-signature failures within ~90 minutes",
+				"failed on batch 1, nothing committed yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
+		},
+		{
 			"key": "issue:minion-meta#1007",
 			"kind": "issue",
 			"stage": "proposal",
@@ -39919,6 +39817,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:18:41.725Z"
+		},
+		{
+			"key": "issue:minion-meta#999",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#999 [monitor:unstick] rank run f42f830d: provider JSON fallback failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/999",
+			"sourceUpdatedAt": "2026-11-12T01:17:31Z",
+			"sourceFingerprint": "aef619f06746e979b6aad93b0a09ee7330918b043536a2af6943a8d13c878255",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1000",
+				"issue:minion-meta#1001",
+				"issue:minion-meta#1002"
+			],
+			"rationale": "Same batch-1 non-JSON provider parse failure repeated 30 minutes after #1000 should be merged into one host-classifier goal instead of five separate tickets.",
+			"evidence": [
+				"same signature fired on run 97b27af7 thirty minutes earlier",
+				"claude batch 1 non-JSON then codex fallback also failed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
 		},
 		{
 			"key": "pr:minion-meta#861",
@@ -40109,6 +40043,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T11:48:03.354Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 9d8d4a8",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-9d8d4a8.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "953cf0a82ddb9e967405609c3658be44a15dbeab6ee88862c90f582a6cda313c",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Single precise null-check fix prevents a TypeError crash in chat markdown rendering.",
+			"evidence": [
+				"c.input accessed without null check in MarkdownMessage.svelte:41 can throw TypeError"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-site-4edd54f",
@@ -41474,6 +41439,42 @@
 			"scoredAt": "2026-11-14T05:54:14.087Z"
 		},
 		{
+			"key": "issue:minion-meta#938",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#938 [monitor:unstick] rank run 58a7570e: provider fallback exhausted on batch 10/10",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/938",
+			"sourceUpdatedAt": "2026-11-05T02:17:24Z",
+			"sourceFingerprint": "23a5177d56c3f0ee92ad95b83888f6a16c77b679380d0b93e9c528a85720d0e8",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1001",
+				"issue:minion-meta#1002",
+				"issue:minion-meta#1000"
+			],
+			"rationale": "Same provider-fallback-exhaustion class as the other rank-run monitor tickets, just surfacing on batch 10 of 10; should fold into the same host-classifier goal.",
+			"evidence": [
+				"batches 1-9 scored fine, both providers failed only on batch 10",
+				"9 batches already persisted, retry only redoes last batch"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
+		},
+		{
 			"key": "pr:minion_hub#635",
 			"kind": "pr",
 			"stage": "development",
@@ -42410,6 +42411,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T20:49:49.904Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-29ee60e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 29ee60e",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-29ee60e.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "0801b1505825de9297db2705ab04c8eb04746bef373cb47832e27eab50ba96d9",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Minor, well-localized empty-catch fixes in FloatingAssistant's localStorage handling affect chat session persistence in restrictive browser modes.",
+			"evidence": [
+				"localStorage.getItem/setItem silently fail during session restore/persist",
+				"three empty-catch findings all in FloatingAssistant.svelte"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T03:48:21.652Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-be019c6",
@@ -47843,38 +47876,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T03:17:02.003Z"
-		},
-		{
-			"key": "issue:minion-meta#999",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#999 [monitor:unstick] rank run f42f830d: provider JSON fallback failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/999",
-			"sourceUpdatedAt": "2026-11-12T01:17:31Z",
-			"sourceFingerprint": "aef619f06746e979b6aad93b0a09ee7330918b043536a2af6943a8d13c878255",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Transient provider-side JSON failure already diagnosed as safe to retry, not a spec or code defect requiring dev work.",
-			"evidence": [
-				"ranking batch exit 1 attributed to transient non-JSON provider response, not stall or spec bug",
-				"recommendation in the log itself: safe to retry as-is; check provider health if recurring"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:20:00.082Z"
 		},
 		{
 			"key": "proposal:2026-08-17-site-vendored-tgz-untracked",
