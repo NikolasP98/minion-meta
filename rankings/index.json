@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-19T06:46:56.588Z",
+	"generatedAt": "2026-11-19T07:17:24.384Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2054,41 +2054,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T08:18:21.705Z"
-		},
-		{
-			"key": "spec:2026-10-18-assistant-capability-failure-recovery-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion",
-			"title": "Assigned assistant capability discovery and bounded output recovery",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-18-assistant-capability-failure-recovery-spec.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "925e50e864f1b41fb09de82add1dc1795e5734b52cdfc3514dc64cf9956aa699",
-			"score": 71,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-18-assistant-capability-failure-recovery"
-			],
-			"rationale": "Active implementing-stage spec addressing a confirmed production defect where assistant catalog discovery 403s and malformed model output can leak to users.",
-			"evidence": [
-				"status: implementing",
-				"AS-IS documents 403 ASSISTANT_GATEWAY_ASSIGNMENT_REQUIRED and raw DSML reaching delivery paths",
-				"TO-BE requires truthful discovery status and a shared sanitization boundary before every output sink"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T06:48:52.986Z"
 		},
 		{
 			"key": "pr:minion_hub#647",
@@ -4694,6 +4659,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:53:38.991Z"
+		},
+		{
+			"key": "proposal:2026-09-16-hub-requireadmin-audit-followup",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Full requireAdmin call-site audit (org-vs-platform misclassification)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-requireadmin-audit-followup.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "ed0534a611547935b64fa690d5faa597bfe6729c6a440341db2990bba399d61c",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Confirmed authz misclassification pattern already fixed in scheduling leaves ~50 unaudited call sites that may incorrectly 403 org admins.",
+			"evidence": [
+				"requireAdmin checks platform role not org membership, confirmed defect on scheduling handlers",
+				"~50 remaining call sites spot-audited by path name only, not line-by-line"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T07:17:24.127Z"
 		},
 		{
 			"key": "proposal:2026-10-03-gateway-managed-writer-leases",
@@ -10956,39 +10953,6 @@
 			"scoredAt": "2026-11-16T02:48:07.776Z"
 		},
 		{
-			"key": "proposal:2026-09-16-hub-requireadmin-audit-followup",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Full requireAdmin call-site audit (org-vs-platform misclassification)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-requireadmin-audit-followup.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "ed0534a611547935b64fa690d5faa597bfe6729c6a440341db2990bba399d61c",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Confirmed misclassification pattern already fixed for scheduling; remaining ~55 requireAdmin call sites need the same evidence-based audit and tests to stop blocking org owners.",
-			"evidence": [
-				"~55 call sites spot-audited by path name only, not read line-by-line",
-				"scheduling handlers already switched to requireOrgCapability with owner-pass/viewer-fail tests",
-				"clear definition of done: classification comment or switch + targeted vitest per site"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T06:48:52.986Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-519a349c5d17",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -12188,19 +12152,18 @@
 				"implementation": 7
 			},
 			"confidence": 4,
-			"recommendation": "prune",
+			"recommendation": "reevaluate",
 			"relatedKeys": [
 				"spec:2026-10-18-assistant-capability-failure-recovery-spec"
 			],
-			"rationale": "Status already advanced to in-spec with checkpoints showing production deployment, so this proposal is superseded by its own now-implementing spec.",
+			"rationale": "Production checkpoint shows the fix deployed and healthy but authenticated Hub chat acceptance is still pending so completion is unverified.",
 			"evidence": [
-				"status: in-spec with 2026-10-21 production checkpoint recorded",
-				"owner smoke checkpoint confirms answers now include prices/sources",
-				"matching spec:2026-10-18-assistant-capability-failure-recovery-spec is already status implementing"
+				"Gateway source 97ccd699 deployed, both canonical services healthy",
+				"Authenticated Hub chat acceptance remains pending, so this artifact is not marked complete"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T06:48:52.986Z"
+			"scoredAt": "2026-11-19T07:17:24.127Z"
 		},
 		{
 			"key": "proposal:2026-11-10-crm-conversation-restricted-role-support",
@@ -12802,6 +12765,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T16:47:59.842Z"
+		},
+		{
+			"key": "spec:2026-10-18-assistant-capability-failure-recovery-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Assigned assistant capability discovery and bounded output recovery",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-18-assistant-capability-failure-recovery-spec.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "925e50e864f1b41fb09de82add1dc1795e5734b52cdfc3514dc64cf9956aa699",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-18-assistant-capability-failure-recovery"
+			],
+			"rationale": "Well-specified invariants for truthful discovery, bounded recovery, and persisted assignment are already in implementing status.",
+			"evidence": [
+				"Status implementing, updated 2026-10-21",
+				"Defines concrete invariants for discovery truthfulness, output sanitization, and hosted assignment persistence"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T07:17:24.127Z"
 		},
 		{
 			"key": "spec:2026-10-23-harness-factory-spec",
@@ -25943,6 +25940,40 @@
 			"scoredAt": "2026-11-14T18:17:17.214Z"
 		},
 		{
+			"key": "proposal:2026-10-21-assistant-catalog-answer-and-history-polish",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Show useful maximum-price ties and friendly oversized-history state",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-assistant-catalog-answer-and-history-polish.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "4ca88d32d341646e3401ae8db095ee2f9c9466e4ff44e25d9c0d4b4e40eac9d5",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-21-assistant-catalog-answer-and-history-polish-spec"
+			],
+			"rationale": "UI/presentation polish with an implementation PR already merged pending qualification receipts and browser verification.",
+			"evidence": [
+				"Hub PR578 implements both changes at b7b2c7e",
+				"Exact rendering and source-link click behavior were not browser-verified in this turn"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T07:17:24.127Z"
+		},
+		{
 			"key": "proposal:2026-10-21-gateway-macos-ci-pause",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25973,72 +26004,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T04:48:02.180Z"
-		},
-		{
-			"key": "proposal:2026-10-21-windows-aggregate-placeholder-scope",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Scope full Windows placeholder rejection to its own matrix",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-aggregate-placeholder-scope.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "c762c644f0f683d5583bc863601aacc5c4419aa82740c3518a57920901ac6c51",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The scoping correction already merged as PR #348 with passing native proof and CI, leaving only a routine follow-up qualification run rather than open engineering work.",
-			"evidence": [
-				"PR #348 merged at DEV f95ef46b43f3f0c5337f6b7ac1992e9a113efcf3",
-				"CI 39682003226 passed every applicable check, 17 native cases independently reverified",
-				"helper fix scopes the unresolved-placeholder check to the full Windows job family only, 61 tests pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T06:48:52.986Z"
-		},
-		{
-			"key": "proposal:2026-10-21-windows-full-shard-artifact-layout",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Read full Windows shard identity from its actual artifact directory",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-full-shard-artifact-layout.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "37e896668f2ee16b89e3ccbdf5333eefe220578dee931a508b5910ef104b7f90",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 9
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The artifact-path fix already merged as PR #347 with passing CI and verified native Windows contracts, leaving the goal already satisfied pending only a routine re-qualification run.",
-			"evidence": [
-				"PR #347 merged, head 7342e171e63ea6a2f5902cfb7f7c9c5e996d90d9",
-				"CI 39675104942 passed all applicable checks including 17 real Windows contracts",
-				"43 helper contracts pass after the single path-expression correction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T06:48:52.986Z"
 		},
 		{
 			"key": "proposal:2026-10-24-site-stay-in-touch-updates",
@@ -26517,20 +26482,19 @@
 				"specification": 8,
 				"implementation": 6
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "execute",
 			"relatedKeys": [
 				"proposal:2026-10-21-assistant-catalog-answer-and-history-polish"
 			],
-			"rationale": "Implementing-stage spec with a detailed contract v2 and localized history-display DELTA, already backed by a Hub PR per its companion proposal.",
+			"rationale": "Clear contract-versioned spec for maximum-price ties and history localization is already implementing with defined test coverage.",
 			"evidence": [
-				"status: implementing",
-				"declares catalog contract v2 with mode: maximum|ranked and a hard 20-item cap",
-				"shared display helpers to localize oversized-history markers across assistant and user bubbles"
+				"Status implementing, updated 2026-10-22",
+				"Specifies catalog contract v2 mode enum and shared display helper requirements with explicit test cases"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T06:48:52.986Z"
+			"scoredAt": "2026-11-19T07:17:24.127Z"
 		},
 		{
 			"key": "issue:minion-meta#1011",
@@ -27345,6 +27309,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T20:48:27.701Z"
+		},
+		{
+			"key": "proposal:2026-10-21-windows-aggregate-placeholder-scope",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Scope full Windows placeholder rejection to its own matrix",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-aggregate-placeholder-scope.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "c762c644f0f683d5583bc863601aacc5c4419aa82740c3518a57920901ac6c51",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-21-windows-full-shard-artifact-layout"
+			],
+			"rationale": "A verified false-negative CI gate blocks valid Windows qualification runs and a reviewed fix is already merged, just needs a fresh complete run.",
+			"evidence": [
+				"Required aggregate job failed before artifact validation due to an unrelated skipped matrix placeholder",
+				"Reviewed correction PR348 merged at DEV f95ef46; fresh CI 39682003226 running"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T07:17:24.127Z"
+		},
+		{
+			"key": "proposal:2026-10-21-windows-full-shard-artifact-layout",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Read full Windows shard identity from its actual artifact directory",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-full-shard-artifact-layout.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "37e896668f2ee16b89e3ccbdf5333eefe220578dee931a508b5910ef104b7f90",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-21-windows-aggregate-placeholder-scope"
+			],
+			"rationale": "A real artifact path mismatch blocks Windows shard qualification and the single-path fix is already merged and CI-verified.",
+			"evidence": [
+				"validateDownloadedEvidence expects source-identity.json directly but artifact nests it under vitest-reports/",
+				"PR347 merged at 8ca6fd..., CI 39675104942 passed all applicable checks"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T07:17:24.127Z"
 		},
 		{
 			"key": "proposal:2026-10-21-windows-heartbeat-qualification-timing",
@@ -34060,21 +34092,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 6,
 				"implementation": 4
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Narrow, well-anchored follow-up to bound auto-lane request byte size and attest resolver success, but affects only the opt-in auto CI mode, not the already-shipped off/on defaults.",
+			"rationale": "Narrow CI byte-bound and gate-attestation follow-up to an already-approved off/on lane mode, not urgent since defaults disable the affected paths.",
 			"evidence": [
-				"off/on defaults already reviewed and shipped for release #350",
-				"auto request can exceed 24KB when filenames alone exceed the budget",
-				"anchored TODO(handoff) at scripts/ci/lane-flags.mjs:15"
+				"Defaults disable Windows/macOS and allow Android; off/on resolve without Jev calls",
+				"boundedState caps file names at 400 and can exceed 24KB when names alone exceed the budget"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T06:48:52.986Z"
+			"scoredAt": "2026-11-19T07:17:24.127Z"
 		},
 		{
 			"key": "proposal:2026-11-17-hub-booking-product-consistency-handoff",
@@ -35322,41 +35353,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:52:28.823Z"
-		},
-		{
-			"key": "proposal:2026-10-21-assistant-catalog-answer-and-history-polish",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Show useful maximum-price ties and friendly oversized-history state",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-assistant-catalog-answer-and-history-polish.md",
-			"sourceUpdatedAt": "2026-10-22",
-			"sourceFingerprint": "4ca88d32d341646e3401ae8db095ee2f9c9466e4ff44e25d9c0d4b4e40eac9d5",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"spec:2026-10-21-assistant-catalog-answer-and-history-polish-spec"
-			],
-			"rationale": "Owner already authorized implementation and Hub PR #578 implements both changes against the paired spec, leaving this proposal document superseded.",
-			"evidence": [
-				"Hub PR #578 implements both changes with qualification receipts",
-				"status in-spec with companion spec already status implementing",
-				"owner implementation authorization already granted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T06:48:52.986Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-1431194768",
