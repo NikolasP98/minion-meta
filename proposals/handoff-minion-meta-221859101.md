@@ -71,28 +71,28 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18865
 - `NikolasP98/minion-meta@dev rankings/index.json:22595` — the agenda lists every booking in bookings — the whole [list]",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22595
-- `NikolasP98/minion-meta@dev rankings/index.json:25506` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25506
-- `NikolasP98/minion-meta@dev rankings/index.json:25570` — a period with NO purchases no longer appears at all",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25570
-- `NikolasP98/minion-meta@dev rankings/index.json:25602` — 'RUC parties created BEFORE 2026-09-17 are unverified'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25602
-- `NikolasP98/minion-meta@dev rankings/index.json:25668` — qualify historical stock denomination before currency formatting",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25668
-- `NikolasP98/minion-meta@dev rankings/index.json:26229` — ${owner} is not implemented yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26229
-- `NikolasP98/minion-meta@dev rankings/index.json:26362` — no attachments card — fin_purchase is not in [attachments system]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26362
-- `NikolasP98/minion-meta@dev rankings/index.json:28074` — 'Add an explicitly reviewed indeterminate recovery policy'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28074
-- `NikolasP98/minion-meta@dev rankings/index.json:28208` — delete this route in A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28208
-- `NikolasP98/minion-meta@dev rankings/index.json:30316` — the PREDICATE is covered here, the WIRING is not — no test'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30316
-- `NikolasP98/minion-meta@dev rankings/index.json:30348` — see appointment-overdue.ts — same unwired deep-link param.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30348
-- `NikolasP98/minion-meta@dev rankings/index.json:30480` — adding the boolean variant makes DataTable.svelte's... in src/lib/components/data-table/filters.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30480
+- `NikolasP98/minion-meta@dev rankings/index.json:25539` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25539
+- `NikolasP98/minion-meta@dev rankings/index.json:25603` — a period with NO purchases no longer appears at all",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25603
+- `NikolasP98/minion-meta@dev rankings/index.json:25635` — 'RUC parties created BEFORE 2026-09-17 are unverified'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25635
+- `NikolasP98/minion-meta@dev rankings/index.json:25701` — qualify historical stock denomination before currency formatting",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25701
+- `NikolasP98/minion-meta@dev rankings/index.json:26262` — ${owner} is not implemented yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26262
+- `NikolasP98/minion-meta@dev rankings/index.json:26395` — no attachments card — fin_purchase is not in [attachments system]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26395
+- `NikolasP98/minion-meta@dev rankings/index.json:28107` — 'Add an explicitly reviewed indeterminate recovery policy'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28107
+- `NikolasP98/minion-meta@dev rankings/index.json:28241` — delete this route in A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28241
+- `NikolasP98/minion-meta@dev rankings/index.json:30349` — the PREDICATE is covered here, the WIRING is not — no test'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30349
+- `NikolasP98/minion-meta@dev rankings/index.json:30381` — see appointment-overdue.ts — same unwired deep-link param.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30381
+- `NikolasP98/minion-meta@dev rankings/index.json:30513` — adding the boolean variant makes DataTable.svelte's... in src/lib/components/data-table/filters.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30513
 - `NikolasP98/minion-meta@dev rankings/index.json:34620` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34620
 - `NikolasP98/minion-meta@dev rankings/index.json:34685` — drop column (proposal #16)",
@@ -125,5 +125,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45637
 - `NikolasP98/minion-meta@dev rankings/index.json:48922` — additional custom fields lose their mailto link",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48922
-- `NikolasP98/minion-meta@dev rankings/index.json:49392` — move to an ai flag on plugin flow-node manifests when a third AI action",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L49392
+- `NikolasP98/minion-meta@dev rankings/index.json:49357` — move to an ai flag on plugin flow-node manifests when a third AI action",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L49357
