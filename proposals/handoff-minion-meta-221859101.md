@@ -27,103 +27,103 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-19)
 
-- `NikolasP98/minion-meta@dev rankings/index.json:4930` — wire qualified producers, projection, retention and tenant-deletion reconciliation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4930
-- `NikolasP98/minion-meta@dev rankings/index.json:5394` — 'Gate constrained capabilities before component mounting, audit token/method authority'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5394
-- `NikolasP98/minion-meta@dev rankings/index.json:5837` — a realized accrual is counted via (source, source_id, status)",
+- `NikolasP98/minion-meta@dev rankings/index.json:4896` — wire qualified producers, projection, retention and tenant-deletion reconciliation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L4896
+- `NikolasP98/minion-meta@dev rankings/index.json:5360` — 'Gate constrained capabilities before component mounting, audit token/method authority'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5360
+- `NikolasP98/minion-meta@dev rankings/index.json:5803` — a realized accrual is counted via (source, source_id, status)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5803
+- `NikolasP98/minion-meta@dev rankings/index.json:5837` — paidAmount sums every non-void line of the member regardless",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5837
-- `NikolasP98/minion-meta@dev rankings/index.json:5871` — paidAmount sums every non-void line of the member regardless",
+- `NikolasP98/minion-meta@dev rankings/index.json:5871` — a rebuild that read the sale before the void committed",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5871
-- `NikolasP98/minion-meta@dev rankings/index.json:5905` — a rebuild that read the sale before the void committed",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5905
-- `NikolasP98/minion-meta@dev rankings/index.json:5974` — drop with the legacy audience in spec 045 A4 (tasks T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5974
-- `NikolasP98/minion-meta@dev rankings/index.json:8436` — spec 045 T037/T038 hide (not lock) every surface behind this list",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8436
-- `NikolasP98/minion-meta@dev rankings/index.json:8500` — Admit stock release durably with the booking commit",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8500
-- `NikolasP98/minion-meta@dev rankings/index.json:8564` — this read and moveGroup are two transactions, so a visit [could race]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8564
-- `NikolasP98/minion-meta@dev rankings/index.json:8596` — flows with a NULL tenant_id are never gated (aiEnabled true); backfill",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8596
-- `NikolasP98/minion-meta@dev rankings/index.json:8695` — register and qualify the real Slice5 projector before enabling the [scheduler]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8695
-- `NikolasP98/minion-meta@dev rankings/index.json:8861` — scope word-frequency/sentiment/win-index rollups by owner",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8861
-- `NikolasP98/minion-meta@dev rankings/index.json:10120` — a full per-handler audit of the remaining requireAdmin",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10120
-- `NikolasP98/minion-meta@dev rankings/index.json:10616` — 'provider JSON reader is not byte bounded before res.json()'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10616
-- `NikolasP98/minion-meta@dev rankings/index.json:12365` — spec 045 A4 deletes the flag — make the audience unconditional there (tasks T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12365
-- `NikolasP98/minion-meta@dev rankings/index.json:13672` — Keep restricted roles denied until scoped retrieval/masking is\"",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13672
-- `NikolasP98/minion-meta@dev rankings/index.json:13708` — Keep restricted roles denied until scoped retrieval/masking is\"",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13708
-- `NikolasP98/minion-meta@dev rankings/index.json:14454` — fresh=1 is an uncached whole-org rank with no rate limit",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14454
-- `NikolasP98/minion-meta@dev rankings/index.json:14551` — channel.whatsapp_logged_out (spec Slice 4) is SKIPPED — no",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14551
-- `NikolasP98/minion-meta@dev rankings/index.json:16895` — historical version replacement needs an explicit data contract",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16895
-- `NikolasP98/minion-meta@dev rankings/index.json:18865` — the guard key uses the BROWSER's local date, not the org's",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18865
-- `NikolasP98/minion-meta@dev rankings/index.json:22595` — the agenda lists every booking in bookings — the whole [list]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22595
-- `NikolasP98/minion-meta@dev rankings/index.json:25539` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25539
-- `NikolasP98/minion-meta@dev rankings/index.json:25603` — a period with NO purchases no longer appears at all",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25603
-- `NikolasP98/minion-meta@dev rankings/index.json:25635` — 'RUC parties created BEFORE 2026-09-17 are unverified'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25635
-- `NikolasP98/minion-meta@dev rankings/index.json:25701` — qualify historical stock denomination before currency formatting",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25701
-- `NikolasP98/minion-meta@dev rankings/index.json:26262` — ${owner} is not implemented yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26262
-- `NikolasP98/minion-meta@dev rankings/index.json:26395` — no attachments card — fin_purchase is not in [attachments system]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26395
-- `NikolasP98/minion-meta@dev rankings/index.json:28107` — 'Add an explicitly reviewed indeterminate recovery policy'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28107
-- `NikolasP98/minion-meta@dev rankings/index.json:28241` — delete this route in A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28241
-- `NikolasP98/minion-meta@dev rankings/index.json:30349` — the PREDICATE is covered here, the WIRING is not — no test'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30349
-- `NikolasP98/minion-meta@dev rankings/index.json:30381` — see appointment-overdue.ts — same unwired deep-link param.",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30381
-- `NikolasP98/minion-meta@dev rankings/index.json:30513` — adding the boolean variant makes DataTable.svelte's... in src/lib/components/data-table/filters.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30513
-- `NikolasP98/minion-meta@dev rankings/index.json:34620` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34620
-- `NikolasP98/minion-meta@dev rankings/index.json:34685` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34685
-- `NikolasP98/minion-meta@dev rankings/index.json:34849` — drop with A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34849
-- `NikolasP98/minion-meta@dev rankings/index.json:34883` — item_group/reorder_qty/moq (this column + reorderQty +",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34883
-- `NikolasP98/minion-meta@dev rankings/index.json:38247` — the plan button is gated on pos:create, but server-side...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38247
-- `NikolasP98/minion-meta@dev rankings/index.json:39562` — Full Workshop composition/camera and keyboard relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39562
-- `NikolasP98/minion-meta@dev rankings/index.json:40198` — --apply is intentionally unimplemented. Building it"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40198
-- `NikolasP98/minion-meta@dev rankings/index.json:42837` — tags are NOT inline-editable here while /pos/catalog ...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42837
-- `NikolasP98/minion-meta@dev rankings/index.json:42901` — 'add-only; rename / deactivate / max-days edits need a modal'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42901
-- `NikolasP98/minion-meta@dev rankings/index.json:42933` — no calendar deep-link param exists yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42933
-- `NikolasP98/minion-meta@dev rankings/index.json:45345` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45345
-- `NikolasP98/minion-meta@dev rankings/index.json:45377` — the owner also asked for \"custom select columns\" to be",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45377
-- `NikolasP98/minion-meta@dev rankings/index.json:45472` — drop these two once plugin UIs get a JWT path (spec 043 R8)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45472
-- `NikolasP98/minion-meta@dev rankings/index.json:45538` — FilterValue (component) vs TableFilterValue (kit) generic mismatch",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45538
-- `NikolasP98/minion-meta@dev rankings/index.json:45637` — brief-debloat-c §3 asked for this to be wrapped in [something]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45637
-- `NikolasP98/minion-meta@dev rankings/index.json:48922` — additional custom fields lose their mailto link",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48922
-- `NikolasP98/minion-meta@dev rankings/index.json:49357` — move to an ai flag on plugin flow-node manifests when a third AI action",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L49357
+- `NikolasP98/minion-meta@dev rankings/index.json:5940` — drop with the legacy audience in spec 045 A4 (tasks T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L5940
+- `NikolasP98/minion-meta@dev rankings/index.json:8402` — spec 045 T037/T038 hide (not lock) every surface behind this list",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8402
+- `NikolasP98/minion-meta@dev rankings/index.json:8466` — Admit stock release durably with the booking commit",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8466
+- `NikolasP98/minion-meta@dev rankings/index.json:8530` — this read and moveGroup are two transactions, so a visit [could race]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8530
+- `NikolasP98/minion-meta@dev rankings/index.json:8562` — flows with a NULL tenant_id are never gated (aiEnabled true); backfill",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8562
+- `NikolasP98/minion-meta@dev rankings/index.json:8661` — register and qualify the real Slice5 projector before enabling the [scheduler]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8661
+- `NikolasP98/minion-meta@dev rankings/index.json:8827` — scope word-frequency/sentiment/win-index rollups by owner",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8827
+- `NikolasP98/minion-meta@dev rankings/index.json:10086` — a full per-handler audit of the remaining requireAdmin",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10086
+- `NikolasP98/minion-meta@dev rankings/index.json:10582` — 'provider JSON reader is not byte bounded before res.json()'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10582
+- `NikolasP98/minion-meta@dev rankings/index.json:12331` — spec 045 A4 deletes the flag — make the audience unconditional there (tasks T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12331
+- `NikolasP98/minion-meta@dev rankings/index.json:13638` — Keep restricted roles denied until scoped retrieval/masking is\"",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13638
+- `NikolasP98/minion-meta@dev rankings/index.json:13674` — Keep restricted roles denied until scoped retrieval/masking is\"",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L13674
+- `NikolasP98/minion-meta@dev rankings/index.json:14387` — fresh=1 is an uncached whole-org rank with no rate limit",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14387
+- `NikolasP98/minion-meta@dev rankings/index.json:14484` — channel.whatsapp_logged_out (spec Slice 4) is SKIPPED — no",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14484
+- `NikolasP98/minion-meta@dev rankings/index.json:16828` — historical version replacement needs an explicit data contract",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16828
+- `NikolasP98/minion-meta@dev rankings/index.json:18798` — the guard key uses the BROWSER's local date, not the org's",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18798
+- `NikolasP98/minion-meta@dev rankings/index.json:22528` — the agenda lists every booking in bookings — the whole [list]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22528
+- `NikolasP98/minion-meta@dev rankings/index.json:25436` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25436
+- `NikolasP98/minion-meta@dev rankings/index.json:25500` — a period with NO purchases no longer appears at all",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25500
+- `NikolasP98/minion-meta@dev rankings/index.json:25532` — 'RUC parties created BEFORE 2026-09-17 are unverified'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25532
+- `NikolasP98/minion-meta@dev rankings/index.json:25598` — qualify historical stock denomination before currency formatting",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25598
+- `NikolasP98/minion-meta@dev rankings/index.json:26159` — ${owner} is not implemented yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26159
+- `NikolasP98/minion-meta@dev rankings/index.json:26292` — no attachments card — fin_purchase is not in [attachments system]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26292
+- `NikolasP98/minion-meta@dev rankings/index.json:28004` — 'Add an explicitly reviewed indeterminate recovery policy'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28004
+- `NikolasP98/minion-meta@dev rankings/index.json:28138` — delete this route in A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28138
+- `NikolasP98/minion-meta@dev rankings/index.json:30246` — the PREDICATE is covered here, the WIRING is not — no test'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30246
+- `NikolasP98/minion-meta@dev rankings/index.json:30278` — see appointment-overdue.ts — same unwired deep-link param.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30278
+- `NikolasP98/minion-meta@dev rankings/index.json:30410` — adding the boolean variant makes DataTable.svelte's... in src/lib/components/data-table/filters.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30410
+- `NikolasP98/minion-meta@dev rankings/index.json:34517` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34517
+- `NikolasP98/minion-meta@dev rankings/index.json:34582` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34582
+- `NikolasP98/minion-meta@dev rankings/index.json:34746` — drop with A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34746
+- `NikolasP98/minion-meta@dev rankings/index.json:34780` — item_group/reorder_qty/moq (this column + reorderQty +",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34780
+- `NikolasP98/minion-meta@dev rankings/index.json:38176` — the plan button is gated on pos:create, but server-side...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38176
+- `NikolasP98/minion-meta@dev rankings/index.json:39491` — Full Workshop composition/camera and keyboard relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39491
+- `NikolasP98/minion-meta@dev rankings/index.json:40127` — --apply is intentionally unimplemented. Building it"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40127
+- `NikolasP98/minion-meta@dev rankings/index.json:42733` — tags are NOT inline-editable here while /pos/catalog ...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42733
+- `NikolasP98/minion-meta@dev rankings/index.json:42797` — 'add-only; rename / deactivate / max-days edits need a modal'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42797
+- `NikolasP98/minion-meta@dev rankings/index.json:42829` — no calendar deep-link param exists yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42829
+- `NikolasP98/minion-meta@dev rankings/index.json:45241` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45241
+- `NikolasP98/minion-meta@dev rankings/index.json:45273` — the owner also asked for \"custom select columns\" to be",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45273
+- `NikolasP98/minion-meta@dev rankings/index.json:45368` — drop these two once plugin UIs get a JWT path (spec 043 R8)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45368
+- `NikolasP98/minion-meta@dev rankings/index.json:45434` — FilterValue (component) vs TableFilterValue (kit) generic mismatch",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45434
+- `NikolasP98/minion-meta@dev rankings/index.json:45533` — brief-debloat-c §3 asked for this to be wrapped in [something]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45533
+- `NikolasP98/minion-meta@dev rankings/index.json:48850` — additional custom fields lose their mailto link",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48850
+- `NikolasP98/minion-meta@dev rankings/index.json:49285` — move to an ai flag on plugin flow-node manifests when a third AI action",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L49285

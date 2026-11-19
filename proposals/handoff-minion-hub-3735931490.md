@@ -27,11 +27,11 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-19)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/PageBody.svelte:201` — FilterValue (component) ⇄ TableFilterValue (kit) is a generic
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/PageBody.svelte#L201
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/PageBody.svelte:204` — FilterValue (component) ⇄ TableFilterValue (kit) is a generic
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/PageBody.svelte#L204
 - `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/PageBody.svelte:218` — the assistant opens this party form via ?new=1, but POST
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/PageBody.svelte#L218
-- `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/PageBody.svelte:530` — tags are NOT inline-editable here while /pos/catalog and
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/PageBody.svelte#L530
-- `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/PageBody.svelte:788` — no mounted test for this host yet (DataTable virtualization in happy-dom hid the merge dialog); see proposal.
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/PageBody.svelte#L788
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/PageBody.svelte:548` — tags are NOT inline-editable here while /pos/catalog and
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/PageBody.svelte#L548
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/customers/PageBody.svelte:806` — no mounted test for this host yet (DataTable virtualization in happy-dom hid the merge dialog); see proposal.
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/customers/PageBody.svelte#L806
