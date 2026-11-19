@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-19T03:48:21.893Z",
+	"generatedAt": "2026-11-19T04:48:02.407Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -25943,6 +25943,38 @@
 			"scoredAt": "2026-11-14T18:17:17.214Z"
 		},
 		{
+			"key": "proposal:2026-10-21-gateway-macos-ci-pause",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Resume the gateway macOS and Windows CI lanes",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-gateway-macos-ci-pause.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "c1bba18f6743873c795dab4dea0d832a211b455f6c318e292e687a8c946f9bc4",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The resume action is a trivial, well-specified command but is explicitly gated on an external business decision (Mac/Windows releases resuming) that has not yet occurred.",
+			"evidence": [
+				"CI_MACOS default off; owner paused 2026-10-21 because Mac releases are on hold",
+				"resume via gh variable set CI_MACOS/CI_WINDOWS -R ... --body on when releases resume"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T04:48:02.180Z"
+		},
+		{
 			"key": "proposal:2026-10-21-windows-aggregate-placeholder-scope",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -27539,6 +27571,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T06:13:10.662Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-648f095",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 648f095",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-648f095.md",
+			"sourceUpdatedAt": "2026-10-22",
+			"sourceFingerprint": "26c80fe0c5d67e2baae11354c08cd87b77056f4c28965e4ce9b8bd81603d3bfa",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A narrowly scoped, exact-location finding (unvalidated secret-inspect output passed to --secret-rm) with a straightforward bounded fix.",
+			"evidence": [
+				"medium unchecked-access finding at deploy/swarm/set-runtime-env.sh:68",
+				"current from docker service inspect could be empty, passed to --secret-rm without validation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T04:48:02.180Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
@@ -31166,38 +31230,6 @@
 			"scoredAt": "2026-11-19T02:30:23.207Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-648f095",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 648f095",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-648f095.md",
-			"sourceUpdatedAt": "2026-10-22",
-			"sourceFingerprint": "26c80fe0c5d67e2baae11354c08cd87b77056f4c28965e4ce9b8bd81603d3bfa",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Narrow, well-located medium-severity finding with a bounded fix: validate a value before passing it to --secret-rm.",
-			"evidence": [
-				"medium severity unchecked-access at deploy/swarm/set-runtime-env.sh:68",
-				"value from docker service inspect could be empty, passed to --secret-rm without validation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:48:16.564Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-cc90bff",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -34045,39 +34077,6 @@
 			"scoredAt": "2026-11-12T06:48:52.986Z"
 		},
 		{
-			"key": "proposal:2026-10-21-gateway-macos-ci-pause",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Resume the gateway macOS and Windows CI lanes",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-gateway-macos-ci-pause.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "c1bba18f6743873c795dab4dea0d832a211b455f6c318e292e687a8c946f9bc4",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI lanes are intentionally paused pending an owner business decision on Mac/Windows release resumption, so the clear one-command fix is not actionable until that external trigger occurs.",
-			"evidence": [
-				"CI_MACOS/CI_WINDOWS gated off since 2026-10-21 per owner decision (minion-ai #349)",
-				"resume action is a single gh variable set command",
-				"risk: Swift/macOS and Windows regressions accumulate silently while paused"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:48:16.564Z"
-		},
-		{
 			"key": "proposal:2026-11-17-hub-booking-product-consistency-handoff",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35805,6 +35804,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T21:18:06.358Z"
+		},
+		{
+			"key": "issue:minion-meta#1053",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1053 [monitor:unstick] rank board goals (minion-meta) failed: ranking catalog source unavailable [run d25cc7aa]",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1053",
+			"sourceUpdatedAt": "2026-11-19T04:17:22Z",
+			"sourceFingerprint": "838c16b69b68cfee5c689a72941f2aee0f4afcee8224174c283309b032ba1501",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A deliberate guard rejecting an incomplete catalog is cited with an exact code location but the diagnosis itself recommends only a retry first, so it isn't yet actionable work.",
+			"evidence": [
+				"board-ranking-catalog.mjs:107 deliberately threw \"ranking catalog source unavailable\"",
+				"exit 1 after ~1min, no batches ran"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T04:48:02.180Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
@@ -40275,6 +40306,41 @@
 			"scoredAt": "2026-11-14T06:19:14.403Z"
 		},
 		{
+			"key": "issue:minion-meta#1005",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1005 [monitor:unstick] rank run f4d296f3 (minion-meta): multi-batch provider degradation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1005",
+			"sourceUpdatedAt": "2026-11-12T03:18:14Z",
+			"sourceFingerprint": "fab1e830381376abac488d598e0cd3f524451d2f1147bdf3b4829c0355ffd8b7",
+			"score": 27,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1004",
+				"issue:minion-meta#939"
+			],
+			"rationale": "Describes a sustained multi-batch dual-provider degradation window that is the same recurring failure class as sibling monitor alerts and should be merged into one classifier/auto-retry goal.",
+			"evidence": [
+				"batch 11 fully failed (0/12), sustained degradation ~02:15-02:33 UTC across both providers",
+				"part of a recurring failure class (6 similar unrecognized runs same repo/kind in the last 2.5h)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T04:48:02.180Z"
+		},
+		{
 			"key": "spec:2026-09-12-erp-core-modules-attachments-recon",
 			"kind": "spec",
 			"stage": "spec",
@@ -43459,6 +43525,41 @@
 			"scoredAt": "2026-11-16T14:18:24.410Z"
 		},
 		{
+			"key": "issue:minion-meta#1004",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1004 [monitor:unstick] rank run 6eed9ed1 (minion-meta): batch 16 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1004",
+			"sourceUpdatedAt": "2026-11-12T03:18:14Z",
+			"sourceFingerprint": "c3da1cc399e2abd25395b58e249b06de8840eabb6c65d74676ff41b970a0b639",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1005",
+				"issue:minion-meta#939"
+			],
+			"rationale": "This is one of several auto-filed monitor alerts describing the same recurring claude-invalid-JSON-then-codex-fallback transient failure during rank runs, better consolidated into one host-classifier goal than tracked separately.",
+			"evidence": [
+				"diagnosis: transient provider fault isolated to the final batch, not a spec/task defect",
+				"note: this exact signature recurred across all 6 unrecognized runs in the 2026-11-12 00:15-03:08 UTC window"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T04:48:02.180Z"
+		},
+		{
 			"key": "issue:minion-meta#1026",
 			"kind": "issue",
 			"stage": "proposal",
@@ -44150,6 +44251,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:48:58.846Z"
+		},
+		{
+			"key": "issue:minion-meta#939",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#939 [monitor:unstick] rank run f667d222 (minion-meta): batch 3 provider exhaustion",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/939",
+			"sourceUpdatedAt": "2026-11-05T03:17:33Z",
+			"sourceFingerprint": "9a7917ad0658aaec559c516413d4473e9bbf92c55f2af29f063de62d072115d2",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1004",
+				"issue:minion-meta#1005"
+			],
+			"rationale": "Another instance of the same claude-unavailable-then-codex-fails transient pattern seen in sibling monitor alerts, which should be merged into a single host-classifier goal rather than tracked per-run.",
+			"evidence": [
+				"batch 3 failed: claude provider returned unavailable/invalid response, fell back to codex, both ultimately failed",
+				"note: 'see also 58a7570e with the same signature'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T04:48:02.180Z"
 		},
 		{
 			"key": "issue:minion-meta#990",
@@ -49825,114 +49961,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T23:48:15.734Z"
-		},
-		{
-			"key": "issue:minion-meta#1004",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#1004 [monitor:unstick] rank run 6eed9ed1 (minion-meta): batch 16 provider failure",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1004",
-			"sourceUpdatedAt": "2026-11-12T03:18:14Z",
-			"sourceFingerprint": "c3da1cc399e2abd25395b58e249b06de8840eabb6c65d74676ff41b970a0b639",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#1005",
-				"issue:minion-meta#939"
-			],
-			"rationale": "Automated monitor noise reporting a transient provider failure during a rank run, duplicating sibling alerts for the same recurring pattern.",
-			"evidence": [
-				"batch 16 provider failure, both bounded providers failed",
-				"note recommends retry, not a spec defect",
-				"6 similar unrecognized runs in a 2.5h window"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:48:16.564Z"
-		},
-		{
-			"key": "issue:minion-meta#1005",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#1005 [monitor:unstick] rank run f4d296f3 (minion-meta): multi-batch provider degradation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1005",
-			"sourceUpdatedAt": "2026-11-12T03:18:14Z",
-			"sourceFingerprint": "fab1e830381376abac488d598e0cd3f524451d2f1147bdf3b4829c0355ffd8b7",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#1004",
-				"issue:minion-meta#939"
-			],
-			"rationale": "Automated monitor noise reporting multi-batch transient provider degradation, overlapping with sibling alerts describing the same recurring class.",
-			"evidence": [
-				"batches 10-12 failed across claude and codex",
-				"diagnosis: provider-side degradation, not a spec/task defect",
-				"part of a recurring failure class, 6 similar runs in 2.5h"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:48:16.564Z"
-		},
-		{
-			"key": "issue:minion-meta#939",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#939 [monitor:unstick] rank run f667d222 (minion-meta): batch 3 provider exhaustion",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/939",
-			"sourceUpdatedAt": "2026-11-05T03:17:33Z",
-			"sourceFingerprint": "9a7917ad0658aaec559c516413d4473e9bbf92c55f2af29f063de62d072115d2",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"issue:minion-meta#1004",
-				"issue:minion-meta#1005"
-			],
-			"rationale": "Automated monitor noise reporting a single-batch transient provider exhaustion, the same recurring pattern as sibling alerts.",
-			"evidence": [
-				"batch 3 failed, claude then codex both failed/invalid JSON",
-				"recommendation: safe to retry, no spec fix needed",
-				"references a recurring signature across multiple runs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T03:48:16.564Z"
 		},
 		{
 			"key": "issue:minion-meta#995",
