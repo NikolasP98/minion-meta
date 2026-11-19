@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-19T11:16:58.900Z",
+	"generatedAt": "2026-11-19T11:47:17.990Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -42477,6 +42477,38 @@
 			"scoredAt": "2026-11-19T10:47:42.135Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-db09a2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "These are test-file-only null-check nits plus one removed regression test, none with production or security consequence, so the fixes are cheap but not urgent.",
+			"evidence": [
+				"high findings are all in test/ci/*.test.ts .find() unchecked access",
+				"medium finding is a removed test file for workflow file absence, not production code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T11:47:17.717Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-fb9a03f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -45250,38 +45282,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-12T14:48:03.399Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-db09a2f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified, low-risk test-hardening fixes (null checks on .find() results in CI workflow tests) with narrow blast radius limited to test suite robustness.",
-			"evidence": [
-				"test/ci/labeler-workflow.test.ts:88 unchecked .find() result used without null check",
-				"test/ci/review-workflow.test.ts:1 removed regression check for workflow file re-introduction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T11:17:58.715Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-43a174b",
