@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-19T05:47:06.159Z",
+	"generatedAt": "2026-11-19T06:17:43.312Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8444,38 +8444,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T08:48:42.067Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-70414b7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 70414b7",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-70414b7.md",
-			"sourceUpdatedAt": "2026-11-12",
-			"sourceFingerprint": "65819f3fa23951475cb6095199f50231a52f1c7c3804d7284773f50dfe7db398",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Includes a high-severity bug where invalidToolProtocol state is checked but never set, plus an unchecked-access crash risk in the reply guard, both with precise file:line evidence but reconciliation flags likely overlap with a broader existing spec needing human confirmation.",
-			"evidence": [
-				"high: src/agents/pi-embedded/pi-embedded-subscribe.ts:723 detection logic not wired to state flag",
-				"high: src/auto-reply/reply/reply-output-guard.ts:25 unchecked .text access can crash at runtime"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T05:48:29.534Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-baf3643",
@@ -25219,6 +25187,40 @@
 			"scoredAt": "2026-11-19T02:35:20.901Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-ai-70414b7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 70414b7",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-70414b7.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "65819f3fa23951475cb6095199f50231a52f1c7c3804d7284773f50dfe7db398",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:merge-scan-minion-ai-cc90bff"
+			],
+			"rationale": "Most findings already map to an existing canonical proposal but the author's own note flags uncertainty about fresh regressions, so it needs human confirmation before merge or prune.",
+			"evidence": [
+				"reconciliation note ties findings to 2026-11-06-agent-transcript-evals-and-runtime-improvements",
+				"high-severity unchecked-access findings in reply-output-guard.ts:25 and pi-embedded-subscribe.ts:723"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T06:17:43.064Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-f97efb2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31230,40 +31232,6 @@
 			"scoredAt": "2026-11-19T02:30:23.207Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-cc90bff",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ cc90bff",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-cc90bff.md",
-			"sourceUpdatedAt": "2026-11-12",
-			"sourceFingerprint": "144b9e0d78ef73f1c2b22f682c9f92d476e19e3437d8cbc333e23c2b68047a67",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-ai-2670563229"
-			],
-			"rationale": "Empty-catch swallowing git errors in the fixture-audit script and a missing TODO(handoff) marker on the disabled iOS job sit alongside the same pr371-ci.yml macOS-pause marker flagged in the sibling handoff proposal.",
-			"evidence": [
-				".github/scripts/agent-fixture-audit.mjs:53 empty-catch swallows git errors",
-				"test/ci/fixtures/pr371-ci.yml:1597 iOS job disabled without TODO(handoff) while macOS job at ~1310 has one"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T05:48:29.534Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-1a2ef603c0aa",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31665,6 +31633,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:57:43.926Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 117311 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-11-19T06:13:34Z",
+			"sourceFingerprint": "c24f39eb59847a2c8e7cbd65d78a6377608b413c0116722bcabf2d94d3dab165",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "A single ticket bundling 117,311 raw upstream commits with no triage cannot be reviewed or actioned as one unit.",
+			"evidence": [
+				"title states '117311 new commit(s) available'",
+				"body is an unscoped raw commit log with no categorization"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T06:17:43.064Z"
 		},
 		{
 			"key": "issue:minion-meta#1016",
@@ -40375,39 +40375,6 @@
 			"scoredAt": "2026-11-18T20:49:49.904Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 116957 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-11-18T06:16:44Z",
-			"sourceFingerprint": "e54e0b254dd8729a4253f2802f6bba4289dc9ac94cd2c46cc092f8c085ccb5a6",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "An automated upstream-sync notification listing thousands of commits is not itself an actionable goal without triage into a scoped merge plan.",
-			"evidence": [
-				"116957 new commits reported",
-				"no scoped plan or diff review attached",
-				"auto-generated issue format"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T06:32:33.950Z"
-		},
-		{
 			"key": "issue:minion-meta#1014",
 			"kind": "issue",
 			"stage": "proposal",
@@ -48520,6 +48487,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-15T04:47:39.103Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-cc90bff",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ cc90bff",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-cc90bff.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "144b9e0d78ef73f1c2b22f682c9f92d476e19e3437d8cbc333e23c2b68047a67",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:merge-scan-minion-ai-70414b7"
+			],
+			"rationale": "Both findings are explicitly noted as already pointed to the same canonical proposal, making this a redundant duplicate filing.",
+			"evidence": [
+				"note states finding 1 is 'already pointed there' (handoff-minion-ai-975979439)",
+				"finding 2 matches handoff-minion-ai-2670563229 per that proposal's own reconciliation note"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T06:17:43.064Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-0f5a066",
