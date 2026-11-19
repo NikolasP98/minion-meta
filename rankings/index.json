@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-19T08:17:41.971Z",
+	"generatedAt": "2026-11-19T08:47:11.816Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -803,6 +803,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T06:47:14.143Z"
+		},
+		{
+			"key": "pr:minion_hub#690",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#690 fix(socials): Meta sync reports a failure instead of OK when nothing runs",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/690",
+			"sourceUpdatedAt": "2026-11-19T08:20:41Z",
+			"sourceFingerprint": "7703246ed6b61c7878f985966efb44401a4000270dcf7d539ef90d72326f90b3",
+			"score": 82,
+			"band": "high",
+			"axes": {
+				"criticality": 9,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Production data outage (no Meta sync since 2026-10-05) with a deployed, tested fix that restores accurate failure reporting.",
+			"evidence": [
+				"No Meta data landed 2026-10-05 to 2026-11-19 due to silent lease-check failures",
+				"Deployed to netcup 2026-11-19; tick now returns 500/503 on failure; 69 vitest tests pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T08:47:11.581Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-807f018d50fd",
@@ -23389,6 +23421,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-15T00:17:40.115Z"
+		},
+		{
+			"key": "pr:minion_hub#691",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#691 feat(pos): marketing funnel page with CAC, LTV and customers that can be targeted",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/691",
+			"sourceUpdatedAt": "2026-11-19T08:42:46Z",
+			"sourceFingerprint": "1fd2de2d8c160948987a7b3d0403435c315a9ebb950e0051be2a255500a1a251",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Read-only marketing funnel feature backed by a spec with verified queries but still a draft, unbrowsed, and dependent on broken lead attribution.",
+			"evidence": [
+				"Status is draft; page has not been opened in a browser per author",
+				"Leads stop on 2026-07-17 in prod because attribution is not running"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T08:47:11.581Z"
 		},
 		{
 			"key": "pr:minion-meta#825",
@@ -46580,6 +46644,40 @@
 			"scoredAt": "2026-11-17T19:47:09.689Z"
 		},
 		{
+			"key": "issue:minion-meta#1054",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1054 [monitor:unstick] rank run 4582b727: both providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1054",
+			"sourceUpdatedAt": "2026-11-19T08:17:19Z",
+			"sourceFingerprint": "66ddb86e3b478b2d450f1c18090b05f46be29db206937f840696b693a7c5b21b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"issue:minion-meta#902"
+			],
+			"rationale": "Transient dual-provider infra failure during a rank run with no spec or code defect indicated, safe to retry and already duplicated by a near-identical prior incident.",
+			"evidence": [
+				"Clone and catalog steps succeeded; only the ranking batch call failed transiently",
+				"Recommendation in the log itself is to retry as-is, not a human fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T08:47:11.581Z"
+		},
+		{
 			"key": "issue:minion-meta#373",
 			"kind": "issue",
 			"stage": "proposal",
@@ -47504,6 +47602,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T03:17:02.003Z"
+		},
+		{
+			"key": "issue:minion-meta#902",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#902 [monitor:unstick] rank run d590a68c: provider outage on ranking batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/902",
+			"sourceUpdatedAt": "2026-10-29T07:17:16Z",
+			"sourceFingerprint": "dfcfd922dc722e50355181640517d876f23e1133fe87edd307fb7a8055cc94a3",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1054"
+			],
+			"rationale": "Same recurring dual-provider transient failure pattern as #1054, suggesting both should be consolidated into one host-classifier signature task rather than tracked as separate incidents.",
+			"evidence": [
+				"Identical failure shape: Claude unavailable, Codex transient failure, exit_code=1",
+				"Both logs suggest adding a dedicated 'dual-provider-transient-failure' classifier signature"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-19T08:47:11.581Z"
 		},
 		{
 			"key": "issue:minion-meta#906",
@@ -50433,38 +50565,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:45:10.983Z"
-		},
-		{
-			"key": "issue:minion-meta#902",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#902 [monitor:unstick] rank run d590a68c: provider outage on ranking batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/902",
-			"sourceUpdatedAt": "2026-10-29T07:17:16Z",
-			"sourceFingerprint": "dfcfd922dc722e50355181640517d876f23e1133fe87edd307fb7a8055cc94a3",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Automated monitor intake describing a transient dual-provider infra failure during a ranking run with no indicated spec or code defect.",
-			"evidence": [
-				"catalog built successfully (1266 goals); only the ranking call on batch 1 failed",
-				"quoted analysis: transient dual-provider fault, safe to retry, no spec/code fix indicated"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-12T08:18:09.555Z"
 		},
 		{
 			"key": "issue:minion-meta#929",
