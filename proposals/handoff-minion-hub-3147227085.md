@@ -1,9 +1,10 @@
 ---
 id: handoff-minion-hub-3147227085
 title: Handoff marker — src/server/services/pos/pos-funnel.service.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-11-19
 updated: 2026-11-19
+merged_into: postmerge-minion-hub-b6022e2358b3
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---

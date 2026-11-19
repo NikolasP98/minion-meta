@@ -45,3 +45,8 @@ This unblocks accurate multi-source POS reporting and tax reconciliation.
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/691
 - file: `src/server/services/pos/pos-funnel.service.ts`
 - checked: 2026-11-19
+
+## Merged from handoff-minion-hub-3147227085
+
+- line: `NikolasP98/minion_hub@master src/server/services/pos/pos-funnel.service.ts:13`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/pos/pos-funnel.service.ts#L13
