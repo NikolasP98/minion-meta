@@ -168,4 +168,11 @@ A package session charged without an appointment issues its supplies at the sale
 
 ## FigCraft demo
 
-`pos-session-existing-appointment.figcraft` (to come before approval): the sell cart line with "Cobrar la cita del …", "Cobrar sesión" on a booked line, and the schedule step with "Usar la cita del …", as-is and to-be.
+[pos-session-existing-appointment.figcraft](pos-session-existing-appointment.figcraft), page "Spec 133 · demo", 8 frames:
+
+1. "Cobrar sesión" from the appointment (as-is / to-be).
+2. A service rung from the catalog (as-is / to-be / to-be after taking the appointment).
+3. The "Agenda los servicios" step (as-is / to-be).
+4. The server refusal (to-be).
+
+The copied master frames ("Point of Sale / pos/sell", Button, Badge, IconButton) are kept on their pages as context. Mock data is fictitious ("Ana Torres").

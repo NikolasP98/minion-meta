@@ -27,7 +27,9 @@ scenarios.
 
 ## Verification
 
-Per the DELTA table in the Spec Kit spec. Plan and tasks follow after owner approval.
+- [Implementation plan](133-pos-session-existing-appointment/plan.md), [research](133-pos-session-existing-appointment/research.md), [API deltas](133-pos-session-existing-appointment/contracts/api.md)
+- [Validation guide](133-pos-session-existing-appointment/quickstart.md)
+- FigCraft demo: [pos-session-existing-appointment.figcraft](133-pos-session-existing-appointment/pos-session-existing-appointment.figcraft)
 
 ## Out of scope
 
