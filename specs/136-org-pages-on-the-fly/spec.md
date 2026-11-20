@@ -27,7 +27,7 @@ element appearing in that org's page listing, and in no other org's.
 
 **Acceptance Scenarios**:
 
-1. **Given** a key with the sandbox scope, **When** the client calls `initialize` then `tools/list`, **Then** it receives the server identity and exactly the five tools below.
+1. **Given** a key with the sandbox scope, **When** the client calls `initialize` then `tools/list`, **Then** it receives the server identity and exactly the ten tools below.
 2. **Given** the same key, **When** it writes an element with a title and markup onto page `ventas`, **Then** the element is stored for the key's org on that page and the reply carries its id.
 3. **Given** the same key, **When** it updates that element's title by id, **Then** only the title changes.
 4. **Given** the same key, **When** it removes the element, **Then** it is gone from the page listing.
@@ -35,6 +35,10 @@ element appearing in that org's page listing, and in no other org's.
 6. **Given** no key, a malformed key or a revoked key, **When** it calls anything, **Then** it is refused as unauthorised and nothing is written.
 7. **Given** a key of org A, **When** it passes an element id that belongs to org B, **Then** nothing changes and the reply says the element was not found.
 8. **Given** a scoped key, **When** it sends more calls than the limit in a minute, **Then** it gets a retryable "too many requests" reply.
+9. **Given** a scoped key, **When** it asks for the block catalogue, **Then** it receives the block kinds, every preset value and one complete example per kind.
+10. **Given** a scoped key, **When** it writes a KPI block naming a dataset, a metric and a format onto page `ventas`, **Then** the block is stored as data (no markup or script) on that page, and the org sees it rendered with the hub's own components.
+11. **Given** a scoped key, **When** it writes a block that names a column the dataset does not have, or a sum over a text column, **Then** nothing is stored and the reply names the field that is wrong.
+12. **Given** a scoped key, **When** it sends a block by id, **Then** that element becomes the new block and stays on its page.
 
 ### User Story 2 - The owner grants and withdraws the ability (Priority: P1) — slice S5
 
@@ -47,10 +51,11 @@ The key list shows which keys can. Revoking a key stops its MCP access at once.
 2. **Given** an existing key from before this change, **When** it calls the MCP endpoint, **Then** it is refused (no key gains the ability silently).
 3. **Given** a revoked key, **When** it calls, **Then** it is refused.
 
-### User Story 3 - A page built this way looks like the hub and sits in the menu (Priority: P2) — slices S1, S2, S4
+### User Story 3 - A page built this way sits in the menu and covers more shapes (Priority: P2) — slices S2, S4
 
-The agent composes a page from typed blocks. The org places the page in its menu under any
-section. It has its own address and title.
+Slice S1 is done: the block kit (hub #642) is live, and S5 writes blocks over MCP. What remains
+is placing a page in the org's menu with its own address and title (S2) and the block kinds the
+funnel needed (S4).
 
 ### User Story 4 - The page can show what the funnel showed (Priority: P3) — slice S3
 
@@ -74,6 +79,9 @@ to blocks under the viewer's own permissions.
 - **FR-003**: API keys MUST carry a list of scopes. Only keys with the `sandbox` scope may use the endpoint. Existing keys have no scopes.
 - **FR-004**: The owner MUST be able to set the scope when creating a key and see it in the key list. Scopes cannot be changed after creation.
 - **FR-005**: Tools: `sandbox_datasets` (datasets with columns and types, no rows), `sandbox_pages` (page names with element counts), `sandbox_elements` (elements of one page), `sandbox_element_write` (create, or change by id), `sandbox_element_remove`.
+- **FR-005a**: Block tools (added 2026-11-20 at the owner's request, after the block kit went live): `sandbox_blocks` (the catalogue: kinds, presets, one example per kind) and one writer per kind, `sandbox_block_kpi`, `sandbox_block_chart`, `sandbox_block_table`, `sandbox_block_list`. Their inputs come from the same grammar the in-page assistant uses, so the two cannot differ.
+- **FR-005b**: A block MUST be checked against the dataset registry before it is stored: unknown dataset, unknown column, or a metric over the wrong column type is refused with the field named.
+- **FR-005c**: Block tools are the default way to build a page. `sandbox_element_write` (free markup) is the escape hatch for a visual no block kind can express, and the tool descriptions MUST say so.
 - **FR-006**: Every write MUST record which key made it.
 - **FR-007**: The endpoint MUST limit calls per key and answer over-limit calls with a retryable error.
 - **FR-008**: The endpoint MUST NOT expose any tool that returns business data rows.
@@ -86,13 +94,13 @@ to blocks under the viewer's own permissions.
 - **FR-012** (S2): A sandbox page can be a navigation target for one org, with its own address, title and view rule.
 - **FR-013** (S3): New datasets and saved queries are added by pull request, each with a permission module and tests.
 - **FR-014** (S4): Block kinds exist for a calculated card with formula tooltip, funnel stages, and a table with the filter button.
-- **FR-015** (S1, S5): MCP gains block-writing tools once S1 is merged.
+- **FR-015** (S4, S5): each new block kind added in S4 appears as an MCP writer automatically, from the shared grammar.
 
 ### Key Entities
 
 - **API key**: org, name, scopes, created/revoked. A scope is a named ability, starting with `sandbox`.
 - **Sandbox page**: a name within an org that groups elements.
-- **Sandbox element**: one visual on a page; markup or (after S1) a typed block; records who or which key wrote it.
+- **Sandbox element**: one visual on a page; a typed block (preferred) or free markup; records who or which key wrote it.
 
 ## Success Criteria *(mandatory)*
 

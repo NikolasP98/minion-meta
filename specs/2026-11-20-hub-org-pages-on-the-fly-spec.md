@@ -19,7 +19,7 @@ tags: [security, data, ui]
 The owner asks for a page or dashboard for one org; an agent builds it and the org sees it within a
 minute, without a pull request. Slice S5 gives an outside agent a way in: a hub MCP endpoint,
 authorised by an org API key that carries a `sandbox` scope, to list datasets and pages and to
-write and remove sandbox elements. Slices S1–S4 make such pages look like the hub, sit in the
+write and remove sandbox elements, including typed blocks (KPI, chart, table, list). Slices S1–S4 make such pages look like the hub, sit in the
 org's menu, and reach the data the funnel page needed.
 
 The canonical [Spec Kit specification](136-org-pages-on-the-fly/spec.md), its

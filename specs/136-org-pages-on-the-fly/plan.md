@@ -12,7 +12,8 @@ hand-rolled JSON-RPC, as the gateway's `/mcp` is. Every tool calls the existing 
 | Migration | `supabase/migrations/<ts>_api_key_scopes_sandbox_writer.sql`: `org_api_keys.scopes text[] not null default '{}'` with a check that each value is in `('sandbox')`; `sandbox_elements.written_by_key uuid` (plain uuid, the key outlives nothing it references) | `20261116100000_org_api_keys.sql`; run `bun scripts/qa/check-migration-seed-pairing.ts` and satisfy it |
 | Key scopes | `org-api-keys.service.ts`: `createKey` takes `scopes`, `listKeys`/`verifyKey` return them; Drizzle schema column; `src/lib/types/api-keys.ts`; `/api/settings/api-keys` POST accepts `scopes`; `ApiKeysSection.svelte` gets one checkbox and a badge | existing key code; `doors/caller.ts` stays untouched |
 | Protocol | `src/server/mcp/protocol.ts` (pure): parse/validate JSON-RPC, `initialize` (protocolVersion `2025-06-18`, serverInfo `minion-hub`), `ping`, `tools/list`, `tools/call`, `notifications/*` → 202; error codes -32700/-32600/-32601/-32602 | gateway `src/gateway/mcp/protocol.ts` for shape only |
-| Tools | `src/server/mcp/sandbox-tools.ts`: five tools with JSON Schemas; handlers take `{ ctx: CoreCtx, keyId }` | `src/lib/sandbox/tools.ts` for argument names |
+| Tools | `src/server/mcp/sandbox-tools.ts`: five element tools with JSON Schemas; handlers take `{ ctx: CoreCtx, keyId }` | `src/lib/sandbox/tools.ts` for argument names |
+| Block tools | same file: `sandbox_blocks` + one writer per kind from `blockToolSchemas()` (`src/lib/sandbox/blocks/schema.ts`), each adding a `page` argument; `validateBlockSpec` (`src/server/sandbox/blocks.ts`) before `upsertElement`. Descriptions and examples move to `src/lib/sandbox/blocks/catalog.ts`, shared with the in-page assistant | `src/lib/sandbox/tools.ts` block writers |
 | Route | `src/routes/api/mcp/+server.ts`: POST only; Bearer `mk_` key → `verifyKey` → scope check → rate limit (`checkSharedRateLimit('mcp-key:<id>', …)`, 120/min) → `touchKey` → dispatch | `src/server/doors/caller.ts` |
 | Service | `sandbox.service.ts`: `listPages(ctx)`; `upsertElement`/insert accept an optional `writtenByKey`; a `datasetCatalog()` that returns every dataset's schema without a user (schemas are not data) | existing functions |
 | Access | the route authenticates itself: add it wherever key-authenticated door routes are allow-listed (hooks + `route-access-registry.ts`), and to every route-contract count the tests name | memory: route contract counts |
@@ -43,4 +44,4 @@ hand-rolled JSON-RPC, as the gateway's `/mcp` is. Every tool calls the existing 
 ## Risks
 
 - A scoped key leak lets someone edit an org's sandbox pages; mitigations in the spec (no rows, no outbound network from elements, revoke).
-- `TODO(handoff)`: block tools after hub #642; gateway proxy after spec 005.
+- `TODO(handoff)`: gateway proxy after spec 005.

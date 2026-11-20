@@ -62,11 +62,11 @@ Invariants:
 
 | Slice | Change | Proof |
 |---|---|---|
-| S1 Blocks | Merge hub #642 (typed blocks on shared components). | Its own tests; a block renders with hub components. |
+| S1 Blocks | Merge hub #642 (typed blocks on shared components). **Done 2026-11-20** (`3677e35a`). | Its own tests; a block renders with hub components. |
 | S2 Pages in the menu | A named sandbox page is a screen an org can place in its navigation (`app_nav_config` target), with its own URL and title. | Nav test: a page entry resolves; an org without the entry does not list it. |
 | S3 Data | More datasets (Meta ads, leads, parties, stock) and saved queries with joins, each reviewed once. | Compiler tests per dataset; RBAC test per module. |
 | S4 Block kinds | Calculated card with formula tooltip, funnel stages, table with the filter button. | Block tests; visual parity with `/pos/funnel`. |
-| S5 Agent control (MCP) | A hub MCP endpoint, authorised by an org API key that carries a `sandbox` scope: list datasets and pages, read, write and remove elements. | Protocol tests; a key without the scope is refused; a write is attributed to the key. |
+| S5 Agent control (MCP) | A hub MCP endpoint, authorised by an org API key that carries a `sandbox` scope: list datasets and pages, read, write and remove elements, and write typed blocks (KPI, chart, table, list) from the block catalogue. | Protocol tests; a key without the scope is refused; a write is attributed to the key. |
 
 Order: S5 first (it works on today's elements and gives the agent a way in), then S1, S2, S4, S3.
 
