@@ -1,5 +1,7 @@
 # Implementation Plan: Closing appointments
 
+> **Superseded in part by spec pass 2 (2026-11-20):** two-layer statuses, a hardened state machine with a DB trigger, payment as its own track, and the board view. The status-reader inventory (research R12), time-zone decision, tray and Archivar design still hold. This plan is being revised before `/speckit-tasks`.
+
 **Branch**: `feat/134-booking-closure-s<N>` per slice (hub, base `master`) | **Date**: 2026-11-20 | **Spec**: [spec.md](spec.md)
 
 **Input**: Feature specification from `specs/134-booking-closure/spec.md` (approved 2026-11-20, meta #1056)

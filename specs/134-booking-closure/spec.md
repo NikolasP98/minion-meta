@@ -1,10 +1,10 @@
 ---
 id: 134-booking-closure
-title: Closing appointments — "Por cerrar" after the day ends, Desagendar on every appointment, Archivar as the main close
+title: Appointment lifecycle — two-layer statuses with a hardened state machine, payment as its own track, Por cerrar, Desagendar, Archivar, board view
 stage: spec
 status: draft
-verdict: approved
-pass: 1
+verdict: pending
+pass: 2
 created: 2026-11-20
 updated: 2026-11-20
 repos: [minion_hub]
@@ -12,7 +12,7 @@ tags: [ui, data]
 related: [135-stock-checkpoints, 120-till-corrections, 133-pos-session-existing-appointment, 116-pos-booking-state-hardening]
 ---
 
-# Feature Specification: Closing appointments
+# Feature Specification: Appointment lifecycle (closing appointments)
 
 **Feature Branch**: `feat/134-booking-closure` (hub, base `master`)
 
@@ -31,7 +31,15 @@ Owner decisions, 2026-11-20 (verbatim):
 5. "Archive is the main action. Anular is hidden behind a context submenu"
 6. Stock cut-off, 2026-11-20: "We can go a step further and implement CHECKPOINT stock counts, where staff physically validates counts and locks those values in, so if anything impacting stock counts are \"completed\" before the mentioned checkpoint dates, stock won't move." → specified separately as spec 135 (stock checkpoints); FR-012 consumes it.
 
-Approval, 2026-11-20: "I approve the rest, btw."
+Approval of pass 1, 2026-11-20: "I approve the rest, btw."
+
+**Pass 2 (rescope), owner 2026-11-20, verbatim:**
+
+- "anything interpreted as a negation (jev eval) should initiate a process where the agent confirms the negation, asks the patient how they want to proceed and reports this to the staff. For this, consider event statuses like how notion has nested status types (2 layers …) but relevant to this industry (eg. "to-do": scheduled, awaiting confirmation after a confirmation message is sent, awaiting payment; "complete": canceled, completed, refunded; etc). Obviously, this implies a new state machine, so logic between each state should be enforced." The WhatsApp follow-up itself is spec 138; this spec owns the statuses and the state machine.
+- On completing an unscheduled appointment: "for best practice, it should have a time first"
+- "Consider adding to the team calendar as its own kanban view. when the staff user switches views from cal to kanban, keep the same date range filter … Switching back from the kanban to cal should also be smart, but I leave that logic up to you."
+- On the status tree proposed in chat: "Yes, it looks good. Just please make sure the state machine's logic is hardened."
+- On payment: "faces takes payment before appts. But maybe you're right that appts should have separate payment statuses, since the appt status vs payment status can move independently. The only strict rule that FACES follows is that an appt cannot be counted as completed until all payments are settled."
 
 ## AS-IS (observed 2026-11-19, prod read-only + PostHog, hub `origin/master` `63c4313b`)
 
@@ -70,157 +78,238 @@ FACES stock was squared to a physical count taken 2026-11-18 16:00 (adjustment S
 
 ## TO-BE
 
-### 1. "Por cerrar" (to close)
+### 1. Two-layer statuses
 
-- A live appointment (`pending` or `accepted`) is **Por cerrar** once the organization's local midnight after its day has passed (FACES: America/Lima).
-- It is **derived** from the clock and the organization's time zone, never stored, so no job runs and nothing is migrated.
-- The agenda draws it in a distinct style, and the inbox raises "N citas por cerrar" at the same moment.
-- A Por cerrar appointment offers exactly three outcomes: **Completada**, **Desagendar**, **Archivar** (plus **Anular** in the submenu, §4).
+Every appointment has exactly one **status**. Each status belongs to one **group**; the group is never stored, it is a fixed property of the status.
 
-### 2. Desagendar, on every appointment
+| Group | Status (UI) | Key | Meaning |
+|---|---|---|---|
+| **Por hacer** | Agendada | `pending` (kept) | booked, nothing sent yet |
+| | Por confirmar | `awaiting_confirmation` | confirmation message sent, no answer yet |
+| | Confirmada | `accepted` (kept) | client said yes, or staff confirmed |
+| | Por reconfirmar | `reconfirm` | client said no or something unclear; the agent is following up (spec 138) |
+| | Desagendada | `unscheduled` | no time; waits to be re-booked; reason `no_vino` or `sin_fecha` |
+| **En curso** | En atención | `checked_in` | client arrived (check-in) |
+| | Por cerrar | `to_close` | its day ended (org-local midnight) and it was not closed |
+| **Cerrada** | Completada | `completed` (kept) | treatment done; supplies issued (spec 120, 135) |
+| | Archivada | `archived` | will not happen, no follow-up; reason required; nothing refunded |
+| | Anulada | `cancelled` (kept) | cancelled at the client's request; package session handed back |
+| | Reembolsada | `refunded` | cancelled and its payments refunded |
+| | Rechazada | `rejected` (kept) | an online booking request the clinic declined |
+| | No vino (anterior) | `no_show` (kept, read-only) | history before this spec; no new appointment enters it |
 
-- Every appointment's context menu has **Desagendar**, paid or not, past or future.
-- Desagendar moves the appointment to a new live status **`unscheduled`**: it leaves the calendar grid, keeps its client, treatment, sale lines and package session, and keeps its stock **reservation** (decision 1: reserved, not consumed).
-- The appointment remembers its last time and staff member, shown as "Antes: 18/11 17:15 · <miembro del equipo>".
-- **"No vino"** is a Desagendar with reason `no_vino` (decision 2): the client keeps the session and the payment; nothing is refunded.
-- Re-assigning = dropping it on the calendar or picking a time, which reuses today's move and returns it to `accepted`.
-- An `unscheduled` appointment **does not block a time slot**, gets **no reminders**, and is never counted as a no-show or a cancellation.
-- Today's paid-only "Desagendar" switches to this behaviour; it no longer stores `cancelled`.
+Keys already in use keep their value, so existing rows keep their meaning and only new keys are added.
 
-### 3. One tray, items told apart by status (decision 3)
+### 2. The state machine (hardened)
 
-- One **"Pendientes"** tray replaces "Servicios pagados sin agendar".
-- Every item carries a visible status chip, and the tray has a filter per chip:
+**One table, one gate.** Every status change, from any surface (agenda, drawer, board drag, bookings list, assistant tool, reminder replies, the clock), goes through one server function that checks the table below. Nothing else writes `sched_bookings.status`.
 
-  | Chip | What it is | Source |
-  |---|---|---|
-  | **Por cerrar** | appointment past its day, still open | §1 |
-  | **No vino** | unscheduled, reason `no_vino` | §2 |
-  | **Desagendada** | unscheduled, any other reason | §2 |
-  | **Pagado sin agendar** | paid service with no appointment yet | today's tray |
+| From | To | Who / what | Guards |
+|---|---|---|---|
+| Agendada | Por confirmar | system (confirmation message sent) | message actually delivered to the channel |
+| Agendada, Por confirmar, Por reconfirmar | Confirmada | client "yes" (reply), staff | — |
+| Por confirmar, Confirmada | Por reconfirmar | agent (negation classified, spec 138) | reply after the message; not already closed |
+| any Por hacer except Desagendada | Desagendada | staff ("Desagendar"; "No vino") | reason required |
+| Desagendada | Agendada / Confirmada | staff (new time via drag or picker) | a new start time is set in the same change |
+| Agendada, Por confirmar, Confirmada | En atención | staff (check-in) | appointment day is today |
+| Agendada, Por confirmar, Confirmada, Por reconfirmar, En atención | Por cerrar | clock (org-local midnight after its day) | still in that status at midnight |
+| En atención, Por cerrar, Confirmada (same day) | Completada | staff | **payments settled (§3)**; supplies confirmed (spec 120/135) |
+| any Por hacer, En curso | Archivada | staff | reason required (desistió, duplicada, otro) |
+| any Por hacer, En curso | Anulada | staff, via "Más… → Anular cita" | reason required; package session handed back |
+| Anulada | Reembolsada | system, when every payment of the appointment's sale is refunded | refunds recorded on the sale |
+| Agendada, Por confirmar (online request) | Rechazada | staff | — |
+| any Cerrada | anything | — | **refused**: a closed appointment never reopens; offer "Crear cita nueva" |
 
-- A paid item shows a "Pagado" mark whatever its chip.
-- Each item offers the next step where it sits: Por cerrar → its three outcomes; the others → "Agendar" (drag or pick a time).
+**Hardening rules:**
 
-### 4. Archivar is the main close; Anular is in a submenu (decision 5)
+- **Compare-and-set:** a change names the status it expects to leave (`from`). The update applies only if the row still has it (row lock in the same transaction). Two receptionists or the clock and a receptionist can never both win. A lost race is refused with "La cita cambió mientras tanto: ahora está {estado}" and the current state.
+- **Idempotent:** asking for the status the appointment already has is a success with no new log row.
+- **Every change writes one log row** (from, to, actor: staff, client reply, agent, clock or system; reason; time) in the same transaction. Effects run in the same transaction as the change: stock reservation release, package session hand-back, notifications. The only exception is effects that are explicitly post-commit and idempotent today (reservation release).
+- **Unknown or illegal pairs are refused** with a reason and the next step, never silently mapped.
+- **Grouped visits:** a change on one appointment of a visit applies per member, all or none, with the same table checked per member.
+- **The clock is an actor like any other:** the midnight job uses the same gate, so it never overrides a closed or desagendada appointment. If the job is late, reads still show a past-day open appointment as Por cerrar (derived fallback), and the job records the stored change when it runs.
+- **Database backstop:** a trigger refuses any write of a status value outside the known keys, and any change out of a Cerrada status. App bugs or scripts cannot create an illegal state.
+- **Tested exhaustively:** a test enumerates every (from, to, actor) pair, and asserts that only the table's pairs succeed.
 
-- **Archivar** closes an appointment that will not happen and needs no follow-up. It requires a reason: *El cliente desistió*, *Duplicada*, *Otro (texto)*. It stores a new final status **`archived`**, releases the stock reservation, and **does not** hand back the package session or money (decision 2: no refund unless asked).
-- **Anular** is today's cancel, unchanged in behaviour (releases the reservation, hands back the package session; the existing paid-cancel flow handles money). It moves into a **"Más…" submenu** and is relabelled "Anular cita".
-- "Marcar inasistencia" and "Cancelar" leave the appointment menus.
-- Stored history is kept: existing `no_show` and `cancelled` appointments keep their status and show as "No vino (anterior)" and "Anulada".
-- The word *Cancelar/Cancelada* no longer names an appointment action or status. Generic dialog buttons elsewhere are out of scope.
+### 3. Payment is its own track
+
+- Each appointment shows a **payment state** next to its status, computed from the sale lines linked to it:
+
+| State | When |
+|---|---|
+| Sin cobro | no linked sale line |
+| Adelanto | some paid, a balance remains |
+| Pagado | everything settled (a 0-price line counts as settled) |
+| Por cobrar | charged but unpaid |
+| Reembolsado | payments refunded |
+
+- Status and payment move independently (decision, owner 2026-11-20), with **one strict rule per organization**: "an appointment cannot be Completada until all payments are settled". It is an org setting, on for FACES.
+- Completing an unsettled appointment is refused with "Falta cobrar S/ {saldo}" and a **"Cobrar ahora"** action that opens the till for that appointment.
+- Spec 120's "products issue at the sale" is unchanged; payment never moves stock.
+
+### 4. Por cerrar
+
+- At org-local midnight after its day, an appointment still in Agendada, Por confirmar, Confirmada, Por reconfirmar or En atención becomes **Por cerrar** (clock transition, §2).
+- The time zone is the one the calendar uses.
+- The agenda draws it in a distinct style.
+- The inbox raises **one** notification per day: "N citas por cerrar". It links to the Pendientes tray filtered to Por cerrar, and is resolved when none remain. It replaces today's per-appointment "Cita sin cerrar" (`appointment.overdue`).
+- From Por cerrar the menu offers: **Completar** (if paid), **Desagendar**, **Archivar**, and "Más… → Anular cita".
+
+### 5. Desagendar, on every appointment
+
+- Every Por hacer appointment's menu has **Desagendar** ("No vino" or "Sin fecha nueva").
+- The appointment leaves the calendar grid. It keeps client, treatment, sale lines, package session and stock **reservation** (decision 1: reserved, not consumed). It shows "Antes: 18/11 17:15 · <miembro del equipo>".
+- "No vino" refunds nothing (decision 2).
+- It does not block a time slot and gets no reminders.
+- It **must get a new time before it can be completed** (owner: "it should have a time first").
+- Today's orphaned `unscheduleVisit` path is replaced by this transition.
+
+### 6. Archivar and Anular
+
+- **Archivar** is the main close (decision 5): a reason is required, it releases the reservation, and it keeps the package session and payments.
+- **Anular cita** sits under "Más…". It hands back the package session, and money refunds go through the existing paid-cancel flow. When every payment is refunded, the system moves it to **Reembolsada**.
+- "Marcar inasistencia", "Cancelar" and "Eliminar" leave every appointment surface (hover card, drawer, list, board, context menu).
+- *Cancelar/Cancelada* no longer name an appointment action or status, because in Peru "cancelar" means "to pay".
+
+### 7. One Pendientes tray (POS agenda)
+
+- One **"Pendientes"** tray replaces "Servicios pagados sin agendar". Each item carries a status chip and a payment chip; the chip filters are Por cerrar, Por reconfirmar, Desagendada (No vino / Sin fecha) and Pagado sin agendar.
+- Each item offers its next step where it sits.
+
+### 8. Board (Kanban) view on the team calendar
+
+- The team calendar (`/scheduling/calendar`) keeps its views: calendar, table and board.
+- The **board** shows columns per status, grouped under Por hacer / En curso / Cerrada. Cerrada can be collapsed.
+- Dragging a card to another column runs the same gate (§2). Illegal drops are refused with the reason, and Cerrada columns accept only legal closes.
+- **Shared date range:**
+  - Switching calendar → board keeps the visible range (e.g. Sep 3–10) as the board's filter. The user can edit it on the board.
+  - Switching board → calendar opens at the range start, choosing the zoom from the range length: 1 day → day view, 2–7 days → week view, longer → month view.
+  - The range is kept in the URL, so reloads and shared links keep it.
+- Desagendada appointments have no time, so they always show in their column, whatever the range.
 
 ### Invariants
 
-- A live appointment is never left without a path: it is upcoming, Por cerrar, or in the Pendientes tray.
-- A treatment's supplies leave stock exactly once, at completion (spec 120); a reservation is released only by Archivar or Anular.
-- A package session or a payment is handed back only by Anular.
-- An `unscheduled` appointment never occupies a time slot.
+- Every appointment has exactly one status from §1; its group is derived.
+- Only the table in §2 changes a status; every change has exactly one log row; a Cerrada appointment never changes again.
+- With the org rule on, no appointment is Completada while its payments are unsettled.
+- A treatment's supplies leave stock exactly once, at completion (spec 120); spec 135 checkpoints decide whether that moves stock.
+- A package session or payment is handed back only by Anular (and Reembolsada follows refunds).
+- An `unscheduled` appointment never occupies a time slot and never receives reminders.
 
 ## DELTA
 
 | Transition | Proof (test to add) |
 |---|---|
-| Live appointment after its local midnight: no marker → Por cerrar (derived, time-zone aware) | unit: `isPorCerrar(booking, now, tz)` at 23:59 / 00:00 Lima, DST-free and UTC-offset cases |
-| Inbox: one "Cita sin cerrar" per visit 30 min after its end (152 sent, 142 unresolved) → one daily "N citas por cerrar" at local midnight, linking to the Pendientes tray, resolved when the count reaches 0 | `appointment-overdue` rule test rewritten |
-| Desagendar on an unpaid appointment: not offered → `unscheduled`, reservation kept, session kept | service: status + log row, no `releaseAccruals`, no redemption reversal |
-| Desagendar on a paid appointment: `cancelled` + unlinked lines → `unscheduled`, lines stay linked | service: replaces `unscheduleVisit` semantics; existing tests rewritten |
-| "No vino": `no_show` (releases, hands session back) → `unscheduled` reason `no_vino` (keeps both) | service test |
-| `unscheduled` appointment: blocks its slot, gets reminders → neither | slot-conflict query test; `reminders.ts` test |
-| Re-assigning an `unscheduled` appointment: n/a → `accepted` with the new time, reservation unchanged | service: move path accepts `unscheduled` |
-| Archivar: n/a → `archived` + reason, reservation released, session and money untouched | service test; transition guard treats `archived` as final |
-| Anular: top-level "Cancelar" → submenu "Anular cita", behaviour unchanged | component: menu structure; existing cancel tests unchanged |
-| Tray: "Servicios pagados sin agendar" → "Pendientes" with four chips and filters | component + server listing test |
-| Every reader of booking status (receivables audit, unbilled, analytics, booking groups, colours, notifications fields) handles `unscheduled` and `archived` | one test per reader, listed in the plan |
+| Statuses: 6 flat values → 13 in 3 groups (§1), keys kept where the meaning is unchanged | unit: group of every key; label maps cover every key |
+| Status writes from 7 surfaces → one gate with the §2 table, compare-and-set, idempotence, one log row | exhaustive (from, to, actor) matrix test; concurrent-change test (second writer refused with the current state) |
+| No DB guard → trigger refusing unknown keys and changes out of Cerrada | SQL integration test |
+| Reminder sent: no status change → Agendada → Por confirmar | reminders service test |
+| Reply "no": `cancelled` + session handed back → Por reconfirmar, nothing handed back (follow-up in spec 138) | reminders service test |
+| Past day, open: stays open forever, one alert per visit → Por cerrar at local midnight (clock via the gate; derived fallback), one daily inbox count | clock job test (idempotent, never touches closed/desagendada); `appointment-overdue` rule rewritten |
+| Completar unpaid (FACES rule on): allowed → refused "Falta cobrar S/ …" with "Cobrar ahora" | service + component test; org setting off → allowed |
+| Payment chip: none → Sin cobro / Adelanto / Pagado / Por cobrar / Reembolsado from linked lines | unit test of the derivation incl. 0-price lines |
+| Desagendar: orphaned, stores `cancelled` → `unscheduled` with reason, keeps lines, session, reservation; time required before completion | service tests |
+| Inasistencia / Cancelar / Eliminar on 5 surfaces → Archivar (reason) + "Más… → Anular cita" | component tests per surface |
+| Anulada + all payments refunded: stays cancelled → Reembolsada (system) | service test |
+| Tray: paid-only → Pendientes with status + payment chips | component + listing test |
+| Board view: columns by flat status → grouped columns; drag runs the gate; range shared with calendar, smart return | component tests; URL round-trip test |
+| Every status reader (37 sites, plan research R12) handles the new keys | one test per reader |
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 — Close yesterday's agenda (Priority: P1)
 
-At the start of the day the receptionist opens the agenda. Every appointment from previous days still open shows as Por cerrar, the inbox says how many, and the Pendientes tray lists them. For each one she picks Completada, Desagendar or Archivar.
-
-**Why this priority**: 101 appointments sit open today with no prompt to close them, and leaving them open is how stock and receivables drift.
-
-**Independent Test**: an `accepted` appointment dated yesterday shows as Por cerrar after local midnight and not before; each of the three outcomes leaves it in the right status.
+At the start of the day, every open appointment from earlier days is Por cerrar. The inbox shows "9 citas por cerrar"; the Pendientes tray lists them with their payment chip. For each, the receptionist picks Completar (paid ones), Desagendar or Archivar.
 
 **Acceptance Scenarios**:
 
-1. **Given** an accepted appointment on 18/11, **When** it is 23:59 on 18/11 in Lima, **Then** it is not Por cerrar; **When** it is 00:00 on 19/11, **Then** it is.
-2. **Given** a Por cerrar appointment, **When** the receptionist opens its menu, **Then** she sees Completada, Desagendar and Archivar, and "Anular cita" only under "Más…".
-3. **Given** a completed or archived appointment, **Then** it is never Por cerrar.
+1. **Given** a Confirmada appointment on 18/11, **When** it is 00:00 on 19/11 in the org's time zone, **Then** it is Por cerrar (stored by the clock, or derived if the clock has not run).
+2. **Given** a Por cerrar appointment with S/ 300 unpaid and the org rule on, **When** Completar is chosen, **Then** it is refused with "Falta cobrar S/ 300" and a "Cobrar ahora" action.
+3. **Given** an Archivada or Completada appointment, **When** any change is attempted, **Then** it is refused and "Crear cita nueva" is offered.
 
 ### User Story 2 — The client did not come (Priority: P1)
 
-The client misses her appointment. The receptionist chooses "No vino". The appointment leaves the calendar, appears in Pendientes with the "No vino" chip, and keeps her payment and her package session. When the client calls, the receptionist drags it to a new time.
-
-**Independent Test**: "No vino" on a paid, package-funded appointment: status `unscheduled`, sale lines still linked, session not reversed, reservation still open; dragging it to a time returns it to `accepted`.
+The receptionist chooses Desagendar → No vino. The appointment leaves the calendar, keeps payment and session, and waits in Pendientes. When the client calls, it is dragged to a new time and is Confirmada again; only then can it be completed.
 
 **Acceptance Scenarios**:
 
-1. **Given** a paid appointment, **When** "No vino" is chosen, **Then** it shows in Pendientes as "No vino · Pagado" and nothing is refunded.
-2. **Given** that item, **When** it is dropped on a free slot, **Then** it is `accepted` at the new time with the same sale and session.
-3. **Given** an `unscheduled` appointment, **Then** its old time slot is free for another booking.
+1. **Given** "No vino" on a paid appointment, **Then** status Desagendada, payment chip Pagado, nothing refunded, reservation kept.
+2. **Given** a Desagendada appointment, **When** Completar is attempted, **Then** it is refused: "Primero dale una hora".
+3. **Given** it is dropped on a free slot, **Then** it is Confirmada at the new time; its old slot is free.
 
-### User Story 3 — Desagendar any appointment (Priority: P2)
+### User Story 3 — Two people act at once (Priority: P1)
 
-Two days before, the client asks to postpone without a new date. The receptionist right-clicks the appointment and chooses Desagendar. It waits in Pendientes with the "Desagendada" chip.
-
-**Acceptance Scenarios**:
-
-1. **Given** any live appointment, paid or not, **Then** its context menu offers Desagendar.
-2. **Given** an `unscheduled` appointment, **Then** no reminder is sent for its old time.
-
-### User Story 4 — Archive what will not happen (Priority: P2)
-
-A duplicate appointment, or a client who says she no longer wants the treatment. The receptionist chooses Archivar and a reason. The appointment closes, its reserved supplies are freed, and nothing is refunded.
+The clock marks an appointment Por cerrar at 00:00:01 while a receptionist completes it at 23:59:59 on a slow connection. Exactly one change wins. The other sees the current status and no duplicate log row or double stock issue happens.
 
 **Acceptance Scenarios**:
 
-1. **Given** a live appointment, **When** Archivar is chosen without a reason, **Then** it is refused with the reason list in view.
-2. **Given** Archivar with "Duplicada", **Then** the status is `archived`, the reservation is released, and the package session stays used.
-3. **Given** a client who asks for her money back, **When** the receptionist uses "Más… → Anular cita", **Then** today's cancel flow runs unchanged.
+1. **Given** two concurrent changes from the same status, **Then** one succeeds and the other is refused with the current status.
+2. **Given** a repeated identical request (double click), **Then** the second is a no-op success with no new log row.
+
+### User Story 4 — Board view keeps the range (Priority: P2)
+
+A coordinator looks at Sep 3–10 on the team calendar and switches to the board. The board shows Sep 3–10 by status. She widens it to Sep 1–15 and switches back; the calendar opens in month view at Sep 1.
+
+**Acceptance Scenarios**:
+
+1. **Given** the calendar showing Sep 3–10, **When** switching to the board, **Then** the board's range is Sep 3–10 and editable.
+2. **Given** the board range is one day, **When** switching to the calendar, **Then** day view at that day; 2–7 days → week view; longer → month view at the range start.
+3. **Given** a card dragged from Confirmada to Archivada, **Then** the reason dialog opens; dropping on an illegal column is refused with the reason.
+
+### User Story 5 — Archive or annul (Priority: P2)
+
+A duplicate is archived with reason "Duplicada": closed, nothing refunded. A client asks for her money back: "Más… → Anular cita", the session goes back, and once the refund is recorded the appointment shows Reembolsada.
 
 ### Edge Cases
 
-- An appointment grouped with others in one visit: Desagendar, Archivar and Anular act on the whole visit, as `unscheduleVisit` and `setVisitStatus` do today.
-- A Por cerrar appointment linked to a sale that is later voided: the void flow is unchanged; the appointment stays Por cerrar until closed.
-- Recurring series: Desagendar acts on one occurrence; the others stay booked.
-- An `unscheduled` appointment never re-assigned: it stays in Pendientes indefinitely; it is not auto-archived (no auto-close, owner's happy path).
-- Organization without a time zone set: falls back to the hub default zone, as the other date controls do.
+- Grouped visit: Desagendar, Archivar, Anular apply to every member, all or none.
+- Recurring series: each occurrence has its own status; a change applies to one occurrence unless the user picks the series option that exists today.
+- An appointment whose day ended while in Por reconfirmar (spec 138 still talking to the client) becomes Por cerrar; the agent conversation result is still reported to staff.
+- Online request never answered: stays Agendada until midnight, then Por cerrar, where Rechazada is not offered (staff archive it instead).
+- 0-price appointments (controls): payment Pagado, so the completion rule never blocks them.
+- Legacy `no_show` rows: shown as "No vino (anterior)" in Cerrada; no transition in or out.
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: The system MUST mark a `pending`/`accepted` appointment as Por cerrar once the organization's local midnight after its start date has passed, computed at read time.
-- **FR-002**: The existing `appointment.overdue` rule MUST be replaced by one notification per day at local midnight with the count of Por cerrar appointments, linking to the Pendientes tray filtered to Por cerrar, and resolved when none remain. Today's per-visit 30-minute notifications stop; the open ones are resolved on release.
-- **FR-003**: Every appointment context menu MUST offer Desagendar for live appointments, paid or not.
-- **FR-004**: Desagendar MUST store status `unscheduled` with a reason (`no_vino` or `desagendada`), write a status-log row, keep sale-line links, keep the package session, and keep the stock reservation.
-- **FR-005**: An `unscheduled` appointment MUST NOT occupy its time slot, MUST NOT receive reminders, and MUST be re-assignable to `accepted` by moving it.
-- **FR-006**: Archivar MUST require a reason and store final status `archived`; it MUST release the stock reservation and MUST NOT reverse the package session or any payment.
-- **FR-007**: Anular MUST keep today's cancel behaviour and appear only in a "Más…" submenu labelled "Anular cita".
-- **FR-008**: The agenda MUST NOT offer "Marcar inasistencia" or a top-level "Cancelar" for appointments.
-- **FR-009**: The Pendientes tray MUST list Por cerrar, No vino, Desagendada and Pagado sin agendar items, each with a visible status chip and a filter, and mark paid items.
-- **FR-010**: Every server reader of booking status MUST treat `unscheduled` as live-but-off-calendar and `archived` as final-not-done.
-- **FR-011**: Stored `no_show` and `cancelled` history MUST stay unchanged and display as "No vino (anterior)" and "Anulada".
-- **FR-012**: Completing an appointment whose time is before the latest stock checkpoint covering one of its supplies (spec 135) MUST close it without issuing that supply; supplies not covered by a checkpoint are issued as today. The completion dialog MUST name the checkpoint ("Contado el 18/11 16:00: no descuenta Ácido Desoxicólico").
+- **FR-001**: The system MUST store one status per appointment from §1 and derive its group.
+- **FR-002**: Every status change MUST go through one server gate implementing the §2 table: compare-and-set on the expected status, idempotence, one log row with actor and reason, effects in the same transaction.
+- **FR-003**: Illegal changes MUST be refused with the reason and the next step; changes out of Cerrada MUST be refused.
+- **FR-004**: A database trigger MUST refuse unknown status keys and changes out of Cerrada statuses.
+- **FR-005**: Sending a confirmation message MUST move Agendada to Por confirmar; a "yes" reply MUST move it to Confirmada; a negation MUST move it to Por reconfirmar and MUST NOT cancel or hand anything back (follow-up: spec 138).
+- **FR-006**: At org-local midnight after its day, an open appointment (Agendada, Por confirmar, Confirmada, Por reconfirmar, En atención) MUST become Por cerrar through the gate; reads MUST show it as Por cerrar even if the job has not run.
+- **FR-007**: The inbox MUST raise one daily "N citas por cerrar" notification per org linking to the tray, resolved at zero; the per-visit `appointment.overdue` notifications MUST stop and the open ones MUST be resolved on release.
+- **FR-008**: Each appointment MUST show a payment state (Sin cobro, Adelanto, Pagado, Por cobrar, Reembolsado) derived from its linked sale lines; 0-price lines count as settled.
+- **FR-009**: When the org setting "completar solo con pagos saldados" is on, Completar MUST be refused while payment is not Pagado, offering "Cobrar ahora". FACES MUST have it on.
+- **FR-010**: Desagendar MUST be offered on every Por hacer appointment, store `unscheduled` with reason `no_vino` or `sin_fecha`, keep sale lines, session and reservation, free the slot, stop reminders, and require a new time before completion.
+- **FR-011**: Archivar MUST require a reason, store `archived`, release the reservation, and not hand back session or payments.
+- **FR-012**: Completing an appointment whose time is before the latest stock checkpoint covering one of its supplies (spec 135) MUST close it without issuing that supply, naming the checkpoint in the dialog.
+- **FR-013**: Anular MUST keep today's cancel behaviour, appear only under "Más…", and move to Reembolsada when every payment is refunded.
+- **FR-014**: "Marcar inasistencia", "Cancelar" and "Eliminar" MUST NOT appear on any appointment surface.
+- **FR-015**: The POS agenda MUST show one Pendientes tray with status and payment chips and per-chip filters.
+- **FR-016**: The team calendar board MUST group columns by status group, run the gate on drag, share the date range with the calendar via the URL, and choose the calendar zoom from the range when switching back.
+- **FR-017**: Every server reader of booking status MUST handle the new keys (inventory in the plan).
+- **FR-018**: Legacy `no_show` rows MUST display as "No vino (anterior)" and accept no transition.
 
 ### Key Entities
 
-- **Appointment** (`sched_bookings`): gains statuses `unscheduled` (live, off-calendar) and `archived` (final). Last time and staff member stay in `start_time`/`resource_id`.
-- **Status log** (`sched_booking_status_log`): reason carries `no_vino`, `desagendada`, or the Archivar reason.
-- **Pendientes item**: an appointment (Por cerrar or unscheduled) or a paid sale line without an appointment.
+- **Appointment** (`sched_bookings`): `status` from §1 (new keys added, existing kept); last time and staff member stay in `start_time`/`resource_id` while desagendada.
+- **Status log** (`sched_booking_status_log`): from, to, actor kind, actor id, reason, time.
+- **Org scheduling setting**: "completar solo con pagos saldados" (boolean).
+- **Payment state**: derived, not stored.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: After release, FACES has 0 live appointments more than one day past their date that are not shown as Por cerrar.
-- **SC-002**: Within two weeks of release, the 101 open past appointments are closed or unscheduled (from 101 to under 10).
-- **SC-003**: Of new missed appointments, the share followed by nothing (56 of 107 today) drops, because each lands in Pendientes instead of a final status.
-- **SC-004**: No package session or payment is handed back except through Anular.
+- **SC-001**: After release, no live appointment from a previous day exists outside Por cerrar, Desagendada or Cerrada.
+- **SC-002**: Within two weeks, FACES' 101 open past appointments drop below 10.
+- **SC-003**: The exhaustive transition test passes, and production status-log rows over the first month contain no pair outside the §2 table.
+- **SC-004**: No FACES appointment is Completada with an unsettled payment after release.
+- **SC-005**: No package session or payment is handed back except through Anular.
 
-## Stock checkpoints (formerly the open question)
+## Stock checkpoints
 
-Resolved by the owner's checkpoint proposal (decision 6). Spec 135 defines the checkpoint: a locked physical count per item and warehouse, with the time it was taken. Spec 134 only reads it (FR-012). Slice S1 of this spec ships after spec 135's first slice, so the backlog of open appointments can be closed without moving counted stock twice.
+Spec 135 defines checkpoints; this spec only reads them (FR-012). 135-S1 ships first.
 
 ## Assumptions
 
@@ -228,3 +317,6 @@ Resolved by the owner's checkpoint proposal (decision 6). Spec 135 defines the c
 - Refunds of money keep using the existing paid-cancel flow; this spec adds none.
 - UI changes follow the FigCraft demo-first rule; the as-is/to-be demo is linked from the plan.
 - Spec 133 (charging an existing appointment) is independent; both touch the agenda menu, and whichever lands second rebases.
+- "En atención" needs a check-in action, which the hub does not have today; it is a new button on the appointment (hover card, drawer, board). Using it is optional: an appointment can go from Confirmada to Completada on its day without check-in.
+- Spec 138 (WhatsApp negation follow-up) owns the agent conversation and the staff report; it drives the Por confirmar → Por reconfirmar → Confirmada/Desagendada/Archivada transitions through this spec's gate.
+- Pass 2 supersedes the pass-1 plan's slice contents; the plan is revised before tasks.
