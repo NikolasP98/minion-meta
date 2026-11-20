@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-222d6a6aa4c3
 title: "Post-merge finding — todo-handoff in src/lib/sandbox/canvas.ts (minion_hub)"
-status: approved
+status: closed
 created: 2026-10-17
-updated: 2026-10-17
+updated: 2026-11-20
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/sandbox/canvas.ts`
