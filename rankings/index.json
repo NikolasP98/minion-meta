@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-20T21:47:04.327Z",
+	"generatedAt": "2026-11-20T22:17:52.456Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6509,6 +6509,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:17:44.921Z"
+		},
+		{
+			"key": "pr:minion_hub#692",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#692 feat(sandbox): agents can build an org's sandbox pages over MCP with a scoped API key",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/692",
+			"sourceUpdatedAt": "2026-11-20T22:11:05Z",
+			"sourceFingerprint": "8b6efc64a38008cddfa14169cb46f04957f5c2c3e077f2b1b7d5341ba851e3cd",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1058"
+			],
+			"rationale": "Security-tagged MCP sandbox-pages feature with strong test evidence but still needs the owner's merge gate and has unverified block-tool/load paths.",
+			"evidence": [
+				"Security-tagged: owner review and merge",
+				"bun run check 0 errors, vite build passes, 889 targeted vitest",
+				"block tools end-to-end and rate limit under real load not verified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:17:52.268Z"
 		},
 		{
 			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
@@ -15052,14 +15087,14 @@
 			"scoredAt": "2026-11-20T19:17:36.235Z"
 		},
 		{
-			"key": "pr:minion_hub#692",
+			"key": "pr:minion-meta#1058",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#692 feat(sandbox): agents can build an org's sandbox pages over MCP with a scoped API key",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/692",
-			"sourceUpdatedAt": "2026-11-20T18:44:55Z",
-			"sourceFingerprint": "03d8a6aed3c2e8cc67a2251e2674a934469edb7eddfbaa50e8e054bea68fc267",
+			"repo": "minion-meta",
+			"title": "#1058 spec(136): org pages on the fly — an agent builds a page for one org over MCP, live without a deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1058",
+			"sourceUpdatedAt": "2026-11-20T22:04:18Z",
+			"sourceFingerprint": "d7bb0d73fba99b29fd5a3847dbf94d18af624f2fa38a31029a4dfca0076f5a91",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -15068,21 +15103,23 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 9
+				"specification": 7,
+				"implementation": 3
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-specified, extensively tested security-tagged PR implementing a scoped MCP endpoint that is draft and ready for the required owner review/merge gate.",
+			"relatedKeys": [
+				"pr:minion_hub#692"
+			],
+			"rationale": "Spec covering the org-pages-on-the-fly feature whose S5 slice is already implemented and tested in the companion hub PR, so formalizing/merging it alongside that PR keeps the SDLC record consistent.",
 			"evidence": [
-				"Security-tagged: owner review and merge",
-				"bun run check 0 errors, vite build passes, 889 targeted vitest tests, end-to-end QA on local stack with migration applied",
-				"Additive migration org_api_keys.scopes / sandbox_elements.written_by_key"
+				"Slice S5 is specified to implementation depth; S1-S4 to planning depth",
+				"Tagged security and data: owner approval before merge of the hub PR for S5",
+				"status: draft"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T18:47:14.536Z"
+			"scoredAt": "2026-11-20T22:17:52.268Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
@@ -17982,40 +18019,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:29:37.583Z"
-		},
-		{
-			"key": "pr:minion-meta#1060",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1060 proposal: hub accessibility program — every component accessible, atom to page (WCAG 2.2 AA)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1060",
-			"sourceUpdatedAt": "2026-11-20T19:05:47Z",
-			"sourceFingerprint": "e83a5717fb8c700f03404c3a1d7a2772365ef780c5e6cdbf88c404ab62535d64",
-			"score": 47,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#1061"
-			],
-			"rationale": "Broad accessibility proposal already spawned its first actionable slice spec, leaving the parent proposal itself with no independent execution step beyond pending owner decisions.",
-			"evidence": [
-				"proposal only; each slice gets its own spec",
-				"two owner decisions listed at the end"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T19:17:36.235Z"
 		},
 		{
 			"key": "proposal:ci-minion-ai-auto-response",
@@ -23375,6 +23378,39 @@
 			"scoredAt": "2026-11-17T17:47:29.103Z"
 		},
 		{
+			"key": "pr:minion-meta#1060",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1060 proposal: hub accessibility program — every component accessible, atom to page (WCAG 2.2 AA)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1060",
+			"sourceUpdatedAt": "2026-11-20T22:10:49Z",
+			"sourceFingerprint": "450b04f50fd15229ba24d910155f85fe77033faa613445c610fd6562867e443c",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Thorough accessibility audit and proposal with owner sign-off to begin S0, but no code has shipped and most slices are still planning-depth.",
+			"evidence": [
+				"Owner decisions (2026-11-20): approved, start with S0",
+				"Proposal only; each slice gets its own spec. Docs only, no hub code",
+				"15 ranked gaps with file:line anchors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:17:52.268Z"
+		},
+		{
 			"key": "proposal:2026-08-17-pkg-workforce-client-json-error",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25643,38 +25679,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T05:48:58.413Z"
-		},
-		{
-			"key": "pr:minion-meta#1058",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1058 spec(136): org pages on the fly — an agent builds a page for one org over MCP, live without a deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1058",
-			"sourceUpdatedAt": "2026-11-20T07:23:48Z",
-			"sourceFingerprint": "5c69ed9a576c3d30b0c58895a06fcddda0128b7a29ec4bf4e8d447772a7658e4",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An ambitious new MCP-driven agentic feature is only specified to implementation depth for one of five slices and has explicit security decisions still awaiting owner review.",
-			"evidence": [
-				"S5 ... is specified to implementation depth; S1-S4 to planning depth",
-				"Tagged security and data: owner approval before merge of the hub PR for S5"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T07:47:28.679Z"
 		},
 		{
 			"key": "pr:minion-meta#808",
