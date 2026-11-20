@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-20T20:17:05.012Z",
+	"generatedAt": "2026-11-20T20:49:42.646Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1854,6 +1854,39 @@
 			"scoredAt": "2026-11-16T10:27:42.973Z"
 		},
 		{
+			"key": "pr:minion-factory#199",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-factory",
+			"title": "#199 fix(lifecycle): validate WorkItems before approval and spec admission",
+			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/199",
+			"sourceUpdatedAt": "2026-10-18T00:09:05Z",
+			"sourceFingerprint": "61540ebca717f070177c4df5bbfb7dfc8f277793cbcd53be2952e437cb0ef42b",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Security-tagged lifecycle-integrity fix with extensive regression coverage and an independent zero-findings review, gated only on required owner merge.",
+			"evidence": [
+				"Local full runner suite: 1,266 passed, zero failures or skips",
+				"Independent full-feature review... zero findings",
+				"owner merge is required"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:48:35.267Z"
+		},
+		{
 			"key": "pr:minion-meta#900",
 			"kind": "pr",
 			"stage": "development",
@@ -2283,72 +2316,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T08:48:42.067Z"
-		},
-		{
-			"key": "pr:minion-factory#199",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-factory",
-			"title": "#199 fix(lifecycle): validate WorkItems before approval and spec admission",
-			"sourceUrl": "https://github.com/NikolasP98/minion-factory/pull/199",
-			"sourceUpdatedAt": "2026-10-18T00:09:05Z",
-			"sourceFingerprint": "61540ebca717f070177c4df5bbfb7dfc8f277793cbcd53be2952e437cb0ef42b",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Security-relevant lifecycle validation fix with detailed AS-IS/TO-BE/DELTA, owner-approved plan, and extensive regression evidence; ready pending the stated owner merge gate.",
-			"evidence": [
-				"\"Local full runner suite: 1,266 passed, zero failures or skips\"",
-				"\"Independent full-feature review ... zero findings\"",
-				"\"Owner NikolasP98 approved the plan by merging meta PR #835\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
-		},
-		{
-			"key": "pr:minion-meta#810",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#810 feat(whatsapp): bind internal assistant accounts to one organization",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/810",
-			"sourceUpdatedAt": "2026-10-16T15:40:08Z",
-			"sourceFingerprint": "09b99c400b7d3010c2ea461eb1d73254c58573ab4c3cf0720a01ed12893c6446",
-			"score": 69,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Large security-sensitive schema and spec work for WhatsApp org binding has passing tests but explicitly documents major unresolved execution gaps.",
-			"evidence": [
-				"32 tests passed on schema changes",
-				"isolated Docker primitive not wired into exec/process",
-				"PR explicitly kept in draft pending coordinated release"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
 		},
 		{
 			"key": "pr:minion-meta#887",
@@ -4042,19 +4009,20 @@
 				"implementation": 4
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
+			"recommendation": "group",
 			"relatedKeys": [
-				"pr:minion (gateway)#331"
+				"pr:minion (gateway)#331",
+				"pr:minion-meta#810"
 			],
-			"rationale": "High-value cross-repo WhatsApp integration is explicitly not production-ready and blocked on an unshipped Hub PR and a prerequisite audit PR.",
+			"rationale": "Large WhatsApp integration feature explicitly sequenced with the audit PR and meta schema/spec PR and not independently mergeable.",
 			"evidence": [
-				"\"Draft remains gated on full capability parity and live-account qualification\"",
-				"\"Hub implementation: ...#544 (must ship first)\"",
-				"\"No human/live-account verification yet\""
+				"Draft remains gated on full capability parity and live-account qualification",
+				"Hub implementation ...#544 (must ship first)",
+				"old status/visibility E2E suites also fail on the archived pre-change source"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
+			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
 			"key": "pr:minion (gateway)#380",
@@ -4127,6 +4095,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:47:45.969Z"
+		},
+		{
+			"key": "pr:minion-meta#810",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#810 feat(whatsapp): bind internal assistant accounts to one organization",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/810",
+			"sourceUpdatedAt": "2026-10-16T15:40:08Z",
+			"sourceFingerprint": "09b99c400b7d3010c2ea461eb1d73254c58573ab4c3cf0720a01ed12893c6446",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion (gateway)#330",
+				"pr:minion (gateway)#331"
+			],
+			"rationale": "Canonical schema/spec for the same WhatsApp integration tracked separately in the gateway feature and audit PRs, so should be managed as one coordinated release goal.",
+			"evidence": [
+				"Gateway: .../pull/330",
+				"Hub: .../pull/544 (must ship first)",
+				"Scanner audit prerequisite: .../pull/331"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
 			"key": "proposal:2026-10-10-hub-catalog-service-unification",
@@ -5172,38 +5176,6 @@
 			"scoredAt": "2026-11-15T17:17:09.582Z"
 		},
 		{
-			"key": "pr:minion-meta#775",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#775 docs(proposal): SUNAT zero-value lines as operaciones gratuitas (fault 3105, hub #466)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/775",
-			"sourceUpdatedAt": "2026-10-10T21:47:27Z",
-			"sourceFingerprint": "0eaeaf4c6821fff21a9fcf40a5497f7af4f8d91459b51b3da444918fac59b147",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A tax-compliance (SUNAT) invoicing fault is significant, but the actual fix is still a draft blocked on accountant confirmation of tax treatment.",
-			"evidence": [
-				"\"SUNAT 3105 shadow-emission failures found 2026-10-10\"",
-				"\"Fix is hub #466 (draft; accountant must confirm afectación 31 vs 15 before cutover)\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
-		},
-		{
 			"key": "proposal:2026-10-21-windows-release-qualification-timing",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5586,21 +5558,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 6,
-			"recommendation": "reframe",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Grounding review finds fundamental identity and idempotency gaps in the cost-telemetry design, concluding planning stopped before producing executable tasks.",
+			"rationale": "Valid diagnosis of a stalled high-value cost-telemetry goal but stops short of producing an executable task set.",
 			"evidence": [
-				"run 60bca3bb failed after pass 2 with invalid verdict: degraded",
-				"planning stopped at grounding/constitution preflight, no executable tasks",
-				"overlapping intervals invalidate a simple duration sum"
+				"Prior run 60bca3bb failed after pass 2 with invalid verdict: degraded",
+				"Spec Kit planning stopped at grounding/constitution preflight, no executable tasks"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
+			"scoredAt": "2026-11-20T20:49:42.462Z"
 		},
 		{
 			"key": "proposal:2026-09-02-gateway-client-tools-webmcp-bridge",
@@ -13275,6 +13246,38 @@
 			"scoredAt": "2026-11-14T05:47:16.085Z"
 		},
 		{
+			"key": "pr:minion-meta#775",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#775 docs(proposal): SUNAT zero-value lines as operaciones gratuitas (fault 3105, hub #466)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/775",
+			"sourceUpdatedAt": "2026-10-10T21:47:27Z",
+			"sourceFingerprint": "0eaeaf4c6821fff21a9fcf40a5497f7af4f8d91459b51b3da444918fac59b147",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The proposal correctly flags a tax-compliance fault but cannot proceed until an accountant resolves the afectación 31-vs-15 ambiguity, so this angle needs that input before it's actionable.",
+			"evidence": [
+				"accountant must confirm afectación 31 vs 15 before cutover",
+				"Fix is hub #466 (draft)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:48:35.267Z"
+		},
+		{
 			"key": "proposal:2026-08-20-hub-finance-provider-source-refs",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13558,20 +13561,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 5
+				"implementation": 4
 			},
 			"confidence": 6,
-			"recommendation": "reevaluate",
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Documentation-only correction returns an inconsistent prior approval to review with verified current evidence, without claiming the underlying goal shipped.",
+			"rationale": "Documentation-only correction backed by verified commit SHAs and passing test counts resolves a stale governance finding without overclaiming completion.",
 			"evidence": [
-				"Base commit verified to have the budget consumer and settings load",
-				"41 tests pass, bun run check zero warnings",
-				"anonymous production browser still redirects to login, final acceptance unproven"
+				"Base 3c4d5bef confirmed with budget consumer, matching deployment 6216990278",
+				"bun test 41 pass, bun run check zero errors",
+				"Authenticated rendering proof still unproven (redirects to login)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
+			"scoredAt": "2026-11-20T20:49:42.462Z"
 		},
 		{
 			"key": "proposal:2026-08-24-hub-crm-activity-rollup",
@@ -15098,20 +15101,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 6
+				"specification": 6,
+				"implementation": 5
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Schema-cleanup spec removing a hidden stock coupling has a linked hub implementation PR and a follow-up ledger for the retired column.",
+			"rationale": "Concrete data-integrity fix tied to a specific hub PR removing a hidden stock bridge.",
 			"evidence": [
-				"hub #563 implementation referenced",
-				"follow-up proposal to drop the retired column"
+				"Spec Kit artifacts for hub #563",
+				"Follow-up proposal to drop the retired column"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
+			"scoredAt": "2026-11-20T20:49:42.462Z"
 		},
 		{
 			"key": "pr:minion-meta#884",
@@ -18736,39 +18739,6 @@
 			"scoredAt": "2026-11-19T18:48:21.281Z"
 		},
 		{
-			"key": "pr:minion-meta#839",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#839 docs(spec): record owner approval and WorkItem consumer validation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/839",
-			"sourceUpdatedAt": "2026-10-18T00:09:11Z",
-			"sourceFingerprint": "515b5eaa4c594467d7d5e4d2f18150c1e748809f796c0b36c012ce94e06422fa",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Documentation PR accurately records already-given owner approval and passing validation for the WorkItem consumer plan, ready for owner merge.",
-			"evidence": [
-				"1,266 runner tests passed",
-				"independent final review has zero findings",
-				"owner approval preserved at initial commit 329c87dc"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
-		},
-		{
 			"key": "proposal:2026-09-02-hub-pos-appointments-modal-to-route",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19665,6 +19635,41 @@
 			"scoredAt": "2026-11-16T10:28:18.225Z"
 		},
 		{
+			"key": "pr:minion (gateway)#331",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#331 chore(security): audit generated WhatsApp schema checksum",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/331",
+			"sourceUpdatedAt": "2026-10-16T09:05:35Z",
+			"sourceFingerprint": "2be830afa86b7b96889c3f8630b0e70da257963e9f61506634a8c6728eaf45fa",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#330"
+			],
+			"rationale": "Narrow, well-verified scanner-baseline audit that is the concrete blocking prerequisite for the larger WhatsApp feature.",
+			"evidence": [
+				"Independently calculate... matches the generated metadata",
+				"Replace the checksum... exit 1, Hex High Entropy String finding remains",
+				"Prerequisite for #330"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:48:35.267Z"
+		},
+		{
 			"key": "pr:minion_hub#279",
 			"kind": "pr",
 			"stage": "development",
@@ -19696,39 +19701,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
-			"key": "pr:minion_hub#636",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#636 feat(crm): ICP score slice 1 — contract, settings storage and _icp strip/mask rules",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/636",
-			"sourceUpdatedAt": "2026-11-06T13:02:36Z",
-			"sourceFingerprint": "843eb30f1875591bae0bf0bc64d09f72c049c8612d0f616d3625b514b1a5c398",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "CRM ICP contract/storage slice has two rounds of multi-reviewer council approval with identified blockers already fixed.",
-			"evidence": [
-				"Round 2 (head 694f9dac; A, B and C all approve)",
-				"\"Verified blocker, fixed in F1\" / \"fixed in F2\"",
-				"Bounded Zod schemas and atomic version-bump storage described"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
 		},
 		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
@@ -23532,39 +23504,6 @@
 			"scoredAt": "2026-11-20T10:47:27.769Z"
 		},
 		{
-			"key": "pr:minion-meta#825",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#825 docs(spec): 018 — sandbox vendors: slim d3 and ECharts GL, with the memory bill",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/825",
-			"sourceUpdatedAt": "2026-10-17T04:54:59Z",
-			"sourceFingerprint": "d3df79cc0f46d8aa3786f57afb853b8563b46f85aa93da86305c7f417171f83e",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Vendor-slimming spec is detailed with concrete size/memory metrics and a linked hub implementation PR.",
-			"evidence": [
-				"slim d3 is 70% of full d3.min.js size",
-				"implementation linked at hub#555",
-				"WebGL context-loss cap measured at 20 bar3D elements"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
-		},
-		{
 			"key": "pr:minion-meta#827",
 			"kind": "pr",
 			"stage": "development",
@@ -23584,17 +23523,17 @@
 				"specification": 8,
 				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Chat-kit port spec has clear AS-IS/TO-BE/DELTA anchors and tasks already completed in the linked hub PR.",
+			"rationale": "Well-anchored AS-IS/TO-BE/DELTA spec with tasks already completed in the linked hub PR.",
 			"evidence": [
-				"Tasks T001–T019 done in the hub PR",
-				"AS-IS/TO-BE/DELTA anchored to hub origin/master@21c00d15"
+				"AS-IS/TO-BE/DELTA anchored to hub origin/master@21c00d15",
+				"Tasks T001-T019 done in linked hub PR"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
+			"scoredAt": "2026-11-20T20:49:42.462Z"
 		},
 		{
 			"key": "proposal:2026-08-17-hub-pos-appointments-fork",
@@ -25736,6 +25675,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T07:47:28.679Z"
+		},
+		{
+			"key": "pr:minion-meta#808",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#808 docs(spec): 010 — Sandbox pages: agent-built visuals over configurable data endpoints (POC)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/808",
+			"sourceUpdatedAt": "2026-10-16T23:28:03Z",
+			"sourceFingerprint": "33aefc67e136555a613233edade1f44d7ac33f0f0574180b7ccea328a66c29fc",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Security-tagged POC with user-authored JS execution and a new read endpoint is explicitly blocked from proceeding past draft until owner approves the spec.",
+			"evidence": [
+				"Owner approves this spec before the POC PR leaves draft",
+				"Security-tagged: user-authored JS executes in the browser and a new generic read endpoint ships"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:48:35.267Z"
+		},
+		{
+			"key": "pr:minion-meta#825",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#825 docs(spec): 018 — sandbox vendors: slim d3 and ECharts GL, with the memory bill",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/825",
+			"sourceUpdatedAt": "2026-10-17T04:54:59Z",
+			"sourceFingerprint": "d3df79cc0f46d8aa3786f57afb853b8563b46f85aa93da86305c7f417171f83e",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Detailed spec with concrete bundle/memory/WebGL metrics and a linked hub implementation PR makes this actionable.",
+			"evidence": [
+				"Headline metrics: slim d3 63,758B gz, bar3D 2.83MB JS heap per element",
+				"Implementation linked at NikolasP98/minion_hub#555"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:49:42.462Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-error-hook-consumer-adoption",
@@ -28533,6 +28536,39 @@
 			"scoredAt": "2026-11-16T10:28:49.704Z"
 		},
 		{
+			"key": "pr:minion_hub#636",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#636 feat(crm): ICP score slice 1 — contract, settings storage and _icp strip/mask rules",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/636",
+			"sourceUpdatedAt": "2026-11-06T13:02:36Z",
+			"sourceFingerprint": "843eb30f1875591bae0bf0bc64d09f72c049c8612d0f616d3625b514b1a5c398",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified CRM contract slice with both review blockers resolved and round-2 council approval.",
+			"evidence": [
+				"Round 2 (head 694f9dac; A, B and C all approve)",
+				"Fix F1 fixed",
+				"Fix F2 fixed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:48:35.267Z"
+		},
+		{
 			"key": "pr:minion-meta#971",
 			"kind": "pr",
 			"stage": "development",
@@ -29995,6 +30031,38 @@
 			"scoredAt": "2026-11-19T18:48:21.281Z"
 		},
 		{
+			"key": "pr:minion-meta#839",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#839 docs(spec): record owner approval and WorkItem consumer validation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/839",
+			"sourceUpdatedAt": "2026-10-18T00:09:11Z",
+			"sourceFingerprint": "515b5eaa4c594467d7d5e4d2f18150c1e748809f796c0b36c012ce94e06422fa",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-evidenced bookkeeping PR records already-given owner approval and passing validation without claiming deployment.",
+			"evidence": [
+				"Owner merged WorkItem consumer-first plan in PR #835 at 0dc0ece6",
+				"Factory source: 1,266 runner tests passed, zero review findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:49:42.462Z"
+		},
+		{
 			"key": "pr:minion-meta#853",
 			"kind": "pr",
 			"stage": "development",
@@ -31325,41 +31393,6 @@
 			"scoredAt": "2026-11-14T05:48:14.769Z"
 		},
 		{
-			"key": "pr:minion (gateway)#331",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#331 chore(security): audit generated WhatsApp schema checksum",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/331",
-			"sourceUpdatedAt": "2026-10-16T09:05:35Z",
-			"sourceFingerprint": "2be830afa86b7b96889c3f8630b0e70da257963e9f61506634a8c6728eaf45fa",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#330"
-			],
-			"rationale": "Narrow, well-evidenced secret-scanner baseline audit is fully verified and only needs the documented human merge exception, unblocking #330.",
-			"evidence": [
-				"\"Prerequisite for #330\"",
-				"\"detect-secrets-hook ... exit 0, no findings\" / negative control exit 1",
-				"\"this dedicated audit requires an explicit human merge exception after review\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
-		},
-		{
 			"key": "proposal:2026-09-28-hub-table-open-modes-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31592,39 +31625,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:18:24.410Z"
-		},
-		{
-			"key": "pr:minion-meta#808",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#808 docs(spec): 010 — Sandbox pages: agent-built visuals over configurable data endpoints (POC)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/808",
-			"sourceUpdatedAt": "2026-10-16T23:28:03Z",
-			"sourceFingerprint": "33aefc67e136555a613233edade1f44d7ac33f0f0574180b7ccea328a66c29fc",
-			"score": 34,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Security-tagged new feature spec (user-authored JS execution, new generic data endpoint) explicitly requires owner approval before leaving draft.",
-			"evidence": [
-				"\"Security-tagged: user-authored JS executes in the browser and a new generic read endpoint ships\"",
-				"\"Owner approves this spec before the POC PR leaves draft\"",
-				"\"The POC runs on dev:local meanwhile\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
 		},
 		{
 			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
@@ -33977,6 +33977,38 @@
 			"scoredAt": "2026-11-16T10:19:54.006Z"
 		},
 		{
+			"key": "pr:minion-meta#815",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#815 chore: version packages",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/815",
+			"sourceUpdatedAt": "2026-10-16T22:08:17Z",
+			"sourceFingerprint": "859e3ad1662980c40dc2dcd55041eb1586caec5a4ece2928e794b8293f007eac",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 10,
+				"implementation": 10
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated Changesets release PR is fully ready to merge and publish the pending minor version bumps.",
+			"evidence": [
+				"Opened by Changesets release action",
+				"Bumps @minion-stack/design-tokens and @minion-stack/ui to 0.3.0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:49:42.462Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-dead-mirrors-cleanup",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35514,21 +35546,21 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 9,
 				"implementation": 3
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Well-specified dev-tooling improvement with a clear AS-IS/DELTA and task plan, but implementation has not started and opens a new secret boundary requiring owner review.",
+			"rationale": "Thoroughly specified dev-tooling feature, but it opens a new secret boundary so implementation requires owner review before proceeding past the draft spec stage.",
 			"evidence": [
-				"\"Principle V applies ... the implementation PR opens as a draft for owner review and owner merge\"",
-				"\"23 tasks across 5 phases\"",
-				"Four assumptions tagged (ASSUMPTION — owner to confirm)"
+				"Principle V applies — the feature opens a new opt-in secret boundary",
+				"implementation PR opens as a draft for owner review and owner merge",
+				"23 tasks across 5 phases"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
+			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-3215540846",
@@ -39327,6 +39359,39 @@
 			"scoredAt": "2026-11-14T20:47:42.827Z"
 		},
 		{
+			"key": "pr:minion_hub#635",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#635 test(data-table): close S4 DOM-mount test gap — Slice 1 (VITEST-gated conditions, teardown + row-content asserts)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/635",
+			"sourceUpdatedAt": "2026-11-06T11:23:09Z",
+			"sourceFingerprint": "d69025b5a35c836fca7af4496176e63cf4d2de08052adb2e00952c24d999acdd",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Small, test-only change already fully verified and council-approved with mutation testing confirming test efficacy.",
+			"evidence": [
+				"25 files / 254 tests passed",
+				"Council verdict... all approve",
+				"git diff --name-only master..HEAD -- '*.svelte' → empty"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T20:48:35.267Z"
+		},
+		{
 			"key": "pr:minion_site#28",
 			"kind": "pr",
 			"stage": "development",
@@ -39390,39 +39455,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T17:47:29.103Z"
-		},
-		{
-			"key": "pr:minion-meta#555",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#555 docs: record JEV shadow deployment and week-one review",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/555",
-			"sourceUpdatedAt": "2026-09-22T03:54:56Z",
-			"sourceFingerprint": "9a8b586922123dee24a559b2282f4345964562a52ef78ce6719b6066ca207196",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Shadow-deployment record is stale and itself notes open follow-ups (off-host backup, erasure propagation) that remain unresolved.",
-			"evidence": [
-				"\"off-host backup and erasure propagation remain recorded follow-ups\"",
-				"\"does not claim a Hub merge/release, certified token admission or measured labeling accuracy\"",
-				"updatedAt 2026-09-22, status draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -41761,39 +41793,6 @@
 			"scoredAt": "2026-11-19T03:48:21.652Z"
 		},
 		{
-			"key": "pr:minion_hub#635",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#635 test(data-table): close S4 DOM-mount test gap — Slice 1 (VITEST-gated conditions, teardown + row-content asserts)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/635",
-			"sourceUpdatedAt": "2026-11-06T11:23:09Z",
-			"sourceFingerprint": "d69025b5a35c836fca7af4496176e63cf4d2de08052adb2e00952c24d999acdd",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, test-only slice closing a specific DOM-mount coverage gap with a clean council verdict and strong mutation-tested evidence.",
-			"evidence": [
-				"\"No verified blockers\"",
-				"\"vitest run ... 25 files / 254 tests passed\"",
-				"\"git diff --name-only master..HEAD -- '*.svelte' → empty\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
-		},
-		{
 			"key": "pr:minion_hub#638",
 			"kind": "pr",
 			"stage": "development",
@@ -41893,14 +41892,14 @@
 			"scoredAt": "2026-11-17T17:47:29.103Z"
 		},
 		{
-			"key": "pr:minion-meta#815",
+			"key": "pr:minion-meta#555",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-meta",
-			"title": "#815 chore: version packages",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/815",
-			"sourceUpdatedAt": "2026-10-16T22:08:17Z",
-			"sourceFingerprint": "859e3ad1662980c40dc2dcd55041eb1586caec5a4ece2928e794b8293f007eac",
+			"title": "#555 docs: record JEV shadow deployment and week-one review",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/555",
+			"sourceUpdatedAt": "2026-09-22T03:54:56Z",
+			"sourceFingerprint": "9a8b586922123dee24a559b2282f4345964562a52ef78ce6719b6066ca207196",
 			"score": 26,
 			"band": "low",
 			"axes": {
@@ -41909,20 +41908,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 9
+				"specification": 4,
+				"implementation": 3
 			},
-			"confidence": 8,
-			"recommendation": "execute",
+			"confidence": 4,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Automated changesets release PR is fully specified and ready to merge with no further work.",
+			"rationale": "Shadow-deployment review doc with outstanding human-labeling and backup/erasure follow-ups left unresolved since September.",
 			"evidence": [
-				"opened automatically by Changesets release action",
-				"bundles two package minor releases ready to publish"
+				"Review requires independent human labels",
+				"off-host backup and erasure propagation remain recorded follow-ups"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
+			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
 			"key": "pr:minion-meta#834",
@@ -41950,14 +41949,14 @@
 				"pr:minion-meta#838",
 				"pr:minion-meta#841"
 			],
-			"rationale": "Minimally described chat-icon spec overlaps with sibling step-verb and spinner specs in this batch and should become one chat-loading-indicator goal.",
+			"rationale": "Thin, minor chat step-icon spec overlapping scope with sibling step/spinner specs on the same surface.",
 			"evidence": [
-				"Spec for hub assistant step line the owner picked from the demo",
-				"no AS-IS/TO-BE/DELTA detail given"
+				"Summary is only 'the assistant step line the owner picked from the demo'",
+				"Overlaps with #838 step verbs and #841 spinner material"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
+			"scoredAt": "2026-11-20T20:49:42.462Z"
 		},
 		{
 			"key": "pr:minion-meta#838",
@@ -41985,14 +41984,14 @@
 				"pr:minion-meta#834",
 				"pr:minion-meta#841"
 			],
-			"rationale": "Thin chat step-header/spinner spec overlaps with sibling loading-indicator specs in this batch and should be consolidated.",
+			"rationale": "Minor chat step/spinner spec duplicating scope with sibling specs that should be consolidated into one goal.",
 			"evidence": [
-				"Spec for the Notion-style step header and verbs + 3D spinner on every AI chat surface",
-				"no AS-IS/TO-BE/DELTA detail given"
+				"One-line description of step header/verbs plus spinner for AI chat surfaces",
+				"Overlaps with #834 and #841"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
+			"scoredAt": "2026-11-20T20:49:42.462Z"
 		},
 		{
 			"key": "pr:minion-meta#841",
@@ -42011,8 +42010,8 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 2
+				"specification": 3,
+				"implementation": 3
 			},
 			"confidence": 3,
 			"recommendation": "group",
@@ -42020,14 +42019,14 @@
 				"pr:minion-meta#834",
 				"pr:minion-meta#838"
 			],
-			"rationale": "One-line spinner-material spec overlaps with sibling chat loading-indicator specs in this batch and should be consolidated.",
+			"rationale": "Minor Appearance spinner-material spec overlapping with sibling chat step/spinner specs on the same surface.",
 			"evidence": [
-				"Spec for hub #568",
-				"no AS-IS/TO-BE/DELTA detail given"
+				"Spec for hub #568 thinking spinner material in Appearance",
+				"Overlaps with #834 and #838"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:20:00.863Z"
+			"scoredAt": "2026-11-20T20:49:42.462Z"
 		},
 		{
 			"key": "pr:minion-meta#850",
@@ -44593,20 +44592,19 @@
 			},
 			"readiness": {
 				"specification": 3,
-				"implementation": 3
+				"implementation": 2
 			},
 			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Documentation-only record of POS hardening is stale (two months open) and explicitly says deployment/qualification results are still pending.",
+			"rationale": "Stale documentation PR tracking ongoing qualification with no concrete current status, unclear if still relevant two months later.",
 			"evidence": [
-				"\"Implementation and deployment results will be updated as release qualification completes\"",
-				"status: open, updatedAt 2026-09-20",
-				"\"This documentation does not claim deployment\""
+				"Implementation and deployment results will be updated as release qualification completes",
+				"updatedAt 2026-09-20"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
+			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
 			"key": "pr:minion-meta#849",
@@ -49600,21 +49598,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
+				"specification": 7,
 				"implementation": 9
 			},
-			"confidence": 6,
+			"confidence": 8,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The underlying work is already merged, deployed, and verified in production, so prioritizing this record further adds little value.",
+			"rationale": "Documents a feature already merged, deployed to production, and verified by passing post-merge CI, so no further action is needed.",
 			"evidence": [
-				"\"Hub PR #362 merged ... after explicit user authorization\"",
-				"\"Vercel production deployment ... is READY and serves https://hub.minion-ai.org\"",
-				"\"Post-merge CI run ... completed successfully with all six applicable jobs passing\""
+				"Hub PR #362 merged",
+				"Vercel production deployment... is READY",
+				"Post-merge CI run... passed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T20:18:46.563Z"
+			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
 			"key": "pr:minion-meta#946",
