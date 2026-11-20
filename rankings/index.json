@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-20T06:47:05.989Z",
+	"generatedAt": "2026-11-20T07:17:08.239Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1623,6 +1623,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T10:48:05.478Z"
+		},
+		{
+			"key": "pr:minion-meta#1057",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1057 spec(135): stock checkpoints — count, owner/admin lock, nothing pre-count moves stock",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1057",
+			"sourceUpdatedAt": "2026-11-20T07:12:17Z",
+			"sourceFingerprint": "77f9b34ed98dde61124a793afe82121e94aeb69f3b62b0e78b23c00506585ec7",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#1056"
+			],
+			"rationale": "Stock-checkpoint spec is well-specified with concrete prod evidence of a real data-integrity incident and is a prerequisite for the related appointment-closure spec.",
+			"evidence": [
+				"Evidence it prevents: the 2026-11-18 repair returned 690 U of Dysport ... that a hand-made squaring had already absorbed",
+				"Spec 134 (#1056) S1 depends on this spec's appointment-completion rule and backfill"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T07:17:07.978Z"
 		},
 		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
@@ -4438,6 +4472,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T18:47:17.857Z"
+		},
+		{
+			"key": "pr:minion-meta#1056",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1056 spec(134): closing appointments — Por cerrar, Desagendar everywhere, Archivar",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1056",
+			"sourceUpdatedAt": "2026-11-20T07:10:19Z",
+			"sourceFingerprint": "458f5934e7fe4f6c254dc78a8171ce560576e659495b0639d00cf67a26734eb7",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#1057"
+			],
+			"rationale": "Well-documented appointment-closure spec with clear AS-IS/TO-BE/DELTA but one open FR blocking planning and an explicit dependency on spec 135.",
+			"evidence": [
+				"Open: FR-012, the stock cut-off for appointments completed after a physical count; needed before /speckit-plan",
+				"Spec 134 (#1056) S1 depends on this spec's appointment-completion rule and backfill"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T07:17:07.978Z"
 		},
 		{
 			"key": "pr:minion-meta#936",
@@ -46364,21 +46432,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 2
+				"specification": 3,
+				"implementation": 1
 			},
-			"confidence": 4,
+			"confidence": 5,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Transient dual-provider infra failure with no spec/code defect indicated, so it is a safe-to-retry monitor artifact rather than actionable work.",
+			"rationale": "This is a transient dual-provider infra failure report on an older ranking run with no code or spec defect indicated, so it is not actionable work.",
 			"evidence": [
-				"\"both bounded providers failed or returned invalid JSON on batch 1\"",
-				"\"No evidence of a bad spec or malformed input\"",
-				"\"Recommendation: safe to retry as-is\""
+				"both LLM backends unhealthy at once, not a genuine task failure",
+				"Recommendation: safe to retry as-is; no spec or code fix indicated"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T06:47:36.536Z"
+			"scoredAt": "2026-11-20T07:17:07.978Z"
 		},
 		{
 			"key": "issue:minion-meta#1031",
