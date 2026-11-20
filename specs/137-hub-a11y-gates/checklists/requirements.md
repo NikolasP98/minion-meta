@@ -17,7 +17,7 @@
 - [x] Requirements are testable and unambiguous (each FR maps to an acceptance scenario or SC)
 - [x] Success criteria are measurable (100% seeded-failure trials, 15-min / +6-min CI budgets, 7 patterns)
 - [x] Success criteria are technology-agnostic
-- [x] All acceptance scenarios are defined (US1–US5)
+- [x] All acceptance scenarios are defined (US1–US6)
 - [x] Edge cases are identified (flakiness, selector churn, themes, allow-list, render failure, disabled items, RTL)
 - [x] Scope is clearly bounded (Out of Scope section; no fixes in S0)
 - [x] Dependencies and assumptions identified
@@ -25,10 +25,10 @@
 ## Feature Readiness
 
 - [x] All functional requirements have clear acceptance criteria
-- [x] User scenarios cover primary flows (page, story, pattern, existing specs, suppressions)
+- [x] User scenarios cover primary flows (page, story, pattern, existing specs, suppressions, one command)
 - [x] Feature meets measurable outcomes defined in Success Criteria
 - [x] No implementation details leak into specification (beyond the required evidence anchors)
 
 ## Notes
 
-- One iteration; all items pass. Ready for `/speckit-plan` after spec review (2-pass, per AGENTS.md SDLC).
+- Two iterations. The 2-pass review (2026-11-20, `../review.md`) found 14 issues; all are fixed in `spec.md` and every item above still passes.
