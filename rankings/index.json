@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-20T22:47:24.201Z",
+	"generatedAt": "2026-11-20T23:18:06.185Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1295,6 +1295,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T18:48:21.281Z"
+		},
+		{
+			"key": "pr:minion-meta#1057",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1057 spec(135): stock checkpoints — count, owner/admin lock, nothing pre-count moves stock",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1057",
+			"sourceUpdatedAt": "2026-11-20T22:47:44Z",
+			"sourceFingerprint": "dd2b76100942651f354e36c6a8eefb160401a43f72602f659970abf33347acf2",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1056",
+				"pr:minion-meta#1064"
+			],
+			"rationale": "This spec is grounded in a concrete data-integrity incident and is a dependency for other appointment work, making owner approval and progression high priority.",
+			"evidence": [
+				"evidence cited: 2026-11-18 repair returned 690 U of Dysport that a hand-made squaring had already absorbed",
+				"spec 134 (#1056) S1 depends on this spec's rules"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-hub-fresh-authority-spec",
@@ -4516,14 +4551,14 @@
 			"scoredAt": "2026-11-18T18:47:17.857Z"
 		},
 		{
-			"key": "pr:minion-meta#1057",
+			"key": "pr:minion-meta#1056",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-meta",
-			"title": "#1057 spec(135): stock checkpoints — count, owner/admin lock, nothing pre-count moves stock",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1057",
-			"sourceUpdatedAt": "2026-11-20T22:41:14Z",
-			"sourceFingerprint": "2c81711d7ab03b1caa7a5a4c9a00a99a0d8dd53a1b403ef280429bd50dcb222d",
+			"title": "#1056 spec(134): appointment lifecycle — two-layer statuses, hardened state machine, payment track, board view",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1056",
+			"sourceUpdatedAt": "2026-11-20T22:53:09Z",
+			"sourceFingerprint": "affcd318355f5309adcef180fdf8162f60c64d87e627eea7c531774ba094f5d6",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -4532,22 +4567,22 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 3
 			},
 			"confidence": 6,
-			"recommendation": "execute",
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"pr:minion-meta#1056"
+				"pr:minion-meta#1057",
+				"pr:minion-meta#1063"
 			],
-			"rationale": "Well-evidenced spec addressing a concrete production data-integrity incident (duplicate stock adjustment) and gating a dependent spec, ready for owner approval.",
+			"rationale": "A substantial appointment-lifecycle spec with real business value but an explicitly open requirement (FR-012) blocking progression to the plan stage.",
 			"evidence": [
-				"Evidence it prevents: the 2026-11-18 repair returned 690 U of Dysport... that a hand-made squaring had already absorbed",
-				"Spec 134 (#1056) S1 depends on this spec's appointment-completion rule and backfill"
+				"spec body: 'Open: FR-012, the stock cut-off for appointments completed after a physical count; needed before /speckit-plan'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "pr:minion-meta#936",
@@ -6617,6 +6652,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:17:44.921Z"
+		},
+		{
+			"key": "pr:minion_hub#698",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#698 test(house-rules): every write endpoint is permission-gated or listed with how it is protected",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/698",
+			"sourceUpdatedAt": "2026-11-20T23:04:24Z",
+			"sourceFingerprint": "2ae268dda6b5b587d2b729c03d2ddac482b9237f92b5337454cebde96d81ad3f",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#700",
+				"pr:minion_hub#701"
+			],
+			"rationale": "A test-only security inventory that is verified passing and clearly scoped under spec 138, ready to merge as part of the house-rules chain.",
+			"evidence": [
+				"9 of 9 scripts/house-rules tests pass",
+				"371 write endpoint files / 428 handlers scanned, 137 left unclassified as todo"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "pr:minion-meta#1062",
@@ -9832,6 +9902,76 @@
 			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
+			"key": "pr:minion_hub#700",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#700 feat(api): scheduling errors show a sentence instead of a code, and shared error responses carry message, error and code",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/700",
+			"sourceUpdatedAt": "2026-11-20T23:04:00Z",
+			"sourceFingerprint": "57cce8e83ebbdaa3093f4434a596d5f7f0119dce46c8ef7fa4473ef08ee6cfc3",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#698",
+				"pr:minion_hub#701"
+			],
+			"rationale": "A well-verified standardization of error response shape across many routes that improves user-facing error text with no status-code regressions.",
+			"evidence": [
+				"bun run check clean apart from two known PostHog errors",
+				"scheduling errors now show a sentence instead of a bare code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T23:18:05.985Z"
+		},
+		{
+			"key": "pr:minion_hub#701",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#701 fix(api): a switched-off module answers 404 on every API route",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/701",
+			"sourceUpdatedAt": "2026-11-20T23:09:13Z",
+			"sourceFingerprint": "9f51ce208d6d64a0295c658a00503aaa4d078a25a75ac8512c4256a817c96510",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#698",
+				"pr:minion_hub#700"
+			],
+			"rationale": "The one deliberate status-code change in spec 138 is narrowly scoped, verified with updated tests, and closes an inconsistency across 43 call sites.",
+			"evidence": [
+				"43 call sites in 31 files now return 404 with code module_disabled",
+				"540 tests pass across stock, auth, modules, and nav"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T23:18:05.985Z"
+		},
+		{
 			"key": "pr:minion_site#29",
 			"kind": "pr",
 			"stage": "development",
@@ -10960,40 +11100,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:47:45.969Z"
-		},
-		{
-			"key": "pr:minion-meta#1061",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1061 spec(137): accessibility gates first — CI fails on any new a11y regression (program S0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1061",
-			"sourceUpdatedAt": "2026-11-20T19:08:52Z",
-			"sourceFingerprint": "96ebdac8b5bd30304111fd32601877a5942d6009376172e88c916bb84734f010",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1060"
-			],
-			"rationale": "Owner-approved S0 slice has clear AS-IS anchors and a bounded CI-gate scope ready to move into plan/implement.",
-			"evidence": [
-				"owner approved 2026-11-20: \"Approve, start S0 spec\"",
-				"Next: spec review, then /speckit-plan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T19:17:36.235Z"
 		},
 		{
 			"key": "pr:minion-meta#885",
@@ -12205,14 +12311,14 @@
 			"scoredAt": "2026-11-19T23:47:21.098Z"
 		},
 		{
-			"key": "pr:minion-meta#1056",
+			"key": "pr:minion-meta#1064",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-meta",
-			"title": "#1056 spec(134): closing appointments — Por cerrar, Desagendar everywhere, Archivar",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1056",
-			"sourceUpdatedAt": "2026-11-20T22:22:42Z",
-			"sourceFingerprint": "406e1a6a7084481061636931b2cf8657e23051dfd72f380f5d7f9faea27eafed",
+			"title": "#1064 spec(140): record lock policy — after X days, month close, SUNAT or webhook",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1064",
+			"sourceUpdatedAt": "2026-11-20T22:49:51Z",
+			"sourceFingerprint": "e0e77756674ac07568997b4e519cf42b6fcbf0debd640b88b775bc17c6bd9f73",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -12227,16 +12333,17 @@
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
+				"pr:minion-meta#1056",
 				"pr:minion-meta#1057"
 			],
-			"rationale": "Spec-only artifact for appointment closure with an explicitly open requirement (FR-012) blocking progression to planning.",
+			"rationale": "A compliance-oriented record-lock spec still at spec stage, part of the same FACES stream and likely sequenced after the stock checkpoints work it depends on.",
 			"evidence": [
-				"Open: FR-012, the stock cut-off for appointments completed after a physical count; needed before /speckit-plan",
-				"owner approves the spec and merges"
+				"spec-stage artifact only, no implementation evidence given",
+				"described as part of the same FACES appointment/stock work as #1056 and #1057"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -13654,14 +13761,14 @@
 			"scoredAt": "2026-11-16T14:18:24.410Z"
 		},
 		{
-			"key": "pr:minion_hub#698",
+			"key": "pr:minion_hub#702",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#698 test(house-rules): every write endpoint is permission-gated or listed with how it is protected",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/698",
-			"sourceUpdatedAt": "2026-11-20T22:44:07Z",
-			"sourceFingerprint": "c4e450f58b91302ba080f4dd28c29e66f47bfe0036dd29b01daca1f862d08c67",
+			"title": "#702 feat(a11y): accessibility gates first — one command, five gates, decrease-only baselines (spec 137)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/702",
+			"sourceUpdatedAt": "2026-11-20T23:14:18Z",
+			"sourceFingerprint": "59f82a1c193ba31fcdb4f184fbfc3ca2fabfd02f1901c23e95c17ffa858d454b",
 			"score": 51,
 			"band": "medium",
 			"axes": {
@@ -13670,24 +13777,22 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 7
+				"specification": 5,
+				"implementation": 5
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [
-				"pr:minion-meta#1062",
-				"pr:minion_hub#693"
+				"pr:minion_plugins#2",
+				"pr:minion-meta#1061"
 			],
-			"rationale": "Security-relevant inventory of unprotected write endpoints, test-only and passing, with 137 unclassified endpoints explicitly flagged as follow-up rather than hidden.",
+			"rationale": "The PR itself states its description is incomplete pending baseline counts and CI timing data, so readiness cannot yet be judged.",
 			"evidence": [
-				"9 of 9 pass",
-				"Files with an uncovered method / uncovered methods: 183 / 204",
-				"Classifying the 137 todo endpoints is follow-up work"
+				"PR body: 'Draft while the page baseline is taken from this PR's own CI run; the full description...follows'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -13756,6 +13861,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T06:47:55.767Z"
+		},
+		{
+			"key": "pr:minion-meta#1061",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1061 spec(137): accessibility gates first — CI fails on any new a11y regression (program S0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1061",
+			"sourceUpdatedAt": "2026-11-20T23:02:16Z",
+			"sourceFingerprint": "cfb08387d46e14677ad56097b3398bf0885bae576f17c2bdca4bdbf529e6f358",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#702",
+				"pr:minion_plugins#2"
+			],
+			"rationale": "This approved a11y spec is already paired with implementation code in hub#702 and a doc update in plugins#2, so it should be tracked as one delivery.",
+			"evidence": [
+				"owner approved 2026-11-20: 'Approve, start S0 spec'",
+				"implementation already exists in minion_hub#702"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "pr:minion-meta#836",
@@ -16627,6 +16767,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:55:16.325Z"
+		},
+		{
+			"key": "pr:minion-meta#1063",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1063 spec(139): reminder negation follow-up — agent confirms, asks, reports; no auto-cancel",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1063",
+			"sourceUpdatedAt": "2026-11-20T22:49:47Z",
+			"sourceFingerprint": "c8779ab50602978dc917c364d66250a30f02ea9d746213f76400df37f5ff85e0",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion-meta#1056",
+				"pr:minion-meta#1057"
+			],
+			"rationale": "A spec-stage-only item in the same FACES stream as #1056/#1057, with less supporting detail given in the summary than its siblings.",
+			"evidence": [
+				"spec-stage artifact only, no implementation evidence given",
+				"described as part of the same FACES appointment/stock work as #1056 and #1057"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-shells-lifecycle-stubs",
@@ -37547,8 +37722,8 @@
 			"repo": "minion_hub",
 			"title": "#699 chore(pulse): Pulse is switched off for every organization until work on it resumes",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/699",
-			"sourceUpdatedAt": "2026-11-20T22:43:41Z",
-			"sourceFingerprint": "a9ea4c2f5bf0fe35abb8fb4dc222b805fb913377c4912ccdc2e93026c452d917",
+			"sourceUpdatedAt": "2026-11-20T23:02:35Z",
+			"sourceFingerprint": "e8dfce18e88884c16cbb2c418858b1e019822f105573e5567fafad6fcaf0d25f",
 			"score": 30,
 			"band": "low",
 			"axes": {
@@ -37557,21 +37732,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 8
+				"specification": 7,
+				"implementation": 9
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Simple, reversible owner-directed feature-flag disable with 631 passing tests and clear revert instructions, though no browser check was run.",
+			"rationale": "A small, reversible, owner-requested feature toggle with passing tests and no spec needed given its scope.",
 			"evidence": [
-				"Owner decision, 2026-11-20",
-				"631 tests pass",
-				"Not run locally:... a browser check"
+				"owner decision 2026-11-20 quoted directly",
+				"631 of 631 tests pass across 34 files"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "pr:minion-meta#954",
@@ -39678,6 +39852,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T20:48:35.267Z"
+		},
+		{
+			"key": "pr:minion_plugins#2",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_plugins",
+			"title": "#2 docs(minion-engineering): accessibility gate for minion_hub UI changes (spec 137)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_plugins/pull/2",
+			"sourceUpdatedAt": "2026-11-20T23:14:24Z",
+			"sourceFingerprint": "540048cbc4026c2e85ccfc39f16d5e029943c2dad013f7f4d98777c1b5141f71",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#702",
+				"pr:minion-meta#1061"
+			],
+			"rationale": "This skill-doc update is explicitly sequenced after hub#702 and meta#1061, so it should land as one accessibility delivery rather than be ranked alone.",
+			"evidence": [
+				"PR body: 'merge this after that PR'",
+				"depends on command shipped in minion_hub#702"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
 			"key": "pr:minion_site#28",
