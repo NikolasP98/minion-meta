@@ -35,7 +35,7 @@ Approval of pass 1, 2026-11-20: "I approve the rest, btw."
 
 **Pass 2 (rescope), owner 2026-11-20, verbatim:**
 
-- "anything interpreted as a negation (jev eval) should initiate a process where the agent confirms the negation, asks the patient how they want to proceed and reports this to the staff. For this, consider event statuses like how notion has nested status types (2 layers …) but relevant to this industry (eg. "to-do": scheduled, awaiting confirmation after a confirmation message is sent, awaiting payment; "complete": canceled, completed, refunded; etc). Obviously, this implies a new state machine, so logic between each state should be enforced." The WhatsApp follow-up itself is spec 138; this spec owns the statuses and the state machine.
+- "anything interpreted as a negation (jev eval) should initiate a process where the agent confirms the negation, asks the patient how they want to proceed and reports this to the staff. For this, consider event statuses like how notion has nested status types (2 layers …) but relevant to this industry (eg. "to-do": scheduled, awaiting confirmation after a confirmation message is sent, awaiting payment; "complete": canceled, completed, refunded; etc). Obviously, this implies a new state machine, so logic between each state should be enforced." The WhatsApp follow-up itself is spec 139; this spec owns the statuses and the state machine.
 - On completing an unscheduled appointment: "for best practice, it should have a time first"
 - "Consider adding to the team calendar as its own kanban view. when the staff user switches views from cal to kanban, keep the same date range filter … Switching back from the kanban to cal should also be smart, but I leave that logic up to you."
 - On the status tree proposed in chat: "Yes, it looks good. Just please make sure the state machine's logic is hardened."
@@ -87,7 +87,7 @@ Every appointment has exactly one **status**. Each status belongs to one **group
 | **Por hacer** | Agendada | `pending` (kept) | booked, nothing sent yet |
 | | Por confirmar | `awaiting_confirmation` | confirmation message sent, no answer yet |
 | | Confirmada | `accepted` (kept) | client said yes, or staff confirmed |
-| | Por reconfirmar | `reconfirm` | client said no or something unclear; the agent is following up (spec 138) |
+| | Por reconfirmar | `reconfirm` | client said no or something unclear; the agent is following up (spec 139) |
 | | Desagendada | `unscheduled` | no time; waits to be re-booked; reason `no_vino` or `sin_fecha` |
 | **En curso** | En atención | `checked_in` | client arrived (check-in) |
 | | Por cerrar | `to_close` | its day ended (org-local midnight) and it was not closed |
@@ -108,7 +108,7 @@ Keys already in use keep their value, so existing rows keep their meaning and on
 |---|---|---|---|
 | Agendada | Por confirmar | system (confirmation message sent) | message actually delivered to the channel |
 | Agendada, Por confirmar, Por reconfirmar | Confirmada | client "yes" (reply), staff | — |
-| Por confirmar, Confirmada | Por reconfirmar | agent (negation classified, spec 138) | reply after the message; not already closed |
+| Por confirmar, Confirmada | Por reconfirmar | agent (negation classified, spec 139) | reply after the message; not already closed |
 | any Por hacer except Desagendada | Desagendada | staff ("Desagendar"; "No vino") | reason required |
 | Desagendada | Agendada / Confirmada | staff (new time via drag or picker) | a new start time is set in the same change |
 | Agendada, Por confirmar, Confirmada | En atención | staff (check-in) | appointment day is today |
@@ -204,7 +204,7 @@ Keys already in use keep their value, so existing rows keep their meaning and on
 | Status writes from 7 surfaces → one gate with the §2 table, compare-and-set, idempotence, one log row | exhaustive (from, to, actor) matrix test; concurrent-change test (second writer refused with the current state) |
 | No DB guard → trigger refusing unknown keys and changes out of Cerrada | SQL integration test |
 | Reminder sent: no status change → Agendada → Por confirmar | reminders service test |
-| Reply "no": `cancelled` + session handed back → Por reconfirmar, nothing handed back (follow-up in spec 138) | reminders service test |
+| Reply "no": `cancelled` + session handed back → Por reconfirmar, nothing handed back (follow-up in spec 139) | reminders service test |
 | Past day, open: stays open forever, one alert per visit → Por cerrar at local midnight (clock via the gate; derived fallback), one daily inbox count | clock job test (idempotent, never touches closed/desagendada); `appointment-overdue` rule rewritten |
 | Completar unpaid (FACES rule on): allowed → refused "Falta cobrar S/ …" with "Cobrar ahora" | service + component test; org setting off → allowed |
 | Payment chip: none → Sin cobro / Adelanto / Pagado / Por cobrar / Reembolsado from linked lines | unit test of the derivation incl. 0-price lines |
@@ -264,7 +264,7 @@ A duplicate is archived with reason "Duplicada": closed, nothing refunded. A cli
 
 - Grouped visit: Desagendar, Archivar, Anular apply to every member, all or none.
 - Recurring series: each occurrence has its own status; a change applies to one occurrence unless the user picks the series option that exists today.
-- An appointment whose day ended while in Por reconfirmar (spec 138 still talking to the client) becomes Por cerrar; the agent conversation result is still reported to staff.
+- An appointment whose day ended while in Por reconfirmar (spec 139 still talking to the client) becomes Por cerrar; the agent conversation result is still reported to staff.
 - Online request never answered: stays Agendada until midnight, then Por cerrar, where Rechazada is not offered (staff archive it instead).
 - 0-price appointments (controls): payment Pagado, so the completion rule never blocks them.
 - Legacy `no_show` rows: shown as "No vino (anterior)" in Cerrada; no transition in or out.
@@ -277,7 +277,7 @@ A duplicate is archived with reason "Duplicada": closed, nothing refunded. A cli
 - **FR-002**: Every status change MUST go through one server gate implementing the §2 table: compare-and-set on the expected status, idempotence, one log row with actor and reason, effects in the same transaction.
 - **FR-003**: Illegal changes MUST be refused with the reason and the next step; changes out of Cerrada MUST be refused.
 - **FR-004**: A database trigger MUST refuse unknown status keys and changes out of Cerrada statuses.
-- **FR-005**: Sending a confirmation message MUST move Agendada to Por confirmar; a "yes" reply MUST move it to Confirmada; a negation MUST move it to Por reconfirmar and MUST NOT cancel or hand anything back (follow-up: spec 138).
+- **FR-005**: Sending a confirmation message MUST move Agendada to Por confirmar; a "yes" reply MUST move it to Confirmada; a negation MUST move it to Por reconfirmar and MUST NOT cancel or hand anything back (follow-up: spec 139).
 - **FR-006**: At org-local midnight after its day, an open appointment (Agendada, Por confirmar, Confirmada, Por reconfirmar, En atención) MUST become Por cerrar through the gate; reads MUST show it as Por cerrar even if the job has not run.
 - **FR-007**: The inbox MUST raise one daily "N citas por cerrar" notification per org linking to the tray, resolved at zero; the per-visit `appointment.overdue` notifications MUST stop and the open ones MUST be resolved on release.
 - **FR-008**: Each appointment MUST show a payment state (Sin cobro, Adelanto, Pagado, Por cobrar, Reembolsado) derived from its linked sale lines; 0-price lines count as settled.
