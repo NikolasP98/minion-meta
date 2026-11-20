@@ -113,7 +113,7 @@ src/routes/api/pos/appointments/[id]/unschedule/+server.ts   # body { reason } (
 src/server/services/
 ├── scheduling-bookings.service.ts  # listPendingAppointments (S1); archived + RELEASING split (S2);
 │                                   # unscheduled guard, unscheduleVisit rewrite, move flip, addService inherit (S3)
-├── stock-accruals.service.ts       # listAccruals: checkpoint per row via checkpointFor (S1)
+├── stock-accruals.service.ts       # (built by 135-S1: listAccruals checkpoint field)
 ├── calendar-window.service.ts      # drop unscheduled (S3)
 ├── pos/accounts/{unbilled.ts,audit.logic.ts,audit.evidence.ts,audit.ts}  # archived/unscheduled (S2)
 └── inbox/rules/
@@ -151,7 +151,7 @@ Ships:
 - **Calendar**: a Por cerrar box gets the `.por-cerrar` class (dashed `--color-warning-border` sliver) and a "Por cerrar" badge in the hover card. Its menu puts "Completada" first. Until S2/S3 the rest of the menu is today's (Eliminar / Cancelar y anular).
 - **Inbox**: `appointments-por-cerrar.ts` replaces `appointment-overdue.ts` (research R8); it resolves every open `appointment.overdue` row. Adds the `feed.ts` label and its case in `src/lib/inbox/feed.test.ts:37`. It deletes `appointment-overdue.ts` and its test, and updates the rule list in the comment at `system-automations.ts:72`.
 - **QA seed**: `scripts/qa/seed/scheduling.ts:39-46` gains `sched.booking.por-cerrar`, an `accepted` booking dated yesterday, so the QA stack shows one Por cerrar item.
-- **FR-012 note**: `listAccruals` adds `checkpoint` via `checkpointFor`. `ConsumptionConfirmDialog` shows "Contado el {fecha}: no descuenta {ítem}" on that row and hides its quantity input. Plus `TODO(handoff)` for default rows without an accrual (research R11) and a proposal ledger entry.
+- **FR-012 note**: built by **135-S1** (orchestrator decision 2026-11-20): `listAccruals` adds `checkpoint` via `checkpointFor`, and `ConsumptionConfirmDialog` shows "Contado el {fecha}: no descuenta {ítem}" on that row and hides its quantity input. 134-S1 builds none of it and only depends on it. Plus `TODO(handoff)` for default rows without an accrual (research R11) and a proposal ledger entry.
 
 Tests:
 - `src/lib/components/scheduling/booking-lifecycle.test.ts` (new): `isPorCerrar` at 23:59 / 00:00 Lima; a Europe/Madrid DST-change day; completed/archived never; `porCerrarCutoff` with an invalid zone → Lima.
@@ -161,8 +161,6 @@ Tests:
   - open `appointment.overdue` rows resolved.
 - `src/server/services/scheduling-bookings-pending.test.ts` (new): `listPendingAppointments` cut-off, anchors only, `paid` flag, limit.
 - `src/lib/components/pos/pending-groups.test.ts`: `pendientesItems` chip order and grouping.
-- `src/lib/components/scheduling/consumption-confirm-dialog.mounted.test.ts`: a row with `checkpoint` shows the note and is not issued in the POST body.
-- Stock: a `listAccruals` checkpoint case in the existing accrual tests (`scheduling-bookings-accrual.test.ts`), mocked `checkpointFor`.
 
 ### 134-S2: Archivar, Anular in "Más…", reader sweep (after 135-S2)
 
