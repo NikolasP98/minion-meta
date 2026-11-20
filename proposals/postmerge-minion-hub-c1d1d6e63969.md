@@ -1,7 +1,8 @@
 ---
 id: postmerge-minion-hub-c1d1d6e63969
 title: "Post-merge finding — todo-handoff in src/lib/sandbox/canvas.ts (minion_hub)"
-status: draft
+status: review
+possibly_reopens: postmerge-minion-hub-222d6a6aa4c3
 created: 2026-11-20
 updated: 2026-11-20
 repos: [minion-hub]

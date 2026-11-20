@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-1798723500
 title: Handoff marker — src/lib/assistant/pill-status.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-0c59fdd23fd5
 created: 2026-11-19
 updated: 2026-11-20
 repos: [minion-hub]
