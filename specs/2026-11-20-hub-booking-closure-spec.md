@@ -7,7 +7,7 @@ pass: 1
 created: 2026-11-20
 updated: 2026-11-20
 repos: [minion_hub]
-verdict: pending
+verdict: approved
 type: feature
 tags: [ui, data]
 ---
@@ -29,7 +29,7 @@ TO-BE invariants, DELTA and acceptance scenarios.
 
 ## Verification
 
-- Plan, research and FigCraft as-is/to-be demo: to follow (`/speckit-plan`), after FR-012 is answered.
+- Plan, research and FigCraft as-is/to-be demo: next (`/speckit-plan`). S1 depends on spec 135 (stock checkpoints).
 
 ## Out of scope
 

@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain — FR-012 (stock cut-off) waits on the owner
+- [x] No [NEEDS CLARIFICATION] markers remain — FR-012 resolved 2026-11-20 via stock checkpoints (spec 135)
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -32,4 +32,4 @@
 ## Notes
 
 - Decision 3 (tray) is read as: ONE "Pendientes" tray, each item with a status chip and a filter per chip. Owner to confirm on the FigCraft demo.
-- FR-012 must be answered before `/speckit-plan`.
+- Owner approved 2026-11-20 ("I approve the rest, btw."); S1 depends on spec 135 S1.

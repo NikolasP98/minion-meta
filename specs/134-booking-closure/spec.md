@@ -3,13 +3,13 @@ id: 134-booking-closure
 title: Closing appointments — "Por cerrar" after the day ends, Desagendar on every appointment, Archivar as the main close
 stage: spec
 status: draft
-verdict: pending
+verdict: approved
 pass: 1
 created: 2026-11-20
 updated: 2026-11-20
 repos: [minion_hub]
 tags: [ui, data]
-related: [120-till-corrections, 133-pos-session-existing-appointment, 116-pos-booking-state-hardening]
+related: [135-stock-checkpoints, 120-till-corrections, 133-pos-session-existing-appointment, 116-pos-booking-state-hardening]
 ---
 
 # Feature Specification: Closing appointments
@@ -29,7 +29,9 @@ Owner decisions, 2026-11-20 (verbatim):
 3. "Split the tray for the different concerns. I was also thinking a unified tray, but a clear status property that distinguished the different items from eachother"
 4. "I'd say all unclosed events are marked or status changed after the day ends (12 midnight)"
 5. "Archive is the main action. Anular is hidden behind a context submenu"
-6. Stock cut-off for appointments older than the last physical count: open, see [Open question](#open-question).
+6. Stock cut-off, 2026-11-20: "We can go a step further and implement CHECKPOINT stock counts, where staff physically validates counts and locks those values in, so if anything impacting stock counts are \"completed\" before the mentioned checkpoint dates, stock won't move." → specified separately as spec 135 (stock checkpoints); FR-012 consumes it.
+
+Approval, 2026-11-20: "I approve the rest, btw."
 
 ## AS-IS (observed 2026-11-19, prod read-only + PostHog, hub `origin/master` `63c4313b`)
 
@@ -201,7 +203,7 @@ A duplicate appointment, or a client who says she no longer wants the treatment.
 - **FR-009**: The Pendientes tray MUST list Por cerrar, No vino, Desagendada and Pagado sin agendar items, each with a visible status chip and a filter, and mark paid items.
 - **FR-010**: Every server reader of booking status MUST treat `unscheduled` as live-but-off-calendar and `archived` as final-not-done.
 - **FR-011**: Stored `no_show` and `cancelled` history MUST stay unchanged and display as "No vino (anterior)" and "Anulada".
-- **FR-012**: [NEEDS CLARIFICATION: stock cut-off — see Open question.]
+- **FR-012**: Completing an appointment whose time is before the latest stock checkpoint covering one of its supplies (spec 135) MUST close it without issuing that supply; supplies not covered by a checkpoint are issued as today. The completion dialog MUST name the checkpoint ("Contado el 18/11 16:00: no descuenta Ácido Desoxicólico").
 
 ### Key Entities
 
@@ -216,9 +218,9 @@ A duplicate appointment, or a client who says she no longer wants the treatment.
 - **SC-003**: Of new missed appointments, the share followed by nothing (56 of 107 today) drops, because each lands in Pendientes instead of a final status.
 - **SC-004**: No package session or payment is handed back except through Anular.
 
-## Open question
+## Stock checkpoints (formerly the open question)
 
-**FR-012 — completing an old appointment after a physical count.** The clinic counted stock on 18/11 at 16:00 and the system was set to that count. Many open appointments from before that date were probably done but never marked. If someone marks one of them Completada now (for example an Afinamiento from 24/10), the system subtracts 6 ml of Ácido from today's stock, but those 6 ml were already gone when the shelf was counted, so stock ends up 6 ml too low. The proposed rule: completing an appointment dated before the latest count closes it **without** deducting supplies, and the dialog says why. Options: (a) yes, apply this rule; (b) no, always deduct and fix with a new count later.
+Resolved by the owner's checkpoint proposal (decision 6). Spec 135 defines the checkpoint: a locked physical count per item and warehouse, with the time it was taken. Spec 134 only reads it (FR-012). Slice S1 of this spec ships after spec 135's first slice, so the backlog of open appointments can be closed without moving counted stock twice.
 
 ## Assumptions
 
