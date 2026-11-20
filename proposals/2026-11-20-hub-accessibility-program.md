@@ -71,14 +71,69 @@ hand (file:line below).
 
 ### Governance today
 
-- **No automated a11y engine** (no axe / pa11y / Lighthouse anywhere).
-- 80 `svelte-ignore a11y_*` comments (51 × `no_static_element_interactions`), not ratcheted.
+Re-measured on `3677e35a`; commands, the per-primitive table and every number that changed are
+in [`audits/2026-11-20-hub-a11y/`](../audits/2026-11-20-hub-a11y/README.md).
+
+- **An a11y engine is installed but gates nothing.** `@storybook/addon-a11y` (axe-core 4.14.0)
+  and `@storybook/addon-vitest` are registered (`.storybook/main.ts:11-12`), but
+  `a11y.test: 'todo'` only reports (`.storybook/preview.ts:91-95`) and no workflow runs
+  `test:storybook` (`package.json:232`). The page sweep (`ci.yml:827-833`) has no a11y rule
+  (`tests/e2e/ui-audit/conformance.ts:20-27`). (An earlier version of this bullet said no engine
+  existed; that was wrong.)
+- 80 `svelte-ignore a11y_*` comments carrying 84 rule tokens (54 ×
+  `no_static_element_interactions`), not ratcheted.
 - `tests/e2e/ui-audit/canvas-accessibility.spec.ts` and `workshop-accessibility.spec.ts` exist
-  but **do not run in CI** (`playwright.critical.config.ts:11-14` only matches critical journeys).
-- `design-lint.mjs` has no a11y rule beyond `bare-button`/`native-select`.
+  but **do not run in CI** (`playwright.critical.config.ts:11-14` only matches critical journeys;
+  `playwright.workshop.config.ts:7` is referenced by no workflow or script).
+- `design-lint.mjs` has no a11y rule beyond `bare-button`/`native-select` (`:81,86`).
 - Contrast tests cover text only; nothing checks non-text contrast (1.4.11), focus rings, borders.
-- Prior ledger still open: `proposals/2026-10-07-hub-readiness-ui-a11y-followups.md`
-  (HC-043 link colour 3.3–4.0:1 on dark presets ⇒ `--color-link` token; HC-028 overlay contract).
+- Prior ledger: `proposals/2026-10-07-hub-readiness-ui-a11y-followups.md`, merged below.
+
+### Corrections after re-measurement (2026-11-20)
+
+The audit appendix changes these statements above; the table and comparison rows keep their
+original wording so the history stays readable.
+
+| Statement above | Measured |
+|---|---|
+| "497 of 695 `aria-label`s translated" | 535 of 695 |
+| Gap 13 and the i18n row: "58" hard-coded labels | 56 string literals + 38 untranslated expressions = 94 sites |
+| Gap 6: "40 of 44 charts" | 40 of 44 call sites including 16 stories; 24 of 28 in product code |
+| Gap 4: "~87 components set one" | 89 files |
+| Gap 7: "168 uses" of `outline-none` | 98 `outline-none` classes + 70 CSS `outline: none`/`0` |
+| Gap 8: DraggableDialog has no focus move/return | Not verified: Zag owns it (`ui/DraggableDialog.svelte:49-54`); DraggableWindow is confirmed |
+| Gap 15: "Spinner/Skeleton silent" | Silent by default: the shared ones announce when given `label`; the hub Skeleton adapter cannot take one (`ui/Skeleton.svelte:3-8`) |
+| S3: "icon-only Button requires `label` by type (export `IconButton`)" | `IconButton` already exists with a required `label` (`packages/ui/src/lib/IconButton.svelte:6`); the work is adoption (8 hub files use it, 151 icon-shaped `Button` uses do not) |
+| S0: "ratchet the `svelte-ignore a11y_*` count (80 → only down)" | Count rule tokens (84), not comments, or a second rule added to an existing comment slips through |
+| "Comparison" rows: "None" for automated engine | Installed, report-only (first bullet above) |
+
+### Prior ledger merged in (2026-10-07 readiness batch)
+
+`proposals/2026-10-07-hub-readiness-ui-a11y-followups.md` stays the row-by-row record. Its a11y
+rows were re-checked on `3677e35a`: **every hub marker is still in the code**, so none is closed.
+Line numbers below are current. The slice column is a proposed mapping, not an owner decision.
+
+| Ledger row | Site on `3677e35a` | State | Slice |
+|---|---|---|---|
+| #1 / U3 HC-043 link colour | `src/app.css:156-161` (`a { color: var(--color-accent) }`); no `--color-link` in `packages/design-tokens/contract.json` | open | S4 (already named there) |
+| #2 HC-043 surface text gaps | `scripts/qa/hc043/resolve.ts:86-93` | half closed: the solarized-light entry was cleared by token contract 1.1.0 (`:92`); `gruvbox-light\|error\|--color-surface-3` remains (`:93`) | S4 |
+| #3 HC-028 SectionProseEditor modal | `agents/SectionProseEditor.svelte:270` | open | S3 |
+| #4 HC-028 AgentSettingsPanel drawer | `agents/AgentSettingsPanel.svelte:228` | open | S3 |
+| #5 HC-028 AgentCreateWizard | `builder/AgentCreateWizard.svelte:236` | open | S3 |
+| #6 HC-028 AgentCreatorWizard (no Escape path at all) | `marketplace/AgentCreatorWizard.svelte:147` | open | S1 (keyboard blocker) |
+| #7 HC-028 RelationshipPrompt | `workshop/RelationshipPrompt.svelte:44` | open | S3 |
+| #8 HC-028 EaselBoard `aria-modal="true"` | `my-agent/EaselBoard.svelte:323-324` | open | S3 |
+| #9 HC-028 ZenMode `aria-modal="true"` | `my-agent/ZenMode.svelte:105-106` | open | S3 |
+| #10 HC-028 BugReporter `aria-modal="true"` | `layout/BugReporter.svelte:97,103` | open | S3 |
+| U2 SkillCreateWizard dismissible while creating | `builder/SkillCreateWizard.svelte:51` (`<Dialog` with no `dismissible` prop) | open | S3 |
+| U8 KpiRow raw `outline-none` | `reliability/KpiRow.svelte:57` | open | S4 |
+| U9 CodeEditorPane drag rows without keyboard reorder | not re-read | reviewer decision still pending | S5 or reject |
+| U10 backdrops typed `role="button"` | not re-read | rides the HC-028 rows | S3 |
+
+Stays in the old ledger, outside this program: #11, #12, U4, U5 (UI-002 calendar touch height
+and its red e2e assertions; both markers still present at
+`scheduling/CalendarWindowIssues.svelte:39` and `tests/e2e/ui-audit/calendar-mobile.spec.ts:138`),
+U1 (Button icon padding), and the gateway rows #13, U6, U7.
 
 ## Comparison with UI SDK's approach
 
