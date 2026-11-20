@@ -1,0 +1,240 @@
+---
+id: 135-stock-checkpoints
+title: Stock checkpoints — staff count the shelf, an owner/admin locks it, nothing from before the count moves that stock again
+stage: spec
+status: draft
+verdict: pending
+pass: 1
+created: 2026-11-20
+updated: 2026-11-20
+repos: [minion_hub]
+tags: [ui, data]
+related: [134-booking-closure, 120-till-corrections, 122-faces-stock-reconciliation, 124-stock-correction-workflow]
+---
+
+# Feature Specification: Stock checkpoints
+
+**Feature Branch**: `feat/135-stock-checkpoints` (hub, base `master`)
+
+**Created**: 2026-11-20
+
+**Status**: Draft
+
+**Input**: Owner, 2026-11-20: "We can go a step further and implement CHECKPOINT stock counts, where staff physically validates counts and locks those values in, so if anything impacting stock counts are "completed" before the mentioned checkpoint dates, stock won't move."
+
+Owner decisions, 2026-11-20: "yes, start spec 135, owner/admin only, include reminders." Locking a count is limited to owner and admin. Count reminders are in scope.
+
+## AS-IS (observed 2026-11-19/20, prod read-only, hub `origin/master` `63c4313b`)
+
+### No count concept
+
+- Stock movements are entries of type `receipt`, `issue`, `transfer` or `adjustment` (`src/lib/stock/entry-legs.ts:8`). There is no "count" record and no lock.
+- A movement is dated when it is posted. A backdated posting is possible through `postedAt` and is only refused when it precedes the newest ledger row of the same item and warehouse, or lies in the future (`assertPostedAtAdmissible`, `src/server/services/stock.service.ts` ~794).
+- Several paths move stock **now** for something that happened **earlier**:
+  - completing an appointment (issues its supplies at completion time, whatever the appointment's date);
+  - voiding a sale and cancelling an entry (reversal rows dated now);
+  - repair scripts and stock corrections (spec 120, spec 124).
+- Existing locks are about money, not quantities: monthly `pos_period_locks` and the receipt-period policy of spec 124 (`stock-corrections.logic.ts:249`).
+
+### How FACES squares stock today (by hand)
+
+| When | How | Evidence |
+|---|---|---|
+| 2026-10-01 | 9 manual issues noted "Ajuste Minion-Flowww" (e.g. Saypha Volume Plus −41) | STE-2026-00336…00344 |
+| 2026-10-05 | Manual issue "Ajuste minion 29/09", Dysport −1,926 | STE-2026-00365 |
+| 2026-10-29 | 6 manual issues with no note (Ácido −16, Saypha Volume −2, Filler −1, …) | STE-2026-00549…00558 |
+| 2026-11-12 | A purchase receipt typed so Dysport lands on exactly 1,500 | STE-2026-00635 (44 → 1,500) |
+| 2026-11-19 | Count of 2026-11-18 16:00 applied by an operator script (6 items) | STE-2026-00694, `metadata.reconciliation`, `metadata.countedAt` |
+
+None of these is recognizable as a count by the system. Nothing stops a later posting from undoing them.
+
+### What that cost (2026-11-18)
+
+The spec-120 repair returned supplies of 13 old sales. Three items had been squared by hand **after** those sales, so the repair returned stock the count already reflected:
+
+| Item | Returned twice |
+|---|---|
+| Dysport | +690 U |
+| Saypha Volume Plus | +2 |
+| Saypha Filler | +1 |
+
+It was fixed by a second count (STE-2026-00694). 57 to 101 old open appointments still wait to be closed (spec 134), and completing any of them today would issue supplies that the 18/11 count already accounted for.
+
+### Reminders
+
+`stock.low` exists (`src/server/services/inbox/rules/stock-low.ts`). Nothing reminds anyone to count.
+
+## TO-BE
+
+### 1. A count (Conteo físico)
+
+- Anyone who may create stock entries (`stock:create`) can start a count:
+  - choose a warehouse and the items to count (all, a category, or a selection);
+  - set the time the shelf was counted (default: now);
+  - type what is on the shelf.
+- The count shows, per item, the system quantity **at the counted time** and the difference. Movements posted after the counted time do not distort it.
+- A count is saved as a draft and can be edited until it is locked.
+
+### 2. Locking a count creates checkpoints (owner/admin only)
+
+- Only an **owner or admin** can lock ("Validar y bloquear"). Others see the button disabled with "Solo el dueño o un administrador puede bloquear un conteo."
+- Locking does two things in one transaction:
+  - posts **one adjustment** for the items whose difference is not zero;
+  - records **one checkpoint per counted item and warehouse**: counted time, counted quantity, system quantity at that time, the adjustment, and who locked it and when.
+- Items counted with no difference still get a checkpoint.
+- A locked count and its checkpoints **cannot be edited or deleted**. A wrong count is fixed by a newer count.
+
+### 3. The lock rule
+
+- A movement of a checkpointed item in that warehouse whose **physical time** is at or before the item's latest checkpoint does **not** move that item's quantity.
+- The movement still happens for every other item. It records "No mueve stock: contado el 18/11 16:00 (Conteo C-…)" on the skipped line.
+- Physical time, per source:
+
+  | Source | Physical time |
+  |---|---|
+  | Completing an appointment | the appointment's start |
+  | Sale issued at the till | the sale's submit time |
+  | Reversal: void of a sale, cancel of an entry | the original movement's posting time |
+  | Backdated posting (`postedAt`) | the given time; refused, not skipped, for checkpointed items: "Esta fecha es anterior al conteo del …" |
+  | Stock correction or repair with a quantity effect | the corrected movement's posting time |
+  | Any other new posting | now, so it moves stock as today |
+
+- A product physically handed back today after a pre-count sale is voided is recorded as a new receipt. The void screen says so.
+- The lock is on **quantities only**. Rate and value corrections (for example a wrong unit cost) still apply.
+- Reserved supplies of appointments from before a checkpoint are released, not issued, when the appointment closes. This is what spec 134 FR-012 reads.
+
+### 4. Reminders
+
+- **"Conteo pendiente"**: an inbox notification for owners, admins and anyone with `stock:create`.
+  - It fires when a warehouse holds stock items not counted for longer than the organization's count interval. The default interval is 30 days, and the interval can be changed or switched off in stock settings.
+  - One notification per warehouse, with the number of items due, linking to a new count pre-filled with those items.
+  - It is resolved when they are counted.
+- **"Conteo por validar"**: notifies owners and admins when a draft count has waited more than 24 hours to be locked.
+
+### 5. Seeing checkpoints
+
+- The item's movement list shows each checkpoint as a row: "Contado · 302 ml · 18/11 16:00 · bloqueado por …".
+- A skipped line in any movement shows the "No mueve stock" note above.
+- The stock page lists counts: draft or locked, date, warehouse, items, total difference.
+
+### 6. First checkpoint (backfill)
+
+- The count of 2026-11-18 16:00 (STE-2026-00694) becomes the first locked count for its six items in Almacén Principal:
+
+  | Item | Counted |
+  |---|---|
+  | Dysport | 1,500 |
+  | INIBO | 641 (approximate) |
+  | Saypha Filler | 33 |
+  | Saypha Volume Plus | 78 |
+  | Saypha Volume | 31 |
+  | Ácido Desoxicólico | 302 |
+
+- It is locked by the owner, with no new adjustment.
+
+### Invariants
+
+- After a checkpoint, an item's quantity changes only through movements whose physical time is after the checkpoint.
+- A checkpoint never changes once locked; the latest checkpoint per item and warehouse is the one that applies.
+- Only an owner or admin can create a checkpoint.
+- Every skipped quantity is visible on the movement that skipped it.
+
+## DELTA
+
+| Transition | Proof (test to add) |
+|---|---|
+| No count record → draft count with lines (system qty at counted time, counted qty, difference) | service: system qty at time T from the ledger, with movements after T ignored |
+| Lock: n/a → one adjustment (non-zero lines) + one checkpoint per counted item, one transaction | service: both or neither; zero-difference items get a checkpoint and no ledger row |
+| Lock by staff or manager → refused (403, "solo dueño o administrador") | route test |
+| Edit or delete a locked count → refused | service test |
+| Completing an appointment dated before a checkpoint: issues all supplies → issues only uncounted ones, releases the counted ones' reservation, notes the skip | `stock-accruals` test, mixed recipe |
+| Void of a pre-checkpoint sale: returns all items → skips counted items, notes it, points to "registrar devolución" | `pos.tickets` void test |
+| Cancel of a pre-checkpoint entry: reverses all → skips counted items | stock.service cancel test |
+| Backdated posting at/before a checkpoint for a counted item: allowed if after newest row → refused `before_checkpoint` | `assertPostedAtAdmissible` test |
+| Quantity effect of a correction or repair on a pre-checkpoint movement: applied → skipped; rate-only correction still applied | stock-corrections test |
+| Inbox: nothing → "Conteo pendiente" per warehouse past the interval; "Conteo por validar" after 24 h | rule tests (pattern: `stock-low`) |
+| FACES backfill: none → locked count 2026-11-18 16:00, 6 checkpoints, linked to STE-2026-00694 | one-off script with dry-run, run twice (second run plans nothing) |
+
+## User Scenarios & Testing *(mandatory)*
+
+### User Story 1 — Count the shelf and lock it (Priority: P1)
+
+At month end, the stock assistant opens "Conteo físico", picks the injectables, counts the shelf and types the numbers. The screen shows Dysport 1,480 counted vs 1,500 in the system (−20). She saves the draft. The owner reviews it and presses "Validar y bloquear". Stock now reads 1,480, and the count is locked.
+
+**Why this priority**: it replaces hand-made adjustments and receipts typed to land on a number, which the system cannot recognize or protect.
+
+**Independent Test**: create a draft for 3 items (one with no difference), lock it as admin, and check the system quantities, one adjustment with 2 lines, and 3 checkpoints.
+
+**Acceptance Scenarios**:
+
+1. **Given** a draft count, **When** a staff user presses "Validar y bloquear", **Then** it is refused with "Solo el dueño o un administrador puede bloquear un conteo."
+2. **Given** a draft counted at 16:00 and a sale at 17:00 of one counted item, **When** the owner locks at 18:00, **Then** the difference is computed against the 16:00 quantity and the 17:00 sale stays applied.
+3. **Given** a locked count, **When** anyone tries to edit it, **Then** it is refused and a "Nuevo conteo" action is offered.
+
+### User Story 2 — Closing an old appointment after a count (Priority: P1)
+
+After the 18/11 count, the receptionist marks an Afinamiento of 24/10 as completed. The appointment closes. Ácido is not deducted, and the completion screen says "Contado el 18/11 16:00: no descuenta Ácido Desoxicólico". An uncounted supply in the same recipe is deducted as usual.
+
+**Independent Test**: an appointment dated before a checkpoint with a recipe of one counted and one uncounted item. Completing it issues only the uncounted item and releases the counted one's reservation.
+
+### User Story 3 — A late correction cannot undo a count (Priority: P1)
+
+A repair or a void reverses a sale from October for an item counted on 18/11. The counted item does not move; the movement shows why.
+
+**Independent Test**: reproduce the 2026-11-18 incident with a checkpoint in place. The repair leaves Dysport at the counted quantity.
+
+### User Story 4 — Reminders to count (Priority: P2)
+
+Thirty days after the last count, owners, admins and the stock assistant see "Conteo pendiente · Almacén Principal · 12 ítems". The link opens a new count with those items. A draft left unlocked for a day reminds owners and admins to validate it.
+
+**Acceptance Scenarios**:
+
+1. **Given** an item counted 31 days ago and a 30-day interval, **Then** "Conteo pendiente" exists for its warehouse.
+2. **Given** the interval is switched off, **Then** no "Conteo pendiente" is raised.
+3. **Given** the items are counted and locked, **Then** the notification is resolved.
+
+### Edge Cases
+
+- Counting the same item twice in one day: the later counted time wins; the earlier stays in history.
+- Counted time in the future: refused. A counted time before the item's previous checkpoint: refused ("ya hay un conteo más reciente").
+- An item with no stock tracking cannot be counted.
+- A count across warehouses: one count is per warehouse; a transfer whose two legs fall on either side of a checkpoint skips only the checkpointed leg.
+- The approximate count (INIBO "aprox 641"): counts accept decimals and an optional note per line; no special state.
+
+## Requirements *(mandatory)*
+
+### Functional Requirements
+
+- **FR-001**: Users with `stock:create` MUST be able to create, edit and save a draft count for one warehouse: items, counted time and counted quantities.
+- **FR-002**: The draft MUST show, per item, the system quantity at the counted time and the difference.
+- **FR-003**: Only owners and admins MUST be able to lock a count. Locking MUST post one adjustment for non-zero differences and record one checkpoint per counted item, atomically.
+- **FR-004**: Locked counts and checkpoints MUST be immutable.
+- **FR-005**: A movement of a checkpointed item and warehouse whose physical time is at or before the latest checkpoint MUST NOT change that item's quantity. The movement MUST record the skip.
+- **FR-006**: A backdated posting at or before a checkpoint for a checkpointed item MUST be refused with a message naming the count.
+- **FR-007**: Rate and value corrections MUST NOT be blocked by checkpoints.
+- **FR-008**: Completing an appointment MUST apply FR-005 using the appointment's start as the physical time, releasing the reservation of skipped items.
+- **FR-009**: The system MUST raise "Conteo pendiente" per warehouse when items exceed the organization's count interval (default 30 days, configurable, can be off), for owners, admins and `stock:create` holders, and resolve it when they are counted.
+- **FR-010**: The system MUST raise "Conteo por validar" to owners and admins for drafts older than 24 hours.
+- **FR-011**: Item movement views MUST show checkpoints and skipped lines.
+- **FR-012**: FACES' count of 2026-11-18 16:00 MUST be recorded as the first locked count, linked to STE-2026-00694, without a new adjustment.
+
+### Key Entities
+
+- **Count**: warehouse, counted time, status (draft, locked), created by, locked by, locked at, adjustment entry.
+- **Count line / checkpoint**: count, item, counted quantity, system quantity at the counted time, difference, optional note. A locked line is a checkpoint.
+- **Skip record**: on the movement line, the checkpoint that absorbed it.
+- **Org stock settings**: count interval (days, or off).
+
+## Success Criteria *(mandatory)*
+
+- **SC-001**: The 2026-11-18 incident cannot recur. Replaying the spec-120 repair against a checkpointed item leaves its quantity at the counted value (test).
+- **SC-002**: FACES closes its backlog of old appointments (spec 134) without any counted item drifting from its count.
+- **SC-003**: Within two months, every FACES stock item with movement has a checkpoint younger than the count interval.
+- **SC-004**: No new stock adjustment without a count record appears for squaring purposes (the "Ajuste…" and "land on 1,500" patterns stop).
+
+## Assumptions
+
+- A product physically returned after a pre-count sale is recorded as a new receipt; voids do not return counted items. The owner can revisit this.
+- Locked counts are never undone in the product; a database correction would be an operator action with its own record.
+- Cost of goods is not recomputed for skipped lines; the count adjustment carries the loss or gain.
+- UI follows the FigCraft demo-first rule; the as-is/to-be demo is linked from the plan.
