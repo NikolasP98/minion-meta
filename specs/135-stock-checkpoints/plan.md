@@ -100,7 +100,7 @@ src/server/services/
 ├── stock-accruals.service.ts                 # S1: realizeAccrualsInTx passes the booking start as physicalAt; listAccruals adds `checkpoint`
 ├── stock-counts.service.ts                   # S2 NEW: create/update/delete draft, getCount (live system qty), lockCount, listCounts, isOwnerOrAdmin
 ├── pos.service.ts                            # S3: postTicketStockInTx + applySaleVariantPlanInTx pass physicalAt; getTicket adds `stockCounted`
-├── stock-corrections.service.ts              # S3: receipt_replace: qty change on a counted bin → before_checkpoint; rate-only → ignoreCheckpoints
+├── stock-corrections.service.ts              # S3: receipt_replace: qty change allowed (reason + audit row); counted bins absorbed by FR-005; rate-only → ignoreCheckpoints
 ├── stock-entries-read.service.ts             # S3: entry lines carry their skip; item checkpoints + skips for the item page
 ├── rbac.service.ts                           # S2: apiWriteCapability rules for /api/stock/counts (create, draft edit, lock)
 └── inbox/rules/
@@ -237,8 +237,10 @@ Ships:
 - `assertPostedAtAdmissible` refuses `before_checkpoint`.
 - `postTicketStockInTx` passes the ticket's `submitted_at`.
 - `applySaleVariantPlanInTx` passes the live entry's physical time to the replacement issue.
-- `receipt_replace`:
-  - a quantity change on a counted bin is refused with `before_checkpoint` and a next step;
+- `receipt_replace` (owner amendment 2026-11-20, FR-007b):
+  - a quantity change is **allowed** on any purchase not locked by the org's lock policy (spec 139; until 139 ships, today's spec-124 receipt-period policy is the lock);
+  - a reason is required, and one `stk_purchase_corrections` audit row is written (line, before, after, reason, actor, time, effect `moved` | `absorbed`);
+  - on a counted bin the replacement's quantity difference is absorbed by FR-005: the record changes, stock does not move, and a skip row names the checkpoint;
   - a rate-only change runs with `ignoreCheckpoints` (net quantity zero).
 - UI:
   - `getTicket` gains `stockCounted`; the void dialog shows "No vuelve al stock: … Si el cliente devolvió el producto, regístralo como una entrada nueva" with a link to a new receipt;
@@ -248,24 +250,39 @@ Ships:
 Tests:
 - `stock.service.test.ts`: backdated `postedAt` before a checkpoint → `before_checkpoint`.
 - `stock-corrections` tests:
-  - qty change on a counted receipt line → `before_checkpoint`;
+  - qty change on a counted receipt line → allowed, audit row `absorbed`, stock unchanged;
+  - qty change on an uncounted line → audit row `moved`, stock moves by the difference;
+  - no reason → refused `reason_required`;
   - rate-only change still applies;
   - variant swap of a pre-checkpoint sale skips the counted legs.
 - `page.swap.mounted.test.ts` or a new void mounted test: the note appears.
 
-### 135-S4 — reminders and interval
+### 135-S4 — count schedules and reminders (owner amendment 2026-11-20)
 
 Ships:
-- Migration `20261120130000_stock_settings.sql`.
-- `GET/PATCH /api/stock/settings`. The control "Recordar contar cada N días / No recordar" sits on `/stock/counts` and needs `stock:manage`.
-- Two rules on the existing `/api/jobs/tick`:
-  - `stock.count_due`: role scope `stock:create`, one per warehouse;
-  - `stock.count_unlocked`: user scope, one per owner/admin per draft older than 24 h.
-- Feed labels.
+- Migration `20261120130000_stock_count_schedules.sql`:
+  - `stk_count_schedules` (org, name, warehouse_id nullable = all, items mode `all` | `list`, rhythm `every_n_days` | `weekly` | `monthly` + value, mode `light` | `mandatory`, active, created_at);
+  - `stk_count_schedule_items` (schedule, item) for list mode;
+  - a seed per org of "Día de conteo" (all, monthly on day 1, light), run by the migration for existing orgs and by org creation for new ones.
+- `stock-count-schedules.ts` (pure):
+  - `dueItems(schedules, checkpoints, now)`, where the strictest schedule wins;
+  - `firstDueAfter(release)` for never-counted items;
+  - `lastDueDate(rhythm, now, tz)`.
+- `GET/PUT /api/stock/count-schedules` (needs `stock:manage`). The editor sits on `/stock/counts` as a "Calendario de conteo" panel: list of schedules, item picker (Picker SDK) for core items, rhythm and mode controls.
+- Rules on the existing `/api/jobs/tick`:
+  - `stock.count_due` (light): one dismissible nudge per due schedule, role scope `stock:create`;
+  - `stock.count_mandatory` (mandatory): not dismissible; resolved only when every due item has a newer checkpoint;
+  - `stock.count_unlocked`: unchanged (owner/admin, draft older than 24 h).
+- Stock layout banner: `/stock` pages read the open mandatory notices and list their overdue items, with a "Contar ahora" link pre-filled with them.
 
 Tests:
-- `stock-count-due.test.ts`: item counted 31 days ago with a 30-day interval → raised; interval off → none; counted → resolved.
-- `stock-count-unlocked.test.ts`: 25 h draft → raised for owner/admin only; locked or deleted → resolved.
+- `stock-count-schedules.test.ts`:
+  - strictest schedule wins (mandatory over light, shortest rhythm);
+  - never-counted items are due at the first due date after release, not on release day;
+  - monthly and weekly due dates in the org time zone.
+- `stock-count-due.test.ts`: a light nudge is dismissible and returns at the next due date; a mandatory notice survives a dismissal and resolves only after a count covering the due items is locked (a partial count is enough).
+- `stock-layout.mounted.test.ts`: the banner shows when a mandatory notice is open, with a link pre-filled with the overdue items.
+- `stock-count-unlocked.test.ts`: unchanged.
 
 ## Risks
 

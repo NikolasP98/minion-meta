@@ -26,6 +26,12 @@ Owner decisions, 2026-11-20: "yes, start spec 135, owner/admin only, include rem
 
 Approval, 2026-11-20: "approved, confirmed — go ahead with the plan." The confirmation covers the void rule: voiding a pre-count sale does not return counted items, and a physical return is a new receipt.
 
+Owner amendments, 2026-11-20 (verbatim):
+
+- "One general reminder for "counting day", but it should be a light tap on the shoulder (unless the org configures it as mandatory)."
+- "I also want to set per-item count reminders or obligations. So if an org has a mandatory count date/frequency, it doesnt have to apply to ALL items, but maybe to a select core items."
+- "The staff should be able to correct the qty of any past purchase. It should always be audit logged, though so that we know how qtys changed over time. The org can set this: lock after X days, lock after a webhook is run, after SUNAT is locked, etc." The org lock policy is specified separately (spec 139).
+
 Owner note, same message: "I think this might help with implementing ML models that track displacement to find recommendations or patterns for the moving data". Out of scope here. The data model keeps what such a model needs (see Assumptions).
 
 ## AS-IS (observed 2026-11-19/20, prod read-only, hub `origin/master` `63c4313b`)
@@ -100,19 +106,36 @@ It was fixed by a second count (STE-2026-00694). 57 to 101 old open appointments
   | Sale issued at the till | the sale's submit time |
   | Reversal: void of a sale, cancel of an entry | the original movement's posting time |
   | Backdated posting (`postedAt`) | the given time; refused, not skipped, for checkpointed items: "Esta fecha es anterior al conteo del …" |
-  | Stock correction or repair with a quantity effect | the corrected movement's posting time |
+  | Stock correction or repair with a quantity effect (incl. a purchase quantity correction, §3b) | the corrected movement's posting time |
   | Any other new posting | now, so it moves stock as today |
 
 - A product physically handed back today after a pre-count sale is voided is recorded as a new receipt. The void screen says so.
-- The lock is on **quantities only**. Rate and value corrections (for example a wrong unit cost) still apply.
+- The lock is on **stock quantities only**. Rate and value corrections (for example a wrong unit cost) still apply.
 - Reserved supplies of appointments from before a checkpoint are released, not issued, when the appointment closes. This is what spec 134 FR-012 reads.
 
-### 4. Reminders
+### 3b. Correcting the quantity of a past purchase
 
-- **"Conteo pendiente"**: an inbox notification for owners, admins and anyone with `stock:create`.
-  - It fires when a warehouse holds stock items not counted for longer than the organization's count interval. The default interval is 30 days, and the interval can be changed or switched off in stock settings.
-  - One notification per warehouse, with the number of items due, linking to a new count pre-filled with those items.
-  - It is resolved when they are counted.
+- Staff may correct the quantity of any past purchase (receipt) line, unless the organization's lock policy (spec 139) has locked that record.
+- Every correction is audit-logged: who, when, the line, quantity before → after, and a required reason. The purchase shows its correction history.
+- Stock effect:
+  - If no checkpoint covers the item after the purchase, the difference moves stock as today.
+  - If a later count covers it, the record and the log change, but stock does **not** move: the count already reflects the shelf. The correction shows "No mueve stock: contado el …". The drift analysis (proposal `2026-11-20-stock-drift-patterns`) can then attribute the difference to the purchase.
+
+### 4. Count schedules and reminders
+
+- A **count schedule** says which items must be counted, how often, and how firmly. It has:
+  - a name (e.g. "Día de conteo", "Inyectables semanales");
+  - the items it covers: all stock items, or a hand-picked list of core items;
+  - the warehouse it applies to (all, or one);
+  - a rhythm: every N days, a weekday each week, or a day of the month;
+  - a mode: **light** (default) or **mandatory**.
+- Every organization starts with one schedule, **"Día de conteo"**: all items, monthly, light. The organization can change it, switch it off, or add stricter schedules for core items (for example, weekly and mandatory for injectables).
+- An item covered by several schedules follows the strictest one: mandatory beats light, and the shortest rhythm wins.
+- When a schedule is due:
+  - **Light**: one dismissible inbox nudge, "Hoy es día de conteo · 12 ítems". It links to a new count pre-filled with the due items. Dismissing it hides it until the next due date.
+  - **Mandatory**: the same notice, which cannot be dismissed, plus a banner on the stock screens listing the overdue items. It stays until those items are counted and locked. A partial count that covers them is enough.
+- An item is due when its latest checkpoint is older than the schedule's last due date. Items never counted become due on the schedule's first due date after release, not immediately.
+- Editing schedules requires `stock:manage`.
 - **"Conteo por validar"**: notifies owners and admins when a draft count has waited more than 24 hours to be locked.
 
 ### 5. Seeing checkpoints
@@ -156,7 +179,8 @@ It was fixed by a second count (STE-2026-00694). 57 to 101 old open appointments
 | Cancel of a pre-checkpoint entry: reverses all → skips counted items | stock.service cancel test |
 | Backdated posting at/before a checkpoint for a counted item: allowed if after newest row → refused `before_checkpoint` | `assertPostedAtAdmissible` test |
 | Quantity effect of a correction or repair on a pre-checkpoint movement: applied → skipped; rate-only correction still applied | stock-corrections test |
-| Inbox: nothing → "Conteo pendiente" per warehouse past the interval; "Conteo por validar" after 24 h | rule tests (pattern: `stock-low`) |
+| Purchase quantity correction: only via the spec-124 receipt replacement (refused on a counted line in the first plan) → allowed for any unlocked purchase, reason required, audit row written; stock moves only if no later checkpoint covers the item | stock-corrections + audit test |
+| Reminders: nothing → count schedules (default "Día de conteo", all items, monthly, light; extra schedules for core items); light = dismissible nudge, mandatory = undismissable notice + stock banner until counted; "Conteo por validar" after 24 h | rule tests (pattern: `stock-low`): strictest schedule wins, never-counted items due at the first due date, partial count resolves |
 | FACES backfill: none → locked count 2026-11-18 16:00, 6 checkpoints, linked to STE-2026-00694 | one-off script with dry-run, run twice (second run plans nothing) |
 
 ## User Scenarios & Testing *(mandatory)*
@@ -187,15 +211,28 @@ A repair or a void reverses a sale from October for an item counted on 18/11. Th
 
 **Independent Test**: reproduce the 2026-11-18 incident with a checkpoint in place. The repair leaves Dysport at the counted quantity.
 
-### User Story 4 — Reminders to count (Priority: P2)
+### User Story 4 — Counting day and core items (Priority: P2)
 
-Thirty days after the last count, owners, admins and the stock assistant see "Conteo pendiente · Almacén Principal · 12 ítems". The link opens a new count with those items. A draft left unlocked for a day reminds owners and admins to validate it.
+The clinic keeps the monthly "Día de conteo" as a light nudge for everything. It adds a mandatory weekly schedule for its six injectables. On Monday the stock screens show a banner, "Conteo obligatorio pendiente: 6 ítems", until someone counts those six and the owner locks it. The monthly nudge for the rest can be dismissed.
 
 **Acceptance Scenarios**:
 
-1. **Given** an item counted 31 days ago and a 30-day interval, **Then** "Conteo pendiente" exists for its warehouse.
-2. **Given** the interval is switched off, **Then** no "Conteo pendiente" is raised.
-3. **Given** the items are counted and locked, **Then** the notification is resolved.
+1. **Given** the default schedule and an item last counted before its due date, **Then** one dismissible "Hoy es día de conteo" nudge exists.
+2. **Given** a mandatory weekly schedule for 6 core items that are due, **Then** the stock screens show the banner and the notice cannot be dismissed.
+3. **Given** a count covering only those 6 items is locked, **Then** the mandatory notice and banner are resolved while the monthly nudge for other items stays.
+4. **Given** an item in both schedules, **Then** it follows the mandatory weekly one.
+5. **Given** a schedule switched off, **Then** it raises nothing.
+
+### User Story 5 — Correct a purchase quantity (Priority: P2)
+
+The assistant typed 89 syringes on a purchase that brought 87. She opens the purchase, corrects the line to 87, and writes why. The purchase shows the change in its history. If the item was counted after that purchase, stock does not move and the line says why.
+
+**Acceptance Scenarios**:
+
+1. **Given** an unlocked past purchase, **When** its quantity is corrected with a reason, **Then** the record changes and an audit row stores before, after, who, when and why.
+2. **Given** no later count of the item, **Then** stock moves by the difference.
+3. **Given** a later count, **Then** stock does not move and the line shows "No mueve stock: contado el …".
+4. **Given** the purchase is locked by the org's policy (spec 139), **Then** the correction is refused with the reason and who can unlock it.
 
 ### Edge Cases
 
@@ -216,8 +253,10 @@ Thirty days after the last count, owners, admins and the stock assistant see "Co
 - **FR-005**: A movement of a checkpointed item and warehouse whose physical time is at or before the latest checkpoint MUST NOT change that item's quantity. The movement MUST record the skip.
 - **FR-006**: A backdated posting at or before a checkpoint for a checkpointed item MUST be refused with a message naming the count.
 - **FR-007**: Rate and value corrections MUST NOT be blocked by checkpoints.
+- **FR-007b**: Staff MUST be able to correct the quantity of any past purchase line not locked by the org's lock policy (spec 139), with a required reason. Every correction MUST be audit-logged (who, when, line, before, after, reason). Its stock effect MUST follow FR-005.
 - **FR-008**: Completing an appointment MUST apply FR-005 using the appointment's start as the physical time, releasing the reservation of skipped items.
-- **FR-009**: The system MUST raise "Conteo pendiente" per warehouse when items exceed the organization's count interval (default 30 days, configurable, can be off), for owners, admins and `stock:create` holders, and resolve it when they are counted.
+- **FR-009**: The system MUST support count schedules (items: all or a list; warehouse; rhythm; mode light or mandatory), editable with `stock:manage`. Every organization MUST start with "Día de conteo" (all items, monthly, light). An item MUST follow its strictest schedule.
+- **FR-009b**: A due light schedule MUST raise one dismissible nudge for owners, admins and `stock:create` holders. A due mandatory schedule MUST raise an undismissable notice and show a banner on the stock screens until its due items are counted and locked. Never-counted items MUST become due at the schedule's first due date after release.
 - **FR-010**: The system MUST raise "Conteo por validar" to owners and admins for drafts older than 24 hours.
 - **FR-011**: Item movement views MUST show checkpoints and skipped lines.
 - **FR-012**: FACES' count of 2026-11-18 16:00 MUST be recorded as the first locked count, linked to STE-2026-00694, without a new adjustment.
@@ -227,13 +266,14 @@ Thirty days after the last count, owners, admins and the stock assistant see "Co
 - **Count**: warehouse, counted time, status (draft, locked), created by, locked by, locked at, adjustment entry.
 - **Count line / checkpoint**: count, item, counted quantity, system quantity at the counted time, difference, optional note. A locked line is a checkpoint.
 - **Skip record**: on the movement line, the checkpoint that absorbed it.
-- **Org stock settings**: count interval (days, or off).
+- **Count schedule**: name, items (all or a list), warehouse (all or one), rhythm, mode (light, mandatory), active.
+- **Purchase correction log**: entry line, quantity before and after, reason, actor, time, stock effect (moved or absorbed by a checkpoint).
 
 ## Success Criteria *(mandatory)*
 
 - **SC-001**: The 2026-11-18 incident cannot recur. Replaying the spec-120 repair against a checkpointed item leaves its quantity at the counted value (test).
 - **SC-002**: FACES closes its backlog of old appointments (spec 134) without any counted item drifting from its count.
-- **SC-003**: Within two months, every FACES stock item with movement has a checkpoint younger than the count interval.
+- **SC-003**: Within two months, every FACES item in a mandatory schedule is never overdue by more than one rhythm period, and every other item with movement has been counted at least once.
 - **SC-004**: No new stock adjustment without a count record appears for squaring purposes (the "Ajuste…" and "land on 1,500" patterns stop).
 
 ## Assumptions
