@@ -134,8 +134,8 @@ One structural test ships in H1:
 
 - **Tick routes are listed.** Every directory `src/routes/api/**/tick/` with a `+server.ts` has a
   row in `SYSTEM_AUTOMATIONS` whose path, ignoring any query string, equals the route path.
-  `/api/pulse/tick` gets its row: `{ path: '/api/pulse/tick', key: 'pulse', cadence: 'hourly',
-  wiring: 'unscheduled' }` (wiring per open question 2). The autonomous-agents page renders a
+  `/api/pulse/tick` gets its row: `{ path: '/api/pulse/tick', key: 'pulse', cadence: 'minute',
+  wiring: 'unscheduled' }` (owner decision 2). The autonomous-agents page renders a
   title for every row from a hand-written map (`src/routes/(app)/agents/autonomous/+page.svelte:81-125,199`),
   so the same change adds a `pulse` entry to that map and the message keys
   `automation_pulse_title` and `automation_pulse_desc` in `messages/en.json` and `messages/es.json`.
@@ -193,7 +193,7 @@ Each item is its own migration and pull request, so each can be merged or held a
 **H4. `stk_ledger.created_at`.**
 - Add the column nullable, fill existing rows, then set `NOT NULL DEFAULT now()`, with an
   assertion in the migration that no row is null. The Drizzle model gains `createdAt`.
-- Fill value: see open question 1. Either choice is a lower bound for old rows, not the true
+- Fill value: the later of `posted_at` and the entry's `created_at` (owner decision 1). It is a lower bound for old rows, not the true
   write time: a ledger row is written when its entry is submitted or cancelled, which is at or
   after the entry's creation.
 - `job-stock-concurrency.sql.integration.test.ts:85` gains the column in its copied definition.
@@ -430,15 +430,16 @@ Human approval at spec and at merge applies to H2, H3 and H4 (stock and sales da
   It is recorded in the open-items ledger.
 - Gateway and internal route error bodies.
 
-## Open questions for the owner
+## Owner decisions
 
-1. **Fill value for `stk_ledger.created_at`.** You asked for `posted_at`. In production 1,647 of
-   2,076 rows have a posting date more than a day before their entry was created, so `posted_at`
-   is known to be too early for most rows. Recommended: the later of `posted_at` and the entry's
-   `created_at`. Neither is the true write time; the recommendation is the closer lower bound.
-   The spec is written for the recommendation; say if you prefer plain `posted_at`.
-2. **`/api/pulse/tick` wiring.** The manifest must say who calls it (netcup, Vercel, or
-   unscheduled). The repository does not say; it is entered as `unscheduled` unless you know.
+1. **Fill value for `stk_ledger.created_at`** (2026-11-20: "sure, whatever makes more sense here"):
+   the later of `posted_at` and the entry's `created_at`. In production 1,647 of 2,076 rows have a
+   posting date more than a day before their entry was created, so plain `posted_at` would be
+   known to be too early for most rows. Neither value is the true write time.
+2. **`/api/pulse/tick` wiring** (2026-11-20: "unscheduled for now. Lets disable this
+   personal-org-only feature until we begin working on it again."): the manifest row is
+   `unscheduled`, with the cadence of `deploy/pulse-tick.cron.example`. Switching Pulse off for
+   every organization is a separate hub pull request, outside this spec.
 
 ## Definition of done
 
