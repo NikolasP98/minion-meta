@@ -24,6 +24,10 @@ The canonical [Spec Kit specification](139-reminder-negation-followup/spec.md) c
 
 - Plan: next (`/speckit-plan`) after owner approval.
 
+## Out of scope
+
+Enabling reminders and reconnecting FACES WhatsApp (owner configuration), automatic cancellations or refunds, reminders for staff.
+
 ## Human gates
 
 Tagged `data`: the owner approves this spec before code and merges each PR.
