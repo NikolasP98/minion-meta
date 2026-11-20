@@ -7,7 +7,7 @@ pass: 1
 created: 2026-11-20
 updated: 2026-11-20
 repos: [minion_hub]
-verdict: pending
+verdict: approved
 type: feature
 tags: [ui, data]
 ---
