@@ -1,7 +1,7 @@
 ---
 id: 2026-11-20-hub-accessibility-program
 title: Hub accessibility program — every component accessible, from atom to full page (WCAG 2.2 AA)
-status: draft
+status: approved
 created: 2026-11-20
 updated: 2026-11-20
 repos: [minion_hub, minion-meta]
@@ -138,13 +138,15 @@ regress.
 - AAA criteria; native apps (`minion/apps/*`).
 - Re-designing BookingCalendar or the workshop canvas beyond a keyboard path.
 
-## Decisions for the owner
+## Owner decisions (2026-11-20)
 
-1. **Test helper source:** write our own `assertPattern` (recommended; covers grid, no beta
-   dependency) or use `@ui-sdk/core/testing` as a dev-only dependency (faster, but beta and the
-   licence question #867 is unanswered).
-2. **Kanban move model:** keep the "Move to…" menu (recommended) or add pick-up/arrow/drop
-   keyboard dragging like UI SDK's `createTransfer`.
+1. **Test helper:** write our own `assertPattern` (covers grid; no beta dependency). Chosen.
+2. **Board keyboard moves:** keep the "Move to…" menu **and add keyboard drag** — Space/Enter
+   picks a card up, arrows move it (Up/Down within a column, Left/Right to the next column that
+   accepts it), Space/Enter drops, Escape cancels and restores; focus stays on the moved card;
+   every step is announced through the shared announcer in the user's language. Lands in
+   `BoardView` (S3), so every board gets it; SessionKanban moves onto BoardView in S1.
+3. **Approved;** start with S0 (gates first).
 
 ## Definition of done
 
