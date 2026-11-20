@@ -30,7 +30,7 @@ Owner amendments, 2026-11-20 (verbatim):
 
 - "One general reminder for "counting day", but it should be a light tap on the shoulder (unless the org configures it as mandatory)."
 - "I also want to set per-item count reminders or obligations. So if an org has a mandatory count date/frequency, it doesnt have to apply to ALL items, but maybe to a select core items."
-- "The staff should be able to correct the qty of any past purchase. It should always be audit logged, though so that we know how qtys changed over time. The org can set this: lock after X days, lock after a webhook is run, after SUNAT is locked, etc." The org lock policy is specified separately (spec 139).
+- "The staff should be able to correct the qty of any past purchase. It should always be audit logged, though so that we know how qtys changed over time. The org can set this: lock after X days, lock after a webhook is run, after SUNAT is locked, etc." The org lock policy is specified separately (spec 140).
 
 Owner note, same message: "I think this might help with implementing ML models that track displacement to find recommendations or patterns for the moving data". Out of scope here. The data model keeps what such a model needs (see Assumptions).
 
@@ -115,7 +115,7 @@ It was fixed by a second count (STE-2026-00694). 57 to 101 old open appointments
 
 ### 3b. Correcting the quantity of a past purchase
 
-- Staff may correct the quantity of any past purchase (receipt) line, unless the organization's lock policy (spec 139) has locked that record.
+- Staff may correct the quantity of any past purchase (receipt) line, unless the organization's lock policy (spec 140) has locked that record.
 - Every correction is audit-logged: who, when, the line, quantity before → after, and a required reason. The purchase shows its correction history.
 - Stock effect:
   - If no checkpoint covers the item after the purchase, the difference moves stock as today.
@@ -232,7 +232,7 @@ The assistant typed 89 syringes on a purchase that brought 87. She opens the pur
 1. **Given** an unlocked past purchase, **When** its quantity is corrected with a reason, **Then** the record changes and an audit row stores before, after, who, when and why.
 2. **Given** no later count of the item, **Then** stock moves by the difference.
 3. **Given** a later count, **Then** stock does not move and the line shows "No mueve stock: contado el …".
-4. **Given** the purchase is locked by the org's policy (spec 139), **Then** the correction is refused with the reason and who can unlock it.
+4. **Given** the purchase is locked by the org's policy (spec 140), **Then** the correction is refused with the reason and who can unlock it.
 
 ### Edge Cases
 
@@ -253,7 +253,7 @@ The assistant typed 89 syringes on a purchase that brought 87. She opens the pur
 - **FR-005**: A movement of a checkpointed item and warehouse whose physical time is at or before the latest checkpoint MUST NOT change that item's quantity. The movement MUST record the skip.
 - **FR-006**: A backdated posting at or before a checkpoint for a checkpointed item MUST be refused with a message naming the count.
 - **FR-007**: Rate and value corrections MUST NOT be blocked by checkpoints.
-- **FR-007b**: Staff MUST be able to correct the quantity of any past purchase line not locked by the org's lock policy (spec 139), with a required reason. Every correction MUST be audit-logged (who, when, line, before, after, reason). Its stock effect MUST follow FR-005.
+- **FR-007b**: Staff MUST be able to correct the quantity of any past purchase line not locked by the org's lock policy (spec 140), with a required reason. Every correction MUST be audit-logged (who, when, line, before, after, reason). Its stock effect MUST follow FR-005.
 - **FR-008**: Completing an appointment MUST apply FR-005 using the appointment's start as the physical time, releasing the reservation of skipped items.
 - **FR-009**: The system MUST support count schedules (items: all or a list; warehouse; rhythm; mode light or mandatory), editable with `stock:manage`. Every organization MUST start with "Día de conteo" (all items, monthly, light). An item MUST follow its strictest schedule.
 - **FR-009b**: A due light schedule MUST raise one dismissible nudge for owners, admins and `stock:create` holders. A due mandatory schedule MUST raise an undismissable notice and show a banner on the stock screens until its due items are counted and locked. Never-counted items MUST become due at the schedule's first due date after release.

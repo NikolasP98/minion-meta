@@ -238,7 +238,7 @@ Ships:
 - `postTicketStockInTx` passes the ticket's `submitted_at`.
 - `applySaleVariantPlanInTx` passes the live entry's physical time to the replacement issue.
 - `receipt_replace` (owner amendment 2026-11-20, FR-007b):
-  - a quantity change is **allowed** on any purchase not locked by the org's lock policy (spec 139; until 139 ships, today's spec-124 receipt-period policy is the lock);
+  - a quantity change is **allowed** on any purchase not locked by the org's lock policy (spec 140; until 139 ships, today's spec-124 receipt-period policy is the lock);
   - a reason is required, and one `stk_purchase_corrections` audit row is written (line, before, after, reason, actor, time, effect `moved` | `absorbed`);
   - on a counted bin the replacement's quantity difference is absorbed by FR-005: the record changes, stock does not move, and a skip row names the checkpoint;
   - a rate-only change runs with `ignoreCheckpoints` (net quantity zero).
