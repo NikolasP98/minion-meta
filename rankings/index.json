@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-20T22:17:52.456Z",
+	"generatedAt": "2026-11-20T22:47:24.201Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2614,6 +2614,78 @@
 			"scoredAt": "2026-11-17T21:17:37.653Z"
 		},
 		{
+			"key": "pr:minion_hub#695",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#695 feat(stock): one live stock movement per sale or booking is enforced by the database",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/695",
+			"sourceUpdatedAt": "2026-11-20T22:38:02Z",
+			"sourceFingerprint": "68560716055cecdb7d8f20ce3fa187db62f775c7dd951a41df9a2ba1bec97a62",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1062",
+				"pr:minion_hub#697"
+			],
+			"rationale": "Production migration enforcing a data-integrity invariant on stock entries, pre-checked against prod with 0 duplicate rows and 29/29 tests passing.",
+			"evidence": [
+				"Result on production, 2026-11-20 (read-only): 0 rows",
+				"29 of 29 pass",
+				"Hub migrations run inside the production build"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
+		},
+		{
+			"key": "pr:minion_hub#696",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#696 feat(pos): tickets and payments can no longer be deleted, and stock ledger rows are final",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/696",
+			"sourceUpdatedAt": "2026-11-20T22:38:18Z",
+			"sourceFingerprint": "c56402f77ff94e5da7e933aa9552441233bb9a002b298fcf93102c6c70068d18",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1062",
+				"pr:minion_hub#695"
+			],
+			"rationale": "Production grant-revoke hardening deletion/truncation of financial ledger tables, with a key grants test not yet run locally.",
+			"evidence": [
+				"Not run locally: the new grants test",
+				"6 of 6 pass",
+				"changes grants only; no rows"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
+		},
+		{
 			"key": "pr:minion-meta#1055",
 			"kind": "pr",
 			"stage": "development",
@@ -2644,40 +2716,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T21:47:36.468Z"
-		},
-		{
-			"key": "pr:minion-meta#1057",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1057 spec(135): stock checkpoints — count, owner/admin lock, nothing pre-count moves stock",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1057",
-			"sourceUpdatedAt": "2026-11-20T07:28:58Z",
-			"sourceFingerprint": "cc9cfcf327dde3628eb60edf4c2afd789f6b50f41f214c4885c44ebbeb535928",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 2
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#1056"
-			],
-			"rationale": "This spec cites a concrete prior incident of stock loss it would prevent and is a prerequisite for spec 134, but it is still an unapproved spec with no implementation.",
-			"evidence": [
-				"Evidence it prevents: the 2026-11-18 repair returned 690 U of Dysport ... that a hand-made squaring had already absorbed",
-				"Tagged data: owner approves the spec and merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T07:47:28.679Z"
 		},
 		{
 			"key": "proposal:2026-09-12-360-continuation-review-followups",
@@ -4478,6 +4516,40 @@
 			"scoredAt": "2026-11-18T18:47:17.857Z"
 		},
 		{
+			"key": "pr:minion-meta#1057",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1057 spec(135): stock checkpoints — count, owner/admin lock, nothing pre-count moves stock",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1057",
+			"sourceUpdatedAt": "2026-11-20T22:41:14Z",
+			"sourceFingerprint": "2c81711d7ab03b1caa7a5a4c9a00a99a0d8dd53a1b403ef280429bd50dcb222d",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1056"
+			],
+			"rationale": "Well-evidenced spec addressing a concrete production data-integrity incident (duplicate stock adjustment) and gating a dependent spec, ready for owner approval.",
+			"evidence": [
+				"Evidence it prevents: the 2026-11-18 repair returned 690 U of Dysport... that a hand-made squaring had already absorbed",
+				"Spec 134 (#1056) S1 depends on this spec's appointment-completion rule and backfill"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
+		},
+		{
 			"key": "pr:minion-meta#936",
 			"kind": "pr",
 			"stage": "development",
@@ -6046,6 +6118,42 @@
 			"scoredAt": "2026-11-14T05:31:58.264Z"
 		},
 		{
+			"key": "pr:minion_hub#697",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#697 feat(stock): every stock ledger row records when it was written",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/697",
+			"sourceUpdatedAt": "2026-11-20T22:40:02Z",
+			"sourceFingerprint": "a710195cd98a64f05684f38c56256fdce2bc5aef1d1c14471c458828b276b480",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1062",
+				"pr:minion_hub#695"
+			],
+			"rationale": "Production migration adding a write-time column to stock ledger with owner-decided backfill value, verified on primary tests but two integration suites not run locally.",
+			"evidence": [
+				"Fill value, decided by the owner on 2026-11-20",
+				"28 of 28 pass",
+				"Not run locally: job-stock-concurrency... stock-corrections"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
+		},
+		{
 			"key": "proposal:2026-08-17-hub-distinct-visit-dates",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -6511,14 +6619,14 @@
 			"scoredAt": "2026-11-16T04:17:44.921Z"
 		},
 		{
-			"key": "pr:minion_hub#692",
+			"key": "pr:minion-meta#1062",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#692 feat(sandbox): agents can build an org's sandbox pages over MCP with a scoped API key",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/692",
-			"sourceUpdatedAt": "2026-11-20T22:11:05Z",
-			"sourceFingerprint": "8b6efc64a38008cddfa14169cb46f04957f5c2c3e077f2b1b7d5341ba851e3cd",
+			"repo": "minion-meta",
+			"title": "#1062 spec(138): hub house rules — enforced standards for documents and server paths (proposal + slices 0 to 2)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1062",
+			"sourceUpdatedAt": "2026-11-20T22:39:47Z",
+			"sourceFingerprint": "02921baf463101326d10d40fd64f8037a71cea4c2bf64f7cdf597d36a22e8270",
 			"score": 59,
 			"band": "medium",
 			"axes": {
@@ -6528,22 +6636,24 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 7
+				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion-meta#1058"
+				"pr:minion_hub#693",
+				"pr:minion_hub#695",
+				"pr:minion_hub#697"
 			],
-			"rationale": "Security-tagged MCP sandbox-pages feature with strong test evidence but still needs the owner's merge gate and has unverified block-tool/load paths.",
+			"rationale": "Owner-approved umbrella spec with two-round review covering eight linked hub PRs, with two explicit open questions for the owner before full merge.",
 			"evidence": [
-				"Security-tagged: owner review and merge",
-				"bun run check 0 errors, vite build passes, 889 targeted vitest",
-				"block tools end-to-end and rate limit under real load not verified"
+				"Owner go-ahead for slices 0 to 2 on 2026-11-20, with EGM as the review method",
+				"Two open questions for the owner are in the spec",
+				"checks... both pass on this branch"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:17:52.268Z"
+			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
 			"key": "proposal:2026-09-09-assistant-query-delegation-restoration",
@@ -9689,6 +9799,39 @@
 			"scoredAt": "2026-11-14T05:18:09.117Z"
 		},
 		{
+			"key": "pr:minion_hub#692",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#692 feat(sandbox): agents can build an org's sandbox pages over MCP with a scoped API key",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/692",
+			"sourceUpdatedAt": "2026-11-20T22:42:47Z",
+			"sourceFingerprint": "b4fcd93b465c9de763c1459b292d1edf412346ac2a3e34765aaa081d263595fe",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Security-tagged MCP sandbox feature is substantially verified end-to-end but has explicit unverified block-tool and cross-org paths needing owner review before merge.",
+			"evidence": [
+				"Security-tagged: owner review and merge",
+				"block tools... no live call was made",
+				"end to end on local QA stack with migration applied"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
+		},
+		{
 			"key": "pr:minion_site#29",
 			"kind": "pr",
 			"stage": "development",
@@ -12068,8 +12211,8 @@
 			"repo": "minion-meta",
 			"title": "#1056 spec(134): closing appointments — Por cerrar, Desagendar everywhere, Archivar",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1056",
-			"sourceUpdatedAt": "2026-11-20T07:39:51Z",
-			"sourceFingerprint": "cb0d56ed78a7c6774a021434034926c011df2cc10b739d46c3d66df6ac2c498b",
+			"sourceUpdatedAt": "2026-11-20T22:22:42Z",
+			"sourceFingerprint": "406e1a6a7084481061636931b2cf8657e23051dfd72f380f5d7f9faea27eafed",
 			"score": 53,
 			"band": "medium",
 			"axes": {
@@ -12081,19 +12224,19 @@
 				"specification": 6,
 				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
 				"pr:minion-meta#1057"
 			],
-			"rationale": "A well-evidenced spec draft still has an open FR-012 decision and depends on spec 135's appointment-completion rule, so it needs owner resolution before planning.",
+			"rationale": "Spec-only artifact for appointment closure with an explicitly open requirement (FR-012) blocking progression to planning.",
 			"evidence": [
 				"Open: FR-012, the stock cut-off for appointments completed after a physical count; needed before /speckit-plan",
-				"Spec 134 (#1056) S1 depends on this spec's appointment-completion rule and backfill"
+				"owner approves the spec and merges"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T07:47:28.679Z"
+			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
@@ -13509,6 +13652,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:18:24.410Z"
+		},
+		{
+			"key": "pr:minion_hub#698",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#698 test(house-rules): every write endpoint is permission-gated or listed with how it is protected",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/698",
+			"sourceUpdatedAt": "2026-11-20T22:44:07Z",
+			"sourceFingerprint": "c4e450f58b91302ba080f4dd28c29e66f47bfe0036dd29b01daca1f862d08c67",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1062",
+				"pr:minion_hub#693"
+			],
+			"rationale": "Security-relevant inventory of unprotected write endpoints, test-only and passing, with 137 unclassified endpoints explicitly flagged as follow-up rather than hidden.",
+			"evidence": [
+				"9 of 9 pass",
+				"Files with an uncovered method / uncovered methods: 183 / 204",
+				"Classifying the 137 todo endpoints is follow-up work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -25681,6 +25860,78 @@
 			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
+			"key": "pr:minion_hub#693",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#693 test(house-rules): convention debt is counted and cannot grow unnoticed",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/693",
+			"sourceUpdatedAt": "2026-11-20T22:42:25Z",
+			"sourceFingerprint": "3d49cda25e79e90c12582f46d318948edd27ca33a3b635a2a7e211f6e45b9201",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1062",
+				"pr:minion_hub#698"
+			],
+			"rationale": "Low-risk convention-debt harness with passing tests and a named open question for the owner, ready to merge as slice 0 of an approved spec.",
+			"evidence": [
+				"20 of 20 pass",
+				"owner go-ahead for slices 0 to 2 on 2026-11-20",
+				"owner has been asked who calls /api/pulse/tick"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
+		},
+		{
+			"key": "pr:minion_hub#694",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#694 test(house-rules): new tables must carry the organization",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/694",
+			"sourceUpdatedAt": "2026-11-20T22:39:28Z",
+			"sourceFingerprint": "001c4c0eadbe35f14b006242ebf77e8f3a3f48550524e4b405870e096d23c9ff",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1062",
+				"pr:minion_hub#693"
+			],
+			"rationale": "Simple, verified test-only rule enforcing org_id on new tables, part of an owner-approved spec slice.",
+			"evidence": [
+				"4 of 4 pass",
+				"No runtime code changes",
+				"owner go-ahead for slices 0 to 2"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
+		},
+		{
 			"key": "pr:minion-meta#808",
 			"kind": "pr",
 			"stage": "development",
@@ -37288,6 +37539,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-14T05:48:14.769Z"
+		},
+		{
+			"key": "pr:minion_hub#699",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#699 chore(pulse): Pulse is switched off for every organization until work on it resumes",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/699",
+			"sourceUpdatedAt": "2026-11-20T22:43:41Z",
+			"sourceFingerprint": "a9ea4c2f5bf0fe35abb8fb4dc222b805fb913377c4912ccdc2e93026c452d917",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Simple, reversible owner-directed feature-flag disable with 631 passing tests and clear revert instructions, though no browser check was run.",
+			"evidence": [
+				"Owner decision, 2026-11-20",
+				"631 tests pass",
+				"Not run locally:... a browser check"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
 			"key": "pr:minion-meta#954",
