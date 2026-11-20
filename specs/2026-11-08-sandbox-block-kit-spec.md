@@ -1,14 +1,14 @@
 ---
 id: 2026-11-08-sandbox-block-kit-spec
 title: Sandbox block kit — deterministic, typed building blocks from the shared UI library
-stage: spec
-status: implementing
+stage: deploy
+status: merged
 verdict: pending
 pr: 642
 type: feature
 pass: 1
 created: 2026-11-08
-updated: 2026-11-08
+updated: 2026-11-20
 repos: [minion_hub, minion-meta]
 tags: [logic, data, ui]
 ---
@@ -35,3 +35,7 @@ tags: [logic, data, ui]
 ## Out of scope
 
 Series split by a second dimension, a board-level date control, drill-down to module records, per-row currency, converting the seeded custom element, and a catalogue API/MCP outside the hub page — all tracked in `proposals/2026-11-08-hub-sandbox-block-kit-followups.md`.
+
+## Delivery note (2026-11-20)
+
+Hub #642 merged to master as `3677e35a` on the owner's instruction ("finish and merge #642"), after a rebase onto `06d138d0` and a green CI run on head `93408b43` (check-and-build, test, qa-stack, postgres lanes, migration-seed-pairing). The spec's two-pass review was **not** run; `verdict` stays `pending` on purpose rather than recording an approval that did not happen. Rebase fix: master's `formatNumber(value, Intl.NumberFormatOptions)` is kept and the block presets pass Intl options; the branch's duplicate signature was dropped.
