@@ -1,0 +1,35 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-org-role-templates-20261112
+
+----------------xx··-------------------------------------------
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/organization-role-admin.sql.integration.test.ts > organization-local role administration (native PostgreSQL) > recipient role union data deltas > does not lend retained rank80 through a new custom-role-management grant from rank60
+ FAIL  src/server/services/organization-role-admin.sql.integration.test.ts > organization-local role administration (native PostgreSQL) > recipient role union data deltas > does not lend retained rank80 through a new custom-team-management grant from rank60
+AssertionError: promise resolved "undefined" instead of rejecting
+
+- Expected:
+Error {
+  "message": "rejected promise",
+}
+
++ Received:
+undefined
+
+ ❯ src/server/services/organization-role-admin.sql.integration.test.ts:481:61
+    479|       async (key) => {
+    480|         await rankUnionFixture();
+    481|         await expect(addMemberRole(org, member, key, owner)).rejects.t…
+       |                                                             ^
+    482|         expect(await assignments(member)).toEqual([{ role_key: 'custom…
+    483|         expect(await db`select * from doc_audit_log`).toHaveLength(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 2 passed | 59 skipped (63)
+   Start at  04:32:45
+   Duration  35.07s (transform 27.71s, setup 48ms, import 33.79s, tests 1.04s, environment 0ms)
+

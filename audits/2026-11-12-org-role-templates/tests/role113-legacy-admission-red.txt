@@ -1,0 +1,111 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-org-role-templates-20261112
+
+ × src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > admits a permitted legacy built-in role with verified grantor provenance and one atomic use 349ms
+   → undefined
+ × src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a legacy invitation without recorded grantor authority while preserving existing-member replay 355ms
+   → expected { Object (status, body) } to match object { status: 409, body: { …(1) } }
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a legacy admin invitation beyond the actual grantor page, record or field authority
+stdout | src/server/services/join/organization-admission.sql.integration.test.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'drop cascades to 11 other objects',
+  detail: 'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.organizations\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.org_roles\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.permission_roles\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.profiles\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.organization_members\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.member_roles\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.permission_rules\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.app_nav_config\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.join_link\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.join_request\n' +
+    'drop cascades to table role_admission_daa316c43cc8400d90bad40d69291c23.doc_audit_log',
+  file: 'dependency.c',
+  line: '1165',
+  routine: 'reportDependentObjects'
+}
+
+ × src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > approves an omitted legacy role as Staff only within the fresh reviewer ceiling 396ms
+   → undefined
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > completes legacy profile-fenced admission with a one-connection pool and retains legacy role semantics
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a pending-deletion legacy admission before either membership write
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects pending-deletion targets without granting membership or consuming an invite
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a pending-deletion grantor when minting or redeeming their invite
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > keeps requests pending when their target profile is fenced for deletion
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > intersects invite grant authority with the active simulated role
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > freezes the default local role when minting and does not adopt a later default
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > admits the selected local role and consumes exactly one use atomically
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > retains raw JSON navigation section denials on the Drizzle-initialized shared pool
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > replaying an invite never promotes an existing member or consumes another use
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > serializes concurrent redemptions so a one-use link admits only one new member
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects an invite whose role permissions changed after minting
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects an invite after the original grantor loses grant authority
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects foreign and built-in role keys without minting an invite
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > accepts a future-dated invite when the mixed pool returns timestamp strings
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects revoked and expired links without creating membership or consuming use
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rolls back membership, role and use when audit insertion fails
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > approves a pending request atomically using the current default local role
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > does not resolve a request from another organization
+ ↓ src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > leaves a pending request unresolved when membership admission rolls back
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > admits a permitted legacy built-in role with verified grantor provenance and one atomic use
+{
+  status: 403,
+  body: { message: 'Organization admission unavailable' },
+  constructor: 'Function<HttpError>',
+  toString: 'Function<toString>',
+  stacks: []
+}
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { status: 403, body: { message: 'Organization admission unavailable' } }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+ FAIL  src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > rejects a legacy invitation without recorded grantor authority while preserving existing-member replay
+AssertionError: expected { Object (status, body) } to match object { status: 409, body: { …(1) } }
+
+- Expected
++ Received
+
+- {
++ HttpError {
+    "body": {
+-     "message": StringContaining "create a new link",
++     "message": "Organization admission unavailable",
+    },
+-   "status": 409,
++   "status": 403,
+  }
+
+ ❯ src/server/services/join/organization-admission.sql.integration.test.ts:155:6
+    153|     await expect(
+    154|       consumeOrganizationInvite('legacy-unverified', user(), tables),
+    155|     ).rejects.toMatchObject({
+       |      ^
+    156|       status: 409,
+    157|       body: { message: expect.stringContaining('create a new link') },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3]⎯
+
+ FAIL  src/server/services/join/organization-admission.sql.integration.test.ts > organization-model transactional admission on PostgreSQL > approves an omitted legacy role as Staff only within the fresh reviewer ceiling
+{
+  status: 403,
+  body: { message: 'Organization admission unavailable' },
+  constructor: 'Function<HttpError>',
+  toString: 'Function<toString>',
+  stacks: []
+}
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { status: 403, body: { message: 'Organization admission unavailable' } }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 21 skipped (24)
+   Start at  03:39:50
+   Duration  5.40s (transform 2.48s, setup 56ms, import 3.90s, tests 1.24s, environment 0ms)
+

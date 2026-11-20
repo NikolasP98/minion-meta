@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-44dcd134459a
 title: "Post-merge finding — todo-handoff in src/server/services/nav-config.service.ts (minion_hub)"
-status: approved
+status: closed
 created: 2026-10-26
-updated: 2026-10-26
+updated: 2026-11-09
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/server/services/nav-config.service.ts`

@@ -4,7 +4,7 @@ title: Handoff marker — src/routes/(app)/pos/sell/PageBody.svelte (minion_hub)
 status: review
 duplicate_candidate: postmerge-minion-hub-4cd4ed4c43ae
 created: 2026-10-26
-updated: 2026-11-08
+updated: 2026-11-20
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
@@ -25,11 +25,11 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-11-08)
+## Markers (as of 2026-11-20)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:465` — that till-side draw happens on CLICK, not on submit, so an
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L465
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:520` — this synthetic line posts finProductId: null, so
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L520
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:830` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L830
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:471` — that till-side draw happens on CLICK, not on submit, so an
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L471
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:526` — this synthetic line posts finProductId: null, so
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L526
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:840` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L840

@@ -3,7 +3,7 @@ id: handoff-minion-hub-1242576349
 title: Handoff marker — src/routes/(app)/crm/[contactId]/PageBody.svelte (minion_hub)
 status: review
 created: 2026-10-26
-updated: 2026-11-08
+updated: 2026-11-20
 repos: [minion-hub]
 tags: [handoff-sweep]
 duplicate_candidate: postmerge-minion-hub-7ad076c39cbe
@@ -25,9 +25,9 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-11-08)
+## Markers (as of 2026-11-20)
 
-- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/PageBody.svelte:827` — additional custom fields lose their mailto link
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/PageBody.svelte#L827
-- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/PageBody.svelte:953` — spec 2026-09-28 Bundle F asks for tags LAST inside
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/PageBody.svelte#L953
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/PageBody.svelte:870` — additional custom fields lose their mailto link
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/PageBody.svelte#L870
+- `NikolasP98/minion_hub@master src/routes/(app)/crm/[contactId]/PageBody.svelte:996` — spec 2026-09-28 Bundle F asks for tags LAST inside
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/crm/[contactId]/PageBody.svelte#L996

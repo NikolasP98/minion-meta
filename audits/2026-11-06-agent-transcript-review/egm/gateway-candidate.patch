@@ -1,0 +1,1089 @@
+--- a/src/agents/bootstrap/bootstrap-files.ts
++++ b/src/agents/bootstrap/bootstrap-files.ts
+@@ -1,6 +1,9 @@
+ import type { MinionConfig } from "../../config/config.js";
+ import { isTruthyEnvValue, logAcceptedEnvOption } from "../../infra/env.js";
++import { resolveAgentIdFromSessionKey } from "../../routing/session-key.js";
++import { isPersonalAgentId } from "../personal-agent-id.js";
+ import {
++  DEFAULT_BOOTSTRAP_FILENAME,
+   DEFAULT_FOCUS_FILENAME,
+   DEFAULT_HEARTBEAT_FILENAME,
+   DEFAULT_TOOLS_FILENAME,
+@@ -63,6 +66,18 @@
+ 
+ Do NOT proceed with other tasks until onboarding is resolved.`;
+ 
++const PERSONAL_ONBOARDING_CONTENT = `# Optional Personal Setup
++
++For personal agents, this policy supersedes workspace onboarding/personality rituals, including
++references to BOOTSTRAP.md. Process authorized tasks immediately. Optional identity and conversation-style setup must not
++block a task or require a naming interview. Leave unknown preferences and identity facts unknown.
++Only discuss setup when the user asks for it or has no task to handle.
++
++Do not invent defaults, modify identity/profile files, delete BOOTSTRAP.md, or mark onboarding
++complete merely because the user starts a task. File/configuration changes still require the
++applicable owner/admin permission and confirmation. Capability and assignment restrictions still
++apply; explain the actual access/readiness error rather than attributing it to optional setup.`;
++
+ export async function resolveBootstrapContextForRun(params: {
+   workspaceDir: string;
+   overlayDir?: string;
+@@ -100,13 +115,23 @@
+     }
+   }
+ 
++  const agentId = params.agentId ?? resolveAgentIdFromSessionKey(params.sessionKey);
++  const personalAgent = isPersonalAgentId(agentId);
++  if (personalAgent) {
++    // BOOTSTRAP is a setup ritual, not capability or permission policy. Keep the
++    // source file intact while preventing it from contradicting personal task handling.
++    bootstrapFiles = bootstrapFiles.filter((file) => file.name !== DEFAULT_BOOTSTRAP_FILENAME);
++  }
++
+   const contextFiles = buildBootstrapContextFiles(bootstrapFiles, {
+     maxChars: resolveBootstrapMaxChars(params.config),
+     totalMaxChars: resolveBootstrapTotalMaxChars(params.config),
+     warn: params.warn,
+   });
+ 
+-  if (!isTruthyEnvValue(process.env.OPENCLAW_SKIP_ONBOARDING_GATE)) {
++  if (personalAgent) {
++    contextFiles.unshift({ path: "ONBOARDING_OPTIONAL", content: PERSONAL_ONBOARDING_CONTENT });
++  } else if (!isTruthyEnvValue(process.env.OPENCLAW_SKIP_ONBOARDING_GATE)) {
+     logAcceptedEnvOption({
+       key: "OPENCLAW_SKIP_ONBOARDING_GATE",
+       description: "skip onboarding-required system prompt injection",
+--- a/src/agents/pi-embedded-runner/run/attempt.ts
++++ b/src/agents/pi-embedded-runner/run/attempt.ts
+@@ -362,6 +362,7 @@
+         // Run before_prompt_build hooks to allow plugins to inject prompt context.
+         // Legacy compatibility: before_agent_start is also checked for context fields.
+         let effectivePrompt = params.prompt;
++        let existingMemoryForExtraction = "";
+         const hookCtx = {
+           agentId: hookAgentId,
+           sessionKey: params.sessionKey,
+@@ -466,6 +467,9 @@
+           try {
+             const hits = await recallMemories(env.sessionAgentId, params.prompt, { limit: 5 });
+             const lines = hits.filter((h) => h.score >= 0.2).map((h) => `- ${h.content}`);
++            // Reuse only memory already authorized for this run. No second read
++            // or private bootstrap-file load is needed by the detached extractor.
++            existingMemoryForExtraction = lines.join("\n").slice(0, 16_000);
+             if (lines.length > 0) {
+               effectivePrompt = `## Relevant memories\n${lines.join("\n")}\n\n${effectivePrompt}`;
+               emitMemoryRead({ source: "pre-turn-recall", hits: lines.length });
+@@ -729,6 +733,14 @@
+         // Only runs when the last turn had no tool calls (the model produced a final response).
+         if (!aborted && !promptError) {
+           const hadToolCalls = (toolMetas?.length ?? 0) > 0;
++          // Tool metadata lacks success status: conservatively suppress even
++          // failed explicit memory-write attempts instead of mining them later.
++          // TODO(handoff): cover filesystem/plugin memory writes through an
++          // authenticated write-outcome contract before wider adoption; see
++          // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
++          const userWroteMemoryThisTurn = toolMetas.some(({ toolName }) =>
++            ["remember", "brain_remember", "forget", "update_entity"].includes(toolName),
++          );
+           const lastText = extractLastAssistantText(messagesSnapshot);
+           const recentMsgs = lastText
+             ? [
+@@ -738,16 +750,21 @@
+             : [];
+           maybeExtractMemories({
+             sessionId: params.sessionId,
++            windowId: params.runId,
++            abortSignal: params.abortSignal,
+             lastTurnHadToolCalls: hadToolCalls,
+             newMessageCount: recentMsgs.length,
+-            userWroteMemoryThisTurn: false,
+-            existingMemory: "",
++            userWroteMemoryThisTurn,
++            existingMemory: existingMemoryForExtraction,
+             recentMessages: recentMsgs,
+             llmCall: callLlmForMemory,
+             // Fan extracted memories into the hub corpus (was previously dropped —
+             // no persistence callback was wired). Best-effort; no-op unless the
+             // memory sink is configured and an agent id is resolved.
+             onMemoryExtracted: async (mem) => {
++              // TODO(handoff): require an acknowledged/idempotent sink before
++              // claiming durable delivery; current sink is fire-and-forget. See
++              // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+               recordExtractedMemories([mem], { agentId: env.sessionAgentId });
+             },
+           });
+--- a/src/agents/sections/identity.ts
++++ b/src/agents/sections/identity.ts
+@@ -70,15 +70,15 @@
+         const nameGuidance = knownName
+           ? [
+               `The user's name is **${knownName}** (from their account) — you already know it. Greet them by name (e.g. "Hey ${knownName}").`,
+-              "Do NOT ask what to call them. If you want, you may ask once whether they'd prefer to go by a different name — but if they don't answer or just move on, keep using their account name. Never block onboarding on this.",
++              "Use their account name without a naming interview. Ask about a different preferred name only if they request optional setup; keep using their account name if they move on.",
+               "",
+             ]
+           : [];
+         return [
+-          "## First Conversation Onboarding",
++          "## Optional Personal Setup",
+           "",
+           ...nameGuidance,
+-          "This is a new personal agent that hasn't been configured with a personality yet. On your FIRST message to this user, naturally introduce yourself and ask about their preferred conversation style. Offer these options:",
++          "This personal agent has no configured personality yet. Process an authorized task immediately using a friendly, clear style; do not interrupt it with setup questions. If the user requests setup or has no task, you may introduce yourself and offer these optional styles:",
+           "",
+           "- **Professional**: Clear, structured responses with a focus on accuracy and efficiency",
+           "- **Casual**: Friendly and conversational, like chatting with a helpful friend",
+--- a/src/agents/sessions/session-tool-result-guard.ts
++++ b/src/agents/sessions/session-tool-result-guard.ts
+@@ -5,6 +5,10 @@
+   PluginHookBeforeMessageWriteEvent,
+   PluginHookBeforeMessageWriteResult,
+ } from "../../plugins/types.js";
++import {
++  redactExplicitSecretDetails,
++  redactExplicitSecretText,
++} from "../../security/explicit-secret-redaction.js";
+ import { emitSessionTranscriptUpdate } from "../../sessions/transcript-events.js";
+ import { HARD_MAX_TOOL_RESULT_CHARS } from "../pi-embedded-runner/tool-result-truncation.js";
+ import {
+@@ -77,6 +81,31 @@
+   });
+ 
+   return { ...msg, content: newContent } as AgentMessage;
++}
++
++/** Run last, after all optional/plugin transforms, so persistence cannot opt out. */
++function redactToolResultForPersistence(message: AgentMessage): AgentMessage {
++  const result = message as AgentMessage & { content?: unknown; details?: unknown };
++  const content = Array.isArray(result.content)
++    ? result.content.map((block: unknown) => {
++        if (!block || typeof block !== "object" || (block as { type?: unknown }).type !== "text") {
++          return block; // Preserve image bytes and non-text protocol blocks.
++        }
++        const textBlock = block as { text?: unknown };
++        return typeof textBlock.text === "string"
++          ? { ...block, text: redactExplicitSecretText(textBlock.text).text }
++          : block;
++      })
++    : typeof result.content === "string"
++      ? redactExplicitSecretText(result.content).text
++      : result.content;
++  return {
++    ...message,
++    content,
++    ...(Object.hasOwn(result, "details")
++      ? { details: redactExplicitSecretDetails(result.details) }
++      : {}),
++  } as AgentMessage;
+ }
+ 
+ export function installSessionToolResultGuard(
+@@ -163,7 +192,7 @@
+           }),
+         );
+         if (flushed) {
+-          originalAppend(flushed as never);
++          originalAppend(redactToolResultForPersistence(flushed) as never);
+         }
+       }
+     }
+@@ -204,7 +233,7 @@
+       if (!persisted) {
+         return undefined;
+       }
+-      return originalAppend(persisted as never);
++      return originalAppend(redactToolResultForPersistence(persisted) as never);
+     }
+ 
+     const toolCalls =
+@@ -227,7 +256,11 @@
+     if (!finalMessage) {
+       return undefined;
+     }
+-    const result = originalAppend(finalMessage as never);
++    const result = originalAppend(
++      ((finalMessage as { role?: unknown }).role === "toolResult"
++        ? redactToolResultForPersistence(finalMessage)
++        : finalMessage) as never,
++    );
+ 
+     const sessionFile = (
+       sessionManager as { getSessionFile?: () => string | null }
+--- a/src/agents/tools/hub/bookings-query-tool.ts
++++ b/src/agents/tools/hub/bookings-query-tool.ts
+@@ -1,7 +1,8 @@
+ import { Type } from "typebox";
++import { optionalStringEnum } from "../../schema/typebox.js";
+ import { wrapToolWithTracking } from "../../../logging/tool-tracking.js";
+ import type { AnyAgentTool } from "../common.js";
+-import { jsonResult, readStringParam } from "../common.js";
++import { jsonResult, readStringParam, readNumberParam } from "../common.js";
+ import { hubGet, hubToolsAvailable, ORG_ID_FIELD } from "./hub-common.js";
+ 
+ const BookingsQuerySchema = Type.Object({
+@@ -18,6 +19,17 @@
+   dateTo: Type.Optional(
+     Type.String({ description: "ISO date/time, inclusive upper bound on start time." }),
+   ),
++  limit: Type.Optional(
++    Type.Integer({
++      minimum: 1,
++      maximum: 500,
++      description: "Maximum rows in list mode; default 500. Narrow filters if truncated.",
++    }),
++  ),
++  mode: optionalStringEnum(["list", "count"], {
++    description:
++      "Use count for exact scoped totals without fetching the list; list returns total/returned/truncated/limit.",
++  }),
+   orgId: ORG_ID_FIELD,
+ });
+ 
+@@ -37,7 +49,7 @@
+       label: "Bookings Query",
+       name: "bookings_query",
+       description:
+-        "List appointments/bookings — upcoming, past, or a date range, optionally filtered to one contact. Use for 'what's on the schedule today', 'when is X's next appointment'. To create/change/cancel a booking use booking_create/booking_reschedule/booking_cancel. Present results with a deep link like [bookings](/scheduling/bookings) or, for one contact, [bookings](/scheduling/bookings?contact={contactId}).",
++        "List appointments/bookings; disclose truncated results and use total for counts, never array length — upcoming, past, or a date range, optionally filtered to one contact. Use for 'what's on the schedule today', 'when is X's next appointment'. To create/change/cancel a booking use booking_create/booking_reschedule/booking_cancel. Present results with a deep link like [bookings](/scheduling/bookings) or, for one contact, [bookings](/scheduling/bookings?contact={contactId}).",
+       parameters: BookingsQuerySchema,
+       execute: async (_toolCallId, args, signal) => {
+         const params = args as Record<string, unknown>;
+@@ -45,6 +57,8 @@
+           "query/bookings",
+           agentId as string,
+           {
++            limit: readNumberParam(params, "limit")?.toString(),
++            mode: readStringParam(params, "mode"),
+             status: readStringParam(params, "status"),
+             contact: readStringParam(params, "contactId"),
+             from: readStringParam(params, "dateFrom"),
+--- a/src/agents/tools/hub/finance-query-tool.ts
++++ b/src/agents/tools/hub/finance-query-tool.ts
+@@ -1,17 +1,28 @@
+ import { Type } from "typebox";
++import { optionalStringEnum } from "../../schema/typebox.js";
+ import { wrapToolWithTracking } from "../../../logging/tool-tracking.js";
+ import type { AnyAgentTool } from "../common.js";
+ import { jsonResult, readStringParam } from "../common.js";
+ import { hubGet, hubToolsAvailable, ORG_ID_FIELD } from "./hub-common.js";
+ 
+ const FinanceQuerySchema = Type.Object({
+-  dateFrom: Type.Optional(Type.String({ description: "ISO date, inclusive lower bound." })),
+-  dateTo: Type.Optional(Type.String({ description: "ISO date, inclusive upper bound." })),
+-  bucket: Type.Optional(
+-    Type.Union([Type.Literal("day"), Type.Literal("week"), Type.Literal("month")], {
+-      description: "Granularity of the revenue time series. Defaults to 'month'.",
++  dateFrom: Type.Optional(
++    Type.String({
++      description: "YYYY-MM-DD calendar date in the business timezone; inclusive first day.",
+     }),
+   ),
++  dateTo: Type.Optional(
++    Type.String({
++      description: "YYYY-MM-DD calendar date in the business timezone; inclusive last day.",
++    }),
++  ),
++  range: optionalStringEnum(["all"], {
++    description:
++      "Explicit all-time query. Omit dateFrom/dateTo when set. Without any period filter, returns rolling 12 months; report the returned periodSemantics.",
++  }),
++  bucket: optionalStringEnum(["day", "week", "month"], {
++    description: "Revenue time-series granularity; default month.",
++  }),
+   orgId: ORG_ID_FIELD,
+ });
+ 
+@@ -37,14 +48,19 @@
+       parameters: FinanceQuerySchema,
+       execute: async (_toolCallId, args, signal) => {
+         const params = args as Record<string, unknown>;
+-        const dateFrom = readStringParam(params, "dateFrom");
+-        const dateTo = readStringParam(params, "dateTo");
+-        const bucket = readStringParam(params, "bucket");
++        // Supplied blank inputs must not disappear into the Hub's absent-filter
++        // default. Preserve presence before the common optional-string reader.
++        const readPeriod = (key: string) =>
++          readStringParam(params, key, { required: Object.hasOwn(params, key) });
++        const dateFrom = readPeriod("dateFrom");
++        const dateTo = readPeriod("dateTo");
++        const bucket = readPeriod("bucket");
+         const orgId = readStringParam(params, "orgId");
+         const result = await hubGet(
+           "query/finance",
+           agentId as string,
+           {
++            range: readPeriod("range"),
+             from: dateFrom,
+             to: dateTo,
+             bucket,
+--- a/src/auto-reply/reply/reply-dispatcher.ts
++++ b/src/auto-reply/reply/reply-dispatcher.ts
+@@ -1,4 +1,7 @@
+-import { sanitizeOutboundText } from "../../channels/outbound-sanitizer.js";
++import {
++  sanitizeOutboundText,
++  sanitizeTerminalFinalText,
++} from "../../channels/outbound-sanitizer.js";
+ import type { HumanDelayConfig } from "../../config/types.js";
+ import { sleep } from "../../utils.js";
+ import type { GetReplyOptions, ReplyPayload } from "../types.js";
+@@ -101,6 +104,8 @@
+   });
+ }
+ 
++// TODO(handoff): qualify channel delivery paths that bypass this dispatcher before
++// claiming fleet-wide egress coverage; see proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ export function createReplyDispatcher(options: ReplyDispatcherOptions): ReplyDispatcher {
+   let sendChain: Promise<void> = Promise.resolve();
+   // Track in-flight deliveries so we can emit a reliable "idle" signal.
+@@ -139,15 +144,25 @@
+     // tool-call syntax leaks, and redact secret shapes from EVERY outbound
+     // reply on EVERY channel — the streaming path (block/final/tool) previously
+     // bypassed the sanitizer that only the web HTTP path applied, so [[tts]]
+-    // markers leaked into hub chat (onboarding transcript 2026-06-11). Audio is
+-    // already generated upstream (maybeApplyTtsToPayload) from the raw text, so
+-    // cleaning the visible text here does not affect TTS.
++    // markers leaked into hub chat (onboarding transcript 2026-06-11). TTS
++    // sanitizes before synthesis; keep this final guard after later transforms.
+     if (normalized.text) {
+-      const sanitized = sanitizeOutboundText(normalized.text);
++      const hasMedia = Boolean(normalized.mediaUrl) || (normalized.mediaUrls?.length ?? 0) > 0;
++      const hasChannelData = Boolean(
++        normalized.channelData && Object.keys(normalized.channelData).length > 0,
++      );
++      // Classify the original body so a presentation prefix cannot turn a
++      // protocol-only answer into apparently valid prose.
++      const terminal =
++        kind === "final" && !hasMedia && !hasChannelData
++          ? sanitizeTerminalFinalText(payload.text ?? "")
++          : undefined;
++      const sanitized = terminal?.invalidToolProtocol
++        ? terminal
++        : sanitizeOutboundText(normalized.text);
+       if (sanitized.text !== normalized.text) {
+-        const hasMedia = Boolean(normalized.mediaUrl) || (normalized.mediaUrls?.length ?? 0) > 0;
+-        if (!sanitized.text.trim() && !hasMedia) {
+-          // Whole message was control tokens / tool syntax — nothing to send.
++        if (!sanitized.text.trim() && !hasMedia && !hasChannelData) {
++          // Intentional control-only suppression or nonterminal tool syntax.
+           options.onSkip?.(payload, { kind, reason: "empty" });
+           return false;
+         }
+--- a/src/channels/outbound-sanitizer.ts
++++ b/src/channels/outbound-sanitizer.ts
+@@ -1,3 +1,5 @@
++import { redactExplicitSecretText } from "../security/explicit-secret-redaction.js";
++
+ /**
+  * Outbound message sanitizer — a model-independent last line of defense.
+  *
+@@ -88,20 +90,11 @@
+ const MALFORMED_TTS_TOKEN_RE = /\[{1,2}\/?tts(?::[a-z]+)?\]{1,2}/gi;
+ const WORKSHOP_TOKEN_RE = /\[(?:VOTE_UP|VOTE_DOWN|KEEP_PIN)\]/g;
+ 
+-/** High-confidence secret shapes. Conservative to avoid redacting normal text. */
+-const SECRET_PATTERNS: RegExp[] = [
+-  /\b\d{5,}:[A-Za-z0-9_-]{20,}\b/g, // Telegram/ManyChat-style bot token (recon #169)
+-  /1\/\/0[A-Za-z0-9_/-]{20,}/g, // Google OAuth refresh token (fleet recon S1: panik leak)
+-  /\bsk-or-[A-Za-z0-9-]{20,}\b/g, // OpenRouter (fleet recon S1: leiva)
+-  /\bsk-ant-[A-Za-z0-9_-]{20,}\b/g, // Anthropic-style
+-  /\bsk-[A-Za-z0-9]{20,}\b/g, // OpenAI-style
+-  /\bgh[posru]_[A-Za-z0-9]{20,}\b/g, // GitHub PAT
+-  /\bxox[baprs]-[A-Za-z0-9-]{10,}\b/g, // Slack
+-  /\bAKIA[0-9A-Z]{16}\b/g, // AWS access key id
+-  /\bAIza[0-9A-Za-z_-]{30,}\b/g, // Google API key
+-];
+-
+-const REDACTION = "[REDACTED]";
++/** DSML provider protocol is invalid final output, including incomplete invocations. */
++const DSML_PAIRED_RE = /<｜DSML｜(tool_calls|invoke|parameter)\b[^>]*>[\s\S]*?<\/｜DSML｜\1\s*>/gi;
++const DSML_UNFINISHED_RE = /<\/?｜DSML｜(?:tool_calls|invoke|parameter)\b[\s\S]*$/gi;
++const INVALID_PROTOCOL_REPLY =
++  "I could not complete this response because it contained invalid tool protocol. No tool action was executed from that text. Please try again.";
+ 
+ /**
+  * Sanitize an outbound message body. Returns cleaned text plus what was done,
+@@ -115,6 +108,27 @@
+ 
+   let text = input;
+   let strippedToolSyntax = false;
++  let invalidProviderProtocol = false;
++
++  // Detect complete or incomplete envelopes before other stripping. Any DSML
++  // contamination invalidates the whole response, including surrounding prose.
++  text = text.replace(FENCED_TOOL_BLOCK_RE, (whole, body: string) => {
++    if (/<\/?｜DSML｜(?:tool_calls|invoke|parameter)\b/i.test(body)) {
++      invalidProviderProtocol = true;
++      return "";
++    }
++    return whole;
++  });
++  text = text
++    .replace(DSML_PAIRED_RE, () => {
++      invalidProviderProtocol = true;
++      return "";
++    })
++    .replace(DSML_UNFINISHED_RE, () => {
++      invalidProviderProtocol = true;
++      return "";
++    });
++  strippedToolSyntax = invalidProviderProtocol;
+ 
+   // 1. Fenced tool blocks (only when the body is clearly tool machinery).
+   text = text.replace(FENCED_TOOL_BLOCK_RE, (whole, body: string) => {
+@@ -162,14 +176,10 @@
+   }
+   text = afterBrackets;
+ 
+-  // 5. Redact high-confidence secret shapes.
+-  let redactions = 0;
+-  for (const pattern of SECRET_PATTERNS) {
+-    text = text.replace(pattern, () => {
+-      redactions += 1;
+-      return REDACTION;
+-    });
+-  }
++  // Mandatory redaction shares the same vocabulary as transcript persistence.
++  const redacted = redactExplicitSecretText(text);
++  text = redacted.text;
++  const redactions = redacted.redactions;
+ 
+   // Tidy up whitespace left by strips: collapse 3+ blank lines, trim trailing
+   // spaces per line, and trim the whole thing.
+@@ -180,5 +190,36 @@
+       .trim();
+   }
+ 
++  if (invalidProviderProtocol) {
++    text = INVALID_PROTOCOL_REPLY;
++  }
+   return { text, redactions, strippedToolSyntax };
+ }
++
++/** A recognized provider invocation contaminates the whole terminal answer. */
++export function containsProviderToolProtocol(input: string): boolean {
++  return /<\/?｜DSML｜(?:tool_calls|invoke|parameter)\b/i.test(input);
++}
++
++/**
++ * Terminal text-only final replies need an explicit outcome when invocation
++ * syntax was the entire answer. Control-only suppression stays intentional.
++ */
++export function sanitizeTerminalFinalText(
++  input: string,
++): OutboundSanitizeResult & { invalidToolProtocol: boolean } {
++  const result = sanitizeOutboundText(input);
++  if (result.text.trim()) {
++    return { ...result, invalidToolProtocol: containsProviderToolProtocol(input) };
++  }
++  const invocationSyntax =
++    input.search(LONE_TOOL_TAG_RE) >= 0 ||
++    input.search(JSON_ACTION_RE) >= 0 ||
++    input.search(TOOLU_ID_RE) >= 0 ||
++    [...input.matchAll(FENCED_TOOL_BLOCK_RE)].some((match) => TOOL_BLOCK_MARKERS.test(match[1]));
++  return {
++    ...result,
++    ...(invocationSyntax ? { text: INVALID_PROTOCOL_REPLY } : {}),
++    invalidToolProtocol: invocationSyntax,
++  };
++}
+--- a/src/gateway/server-methods/sessions.ts
++++ b/src/gateway/server-methods/sessions.ts
+@@ -13,6 +13,7 @@
+   updateSessionStore,
+ } from "../../config/sessions.js";
+ import { createInternalHookEvent, triggerInternalHook } from "../../hooks/internal-hooks.js";
++import { clearSessionCursor } from "../../memory/extract-memories-runner.js";
+ import { normalizeAgentId, parseAgentSessionKey } from "../../routing/session-key.js";
+ import {
+   ErrorCodes,
+@@ -131,6 +132,13 @@
+   abortEmbeddedPiRun(params.sessionId);
+   const ended = await waitForEmbeddedPiRunEnd(params.sessionId, 15_000);
+   if (ended) {
++    // Reset/delete own the detached extraction generation too. Wait until the
++    // attempt has stopped scheduling jobs, then fence queued/late completions
++    // before replacing/removing the session store entry. Failed cleanup keeps
++    // the current session and its attempt budget intact.
++    // TODO(handoff): qualify automatic rotation paths outside these RPCs; see
++    // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
++    clearSessionCursor(params.sessionId);
+     return undefined;
+   }
+   return errorShape(
+--- a/src/memory/extract-memories-runner.test.ts
++++ b/src/memory/extract-memories-runner.test.ts
+@@ -21,12 +21,14 @@
+   return {
+     sessionId: "test-session",
+     lastTurnHadToolCalls: false,
+-    newMessageCount: 5,
++    newMessageCount: 4,
+     userWroteMemoryThisTurn: false,
+     existingMemory: "",
+     recentMessages: [
+       { role: "user", content: "I prefer dark mode" },
+       { role: "assistant", content: "Noted!" },
++      { role: "user", content: "Project uses pnpm" },
++      { role: "assistant", content: "Understood." },
+     ],
+     llmCall: vi.fn<(prompt: string) => Promise<string>>().mockResolvedValue(VALID_LLM_RESPONSE),
+     onMemoryExtracted: vi
+@@ -113,7 +115,10 @@
+   });
+ 
+   it("does NOT call llmCall when newMessageCount is below threshold", async () => {
+-    const opts = defaultOpts({ newMessageCount: 1 });
++    const opts = defaultOpts({
++      newMessageCount: 1,
++      recentMessages: [{ role: "user", content: "One actual message" }],
++    });
+     maybeExtractMemories(opts);
+ 
+     await vi.runAllTimersAsync();
+--- a/src/memory/extract-memories-runner.ts
++++ b/src/memory/extract-memories-runner.ts
+@@ -1,3 +1,4 @@
++import { createHash } from "node:crypto";
+ import { trackEvent } from "../infra/posthog.js";
+ import { addSentryBreadcrumb } from "../infra/sentry.js";
+ import { createSubsystemLogger } from "../logging/subsystem.js";
+@@ -14,99 +15,291 @@
+ } from "./extract-memories.js";
+ 
+ const log = createSubsystemLogger("memory");
+-
+-// Per-session cursor tracking (in-memory, resets on process restart)
+-const SESSION_CURSORS = new Map<string, ExtractionCursor>();
+-
+-/**
+- * Get or create an extraction cursor for a session.
+- */
+-export function getOrCreateCursor(sessionId: string): ExtractionCursor {
+-  let cursor = SESSION_CURSORS.get(sessionId);
+-  if (!cursor) {
+-    cursor = createCursor(sessionId);
+-    SESSION_CURSORS.set(sessionId, cursor);
+-  }
+-  return cursor;
+-}
+-
+-/**
+- * Fire-and-forget memory extraction. Called after the agent's final response.
+- * NEVER delays the user's next message — runs in a detached microtask.
+- *
+- * @param opts.sessionId - The current session ID
+- * @param opts.lastTurnHadToolCalls - Whether the last assistant turn included tool calls
+- * @param opts.newMessageCount - Number of messages since last extraction
+- * @param opts.userWroteMemoryThisTurn - Whether the user/agent wrote to memory this turn
+- * @param opts.existingMemory - Current MEMORY.md content (for dedup)
+- * @param opts.recentMessages - Messages since last extraction (role + content pairs)
+- * @param opts.llmCall - Function to call the LLM (injected dependency)
+- * @param opts.onMemoryExtracted - Callback for each extracted memory (write to store)
+- * @param opts.config - Optional extraction config override
+- */
+-export function maybeExtractMemories(opts: {
++const MAX_PENDING_MESSAGES = 64;
++const MAX_PENDING_CHARACTERS = 64_000;
++const MAX_REMEMBERED_WINDOWS = 128;
++const MAX_QUEUED_WINDOWS = 5;
++const MAX_LOCAL_MEMORY_CHARACTERS = 16_000;
++const MAX_RETAINED_SESSIONS = 256;
++const IDLE_RETENTION_MS = 30 * 60 * 1000;
++
++type Message = { role: string; content: string };
++type ExtractionOptions = {
+   sessionId: string;
++  /** Stable identity of a new turn/window; the actual attempt passes its runId. */
++  windowId?: string;
++  abortSignal?: AbortSignal;
+   lastTurnHadToolCalls: boolean;
++  /** Compatibility field only. Admission counts the actual buffered messages. */
+   newMessageCount: number;
+   userWroteMemoryThisTurn: boolean;
+   existingMemory: string;
+-  recentMessages: ReadonlyArray<{ role: string; content: string }>;
++  recentMessages: ReadonlyArray<Message>;
+   llmCall: (prompt: string) => Promise<string>;
+   onMemoryExtracted?: (memory: ExtractedMemory) => Promise<void>;
+   config?: ExtractionConfig;
+-}): void {
++};
++type InputWindow = { id: string; messages: Message[]; characters: number; signal?: AbortSignal };
++type Job = { opts: ExtractionOptions; windows: InputWindow[]; lastWindowId: string };
++type SessionState = {
++  cursor: ExtractionCursor;
++  pending: InputWindow[];
++  seenWindows: Set<string>;
++  queue: Job[];
++  running: boolean;
++  reserved: number;
++  attempts: number;
++  failed: number;
++  canceled: number;
++  extractedContext: string;
++  lastActivity: number;
++};
++
++// State-object identity is the generation fence. Clearing cannot let an old
++// completion replace a newly created session's cursor or begin another write.
++const SESSIONS = new Map<string, SessionState>();
++function getOrCreateState(sessionId: string): SessionState | undefined {
++  let state = SESSIONS.get(sessionId);
++  if (!state) {
++    if (SESSIONS.size >= MAX_RETAINED_SESSIONS) return undefined;
++    state = {
++      cursor: createCursor(sessionId),
++      pending: [],
++      seenWindows: new Set(),
++      queue: [],
++      running: false,
++      reserved: 0,
++      attempts: 0,
++      failed: 0,
++      canceled: 0,
++      extractedContext: "",
++      lastActivity: Date.now(),
++    };
++    SESSIONS.set(sessionId, state);
++  }
++  return state;
++}
++
++export function getOrCreateCursor(sessionId: string): ExtractionCursor {
++  // At capacity, an inspection receives an untracked default, not a new slot.
++  return getOrCreateState(sessionId)?.cursor ?? createCursor(sessionId);
++}
++
++/** Snapshot: paid attempts include failures/cancellations after model dispatch. */
++export function getSessionExtractionStats(sessionId: string) {
++  const state = getOrCreateState(sessionId);
++  return {
++    tracked: state !== undefined,
++    retainedSessions: SESSIONS.size,
++    reserved: state?.reserved ?? 0,
++    attempts: state?.attempts ?? 0,
++    failed: state?.failed ?? 0,
++    canceled: state?.canceled ?? 0,
++    completed: state?.cursor.extractionCount ?? 0,
++    pendingMessages: state?.pending.reduce((sum, window) => sum + window.messages.length, 0) ?? 0,
++    queued: state?.queue.length ?? 0,
++    lastActivityAt: state?.lastActivity ?? null,
++  };
++}
++
++/** Lazy retention sweep never evicts in-flight or queued work/paid capacity. */
++function expireIdleSessions(now: number): void {
++  for (const [sessionId, state] of SESSIONS) {
++    if (
++      !state.running &&
++      state.queue.length === 0 &&
++      now - state.lastActivity >= IDLE_RETENTION_MS
++    ) {
++      clearSessionCursor(sessionId);
++    }
++  }
++}
++
++/**
++ * Accumulate actual new messages and reserve capacity synchronously, then run a
++ * single detached worker per session. Legacy callers without an identity get
++ * exact-window content deduplication; callers with run IDs may repeat real text.
++ * Buffers/dedup are bounded and process-local, as was the original cursor.
++ */
++export function maybeExtractMemories(opts: ExtractionOptions): void {
+   const config = opts.config ?? createDefaultConfig();
+-  const cursor = getOrCreateCursor(opts.sessionId);
++  if (
++    !config.enabled ||
++    opts.abortSignal?.aborted ||
++    (config.skipIfUserWroteMemory && opts.userWroteMemoryThisTurn)
++  ) {
++    return;
++  }
++  expireIdleSessions(Date.now());
++  const state = getOrCreateState(opts.sessionId);
++  if (!state) {
++    log.warn(
++      `memory extraction session capacity full; admission skipped for session=${opts.sessionId}`,
++    );
++    return;
++  }
++  if (state.attempts + state.reserved >= config.maxExtractionsPerSession) {
++    return;
++  }
++  const windowId =
++    opts.windowId ??
++    `turn-${createHash("sha256").update(JSON.stringify(opts.recentMessages)).digest("hex")}`;
++  if (state.seenWindows.has(windowId) || opts.recentMessages.length === 0) {
++    return;
++  }
++  const characters = opts.recentMessages.reduce(
++    (sum, message) => sum + message.content.length + message.role.length,
++    0,
++  );
++  if (
++    windowId.length > 256 ||
++    opts.recentMessages.length > MAX_PENDING_MESSAGES ||
++    characters > MAX_PENDING_CHARACTERS ||
++    state.queue.length >= MAX_QUEUED_WINDOWS
++  ) {
++    log.warn(`memory extraction window exceeds buffer capacity for session=${opts.sessionId}`);
++    return;
++  }
++  state.pending = state.pending.filter((window) => !window.signal?.aborted);
++  let pendingCount = state.pending.reduce((sum, window) => sum + window.messages.length, 0);
++  let pendingCharacters = state.pending.reduce((sum, window) => sum + window.characters, 0);
++  // Whole-window rolling retention cannot deadlock when many tool turns defer
++  // extraction. Eviction is explicit and never leaves half a user/assistant pair.
++  while (
++    pendingCount + opts.recentMessages.length > MAX_PENDING_MESSAGES ||
++    pendingCharacters + characters > MAX_PENDING_CHARACTERS
++  ) {
++    const oldest = state.pending.shift();
++    if (!oldest) break;
++    pendingCount -= oldest.messages.length;
++    pendingCharacters -= oldest.characters;
++    log.warn(`memory extraction evicted oldest pending window for session=${opts.sessionId}`);
++  }
++  state.seenWindows.add(windowId);
++  if (state.seenWindows.size > MAX_REMEMBERED_WINDOWS) {
++    const oldest = state.seenWindows.values().next().value;
++    if (oldest !== undefined) state.seenWindows.delete(oldest);
++  }
++  state.lastActivity = Date.now();
++  state.pending.push({
++    id: windowId,
++    messages: opts.recentMessages.map(({ role, content }) => ({ role, content })),
++    characters,
++    signal: opts.abortSignal,
++  });
+ 
+   if (
+     !shouldExtract(
+       config,
+-      cursor,
++      { ...state.cursor, extractionCount: state.attempts + state.reserved },
+       opts.lastTurnHadToolCalls,
+-      opts.newMessageCount,
++      pendingCount + opts.recentMessages.length,
+       opts.userWroteMemoryThisTurn,
+     )
+   ) {
+     return;
+   }
+ 
+-  // Fire and forget — setImmediate ensures we don't block the current event loop turn
+-  setImmediate(async () => {
++  // Reservation happens before setImmediate, so all overlapping callers observe
++  // the same monotonically consumed budget. No stale captured cursor is used.
++  state.reserved++;
++  state.queue.push({ opts: { ...opts }, windows: state.pending, lastWindowId: windowId });
++  state.pending = [];
++  if (!state.running) {
++    state.running = true;
++    setImmediate(() => {
++      void drainSession(opts.sessionId, state);
++    });
++  }
++}
++
++async function drainSession(sessionId: string, state: SessionState): Promise<void> {
++  const current = () => SESSIONS.get(sessionId) === state;
++  while (current() && state.queue.length > 0) {
++    const job = state.queue.shift();
++    if (!job) break;
++    state.reserved--;
++    const canceled = () => job.windows.some((window) => window.signal?.aborted);
++    if (canceled()) {
++      // A canceled reservation never called a model: its capacity is reusable.
++      state.canceled++;
++      state.lastActivity = Date.now();
++      continue;
++    }
++    const valid = () => current() && !canceled();
++    state.attempts++;
+     try {
+-      const prompt = buildExtractionPrompt(opts.recentMessages, opts.existingMemory);
+-      const raw = await opts.llmCall(prompt);
++      const existingMemory = [job.opts.existingMemory, state.extractedContext]
++        .filter(Boolean)
++        .join("\n");
++      // TODO(handoff): define provider timeout/abort transport so a hung model
++      // cannot occupy retained capacity indefinitely; see
++      // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
++      const raw = await job.opts.llmCall(
++        buildExtractionPrompt(
++          job.windows.flatMap((window) => window.messages),
++          existingMemory,
++        ),
++      );
++      if (!valid()) {
++        state.canceled++;
++        continue;
++      }
+       const memories = parseExtractionResponse(raw);
+-
++      for (const memory of memories) {
++        if (!valid()) break;
++        if (job.opts.onMemoryExtracted) await job.opts.onMemoryExtracted(memory);
++        if (!valid()) break;
++        state.extractedContext = `${state.extractedContext}\n${memory.content}`.slice(
++          -MAX_LOCAL_MEMORY_CHARACTERS,
++        );
++      }
++      if (!valid()) {
++        state.canceled++;
++        continue;
++      }
++      state.cursor = advanceCursor(state.cursor, job.lastWindowId);
+       if (memories.length > 0) {
+-        log.info(`extracted ${memories.length} memories for session=${opts.sessionId}`);
+-        addSentryBreadcrumb({
+-          category: "dream.extraction",
+-          message: `extracted ${memories.length} memories for session=${opts.sessionId}`,
+-          level: "info",
+-        });
+-        void trackEvent(opts.sessionId, "dream_extraction", {
+-          sessionId: opts.sessionId,
+-          memoriesExtracted: memories.length,
+-        });
+-        if (opts.onMemoryExtracted) {
+-          for (const mem of memories) {
+-            await opts.onMemoryExtracted(mem);
+-          }
++        try {
++          log.info(`extracted ${memories.length} memories for session=${sessionId}`);
++          addSentryBreadcrumb({
++            category: "dream.extraction",
++            message: `extracted ${memories.length} memories for session=${sessionId}`,
++            level: "info",
++          });
++          void Promise.resolve(
++            trackEvent(sessionId, "dream_extraction", {
++              sessionId,
++              memoriesExtracted: memories.length,
++            }),
++          ).catch(() => log.debug("memory extraction telemetry failed"));
++        } catch {
++          log.debug("memory extraction telemetry failed");
+         }
+       }
+-
+-      // Advance cursor
+-      const lastId = `turn-${Date.now()}`;
+-      SESSION_CURSORS.set(opts.sessionId, advanceCursor(cursor, lastId));
+     } catch (err) {
+-      log.warn(`memory extraction failed for session=${opts.sessionId}: ${String(err)}`);
++      // Failed attempts remain charged; replay cannot create an unbounded retry
++      // bill. Partial callback writes are not retried automatically.
++      if (valid()) state.failed++;
++      else state.canceled++;
++      log.warn(`memory extraction failed for session=${sessionId}: ${String(err)}`);
++    } finally {
++      if (current()) state.lastActivity = Date.now();
+     }
+-  });
+-}
+-
+-/**
+- * Clean up cursor for a session (call on session end).
+- */
++  }
++  state.running = false;
++}
++
++/** Clear a session generation; queued jobs and late provider results become inert. */
+ export function clearSessionCursor(sessionId: string): void {
+-  SESSION_CURSORS.delete(sessionId);
+-}
++  const state = SESSIONS.get(sessionId);
++  SESSIONS.delete(sessionId);
++  if (state) {
++    state.canceled += state.reserved;
++    state.reserved = 0;
++    state.queue = [];
++    state.pending = [];
++    state.seenWindows.clear();
++    state.extractedContext = "";
++  }
++}
+--- /dev/null
++++ b/src/security/explicit-secret-redaction.ts
+@@ -0,0 +1,83 @@
++/** Mandatory, configuration-independent redaction for explicit credential evidence. */
++export const SECRET_REDACTION = "[REDACTED]";
++
++// Preserve the existing egress vocabulary; deliberately avoid entropy/long-ID heuristics.
++const SECRET_SHAPES: RegExp[] = [
++  /\b\d{5,}:[A-Za-z0-9_-]{20,}\b/g,
++  /1\/\/0[A-Za-z0-9_/-]{20,}/g,
++  /\bsk-or-[A-Za-z0-9-]{20,}\b/g,
++  /\bsk-ant-[A-Za-z0-9_-]{20,}\b/g,
++  /\bsk-[A-Za-z0-9]{20,}\b/g,
++  /\bgh[posru]_[A-Za-z0-9]{20,}\b/g,
++  /\bgithub_pat_[A-Za-z0-9_]{20,}\b/g,
++  /\bxox[baprs]-[A-Za-z0-9-]{10,}\b/g,
++  /\bAKIA[0-9A-Z]{16}\b/g,
++  /\bAIza[0-9A-Za-z_-]{30,}\b/g,
++  /\bBearer\s+[A-Za-z0-9._\-+=]{18,}\b/gi,
++  /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]+?-----END [A-Z ]*PRIVATE KEY-----/g,
++];
++
++function isSecretKey(key: string): boolean {
++  const normalized = key
++    .replace(/([a-z0-9])([A-Z])/g, "$1_$2")
++    .replace(/[-.]/g, "_")
++    .toUpperCase();
++  return /(?:^|_)(?:TOKEN|PAT|API_KEY|SECRETS?_KEY|PASSWORD|PASSWD|SECRET|ACCESS_KEY)$/.test(
++    normalized,
++  );
++}
++
++// Match scalar assignments only. In particular, a schema's TOKEN: {type: ...}
++// and required: ["TOKEN"] are not credential values.
++const ASSIGNMENT_RE =
++  /((?:["']?)((?:[A-Za-z_][\w.-]*?)?(?:TOKEN|PAT|API[_-]?KEY|SECRETS?[_-]?KEY|PASSWORD|PASSWD|SECRET|ACCESS[_-]?KEY))(?:["']?)\s*[:=]\s*)("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[^\s"'`<>{},;&\])]+)/gi;
++const CREDENTIAL_URL_RE = /\b([a-z][a-z0-9+.-]*:\/\/)([^\s/@]+:[^\s/@]+)@/gi;
++
++export function redactExplicitSecretText(input: string): { text: string; redactions: number } {
++  let redactions = 0;
++  let text = input.replace(CREDENTIAL_URL_RE, (_whole, scheme: string) => {
++    redactions += 1;
++    return `${scheme}${SECRET_REDACTION}@`;
++  });
++  text = text.replace(ASSIGNMENT_RE, (whole, prefix: string, key: string, value: string) => {
++    if (
++      !isSecretKey(key) ||
++      value === SECRET_REDACTION ||
++      value === `"${SECRET_REDACTION}"` ||
++      value === `'${SECRET_REDACTION}'`
++    ) {
++      return whole;
++    }
++    redactions += 1;
++    const quote = value[0] === '"' || value[0] === "'" ? value[0] : "";
++    return `${prefix}${quote}${SECRET_REDACTION}${quote}`;
++  });
++  for (const pattern of SECRET_SHAPES) {
++    text = text.replace(pattern, () => {
++      redactions += 1;
++      return SECRET_REDACTION;
++    });
++  }
++  return { text, redactions };
++}
++
++/** Redact text values and explicit credential fields, retaining structured schemas. */
++export function redactExplicitSecretDetails(value: unknown): unknown {
++  if (typeof value === "string") {
++    return redactExplicitSecretText(value).text;
++  }
++  if (Array.isArray(value)) {
++    return value.map(redactExplicitSecretDetails);
++  }
++  if (!value || typeof value !== "object" || Object.getPrototypeOf(value) !== Object.prototype) {
++    return value;
++  }
++  return Object.fromEntries(
++    Object.entries(value).map(([key, child]) => [
++      key,
++      isSecretKey(key) && typeof child === "string"
++        ? SECRET_REDACTION
++        : redactExplicitSecretDetails(child),
++    ]),
++  );
++}
+--- a/src/tts/tts.ts
++++ b/src/tts/tts.ts
+@@ -11,6 +11,11 @@
+ import { tmpdir } from "node:os";
+ import path from "node:path";
+ import type { ReplyPayload } from "../auto-reply/types.js";
++import {
++  containsProviderToolProtocol,
++  sanitizeOutboundText,
++  sanitizeTerminalFinalText,
++} from "../channels/outbound-sanitizer.js";
+ import { stripMarkdown } from "../channels/impl/line/markdown-to-line.js";
+ import { normalizeChannelId } from "../channels/plugins/index.js";
+ import type { ChannelId } from "../channels/plugins/types.js";
+@@ -585,6 +590,8 @@
+   return `${provider}: ${error.message}`;
+ }
+ 
++// TODO(handoff): qualify direct speech callers that bypass maybeApplyTtsToPayload;
++// see proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md (C06/C07).
+ export async function textToSpeech(params: {
+   text: string;
+   cfg: MinionConfig;
+@@ -765,6 +772,8 @@
+   };
+ }
+ 
++// TODO(handoff): apply and qualify the explicit output policy for direct telephony
++// callers; see proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ export async function textToSpeechTelephony(params: {
+   text: string;
+   cfg: MinionConfig;
+@@ -891,12 +900,21 @@
+     prefsPath,
+     sessionAuto: params.ttsAuto,
+   });
++  const hasMedia = Boolean(params.payload.mediaUrl) || (params.payload.mediaUrls?.length ?? 0) > 0;
++  const hasChannelData = Boolean(
++    params.payload.channelData && Object.keys(params.payload.channelData).length > 0,
++  );
++  const sanitizeVisible =
++    params.kind === "final" && !hasMedia && !hasChannelData
++      ? sanitizeTerminalFinalText
++      : sanitizeOutboundText;
+   if (autoMode === "off") {
+     // Still strip [[tts]] tags from text even when TTS is disabled,
+     // so users never see raw directives in channel output.
+     const rawText = params.payload.text ?? "";
+     const offDirectives = parseTtsDirectives(rawText, config.modelOverrides);
+-    const offCleaned = offDirectives.cleanedText.trim();
++    const offInput = containsProviderToolProtocol(rawText) ? rawText : offDirectives.cleanedText;
++    const offCleaned = sanitizeVisible(offInput).text.trim();
+     if (offCleaned !== rawText.trim()) {
+       return { ...params.payload, text: offCleaned.length > 0 ? offCleaned : undefined };
+     }
+@@ -909,10 +927,12 @@
+     logVerbose(`TTS: ignored directive overrides (${directives.warnings.join("; ")})`);
+   }
+ 
+-  const cleanedText = directives.cleanedText;
+-  const trimmedCleaned = cleanedText.trim();
+-  const visibleText = trimmedCleaned.length > 0 ? trimmedCleaned : "";
+-  const ttsText = directives.ttsText?.trim() || visibleText;
++  // Parse valid directives first, then guard both independent text surfaces.
++  // A DSML envelope in either surface invalidates the whole response, including
++  // any success claim outside the envelope.
++  const visibleInput = containsProviderToolProtocol(text) ? text : directives.cleanedText;
++  const visibleText = sanitizeVisible(visibleInput).text.trim();
++  const ttsText = sanitizeVisible(directives.ttsText?.trim() || visibleText).text.trim();
+ 
+   const nextPayload =
+     visibleText === text.trim()
+@@ -966,7 +986,8 @@
+           config,
+           timeoutMs: config.timeoutMs,
+         });
+-        textForAudio = summary.summary;
++        // The model-generated summary is a new untrusted egress surface.
++        textForAudio = sanitizeOutboundText(summary.summary).text;
+         wasSummarized = true;
+         if (textForAudio.length > config.maxTextLength) {
+           logVerbose(
+@@ -982,7 +1003,8 @@
+     }
+   }
+ 
+-  textForAudio = stripMarkdown(textForAudio).trim(); // strip markdown for TTS (### → "hashtag" etc.)
++  // Guard again after formatting, which can reveal previously escaped syntax.
++  textForAudio = sanitizeOutboundText(stripMarkdown(textForAudio)).text.trim();
+   if (textForAudio.length < 10) {
+     return nextPayload;
+   }

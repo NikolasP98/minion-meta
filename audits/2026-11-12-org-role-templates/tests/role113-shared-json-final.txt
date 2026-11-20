@@ -1,0 +1,51 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-org-role-templates-20261112
+
+····················stdout | src/server/services/join/organization-admission.sql.integration.test.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'drop cascades to 10 other objects',
+  detail: 'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.organizations\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.org_roles\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.profiles\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.organization_members\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.member_roles\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.permission_rules\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.app_nav_config\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.join_link\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.join_request\n' +
+    'drop cascades to table role_admission_b7464de011fd4eee9ad8765f9932c1ca.doc_audit_log',
+  file: 'dependency.c',
+  line: '1165',
+  routine: 'reportDependentObjects'
+}
+
+···························stdout | src/server/services/organization-bootstrap.sql.integration.test.ts
+{
+  severity_local: 'NOTICE',
+  severity: 'NOTICE',
+  code: '00000',
+  message: 'drop cascades to 9 other objects',
+  detail: 'drop cascades to table qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.profiles\n' +
+    'drop cascades to table qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.organizations\n' +
+    'drop cascades to table qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.org_roles\n' +
+    'drop cascades to table qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.permission_rules\n' +
+    'drop cascades to table qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.organization_members\n' +
+    'drop cascades to table qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.member_roles\n' +
+    'drop cascades to table qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.join_link\n' +
+    'drop cascades to table qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.doc_audit_log\n' +
+    'drop cascades to function qc_org_bootstrap_b9b4acd517cd4725b646cee7c6f109dc.reject_fixture_grant()',
+  file: 'dependency.c',
+  line: '1165',
+  routine: 'reportDependentObjects'
+}
+
+
+
+ Test Files  3 passed (3)
+      Tests  47 passed (47)
+   Start at  02:35:19
+   Duration  117.10s (transform 31.55s, setup 142ms, import 46.65s, tests 69.18s, environment 1ms)
+

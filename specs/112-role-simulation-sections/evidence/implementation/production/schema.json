@@ -1,0 +1,71 @@
+{
+  "checkedAt": "2026-11-09T15:01:29.587Z",
+  "migration": [
+    {
+      "migration_applied": true
+    }
+  ],
+  "protection": [
+    {
+      "relrowsecurity": true,
+      "relforcerowsecurity": true,
+      "no_policies": true,
+      "runtime_privileges": true,
+      "browser_roles_denied": true,
+      "public_denied": true
+    }
+  ],
+  "constraints": [
+    {
+      "contype": "p",
+      "definition": "PRIMARY KEY (session_id)"
+    },
+    {
+      "contype": "f",
+      "definition": "FOREIGN KEY (profile_id) REFERENCES profiles(id) ON DELETE CASCADE"
+    },
+    {
+      "contype": "f",
+      "definition": "FOREIGN KEY (session_id) REFERENCES auth.sessions(id) ON DELETE CASCADE"
+    },
+    {
+      "contype": "c",
+      "definition": "CHECK (((return_to IS NULL) OR (length(return_to) <= 4096)))"
+    },
+    {
+      "contype": "c",
+      "definition": "CHECK (((role_key IS NULL) OR ((length(role_key) >= 1) AND (length(role_key) <= 256))))"
+    }
+  ],
+  "auditColumns": [
+    {
+      "column_name": "simulation_generation",
+      "data_type": "uuid",
+      "column_default": "(NULLIF(current_setting('app.simulation_generation'::text, true), ''::text))::uuid"
+    },
+    {
+      "column_name": "simulation_role_key",
+      "data_type": "text",
+      "column_default": "NULLIF(current_setting('app.simulation_role_key'::text, true), ''::text)"
+    }
+  ],
+  "trigger": [
+    {
+      "tgenabled": "O",
+      "definition": "CREATE TRIGGER doc_audit_simulation_actor BEFORE INSERT ON public.doc_audit_log FOR EACH ROW EXECUTE FUNCTION app_attribute_simulation_audit()",
+      "proname": "app_attribute_simulation_audit",
+      "actual_actor_guard": true
+    }
+  ],
+  "checks": {
+    "migration": true,
+    "protection": true,
+    "primary": true,
+    "sessionsCascade": true,
+    "profileCascade": true,
+    "noOrgForeignKey": true,
+    "auditColumns": true,
+    "trigger": true
+  },
+  "passed": true
+}

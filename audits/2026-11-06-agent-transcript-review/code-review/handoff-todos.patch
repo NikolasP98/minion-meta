@@ -1,0 +1,98 @@
+--- a/gateway/src/agents/pi-embedded-runner/run/attempt.ts
++++ b/gateway/src/agents/pi-embedded-runner/run/attempt.ts
+@@ -730,6 +730,9 @@
+         if (!aborted && !promptError) {
+           const hadToolCalls = (toolMetas?.length ?? 0) > 0;
+           const lastText = extractLastAssistantText(messagesSnapshot);
++          // TODO(handoff): C01 supplies at most two messages to a four-message
++          // extraction gate. Accumulate the real cursor window; see meta
++          // proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+           const recentMsgs = lastText
+             ? [
+                 { role: "user" as const, content: promptForMemory },
+--- a/gateway/src/agents/bootstrap/bootstrap-files.ts
++++ b/gateway/src/agents/bootstrap/bootstrap-files.ts
+@@ -51,6 +51,8 @@
+   });
+ }
+ 
++// TODO(handoff): C02 blocks business work while personality guidance permits it.
++// Resolve the personal-agent policy; see meta proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ const ONBOARDING_GATE_CONTENT = `# ⚠️ Onboarding Required
+ 
+ This workspace has not completed onboarding. You MUST guide the user through the onboarding
+--- a/hub/src/routes/api/gateway/actions/booking-create/+server.ts
++++ b/hub/src/routes/api/gateway/actions/booking-create/+server.ts
+@@ -30,6 +30,8 @@
+ 	const { ctx } = await requireAssistantCapability(locals, url, 'scheduling', 'create');
+ 	const b = await parseBody(request, bodySchema);
+ 
++	// TODO(handoff): C03 echoes references without semantic preflight and omits
++	// customer/resource identity from preview. See meta proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ 	if (!b.confirm) {
+ 		return json({
+ 			preview: {
+--- a/hub/src/routes/api/gateway/query/bookings/+server.ts
++++ b/hub/src/routes/api/gateway/query/bookings/+server.ts
+@@ -16,6 +16,8 @@
+ 	const status = url.searchParams.get('status');
+ 	const contact = url.searchParams.get('contact');
+ 
++	// TODO(handoff): C04 inherits a 500-row cap without completeness metadata.
++	// Add a bounded assistant page/count contract; see meta proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ 	const bookings = await listBookings(ctx, {
+ 		from: from ? new Date(from) : undefined,
+ 		to: to ? new Date(to) : undefined,
+--- a/hub/src/lib/finance/period.ts
++++ b/hub/src/lib/finance/period.ts
+@@ -3,6 +3,8 @@
+ export type Bucket = 'day' | 'week' | 'month';
+ export type Period = { from: string | null; to: string | null; bucket: Bucket };
+ const BUCKETS: Bucket[] = ['day', 'week', 'month'];
++// TODO(handoff): C05 agent APIs need strict explicit-date validation without
++// changing absent-filter UI defaults. See meta proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ function iso(v: string | null): string | null {
+   if (!v) return null; const t = Date.parse(v); return Number.isFinite(t) ? new Date(t).toISOString() : null;
+ }
+--- a/gateway/src/channels/outbound-sanitizer.ts
++++ b/gateway/src/channels/outbound-sanitizer.ts
+@@ -25,6 +25,8 @@
+ }
+ 
+ /** Tool/agent tag names that should never appear as literal XML in a reply. */
++// TODO(handoff): C06 DSML tags evade this guard. Add provider-output validation
++// and bounded recovery; see meta proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ const TOOL_TAG_NAMES = [
+   "read",
+   "write",
+@@ -89,6 +91,8 @@
+ const WORKSHOP_TOKEN_RE = /\[(?:VOTE_UP|VOTE_DOWN|KEEP_PIN)\]/g;
+ 
+ /** High-confidence secret shapes. Conservative to avoid redacting normal text. */
++// TODO(handoff): C07 named secret fields and fine-grained PATs are uncovered.
++// Use synthetic fixtures; see meta proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+ const SECRET_PATTERNS: RegExp[] = [
+   /\b\d{5,}:[A-Za-z0-9_-]{20,}\b/g, // Telegram/ManyChat-style bot token (recon #169)
+   /1\/\/0[A-Za-z0-9_/-]{20,}/g, // Google OAuth refresh token (fleet recon S1: panik leak)
+--- a/gateway/src/agents/sessions/session-tool-result-guard.ts
++++ b/gateway/src/agents/sessions/session-tool-result-guard.ts
+@@ -119,6 +119,8 @@
+     return transformer ? transformer(message) : message;
+   };
+ 
++  // TODO(handoff): C07 default persistence needs secret-aware redaction before
++  // optional transforms; see meta proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+   const persistToolResult = (
+     message: AgentMessage,
+     meta: { toolCallId?: string; toolName?: string; isSynthetic?: boolean },
+--- a/gateway/src/memory/extract-memories-runner.ts
++++ b/gateway/src/memory/extract-memories-runner.ts
+@@ -70,6 +70,8 @@
+     return;
+   }
+ 
++  // TODO(handoff): C08 reserve capacity before scheduling and avoid stale-cursor
++  // commits; fix with C01. See meta proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md.
+   // Fire and forget — setImmediate ensures we don't block the current event loop turn
+   setImmediate(async () => {
+     try {

@@ -1,0 +1,9 @@
+# Revision-4 EGM review record
+
+See [machine-readable findings and round status](implementation-admission.json). Reports were returned by native fresh-context agents after required persona/standard/document reads. This is a parent synthesis of those actual reports, not a claim of independent runtime qualification.
+
+Feature round 1 found alternatives/operating-envelope omissions and a concrete legacy permission-writer bypass. The spec now compares owner-fixed alternatives, marks test envelopes rather than customer statistics, and consistently requires Finish before another role. FR014 names the governing contract paths. The technical plan routes both editors through the same immutable-owner/revision/audit writer.
+
+Fresh feature rounds 2 and 3 were clean across combined design/structural/style lenses; round 3 also completed intermediate Zoom Out. Each combined review is one agent, explicitly not three/four independent reviews. No feature Major/Blocker remains.
+
+Technical round 1 found missing executable decisions for session lifecycle, complete containment, global browser interception, section wire/revision semantics, canonical Settings revisions, context inference, nav/prune serialization, strict catalog reads, deferred queues, audit UUIDs/GUC restoration and QA file ownership. These were repaired in plan/contracts/model before another fresh review. Technical round 2 found a revoked-session cascade edge case: checking auth.sessions only for active mode could let a still-signed token regain actual authority after row deletion. The plan now validates auth.sessions before absent/off/active mode. Fresh technical rounds 3 and 4 returned no Blocker/Major across readiness/details/style. Round 3 inventory Nit was corrected. Technical review has converged; actual source implementation and runtime proof remain required.
