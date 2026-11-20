@@ -71,59 +71,59 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19020
 - `NikolasP98/minion-meta@dev rankings/index.json:22731` — the agenda lists every booking in bookings — the whole [list]",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22731
-- `NikolasP98/minion-meta@dev rankings/index.json:25308` — no status filter — every status reaches the grid",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25308
-- `NikolasP98/minion-meta@dev rankings/index.json:25372` — a period with NO purchases no longer appears at all",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25372
-- `NikolasP98/minion-meta@dev rankings/index.json:25404` — 'RUC parties created BEFORE 2026-09-17 are unverified'",
+- `NikolasP98/minion-meta@dev rankings/index.json:25340` — no status filter — every status reaches the grid",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25340
+- `NikolasP98/minion-meta@dev rankings/index.json:25404` — a period with NO purchases no longer appears at all",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25404
-- `NikolasP98/minion-meta@dev rankings/index.json:25470` — qualify historical stock denomination before currency formatting",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25470
-- `NikolasP98/minion-meta@dev rankings/index.json:26130` — ${owner} is not implemented yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26130
-- `NikolasP98/minion-meta@dev rankings/index.json:26263` — no attachments card — fin_purchase is not in [attachments system]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26263
-- `NikolasP98/minion-meta@dev rankings/index.json:28163` — 'Add an explicitly reviewed indeterminate recovery policy'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28163
-- `NikolasP98/minion-meta@dev rankings/index.json:28297` — delete this route in A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28297
-- `NikolasP98/minion-meta@dev rankings/index.json:30342` — the PREDICATE is covered here, the WIRING is not — no test'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30342
-- `NikolasP98/minion-meta@dev rankings/index.json:30374` — see appointment-overdue.ts — same unwired deep-link param.",
+- `NikolasP98/minion-meta@dev rankings/index.json:25436` — 'RUC parties created BEFORE 2026-09-17 are unverified'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25436
+- `NikolasP98/minion-meta@dev rankings/index.json:25502` — qualify historical stock denomination before currency formatting",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25502
+- `NikolasP98/minion-meta@dev rankings/index.json:26162` — ${owner} is not implemented yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26162
+- `NikolasP98/minion-meta@dev rankings/index.json:26295` — no attachments card — fin_purchase is not in [attachments system]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26295
+- `NikolasP98/minion-meta@dev rankings/index.json:28195` — 'Add an explicitly reviewed indeterminate recovery policy'",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28195
+- `NikolasP98/minion-meta@dev rankings/index.json:28329` — delete this route in A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28329
+- `NikolasP98/minion-meta@dev rankings/index.json:30374` — the PREDICATE is covered here, the WIRING is not — no test'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30374
-- `NikolasP98/minion-meta@dev rankings/index.json:30506` — adding the boolean variant makes DataTable.svelte's... in src/lib/components/data-table/filters.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30506
-- `NikolasP98/minion-meta@dev rankings/index.json:34735` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34735
-- `NikolasP98/minion-meta@dev rankings/index.json:34800` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34800
-- `NikolasP98/minion-meta@dev rankings/index.json:34964` — drop with A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34964
-- `NikolasP98/minion-meta@dev rankings/index.json:34998` — item_group/reorder_qty/moq (this column + reorderQty +",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34998
-- `NikolasP98/minion-meta@dev rankings/index.json:38300` — the plan button is gated on pos:create, but server-side...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38300
-- `NikolasP98/minion-meta@dev rankings/index.json:39584` — Full Workshop composition/camera and keyboard relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39584
-- `NikolasP98/minion-meta@dev rankings/index.json:40222` — --apply is intentionally unimplemented. Building it"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40222
-- `NikolasP98/minion-meta@dev rankings/index.json:42796` — tags are NOT inline-editable here while /pos/catalog ...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42796
-- `NikolasP98/minion-meta@dev rankings/index.json:42860` — 'add-only; rename / deactivate / max-days edits need a modal'",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42860
-- `NikolasP98/minion-meta@dev rankings/index.json:42892` — no calendar deep-link param exists yet",
+- `NikolasP98/minion-meta@dev rankings/index.json:30406` — see appointment-overdue.ts — same unwired deep-link param.",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30406
+- `NikolasP98/minion-meta@dev rankings/index.json:30538` — adding the boolean variant makes DataTable.svelte's... in src/lib/components/data-table/filters.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30538
+- `NikolasP98/minion-meta@dev rankings/index.json:34767` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34767
+- `NikolasP98/minion-meta@dev rankings/index.json:34832` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34832
+- `NikolasP98/minion-meta@dev rankings/index.json:34996` — drop with A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34996
+- `NikolasP98/minion-meta@dev rankings/index.json:35030` — item_group/reorder_qty/moq (this column + reorderQty +",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35030
+- `NikolasP98/minion-meta@dev rankings/index.json:38332` — the plan button is gated on pos:create, but server-side...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L38332
+- `NikolasP98/minion-meta@dev rankings/index.json:39616` — Full Workshop composition/camera and keyboard relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39616
+- `NikolasP98/minion-meta@dev rankings/index.json:40254` — --apply is intentionally unimplemented. Building it"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40254
+- `NikolasP98/minion-meta@dev rankings/index.json:42828` — tags are NOT inline-editable here while /pos/catalog ...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42828
+- `NikolasP98/minion-meta@dev rankings/index.json:42892` — 'add-only; rename / deactivate / max-days edits need a modal'",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42892
-- `NikolasP98/minion-meta@dev rankings/index.json:45337` — raw fetch moved verbatim from TeamTab — migrate to",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45337
-- `NikolasP98/minion-meta@dev rankings/index.json:45401` — the owner also asked for \"custom select columns\" to be",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45401
-- `NikolasP98/minion-meta@dev rankings/index.json:45496` — drop these two once plugin UIs get a JWT path (spec 043 R8)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45496
-- `NikolasP98/minion-meta@dev rankings/index.json:45562` — FilterValue (component) vs TableFilterValue (kit) generic mismatch",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45562
-- `NikolasP98/minion-meta@dev rankings/index.json:45661` — brief-debloat-c §3 asked for this to be wrapped in [something]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45661
-- `NikolasP98/minion-meta@dev rankings/index.json:48883` — additional custom fields lose their mailto link",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48883
-- `NikolasP98/minion-meta@dev rankings/index.json:49318` — move to an ai flag on plugin flow-node manifests when a third AI action",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L49318
+- `NikolasP98/minion-meta@dev rankings/index.json:42924` — no calendar deep-link param exists yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42924
+- `NikolasP98/minion-meta@dev rankings/index.json:45369` — raw fetch moved verbatim from TeamTab — migrate to",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45369
+- `NikolasP98/minion-meta@dev rankings/index.json:45433` — the owner also asked for \"custom select columns\" to be",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45433
+- `NikolasP98/minion-meta@dev rankings/index.json:45528` — drop these two once plugin UIs get a JWT path (spec 043 R8)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45528
+- `NikolasP98/minion-meta@dev rankings/index.json:45594` — FilterValue (component) vs TableFilterValue (kit) generic mismatch",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45594
+- `NikolasP98/minion-meta@dev rankings/index.json:45693` — brief-debloat-c §3 asked for this to be wrapped in [something]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45693
+- `NikolasP98/minion-meta@dev rankings/index.json:48915` — additional custom fields lose their mailto link",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48915
+- `NikolasP98/minion-meta@dev rankings/index.json:49350` — move to an ai flag on plugin flow-node manifests when a third AI action",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L49350
