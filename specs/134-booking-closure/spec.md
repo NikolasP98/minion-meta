@@ -42,7 +42,7 @@ Approval, 2026-11-20: "I approve the rest, btw."
 - The agenda (`src/routes/(app)/pos/appointments/PageBody.svelte`) offers "Marcar completada", "Marcar inasistencia" (~1286) and cancel (~1309, ~1344 with reason `deleted`) on every appointment.
 - **"Desagendar" exists only for paid services** (`unscheduleVisit`, ~1274; menu `pos_appt_ctx_unschedule`): it unlinks the paid sale lines (they reappear in "Servicios pagados sin agendar", `listPendingSchedulingLines`, `src/server/services/pos-accounts.service.ts:496`) and stores the appointment as **`cancelled`** with reason `unscheduled`.
 - An appointment always has a time and a staff member: `start_time`, `end_time`, `resource_id` are `NOT NULL`.
-- Nothing happens when an appointment's time passes: it stays `accepted`/`pending` forever.
+- When an appointment's time passes its status never changes. An inbox rule, `appointment.overdue` ("Cita sin cerrar", `src/server/services/inbox/rules/appointment-overdue.ts`), raises one notification per visit 30 minutes after the end time. FACES has received **152** of them since 2026-10-11; **30** were ever opened and **142** are still unresolved. The alert has no action attached, so the appointment stays `accepted`/`pending` indefinitely.
 
 ### What the data shows (FACES, the only org with appointments)
 
@@ -122,7 +122,7 @@ FACES stock was squared to a physical count taken 2026-11-18 16:00 (adjustment S
 | Transition | Proof (test to add) |
 |---|---|
 | Live appointment after its local midnight: no marker → Por cerrar (derived, time-zone aware) | unit: `isPorCerrar(booking, now, tz)` at 23:59 / 00:00 Lima, DST-free and UTC-offset cases |
-| Inbox: nothing → "N citas por cerrar" at midnight | rule test like `service-paid-unscheduled` |
+| Inbox: one "Cita sin cerrar" per visit 30 min after its end (152 sent, 142 unresolved) → one daily "N citas por cerrar" at local midnight, linking to the Pendientes tray, resolved when the count reaches 0 | `appointment-overdue` rule test rewritten |
 | Desagendar on an unpaid appointment: not offered → `unscheduled`, reservation kept, session kept | service: status + log row, no `releaseAccruals`, no redemption reversal |
 | Desagendar on a paid appointment: `cancelled` + unlinked lines → `unscheduled`, lines stay linked | service: replaces `unscheduleVisit` semantics; existing tests rewritten |
 | "No vino": `no_show` (releases, hands session back) → `unscheduled` reason `no_vino` (keeps both) | service test |
@@ -193,7 +193,7 @@ A duplicate appointment, or a client who says she no longer wants the treatment.
 ### Functional Requirements
 
 - **FR-001**: The system MUST mark a `pending`/`accepted` appointment as Por cerrar once the organization's local midnight after its start date has passed, computed at read time.
-- **FR-002**: The inbox MUST show the count of Por cerrar appointments from that same moment, deduplicated per day.
+- **FR-002**: The existing `appointment.overdue` rule MUST be replaced by one notification per day at local midnight with the count of Por cerrar appointments, linking to the Pendientes tray filtered to Por cerrar, and resolved when none remain. Today's per-visit 30-minute notifications stop; the open ones are resolved on release.
 - **FR-003**: Every appointment context menu MUST offer Desagendar for live appointments, paid or not.
 - **FR-004**: Desagendar MUST store status `unscheduled` with a reason (`no_vino` or `desagendada`), write a status-log row, keep sale-line links, keep the package session, and keep the stock reservation.
 - **FR-005**: An `unscheduled` appointment MUST NOT occupy its time slot, MUST NOT receive reminders, and MUST be re-assignable to `accepted` by moving it.
