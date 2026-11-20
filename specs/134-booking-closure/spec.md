@@ -40,7 +40,7 @@ Approval, 2026-11-20: "I approve the rest, btw."
 - Stored statuses: `pending`, `accepted` (live, `ACTIVE_STATUSES`, `src/server/services/scheduling-bookings.service.ts:105`); `completed`, `no_show`, `cancelled`, `rejected` (final; a final appointment refuses every change, spec 116 FR-009, `setBookingStatusInTx` guard ~1112).
 - `no_show`, `cancelled` and `rejected` release the stock reservation and **hand the package session back** (`RELEASING`, ~1056; `reverseBookingRedemptionsInTx`).
 - The agenda (`src/routes/(app)/pos/appointments/PageBody.svelte`) offers "Marcar completada", "Marcar inasistencia" (~1286) and cancel (~1309, ~1344 with reason `deleted`) on every appointment.
-- **"Desagendar" exists only for paid services** (`unscheduleVisit`, ~1274; menu `pos_appt_ctx_unschedule`): it unlinks the paid sale lines (they reappear in "Servicios pagados sin agendar", `listPendingSchedulingLines`, `src/server/services/pos-accounts.service.ts:496`) and stores the appointment as **`cancelled`** with reason `unscheduled`.
+- **"Desagendar" has no button today.** The calendar menu entry was removed on 2026-10-13 (#517, commit `03a7ddc1`), and no drawer button calls it either. The route `/api/pos/appointments/[id]/unschedule` and `unscheduleVisit` (~1274) still exist, unused. When called, it unlinks every sale line of the visit (they reappear in "Servicios pagados sin agendar", `listPendingSchedulingLines`, `src/server/services/pos-accounts.service.ts:496`) and stores the appointment as **`cancelled`** with reason `unscheduled`. (Corrected during planning; see `research.md` § Spec corrections.)
 - An appointment always has a time and a staff member: `start_time`, `end_time`, `resource_id` are `NOT NULL`.
 - When an appointment's time passes its status never changes. An inbox rule, `appointment.overdue` ("Cita sin cerrar", `src/server/services/inbox/rules/appointment-overdue.ts`), raises one notification per visit 30 minutes after the end time. FACES has received **152** of them since 2026-10-11; **30** were ever opened and **142** are still unresolved. The alert has no action attached, so the appointment stays `accepted`/`pending` indefinitely.
 
@@ -55,7 +55,7 @@ Approval, 2026-11-20: "I approve the rest, btw."
 | No-shows on a paid sale | 4 (POS-2026-00027, -00077, -00132, -00143) |
 | `rescheduled_from_id` ever set | 0 — reschedules move the appointment in place ("Mover igual" 198 clicks, "Cambiar fecha, hora o miembro del equipo" 113 in 90 days) |
 | "Marcar inasistencia" | 49 clicks, one person; 25 of the 69 no-shows were set **before** the appointment's time |
-| "Desagendar" | 2 clicks, 2026-10-11 |
+| "Desagendar" | 2 clicks, 2026-10-11 (the button was removed two days later) |
 | Past appointments still reserving stock, 3 Oct – 7 Nov | 57 (sent to the clinic as a CSV on 2026-11-19 to close by hand) |
 
 Classification: same `crm_contact_id`, same event type or title, later `start_time`. Query: `~/.cache/claude-tmp/receipt-fix/lost.sql` (session 2026-11-19).
