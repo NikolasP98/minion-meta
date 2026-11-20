@@ -3,7 +3,7 @@ id: 135-stock-checkpoints
 title: Stock checkpoints — staff count the shelf, an owner/admin locks it, nothing from before the count moves that stock again
 stage: spec
 status: draft
-verdict: pending
+verdict: approved
 pass: 1
 created: 2026-11-20
 updated: 2026-11-20
@@ -23,6 +23,10 @@ related: [134-booking-closure, 120-till-corrections, 122-faces-stock-reconciliat
 **Input**: Owner, 2026-11-20: "We can go a step further and implement CHECKPOINT stock counts, where staff physically validates counts and locks those values in, so if anything impacting stock counts are "completed" before the mentioned checkpoint dates, stock won't move."
 
 Owner decisions, 2026-11-20: "yes, start spec 135, owner/admin only, include reminders." Locking a count is limited to owner and admin. Count reminders are in scope.
+
+Approval, 2026-11-20: "approved, confirmed — go ahead with the plan." The confirmation covers the void rule: voiding a pre-count sale does not return counted items, and a physical return is a new receipt.
+
+Owner note, same message: "I think this might help with implementing ML models that track displacement to find recommendations or patterns for the moving data". Out of scope here. The data model keeps what such a model needs (see Assumptions).
 
 ## AS-IS (observed 2026-11-19/20, prod read-only, hub `origin/master` `63c4313b`)
 
@@ -234,7 +238,8 @@ Thirty days after the last count, owners, admins and the stock assistant see "Co
 
 ## Assumptions
 
-- A product physically returned after a pre-count sale is recorded as a new receipt; voids do not return counted items. The owner can revisit this.
+- A product physically returned after a pre-count sale is recorded as a new receipt; voids do not return counted items (owner confirmed 2026-11-20).
+- Counts are kept as analysable data. Each checkpoint keeps the counted quantity, the system quantity at the counted time and a link to the previous checkpoint of the same item and warehouse. The drift between two counts can therefore be broken down by movement source (appointments per treatment, sales, receipts). That breakdown is the input for later pattern or recommendation work, which needs its own spec and is a premium AI feature.
 - Locked counts are never undone in the product; a database correction would be an operator action with its own record.
 - Cost of goods is not recomputed for skipped lines; the count adjustment carries the loss or gain.
 - UI follows the FigCraft demo-first rule; the as-is/to-be demo is linked from the plan.

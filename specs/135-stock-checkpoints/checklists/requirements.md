@@ -31,5 +31,5 @@
 
 ## Notes
 
-- Assumption to confirm with the owner: voiding a pre-count sale does not return counted items; a physical return is a new receipt.
+- Owner approved and confirmed the void rule 2026-11-20.
 - Spec 134 S1 (closing old appointments) depends on this spec's lock rule for appointment completion (FR-008) and the FACES backfill (FR-012).
