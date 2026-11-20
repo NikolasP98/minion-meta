@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-20T19:46:58.030Z",
+	"generatedAt": "2026-11-20T20:17:05.012Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26613,23 +26613,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 6,
 				"implementation": 4
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#1012"
 			],
-			"rationale": "Transient provider-availability fault in the ranking pipeline, duplicated with #1012 and best handled as one recurring-fault classification task.",
+			"rationale": "Transient dual-provider ranking failure duplicating #1012 should be merged into one classifier-improvement goal rather than tracked twice.",
 			"evidence": [
-				"both ranking providers failed on batch 1",
-				"near-identical failure in run 4eac9305 ~22min earlier",
-				"recommendation: retry; candidate for host classifier"
+				"both providers failed on batch 1, likely transient",
+				"near-identical failure in run 31fcfc9b ~22min apart from #1012's run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T19:47:50.232Z"
+			"scoredAt": "2026-11-20T20:17:04.823Z"
 		},
 		{
 			"key": "issue:minion-meta#1012",
@@ -26648,23 +26647,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 6,
 				"implementation": 4
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#1011"
 			],
-			"rationale": "Same recurring both-providers-failed fault as #1011, filed ~22 minutes apart, should be consolidated rather than triaged separately.",
+			"rationale": "Duplicate of #1011's transient ranking-provider failure; should be consolidated into a single native-classifier goal.",
 			"evidence": [
-				"both ranking providers failed on batch 1",
-				"near-identical failure in run 31fcfc9b ~22min later",
-				"2/1426 candidates pending at failure"
+				"both providers failed on batch 1, likely transient",
+				"near-identical failure in run 4eac9305 ~22min apart from #1011's run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T19:47:50.232Z"
+			"scoredAt": "2026-11-20T20:17:04.823Z"
 		},
 		{
 			"key": "issue:minion-meta#354",
