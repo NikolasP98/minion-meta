@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-20T06:16:53.377Z",
+	"generatedAt": "2026-11-20T06:47:05.989Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7249,19 +7249,20 @@
 			},
 			"readiness": {
 				"specification": 9,
-				"implementation": 8
+				"implementation": 9
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Adds timeouts/in-flight guard to fix unbounded gateway→Hub fetches with tests and lint passing, though full test suite coverage is incomplete.",
+			"rationale": "Adds timeouts and an in-flight guard to prevent gateway hangs when the Hub is degraded, with tests and lint/vitest passing though full tsgo/test suite has unrelated pre-existing failures.",
 			"evidence": [
 				"AbortSignal.timeout added to ledger flusher and memory sink fetches",
-				"26 passing unit tests for timeout/guard behavior; lint and format clean"
+				"unit tests for timeout and in-flight guard pass (26 passed)",
+				"tsgo and full pnpm test have unrelated pre-existing failures noted by author"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-13T06:17:37.984Z"
+			"scoredAt": "2026-11-20T06:47:05.757Z"
 		},
 		{
 			"key": "pr:minion_hub#602",
@@ -31628,38 +31629,6 @@
 			"scoredAt": "2026-11-16T14:57:43.926Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 117311 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-11-19T06:13:34Z",
-			"sourceFingerprint": "c24f39eb59847a2c8e7cbd65d78a6377608b413c0116722bcabf2d94d3dab165",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "A single ticket bundling 117,311 raw upstream commits with no triage cannot be reviewed or actioned as one unit.",
-			"evidence": [
-				"title states '117311 new commit(s) available'",
-				"body is an unscoped raw commit log with no categorization"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T06:17:43.064Z"
-		},
-		{
 			"key": "issue:minion-meta#1016",
 			"kind": "issue",
 			"stage": "proposal",
@@ -46311,6 +46280,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:51:11.850Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 117623 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-11-20T06:17:24Z",
+			"sourceFingerprint": "601b37e78b5b927b3ca221e2cfc8e543c1528a6bd7c6b0eb593ed5a4b69236fb",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated upstream-sync notification listing commits, not a scoped actionable goal.",
+			"evidence": [
+				"title indicates 117623 new commits detected",
+				"tags:upstream-sync",
+				"summary is a raw commit log with no defined task or outcome"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-20T06:47:05.757Z"
 		},
 		{
 			"key": "issue:minion_hub#452",
