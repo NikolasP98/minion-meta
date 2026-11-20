@@ -24,6 +24,10 @@ The canonical [Spec Kit specification](140-record-lock-policy/spec.md) contains 
 
 - Plan: next (`/speckit-plan`) after owner approval.
 
+## Out of scope
+
+Locking sales and manual stock entries (later slices, each with owner confirmation), stock checkpoints (spec 135), SUNAT emission itself.
+
 ## Human gates
 
 Tagged `data`: the owner approves this spec before code and merges each PR.
