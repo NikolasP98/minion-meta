@@ -1,68 +1,95 @@
 # Review findings ledger — spec 143
 
-Owner, 2026-11-21: "all those findings should be addressed before we continue". Every finding from both EGM rounds is listed with the decision that answers it. The last column is filled only after the code and a test for it exist; the PR does not merge with an empty cell.
+Status 2026-11-21: every row has code and a test except the two that can only be observed on a deployment (Round 2 #18's live harness check and Readiness 14's production checks); those are completed in the Rollout section at the end. (filled)
+
+Paths are relative to the hub clone `/home/nikolas/.cache/claude-tmp/hub-meta-fix`. Tests marked (SQL, not run) are in `src/server/mcp/oauth.sql.integration.test.ts` (needs `HUB_TEST_DB_URL`; not run: no database available; admitted in `scripts/qc/native-postgres-manifest.ts` lane `qa-native`).
 
 ## Round 2 — design critic on pass 2
 
 | # | Finding | Decision | Code + test |
 |---|---|---|---|
-| 1 (Blocker) | Framework origin check 403s the form-encoded token endpoint | P1 | |
-| 2 | Renewal retry / parallel sessions end the connection | P2 | |
-| 3 | Code spend rolls back with a failed verification | P3, P18 | |
-| 4 | Cookie identity leaks into capability resolution | P4 | |
-| 5 | App name is self-asserted | P5 | |
-| 6 | Address limit sits in front of the key path | P6 | |
-| 7 | Connection ended on a failed lookup | P7 | |
-| 8 | Renewal not bound to the client before it is spent | P3 | |
-| 9 | Credential and client rows grow without bound | P9 | |
-| 10 | Sandbox module availability not applied | P10 | |
-| 11 | Code replay does not end the connection | P11 | |
-| 12 | No `iss` in the authorization response | P12 | |
-| 13 | Enhanced form cannot follow the outbound redirect | P5 | |
-| 14 | Loose redirect matching | P13 | |
-| 15 | 403 for "no longer a member" reads as step-up | P8 | |
-| 16 | `resource` and registration tolerance | P14 | |
-| 17 | Issuer follows the request origin | P12 | |
-| 18 | Metadata path collision with the gateway issuer | P17 | |
-| 19 | No absolute cap on a connection's life | P15 | |
-| 20 | `tools/list` filtering by kind only | P16 | |
-| 21 | Unbounded `state`; token responses cacheable | P9, token endpoint `no-store` | |
+| 1 (Blocker) | Framework origin check 403s the form-encoded token endpoint | P1 | `svelte.config.js` (`csrf.trustedOrigins: ['*']`); `src/server/auth/csrf.ts` `csrfRefusal`; `src/hooks.server.ts` `csrfHandle` first in `sequence`; tests `src/server/auth/csrf.test.ts` (all five cases + JSON/safe methods); approve/deny origin assertion in `src/routes/oauth/authorize/+page.server.ts` (`sameOrigin`), test `server.test.ts` "same-origin assertion (P1)"; `src/hooks.tenant.test.ts` POST events now send `content-type: application/json` |
+| 2 | Renewal retry / parallel sessions end the connection | P2 | `src/server/mcp/oauth.service.ts` `refresh` (one grace reissue claimed by a conditional update on `regranted_at`, window `RENEW_GRACE_SECONDS = 30`; migration + Drizzle column `regranted_at`); tests `oauth.service.test.ts` "a renewal credential used again within 30 s gets ONE fresh pair…", "a second grace reuse … ends the connection…", "reuse outside the window is the same refusal…"; SQL (run, passed) `oauth.sql.integration.test.ts` "renewal a retry within 30 s…", "renewal a second grace reuse is refused and ends the connection", "renewal reuse after the grace ends the connection", "renewal ten parallel renewals…" |
+| 3 | Code spend rolls back with a failed verification | P3, P18 | `oauth.service.ts` `exchangeCode` (spend is a standalone statement, transaction only afterwards); tests `oauth.service.test.ts` "the spend is its own statement: a failed check runs no transaction work (P3)"; (SQL, not run) "code ten parallel exchanges…", "code a wrong verifier leaves the code spent…" |
+| 4 | Cookie identity leaks into capability resolution | P4 | `src/routes/api/mcp/+server.ts` (`runWithEffectiveAuthority(undefined, () => runWithRequestCapabilities(undefined, …))` for signed-in callers); test `src/routes/api/mcp/isolation.test.ts` "a simulated role and admitted capabilities from the cookie path do not apply" |
+| 5 | App name is self-asserted | P5 | `oauth-logic.ts` `cleanAppName`; `register/+server.ts` and `authorize/+page.server.ts` apply it; `+page.svelte` ("Unverified app", registered-ago, full return address, plain `<form method="POST">`, per-code refusal messages); the four protective headers are set on the final response in `src/server/mcp/approval-headers.ts` `approvalHeadersHandle` (first in `sequence` in `src/hooks.server.ts`, document and `__data.json`, locale prefix stripped); refusals redirect back with `?refused=<code>` (`authorize/+page.server.ts` `refuse`); tests `approval-headers.test.ts` (all four headers on `/oauth/authorize`, `/en/oauth/authorize`, `__data.json`; wired into `handle`), `authorize/server.test.ts` "…goes back to this screen with refused=org…", "…refused=origin", "shows the refusal code…", "strips control and bidirectional characters…"; `oauth-logic.test.ts` "strips control and bidirectional characters"; `register/server.test.ts` "ignores unknown fields, strips control characters…" |
+| 6 | Address limit sits in front of the key path | P6 | `src/server/mcp/caller.ts` (prefix routing first); tests `caller.test.ts` "a key request never touches the per-address limiter (P6)"; `src/routes/api/mcp/server.test.ts` "429s over the per-key limit" restored to `mockResolvedValue(false)` |
+| 7 | Connection ended on a failed lookup | P7 | `caller.ts` (ends only on null profile / null membership; lookups throw otherwise); test `caller.test.ts` "a database failure is never read as a refusal and ends nothing: it throws (P7)" |
+| 8 | Renewal not bound to the client before it is spent | P3 | `oauth.service.ts` `refresh` (`client_id` and `connectionRenewable` in the spend `where`); tests `oauth.service.test.ts` "another app cannot renew it, and burns nothing…", "an ended connection cannot renew"; (SQL, not run) "renewal another app presenting it burns nothing and ends nothing" |
+| 9 | Credential and client rows grow without bound | P9 | `oauth.service.ts` `pruneOauth`; `api/oauth/token/+server.ts` (≈1% call, failure ignored); migration cascade FKs `supabase/migrations/20261121100000_mcp_oauth.sql` + `pg-org-integrations-schema.ts`; tests `token/server.test.ts` "prunes on about 1% of calls…"; `register/server.test.ts` "refuses a return address over 200 characters (P9)". Open end: `TODO(handoff)` in `pruneOauth` (clients that keep a connection are never pruned) |
+| 10 | Sandbox module availability not applied | P10 | `caller.ts` (`isAppRouteBlocked('/sandbox', {kind: tenant.kind, moduleStates, features})` using `listModuleStates` + `resolveEntitlements`, same inputs as `applyModuleAvailabilityGuard`; kind comes from `resolveSupabaseTenant`, no `event.locals`); `sandbox-tools.ts` `gate`; tests `caller.test.ts` "applies the hub availability rule for /sandbox…"; `sandbox-tools.test.ts` "an organization whose Sandbox is unavailable is refused by every sandbox tool…" |
+| 11 | Code replay does not end the connection | P11 | `oauth.service.ts` `exchangeCode` (connection id written onto the code; replay ends it); tests `oauth.service.test.ts` "a spent code presented again ends the connection it opened (P11)", "the connection id is written back onto the code at exchange (P11)"; (SQL, not run) "code presenting a spent code again ends the connection it opened" |
+| 12 | No `iss` in the authorization response | P12 | `authorize/+page.server.ts` `answer()` adds `iss` to code, denial and error redirects; `oauth-logic.ts` `metadata` (`authorization_response_iss_parameter_supported`); test `authorize/server.test.ts` (approve/deny/invalid_request expect `iss`); `oauth-logic.test.ts` "builds both documents from the origin" |
+| 13 | Enhanced form cannot follow the outbound redirect | P5 | `authorize/+page.svelte` (plain POST forms, no `use:enhance`) — no automated test (markup only); `authorize/server.test.ts` covers the 303 to the registered address |
+| 14 | Loose redirect matching | P13 | `oauth-logic.ts` `isLoopbackRedirect` (raw-text regex + `new URL`), `redirectMatches`; tests `oauth-logic.test.ts` "isLoopbackRedirect" (localhost., 127.1, [::ffff:127.0.0.1], 0.0.0.0, LOCALHOST, 127.0.0.1@evil.test, userinfo, fragment, over 200 chars), "redirectMatches" |
+| 15 | 403 for "no longer a member" reads as step-up | P8 | `caller.ts` `unauthorized(..., description)`; tests `caller.test.ts` "a person no longer in the organization: 401 invalid_token with a description…", "anything else is 401; with no credential at all the header carries only the pointer" |
+| 16 | `resource` and registration tolerance | P14 | `oauth-logic.ts` `resourceMatches`; used in `token/+server.ts` and `authorize/+page.server.ts`; registration reads only known fields and always answers `none`; tests `oauth-logic.test.ts` "compares the resource after URL normalisation", `token/server.test.ts` "compares the resource after URL normalisation (P14)", `register/server.test.ts` "ignores unknown fields… always answers auth method none (P14)" |
+| 17 | Issuer follows the request origin | P12 | `src/server/mcp/base-url.ts` `publicBase()` (`hubBaseUrl()` minus trailing slash) used by `caller.ts`, `hooks.server.ts`, `token/+server.ts`, `authorize/+page.server.ts`; tests `caller.test.ts` (header uses `https://hub.test`, request host `other-host.test`), `authorize/server.test.ts` (`iss: 'https://hub.test'` from a mocked `'https://hub.test/'`) |
+| 18 | Metadata path collision with the gateway issuer | P17 | `oauth-logic.ts` `wellKnownDocument` serves exactly the three paths; `/.well-known/openid-configuration` untouched in `hooks.server.ts`; test `oauth-logic.test.ts` "wellKnownDocument serves the three exact paths and nothing else". Live harness check: NOT DONE (needs a deployment) |
+| 19 | No absolute cap on a connection's life | P15 | `oauth.service.ts` `connectionRenewable` (180 days from `approved_at`) in the spend `where` and in the grace lookup; tests `oauth.service.test.ts` "a connection older than 180 days cannot renew: the spend finds nothing, nothing is issued (P15)" (renders the spend `where` and asserts the 180-day predicate); SQL (run, passed) `oauth.sql.integration.test.ts` "renewal a connection approved over 180 days ago cannot renew" |
+| 20 | `tools/list` filtering by kind only | P16 | `sandbox-tools.ts` `sandboxToolsFor(kind, mayUseSandbox)`; `protocol.ts` `handleMcp` `listed` parameter; `api/mcp/+server.ts` computes `mayUseSandbox`; test `sandbox-tools.test.ts` "lists only whoami for a person who may not use the Sandbox (P16)" |
+| 21 | Unbounded `state`; token responses cacheable | P9, token endpoint `no-store` | `authorize/+page.server.ts` `MAX_STATE = 512` (state refused and not echoed); `token/+server.ts` `NO_STORE`; tests `authorize/server.test.ts` "refuses a state over 512 characters and does not echo it back", `token/server.test.ts` "exchanges a code (form-encoded) and answers no-store JSON" |
 
 ## Round 1 — pass 1 (Supabase as authorization server)
 
 | Source | Finding | Answer in pass 2/3 | Code + test |
 |---|---|---|---|
-| Design 1 | Token is a full hub session and data-API credential | Hub issues its own credential valid only on `/api/mcp` (INV-5, D1) | |
-| Design 2 | Ending a connection does not end the grant | D13: one row ends every credential | |
-| Design 3 | Re-approval moves a live connection to another org | Each approval is a new connection (INV-3) | |
-| Design 4 | Closed registration was only a dashboard toggle | FR-003, D11, P13: loopback-only, enforced in code | |
-| Design 5 | Approve action under-specified; row written before approval | D10: everything re-validated from the URL; code created at approve, connection only at exchange | |
-| Design 6 | Core assumptions untested until production | No provider behaviour is assumed any more; local end-to-end in step 11 | |
+| Design 1 | Token is a full hub session and data-API credential | Hub issues its own credential valid only on `/api/mcp` (INV-5, D1) | `oauth.service.ts` (opaque hashed secrets), `caller.ts` (only `mcp_at_` accepted on `/api/mcp`); tests `oauth.service.test.ts` "stores only the hash of a code…", "spends the code, opens one connection and issues a hashed access + renewal pair"; `caller.test.ts` "anything else is 401…". The credential is accepted nowhere else because no other code path reads `mcp_credentials` |
+| Design 2 | Ending a connection does not end the grant | D13: one row ends every credential | `oauth.service.ts` `findAccess` (join + `revoked_at is null`), `endConnection`; tests `oauth.service.test.ts` "end reports whether a live connection in scope was ended", `api/settings/mcp-connections/server.test.ts` |
+| Design 3 | Re-approval moves a live connection to another org | Each approval is a new connection (INV-3) | `oauth.service.ts` `exchangeCode` inserts a new connection per code; test `oauth.service.test.ts` "spends the code, opens one connection…" |
+| Design 4 | Closed registration was only a dashboard toggle | FR-003, D11, P13: loopback-only, enforced in code | `register/+server.ts`, `oauth-logic.ts`; tests `register/server.test.ts` (refusal table), `oauth-logic.test.ts` |
+| Design 5 | Approve action under-specified; row written before approval | D10: everything re-validated from the URL; code created at approve, connection only at exchange | `authorize/+page.server.ts`; tests `authorize/server.test.ts` "takes only the organization from the form…", "refuses an organization the person is not in…" |
+| Design 6 | Core assumptions untested until production | No provider behaviour is assumed any more; local end-to-end in step 11 | Local end-to-end run by the orchestrator on 2026-11-21 against the QA stack (dev server + real Postgres with this migration): 37 of 37 checks — discovery, registration (loopback accepted, others refused), signed-out redirect, approval page document headers, foreign-origin and non-member approvals refused, code issue/spend/replay, token over a form post without Origin, tools as a person (`whoami`, `sandbox_query`, block write with authorship), renewal (wrong app refused, one retry), connected apps list, end → 401, and the cross-site rule on an ordinary route |
 | Design 7 | Alternatives table incomplete | Rewritten | n/a |
-| Design 8 | Pre-auth cost of garbage tokens | D4, P6: per-address limit before any lookup; no remote verification | |
-| Design 9 / Codebase 5 | Google sign-in drops the return path | Plan step 8 | |
-| Design 10 / Readiness 9 | Which permission `sandbox_query` needs | D8 | |
-| Design 11 | Removed then re-added member revives a connection | D4, P7: ended when membership is found missing | |
-| Design 12 | Consent page framing; touch throttle | D10, P5, D4 | |
-| Readiness 1 | Refusal contract (401 vs 403, body shape) | D7, P8 | |
-| Readiness 2 | Revocation loop | D13 | |
-| Readiness 3 | Consent ordering | D2, D10 | |
-| Readiness 4 | Connection identity contradiction | One connection per approval | |
-| Readiness 5 / Codebase 6 | Data model and access model | Data model section | |
-| Readiness 6 | Who may list and end; API shape | D13, Files table, FR-011 | |
-| Readiness 7 / Codebase 8, 10 | Exact locals; missing profile | D5, D4 | |
-| Readiness 8 | Platform admin who is not a member | D6 | |
-| Readiness 10 / Codebase 4, 14 | Tool plumbing, authorship, list filtering | D8, D9, P16 | |
-| Readiness 11 / Codebase 3 | Key tests and the 401 body | D7 last row, P6, SC-005 | |
-| Readiness 12–13 | Tests per scenario; task detail | Detailed Implementation Plan steps 2–9, P18 | |
-| Readiness 14 | Rollout checks and rollback | Steps 11–12 | |
-| Readiness 15 / Codebase 12 | Origin source; hooks gates | P12, P17, Files table | |
-| Readiness 16 | Consent route outside the app gate; no organization | A10, US1.7, Files table | |
-| Codebase 1, 2 | Claims unreachable; platform vs org role | A6, D5, D8 (`resolveCapabilities`) | |
-| Codebase 9 | Role cache; cookie overrides | A6, P4, Assumptions | |
-| Codebase 11 | Database failure must be 500 | D4, P7 | |
-| Codebase 13 | Settings API must not be in the write-prefix list | Files table | |
-| Codebase 15 | Reuse (`listDatasets`, memberships, touch throttle, caller shape) | D8, D10, D4, Files table | |
-| Codebase 16 | Library rows for a signed-in caller | D9 | |
-| Codebase 17 | Inventory entries | Files table | |
-| Codebase 18 | Unlimited pre-connection checks | D4, P6 | |
+| Design 8 | Pre-auth cost of garbage tokens | D4, P6: per-address limit before any lookup; no remote verification | `caller.ts`; tests `src/routes/api/mcp/server.test.ts` "429s a connection credential over the per-address limit before any lookup…", `caller.test.ts` "429s per address before any lookup, and per connection" |
+| Design 9 / Codebase 5 | Google sign-in drops the return path | Plan step 8 | `src/routes/login/+page.svelte` (`login_next` cookie), `src/routes/auth/callback/+server.ts`; test `src/routes/auth/callback/server.test.ts` (return path, fallback, open-redirect refusals) |
+| Design 10 / Readiness 9 | Which permission `sandbox_query` needs | D8 | `sandbox-tools.ts` (`gate` = `settings:manage`, then `runQuery`); tests `sandbox-tools.test.ts` "signed-in callers (spec 143)" group |
+| Design 11 | Removed then re-added member revives a connection | D4, P7: ended when membership is found missing | `caller.ts` (ended when a call finds the membership missing) AND `src/server/mcp/oauth.service.ts` `endConnectionsForMember` called from `src/server/services/user.service.ts` `deleteUser` (the only place the hub removes a member; there is no leave-this-organization or remove-from-one-organization path); tests `oauth.service.test.ts` "endConnectionsForMember ends every live connection…", `user.service.test.ts` "ends the MCP connections of the person in every organization they belonged to", `caller.test.ts` "a person no longer in the organization…" |
+| Design 12 | Consent page framing; touch throttle | D10, P5, D4 | `src/server/mcp/approval-headers.ts` (headers on the real response, since `ssr = false` skips `load`) wired in `src/hooks.server.ts`; `caller.ts` touch throttle; tests `approval-headers.test.ts` (four headers, locale-prefixed and data paths, immutable redirect response, wired in `handle`), `caller.test.ts` "a live connection yields the person…" (touchConnection) |
+| Readiness 1 | Refusal contract (401 vs 403, body shape) | D7, P8 | `caller.ts`; tests `caller.test.ts`, `src/routes/api/mcp/server.test.ts` |
+| Readiness 2 | Revocation loop | D13 | `oauth.service.ts` `endConnection`/`findAccess`/`refresh`; tests as Design 2 |
+| Readiness 3 | Consent ordering | D2, D10 | `exchangeCode`, `authorize/+page.server.ts`; tests as Design 5 |
+| Readiness 4 | Connection identity contradiction | One connection per approval | as Design 3 |
+| Readiness 5 / Codebase 6 | Data model and access model | Data model section | `supabase/migrations/20261121100000_mcp_oauth.sql`, `src/server/db/pg-org-integrations-schema.ts`; `scripts/qa/check-migration-seed-pairing.ts` gate; SQL (run, passed) `src/server/mcp/oauth.sql.integration.test.ts` creates the three tables from the migration itself in a throwaway schema and exercises them (10 tests, 3 repeat runs against a disposable `postgres:17`) |
+| Readiness 6 | Who may list and end; API shape | D13, Files table, FR-011 | `src/routes/api/settings/mcp-connections/{,[id]}/+server.ts`; the component `McpConnectionsSection.svelte` is mounted on Settings → Developers (all connections, needs `settings:manage`) and on `/account/security` (own connections, any member: `src/routes/(app)/account/security/+page.server.ts` + `+page.svelte`, `showPerson={false}`); tests `api/settings/mcp-connections/server.test.ts`, `src/routes/(app)/account/security/page.server.test.ts` |
+| Readiness 7 / Codebase 8, 10 | Exact locals; missing profile | D5, D4 | `caller.ts`; tests `caller.test.ts` "a live connection yields the person… exactly the permission locals", "a person who no longer exists: 401 and the connection ends" |
+| Readiness 8 | Platform admin who is not a member | D6 | `caller.ts` (`resolveSupabaseTenant(userId, connection org)` for everyone); test `caller.test.ts` "a person no longer in the organization…" (membership checked independent of platform role) |
+| Readiness 10 / Codebase 4, 14 | Tool plumbing, authorship, list filtering | D8, D9, P16 | `sandbox-tools.ts`, `sandbox.service.ts` (`written_by_key = null` for a person); tests `sandbox-tools.test.ts`, `src/routes/api/sandbox/server.test.ts` ("written_by_key = null"), `src/routes/api/mcp/server.test.ts` "a key caller is not offered whoami or sandbox_query" |
+| Readiness 11 / Codebase 3 | Key tests and the 401 body | D7 last row, P6, SC-005 | `caller.ts` neutral sentence; `src/routes/api/mcp/server.test.ts` (original assertions kept; 429 test restored) |
+| Readiness 12–13 | Tests per scenario; task detail | Detailed Implementation Plan steps 2–9, P18 | the test files listed throughout; P18 file `src/server/mcp/oauth.sql.integration.test.ts` (SQL, not run) |
+| Readiness 14 | Rollout checks and rollback | Steps 11–12 | T011 done (type-check 0 errors, production build, local end-to-end 37/37, security audit). T012 (production checks: both metadata documents, 401 pointer, a live connection from Claude Code, end → 401) closes at rollout and is recorded below |
+| Readiness 15 / Codebase 12 | Origin source; hooks gates | P12, P17, Files table | `src/hooks.server.ts` (`wellKnownDocument(path, publicBase())`, `/api/oauth` in `API_HANDLER_AUTH_PATHS`); test `oauth-logic.test.ts` "wellKnownDocument…" (the hook wiring itself is exercised only by `src/hooks.tenant.test.ts` staying green) |
+| Readiness 16 | Consent route outside the app gate; no organization | A10, US1.7, Files table | `authorize/+page.server.ts` `signedIn` (login redirect), `+page.svelte` no-organization state; tests `authorize/server.test.ts` "sends a signed-out person to sign in…", "a person with no organization gets an empty list…" |
+| Codebase 1, 2 | Claims unreachable; platform vs org role | A6, D5, D8 (`resolveCapabilities`) | `sandbox-tools.ts` `whoami`; test `sandbox-tools.test.ts` "whoami names the person, organization, roles, permission and datasets" |
+| Codebase 9 | Role cache; cookie overrides | A6, P4, Assumptions | `src/routes/api/mcp/+server.ts`; test `isolation.test.ts` |
+| Codebase 11 | Database failure must be 500 | D4, P7 | `caller.ts`; test `caller.test.ts` "a database failure is never read as a refusal…" |
+| Codebase 13 | Settings API must not be in the write-prefix list | Files table | `src/server/services/rbac.service.ts` untouched (no `mcp-connections` prefix); test `api/settings/mcp-connections/server.test.ts` "a person ends their own connection" (no `settings:manage` needed) |
+| Codebase 15 | Reuse (`listDatasets`, memberships, touch throttle, caller shape) | D8, D10, D4, Files table | `sandbox-tools.ts`, `authorize/+page.server.ts` (`loadCanonicalMemberships`), `oauth.service.ts` `touchConnection`, `caller.ts` |
+| Codebase 16 | Library rows for a signed-in caller | D9 | `sandbox-tools.ts` (user ctx carries `profileId`); test `sandbox-tools.test.ts` "a member who may manage the Sandbox writes, recorded under their profile and no key" |
+| Codebase 17 | Inventory entries | Files table | `src/server/db/rls-bypass-inventory.json` (`caller.ts`, `oauth.service.ts`); `bun scripts/rls-bypass-inventory.ts --check` and `src/server/db/rls-bypass-inventory.test.ts` |
+| Codebase 18 | Unlimited pre-connection checks | D4, P6 | `caller.ts`, `register/+server.ts` (10/h), `token/+server.ts` (60/min); tests `register/server.test.ts` "429s over the hourly per-address limit", `token/server.test.ts` "429s per address before reading anything" |
+
+## Audit round
+
+| # | Finding | Code + test |
+|---|---|---|
+| 1 | Approval-page protective headers never reach the browser (`ssr = false`) | `src/server/mcp/approval-headers.ts` `approvalHeadersHandle`, first-but-one in `sequence` in `src/hooks.server.ts` (`setHeaders` in `load` removed); tests `src/server/mcp/approval-headers.test.ts` "sets all four headers on …" (5 paths incl. `/en/` and `__data.json`), "leaves every other path alone", "works on a response whose headers are immutable", "is wired into the hub handle sequence" |
+| 2 | Renewal grace mints unlimited parallel chains | `oauth.service.ts` `refresh` (one reissue via conditional update on new column `regranted_at`; window 30 s; second grace or late reuse ends the connection); migration `20261121100000_mcp_oauth.sql` and `pg-org-integrations-schema.ts`; tests `oauth.service.test.ts` "…ONE fresh pair…", "a second grace reuse…ends the connection…"; SQL (run) "renewal a second grace reuse is refused and ends the connection" |
+| 3 | Removed-then-re-added member gets the old connection back | `oauth.service.ts` `endConnectionsForMember`; called in `user.service.ts` `deleteUser` for every organization the person belonged to. This is the only removal path in the hub (its own comment says a per-organization removal does not exist; no leave path, org deletion does not touch members); tests `oauth.service.test.ts` "endConnectionsForMember…", `user.service.test.ts` "ends the MCP connections of the person in every organization they belonged to" |
+| 4 | Callback return path accepts `/%09/evil.com` | `src/lib/utils/login-redirect.ts` `normalizeLoginRedirect` (moved out of the login page, re-exported there) used by `src/routes/auth/callback/+server.ts` for `next` and the `login_next` cookie; tests `src/routes/auth/callback/server.test.ts` "falls back to next, then /home; never leaves the origin" (`/%09/evil.test`, `/%5Cevil.test`, `//evil.test`, `/%2F%2Fevil.test`, tab/newline/backslash cookie values), "keeps a normal approval path with its full query string"; `src/routes/login/page.test.ts` unchanged and green |
+| 5 | Refusals on the approval screen show nothing | `authorize/+page.server.ts` `refuse` (303 to the same page with `refused=origin|org|invalid`, never to the app; `/`-prefixed action key dropped), `+page.svelte` messages (`oauth_authorize_refused_origin` new; `oauth_authorize_org_invalid`, `oauth_authorize_failed` reused); tests `authorize/server.test.ts` "an organization the person is not in goes back…", "an invalid app or return address goes back with refused=invalid…", "…refused=origin", "drops the form-action key…", "shows the refusal code…" |
+| 6 | Own connections invisible to members without `settings:manage` (US3.1) | `McpConnectionsSection.svelte` (`showPerson` prop) mounted on `src/routes/(app)/account/security/+page.svelte`; `+page.server.ts` there lists own connections in the active org; the Developers page keeps the all-connections view; test `src/routes/(app)/account/security/page.server.test.ts` |
+| 7 | Mocked unit test for the 180-day cap | `oauth.service.test.ts` "a connection older than 180 days cannot renew: the spend finds nothing, nothing is issued (P15)" |
+| 8 | Comment says metadata derives from the request origin | `src/hooks.server.ts` comment above `wellKnownDocument` now says it is built from `publicBase()`; no test (comment) |
+
+
+
+## Verification by the orchestrator
+
+- Independent security audit (Opus, read-only) of commit `02e2b0f`: ledger rows verified against code; 2 medium + 4 low new findings + 6 partial rows → all fixed in `225e021` ("Audit round" table).
+- `bun run check`: 0 errors. `vite build`: passes. SQL integration test `oauth.sql.integration.test.ts`: 10/10 on a throwaway Postgres 17.
+- Local end-to-end: 37/37 (see Design 6).
+
+## Rollout
+
+_Filled after deployment._
