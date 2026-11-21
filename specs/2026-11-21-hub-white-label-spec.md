@@ -9,6 +9,7 @@ updated: 2026-11-21
 repos: [minion_hub]
 proposal: 2026-11-21-hub-white-label
 verdict: pending
+pr: 1074
 type: feature
 tags: [data, security]
 ---
