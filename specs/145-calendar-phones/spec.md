@@ -284,4 +284,10 @@ A manager reads a week as a list and checks how busy the month is.
 
 ## FigCraft demo
 
-To be built from the hub master into `calendar-phones.figcraft` once this spec passes review: as-is frames for both pages and to-be frames for Día, 3 días, Mes, Lista, the summary sheet, the filters sheet, the view sheet and the "…" sheet. The [interactive preview](https://claude.ai/artifact/EMs9Zhvx4f6AwNuYmQugLm) is what the owner chose option B from; it predates the changes listed under Assumptions.
+[calendar-phones.figcraft](calendar-phones.figcraft), page "Spec 145 · demo", 11 phone frames (390 × 844):
+
+1. As-is (screenshots of the running pages): appointments day view, team calendar week view, tapping an appointment.
+2. To-be: Día, 3 días, Mes, Lista.
+3. To-be sheets: appointment summary, the "…" menu on appointments (cash shift, unscheduled services, POS sections, calendar options), the view menu, filters.
+
+The master frames "Scheduling / scheduling/calendar" and "Sell / staff/appointments" are kept on their pages as desktop context. Mock data is fictitious. The [interactive preview](https://claude.ai/artifact/EMs9Zhvx4f6AwNuYmQugLm) shows the same screens next to the two options that were not chosen.

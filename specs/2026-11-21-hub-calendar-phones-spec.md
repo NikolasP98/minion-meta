@@ -24,7 +24,7 @@ list view available and the day view as default.
 
 The canonical [Spec Kit specification](145-calendar-phones/spec.md) has the AS-IS evidence, TO-BE, DELTA,
 slices and acceptance scenarios. The [plan](145-calendar-phones/plan.md) has the technical approach.
-Interactive preview the owner chose from: https://claude.ai/artifact/EMs9Zhvx4f6AwNuYmQugLm
+FigCraft demo: [calendar-phones.figcraft](145-calendar-phones/calendar-phones.figcraft). Interactive preview the owner chose from: https://claude.ai/artifact/EMs9Zhvx4f6AwNuYmQugLm
 
 ## Verification
 
