@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-21T12:20:20.052Z",
+	"generatedAt": "2026-11-21T12:47:03.727Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8522,14 +8522,15 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Unscoped CRM rollups breaking multi-tenant data isolation is a concrete correctness/security bug with a clear fix direction.",
+			"rationale": "Unscoped CRM dashboard rollups break multi-tenant owner isolation, a correctness/security gap with a clear fix direction already identified.",
 			"evidence": [
-				"TODO(handoff): scope word-frequency/sentiment/win-index rollups by owner",
-				"Fix direction: Add owner_id grouping to aggregation queries and filter by authenticated user scope"
+				"Unscoped rollups mix CRM metrics across all owners/users, breaking multi-tenant isolation",
+				"Add owner_id grouping to word-frequency, sentiment, and win-index aggregation queries",
+				"Same marker, also caught by the factory handoff-ledger sweep"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T12:17:27.451Z"
+			"scoredAt": "2026-11-21T12:47:03.530Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
@@ -42251,6 +42252,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T04:47:01.007Z"
+		},
+		{
+			"key": "issue:minion-meta#1070",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1070 [monitor:unstick] rank run 0e15ca5f: batch 2 provider failure (both bounded providers)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1070",
+			"sourceUpdatedAt": "2026-11-21T12:17:23Z",
+			"sourceFingerprint": "b87e255a160691017974c8ce6acbf296bc807933a74559f9af4d6f6823700a95",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1071"
+			],
+			"rationale": "Transient provider/parse failure in the rank pipeline with an identical duplicate occurrence 30 minutes apart, best handled as one host-classifier addition rather than two separate items.",
+			"evidence": [
+				"Batch 2 failed: claude invalid output, codex fallback 2 transient failures, JSON parse error",
+				"Recommendation: safe to retry the run as-is; no spec fix needed",
+				"essentially identical signature occurred in run 62a08ea0 ~30 minutes earlier"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T12:47:03.530Z"
+		},
+		{
+			"key": "issue:minion-meta#1071",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1071 [monitor:unstick] rank run 62a08ea0: batch 2 provider failure (both bounded providers)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1071",
+			"sourceUpdatedAt": "2026-11-21T12:17:27Z",
+			"sourceFingerprint": "5f8cddc2aa3a908ed99a803b88858f04b06b801aed5e06d9bd3bfb429604a5e0",
+			"score": 25,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1070"
+			],
+			"rationale": "Duplicate of #1070's transient claude->codex->parse-error pattern on the same repo/kind 30 minutes apart; should be consolidated into a single classifier-signature goal.",
+			"evidence": [
+				"two occurrences in 30 minutes suggests a recurring transient class",
+				"same note text, same batch-2 claude+codex failure pattern",
+				"This is a transient infra/provider fault, not a spec or logic bug"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T12:47:03.530Z"
 		},
 		{
 			"key": "issue:minion-meta#898",
