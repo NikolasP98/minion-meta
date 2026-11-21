@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-600452350
 title: Handoff marker — scripts/a11y.mjs (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-8c787a772ea9
 created: 2026-11-21
 updated: 2026-11-21
 repos: [minion-hub]

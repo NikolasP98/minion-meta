@@ -7,6 +7,7 @@ updated: 2026-11-21
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+updated: 2026-11-21
 ---
 
 # Post-merge finding — todo-handoff in `scripts/a11y.mjs`
@@ -40,3 +41,12 @@ The `TODO(handoff)` marker at `scripts/a11y.mjs` is removed, or intentionally le
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/702
 - file: `scripts/a11y.mjs`
 - checked: 2026-11-21
+
+## Merged from handoff-minion-hub-600452350
+
+The handoff-ledger sweep independently filed the same marker the same day,
+with a direct line reference:
+
+- `NikolasP98/minion_hub@master scripts/a11y.mjs:400` — Chromium only; the
+  config's Firefox and WebKit projects are not in CI yet
+  https://github.com/NikolasP98/minion_hub/blob/master/scripts/a11y.mjs#L400
