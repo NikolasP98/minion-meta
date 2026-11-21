@@ -36,6 +36,8 @@ Owner directive (2026-11-20, verbatim): "I want every component to be fully acce
 | 80 `svelte-ignore a11y_*` comments suppress **84 compiler accessibility warnings** (4 comments name two rules; 54 × `no_static_element_interactions`) and nothing stops the count from growing. The design lint holds a global per-rule ceiling and compares each changed file with the PR base, but has no rule for them. | `grep -rho "svelte-ignore a11y_[a-z_]*" src \| wc -l` = 80; `scripts/design-lint.mjs:3-30,320-349,380` (ceiling `scripts/.design-lint-baseline.json`, decreases only) |
 | There is no single accessibility command and no machine-readable result: an agent has to know four scripts and read their logs. | `package.json` scripts (no `a11y`); hub `AGENTS.md` (no accessibility section) |
 
+> **Follow-up with a visible change (2026-11-21):** the public wordmark chip contrast fix, with its FigCraft as-is/to-be demo, is specified in [`wordmark-contrast.md`](wordmark-contrast.md).
+
 ## TO-BE
 
 One command, `bun run a11y`, runs every accessibility gate and prints one JSON document; CI runs the same command. Five gates:
