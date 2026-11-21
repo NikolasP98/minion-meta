@@ -11,12 +11,18 @@ Before proposing a rewrite, extract and protect:
 
 Absolute spans must remain exact. Semantic claims may be rephrased only when strength, direction, scope, and conditions remain identical. Preserve approximations as approximations and both ends of every range. Preserve every list item unless deletion is the explicit task.
 
-Use:
+Use, with `$unslop` resolved by the snippet in [SKILL.md](../SKILL.md) rather than relative to the working directory:
 
 ```bash
-python3 scripts/extract_constraints.py original.md > constraints.json
-python3 scripts/validate_preservation.py original.md proposed.md constraints.json
-python3 scripts/diff_check.py original.md proposed.md
+python3 "$unslop/extract_constraints.py" original.md > constraints.json
+python3 "$unslop/validate_preservation.py" original.md proposed.md constraints.json
+python3 "$unslop/diff_check.py" original.md proposed.md
 ```
 
-For legal, medical, scientific, safety, or security text, run `validate_preservation.py --strict` if supported by the vendored command interface and manually re-read every negation, limit, condition, attribution, and relationship. Tool success is necessary evidence, not semantic proof.
+For legal, medical, scientific, safety, or security text, validate in strict mode, which also fails on warnings rather than on missing constraints alone. The vendored parser reads `--strict` only as the first argument and silently ignores it anywhere else, so keep it ahead of the file arguments:
+
+```bash
+python3 "$unslop/validate_preservation.py" --strict original.md proposed.md constraints.json
+```
+
+Then manually re-read every negation, limit, condition, attribution, and relationship. Tool success is necessary evidence, not semantic proof.
