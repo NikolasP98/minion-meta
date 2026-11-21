@@ -14,6 +14,7 @@ was checked in code or by running the tool; the fix is in `spec.md` on this bran
 | 5 | Story tests were assumed to be repeatable. A cold dependency cache voids a run (7 files fail to import, 10 interaction tests fail); two stories flip between warm runs. | three local runs, see AS-IS | AS-IS rows, two edge cases, an "unstable row" entity. |
 | 6 | "No new dependency (verified in `/speckit-plan`)" was an unverified claim. | `bun.lock`: `axe-core@4.14.0` is already resolved through addon-a11y | Assumption restated as verified. |
 | 7 | The two orphaned specs were not known to pass. | both run locally in Chromium: 7 and 6 tests pass | AS-IS says so; FR-008 names Chromium; Firefox/WebKit out of scope. |
+| 7b | Found during implementation: the sweep's strict gate fails 135 of 149 pages in CI (master too), so a check placed after it measures one page. | run artifacts of master run 44699381361 and of the slice PR's first run | AS-IS row and edge case added; the axe pass runs before the strict gate. |
 
 ## Pass 2 — is it complete, consistent and testable?
 
