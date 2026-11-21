@@ -26,5 +26,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-21)
 
-- `NikolasP98/minion_hub@master tests/e2e/ui-audit/canvas-accessibility.spec.ts:217` — Workshop/Pixi/physics operation parity needs real engine fixtures;
-  https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/canvas-accessibility.spec.ts#L217
+- `NikolasP98/minion_hub@master tests/e2e/ui-audit/canvas-accessibility.spec.ts:222` — Workshop/Pixi/physics operation parity needs real engine fixtures;
+  https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/canvas-accessibility.spec.ts#L222
