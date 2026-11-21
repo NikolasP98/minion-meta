@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-21T19:16:56.717Z",
+	"generatedAt": "2026-11-21T19:47:26.791Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3301,6 +3301,40 @@
 			"scoredAt": "2026-11-21T08:33:43.235Z"
 		},
 		{
+			"key": "run:minion_hub#44937900638",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/44937900638",
+			"sourceUpdatedAt": "2026-11-21T19:18:40Z",
+			"sourceFingerprint": "e3145784b668abb8c50fba7115a08c8072ff0f328c51d1345a9fd7f311d3c8e0",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#704"
+			],
+			"rationale": "A failing CI run on master blocks trust in the pipeline but the catalog gives no failure detail beyond the job name.",
+			"evidence": [
+				"status: failure, push on master, 2026-11-21T19:18:40Z",
+				"no error detail provided beyond workflow name 'CI'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T19:47:26.616Z"
+		},
+		{
 			"key": "spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -4617,6 +4651,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T18:47:17.857Z"
+		},
+		{
+			"key": "pr:minion_hub#704",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#704 fix(a11y): DataTable claims the grid role only when it renders rows",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/704",
+			"sourceUpdatedAt": "2026-11-21T19:37:30Z",
+			"sourceFingerprint": "ef964695cea5374b32a76f3173a5ab1fc312fb70fc2f78ea353160bea2f259a6",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"run:minion_hub#44937900638"
+			],
+			"rationale": "A scoped, tested a11y fix to the shared DataTable component with proof of passing tests and zero regressions is ready to merge.",
+			"evidence": [
+				"255 data-table tests pass, bun run a11y --ci reports ok: true with 0 regressions",
+				"gridRole only applies when rows render, fixing two aria-required-children violations"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T19:47:26.616Z"
 		},
 		{
 			"key": "pr:minion-meta#1050",
@@ -14499,6 +14567,38 @@
 			"scoredAt": "2026-11-18T06:32:33.950Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-676808e46687",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-676808e46687.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "a31281fcaa54b58546b46db009e417b1870b47817a7f9ea0b2a4a913aa583a13",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Drag-and-drop handlers bound to an ancestor element break booking-calendar drop-zone UX and the fix direction is already specified.",
+			"evidence": [
+				"ondragover/ondrop live on .track, an ancestor of the intended drop target",
+				"approved proposal with concrete fix direction, last checked 2026-10-10"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T19:47:26.616Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-99075985a806",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23539,39 +23639,6 @@
 			"scoredAt": "2026-11-18T09:48:23.090Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-676808e46687",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-676808e46687.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "a31281fcaa54b58546b46db009e417b1870b47817a7f9ea0b2a4a913aa583a13",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Already-approved, well-diagnosed UI bug with a clear bounded fix direction.",
-			"evidence": [
-				"ondragover/ondrop delegated to ancestor .track instead of slot elements",
-				"status: approved",
-				"Clear fix direction: attach handlers in slot rendering loop"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-68c035f5b627",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29604,7 +29671,7 @@
 			"title": "Post-merge finding — todo-handoff in scripts/a11y.mjs (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8c787a772ea9.md",
 			"sourceUpdatedAt": "2026-11-21",
-			"sourceFingerprint": "ff2e5b6916e31a8b69e113de379d4302a689d671d2db9a2bc7fb1640f6afa425",
+			"sourceFingerprint": "1e4816a0cf3a26d039dbfd793c68a25f1f16b8af30022fbd678506434ac1e160",
 			"score": 36,
 			"band": "low",
 			"axes": {
@@ -29613,20 +29680,20 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 7,
+				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Missing Firefox/WebKit a11y CI coverage is a real but non-urgent gap with a reasonably clear fix direction already sketched.",
+			"rationale": "Missing Firefox/WebKit a11y CI coverage is a backlog-level test-matrix gap, not an active failure.",
 			"evidence": [
-				"Chromium only; the config's Firefox and WebKit projects are not in CI yet",
-				"merged PR #702 in NikolasP98/minion_hub"
+				"TODO marker: Chromium only; Firefox and WebKit projects are not in CI yet",
+				"independently confirmed by a second handoff-ledger sweep the same day"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T19:16:56.545Z"
+			"scoredAt": "2026-11-21T19:47:26.616Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9732f7ab41ad",
@@ -37808,20 +37875,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 7
+				"specification": 5,
+				"implementation": 2
 			},
-			"confidence": 6,
-			"recommendation": "execute",
+			"confidence": 5,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Low-risk, well-localized null-check fixes in test/CI helper files that are quick to apply.",
+			"rationale": "Unchecked-access findings are confined to test helper files, so risk is limited to CI test reliability rather than production code.",
 			"evidence": [
-				"5 unchecked-access findings, all in test/ci files",
-				"Each cites exact file:line and the missing null check"
+				"All five findings are in test/ci/*.ts helper and fixture files",
+				"status is draft with no proposed fix implementation"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:18:33.263Z"
+			"scoredAt": "2026-11-21T19:47:26.616Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-f2de5e0",
@@ -49555,39 +49622,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T06:33:08.618Z"
-		},
-		{
-			"key": "run:minion_hub#44937900638",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/44937900638",
-			"sourceUpdatedAt": "2026-11-21T18:52:48Z",
-			"sourceFingerprint": "0af638289682e392f6f294cde0aca537f4c2e89cc836637dbde2972386d78058",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 8
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run with no actionable goal content beyond automated status.",
-			"evidence": [
-				"stage testing, status in_progress",
-				"push on master trigger",
-				"generic CI run title"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T18:55:04.033Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
