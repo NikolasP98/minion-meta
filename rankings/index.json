@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-21T21:46:58.826Z",
+	"generatedAt": "2026-11-21T22:17:38.101Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6531,6 +6531,39 @@
 			"scoredAt": "2026-11-17T04:17:59.915Z"
 		},
 		{
+			"key": "proposal:2026-11-10-faces-weekly-sync-backlog",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "FACES weekly sync (2026-11-10) — receivables noise, client lookup, campaign attribution, variable consumption",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-10-faces-weekly-sync-backlog.md",
+			"sourceUpdatedAt": "2026-11-10",
+			"sourceFingerprint": "8078c6b858865caece7fc86250b3262919dc42a55c4cdf2a2701aeb5355f2cb9",
+			"score": 60,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The sync note bundles eleven disparate requests of very different size and readiness under one key, so it should be split into separately scoped goals rather than treated as one.",
+			"evidence": [
+				"past priced, no ticket line ... ~143 (Sep 4, Oct 127, Nov 12)",
+				"11 | Alicia Lengua's afinamiento (S/ 1,700) not on her profile | Data from the pre-validation period",
+				"9 | CRM score/stage logic is arbitrary | Needs a marketing session; owner decision"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T22:17:37.907Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-63d95b819dee",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8668,38 +8701,6 @@
 			"scoredAt": "2026-11-21T12:47:03.530Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
-			"sourceUpdatedAt": "2026-10-17",
-			"sourceFingerprint": "9cbbdebbbd1eb4be1eec75e10c3533391b97ac36e4e147f2013210f4fd8502cc",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved finding with a precise, bounded fix (add missing DROP COLUMN/CONSTRAINT DDL or revert) addressing concrete schema drift risk.",
-			"evidence": [
-				"status approved",
-				"marker names exact missing DDL: drop stk_items.fin_product_id + stk_items_org_fin_product_uniq"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:57:59.031Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-fc192ff88fe3",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -9016,20 +9017,20 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 4,
-				"implementation": 3
+				"specification": 6,
+				"implementation": 5
 			},
-			"confidence": 5,
-			"recommendation": "reframe",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The scan bundles over a dozen unrelated empty-catch and unchecked-access findings across many files into one proposal, which is too heterogeneous to execute as a single goal.",
+			"rationale": "Several high-severity unchecked-access findings create concrete runtime-crash risk and are each pinpointed to an exact file and line.",
 			"evidence": [
-				"15+ findings spanning upload.ts, BookingEditForm.svelte, customers +page.svelte, and multiple integration test files",
-				"findings mix severities (high/medium) and unrelated root causes"
+				"high c.tag_ids is spread without null check; if undefined, throws at runtime",
+				"high b.startTime passed to fmtBooking() without null check; if undefined, fmtBooking().toLocaleString() fails at runtime"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:57:59.031Z"
+			"scoredAt": "2026-11-21T22:17:37.907Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-afd023b",
@@ -12271,39 +12272,6 @@
 			"scoredAt": "2026-11-17T19:17:43.247Z"
 		},
 		{
-			"key": "proposal:2026-11-10-faces-weekly-sync-backlog",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "FACES weekly sync (2026-11-10) — receivables noise, client lookup, campaign attribution, variable consumption",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-10-faces-weekly-sync-backlog.md",
-			"sourceUpdatedAt": "2026-11-10",
-			"sourceFingerprint": "8078c6b858865caece7fc86250b3262919dc42a55c4cdf2a2701aeb5355f2cb9",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Bundles 11 unrelated staff requests of mixed severity into one draft triage note without a single verifiable outcome, so it needs to be split into separate specs before it is actionable.",
-			"evidence": [
-				"11 distinct triage items with different verdicts and sizes",
-				"past priced slice shows ~127 genuinely unlinked October appointments",
-				"status draft, join-key for invoice probe still unconfirmed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:48:33.163Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-1049544011",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13426,6 +13394,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:38:15.115Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fbbb4b2d4696",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in supabase/migrations/20261017120000_retire_sellable_stock_bridge.sql (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fbbb4b2d4696.md",
+			"sourceUpdatedAt": "2026-10-17",
+			"sourceFingerprint": "9cbbdebbbd1eb4be1eec75e10c3533391b97ac36e4e147f2013210f4fd8502cc",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This already-approved migration finding has a precise, bounded two-step fix path for schema drift from a dangling column and constraint.",
+			"evidence": [
+				"status: approved",
+				"the actual DROP COLUMN and DROP CONSTRAINT statements are missing",
+				"First verify the column isn't still referenced in hub code ... then attempting the cleanup"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T22:17:37.907Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -18755,6 +18756,39 @@
 			"scoredAt": "2026-11-21T03:17:21.714Z"
 		},
 		{
+			"key": "pr:minion-meta#1074",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1074 spec(145): use your organization's name throughout Hub",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1074",
+			"sourceUpdatedAt": "2026-11-21T22:03:32Z",
+			"sourceFingerprint": "590138aed6f55e02207f9f0ea518aecae77ae9c5e1b452cf6fa921412dde6ef5",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The white-label spec is fully reviewed via EGM but explicitly withholds implementation authorization pending data/security owner approval.",
+			"evidence": [
+				"EGM result: all five stages completed; feature critics and implementation-readiness reviewers each reached two consecutive clean rounds",
+				"Data/security owner approval remains pending",
+				"This draft does not authorize application implementation or merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T22:17:37.907Z"
+		},
+		{
 			"key": "proposal:2026-08-18-base-ui-primitives-and-shell",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19760,6 +19794,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T16:47:59.842Z"
+		},
+		{
+			"key": "proposal:2026-10-09-native-formatting-coverage",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Establish meaningful iOS and shared Swift formatting coverage",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-native-formatting-coverage.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "f1d6a3dac7a76a7b940b962c14484476e186e7aeaf0c6b077e72963ae1a25a94",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Fixing the false-green SwiftFormat phase is a legitimate CI-correctness concern but needs an inventory and migration before execution is bounded.",
+			"evidence": [
+				"A verified run exited zero while formatting no files, so the phase did not provide meaningful coverage",
+				"status: review"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T22:17:37.907Z"
 		},
 		{
 			"key": "proposal:2026-11-17-hub-faces-stock-reconciliation-handoff",
@@ -27567,20 +27633,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
+				"specification": 6,
 				"implementation": 4
 			},
-			"confidence": 5,
+			"confidence": 4,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The finding itself is a scoped UI drag bug, but the reconciliation note flags it as a likely duplicate of another ledger needing human adjudication before work proceeds.",
+			"rationale": "The proposal itself flags this as a likely duplicate of a separate ledger outside this batch, so a human should resolve the overlap before work proceeds.",
 			"evidence": [
-				"reconciliation note flags possible duplicate of handoff-minion-hub-1194287278",
-				"status is review, not approved"
+				"Possible duplicate of handoff-minion-hub-1194287278",
+				"a human should decide whether to fold this into the ledger or keep them separate"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:57:59.031Z"
+			"scoredAt": "2026-11-21T22:17:37.907Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-8ef9cc8545b6",
@@ -29276,39 +29342,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:31:05.042Z"
-		},
-		{
-			"key": "proposal:2026-10-09-native-formatting-coverage",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Establish meaningful iOS and shared Swift formatting coverage",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-09-native-formatting-coverage.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "f1d6a3dac7a76a7b940b962c14484476e186e7aeaf0c6b077e72963ae1a25a94",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Fixes a false-green CI formatting gate for iOS/shared Swift but has no production impact and no implementation has started.",
-			"evidence": [
-				"verified run exited zero while formatting no files",
-				"status review, no code changes yet",
-				"scope limited to iOS/shared Swift formatting"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
 			"key": "proposal:2026-10-12-hub-catalog-composition-cache-staleness",
