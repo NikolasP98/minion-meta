@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-2188918627
 title: Handoff marker — src/server/mcp/oauth-logic.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-11-21
 updated: 2026-11-21
 repos: [minion-hub]
 tags: [handoff-sweep]
+merged_into: postmerge-minion-hub-fdcedcc97f88
 ---
 
 # Handoff marker — src/server/mcp/oauth-logic.ts

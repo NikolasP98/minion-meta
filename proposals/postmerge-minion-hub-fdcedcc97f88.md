@@ -9,6 +9,8 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- merged from handoff-minion-hub-2188918627 (handoff-sweep marker, same file/marker) -->
+
 # Post-merge finding — todo-handoff in `src/server/mcp/oauth-logic.ts`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
@@ -42,3 +44,8 @@ Add a `.well-known/oauth-client-metadata.json` endpoint in `src/server/mcp/oauth
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/703
 - file: `src/server/mcp/oauth-logic.ts`
 - checked: 2026-11-21
+
+## From handoff-sweep (handoff-minion-hub-2188918627)
+
+- `NikolasP98/minion_hub@master src/server/mcp/oauth-logic.ts:86` — Client ID Metadata Documents (CIMD) are not supported; harnesses that
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/mcp/oauth-logic.ts#L86

@@ -9,6 +9,8 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- merged from handoff-minion-hub-4026458170 (handoff-sweep marker, same file/marker) -->
+
 # Post-merge finding — todo-handoff in `src/server/mcp/oauth.service.ts`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
@@ -40,3 +42,8 @@ The `TODO(handoff)` marker at `src/server/mcp/oauth.service.ts` is removed, or i
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/703
 - file: `src/server/mcp/oauth.service.ts`
 - checked: 2026-11-21
+
+## From handoff-sweep (handoff-minion-hub-4026458170)
+
+- `NikolasP98/minion_hub@master src/server/mcp/oauth.service.ts:265` — apps that still have a connection are never pruned; add an unused-for-90-days
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/mcp/oauth.service.ts#L265
