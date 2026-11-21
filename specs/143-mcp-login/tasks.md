@@ -13,4 +13,4 @@ Each task: files and done-condition are in plan "Detailed Implementation Plan" u
 - [x] T009 Connected apps API + UI + tests.
 - [x] T010 Gates.
 - [x] T011 (orchestrator) check, build, local end-to-end, design re-review, code audit, PR, CI, merge.
-- [ ] T012 (orchestrator) rollout and live verification; connect this machine.
+- [~] T012 (orchestrator) rollout and live verification done; this machine is registered. Open: the owner's first browser approval.

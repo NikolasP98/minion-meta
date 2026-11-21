@@ -92,4 +92,23 @@ Paths are relative to the hub clone `/home/nikolas/.cache/claude-tmp/hub-meta-fi
 
 ## Rollout
 
-_Filled after deployment._
+Hub PR #703 merged 2026-11-21 02:58 UTC (`82ac9665`), all hub checks green on the second CI run; production deploy succeeded; migration `20261121100000` applied by the deploy at 02:58:39 UTC.
+
+Checked on production (2026-11-21):
+
+| Check | Result |
+|---|---|
+| `/.well-known/oauth-protected-resource/api/mcp` | resource `https://hub.minion-ai.org/api/mcp`, authorization server the hub itself |
+| `/.well-known/oauth-authorization-server` | issuer, authorize, token and register endpoints on the hub; S256 only; auth method `none` |
+| `/.well-known/openid-configuration` (gateway issuer) | still served, untouched |
+| `POST /api/mcp` without a credential | 401 with `WWW-Authenticate: Bearer resource_metadata=…` and no `error=` |
+| Unknown API key | 401 |
+| Cross-site form post to an ordinary route | 403 |
+| Form post without `Origin` to an ordinary route | 403 |
+| Form post without `Origin` to `/api/oauth/token` | reaches the handler (400 `invalid_request` for a bogus code) |
+| Approval page, signed out | 302 to `/login?redirectTo=…` with `frame-ancestors 'none'`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `Cache-Control: no-store` |
+| Tables | three `mcp_*` tables, forced RLS, no grants to `anon`/`authenticated`; the existing API key still active |
+| Claude Code | `claude mcp add --transport http minion-hub https://hub.minion-ai.org/api/mcp` → status "Needs authentication" (discovery understood) |
+
+Still open at rollout: the first real approval in a browser by the owner (`/mcp` → minion-hub → Authenticate in an interactive Claude Code session), then `whoami`, one query, one block write and remove, and ending the connection. Round 2 #18 (the harness uses the OAuth document, not the gateway's OpenID document) is confirmed up to the point where Claude Code asks for authentication.
+
