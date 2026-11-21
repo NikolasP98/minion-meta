@@ -1,10 +1,10 @@
 # Feature Specification: Log in to the hub's MCP endpoint — tools run as you, with your role
 
 **Feature Directory**: `specs/143-mcp-login`
-**Created**: 2026-11-21
+**Created**: 2026-11-21 · **Revised**: 2026-11-21 (pass 2, after EGM round 1: hub-issued tokens)
 **Status**: Draft — security tagged (Constitution V)
 **Tags**: security, auth, permissions
-**Repos & PR base**: `minion_hub` → `master`; `minion-meta` → `dev`
+**Repos & PR base**: `minion_hub` → `master`; `minion-meta` → `dev` (this spec only)
 **Proposal**: `proposals/2026-11-20-hub-org-pages-on-the-fly.md` (slice S6)
 **Input**: Owner, 2026-11-20: "create authentication for the MCP instead of a key. Like other tools (cloudflare, posthog, etc) need authentication for harnesses to use it. Look into this option (set up mcp connection, auth and through auth, confirm the user's role)". Then: "Begin planning and implementation via speckit + egm. Lmk when its live and working. Set it up here for testing as well."
 
@@ -13,111 +13,114 @@
 | # | Observed | Evidence |
 |---|---|---|
 | A1 | `POST /api/mcp` serves ten sandbox tools. The only credential is an org API key with the `sandbox` scope. | `src/routes/api/mcp/+server.ts`; hub #692 |
-| A2 | A key is an org, not a person: no role is checked, every scoped key can do the same things, and nothing a key writes names a human. | `sandbox-tools.ts` builds `CoreCtx { tenantId: key.orgId }` with no profile |
+| A2 | A key is an org, not a person: the route builds `CoreCtx { db, tenantId: key.orgId }` with no profile, no role is checked, and nothing a key writes names a human. | `routes/api/mcp/+server.ts:35` |
 | A3 | No tool returns data rows, because a key has no role to scope them by. | spec 136 FR-008 |
 | A4 | A harness must be given the key by hand in a header; there is no "log in" step. | `claude mcp add … --header` |
-| A5 | The hub signs people in with Supabase Auth. Tokens are ES256 and can be verified without a network call. | `supabase-bridge.runtime.ts` `getClaims`; project JWKS lists one ES256 key |
-| A6 | `resolveSupabaseUser(event, client, accessToken)` already turns an explicit access token into the hub user with its role; `resolveSupabaseTenant(userId, orgId)` confirms membership of one org. | `supabase-bridge.runtime.ts:37,108` |
-| A7 | Role checks and the sandbox query already work per user: `hasOrgCapability(locals, module, action)`, `runQuery(locals, spec)`. The Sandbox page itself requires `settings:manage`. | `rbac.service.ts:835`; `sandbox.service.ts`; `(app)/sandbox/+page.server.ts` |
-| A8 | Supabase Auth has an OAuth 2.1 server (beta) with authorize and token endpoints, discovery, optional dynamic client registration and refresh rotation; the app supplies a consent page. It is **disabled** on the hub's project. | Supabase docs `guides/auth/oauth-server`; `GET …/.well-known/oauth-authorization-server/auth/v1` → `feature_disabled` |
-| A9 | The installed client library exposes the consent calls (`auth.oauth.getAuthorizationDetails`, `approveAuthorization`, `denyAuthorization`). | `@supabase/auth-js` 2.110.1 `GoTrueClient.d.ts:23` |
-| A10 | A token from that server is an ordinary user token: it also works against the project's data API. 220 of 247 public tables grant SELECT to `authenticated`; `crm_contact_stats` has row security off. A browser session already holds an equivalent token. | production catalog query, 2026-11-20 |
-| A11 | Claude Code accepts a pre-registered client (`claude mcp add --client-id … --callback-port …`) and also registers itself where a server allows it. | `claude mcp add --help` |
-| A12 | The current MCP authorization spec prefers Client ID Metadata Documents and deprecates dynamic client registration; Supabase documents dynamic registration and pre-registered clients only. | modelcontextprotocol.io authorization spec 2025-11-25 and draft |
+| A5 | People sign in to the hub with Supabase Auth; the app gate sends an unauthenticated page request to `/login?redirectTo=<path+query>`. Password and QA sign-in honour `redirectTo`; Google sign-in goes to `/auth/callback` without it. | `hooks.server.ts:566-577`; `login/+page.svelte:146,159-163,186` |
+| A6 | A person's platform role (`user`/`admin`) comes from `profiles.role`; the role **in an organization** and its permissions come from `resolveCapabilities(orgId, profileId)` (cached 2 min + 30 s stale). | `supabase-bridge.ts:39-40`; `rbac.service.ts:320-333` |
+| A7 | Permission checks and the sandbox query read only `locals.user.{role,supabaseId}` and `locals.tenantCtx`: `hasOrgCapability`, `resolveOwnerScope`, `requireCoreCtx`, `runQuery(locals, spec)`, `listDatasets(locals)`. Platform admins pass every capability check before any org check. The Sandbox page requires `settings:manage`. | `rbac.service.ts:436-476,835-846`; `sandbox.service.ts:39-47`; `(app)/sandbox/+page.server.ts:6` |
+| A8 | Supabase Auth offers an OAuth 2.1 server (beta, disabled on this project). A token it issues is an ordinary user session token: the hub's cookie path accepts any verified token without looking at who it was issued to, and the same token works on the data API, storage and realtime. | Supabase docs; `resolve-identity.ts:225-258`; production probe `feature_disabled` |
+| A9 | 220 of 247 public tables grant SELECT to `authenticated`; `crm_contact_stats` has row security off. | production catalog query, 2026-11-20 |
+| A10 | The hub already hand-serves `/.well-known/*` documents before the app gate, and `/api/mcp` is already exempt from session auth. | `hooks.server.ts:166-206,230,516-518` |
+| A11 | Claude Code connects to an MCP server that advertises OAuth: it discovers the metadata, registers itself where allowed, opens a browser and listens on a loopback address for the result. | `claude mcp add --help` (`--client-id`, `--callback-port`); MCP authorization spec |
 
 ## TO-BE
 
-A person adds the hub to a harness with only its address. The harness opens the hub in a browser; the person signs in as usual, sees who is asking and for what, picks the organization, and approves. From then on every tool call runs as that person in that organization, with that person's role, and the person can end the connection from the hub.
+A person adds the hub to a harness with only its address. The harness opens the hub in a browser; the person signs in as usual, sees which app is asking, picks the organization, and approves. From then on every tool call runs as that person in that organization with their role there. The person can see and end their connections in the hub.
+
+The hub issues the credential itself. It is valid only on the MCP endpoint.
 
 Invariants:
 
-- **INV-1** A call is served only for a verified token of a known person who is still a member of the organization the connection was approved for.
-- **INV-2** A tool does nothing that the same person could not do in the hub with the same role. Sandbox tools require the same permission as the Sandbox page.
-- **INV-3** A connection is approved for exactly one organization and can never act in another.
-- **INV-4** Ending a connection in the hub stops its next call, even if the token itself has not expired.
-- **INV-5** A browser session token is not a connection: without an approved connection for that client, the endpoint refuses.
-- **INV-6** API keys keep working exactly as before.
-- **INV-7** Only clients the owner registered can ask for a connection (no open registration in this slice).
+- **INV-1** A call is served only for a live connection whose person still exists and is still a member of the connection's organization.
+- **INV-2** A tool does nothing the same person could not do in the hub with the same role in that organization.
+- **INV-3** A connection belongs to exactly one organization, fixed at approval, and never changes.
+- **INV-4** Ending a connection stops its very next call and its ability to renew.
+- **INV-5** A connection credential is useless anywhere but the MCP endpoint, and a browser session is useless on the MCP endpoint.
+- **INV-6** API keys keep working: every existing key assertion still holds.
+- **INV-7** An app can only receive a credential at an address on the person's own machine, and only after that person approved it by name on the hub.
+- **INV-8** Credentials are stored only as hashes; a database read does not yield a usable credential.
 
 ## DELTA
 
 | From | To | Proof |
 |---|---|---|
-| Key in a header | Browser sign-in started by the harness (A4 → TO-BE) | Discovery documents served; unauthenticated call answers 401 with the pointer; live connection from Claude Code |
-| Org identity (A2) | Person + role + one org | Tests: member with the permission passes; member without it is refused per tool; non-member refused |
-| No rows (A3) | A role-checked `sandbox_query` tool for signed-in callers only | Tests: caller without `view` on the dataset's module is refused; key callers do not see the tool |
-| No way to see or end connections | "Connected apps" list with revoke | Test: revoked connection refused on next call |
+| Key in a header (A4) | Browser sign-in started by the harness | Metadata served; unauthenticated call answers 401 with the pointer; live connection from Claude Code with only the address |
+| Org identity (A2) | Person + org role + one org | Tests per tool: permitted member passes, member without permission refused, non-member refused |
+| No rows (A3) | `sandbox_query` for signed-in callers only | Tests: no `view` on the dataset's module → refused; key callers do not see the tool |
+| No connection management | "Connected apps" with end | Test: ended connection → 401 on the next call and on renewal |
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Connect a harness by signing in (Priority: P1)
 
-**Independent Test**: With the OAuth server enabled and one registered client, `claude mcp add` with only the address and client id ends, after a browser approval, with the hub's tools listed.
+**Independent Test**: `claude mcp add --transport http minion-hub <hub>/api/mcp`, then one browser approval, ends with the hub's tools listed.
 
-**Acceptance Scenarios**:
-
-1. **Given** no credential, **When** a harness calls the endpoint, **Then** it is refused with a pointer to where sign-in is described, and that description names the hub's sign-in service.
-2. **Given** a signed-in person on the consent screen, **When** they belong to several organizations, **Then** they must pick one before approving; with one organization it is preselected.
-3. **Given** approval, **When** the harness calls `tools/list`, **Then** it receives the tools that person's role allows in that organization.
-4. **Given** a person who is not signed in, **When** they reach the consent screen, **Then** they are sent to sign in and return to the same request.
-5. **Given** the person denies, **Then** the harness is told access was denied and no connection is recorded.
+1. **Given** no credential, **When** a harness calls the endpoint, **Then** it gets 401 with a pointer to the sign-in description, which names the hub itself as the place to sign in.
+2. **Given** an app that registers itself with a return address on the person's own machine, **Then** it is accepted; **Given** any other return address, **Then** registration is refused.
+3. **Given** a signed-in person on the approval screen, **Then** they see the app's name and return address, and must pick one of their organizations (preselected when there is only one).
+4. **Given** a person who is not signed in, **When** they reach the approval screen, **Then** they are sent to sign in and come back to the same request (password sign-in; Google sign-in must return there too).
+5. **Given** approval, **Then** the harness receives a credential and `tools/list` shows the tools that person's role allows.
+6. **Given** denial, **Then** the harness is told access was denied and no connection exists.
+7. **Given** a person with no organization, **Then** the approval screen says so and offers no approval.
 
 ### User Story 2 - Tools obey the person's role (Priority: P1)
 
-**Acceptance Scenarios**:
-
-1. **Given** a member whose role can manage the Sandbox, **When** they write a block, **Then** it is stored with them as the author.
-2. **Given** a member whose role cannot manage the Sandbox, **When** they call a write tool, **Then** it is refused with "your role does not permit…" and nothing is written.
-3. **Given** a member with `view` on sales but not on finance, **When** they query a sales dataset, **Then** rows come back; **When** they query a finance dataset, **Then** it is refused.
-4. **Given** a person removed from the organization after connecting, **When** the harness calls again, **Then** it is refused.
-5. **Given** a `whoami` call, **Then** the reply states the person, the organization, the role, and which tool groups are permitted.
+1. **Given** a member whose role can manage the Sandbox, **When** they write a block, **Then** it is stored with them as its author.
+2. **Given** a member whose role cannot manage the Sandbox, **When** they call a sandbox write or read tool, **Then** the reply says their role does not permit it and nothing changes.
+3. **Given** a member who can manage the Sandbox and has `view` on sales but not finance, **When** they query a sales dataset, **Then** rows come back; a finance dataset is refused.
+4. **Given** a person removed from the organization, **When** the harness calls again, **Then** it is refused and the connection is ended.
+5. **Given** `whoami`, **Then** the reply names the person, the organization, their role(s) there, whether they may manage the Sandbox, and which datasets they may query.
 
 ### User Story 3 - See and end connections (Priority: P2)
 
-**Acceptance Scenarios**:
-
-1. **Given** Settings → Developers, **Then** the person sees their own connected apps for the current organization with the app name and when it was approved and last used.
-2. **Given** they end one, **When** that harness calls again, **Then** it is refused and must be approved again.
+1. **Given** Settings → Developers, **Then** a person sees their own connections in the current organization: app name, approved on, last used.
+2. **Given** a member with `settings:manage`, **Then** they see every connection of the organization, with the person.
+3. **Given** a connection is ended (by its person or by such an admin), **When** that harness calls or renews, **Then** it gets 401 and must be approved again.
 
 ### Edge Cases
 
-- A token whose connection was approved for another organization is refused; there is no way to pass an organization in a call.
-- An expired or malformed token is refused as unauthenticated (so the harness refreshes or signs in again).
-- A token without a client id (an ordinary browser session) is refused (INV-5).
-- A platform admin still needs an approved connection; the org on it is the one they picked.
-- The same person may connect two harnesses; each is its own connection.
-- Key and token in the same request: the key path is taken only for `mk_` values; anything else is treated as a token.
+- Unknown, malformed, expired or ended credential → 401 with the sign-in pointer (the harness renews or signs in again).
+- Renewing with a renewal credential that was already used → the whole connection is ended (theft signal).
+- An approval code used twice, used after 60 seconds, or with the wrong proof → refused; nothing is issued.
+- Two harnesses on one account → two connections; approving again never changes an existing one.
+- A platform admin who is not a member of an organization cannot connect to it.
+- A request carrying both a hub cookie and a connection credential is treated by the credential alone.
+- `mk_` values take the key path; `mcp_` values take the connection path; anything else is 401.
 
 ## Requirements *(mandatory)*
 
-- **FR-001**: The endpoint MUST accept a Supabase-issued access token as `Authorization: Bearer` in addition to org API keys.
-- **FR-002**: The hub MUST publish protected-resource metadata for the endpoint naming the sign-in service, and MUST answer unauthenticated calls with 401 and a `WWW-Authenticate` pointer to it.
-- **FR-003**: The hub MUST provide the consent screen: requesting app, requested access, organization picker limited to the person's memberships, approve and deny.
-- **FR-004**: Approval MUST record a connection (person, app, organization). The endpoint MUST refuse a token with no live connection for its person and app.
-- **FR-005**: Every call MUST re-check membership of the connection's organization and resolve the person's current role.
-- **FR-006**: Sandbox tools MUST require the same permission as the Sandbox page for a signed-in caller; refusals MUST say the role does not permit the action.
-- **FR-007**: Elements written by a signed-in caller MUST record that person as author.
-- **FR-008**: Signed-in callers MUST get `whoami` and `sandbox_query` (rows, through the existing role-checked query). Key callers MUST NOT see `sandbox_query`.
-- **FR-009**: A person MUST be able to list and end their own connections; an org admin MUST be able to list and end all connections of the organization.
-- **FR-010**: Calls MUST be rate limited per connection.
-- **FR-011**: Client registration MUST be closed: only clients registered by the owner can start sign-in. Opening registration is a later, separate decision that depends on tightening data-API grants (A10).
-- **FR-012**: Key-authenticated behaviour (spec 136) MUST be unchanged.
+- **FR-001**: The endpoint MUST accept a hub-issued connection credential as `Authorization: Bearer`, in addition to org API keys.
+- **FR-002**: The hub MUST publish protected-resource metadata and authorization-server metadata, and MUST answer unauthenticated or invalid-credential calls with 401 and a `WWW-Authenticate` pointer.
+- **FR-003**: The hub MUST accept self-registration of public apps whose every return address is a loopback address (`http://localhost`, `http://127.0.0.1`, `http://[::1]`, any port), and refuse all others. Registration MUST be rate limited.
+- **FR-004**: The approval screen MUST require a signed-in person, show the app name and return address, list only that person's organizations, and offer approve and deny. It MUST NOT be embeddable in another site.
+- **FR-005**: Approval MUST use the authorization-code flow with PKCE (S256 only): a single-use code valid 60 seconds, bound to the app, the return address, the person, the organization and the proof.
+- **FR-006**: Exchanging a code MUST create one connection and issue an access credential (1 hour) and a renewal credential (30 days, replaced on every use). Reuse of a replaced renewal credential MUST end the connection.
+- **FR-007**: Every call MUST load the connection, confirm the person exists and is a member of its organization (ending the connection if not), and resolve their role there from the hub's permission service.
+- **FR-008**: For a signed-in caller every sandbox tool MUST require `settings:manage` (the Sandbox page's permission); `sandbox_query` MUST additionally pass the existing per-dataset `view` and record-scope checks. Refusals MUST read "Your role does not permit …".
+- **FR-009**: Signed-in callers MUST get `whoami` and `sandbox_query`; `sandbox_datasets` MUST list only datasets they may view. Key callers MUST NOT see `whoami` or `sandbox_query`.
+- **FR-010**: Elements created by a signed-in caller MUST record that person as author; elements they change MUST clear any recorded key.
+- **FR-011**: A person MUST be able to list and end their own connections; a member with `settings:manage` MUST be able to list and end all connections of the organization.
+- **FR-012**: Calls MUST be rate limited per connection, and credential checks per address before any lookup.
+- **FR-013**: Credentials and codes MUST be stored only as hashes (INV-8).
+- **FR-014**: Key-authenticated behaviour MUST keep every existing assertion (INV-6).
 
 ### Key Entities
 
-- **Connection**: person, app (client id and name), organization, approved at, last used at, ended at.
-- **App**: an OAuth client registered with the sign-in service; identified by client id.
+- **App**: a registered client: id, name, return addresses.
+- **Connection**: person, app, organization, approved at, last used at, ended at, ended by.
+- **Credential**: hash, connection, kind (code, access, renewal), expires at, used at; a code also carries the return address, the proof challenge, the person and the organization until it becomes a connection.
 
 ## Success Criteria *(mandatory)*
 
-- **SC-001**: From `claude mcp add` to a working tool list takes one browser approval and under a minute.
-- **SC-002**: A member without the Sandbox permission cannot change anything through the endpoint; a non-member gets nothing.
+- **SC-001**: From `claude mcp add` with only the address to a working tool list takes one browser approval and under a minute.
+- **SC-002**: A member without the Sandbox permission cannot read or change anything through the endpoint; a non-member gets nothing.
 - **SC-003**: Ending a connection takes effect on the next call.
-- **SC-004**: Every element written through a signed-in connection names its author.
-- **SC-005**: All spec-136 key tests pass unchanged.
+- **SC-004**: A connection credential presented as a hub browser session, or to the database's API, is rejected.
+- **SC-005**: Every existing key test assertion holds (mocks may be extended).
 
 ## Assumptions
 
-- The owner enables the OAuth server on the Supabase project and registers the Claude Code client; these are dashboard actions outside the repository.
-- A harness that cannot be given a client id cannot connect until registration is opened (FR-011).
-- The token is an ordinary user token (A10); this slice does not change what such a token can reach outside the hub.
+- The approval screen relies on the hub's existing sign-in; this slice fixes the Google return path only if it is broken for this URL (A5).
+- Role changes can take up to the permission cache's lifetime (A6) to show in tool calls; membership removal and ended connections are immediate.
+- Harnesses that need a non-loopback return address (hosted assistants) are out of scope.
