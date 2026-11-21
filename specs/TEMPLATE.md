@@ -11,7 +11,7 @@ repos: [minion-meta]
 
 # Spec Template
 
-Copy this file to `specs/YYYY-MM-DD-<slug>.md`. The YAML frontmatter is machine truth —
+Copy this file to `specs/YYYY-MM-DD-<slug>.md`. If the spec ships more than one file (a FigCraft demo, fixtures), make it a directory instead: `specs/YYYY-MM-DD-<slug>/YYYY-MM-DD-<slug>.md` next to its files — single-file specs never get a directory. The YAML frontmatter is machine truth —
 `scripts/spec-index.mjs` validates it and regenerates `specs/index.json` (committed; the
 base.minion-ai.org board reads that one file). Run the script after adding or editing a spec.
 
@@ -94,6 +94,8 @@ Keep the existing house style: `# Title`, then `## 0. Product` (what and why, in
 words), numbered sections, explicit **out-of-scope**, and an end-to-end verification step the
 implementer can run. Slices sized "junior dev, 4–8 focused hours" with a machine-checkable
 definition of done.
+
+**FigCraft demo (required for any hub/site UI change):** a `## FigCraft demo` section links the proposal file `specs/<id>/<id>.figcraft` built from `design/figcraft/*.master.figcraft` with `fc-proposal.py` — as-is frames where an existing view or component changes, `· to-be` frames for the proposal. See `design/figcraft/README.md`.
 
 **AS-IS → TO-BE → DELTA (required):** AS-IS = current verified technical
 behavior (code anchors, existing tests, constraints, known unknowns). TO-BE =
