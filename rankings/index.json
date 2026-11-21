@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-21T19:47:26.791Z",
+	"generatedAt": "2026-11-21T20:17:10.837Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1558,6 +1558,38 @@
 			"scoredAt": "2026-11-16T10:19:54.006Z"
 		},
 		{
+			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
+			"sourceUpdatedAt": "2026-10-03",
+			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
+			"score": 75,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A fully implemented backup/retention scheduler has zero call sites so backups and retention pruning silently never run, and the proposal gives a clear bounded fix (wire or delete).",
+			"evidence": [
+				"startBackupScheduler() has zero call sites anywhere in the repo",
+				"no backup is ever taken and retention pruning never runs, silently"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T20:17:10.562Z"
+		},
+		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -2997,38 +3029,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T01:17:13.474Z"
-		},
-		{
-			"key": "proposal:2026-09-16-hub-backup-scheduler-never-started",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub backup scheduler is never started — backups and retention pruning never run",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-16-hub-backup-scheduler-never-started.md",
-			"sourceUpdatedAt": "2026-10-03",
-			"sourceFingerprint": "8ffcbe3e311cb3deb0e5036cd3d06088c7e4d796fbcc251c17e7b9f822c6d4f5",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The hub backup/retention scheduler has zero call sites so backups silently never run, a data-loss risk with a clear two-option fix.",
-			"evidence": [
-				"startBackupScheduler() is exported but has zero call sites anywhere in the repo",
-				"backups and unified_events/chat retention pruning never run, silently, with no error or log"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:47:37.677Z"
 		},
 		{
 			"key": "proposal:2026-09-16-hub-qa-stack-first-pass-defects",
@@ -24396,6 +24396,38 @@
 			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
+			"key": "pr:minion-meta#1066",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1066 spec(142): trade products with a supplier (canje)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1066",
+			"sourceUpdatedAt": "2026-11-21T20:12:44Z",
+			"sourceFingerprint": "1449cf430b69334022442f75c2c7960de59eb680615f5bd55209ec99af093146",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Well-specified draft feature PR explicitly gated on owner approval before code/merge and no trade has occurred yet, so it is not yet actionable as a board goal.",
+			"evidence": [
+				"tagged data: owner approves before code and merges",
+				"owner: trade has not taken place yet, but I want to prepare the UI"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T20:17:10.562Z"
+		},
+		{
 			"key": "pr:minion-meta#808",
 			"kind": "pr",
 			"stage": "development",
@@ -33141,40 +33173,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T23:24:04.225Z"
-		},
-		{
-			"key": "pr:minion-meta#1066",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1066 spec(142): trade products with a supplier (canje)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1066",
-			"sourceUpdatedAt": "2026-11-21T00:32:49Z",
-			"sourceFingerprint": "289b8321e90a8d00b40d62728951a771810a1211ba32566669b1b146bb3aeab3",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#1065"
-			],
-			"rationale": "Preparatory UI spec for a supplier trade that has not yet occurred, lower urgency than the data-integrity issue it depends on.",
-			"evidence": [
-				"trade has not taken place yet, but I want to prepare the UI that handles this kind of operation",
-				"can be drafted now and registered on the day (pairs with spec 141)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T00:47:36.640Z"
 		},
 		{
 			"key": "pr:minion-meta#815",
@@ -51038,19 +51036,18 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 7
+				"implementation": 6
 			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
+			"confidence": 5,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Single automated finding about a hardcoded timeout constant is a trivial, low-stakes cleanup not urgent on its own.",
+			"rationale": "A single cosmetic hardcoded-constant nit in a test file is too minor to warrant standalone board tracking.",
 			"evidence": [
-				"medium hardcoded-config finding at server.maintenance-timer-ownership.e2e.test.ts:156",
-				"machine-generated from merge-scan commit range bb06e3a..2f3c914"
+				"medium hardcoded-config: a timeout value should be imported as a named constant"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T19:47:37.677Z"
+			"scoredAt": "2026-11-21T20:17:10.562Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-77445c0",
