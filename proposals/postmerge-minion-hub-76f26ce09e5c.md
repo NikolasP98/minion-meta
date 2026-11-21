@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-76f26ce09e5c
 title: "Post-merge finding — todo-handoff in src/server/mcp/oauth.service.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-11-21
 updated: 2026-11-21
 repos: [minion-hub]
