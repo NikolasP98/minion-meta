@@ -5,7 +5,7 @@ stage: deploy
 status: shipped
 pass: 1
 created: 2026-11-14
-updated: 2026-11-16
+updated: 2026-11-18
 repos: [minion_hub]
 proposal: 2026-11-13-faces-stock-follows-appointment-agenda-products-line-swap
 verdict: approved
@@ -51,3 +51,4 @@ no-show syringes are on the shelf. A read-only check on 2026-11-16 found 13 affe
 from before S1 went live, and no submitted sale after it yet, so S1 has not been exercised in
 production. Details and the remaining tasks are in `specs/120-till-corrections/tasks.md`.
 
+Repair applied 2026-11-18 at the owner's request: 13 sales, 13 sale movements cancelled, second preview empty. With the default pool sizes `--apply` stalled before writing (one open read transaction, terminated); it ran with `SUPABASE_DB_POOL_SIZE=4 SUPABASE_DB_RLS_POOL_SIZE=2`.
