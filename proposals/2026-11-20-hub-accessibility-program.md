@@ -208,3 +208,17 @@ regress.
 S0–S6 merged; axe baseline at **0** on all swept routes and stories; every primitive has an
 a11y story passing `assertPattern`; the 15 gaps above closed or each carried as a
 `TODO(handoff)` + ledger entry.
+
+## Open ends from S0 (spec 137, hub PR #702) — `TODO(handoff)` ledger
+
+Left open by the S0 gates slice on 2026-11-20; each is a decision or a follow-up, not a defect in the gates.
+
+1. **Workshop accessibility spec runs in Chromium only.** Its config also lists Firefox and WebKit; adding them costs two browser installs in the `a11y` job. `TODO(handoff)` at hub `scripts/a11y.mjs` (specs gate).
+2. **The page sweep's own ledger was never committed** (`tests/ui-audit/conformance-ledger.json`, spec 014): its compare prints "blocked: no ledger yet" and exits 0, so the six conformance rules gate nothing. S0 did not turn it on. Needs an owner decision under spec 014.
+3. **The sweep's strict runtime gate fails 135 of 149 pages in CI** (targets under 44 px, unnamed controls, duplicate IDs), so the sweep "captures" almost nothing. The axe pass runs before that gate; the gate itself is unchanged.
+4. **22 swept pages are `unmeasured`** in the page baseline (content never became ready in the sweep): `/agents/autonomous`, `/channels/[id]`, `/config`, `/finances/purchases/[id]`, `/killswitches`, `/notifications`, `/onboarding`, `/orgs`, `/orgs/plans`, `/plugins/[id]`, `/pos/catalog/[productId]/edit`, `/pos/tickets/[id]`, `/pulse`, `/scheduling/bookings/[id]/edit`, `/sessions/[sessionKey]/debug`, `/settings/gateways`, `/settings/organizations`, `/settings/pulse`, `/socials/campaigns/[campaignId]`, `/workforce`, `/workforce/issues/[id]`, `/workforce/projects/[id]/pipelines`. Their accessibility is not gated until they can be measured.
+5. **Only the CI viewport is gated** (compact-390 coarse). A wide-1440 baseline needs a local sweep (`bun run a11y --all --update-baseline` on a QA stack); the page gate was not run locally in S0.
+6. **Two story rows are `unstable`** in `tests/ui-audit/a11y-ledger.json`: the AttachmentTile thumbnail button has no accessible name until its image loads (fix in S1/S2, then remove the entry); the Sidebar wordmark contrast row flips 0 ↔ 2 between full runs, cause not found.
+7. **No per-rule waiver mechanism.** Debt is carried by the baseline; the sweep's allow-list type is closed over its six rules.
+8. **Engineering bundle sync pending:** minion_plugins PR #2 adds the gate to `minion-engineering`; after it merges, run `scripts/sync-minion-engineering-skills.sh` in minion-meta.
+9. **`assertPattern` does not check** Tab trapping in dialogs (needs real Tab keys), right-to-left arrow keys, or screen-reader output (S6).
