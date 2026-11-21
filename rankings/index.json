@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-21T20:17:10.837Z",
+	"generatedAt": "2026-11-21T20:47:23.571Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4720,6 +4720,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T18:47:17.857Z"
+		},
+		{
+			"key": "pr:minion-meta#1072",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1072 spec(144): stock value always adds up",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1072",
+			"sourceUpdatedAt": "2026-11-21T20:26:06Z",
+			"sourceFingerprint": "4f4beb72a1233c95e6eb0d48bdab40b400e6d47644f2c92f7fe2cb8779587daa",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 3
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Owner-directed future-proofing spec addresses a real stock-valuation discrepancy already found and repaired in production data.",
+			"evidence": [
+				"Data repair already applied: 9 FACES items... stock value (S/ 4,399.55)",
+				"Owner: apply the fix... and start the spec"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T20:47:23.388Z"
 		},
 		{
 			"key": "pr:minion-meta#936",
@@ -18656,6 +18688,40 @@
 			"scoredAt": "2026-11-19T18:48:21.281Z"
 		},
 		{
+			"key": "pr:minion_hub#705",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#705 feat(stock): trade products with a supplier (canje)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/705",
+			"sourceUpdatedAt": "2026-11-21T20:44:36Z",
+			"sourceFingerprint": "1172b24cf7c383dfc07bdbdd827a53c6cac308a04b229502e24d2db5f8d18ecc",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1066"
+			],
+			"rationale": "The canje feature from spec 142 is fully implemented with extensive tests and ready for review ahead of the actual trade.",
+			"evidence": [
+				"tests cover exchange legs, shortage refusal, and finance isolation",
+				"draft PR explicitly implements spec 142 referenced in pr:minion-meta#1066"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T20:47:23.388Z"
+		},
+		{
 			"key": "pr:minion-meta#1058",
 			"kind": "pr",
 			"stage": "development",
@@ -24402,8 +24468,8 @@
 			"repo": "minion-meta",
 			"title": "#1066 spec(142): trade products with a supplier (canje)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1066",
-			"sourceUpdatedAt": "2026-11-21T20:12:44Z",
-			"sourceFingerprint": "1449cf430b69334022442f75c2c7960de59eb680615f5bd55209ec99af093146",
+			"sourceUpdatedAt": "2026-11-21T20:41:44Z",
+			"sourceFingerprint": "2580505ecee9c8abd5aeadf2828e16774cbfe77922c1ac574b6c273060fd687c",
 			"score": 39,
 			"band": "low",
 			"axes": {
@@ -24412,20 +24478,22 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 4
+				"specification": 7,
+				"implementation": 2
 			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Well-specified draft feature PR explicitly gated on owner approval before code/merge and no trade has occurred yet, so it is not yet actionable as a board goal.",
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#705"
+			],
+			"rationale": "This spec's implementation already exists as a companion draft PR, so the two should be tracked as one goal pending owner approval.",
 			"evidence": [
 				"tagged data: owner approves before code and merges",
-				"owner: trade has not taken place yet, but I want to prepare the UI"
+				"pr:minion_hub#705 already implements this spec"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T20:17:10.562Z"
+			"scoredAt": "2026-11-21T20:47:23.388Z"
 		},
 		{
 			"key": "pr:minion-meta#808",
@@ -51223,21 +51291,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 2,
 				"implementation": 1
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The issue's own diagnosis identifies a transient provider outage/rate-limit affecting only 2 of 1293 candidates, explicitly calling it safe to retry rather than a genuine defect.",
+			"rationale": "The alert itself diagnoses a transient provider outage with a safe-retry recommendation, so it is not an actionable code or spec task.",
 			"evidence": [
-				"\"transient provider-availability fault, not a genuine task/spec failure\"",
-				"\"only 2 of 1293 goals were even attempted\"",
-				"\"safe to retry the run as-is\""
+				"Recommendation: safe to retry the run as-is",
+				"transient provider-availability fault, not a genuine task/spec failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:17:20.478Z"
+			"scoredAt": "2026-11-21T20:47:23.388Z"
 		},
 		{
 			"key": "issue:minion-meta#937",
