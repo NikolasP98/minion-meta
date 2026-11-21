@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-21T20:47:23.571Z",
+	"generatedAt": "2026-11-21T21:17:25.795Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2931,6 +2931,41 @@
 			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
+			"key": "pr:minion_hub#704",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#704 fix(a11y): DataTable claims the grid role only when it renders rows",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/704",
+			"sourceUpdatedAt": "2026-11-21T21:12:41Z",
+			"sourceFingerprint": "f44767cdf4652ccbb7ac2e77f84eda34fee627c5c69923b29a288c62cfe6b4c5",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1061",
+				"pr:minion-meta#1073"
+			],
+			"rationale": "A small, well-tested, root-caused fix that directly removes two of three live CI a11y regressions blocking the approved accessibility program.",
+			"evidence": [
+				"fixes 2 of 3 page-gate regressions that turned qa-stack red",
+				"255 data-table tests pass; bun run a11y --ci ok:true, 0 regressions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T21:17:25.624Z"
+		},
+		{
 			"key": "pr:minion-meta#1055",
 			"kind": "pr",
 			"stage": "development",
@@ -4653,40 +4688,6 @@
 			"scoredAt": "2026-11-18T18:47:17.857Z"
 		},
 		{
-			"key": "pr:minion_hub#704",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#704 fix(a11y): DataTable claims the grid role only when it renders rows",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/704",
-			"sourceUpdatedAt": "2026-11-21T19:37:30Z",
-			"sourceFingerprint": "ef964695cea5374b32a76f3173a5ab1fc312fb70fc2f78ea353160bea2f259a6",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"run:minion_hub#44937900638"
-			],
-			"rationale": "A scoped, tested a11y fix to the shared DataTable component with proof of passing tests and zero regressions is ready to merge.",
-			"evidence": [
-				"255 data-table tests pass, bun run a11y --ci reports ok: true with 0 regressions",
-				"gridRole only applies when rows render, fixing two aria-required-children violations"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T19:47:26.616Z"
-		},
-		{
 			"key": "pr:minion-meta#1050",
 			"kind": "pr",
 			"stage": "development",
@@ -4722,14 +4723,14 @@
 			"scoredAt": "2026-11-18T18:47:17.857Z"
 		},
 		{
-			"key": "pr:minion-meta#1072",
+			"key": "pr:minion-meta#1061",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion-meta",
-			"title": "#1072 spec(144): stock value always adds up",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1072",
-			"sourceUpdatedAt": "2026-11-21T20:26:06Z",
-			"sourceFingerprint": "4f4beb72a1233c95e6eb0d48bdab40b400e6d47644f2c92f7fe2cb8779587daa",
+			"title": "#1061 spec(137): accessibility gates first — CI fails on any new a11y regression (program S0)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1061",
+			"sourceUpdatedAt": "2026-11-21T21:14:37Z",
+			"sourceFingerprint": "a2d568e87ae5c2362285a9aed115ea31466b00468bdab21b1c9b2cd46d04b050",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -4738,20 +4739,55 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 3
+				"specification": 7,
+				"implementation": 4
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Owner-directed future-proofing spec addresses a real stock-valuation discrepancy already found and repaired in production data.",
+			"relatedKeys": [
+				"pr:minion_hub#704",
+				"pr:minion-meta#1073"
+			],
+			"rationale": "Owner-approved CI gate slice that turns existing a11y checks into a decrease-only ledger, a foundational control for the whole hub accessibility program though code is not yet written.",
 			"evidence": [
-				"Data repair already applied: 9 FACES items... stock value (S/ 4,399.55)",
-				"Owner: apply the fix... and start the spec"
+				"owner approved 2026-11-20: \"Approve, start S0 spec\"",
+				"Slice S0 of the approved hub accessibility program (proposal #1060)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T20:47:23.388Z"
+			"scoredAt": "2026-11-21T21:17:25.624Z"
+		},
+		{
+			"key": "pr:minion-meta#1072",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1072 spec(144): stock value always adds up",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1072",
+			"sourceUpdatedAt": "2026-11-21T20:49:22Z",
+			"sourceFingerprint": "addbbbbf521a589cd79b1fd830f7201479419ac50c8ee7feeb5e286b05dc3d7f",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Addresses a real recurring data-integrity defect (S/ 4,399.55 mismatch already repaired once) with a future-proofing engine fix, gated by required owner approval before code.",
+			"evidence": [
+				"9 FACES items had movements that did not add up to their stock value (S/ 4,399.55)",
+				"Tagged data: owner approves before code and merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T21:17:25.624Z"
 		},
 		{
 			"key": "pr:minion-meta#936",
@@ -6832,6 +6868,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T23:18:05.985Z"
+		},
+		{
+			"key": "pr:minion_hub#705",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#705 feat(stock): trade products with a supplier (canje)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/705",
+			"sourceUpdatedAt": "2026-11-21T20:52:25Z",
+			"sourceFingerprint": "f67da742bcf88a4a133beb0d298153c6593616616bd496442fade53c61ab0c46",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A fully spec-driven stock feature with transactional value-conservation logic, explicit rules, and new PGlite integration tests covering success, shortage, and finance isolation.",
+			"evidence": [
+				"Spec 142 — canje: trade products with a supplier",
+				"new stock.exchange.test.ts with real SQL covering cancel, shortage, finance isolation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T21:17:25.624Z"
 		},
 		{
 			"key": "pr:minion-meta#1062",
@@ -15030,39 +15098,6 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
-			"key": "pr:minion-meta#1061",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1061 spec(137): accessibility gates first — CI fails on any new a11y regression (program S0)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1061",
-			"sourceUpdatedAt": "2026-11-21T18:53:31Z",
-			"sourceFingerprint": "50d1ea25025fb9a87a2737ab8716accc836bfbcfdbc4494c0e448c925af24f90",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Draft spec PR for an approved a11y CI gating slice with clear AS-IS anchors and no behavior change, ready for review.",
-			"evidence": [
-				"status draft, part of approved program S0",
-				"owner approved proposal #1060 per summary",
-				"adds CI-only gates, no UI change"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T18:55:04.033Z"
-		},
-		{
 			"key": "pr:minion-meta#833",
 			"kind": "pr",
 			"stage": "development",
@@ -18686,40 +18721,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
-			"key": "pr:minion_hub#705",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#705 feat(stock): trade products with a supplier (canje)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/705",
-			"sourceUpdatedAt": "2026-11-21T20:44:36Z",
-			"sourceFingerprint": "1172b24cf7c383dfc07bdbdd827a53c6cac308a04b229502e24d2db5f8d18ecc",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1066"
-			],
-			"rationale": "The canje feature from spec 142 is fully implemented with extensive tests and ready for review ahead of the actual trade.",
-			"evidence": [
-				"tests cover exchange legs, shortage refusal, and finance isolation",
-				"draft PR explicitly implements spec 142 referenced in pr:minion-meta#1066"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T20:47:23.388Z"
 		},
 		{
 			"key": "pr:minion-meta#1058",
@@ -33209,40 +33210,6 @@
 			"scoredAt": "2026-11-16T10:19:54.006Z"
 		},
 		{
-			"key": "pr:minion_plugins#2",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_plugins",
-			"title": "#2 docs(minion-engineering): accessibility gate for minion_hub UI changes (spec 137)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_plugins/pull/2",
-			"sourceUpdatedAt": "2026-11-20T23:19:35Z",
-			"sourceFingerprint": "70194fd8f32b174a751209b2eeb7a297df58f659e0945e6c29160082c49ae420",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#702"
-			],
-			"rationale": "Docs-only skill update explicitly blocked on the hub PR merging first.",
-			"evidence": [
-				"Merge this after that PR",
-				"The command ships in NikolasP98/minion_hub#702"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T23:24:04.225Z"
-		},
-		{
 			"key": "pr:minion-meta#815",
 			"kind": "pr",
 			"stage": "development",
@@ -39298,17 +39265,16 @@
 				"implementation": 7
 			},
 			"confidence": 5,
-			"recommendation": "reframe",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "The startup-regression-attribution problem is plausible but the delivered XL observer/benchmark harness is explicitly inactive unless manually injected, so it produces no production effect as scoped.",
+			"rationale": "XL draft adds speculative startup-observer tooling with inert seams and no production behavior change, so value is unproven despite passing tests.",
 			"evidence": [
-				"observer and recovery seams are inactive unless explicitly injected",
-				"size: XL tag",
-				"benchmark-only markers absent from production dist"
+				"\"inactive unless explicitly injected by the qualification harness\"",
+				"\"61/61 passed\" performance harness, still draft, size: XL"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-14T20:47:42.827Z"
+			"scoredAt": "2026-11-21T21:17:25.624Z"
 		},
 		{
 			"key": "pr:minion_hub#635",
@@ -41175,6 +41141,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T17:47:29.103Z"
+		},
+		{
+			"key": "pr:minion-meta#1073",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1073 chore(skills): sync minion-engineering bundle from minion_plugins 196fced (a11y gate rule)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1073",
+			"sourceUpdatedAt": "2026-11-21T21:15:41Z",
+			"sourceFingerprint": "8761e0f1fb669a57aad9b31c8438b85cd179132d635e5b2045510ab6db4cd4a2",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#704",
+				"pr:minion-meta#1061"
+			],
+			"rationale": "A low-risk, already-verified mechanical skill-bundle sync with passing provenance checks and no behavior change.",
+			"evidence": [
+				"check-agent-skills: 3 bundles, 9 Python scripts, provenance and wiring OK",
+				"status: open, run in a clean checkout"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T21:17:25.624Z"
 		},
 		{
 			"key": "pr:minion-meta#555",
