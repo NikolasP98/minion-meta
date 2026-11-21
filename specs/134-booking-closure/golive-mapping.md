@@ -58,12 +58,16 @@ FACES is the only organization with appointments (604). Query: `~/.cache/claude-
   - none had a sale for the client that day, on the same visit or otherwise.
   - They look like series prepaid before the till existed, or paid outside it.
 
-## 4. Proposed go-live rules (owner to confirm)
+## 4. Go-live rules (owner decisions 2026-11-20)
 
-1. **Catalog price 0 counts as settled** when there is no sale (controls). This removes 81 + 15 + … from the problem without any data change.
-2. **The strict rule applies to appointments created on or after go-live.**
-   - Older ones (the 60 Por cerrar and any old session completed later) can be completed with a warning and a required reason: "Pagado antes del sistema" or "Pagado fuera del sistema" (audited).
-   - Alternatively, staff link them to a package grant.
+1. **Price 0 = new payment state "Sin costo"**, which counts as settled (owner: "maybe even a new state for price-less operations").
+2. **No bypass** (owner: "completed treatments should be counted as COMPLETED (given they pass the invoice and treatment completed gates)").
+   - The 322 already completed stay Completada.
+   - From go-live, every completion passes the payment gate and the treatment gate.
+   - The 60 priced Por cerrar appointments without a sale pass the payment gate by:
+     - being charged;
+     - "Registrar cobro anterior" for sessions paid before the till existed (audited, no shift cash);
+     - or a package grant.
 3. **Day one:**
    - the daily inbox shows "102 citas por cerrar";
    - the 142 open "Cita sin cerrar" notifications are resolved;

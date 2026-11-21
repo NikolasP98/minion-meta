@@ -39,6 +39,7 @@ Approval of pass 1, 2026-11-20: "I approve the rest, btw."
 - On completing an unscheduled appointment: "for best practice, it should have a time first"
 - "Consider adding to the team calendar as its own kanban view. when the staff user switches views from cal to kanban, keep the same date range filter … Switching back from the kanban to cal should also be smart, but I leave that logic up to you."
 - On the status tree proposed in chat: "Yes, it looks good. Just please make sure the state machine's logic is hardened."
+- On the go-live mapping (`golive-mapping.md`): "Yes, or maybe even a new state for price-less operations" (S/ 0) and "completed treatments should be counted as COMPLETED (given they pass the invoice and treatment completed gates)".
 - On payment: "faces takes payment before appts. But maybe you're right that appts should have separate payment statuses, since the appt status vs payment status can move independently. The only strict rule that FACES follows is that an appt cannot be counted as completed until all payments are settled."
 
 ## AS-IS (observed 2026-11-19, prod read-only + PostHog, hub `origin/master` `63c4313b`)
@@ -137,14 +138,20 @@ Keys already in use keep their value, so existing rows keep their meaning and on
 
 | State | When |
 |---|---|
-| Sin cobro | no linked sale line |
+| Sin costo | the service's catalog price is 0 and nothing was charged (controls); counts as settled |
+| Sin cobro | priced service, no linked sale line |
 | Adelanto | some paid, a balance remains |
 | Pagado | everything settled (a 0-price line counts as settled) |
 | Por cobrar | charged but unpaid |
 | Reembolsado | payments refunded |
 
-- Status and payment move independently (decision, owner 2026-11-20), with **one strict rule per organization**: "an appointment cannot be Completada until all payments are settled". It is an org setting, on for FACES.
-- Completing an unsettled appointment is refused with "Falta cobrar S/ {saldo}" and a **"Cobrar ahora"** action that opens the till for that appointment.
+- Status and payment move independently (decision, owner 2026-11-20).
+- **Completing requires two gates** (owner: "given they pass the invoice and treatment completed gates"):
+  - **Payment gate**: payment is Pagado or Sin costo. It is an org setting, on for FACES.
+  - **Treatment gate**: the completion dialog confirms the supplies used (spec 120, spec 135 checkpoints).
+- Failing the payment gate is refused with "Falta cobrar S/ {saldo}" and a **"Cobrar ahora"** action that opens the till for that appointment. There is no bypass with a reason.
+- **History is kept**: the 322 appointments already Completada stay Completada, including 99 priced ones with no linked sale (`golive-mapping.md`). The gates apply to completions from go-live on.
+- **Appointments paid before the till existed** (series sold before 2026-10-09 or outside it) pass the payment gate by recording that payment. "Registrar cobro anterior" links the appointment to a sale line marked as paid before the system, with its date and method. It is audited and adds no cash to today's shift. A package grant also passes it.
 - Spec 120's "products issue at the sale" is unchanged; payment never moves stock.
 
 ### 4. Por cerrar
@@ -207,7 +214,8 @@ Keys already in use keep their value, so existing rows keep their meaning and on
 | Reply "no": `cancelled` + session handed back → Por reconfirmar, nothing handed back (follow-up in spec 139) | reminders service test |
 | Past day, open: stays open forever, one alert per visit → Por cerrar at local midnight (clock via the gate; derived fallback), one daily inbox count | clock job test (idempotent, never touches closed/desagendada); `appointment-overdue` rule rewritten |
 | Completar unpaid (FACES rule on): allowed → refused "Falta cobrar S/ …" with "Cobrar ahora" | service + component test; org setting off → allowed |
-| Payment chip: none → Sin cobro / Adelanto / Pagado / Por cobrar / Reembolsado from linked lines | unit test of the derivation incl. 0-price lines |
+| Payment chip: none → Sin costo / Sin cobro / Adelanto / Pagado / Por cobrar / Reembolsado from linked lines and catalog price | unit test of the derivation incl. price-0 services |
+| Completion: one implicit step → payment gate + treatment gate; old prepaid sessions pass via "Registrar cobro anterior" (audited, no shift cash) | service + component tests; history untouched |
 | Desagendar: orphaned, stores `cancelled` → `unscheduled` with reason, keeps lines, session, reservation; time required before completion | service tests |
 | Inasistencia / Cancelar / Eliminar on 5 surfaces → Archivar (reason) + "Más… → Anular cita" | component tests per surface |
 | Anulada + all payments refunded: stays cancelled → Reembolsada (system) | service test |
@@ -280,8 +288,9 @@ A duplicate is archived with reason "Duplicada": closed, nothing refunded. A cli
 - **FR-005**: Sending a confirmation message MUST move Agendada to Por confirmar; a "yes" reply MUST move it to Confirmada; a negation MUST move it to Por reconfirmar and MUST NOT cancel or hand anything back (follow-up: spec 139).
 - **FR-006**: At org-local midnight after its day, an open appointment (Agendada, Por confirmar, Confirmada, Por reconfirmar, En atención) MUST become Por cerrar through the gate; reads MUST show it as Por cerrar even if the job has not run.
 - **FR-007**: The inbox MUST raise one daily "N citas por cerrar" notification per org linking to the tray, resolved at zero; the per-visit `appointment.overdue` notifications MUST stop and the open ones MUST be resolved on release.
-- **FR-008**: Each appointment MUST show a payment state (Sin cobro, Adelanto, Pagado, Por cobrar, Reembolsado) derived from its linked sale lines; 0-price lines count as settled.
-- **FR-009**: When the org setting "completar solo con pagos saldados" is on, Completar MUST be refused while payment is not Pagado, offering "Cobrar ahora". FACES MUST have it on.
+- **FR-008**: Each appointment MUST show a payment state (Sin costo, Sin cobro, Adelanto, Pagado, Por cobrar, Reembolsado) derived from its linked sale lines and the service's catalog price; Sin costo and Pagado count as settled.
+- **FR-009**: When the org setting "completar solo con pagos saldados" is on, Completar MUST be refused while payment is neither Pagado nor Sin costo, offering "Cobrar ahora", with no bypass. FACES MUST have it on. Appointments already Completada at go-live MUST stay Completada.
+- **FR-009b**: Staff MUST be able to "Registrar cobro anterior" on an appointment paid before the till existed: a sale line marked as paid before the system, with date and method, audited, not counted in the current shift's cash.
 - **FR-010**: Desagendar MUST be offered on every Por hacer appointment, store `unscheduled` with reason `no_vino` or `sin_fecha`, keep sale lines, session and reservation, free the slot, stop reminders, and require a new time before completion.
 - **FR-011**: Archivar MUST require a reason, store `archived`, release the reservation, and not hand back session or payments.
 - **FR-012**: Completing an appointment whose time is before the latest stock checkpoint covering one of its supplies (spec 135) MUST close it without issuing that supply, naming the checkpoint in the dialog.
