@@ -73,7 +73,7 @@ Both were typed in "Costo por: Unidad" and were caught by hand. They are the onl
    - "Ver" lists the item, the amount and the first movement where it diverges.
    - The same check runs in the stock reconciliation report (spec 122) and in a test that replays the engine.
 3. **The repair script is removed.** It was one-time, and its job is done; the reference in `scripts/sweep-hub-transactions.ts` is updated.
-4. **Last purchase cost** = the unit cost of the latest **registered receipt** that is not cancelled. Adjustments, reversals, canjes and drafts are excluded.
+4. **Last purchase cost** = the unit cost of the latest **registered receipt** that is not cancelled. Adjustments, reversals, canjes and drafts are excluded. *(Delivered early in hub #705, commit `90b5e3a`, with tests; this spec only verifies it.)*
 5. **Unit-vs-total warning on receipts.** When a line's unit cost is ≥ 2.5× or ≤ 1/2.5 of the item's average, the line shows a warning before saving:
    - "S/ 5,474.58 c/u es 22 veces el costo promedio (S/ 250.00). ¿Es el total de la línea?"
    - Next step: a one-click **"Es el total"** button switches that line to total mode, which gives S/ 61.51 c/u.
