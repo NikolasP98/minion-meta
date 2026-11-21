@@ -67,6 +67,7 @@ Invariants:
 | S3 Data | More datasets (Meta ads, leads, parties, stock) and saved queries with joins, each reviewed once. | Compiler tests per dataset; RBAC test per module. |
 | S4 Block kinds | Calculated card with formula tooltip, funnel stages, table with the filter button. | Block tests; visual parity with `/pos/funnel`. |
 | S5 Agent control (MCP) | A hub MCP endpoint, authorised by an org API key that carries a `sandbox` scope: list datasets and pages, read, write and remove elements, and write typed blocks (KPI, chart, table, list) from the block catalogue. | Protocol tests; a key without the scope is refused; a write is attributed to the key. |
+| S6 Sign-in (MCP login) | A person connects a harness by signing in; tools run with that person's role in one organization; connections can be listed and ended. Spec 143. | Role tests per tool; a live connection from Claude Code. |
 
 Order: S5 first (it works on today's elements and gives the agent a way in), then S1, S2, S4, S3.
 
