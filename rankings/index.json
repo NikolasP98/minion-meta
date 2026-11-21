@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-21T02:47:22.822Z",
+	"generatedAt": "2026-11-21T03:01:14.307Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1658,41 +1658,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T10:48:05.478Z"
-		},
-		{
-			"key": "pr:minion_hub#703",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#703 feat(mcp): sign in to the hub from an agent harness — tools run as you, with your role",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/703",
-			"sourceUpdatedAt": "2026-11-21T02:37:47Z",
-			"sourceFingerprint": "4f50c8f29df3dad54d599e07451e962f7d82d2f0d8839911f5a579aab179cf8f",
-			"score": 73,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1058"
-			],
-			"rationale": "Security-tagged MCP-login feature is fully specified with a plan and findings ledger and backed by an independent audit plus passing test/E2E suites, so it is actionable now pending the required human security/data gate.",
-			"evidence": [
-				"Independent security audit found nothing critical/high; remaining items fixed in second commit",
-				"Local end-to-end run: 37/37 checks passing",
-				"SQL integration test for OAuth spend/renewal/replay: 10/10 on throwaway Postgres 17"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T02:47:22.615Z"
 		},
 		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
@@ -28129,6 +28094,40 @@
 			"scoredAt": "2026-11-14T06:15:16.476Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-76f26ce09e5c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/mcp/oauth.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-76f26ce09e5c.md",
+			"sourceUpdatedAt": "2026-11-21",
+			"sourceFingerprint": "67ba4442fc704df56d45accecdf4736447111806fd49cf135a8c2ad7fca73dfb",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-fdcedcc97f88"
+			],
+			"rationale": "Stale OAuth connection pruning is a reasonable hygiene/security improvement but not urgent and lacks concrete scoping evidence beyond the TODO marker.",
+			"evidence": [
+				"TODO(handoff) marker: apps unused for 90 days are never pruned",
+				"file: src/server/mcp/oauth.service.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T03:01:14.111Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-777c7720745d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35758,6 +35757,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T11:17:18.080Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fdcedcc97f88",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/mcp/oauth-logic.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fdcedcc97f88.md",
+			"sourceUpdatedAt": "2026-11-21",
+			"sourceFingerprint": "3301a06f82bc96a0583214dfca3eb77c5c806629ea81f15a19afc38b365d3ebb",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-76f26ce09e5c"
+			],
+			"rationale": "CIMD discovery support could unblock some strict OAuth clients but no evidence of an active blocked integration makes urgency low.",
+			"evidence": [
+				"TODO(handoff): CIMD not supported, harnesses may be blocked",
+				"file: src/server/mcp/oauth-logic.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T03:01:14.111Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-ca055449de0c",
@@ -49809,6 +49842,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T06:33:08.618Z"
+		},
+		{
+			"key": "run:minion_hub#44858705161",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/44858705161",
+			"sourceUpdatedAt": "2026-11-21T02:58:37Z",
+			"sourceFingerprint": "9f64b5b71dbe99c32f2de6c094c4ab049bc2b38d9b0a74bc70fef5c95ebde181",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run on master, not a goal-worthy work item.",
+			"evidence": [
+				"push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-21T03:01:14.111Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
