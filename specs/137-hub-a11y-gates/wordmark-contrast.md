@@ -10,6 +10,7 @@ spec 137 shipped failed master on `/oauth/authorize` (`color-contrast`, `.wordma
 - File: [`wordmark-contrast.figcraft`](wordmark-contrast.figcraft) (page "Spec 137 · wordmark contrast", frames "137 / Marca Minion · as-is" and "· to-be").
 - Exported frames: [as-is](demo/wordmark-as-is.png), [to-be](demo/wordmark-to-be.png).
 - Interactive preview (toggle): https://claude.ai/artifact/FUxZ1KrpjAAu5vUcYUzrKy (private to the owner).
+- **Approved by the owner on 2026-11-21**, verbatim: "I saw the figcraft file. I approve the proposed to-be." This approves the design, not the merge of hub #704.
 
 ## AS-IS (hub master `3d39cbb6`)
 
