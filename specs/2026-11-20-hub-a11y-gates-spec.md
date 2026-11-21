@@ -2,8 +2,8 @@
 id: 2026-11-20-hub-a11y-gates-spec
 title: Accessibility gates first — CI fails on any new accessibility regression (a11y program S0)
 stage: spec
-status: review
-verdict: pending
+status: merged
+verdict: approved
 type: feature
 pass: 2
 created: 2026-11-20

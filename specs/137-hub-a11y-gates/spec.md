@@ -1,6 +1,6 @@
 ---
-status: review
-verdict: pending
+status: merged
+verdict: approved
 created: 2026-11-20
 updated: 2026-11-20
 repos: [minion_hub]
