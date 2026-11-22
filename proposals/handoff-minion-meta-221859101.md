@@ -99,22 +99,22 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34808
 - `NikolasP98/minion-meta@dev rankings/index.json:34840` — Admit guarded formula/relation types and required-on-create only",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L34840
-- `NikolasP98/minion-meta@dev rankings/index.json:39020` — the plan button is gated on pos:create, but server-side...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39020
-- `NikolasP98/minion-meta@dev rankings/index.json:42124` — tags are NOT inline-editable here while /pos/catalog ...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42124
-- `NikolasP98/minion-meta@dev rankings/index.json:42220` — add-only; rename / deactivate / max-days edits need a modal over",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42220
-- `NikolasP98/minion-meta@dev rankings/index.json:42252` — no calendar deep-link param exists yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42252
-- `NikolasP98/minion-meta@dev rankings/index.json:45332` — drop these two once plugin UIs get a JWT path (spec 043 R8)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45332
-- `NikolasP98/minion-meta@dev rankings/index.json:45401` — FilterValue (component) vs TableFilterValue (kit) generic mismatch",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45401
-- `NikolasP98/minion-meta@dev rankings/index.json:45502` — brief-debloat-c §3 asked for this to be wrapped in [something]",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45502
-- `NikolasP98/minion-meta@dev rankings/index.json:45639` — a drag cannot cross the runway's visible edge",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45639
+- `NikolasP98/minion-meta@dev rankings/index.json:39053` — the plan button is gated on pos:create, but server-side...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39053
+- `NikolasP98/minion-meta@dev rankings/index.json:42157` — tags are NOT inline-editable here while /pos/catalog ...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42157
+- `NikolasP98/minion-meta@dev rankings/index.json:42253` — add-only; rename / deactivate / max-days edits need a modal over",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42253
+- `NikolasP98/minion-meta@dev rankings/index.json:42285` — no calendar deep-link param exists yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L42285
+- `NikolasP98/minion-meta@dev rankings/index.json:45365` — drop these two once plugin UIs get a JWT path (spec 043 R8)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45365
+- `NikolasP98/minion-meta@dev rankings/index.json:45434` — FilterValue (component) vs TableFilterValue (kit) generic mismatch",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45434
+- `NikolasP98/minion-meta@dev rankings/index.json:45535` — brief-debloat-c §3 asked for this to be wrapped in [something]",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45535
+- `NikolasP98/minion-meta@dev rankings/index.json:45672` — a drag cannot cross the runway's visible edge",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L45672
 - `NikolasP98/minion-meta@dev rankings/index.json:49541` — additional custom fields lose their mailto link",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L49541
 - `NikolasP98/minion-meta@dev rankings/index.json:50115` — move to an ai flag on plugin flow-node manifests when a third AI action",
