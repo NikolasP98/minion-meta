@@ -2,8 +2,8 @@
 id: 145-calendar-phones
 title: Calendar on phones — the calendar takes the screen, one toolbar row, touch that scrolls, and a list view
 stage: spec
-status: draft
-verdict: pending
+status: approved
+verdict: approved
 pass: 4
 created: 2026-11-21
 updated: 2026-11-21
@@ -18,7 +18,7 @@ related: [137-hub-a11y-gates, 134-booking-closure]
 
 **Created**: 2026-11-21
 
-**Status**: Draft
+**Status**: Approved by the owner 2026-11-21 ("approved, cash shift in the … sheet is fine, start slice 1")
 
 **Input**: Owner, 2026-11-21: "I need you to improve the mobile experience for calendar views. […] consider: The component itself (usability on mobile devices, visibility, a11y, etc), the pages where its embedded, toolbars that affect its behaviors. On mobile, the calendar should be the main element and should occupy the grand majority of the screen's real-estate."
 
@@ -269,7 +269,7 @@ A manager reads a week as a list and checks how busy the month is.
 
 ## Assumptions
 
-- **Cash shift**: its row moves into the "…" sheet on phones. Keeping a 44 px strip visible instead would raise the chrome to 204 px (76% of 844). The owner has not confirmed this.
+- **Cash shift**: its row moves into the "…" sheet on phones. Owner, 2026-11-21: "cash shift in the … sheet is fine".
 - **Floating "+"**: owner decision, 2026-11-21: "I liked the \"+\" at the bottom. Make it interact with the agent bubble: \"+\" takes the bottom-right corner, and the agent bubble moves above it." An earlier draft had moved the "+" into the toolbar.
 - **A phone always opens on Día** unless the link names a view; the last view used is not remembered.
 - **Free gaps in the list** ("Libre 11:00 – 11:30 · + Agendar"), shown in the option C mock-up, are not in this spec: the calendar only knows each day's opening and closing time, so breaks would show as free. They need the server's slot calculation and are proposed as a follow-up.

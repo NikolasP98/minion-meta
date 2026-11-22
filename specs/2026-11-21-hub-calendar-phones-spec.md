@@ -2,12 +2,12 @@
 id: 2026-11-21-hub-calendar-phones-spec
 title: Calendar on phones — the calendar takes the screen, one toolbar row, touch that scrolls, and a list view
 stage: spec
-status: draft
+status: approved
 pass: 1
 created: 2026-11-21
 updated: 2026-11-21
 repos: [minion_hub]
-verdict: pending
+verdict: approved
 type: feature
 tags: [ui]
 ---
