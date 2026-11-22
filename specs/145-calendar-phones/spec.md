@@ -4,7 +4,7 @@ title: Calendar on phones — the calendar takes the screen, one toolbar row, to
 stage: spec
 status: draft
 verdict: pending
-pass: 3
+pass: 4
 created: 2026-11-21
 updated: 2026-11-21
 repos: [minion_hub]
@@ -66,16 +66,17 @@ Measured from the running pages (`.cal-root` top = 410 and 172; grid tops read o
 - POS: filters render inline in the calendar toolbar with no count (POS:1210-1223). The unscheduled tray is a toggle row plus a horizontal strip; a card can be dragged onto the calendar (mouse only) or tapped, which opens the new-appointment form for that service (`clickPick`, POS:1026-1037, 561-574).
 - SCHED: filters collapse into one button and a bottom sheet on phones (`CollapsibleFilters.svelte:28-50`). The list view is on. There is no right-click menu.
 - "Nueva cita" is the page-header button on both pages.
-- The assistant bubble floats over the bottom-right corner and covers the drawer's last action ([screenshot](asis/appt-event.jpg)).
+- The assistant bubble sits in the bottom-right corner by default. It can be dragged anywhere and remembers where it was left; dropping it near the bottom-right corner sends it back to the default (`FloatingAssistant.svelte:672-760`). It covers the drawer's last action ([screenshot](asis/appt-event.jpg)).
 
 ## TO-BE
 
 ### Page layout on phones (both pages, calendar layout)
 
 1. **App top bar** (56 px), unchanged.
-2. **One calendar toolbar row** (48 px): date label (opens the date picker, which has Today and month navigation) · view menu · Filters button with the count of active filters · "+" (new appointment) · "…" menu.
+2. **One calendar toolbar row** (48 px): date label (opens the date picker, which has Today and month navigation) · view menu · Filters button with the count of active filters · "…" menu.
 3. **Week strip** (56 px): previous-week arrow, seven day buttons (weekday letter and date), next-week arrow. The selected day is filled; today has a ring and the word "hoy" in its name. Not shown in Mes, and not shown on a phone held sideways.
 4. **The calendar area** fills the rest. Nothing else sits above it: at most 160 px of chrome, so it gets 81% of an 844 px screen and 75% of a 640 px screen.
+5. A round **"+" button** (new appointment) floats over the calendar's bottom-right corner, and the assistant bubble sits directly above it. The calendar leaves room at its bottom so the last row can be scrolled clear of the two buttons.
 
 Where today's chrome goes on phones while the calendar layout is showing:
 
@@ -84,7 +85,7 @@ Where today's chrome goes on phones while the calendar layout is showing:
 | POS section nav | a "Ir a" list in the "…" sheet (and the app menu, where it already is in module mode) |
 | Cash-shift row | a row in the "…" sheet ("Caja abierta · S/ 805.00") that opens the same shift actions; the "…" button shows a dot when the shift needs attention |
 | Page title | not shown; the date label is the heading |
-| "Nueva cita" button | the "+" in the toolbar |
+| "Nueva cita" button | the floating "+" in the bottom-right corner |
 | Unscheduled tray | a row in the "…" sheet ("131 servicios pagados sin agendar") that opens a bottom sheet with the same cards; the "…" button shows the count. Tapping a card opens the new-appointment form for that service, as today. |
 | Layout switcher (calendar / table / board) | the view menu |
 | Colours, fields, split, lanes | the "…" sheet |
@@ -139,6 +140,7 @@ A phone opens on **Día** when the address names no view. A link that names a vi
 | D6 | Status by colour → icon + name + accessible name; date changes announced | Mounted test of the name and the live region; a11y gates (spec 137) stay green |
 | D7 | Month chips → date + count; day tap opens the day | Browser test at phone width |
 | D8 | List rows without status, empty days missing, POS has no list → list on both pages with status and "Sin citas" | Mounted test |
+| D9a | "Nueva cita" in the page header; assistant bubble alone in the bottom-right corner → floating "+" in the corner, bubble above it, never overlapping | Mounted test of the bubble's position rule; browser test of both buttons' boxes on the calendar and after leaving it |
 | D9 | Unscheduled tray in the page flow → "…" sheet row with count; card tap still books | Browser test with touch input opens the form for an unscheduled service |
 | D10 | Desktop: layout, toolbar order and mouse behaviour unchanged | Existing desktop tests pass; `calendar-toolbar.mounted.test.ts` control-order assertions untouched; desktop screenshots match except block status lines |
 
@@ -191,6 +193,7 @@ Staff create an appointment with "+", by press-and-hold on a free slot, or from 
 **Acceptance Scenarios**:
 
 1. **Given** the calendar, **When** "+" is tapped, **Then** the new-appointment form opens for the selected day.
+4. **Given** the calendar on a phone, **Then** "+" is in the bottom-right corner and the assistant bubble is directly above it; **When** the person leaves the calendar, **Then** the bubble is back where it was.
 2. **Given** empty space, **When** it is pressed and held and dragged, **Then** a snapped block is drawn and the form opens with that time.
 3. **Given** a press-and-hold on empty space, **When** the finger lifts without dragging, **Then** nothing happens.
 
@@ -223,7 +226,9 @@ A manager reads a week as a list and checks how busy the month is.
 - The first visit from a new phone: the page may open once in the desktop arrangement before switching; later visits open directly in the phone layout.
 - Cancelled appointments stay struck through and reachable.
 - The cash shift is closed: the "…" row says so and offers the same actions. A person who cannot manage the shift sees its state only.
-- A person who cannot create appointments sees no "+".
+- A person who cannot create appointments sees no "+", and the assistant bubble stays in its usual corner.
+- The bubble was dragged somewhere else (for example the left edge): it stays there; only a bubble that would overlap the "+" is moved up.
+- A sheet or the appointment is open: the "+" is behind it and cannot be tapped.
 - Reduced-motion setting: no lift or slide animations.
 
 ## Requirements *(mandatory)*
@@ -231,7 +236,8 @@ A manager reads a week as a list and checks how busy the month is.
 ### Functional Requirements
 
 - **FR-001**: On phones, with the calendar layout showing, at most 160 px (top bar, one toolbar row, week strip) MUST sit above the calendar area on both pages, in both POS navigation modes.
-- **FR-002**: The toolbar row MUST hold the date label, the view menu, one Filters button with the active count, "+" and "…", each at least 44 px.
+- **FR-002**: The toolbar row MUST hold the date label, the view menu, one Filters button with the active count, and "…", each at least 44 px.
+- **FR-002a**: A floating "+" (new appointment) MUST sit in the bottom-right corner of the calendar on phones, and the assistant bubble MUST sit above it and never overlap it, whether the bubble is in its default place or was dragged into that corner. Leaving the calendar MUST return the bubble to where it was.
 - **FR-003**: The view menu MUST offer Día, 3 días, Mes and Lista on both pages, plus the table and board layouts. A phone MUST open on Día when the address names no view, and MUST honour a view named in the address.
 - **FR-004**: The week strip MUST select a day, move by week, and mark today and the selected day without relying on colour alone.
 - **FR-005**: The POS section links, the cash-shift actions and the unscheduled services MUST each be reachable in two taps from the calendar ("…", then the row).
@@ -264,7 +270,7 @@ A manager reads a week as a list and checks how busy the month is.
 ## Assumptions
 
 - **Cash shift**: its row moves into the "…" sheet on phones. Keeping a 44 px strip visible instead would raise the chrome to 204 px (76% of 844). The owner has not confirmed this.
-- **"+" in the toolbar**: the owner saw a floating "+" in the mock-up. The review found the assistant bubble is draggable and always paints on top, so a floating button cannot be kept clear of it. The "+" moved into the toolbar row and the unscheduled count onto "…". The owner has not seen this change.
+- **Floating "+"**: owner decision, 2026-11-21: "I liked the \"+\" at the bottom. Make it interact with the agent bubble: \"+\" takes the bottom-right corner, and the agent bubble moves above it." An earlier draft had moved the "+" into the toolbar.
 - **A phone always opens on Día** unless the link names a view; the last view used is not remembered.
 - **Free gaps in the list** ("Libre 11:00 – 11:30 · + Agendar"), shown in the option C mock-up, are not in this spec: the calendar only knows each day's opening and closing time, so breaks would show as free. They need the server's slot calculation and are proposed as a follow-up.
 - **Drag-to-resize by touch** is not offered (today's 6 px edge is not usable by finger either).
@@ -277,7 +283,7 @@ A manager reads a week as a list and checks how busy the month is.
 
 - A single tab stop with arrow-key navigation across the grid, and Enter booking the focused time. It changes the keyboard model on desktop and belongs to the accessibility program (meta proposal #1060).
 - Free gaps in the list (see Assumptions).
-- The assistant bubble covering the drawer's last action (seen in the screenshots; an existing issue on every page).
+- The assistant bubble covering the drawer's last action on other pages (seen in the screenshots; an existing issue).
 - `/pos/history` month calendar and the team time-off calendar (they use `@event-calendar`, not this component).
 - The public booking page.
 - New booking rules, statuses or permissions.

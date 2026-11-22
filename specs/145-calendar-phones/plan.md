@@ -10,7 +10,7 @@ Anchors: "BC" is `src/lib/components/scheduling/BookingCalendar.svelte`, "POS" i
 
 On phones the calendar becomes the page: top bar, one toolbar row, a week strip, then the calendar area. Page chrome is hidden with CSS and its functions move into the "…" sheet. Touch is fixed at the pointer-event level so a finger scrolls and press-and-hold creates or moves. A tap opens a summary sheet. The existing list view is turned on for both pages on phones, and the month view gets phone cells. Blocks get a status icon and name.
 
-The plan adds no view vocabulary, no floating buttons and no new move form. "3 días" is the existing week view with three columns. "Lista" is the existing `agenda` view. Press-and-hold extends the existing `longpress` action. "Mover a…" opens the drawer's existing reschedule form.
+The plan adds no view vocabulary and no new move form. The one floating button is the owner's "+" in the bottom-right corner, with the assistant bubble moved above it. "3 días" is the existing week view with three columns. "Lista" is the existing `agenda` view. Press-and-hold extends the existing `longpress` action. "Mover a…" opens the drawer's existing reschedule form.
 
 ## Technical Context
 
@@ -30,7 +30,7 @@ The plan adds no view vocabulary, no floating buttons and no new move form. "3 d
 
 **Constraints**: design-token contract (`lint:design`, `lint:tokens` debt may only decrease); en/es messages in the same commit, append-only; one hub gate at a time on this workstation; desktop toolbar order and mouse behaviour pinned by existing tests must stay green.
 
-**Scale/Scope**: one 5.4k-line component, two host pages, two layouts, 4 PRs, 4 new small files.
+**Scale/Scope**: one 5.4k-line component, two host pages, two layouts, the assistant launcher, 4 PRs, 6 new small files.
 
 ## Constitution Check
 
@@ -81,6 +81,9 @@ src/routes/(app)/scheduling/calendar/{+page.server.ts,PageBody.svelte}
 src/routes/(app)/pos/+layout.svelte                     # mounts ShiftDialogs; :has() rule hides nav and strip
 src/routes/(app)/scheduling/+layout.svelte              # :has() rule hides the section nav
 src/routes/+layout.svelte                               # sets the cookie once
+src/lib/state/ui/corner-reserve.svelte.ts                # NEW: space a page reserves in the bottom-right corner
+src/lib/components/scheduling/CalendarAddButton.svelte  # NEW: the floating "+"
+src/lib/components/layout/FloatingAssistant.svelte      # sits above a reserved corner
 messages/en.json, messages/es.json
 tests/e2e/ui-audit/calendar-mobile.spec.ts              # geometry + touch
 ```
@@ -123,7 +126,7 @@ Nothing new is stored.
 
 `compact` (boolean prop, default false) switches the toolbar markup only:
 
-- One row: date label button · view button · the host's `tools` snippet · "+" (rendered only when the new `onadd` prop is passed; hosts pass it only when the header's "Nueva cita" button would be enabled, POS:985) · "…" button with `kebabBadge` (number) and `kebabAttention` (dot).
+- One row: date label button · view button · the host's `tools` snippet · "…" button with `kebabBadge` (number) and `kebabAttention` (dot).
 - The date picker, the view options and the kebab content render inside bottom `Sheet`s. The view sheet lists Día, 3 días, Mes, Lista as radio rows calling the existing `onview`, then renders the host's existing `toolbarStart` snippet (the layout switcher) unchanged. The "…" sheet renders the existing kebab body and the existing `kebabItems` snippet.
 - `WeekStrip.svelte` renders under the toolbar in day, week and agenda views; CSS hides it when the screen is at most 500 px tall. It derives its seven days as `team/MemberCalendarStrip.svelte:20-59` does and shows no counts. In week and agenda views a day tap calls the component's internal `goToDay` (a scroll, no load); in day view it calls `ondate` (a navigation and load, as prev/next do today). Today is marked with a ring and "hoy" in the accessible name; the selected day with a filled background and `aria-current="date"`.
 - The desktop toolbar branch is untouched, so `calendar-toolbar.mounted.test.ts:103-121` keeps passing; the existing media rule (BC:4048-4096) keeps applying to it on coarse-pointer tablets.
@@ -137,6 +140,19 @@ Nothing new is stored.
 - **"Ir a"**: the POS page builds the list with `getAreaItems('pos', …).filter(canViewPath)` as `PosNav.svelte:13-19` does; labels only, no badges.
 - **Unscheduled**: the tray's `trayItem` snippet and its group markup (POS:1017-1095) are hoisted to top-level snippets and rendered both in the tray (desktop) and in a bottom `Sheet` (phone). In the sheet the cards are not `draggable` and have no right-click menu; a tap runs the existing `clickPick` (POS:561-574) and closes the sheet. The count goes to `kebabBadge`.
 - **POS filter count**: `activeFilterCount` = the same sum SCHED computes (SCHED:318-324) without `staff` and `kindId`, passed to `CollapsibleFilters` around `FilterToolbar` and `TagFilter`.
+
+### 4a. The floating "+" and the assistant bubble
+
+- `CalendarAddButton.svelte`: a `Button` (icon `Plus`, accessible name "Nueva cita"), 56 px, `position: fixed`, right and bottom `max(16px, env(safe-area-inset-*))`, `--layer-sticky`. The two pages render it when `compactCalendar` is true and the header's "Nueva cita" would be enabled (POS:985); it calls the same create handler. It is an ordinary element, so an open `Sheet`, drawer or dialog (all native top-layer dialogs) covers it and makes it inert without extra code.
+- `corner-reserve.svelte.ts`: `cornerReserve = $state({ bottom: 0 })` with `reserveCorner(px)` returning a release function. `CalendarAddButton` calls it from an effect (browser only, so nothing is written during server rendering) with `56 + 12` and releases on destroy.
+- `FloatingAssistant.svelte` (launcher placement, `:672-760, 921-942`):
+  - **Default place** (`pos` is null): the launcher's fixed `bottom` offset (`:942`) and the home target in `snapHome` (`:747`) add `cornerReserve.bottom`.
+  - **Dragged place**: the saved fraction (`frac`) is not changed. The position used for rendering is derived: if the launcher's box would overlap the reserved box (the bottom-right square of `reserve + margin`), its `top` is reduced to `vh - h - LAUNCH_MARGIN - cornerReserve.bottom`; otherwise it is `pos` as today. Dragging uses the same clamp, so the bubble cannot be dropped on the "+".
+  - The home zone (`HOME_ZONE`, `:683-685, 739-745`) is measured from the raised default place while a reserve is held.
+  - With `cornerReserve.bottom === 0` every expression returns today's value.
+  - The move uses the launcher's existing position transition (`:926-927`), so the bubble slides up when the calendar opens and back when it closes; reduced motion follows the existing token.
+- The assistant's open panel is anchored from the launcher (`:849-862`) and so follows it.
+- The calendar scroller gets `padding-bottom: calc(56px + 48px + 3 * 12px + env(safe-area-inset-bottom))` while compact and a "+" is shown, so the last block or list row can be scrolled above both buttons.
 
 ### 5. Touch
 
@@ -170,15 +186,16 @@ Nothing new is stored.
 1. `phone.svelte.ts`, cookie sync in the root layout; `phoneHint` and `viewInUrl` in both page loads; `parseCalendarPageView` / `calendarViewOf` fallback argument + unit tests; `compact` state and `compactCalendar` in both pages; shallow `replaceState` for the first visit.
 2. `CollapsibleFilters` `compact` prop.
 3. `ShiftDialogs.svelte` + layout context; `ShiftBanner` uses it. Mounted test: both dialogs still open from the banner on desktop.
-4. `compact` prop in the component: compact toolbar branch, three sheets, `onadd`, `kebabBadge`, `kebabAttention`; flip effect.
+4. `compact` prop in the component: compact toolbar branch, three sheets, `kebabBadge`, `kebabAttention`, bottom scroll padding; flip effect.
+4a. `corner-reserve.svelte.ts`, `CalendarAddButton.svelte`, the `FloatingAssistant` position rule; both hosts render the button when they can create.
 5. `WeekStrip.svelte` + story; runway anchoring on the date when `weekDays < 7`.
 6. Hosts: `weekDays`/`subBy` overrides; POS `features.agenda`; header and tray behind `!compactCalendar`; POS `activeFilterCount` + `CollapsibleFilters`; POS `kebabItems` rows (shift, "Ir a", unscheduled) and the hoisted tray snippets + sheet.
 7. `pos/+layout.svelte` and `scheduling/+layout.svelte` `:has()` rules.
-8. Messages (en + es): view names, "+" label, week-strip names, sheet titles, the three "…" rows, "Caja cerrada".
+8. Messages (en + es): view names, "+" accessible name ("Nueva cita"), week-strip names, sheet titles, the three "…" rows, "Caja cerrada".
 9. Tests:
    - unit: view fallback with and without the hint, explicit view wins, table/board return;
-   - mounted: compact toolbar has the five controls and none of the desktop ones; "+" absent without `onadd` and calls it when tapped; view sheet lists Día, 3 días, Mes, Lista and the layout switcher; week strip marks today and the selected day by attribute and name, not only class; POS filter count; shift row label for open, closed and no-permission; `action-scope.test.ts` extended to POS; `calendar-toolbar.mounted.test.ts` untouched;
-   - browser (`tests/e2e/ui-audit/calendar-mobile.spec.ts`, using its `mobile-fixture`): with the cookie set, the server HTML already has the compact toolbar; chrome above the calendar area ≤ 160 px at 390 × 844 and 360 × 640 on both pages, POS in full and module mode (module mode set through the same localStorage key `navMode` reads); no horizontal page scroll; toolbar controls ≥ 44 px; the three "…" rows open their targets, including the shift dialog; week strip changes the day; 3 días starts on the selected day and swipes; 844 × 390 hides the strip; resizing across 768 px keeps day and filters; without the cookie the page ends on Día with `date` and other parameters kept;
+   - mounted: compact toolbar has the four controls and none of the desktop ones; the "+" button calls the create handler and is absent when the person cannot create; the assistant position rule (default place raised by the reserve; a dragged place moved up only when it would overlap; saved place untouched; back to normal when the reserve is released); view sheet lists Día, 3 días, Mes, Lista and the layout switcher; week strip marks today and the selected day by attribute and name, not only class; POS filter count; shift row label for open, closed and no-permission; `action-scope.test.ts` extended to POS; `calendar-toolbar.mounted.test.ts` untouched;
+   - browser (`tests/e2e/ui-audit/calendar-mobile.spec.ts`, using its `mobile-fixture`): with the cookie set, the server HTML already has the compact toolbar; chrome above the calendar area ≤ 160 px at 390 × 844 and 360 × 640 on both pages, POS in full and module mode (module mode set through the same localStorage key `navMode` reads); no horizontal page scroll; toolbar controls ≥ 44 px; "+" is 56 px in the bottom-right corner, the assistant bubble is above it with no overlap, the last list row scrolls clear of both, and after navigating to another page the bubble is back in its corner; the three "…" rows open their targets, including the shift dialog; week strip changes the day; 3 días starts on the selected day and swipes; 844 × 390 hides the strip; resizing across 768 px keeps day and filters; without the cookie the page ends on Día with `date` and other parameters kept;
    - desktop screenshots of both pages at 1280 × 800 from the same spec, compared before and after.
 10. Phone layout stories for both pages (`src/lib/stories/Layouts/`).
 
@@ -220,7 +237,8 @@ Nothing new is stored.
 | Decide "phone" only in the browser | The server would draw the desktop chrome and seven columns first on every visit. |
 | A new hold recogniser file | `lib/actions/longpress.ts` already has the timer, slop, cancel and click swallow, and says to promote it when a second host appears. |
 | Install the `touchmove` blocker when the hold fires; fall back to `touch-action: none` | Browsers decide scroll handling at touch start; both come too late in the gesture. |
-| Floating "+" and unscheduled pill | The assistant launcher is a draggable `popover="manual"` in the top layer (`FloatingAssistant.svelte:923-935`); nothing can be kept clear of it. Toolbar "+" and a count on "…" need no assistant change. |
+| "+" in the toolbar row | The owner asked for the floating "+" in the bottom-right corner with the assistant above it (2026-11-21). |
+| Floating pill for unscheduled services | One floating button is the owner's choice; the count on "…" keeps the corner to two controls. |
 | Full-width paged staff columns in Día | The day scroller has no snap or scroll padding and no scroll tracking (BC:4144-4191, 3127), and an existing phone test pins readable staff columns with sideways scroll. |
 | A list of the tapped day under the month | Month is an endless vertically snapping scroller (BC:4178-4187); there is no "under". Opening the day is one tap and already exists. |
 | A new "Mover a…" form | `BookingDetailDrawer` already has it (`:269, 526-583`). |
@@ -238,6 +256,7 @@ Nothing new is stored.
 | Moving the shift dialogs out of `ShiftBanner` touches the till. | It is a move, not a rewrite: same markup and handlers, one mounted test that both dialogs still open from the banner, and the browser test opens them from the "…" row. |
 | The cookie says phone but the window is now wide (or the reverse). | `compact` follows the media query once hydrated, and the cookie is rewritten on every change. |
 | The scroll-aware drag maths change mouse drags too. | Existing drag tests run unchanged; a browser test drags with a mouse across an edge. |
+| The assistant position rule changes a component every page uses. | The rule only acts while a page holds the reserve; with no reserve the code path returns the same values as today, and a mounted test pins that. |
 | The assistant bubble can sit over a sheet's last row. | The sheets' content ends with bottom padding of the safe-area inset plus 72 px, which clears the bubble's default position. A bubble the user dragged elsewhere is their choice. |
 | Tablets (coarse pointer, wide) get touch behaviour with the desktop toolbar. | Intended; the browser test includes a 1024 × 768 touch run for scroll, hold and tap. |
 

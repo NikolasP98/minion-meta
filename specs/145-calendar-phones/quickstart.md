@@ -9,7 +9,8 @@ Use a clean hub clone, never the owner's checkout. Local stack: `bun run dev:loc
 3. Set two filters: the Filters button shows "2" on both pages.
 4. "…" on POS: the cash-shift row opens the shift actions; "Ir a" lists the POS sections; the unscheduled row shows the count, opens the cards, and a card opens the new-appointment form.
 5. View menu: Día, 3 días, Mes, Lista, then calendar / table / board. Table and board show today's page chrome.
-6. 3 días: three columns; swiping moves days. "+" opens the new-appointment form.
+6. 3 días: three columns; swiping moves days.
+6a. "+" is in the bottom-right corner with the assistant bubble directly above it; "+" opens the new-appointment form. Drag the bubble onto the "+": it settles above it. Drag it to the left edge: it stays there. Open another page: the bubble is back in its corner. The last list row scrolls clear of both buttons.
 7. Rotate to 844 × 390: the week strip hides, the toolbar stays.
 8. Resize across 768 px: the day and filters are kept.
 9. Desktop screenshots of both pages match the ones taken before the change.

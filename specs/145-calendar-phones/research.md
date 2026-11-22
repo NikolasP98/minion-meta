@@ -31,11 +31,12 @@ Each entry: decision, why, what else was considered. Evidence anchors are in [sp
 - **Decision**: move the tray's existing cards into a bottom sheet opened from the "…" sheet; a card tap opens the new-appointment form as it does today.
 - **Round 1**: the first draft said the tray was drag-only and invented tap-to-place. The cards already open the form on tap.
 
-## R6 · No floating buttons (changed in round 1)
+## R6 · The floating "+" and the assistant bubble (owner decision after review)
 
-- **Decision**: "+" in the toolbar row; the unscheduled count as a badge on "…".
-- **Why**: the assistant launcher is draggable and lives in the browser's top layer, so a floating button cannot be kept clear of it.
-- **Open**: the owner saw a floating "+" in the mock-up and has not seen this change.
+- **Decision**: a floating "+" in the bottom-right corner of the calendar on phones; the assistant bubble sits above it. The unscheduled count stays as a badge on "…".
+- **Why**: the owner asked for it after seeing the toolbar version: "I liked the \"+\" at the bottom. Make it interact with the agent bubble: \"+\" takes the bottom-right corner, and the agent bubble moves above it."
+- **How it avoids the round-1 objection** (the bubble is draggable and in the browser's top layer, so nothing can be layered over it): the two never overlap. A page reserves the corner; the bubble's default place is raised by that amount, and a bubble dragged into the corner is shown above it without changing its saved place.
+- **Round 1** had moved the "+" into the toolbar row.
 
 ## R7 · Moving without dragging (changed in round 1)
 

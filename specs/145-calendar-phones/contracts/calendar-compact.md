@@ -7,7 +7,6 @@ Every default reproduces today's behaviour.
 | Prop | Type | Default | Meaning |
 |---|---|---|---|
 | `compact` | `boolean` | `false` | Phone toolbar (one row + week strip, sheets instead of popovers), phone month cells, empty days in the list. |
-| `onadd` | `() => void` | none | Renders "+" in the compact toolbar. |
 | `kebabBadge` | `number \| null` | `null` | Count shown on the compact "…" button. |
 | `kebabAttention` | `boolean` | `false` | Dot on the compact "…" button. |
 | `onopen` | `(bookingId: string, opts?: { reschedule?: boolean }) => void` | as today | Second argument added; existing callers ignore it. |
@@ -45,3 +44,11 @@ Unchanged: `--cal-gutter`, `--cal-head-h`, `--cal-month-row`, `--cal-col-min`. N
 ## `CollapsibleFilters`
 
 New prop `compact?: boolean`: when passed it replaces the component's own media check (and makes the server render match).
+
+## Corner reserve (`lib/state/ui/corner-reserve.svelte.ts`)
+
+`reserveCorner(px: number): () => void` reserves space in the bottom-right corner (browser only) and returns a release function. `FloatingAssistant` keeps its launcher above the reserved space: the default place is raised, and a dragged place is raised only when it would overlap. The saved place is never changed. With nothing reserved the launcher behaves as today.
+
+## `CalendarAddButton`
+
+Props: `onclick: () => void`, `label: string`. A 56 px fixed button in the bottom-right corner that holds the corner reserve while mounted. Rendered by the two calendar pages, not by `BookingCalendar`.
