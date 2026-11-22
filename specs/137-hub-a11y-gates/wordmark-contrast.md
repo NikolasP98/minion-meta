@@ -1,6 +1,6 @@
 # Spec 137 follow-up: the public wordmark chip meets AA in every theme
 
-**Date**: 2026-11-21 | **Hub PR**: NikolasP98/minion_hub#704 | **Owner decision** (2026-11-21): "Fix the colour now, with a demo".
+**Date**: 2026-11-21 | **Hub PR**: NikolasP98/minion_hub#704 (merged to `master` as `5347ff01`) | **Owner decision** (2026-11-21): "Fix the colour now, with a demo".
 
 This is the one VISIBLE change made under spec 137. It exists because the page gate that
 spec 137 shipped failed master on `/oauth/authorize` (`color-contrast`, `.wordmark-minion`).

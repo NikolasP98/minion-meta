@@ -86,6 +86,10 @@ description: "Task list for spec 137 — accessibility gates first (a11y program
 
 Hub PR #702 was approved by the owner and squash-merged to `master` as `3d39cbb6` on 2026-11-21. All tasks done in hub PR #702 (every check green on `c8eccd11`), except the merge-dependent half of T030: minion_plugins PR #2 is open; the meta sync runs after it merges. T011/T012 used the PR's CI artifact (`--artifacts`) because no local QA stack was started. Baselines: stories 806, pages 336 (22 pages unmeasured), suppressions 84. Open ends: `proposals/2026-11-20-hub-accessibility-program.md`.
 
+## Status update (2026-11-21, after #704)
+
+Hub PR #704 (follow-up to #702) was approved by the owner and squash-merged to `master` as `5347ff01`. It fixed the three page-gate rows that failed master after #703 and #692: the `DataTable` grid role (only when rows render), the public wordmark chip contrast (visible change, owner-approved demo: [`wordmark-contrast.md`](wordmark-contrast.md)), and the page axe pass now waits for entry animations. Baselines after #704: pages 329 (22 unmeasured), stories 799, suppressions 84. The engineering-bundle sync (T030) is merged: minion_plugins #2 and minion-meta #1073.
+
 ## Dependencies
 
 T001 → T002 → Phase 2 → US1, US2 (need T004–T005). US3, US4, US5 are independent of each other and of US1/US2 except for their gate wiring in `scripts/a11y.mjs` (T020, T021, T024 after T004). US6 needs all gates. T011 needs a CI run of T008–T010. T030's sync depends on a merge the owner controls.
