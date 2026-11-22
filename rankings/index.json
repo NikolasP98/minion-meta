@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-22T03:16:48.210Z",
+	"generatedAt": "2026-11-22T03:47:23.801Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6225,38 +6225,6 @@
 			"scoredAt": "2026-11-16T07:36:10.693Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c4ef8f310a4a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c4ef8f310a4a.md",
-			"sourceUpdatedAt": "2026-10-11",
-			"sourceFingerprint": "68a74454b92b9bbcce90e8a7375c55627a2e4b9377d2262e940f37581171ba40",
-			"score": 61,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Production notification worker is gated behind missing deployment safety controls and a reconciliation note flags ambiguity about whether the finding is stale, so human review is needed before action.",
-			"evidence": [
-				"\"gate NOTIFICATION_WORKER=1 behind completion of all four\"",
-				"\"Flagged for a human rather than merged, since the closing rationale may still be correct\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T03:17:19.819Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-f0206dc8b63e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8942,6 +8910,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T05:48:58.413Z"
+		},
+		{
+			"key": "proposal:2026-09-26-hub-custom-columns-next-phases",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Relations, complete custom-property queries and minimal provisioning",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-26-hub-custom-columns-next-phases.md",
+			"sourceUpdatedAt": "2026-09-26",
+			"sourceFingerprint": "0a1c351d5782a1ffe5d626f2195f2f998d15e88f62852ec6f3ba79493879ceeb",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Strategic and broad proposal with clear AS-IS/TO-BE/DELTA but spans multiple large phases that need further slicing before any single piece is dispatch-ready.",
+			"evidence": [
+				"source audit found 41 production DataTable uses",
+				"CRM delegates pagination/export to server-side domain queries",
+				"implement each as a reviewed slice"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-22T03:47:23.600Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
@@ -13899,6 +13900,39 @@
 			"scoredAt": "2026-11-22T00:19:27.045Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c4ef8f310a4a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/ops/hub-worker-release.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c4ef8f310a4a.md",
+			"sourceUpdatedAt": "2026-10-11",
+			"sourceFingerprint": "68a74454b92b9bbcce90e8a7375c55627a2e4b9377d2262e940f37581171ba40",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Production-safety gate on NOTIFICATION_WORKER=1 but the finding itself is explicitly flagged as a possible stale duplicate pending human reconciliation.",
+			"evidence": [
+				"flagged for a human rather than merged since the closing rationale may still be correct",
+				"possible revival of a closed duplicate finding with differing marker wording",
+				"gates NOTIFICATION_WORKER=1 behind artifact publisher, rollback controller, and startup qualification"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-22T03:47:23.600Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d9076c262af0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14415,38 +14449,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:53:38.991Z"
-		},
-		{
-			"key": "proposal:2026-09-26-hub-custom-columns-next-phases",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Relations, complete custom-property queries and minimal provisioning",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-09-26-hub-custom-columns-next-phases.md",
-			"sourceUpdatedAt": "2026-09-26",
-			"sourceFingerprint": "0a1c351d5782a1ffe5d626f2195f2f998d15e88f62852ec6f3ba79493879ceeb",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 3,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Large multi-slice extension (relations, server-mode query planner, provisioning) is strategically valuable but still draft-stage with no bounded execution slice ready.",
-			"evidence": [
-				"\"The source audit found 41 production DataTable uses and several grids\"",
-				"\"Implement each as a reviewed slice\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T03:17:19.819Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1229461031",
@@ -16166,6 +16168,39 @@
 			"scoredAt": "2026-11-16T10:21:22.261Z"
 		},
 		{
+			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub evening batch 2026-10-10 — open ends (drop override, per-user shifts, unified sell history, filters across calendar views, DATE property formats)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-pos-sell-history-unified.md",
+			"sourceUpdatedAt": "2026-10-10",
+			"sourceFingerprint": "872f2bef387b9cf88ee95f3e633958a139576b379197fd49d6535de8b0c73ad9",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Detailed ledger of 12 varied-severity follow-ups from already-merged PRs that should be split into individually scoped fixes rather than one goal.",
+			"evidence": [
+				"drop override double-books like the tray does on occupied slots",
+				"no server pagination on /pos/history, TODO(handoff) at the loader",
+				"not browser-verified at multiple breakpoints across four PRs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-22T03:47:23.600Z"
+		},
+		{
 			"key": "proposal:handoff-minion-ai-1915380054",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17805,38 +17840,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T01:17:31.665Z"
-		},
-		{
-			"key": "proposal:2026-10-10-hub-pos-sell-history-unified",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub evening batch 2026-10-10 — open ends (drop override, per-user shifts, unified sell history, filters across calendar views, DATE property formats)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-10-hub-pos-sell-history-unified.md",
-			"sourceUpdatedAt": "2026-10-10",
-			"sourceFingerprint": "872f2bef387b9cf88ee95f3e633958a139576b379197fd49d6535de8b0c73ad9",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Ledger of 12 well-specified open ends from a shipped batch, several low-risk (UI persistence, timezone bucketing) but none urgent or independently actionable as a single paid slice.",
-			"evidence": [
-				"\"five hub PRs: #469...#470...#471...#472...#473\"",
-				"\"Not browser-verified...CI's browser-journey lane\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T03:17:19.819Z"
 		},
 		{
 			"key": "proposal:2026-10-14-hub-global-class-selector-lint",
@@ -48328,20 +48331,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 3,
+				"implementation": 2
 			},
 			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Transient dual-provider failure on one ranking batch that is already resumable/idempotent with no underlying task defect.",
+			"rationale": "Self-diagnosed as transient dual-provider flakiness on a resumable/idempotent ranking run, not an actionable work item.",
 			"evidence": [
-				"\"fallback to codex also failed or returned invalid JSON\"",
-				"\"Recommendation: retry the run; ranking appears resumable/idempotent\""
+				"batches 1-4 completed cleanly, 109 candidates still pending",
+				"ranking appears resumable/idempotent",
+				"reads as transient provider flakiness, not a genuine task failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T03:17:19.819Z"
+			"scoredAt": "2026-11-22T03:47:23.600Z"
 		},
 		{
 			"key": "issue:minion-meta#968",
