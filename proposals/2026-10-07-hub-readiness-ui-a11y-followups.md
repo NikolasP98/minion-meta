@@ -3,7 +3,7 @@ id: 2026-10-07-hub-readiness-ui-a11y-followups
 title: Open-items ledger for the readiness UI/a11y batch (HC-043, HC-028, UI-002, HC-029, HC-027, GW-027)
 status: draft
 created: 2026-10-07
-updated: 2026-10-07
+updated: 2026-11-20
 repos: [minion_hub, minion]
 tags: [todo, handoff-sweep, ui, security, test]
 value: 6
@@ -137,6 +137,16 @@ Re-doing any of the six closed findings; GW-024 (owned by the readiness program)
 - Every numbered row has a closing commit sha or a rejection reason.
 - The two `git grep` commands in AS-IS return no rows that are absent from this file.
 - `proposals/index.json` regenerated (`node scripts/proposal-index.mjs`) on every edit.
+
+## Merged into the accessibility program — 2026-11-20
+
+The a11y rows (#1–#10, U2, U3, U8, U9, U10) are now carried by
+`proposals/2026-11-20-hub-accessibility-program.md` § "Prior ledger merged in", which maps each
+to a program slice. Re-checked on hub `3677e35a`: all 12 hub markers listed in AS-IS are still in
+the code (line numbers have drifted; the program proposal has the current ones). One change:
+row #2's solarized-light entry was cleared by token contract 1.1.0
+(`scripts/qa/hc043/resolve.ts:92`); its gruvbox-light entry remains (`:93`). Rows #11, #12, #13,
+U1, U4, U5, U6 and U7 stay owned by this ledger.
 
 ## Reconciliation merge — 2026-10-07
 
