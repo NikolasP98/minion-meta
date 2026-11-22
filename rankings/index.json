@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-22T04:46:45.724Z",
+	"generatedAt": "2026-11-22T05:17:16.991Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3490,15 +3490,15 @@
 			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Root-caused hotfix for a production bug blanking the POS cart, with passing tests and clear evidence, ready to merge.",
+			"rationale": "A one-line Svelte keying fix resolves a reproducible render crash that has blocked all sales on an affected device for 14 days, validated by 192 green tests.",
 			"evidence": [
-				"0 sales finished in 14 days on the affected device",
-				"192 tests green; new regression case fails on master",
-				"lint:design/lint:tokens/prettier all pass"
+				"0 sales finished in 14 days on the affected device per PostHog",
+				"192/192 vitest cases green including a new regression case",
+				"root cause: duplicate each_key collision between booking and product lines"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T04:47:39.103Z"
+			"scoredAt": "2026-11-22T05:17:16.797Z"
 		},
 		{
 			"key": "proposal:2026-11-20-hub-accessibility-program",
@@ -20566,7 +20566,7 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 6,
 				"implementation": 6
 			},
 			"confidence": 6,
@@ -20574,14 +20574,15 @@
 			"relatedKeys": [
 				"proposal:merge-scan-minion-ai-3cafb0e"
 			],
-			"rationale": "Several bounded null-check and logging fixes across the tool-governance pipeline should be merged with the adjacent merge-scan proposal into one quality-hardening goal.",
+			"rationale": "Two high-severity unchecked-access risks in core tool-governance and tool-search code plus three medium findings warrant consolidation with the adjacent merge-scan proposal into a single minion-ai hardening goal.",
 			"evidence": [
-				"high unchecked-access at tool-policy-pipeline.ts:104 risking TypeError",
-				"empty-catch at hub-query-tools.ts:213 hides tool-init failures"
+				"high unchecked-access in tool-policy-pipeline.ts:104 risking TypeError",
+				"high empty-catch in hub-query-tools.ts:213 hiding tool init failures silently",
+				"medium hardcoded timeout constant in hub-common.ts:29"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T04:47:39.103Z"
+			"scoredAt": "2026-11-22T05:17:16.797Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-12f7ab774cda",
@@ -34422,6 +34423,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T01:03:57.661Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-3cafb0e",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 3cafb0e",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-3cafb0e.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "aa3436546c6054b93993cda6f435dc47059cd223cbbfeaf381157cc2686ac86a",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:merge-scan-minion-ai-51b3968"
+			],
+			"rationale": "A single medium unchecked-access finding in a test file is better consolidated with the adjacent same-repo merge-scan proposal into one cleanup goal.",
+			"evidence": [
+				"medium unchecked-access in swarm-status-capture.test.ts:80 from .find() without null check"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-22T05:17:16.797Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-59d7c8f",
@@ -48364,20 +48398,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 4,
 				"implementation": 2
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Self-diagnosed transient provider outage with no task-logic defect and an explicit safe-to-retry recommendation.",
+			"rationale": "The automated diagnosis already identifies this as a transient provider outage with no logic or spec defect, so it should just be retried rather than tracked as a goal.",
 			"evidence": [
-				"Diagnosis: transient infra fault, not a task-logic failure",
-				"Recommendation: safe to retry the run as-is"
+				"diagnosis: transient infra fault, not a task-logic failure",
+				"recommendation: safe to retry the run as-is"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T04:47:39.103Z"
+			"scoredAt": "2026-11-22T05:17:16.797Z"
 		},
 		{
 			"key": "issue:minion-meta#985",
@@ -49111,39 +49145,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T12:18:02.058Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-3cafb0e",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 3cafb0e",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-3cafb0e.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "aa3436546c6054b93993cda6f435dc47059cd223cbbfeaf381157cc2686ac86a",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:merge-scan-minion-ai-51b3968"
-			],
-			"rationale": "A single small test-file null-check finding is better consolidated with the sibling merge-scan proposal into one cleanup goal than tracked alone.",
-			"evidence": [
-				"medium unchecked-access at test/ci/swarm-status-capture.test.ts:80"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T04:47:39.103Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-cc90bff",
