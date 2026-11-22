@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-22T17:16:48.985Z",
+	"generatedAt": "2026-11-22T17:47:00.807Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -5585,38 +5585,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:39:28.987Z"
-		},
-		{
-			"key": "issue:minion-meta#973",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#973 [monitor:unstick] run bd383fd7: ranking catalog refused — pixel-agents source unavailable",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/973",
-			"sourceUpdatedAt": "2026-11-08T16:17:24Z",
-			"sourceFingerprint": "e6c4db54590c088980c1bec5cd3e2ac4dc0f29880f90633b5ab5413ae639313d",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A fail-fast guard is blocking the ranking catalog because the pixel-agents source is unavailable, which needs human investigation to restore ranking runs.",
-			"evidence": [
-				"board-ranking-catalog.mjs (line 107) throws rather than emit a partial catalog when a repo source cannot be resolved",
-				"missing source is 'pixel-agents', exit code 1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T17:17:09.582Z"
 		},
 		{
 			"key": "pr:minion-meta#1065",
@@ -18622,6 +18590,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:28:08.686Z"
+		},
+		{
+			"key": "issue:minion-meta#973",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#973 [monitor:unstick] run bd383fd7: ranking catalog refused — pixel-agents source unavailable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/973",
+			"sourceUpdatedAt": "2026-11-08T16:17:24Z",
+			"sourceFingerprint": "e6c4db54590c088980c1bec5cd3e2ac4dc0f29880f90633b5ab5413ae639313d",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A fail-fast guard in board-ranking-catalog.mjs is blocking rank runs because the pixel-agents source is unavailable, and the diagnosis already pinpoints the exact guard and fix path.",
+			"evidence": [
+				"guard at board-ranking-catalog.mjs line 107 throws when a repo source cannot be resolved",
+				"missing source identified as 'pixel-agents', exit code 1, single throw site, no ambiguity"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-22T17:47:00.610Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
