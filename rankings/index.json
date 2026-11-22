@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-22T10:16:46.219Z",
+	"generatedAt": "2026-11-22T12:47:43.260Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2645,6 +2645,40 @@
 			"scoredAt": "2026-11-18T20:48:27.701Z"
 		},
 		{
+			"key": "proposal:2026-10-17-agent-dynamic-tools",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Discover current authorized tools and answer catalog questions directly",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-17-agent-dynamic-tools.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "5a92edd2880d198f48ea83e2e1db5b767205c615eccfe4c3110c74e982b73f33",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-10-17-agent-dynamic-tools-spec"
+			],
+			"rationale": "Approved proposal with active spec and open PRs is blocked on an owner-gated security-baseline exception before implementation can proceed.",
+			"evidence": [
+				"Gateway PR333 remains blocked by the secret-scan baseline rule pending owner authorization",
+				"Spec status is implementing with cross-repo contract already defined"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-22T12:47:43.080Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-1961730030",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -2846,6 +2880,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T21:17:37.653Z"
+		},
+		{
+			"key": "spec:2026-10-17-agent-dynamic-tools-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Current tools and answer-first business queries",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-17-agent-dynamic-tools-spec.md",
+			"sourceUpdatedAt": "2026-10-18",
+			"sourceFingerprint": "c00e85cb2277bfa4ddbdb89bf84b3b05cbf13afc4bff6094125b5b66b603fb6d",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-10-17-agent-dynamic-tools"
+			],
+			"rationale": "Detailed implementing-stage spec with a concrete cross-repo tool-catalog contract driving active gateway and hub work.",
+			"evidence": [
+				"Defines explicit tool-catalog JSON contract with schemaVersion and revision hashing",
+				"Status is implementing against a stated source baseline"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-22T12:47:43.080Z"
 		},
 		{
 			"key": "issue:minion-meta#595",
@@ -3276,22 +3344,22 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 6
+				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [
 				"spec:2026-10-18-assistant-navigation-confirmation-spec",
-				"proposal:2026-10-17-agent-dynamic-tools"
+				"proposal:postmerge-minion-hub-12f7ab774cda"
 			],
-			"rationale": "Bounded, clearly specified fix for the assistant falsely claiming navigation and for untrusted model-triggered page changes, with no external blocker noted.",
+			"rationale": "Well-specified fix for the assistant falsely claiming navigation occurred is already moving into an implementing-stage spec.",
 			"evidence": [
-				"Hub permits model-generated navigation fences and native browser tool calls to change the page, and its message renderer can label an unexecuted fence as Opened",
-				"Automatic navigation... and changes to gateway CI resource allocation are out of scope"
+				"MarkdownMessage.svelte synthesizes Opened text independent of execution results",
+				"Linked spec status is implementing with a DELTA verification table"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T11:47:46.937Z"
+			"scoredAt": "2026-11-22T12:47:43.080Z"
 		},
 		{
 			"key": "proposal:2026-10-21-windows-qualification-kernel-containment",
@@ -3449,23 +3517,22 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 9,
+				"specification": 8,
 				"implementation": 7
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"proposal:2026-10-18-assistant-navigation-confirmation",
-				"spec:2026-10-17-agent-dynamic-tools-spec"
+				"proposal:2026-10-18-assistant-navigation-confirmation"
 			],
-			"rationale": "Highly detailed DELTA/invariant table and verification plan make this navigation-safety fix immediately actionable with no stated blocker.",
+			"rationale": "Clear implementing-stage spec with enumerated invariants and a DELTA/verification table directly fixing a false-success assistant bug.",
 			"evidence": [
-				"hub.navigate validates a visible, permitted internal destination and returns a proposal with navigated:false",
-				"Run focused tool/runner/rendering tests...bun run check, bun run test, bun run build"
+				"Lists numbered invariants (e.g., hub.navigate never invokes goto)",
+				"DELTA table maps each boundary change to required evidence"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T11:47:46.937Z"
+			"scoredAt": "2026-11-22T12:47:43.080Z"
 		},
 		{
 			"key": "pr:minion_hub#606",
@@ -5009,41 +5076,6 @@
 			"scoredAt": "2026-11-21T08:31:05.042Z"
 		},
 		{
-			"key": "proposal:2026-10-17-agent-dynamic-tools",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Discover current authorized tools and answer catalog questions directly",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-17-agent-dynamic-tools.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "5a92edd2880d198f48ea83e2e1db5b767205c615eccfe4c3110c74e982b73f33",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-17-agent-dynamic-tools-spec",
-				"proposal:2026-10-18-assistant-navigation-confirmation"
-			],
-			"rationale": "Dynamic-tool/answer-first work is extensively specified and partly drafted but its gateway PR remains blocked pending owner-authorized security baseline change.",
-			"evidence": [
-				"PR333 remains blocked by the repository rule that an implementation branch cannot allowlist its own secret-scan findings",
-				"Selection defaults remain shadow pending task-quality evaluation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T11:47:46.937Z"
-		},
-		{
 			"key": "proposal:2026-11-06-agent-transcript-evals-and-runtime-improvements",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5487,41 +5519,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T05:17:26.057Z"
-		},
-		{
-			"key": "spec:2026-10-17-agent-dynamic-tools-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion",
-			"title": "Current tools and answer-first business queries",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-17-agent-dynamic-tools-spec.md",
-			"sourceUpdatedAt": "2026-10-18",
-			"sourceFingerprint": "c00e85cb2277bfa4ddbdb89bf84b3b05cbf13afc4bff6094125b5b66b603fb6d",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:2026-10-17-agent-dynamic-tools",
-				"spec:2026-10-18-assistant-navigation-confirmation-spec"
-			],
-			"rationale": "Technical contract for dynamic tool discovery is detailed and in the implementing stage but downstream rollout is gated on an unresolved owner-authorization step.",
-			"evidence": [
-				"Gateway accepts only supported schemaVersion, bounded declarations, unique safe tool names...",
-				"status: implementing"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T11:47:46.937Z"
 		},
 		{
 			"key": "spec:2026-10-22-whatsapp-member-agents-spec",
@@ -20697,22 +20694,23 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 5,
 				"implementation": 3
 			},
 			"confidence": 4,
-			"recommendation": "group",
+			"recommendation": "prune",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-1d6db60d6d7b"
+				"proposal:2026-10-18-assistant-navigation-confirmation",
+				"spec:2026-10-18-assistant-navigation-confirmation-spec"
 			],
-			"rationale": "Auto-filed TODO about missing request-bound intent in global-tools.ts points to the same unmerged proposal as a sibling finding in forms.ts, so they should become one goal.",
+			"rationale": "Auto-filed TODO-handoff finding is redundant with the already-tracked navigation-confirmation proposal and spec it explicitly cites.",
 			"evidence": [
-				"TODO(handoff) cites proposals/2026-10-18-assistant-navigation-confirmation.md",
-				"diagnosis says fix direction 'likely' outlines the spec, indicating speculative auto-diagnosis"
+				"Marker text points directly to proposals/2026-10-18-assistant-navigation-confirmation.md",
+				"Finding is from merged PR #570, same scope as the forms.ts finding"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T12:17:23.418Z"
+			"scoredAt": "2026-11-22T12:47:43.080Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1d6db60d6d7b",
@@ -20731,22 +20729,23 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
+				"specification": 5,
 				"implementation": 3
 			},
 			"confidence": 4,
-			"recommendation": "group",
+			"recommendation": "prune",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-12f7ab774cda"
+				"proposal:2026-10-18-assistant-navigation-confirmation",
+				"spec:2026-10-18-assistant-navigation-confirmation-spec"
 			],
-			"rationale": "Same root cause as the global-tools.ts finding (native effects lacking request-bound intent) referencing the identical proposal, warranting a combined goal.",
+			"rationale": "Auto-filed TODO-handoff finding duplicates scope already owned by the navigation-confirmation proposal and its implementing spec.",
 			"evidence": [
-				"TODO(handoff) cites same proposals/2026-10-18-assistant-navigation-confirmation.md",
-				"both findings originate from the same merged PR #570"
+				"Marker text cites proposals/2026-10-18-assistant-navigation-confirmation.md for the fix direction",
+				"Finding is from the same merged PR #570 as the global-tools.ts finding"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-15T12:17:23.418Z"
+			"scoredAt": "2026-11-22T12:47:43.080Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-37ac95d53900",
