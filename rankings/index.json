@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T08:58:26.095Z",
+	"generatedAt": "2026-11-23T09:17:49.361Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4853,8 +4853,8 @@
 			"repo": "minion_hub",
 			"title": "#721 fix(stock): stock value always adds up — residuals booked, gaps shown, unit-vs-total warning",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/721",
-			"sourceUpdatedAt": "2026-11-23T08:53:34Z",
-			"sourceFingerprint": "06181c3e4304699f84e7bbd3de827a3c53ea35fa842f9f24482d5e32fd03b070",
+			"sourceUpdatedAt": "2026-11-23T09:07:17Z",
+			"sourceFingerprint": "dd796e49197e1ebf4a20e899204f48d15657169166b53c090145de2ea1d3f4de",
 			"score": 63,
 			"band": "medium",
 			"axes": {
@@ -4868,18 +4868,15 @@
 			},
 			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1072"
-			],
-			"rationale": "Ready, test-backed PR implementing spec 144's stock-integrity fix, pending merge of its stacked base PR.",
+			"relatedKeys": [],
+			"rationale": "Mature, tested draft PR fixing stock-value ledger drift and surfacing valuation gaps, with local gates passing and ready for review.",
 			"evidence": [
-				"336 scoped tests passed locally",
-				"stacked on #705, merge after it",
-				"implements spec 144"
+				"336 scoped tests passed; bun run check clean except 2 pre-existing errors",
+				"FR-001–FR-005 implemented with new ledger-integrity tests and documented deviations"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:58:25.893Z"
+			"scoredAt": "2026-11-23T09:17:49.121Z"
 		},
 		{
 			"key": "pr:minion-meta#1050",
@@ -11186,39 +11183,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T01:17:17.203Z"
-		},
-		{
-			"key": "pr:minion_hub#705",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#705 feat(stock): trade products with a supplier (canje)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/705",
-			"sourceUpdatedAt": "2026-11-23T08:34:24Z",
-			"sourceFingerprint": "c774a0bd98174f8f41811c80a367c1e8915a83bbbd7d11ec68f11e3b70c4db6d",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The canje feature is extensively specified and already implemented with transaction-level value-splitting logic and dedicated PGlite tests.",
-			"evidence": [
-				"new exchange entry type with submit-time validation rules",
-				"embedded PGlite tests cover split, shortage refusal, cancel, and finance isolation",
-				"status draft, ready for review"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:47:45.568Z"
 		},
 		{
 			"key": "pr:minion-meta#885",
@@ -20678,7 +20642,7 @@
 			"title": "Handoff marker — src/routes/api/marketplace/install/+server.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-99382227.md",
 			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "589474d15d6ce8fc91a0a5c1d24c1c65e341aa3790fc21e52b0bcb88883b8ea7",
+			"sourceFingerprint": "914bac1a6253e44e324436df0e36dfeb3ecaef73e2a12e9903fa6b304786bbe9",
 			"score": 43,
 			"band": "low",
 			"axes": {
@@ -20687,23 +20651,19 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 3,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 4
 			},
 			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-4bd0f04be997"
-			],
-			"rationale": "Bare marker duplicate of the already-approved, more fully diagnosed post-merge finding for the same file and issue.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single security-relevant TODO about marketplace install authorization gating has a clear location but an incomplete description of the missing check.",
 			"evidence": [
-				"same file src/routes/api/marketplace/install/+server.ts:54",
-				"same marketplace entitlement-gating marker text",
-				"companion proposal is already status: approved with a fix direction"
+				"src/routes/api/marketplace/install/+server.ts:54 marked as gated only by marketplace entitlement"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:58:25.893Z"
+			"scoredAt": "2026-11-23T09:17:49.121Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-184419011",
@@ -21945,6 +21905,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T22:48:03.454Z"
+		},
+		{
+			"key": "run:minion_hub#45143068912",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "Release notes",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45143068912",
+			"sourceUpdatedAt": "2026-11-23T08:59:49Z",
+			"sourceFingerprint": "d02730cdb2ba078bcd19217f3560082a7df392bece5d258b61e4e862a8e237d7",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The release-notes workflow failed on a push to master, which drives the in-app changelog per repo policy, but no failure detail exists yet to scope a fix.",
+			"evidence": [
+				"status failure, push on master",
+				"release-notes workflow generates hub's /changelog per project docs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T09:17:49.121Z"
 		},
 		{
 			"key": "issue:minion-meta#1059",
@@ -29816,7 +29808,7 @@
 			"title": "Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1194287278.md",
 			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "c61ebcbf0cb61b2db45ba61be5fa9c47e4c434ea4ee7b02b769c808c788c2912",
+			"sourceFingerprint": "0395a9094f226e7b9a29d17762e60481a5c40dcef6c92147182cae294aea81f5",
 			"score": 36,
 			"band": "low",
 			"axes": {
@@ -29826,21 +29818,18 @@
 			},
 			"readiness": {
 				"specification": 3,
-				"implementation": 2
+				"implementation": 3
 			},
 			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-2303234027"
-			],
-			"rationale": "Seven unscoped behavioral markers in a large scheduling component would form a more effective single cleanup goal alongside the related drawer markers.",
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles seven unrelated TODO markers across one large file into a single proposal with no unifying outcome, so it needs splitting into scoped specs before it is actionable.",
 			"evidence": [
-				"7 TODO(handoff) markers spanning filtering, drag, and RBAC-adjacent behavior",
-				"status draft, not yet triaged into a spec"
+				"7 markers spanning drag-and-drop, RBAC, filters, and agenda listing at lines 281-3619 of BookingCalendar.svelte"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:47:59.202Z"
+			"scoredAt": "2026-11-23T09:17:49.121Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2083867420",
@@ -31267,39 +31256,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T15:16:56.624Z"
-		},
-		{
-			"key": "run:minion_hub#45142430401",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "Release notes",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45142430401",
-			"sourceUpdatedAt": "2026-11-23T08:54:59Z",
-			"sourceFingerprint": "252096a92707c58f79493897c4a250b28bc416da2cf14bb73cbae25202860ebe",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A failed release-notes workflow run needs diagnosis before it can be scoped as actionable work.",
-			"evidence": [
-				"status: failure",
-				"push on master",
-				"Release notes workflow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:58:25.893Z"
 		},
 		{
 			"key": "pr:minion-meta#1076",
@@ -49311,7 +49267,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "f1672590c02a4ad8ffa2aec6548246654fcab6cf1294d4c5da8de21955ecfb20",
+			"sourceFingerprint": "3a86949c3303c7be99fdb1dbb90af01329c514c7ffb610d9b5c98aee58a949e5",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -49320,21 +49276,19 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The sweep is scanning rankings/index.json, a generated ranking-data file whose text fragments are being mistaken for real source-code TODO(handoff) markers.",
+			"rationale": "The quoted markers are fragments from rankings/index.json itself, a generated ranking artifact rather than application source, and bundle 15+ unrelated topics with no coherent scope.",
 			"evidence": [
-				"file is rankings/index.json, not application source",
-				"markers quote prior rationale/evidence text rather than code comments",
-				"self-referential artifact of the ranking system's own output"
+				"markers point into rankings/index.json lines 1616-14014, a generated data file not application source"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:58:25.893Z"
+			"scoredAt": "2026-11-23T09:17:49.121Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
@@ -51079,38 +51033,6 @@
 			"scoredAt": "2026-11-17T23:48:15.734Z"
 		},
 		{
-			"key": "run:minion_hub#45142430321",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45142430321",
-			"sourceUpdatedAt": "2026-11-23T08:54:47Z",
-			"sourceFingerprint": "1ebadfe920bd7cdbfafd6190386474c124185f1bfdc119cbba39028df7ddc6a1",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Routine in-progress CI run, not a discrete goal to rank.",
-			"evidence": [
-				"storybook-deploy push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:58:25.893Z"
-		},
-		{
 			"key": "spec:2026-11-13-doors-site-sdk-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -52400,14 +52322,14 @@
 			"scoredAt": "2026-11-16T10:25:11.905Z"
 		},
 		{
-			"key": "run:minion_hub#45142430462",
+			"key": "run:minion_hub#45143068881",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45142430462",
-			"sourceUpdatedAt": "2026-11-23T08:55:11Z",
-			"sourceFingerprint": "2f6351d30cb2cf47fbcf95728d822ef97146ed3191dc247e32da19f43de0cf83",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45143068881",
+			"sourceUpdatedAt": "2026-11-23T09:00:46Z",
+			"sourceFingerprint": "914b7a880ab3c8c472e11263cef865e1e065ae99747e64b81e3cabebe21b917b",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -52419,17 +52341,16 @@
 				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 2,
+			"confidence": 7,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Queued routine CI run with no outcome yet, not an actionable goal.",
+			"rationale": "This is a routine in-progress CI run status on master, not an actionable goal.",
 			"evidence": [
-				"status: queued",
-				"push on master"
+				"status in_progress, push on master"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:58:25.893Z"
+			"scoredAt": "2026-11-23T09:17:49.121Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
