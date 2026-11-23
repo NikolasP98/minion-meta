@@ -1,7 +1,7 @@
 ---
 id: 147-agenda-closures
 title: Close the agenda — block days or hours with a reason, without booking a fake patient
-stage: spec
+stage: live
 status: approved
 verdict: approved
 pass: 2
