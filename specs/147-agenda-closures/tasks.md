@@ -10,5 +10,5 @@
 - [x] T008 Create drawer "Cita | Cerrar agenda" switch + closure form; toolbar "…" item; i18n es/en + mounted test (D5)
 - [x] ~~T009 Overlap confirm~~ CUT (EGM) → non-blocking drawer banner in T008
 - [x] T010 Gates: `bun run check`, lint, `lint:design`, `lint:tokens`, scoped unit/mounted tests, a11y story gates if BC stories change
-- [x] T011 Independent code audit (0 critical/high; 3 medium → 2 fixed `178be63d`, 1 optimistic flash accepted) → hub #725 merged `8f12c9be` (19/19 green after re-running the pre-existing `gateway.accepted-lineage` flake) → Vercel prod success → table + forced RLS verified → prod visual check found the label spilling into neighbouring days → fix hub #726
+- [x] T011 Independent code audit (0 critical/high; 3 medium → 2 fixed `178be63d`, 1 optimistic flash accepted) → hub #725 merged `8f12c9be` (19/19 green after re-running the pre-existing `gateway.accepted-lineage` flake) → Vercel prod success → table + forced RLS verified → prod visual check found the label spilling into neighbouring days → fix hub #726 merged `960c6438`, live recheck OK
 - [x] T012 D6 applied 2026-11-23: closures 27-Nov 15–20, 30-Nov 09–14, 31-Dec 09:30–14:45 created; the 3 fake bookings cancelled; re-run = no-op
