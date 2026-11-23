@@ -85,3 +85,11 @@ Final pipeline01M83GQFTXACRMYZQA9T5W6ZHR pushed45aead23be155c9e7a551932893e5434d
 The tool skipped PR/CI because its aggregate authentication check rejected an unrelated inactive GitHub account. The active personal CLI remained functional. No account/configuration was changed. Executor opened and readied HubPR709 at exact45aead23; actual hosted CI is in progress. Guarded tool sync refused divergence without changing refs/files,so the original local clone remains clean5de104dd and a fresh remote clone owns any needed follow-up.
 
 Final source inventory at45aead23 closes51identityrows(41Svelteoccurrences/34paths+10localevalues),all5localizedcallers,224explicitexclusions and26presentnewfiles. All191scopedsourcehashes/anchors were refreshed. This is source closure; final hosted CI and production completion remain pending.
+
+### Hosted accessibility correction in progress
+
+HubPR709 at45aead23 passed its build,ordinarytests,native/security checks and QA stack, but hosted a11y found3MinionLogo regressions: compact2vs1,sizes6vs3,with-text2vs1. The same job passes153pattern tests and7+6spec cases. No failing check was waived and no baseline was increased.
+
+The exact Vitest browser lane reproduced missing canonical tokens and font weights: both prefix/suffixpink400at16px on white,ratio3.51. Normal Storybook/app hosts correctly process the sameCSS. The Vitest Storybook project omitted Tailwind processing,leaving token defaults inside unprocessed@theme. The helper also changed the personal logo suffix from foreground90%/700 to opaqueprimary/600.
+
+A four-file uncommitted correction is independently Standards/SpecPASS: story-project-only Tailwind parity plus explicit personal-logo suffix90%/700 restoration using canonical primary; default shell suffix/prefix and personal prefixpalette/900 remain unchanged. Actual focused proof is15mounted tests and all5actual logo stories with0axe violations. The first fullstory run ended143without a report and is explicitly incomplete. One warm-cache fullgate retry is in progress; no correction commit/push or final CI/live claim yet. See implementation/storybook-ci-correction/ for source/runtime reviews and the failedCI rows.
