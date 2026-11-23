@@ -1,0 +1,171 @@
+{
+  "schemaVersion": 1,
+  "evidenceKind": "historical-local-qualification-failure",
+  "source": {
+    "checkout": "/tmp/minion-white-label-145-qa",
+    "commit": "e26231464b187f88976e015000afa6ac71e11d1b",
+    "stage": "old combined candidate before final casing/preset/topbar corrections",
+    "reportSha256": "141b6cc9c964a062b701fcf8103315025edea44c7aa99b628e3f8580242baf1a"
+  },
+  "command": "bun run a11y --all",
+  "ok": false,
+  "gates": {
+    "suppressions": {
+      "status": "error",
+      "message": "git base ref unavailable (fetch origin/master)",
+      "count": 84,
+      "baseline": 84
+    },
+    "patterns": {
+      "status": "pass",
+      "files": 2,
+      "tests": 153,
+      "failures": []
+    },
+    "specs": {
+      "status": "pass",
+      "suites": [
+        {
+          "name": "canvas-accessibility",
+          "status": "pass",
+          "passed": 7,
+          "failures": []
+        },
+        {
+          "name": "workshop-accessibility",
+          "status": "pass",
+          "passed": 6,
+          "failures": []
+        }
+      ]
+    },
+    "stories": {
+      "status": "fail",
+      "violations": 794,
+      "baseline": 799,
+      "regressions": 1,
+      "improvements": 4,
+      "measured": 1205,
+      "unmeasured": [],
+      "coldCacheRerun": true
+    },
+    "pages": {
+      "status": "fail",
+      "hint": "counts fell: run `bun run a11y --update-baseline` and commit the ledger",
+      "violations": 1042,
+      "baseline": 329,
+      "regressions": 0,
+      "improvements": 3,
+      "measured": 300,
+      "scenarios": [
+        "compact-390:coarse",
+        "wide-1440:fine"
+      ],
+      "sweepExit": 0
+    }
+  },
+  "changedRows": [
+    {
+      "kind": "story",
+      "id": "components-calendar-bookingcalendar--month-view",
+      "rule": "color-contrast",
+      "count": 3,
+      "baseline": 4,
+      "status": "improvement",
+      "offenders": [
+        ".active",
+        "#tooltip\\:mchip-2026-09-10-b8\\:trigger > .gap-\\[var\\(--space-control-gap\\)\\] > .m-chip-t.svelte-s23xms",
+        "#tooltip\\:mchip-2026-09-10-b8\\:trigger > .gap-\\[var\\(--space-control-gap\\)\\] > .m-chip-n.truncate.svelte-s23xms"
+      ]
+    },
+    {
+      "kind": "story",
+      "id": "components-navigation-minionlogo--compact",
+      "rule": "color-contrast",
+      "count": 0,
+      "baseline": 1,
+      "status": "improvement"
+    },
+    {
+      "kind": "story",
+      "id": "components-navigation-minionlogo--sizes",
+      "rule": "color-contrast",
+      "count": 0,
+      "baseline": 3,
+      "status": "improvement"
+    },
+    {
+      "kind": "story",
+      "id": "components-navigation-minionlogo--with-text",
+      "rule": "color-contrast",
+      "count": 0,
+      "baseline": 1,
+      "status": "improvement"
+    },
+    {
+      "kind": "story",
+      "id": "layouts-crm-contact--default·-phone",
+      "rule": "button-name",
+      "count": 2,
+      "baseline": 1,
+      "status": "regression",
+      "offenders": [
+        "#popover\\:ui-popover-7\\:trigger",
+        ".note-row > .bg-\\[var\\(--color-surface-2\\)\\].hover\\:bg-\\[var\\(--color-surface-3\\)\\].hover\\:border-\\[var\\(--color-border-strong\\)\\]"
+      ]
+    },
+    {
+      "kind": "page",
+      "id": "/brains/agents @ compact-390:coarse",
+      "rule": "color-contrast",
+      "count": 5,
+      "baseline": 6,
+      "status": "improvement",
+      "offenders": [
+        "a[href$=\"agents\"] > .item-label.svelte-lhswrw",
+        "span[title=\"Title\"]",
+        "#c38-cell-53fdbc9b-5f12-45d6-a6d5-546e6db46130-name > .record-link.svelte-1cvo2pa",
+        "#c38-cell-00000000-0000-4000-8000-000000000201-name > .record-link.svelte-1cvo2pa",
+        "a[href=\"/en/agents?archetype=brain\"]"
+      ]
+    },
+    {
+      "kind": "page",
+      "id": "/settings/appearance @ compact-390:coarse",
+      "rule": "color-contrast",
+      "count": 3,
+      "baseline": 4,
+      "status": "improvement",
+      "offenders": [
+        "#menu\\:ui-dropdown-2\\:trigger > .qa-tools-trigger.svelte-t55g29 > span[data-part=\"badge\"][data-variant=\"semantic\"][data-value=\"accent\"]",
+        ".sm > .active.seg-btn.svelte-1ac1cm",
+        "div[aria-label=\"Density\"] > .active.seg-btn.svelte-1ac1cm"
+      ]
+    },
+    {
+      "kind": "page",
+      "id": "/socials/settings @ compact-390:coarse",
+      "rule": "color-contrast",
+      "count": 0,
+      "baseline": 1,
+      "status": "improvement"
+    }
+  ],
+  "interpretation": {
+    "completeAccessibilityPass": false,
+    "finalCandidateQualification": false,
+    "storyRegression": "CRM Contact phone button-name count2 versus baseline1; unnamed TagsField Popover trigger and note-row Add-note Button. The existing desktop story baseline is2.",
+    "causation": "The offending CRM PageBody, TagsField, Popover and story predate branding and are unchanged in the final source snapshot. Why the phone run newly exposed count2 is unproven; no prior-base browser rerun was performed.",
+    "pageFailure": "Zero page regressions. Plain local mode fails until its3 improvements are ratcheted; CI --ci does not fail improvements alone.",
+    "ledger": "No ledger was changed during triage. Do not raise the CRM baseline or treat this failed historical report as final evidence. Only compact-390:coarse is currently gated; wide-1440:fine was reported ungated."
+  },
+  "subsequentSuppressionsReferenceRepair": {
+    "action": "Fetched missing origin/master without source or baseline edits",
+    "check": "node scripts/design-lint.mjs --ci --json=/tmp/white145-a11y-design-triage.json",
+    "baseRefAvailable": true,
+    "a11yIgnoreCount": 84,
+    "a11yIgnoreBaseline": 84,
+    "fileRegressions": [],
+    "scope": "This repair does not turn the original full report into a pass."
+  }
+}

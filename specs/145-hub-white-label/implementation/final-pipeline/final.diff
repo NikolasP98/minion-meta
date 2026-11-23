@@ -1,0 +1,65 @@
+diff --git a/docs/organization-role-templates.md b/docs/organization-role-templates.md
+index ac9bd5627..544859624 100644
+--- a/docs/organization-role-templates.md
++++ b/docs/organization-role-templates.md
+@@ -63,13 +63,20 @@ their readers.
+ 
+ ## Organization identity
+ 
+-White-label slices 1–2 supply storage, guarded services, organization creation
+-controls, the shared Appearance editor and request-owned branding delivery. The
+-shared shell and five localized callers (welcome, agent export/sync, plugin browsing,
+-OAuth authorization and profile onboarding) use the resolved name. Remaining identity
+-consumers belong to slice 3; complete white-label delivery still requires its
+-deployment and runtime proof. Deploy the data prerequisite (PR707), including the
+-identity migration above, before merging the slice 2 UI.
++The resolved organization name appears in shared shell and public wordmarks,
++including accessible identity in collapsed navigation, page titles, welcome,
++agent export/sync, plugin browsing, OAuth authorization and profile onboarding.
++Marketplace badges and decorative watermarks, the CRT preview and the Markdown
++story use it too. Existing prefix-only labels stay prefix-only; other consumers
++retain their fixed `Hub`/`hub` suffix and its casing. Custom prefix capitalization
++is preserved. Personal logo presets retain their prefix color and weight, while
++ordinary shell wordmarks use their default styling. Authored agent/customer content,
++native installer identity, distinct services and external attribution are unchanged.
++
++Deploy the data prerequisite (PR707), including the identity migration above, before
++the shared setup/UI (PR708); its production deployment must be ready before the
++final identity-consumer release is merged. Source coverage does not establish
++deployment or runtime proof.
+ 
+ In Settings → Organizations, platform administrators can review the suggested
+ **Hub name**, enter a different prefix and preview it before creating an organization.
+diff --git a/src/routes/(app)/tools/+page.svelte b/src/routes/(app)/tools/+page.svelte
+index cde0d9503..dad4dbb87 100644
+--- a/src/routes/(app)/tools/+page.svelte
++++ b/src/routes/(app)/tools/+page.svelte
+@@ -1,10 +1,10 @@
+ <script lang="ts">
+   import { getBranding } from '$lib/branding.svelte';
+-    import BuilderHub from "$lib/components/builder/BuilderHub.svelte";
++  import BuilderHub from '$lib/components/builder/BuilderHub.svelte';
+ </script>
+ 
+ <svelte:head>
+-    <title>Tools · {getBranding().name}</title>
++  <title>Tools · {getBranding().name}</title>
+ </svelte:head>
+ 
+ <BuilderHub only="tools" />
+diff --git a/src/routes/link/[code]/+page.svelte b/src/routes/link/[code]/+page.svelte
+index 1c05150e8..c4d6ffe94 100644
+--- a/src/routes/link/[code]/+page.svelte
++++ b/src/routes/link/[code]/+page.svelte
+@@ -36,7 +36,10 @@
+   eyebrow={`${data.channelLabel} identity`}
+   title={form?.success ? 'Channel linked' : 'Link your channel'}
+   description={form?.success
+-    ? m.link_accountRecognizedDescription({ channel: data.channelLabel, hubFullName: getBranding().fullName })
++    ? m.link_accountRecognizedDescription({
++        channel: data.channelLabel,
++        hubFullName: getBranding().fullName,
++      })
+     : `Confirm the identity that ${data.channelLabel} should use for this channel.`}
+   tone={form?.success ? 'success' : 'default'}
+   icon={taskIcon}

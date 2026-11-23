@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-48d80da185e0
 title: "Post-merge finding — todo-handoff in vitest.config.ts (minion_hub)"
-status: draft
+status: closed
 created: 2026-11-23
 updated: 2026-11-23
 repos: [minion-hub]
@@ -10,6 +10,15 @@ source: postmerge-discovery
 ---
 
 # Post-merge finding — todo-handoff in `vitest.config.ts`
+
+## Reconciliation
+
+This marker is intentionally retained and already tracked by
+[Storybook Vitest CSS producer parity](2026-11-23-storybook-vitest-css-producer-parity.md).
+The naming release preserves the existing test producer and accessibility ledger.
+Changing that producer requires the separate full-story audit documented there;
+the completed experiment found 260 regression rows. This automatic duplicate is
+closed without removing the marker or claiming that audit is complete.
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
 scan of a merged pull request (spec 2026-08-18-factory-postmerge-discovery-loop,
