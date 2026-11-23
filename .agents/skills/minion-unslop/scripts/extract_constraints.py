@@ -29,7 +29,7 @@ class Constraint(TypedDict):
 
 PATTERNS: dict[str, str] = {
     # Currency with amounts
-    "currency": r"\$[\d,]+\.?\d*[KMBkmb]?(?:\s*(?:million|billion|thousand))?",
+    "currency": r"\$[\d,]+(?:\.\d*)?(?:\s*(?:trillion|billion|million|thousand|[KMBkmb]))?\b",
 
     # Percentages
     "percentage": r"\d+\.?\d*%",
@@ -87,7 +87,7 @@ PATTERNS: dict[str, str] = {
     "and_or": r"\band/or\b",
 
     # Numeric counts with context
-    "count": r"\b\d+(?:,\d{3})*\s+(?:users?|customers?|employees?|companies?|teams?|people|engineers?|developers?|items?|products?|orders?|transactions?|requests?|queries?|rows?|records?)\b",
+    "count": r"\b\d+(?:,\d{3})*\s+(?:users?|customers?|employees?|companies?|teams?|people|engineers?|developers?|items?|products?|orders?|transactions?|requests?|queries?|rows?|records?|tables?)\b",
 }
 
 # Proper noun patterns (simplified - real implementation would use NER)

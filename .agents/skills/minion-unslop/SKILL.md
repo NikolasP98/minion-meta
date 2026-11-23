@@ -11,21 +11,27 @@ Read [core-contract.md](references/core-contract.md) before any audit or request
 
 ## Audit
 
-Resolve `scripts/audit.py` relative to this skill's loaded directory, never relative to the working directory. For a project-local install, this shell snippet searches parent directories; a Claude plugin may instead use `${CLAUDE_PLUGIN_ROOT}/skills/minion-unslop/scripts/audit.py`.
+Resolve every script in `scripts/` relative to this skill's loaded directory, never relative to the working directory. This shell snippet sets `$unslop` to that directory for a Claude plugin install and for a project-local `.agents` install; every command in this skill and its references uses `$unslop`. A Cursor or Codex project needs the skill tree copied to `<project>/.agents/skills/`, so that `$unslop` resolves to `<project>/.agents/skills/minion-unslop/scripts`; the marketplace README documents the copy.
 
 ```bash
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
-  audit="$CLAUDE_PLUGIN_ROOT/skills/minion-unslop/scripts/audit.py"
+  unslop="$CLAUDE_PLUGIN_ROOT/skills/minion-unslop/scripts"
 else
   root=$PWD
-  until [ -f "$root/.agents/skills/minion-unslop/scripts/audit.py" ] || [ "$root" = / ]; do root=$(dirname "$root"); done
-  audit="$root/.agents/skills/minion-unslop/scripts/audit.py"
+  until [ -d "$root/.agents/skills/minion-unslop/scripts" ] || [ "$root" = / ]; do root=$(dirname "$root"); done
+  unslop="$root/.agents/skills/minion-unslop/scripts"
 fi
-[ -f "$audit" ] || { echo "minion-unslop audit.py not found" >&2; exit 2; }
-python3 "$audit" -- path/to/file.md path/to/another.md
+[ -f "$unslop/audit.py" ] || { echo "minion-unslop scripts not found" >&2; exit 2; }
+python3 "$unslop/audit.py" -- path/to/file.md path/to/another.md
 ```
 
 The wrapper prints deterministic JSON sections and returns zero when scans find issues. A nonzero status means invocation or tool failure, never prose findings.
+
+`--genre` selects the threshold profile the structure and silhouette scans score against: `docs` (the default, for documentation, READMEs, and reference material), `prose` (articles, posts, essays), or `social`. Pass it before the `--` separator, and state the genre used when reporting, because thresholds differ between profiles.
+
+Every scan obeys the English-only contract. The banned-phrase, structure, and silhouette scans each carry their own language check and decline on their own; the wrapper never overrides one of those verdicts. Readability carries no language check, so the wrapper applies the same shared heuristic to the file itself and declines that scan when the text is not English, rather than scoring it against an English syllable model.
+
+Verdicts can therefore differ across scans on one file. That is intended: each scan reports what it confirmed. A structure or silhouette flag on non-English text is a cadence measurement that does not depend on language, while a declined scan means that scanner refused to judge. Read both, name which scans declined, and treat a mixed verdict as a signal that the language heuristic sits near its threshold.
 
 Report:
 

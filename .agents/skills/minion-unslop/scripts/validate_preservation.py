@@ -12,12 +12,15 @@ Usage:
 
 from __future__ import annotations
 
-import sys
 import json
 import re
+import sys
+from pathlib import Path
 from typing import TypedDict
 
-# Import constraint extraction
+HERE = Path(__file__).resolve().parent
+sys.path.insert(0, str(HERE))
+
 from extract_constraints import extract_constraints, Constraint
 
 
@@ -41,6 +44,9 @@ _MONTHS = [
     "august", "september", "october", "november", "december",
 ]
 
+_MONTH_NUMBERS = {month: index for index, month in enumerate(_MONTHS, start=1)}
+_MAGNITUDE_PATTERN = r"trillion|billion|million|thousand|[kmb]"
+
 
 def normalize_value(value: str) -> str:
     """Normalize a constraint value for comparison."""
@@ -56,9 +62,9 @@ def parse_money(token: str) -> float | None:
     '$47.3M' and '$47.3 million' -> 47_300_000; '$47.3 billion' -> 47_300_000_000.
     Magnitude is part of the fact, so the two must not compare equal.
     """
-    m = re.search(
-        r'([\d,]+\.?\d*)\s*(k|m|b|thousand|million|billion)?',
-        token.lower().replace("$", ""),
+    m = re.fullmatch(
+        rf'\s*\$?\s*([\d,]+(?:\.\d*)?)\s*({_MAGNITUDE_PATTERN})?\s*',
+        token.lower(),
     )
     if not m or not m.group(1).strip(","):
         return None
@@ -69,8 +75,8 @@ def parse_money(token: str) -> float | None:
 
 
 def parse_magnitude_number(token: str) -> float | None:
-    m = re.search(
-        r'\b([\d,]+\.?\d*)\s*(thousand|million|billion|trillion)?\b',
+    m = re.fullmatch(
+        r'\s*([\d,]+(?:\.\d*)?)\s*(thousand|million|billion|trillion)?\s*',
         token.lower(),
     )
     if not m or not m.group(1).strip(","):
@@ -89,6 +95,48 @@ def _numbers_match_exactly(value: str, text: str, pattern: str) -> bool:
     want = re.findall(r'\d+\.?\d*', value)
     have = set(re.findall(pattern, text.lower()))
     return all(num in have for num in want) and bool(want)
+
+
+def _contains_bounded(value: str, text: str) -> bool:
+    """Match a literal without accepting it inside a larger word or number."""
+    left = r"(?<!\w)" if value and value[0].isalnum() else ""
+    right = r"(?!\w)" if value and value[-1].isalnum() else ""
+    return re.search(left + re.escape(value) + right, text, re.IGNORECASE) is not None
+
+
+def _parse_date(value: str) -> tuple[int, int, int] | None:
+    iso = re.fullmatch(r"\s*(\d{4})-(\d{2})-(\d{2})\s*", value)
+    if iso:
+        return tuple(int(part) for part in iso.groups())
+
+    natural = re.fullmatch(
+        r"\s*([A-Za-z]+)\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\s*",
+        value,
+        re.IGNORECASE,
+    )
+    if not natural:
+        return None
+    month_token, day, year = natural.groups()
+    month = next(
+        (number for name, number in _MONTH_NUMBERS.items() if name.startswith(month_token.lower()[:3])),
+        None,
+    )
+    return (int(year), month, int(day)) if month is not None else None
+
+
+def _dates_in_text(text: str) -> set[tuple[int, int, int]]:
+    candidates = re.findall(r"\b\d{4}-\d{2}-\d{2}\b", text)
+    candidates.extend(
+        match.group()
+        for match in re.finditer(
+            r"\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|"
+            r"Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|"
+            r"Dec(?:ember)?)\.?\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4}\b",
+            text,
+            re.IGNORECASE,
+        )
+    )
+    return {parsed for candidate in candidates if (parsed := _parse_date(candidate)) is not None}
 
 
 _UNIT_SYNONYMS = {
@@ -143,19 +191,29 @@ def _quote_core(value: str) -> str:
     return value.strip().strip('"“”').lower()
 
 
-def _time_variants(value: str) -> set[str]:
-    m = re.search(r'\b(\d{1,2})(?::(\d{2}))?(?::\d{2})?\s*(am|pm)?\b', value, re.I)
-    if not m:
-        return set()
-    hour = str(int(m.group(1)))
-    minute = m.group(2) or "00"
-    suffix = (m.group(3) or "").lower()
-    spaced = f" {suffix}" if suffix else ""
-    compact = suffix
-    variants = {f"{hour}:{minute}{spaced}".strip(), f"{hour}:{minute}{compact}".strip()}
-    if minute == "00":
-        variants.update({f"{hour}{spaced}".strip(), f"{hour}{compact}".strip()})
-    return variants
+_TIME_RE = re.compile(
+    r"\b(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(am|pm)?\s*(UTC|PST|EST|CST|MST|GMT)?\b",
+    re.IGNORECASE,
+)
+
+
+def _normalize_time(match: re.Match[str]) -> tuple[int, int, int, str | None] | None:
+    hour, minute, second = (int(match.group(index) or 0) for index in (1, 2, 3))
+    meridiem = (match.group(4) or "").lower()
+    zone = match.group(5).upper() if match.group(5) else None
+    if minute > 59 or second > 59 or hour > (12 if meridiem else 23) or hour == 0 and meridiem:
+        return None
+    if meridiem:
+        hour = hour % 12 + (12 if meridiem == "pm" else 0)
+    return hour, minute, second, zone
+
+
+def _times_in_text(text: str) -> set[tuple[int, int, int, str | None]]:
+    return {
+        normalized
+        for match in _TIME_RE.finditer(text)
+        if (normalized := _normalize_time(match)) is not None
+    }
 
 
 def find_constraint_in_text(constraint: Constraint, text: str) -> bool:
@@ -164,10 +222,6 @@ def find_constraint_in_text(constraint: Constraint, text: str) -> bool:
     ctype = constraint["type"]
     normalized_value = normalize_value(value)
     normalized_text = normalize_value(text)
-
-    # Direct match
-    if normalized_value in normalized_text:
-        return True
 
     # and/or: the disjunction must survive; "or" (or "or both") is faithful,
     # a bare conjunction is not.
@@ -180,7 +234,7 @@ def find_constraint_in_text(constraint: Constraint, text: str) -> bool:
         if target is None:
             return False
         for token in re.findall(
-            r'\$?[\d,]+\.?\d*\s*(?:k|m|b|thousand|million|billion)?', text, re.IGNORECASE
+            rf'\$[\d,]+(?:\.\d*)?\s*(?:{_MAGNITUDE_PATTERN})?\b', text, re.IGNORECASE
         ):
             amount = parse_money(token)
             if amount is not None and abs(amount - target) < 0.01:
@@ -192,7 +246,7 @@ def find_constraint_in_text(constraint: Constraint, text: str) -> bool:
         if target is None:
             return False
         for token in re.findall(
-            r'\b[\d,]+\.?\d*\s*(?:thousand|million|billion|trillion)?\b',
+            r'\b[\d,]+(?:\.\d*)?\s*(?:thousand|million|billion|trillion)\b',
             text,
             re.IGNORECASE,
         ):
@@ -211,19 +265,52 @@ def find_constraint_in_text(constraint: Constraint, text: str) -> bool:
             return False
         number, units = parts
         clean_text = text.replace(",", "").lower()
-        if not re.search(r'(?<![\d.])' + re.escape(number.replace(",", "")) + r'(?![\d.])', clean_text):
-            return False
-        return any(re.search(r'(?<!\w)' + re.escape(unit) + r'(?!\w)', clean_text) for unit in units)
+        amount = re.escape(number.replace(",", ""))
+        return any(
+            re.search(
+                r"(?<![\d.])" + amount + r"(?![\d.])\s*" + re.escape(unit) + r"(?!\w)",
+                clean_text,
+            )
+            is not None
+            for unit in units
+        )
 
     if ctype == "range":
-        return _numbers_match_exactly(value, text, r'(?<![\d.])(\d+\.?\d*)(?![\d.])')
+        parts = re.findall(r"\d+(?:\.\d*)?", value)
+        if len(parts) != 2:
+            return False
+        suffix_match = re.search(r"\d\s*(K|M|B|%|years?|months?|days?)\s*$", value, re.IGNORECASE)
+        suffix = r"\s*" + re.escape(suffix_match.group(1)) + r"\b" if suffix_match else ""
+        return re.search(
+            r"(?<![\d.])"
+            + re.escape(parts[0])
+            + r"(?![\d.])\s*[-–]\s*(?<![\d.])"
+            + re.escape(parts[1])
+            + r"(?![\d.])"
+            + suffix,
+            text,
+            re.IGNORECASE,
+        ) is not None
 
     if ctype == "time":
-        text_variants = _time_variants(text)
-        return bool(_time_variants(value) & text_variants)
+        target = next(iter(_times_in_text(value)), None)
+        return target is not None and target in _times_in_text(text)
 
     # Other quantities: match digits, comma-insensitive, but as whole tokens.
-    if ctype in ("count", "number"):
+    if ctype == "count":
+        count = re.fullmatch(r"\s*([\d,]+)\s+([A-Za-z]+)\s*", value)
+        if not count:
+            return False
+        number, noun = count.groups()
+        clean_number = number.replace(",", "")
+        clean_text = text.replace(",", "")
+        return re.search(
+            r"(?<![\d.])" + re.escape(clean_number) + r"(?![\d.])\s+" + re.escape(noun) + r"\b",
+            clean_text,
+            re.IGNORECASE,
+        ) is not None
+
+    if ctype == "number":
         for num in re.findall(r'[\d,]+\.?\d*', value):
             clean_num = num.replace(",", "")
             if re.search(r'(?<![\d.])' + re.escape(clean_num) + r'(?![\d.])',
@@ -233,40 +320,39 @@ def find_constraint_in_text(constraint: Constraint, text: str) -> bool:
 
     # Dates: the year alone is not enough — a changed month is a changed fact.
     if ctype == "date_quarter":
-        year_match = re.search(r'\d{4}', value)
-        if not (year_match and year_match.group() in text):
+        target = re.fullmatch(r"\s*Q([1-4])\s+(\d{4})\s*", value, re.IGNORECASE)
+        if not target:
             return False
-        q = re.search(r'q([1-4])', value.lower())
-        if not q:
-            return False
-        ordinal = {"1": "first", "2": "second", "3": "third", "4": "fourth"}[q.group(1)]
-        low_text = text.lower()
-        return q.group(0) in low_text or re.search(ordinal + r'\s+quarter', low_text) is not None
+        quarter, year = target.groups()
+        ordinal = {"1": "first", "2": "second", "3": "third", "4": "fourth"}[quarter]
+        return re.search(
+            rf"(?:\bQ{quarter}\s+{year}\b|\b{ordinal}\s+quarter(?:\s+of)?\s+{year}\b)",
+            text,
+            re.IGNORECASE,
+        ) is not None
 
-    if ctype.startswith("date"):
-        year_match = re.search(r'\d{4}', value)
-        if not (year_match and year_match.group() in text):
-            return False
-        low = value.lower()
-        month = next((mo for mo in _MONTHS if mo[:3] in low), None)
-        if month and month[:3] not in text.lower():
-            return False
-        quarter = re.search(r'q[1-4]', low)
-        if quarter and quarter.group() not in text.lower():
-            return False
-        return True
+    if ctype in ("date_iso", "date_natural"):
+        target = _parse_date(value)
+        return target is not None and target in _dates_in_text(text)
+
+    if ctype == "year":
+        return _contains_bounded(value, text)
 
     # For quotes, check if core content is present (without surrounding quotes)
-    if constraint["type"] == "quote":
+    if ctype == "quote":
         inner = _quote_core(value)
         comparable_text = normalized_text.replace("“", '"').replace("”", '"')
         if inner in comparable_text:
             return True
 
     if ctype == "proper_noun":
-        words = re.findall(r'[A-Z][a-z]+', value)
-        if words and all(re.search(r'\b' + re.escape(word) + r'\b', text, re.I) for word in words):
-            return True
+        phrase = r"\s+".join(re.escape(word) for word in value.split())
+        return re.search(r"(?<!\w)" + phrase + r"(?!\w)", text, re.IGNORECASE) is not None
+
+    # Textual constraints still need a bounded literal match. This sits after
+    # numeric/date-specific checks so a substring cannot bypass their semantics.
+    if _contains_bounded(normalized_value, normalized_text):
+        return True
 
     return False
 
