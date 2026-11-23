@@ -63,36 +63,36 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16689
 - `NikolasP98/minion-meta@dev rankings/index.json:21674` — RUC parties created BEFORE 2026-09-17 are unverified",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L21674
-- `NikolasP98/minion-meta@dev rankings/index.json:25193` — qualify historical stock denomination before currency formatting",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25193
-- `NikolasP98/minion-meta@dev rankings/index.json:26449` — ${owner} is not implemented yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26449
-- `NikolasP98/minion-meta@dev rankings/index.json:28691` — delete this route in A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28691
-- `NikolasP98/minion-meta@dev rankings/index.json:28857` — if the router is not started yet the address keeps no view=day",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28857
-- `NikolasP98/minion-meta@dev rankings/index.json:28891` — if the router is not started yet the address keeps no view=day",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28891
-- `NikolasP98/minion-meta@dev rankings/index.json:30796` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30796
-- `NikolasP98/minion-meta@dev rankings/index.json:31059` — adding the boolean variant makes DataTable.svelte's... in src/lib/components/data-table/filters.ts",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31059
-- `NikolasP98/minion-meta@dev rankings/index.json:35313` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35313
-- `NikolasP98/minion-meta@dev rankings/index.json:35345` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35345
-- `NikolasP98/minion-meta@dev rankings/index.json:35478` — drop with A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35478
-- `NikolasP98/minion-meta@dev rankings/index.json:35544` — item_group/reorder_qty/moq (this column + reorderQty +",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35544
-- `NikolasP98/minion-meta@dev rankings/index.json:35576` — Admit guarded formula/relation types and required-on-create only",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35576
-- `NikolasP98/minion-meta@dev rankings/index.json:35743` — only the launcher clears a reserved corner; the OPEN panel still anchors at",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35743
-- `NikolasP98/minion-meta@dev rankings/index.json:36048` — spec 2026-09-28 Bundle F asks for tags LAST inside",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36048
-- `NikolasP98/minion-meta@dev rankings/index.json:39646` — the plan button is gated on pos:create, but server-side...",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39646
+- `NikolasP98/minion-meta@dev rankings/index.json:25160` — qualify historical stock denomination before currency formatting",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25160
+- `NikolasP98/minion-meta@dev rankings/index.json:26416` — ${owner} is not implemented yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L26416
+- `NikolasP98/minion-meta@dev rankings/index.json:28658` — delete this route in A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28658
+- `NikolasP98/minion-meta@dev rankings/index.json:28824` — if the router is not started yet the address keeps no view=day",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28824
+- `NikolasP98/minion-meta@dev rankings/index.json:28858` — if the router is not started yet the address keeps no view=day",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L28858
+- `NikolasP98/minion-meta@dev rankings/index.json:30763` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30763
+- `NikolasP98/minion-meta@dev rankings/index.json:31026` — adding the boolean variant makes DataTable.svelte's... in src/lib/components/data-table/filters.ts",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31026
+- `NikolasP98/minion-meta@dev rankings/index.json:35280` — HC-040 — give agents/autonomous/[id]/+page.server.ts a depends()",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35280
+- `NikolasP98/minion-meta@dev rankings/index.json:35312` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35312
+- `NikolasP98/minion-meta@dev rankings/index.json:35445` — drop with A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35445
+- `NikolasP98/minion-meta@dev rankings/index.json:35511` — item_group/reorder_qty/moq (this column + reorderQty +",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35511
+- `NikolasP98/minion-meta@dev rankings/index.json:35543` — Admit guarded formula/relation types and required-on-create only",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35543
+- `NikolasP98/minion-meta@dev rankings/index.json:35710` — only the launcher clears a reserved corner; the OPEN panel still anchors at",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35710
+- `NikolasP98/minion-meta@dev rankings/index.json:36015` — spec 2026-09-28 Bundle F asks for tags LAST inside",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36015
+- `NikolasP98/minion-meta@dev rankings/index.json:39613` — the plan button is gated on pos:create, but server-side...",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L39613
 - `NikolasP98/minion-meta@dev rankings/index.json:43394` — add-only; rename / deactivate / max-days edits need a modal over",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43394
 - `NikolasP98/minion-meta@dev rankings/index.json:46404` — drop these two once plugin UIs get a JWT path (spec 043 R8)",
