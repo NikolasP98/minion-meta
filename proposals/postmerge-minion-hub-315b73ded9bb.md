@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-315b73ded9bb
 title: "Post-merge finding — todo-handoff in tests/e2e/ui-audit/calendar-mobile.spec.ts (minion_hub)"
-status: approved
+status: closed
 created: 2026-10-07
-updated: 2026-10-07
+updated: 2026-11-23
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `tests/e2e/ui-audit/calendar-mobile.spec.ts`
