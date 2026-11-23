@@ -22,7 +22,7 @@ Inside unattended Factory work, do not ask for human confirmation when an approv
 ## Load only the needed reference
 
 - For bugs, flakes, and regressions, read [debugging.md](references/debugging.md).
-- For feature tests, regression tests, or review, read [testing-and-review.md](references/testing-and-review.md).
+- For feature tests, regression tests, review, or any `minion_hub` UI change (accessibility gate `bun run a11y`), read [testing-and-review.md](references/testing-and-review.md).
 - For cross-module risk and completion proof, read [change-safety.md](references/change-safety.md).
 - For TypeScript models, external input, and adapters, read [typescript-and-boundaries.md](references/typescript-and-boundaries.md).
 - For retries, migrations, repeated work, or recurring mistakes, read [operations-and-learning.md](references/operations-and-learning.md).
