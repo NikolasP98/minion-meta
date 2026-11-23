@@ -1,6 +1,6 @@
 ---
-status: review
-verdict: pending
+status: implementing
+verdict: approved
 created: 2026-11-21
 updated: 2026-11-21
 repos: [minion_hub]
@@ -15,7 +15,7 @@ source_item: S1 (gap 11)
 
 **Created**: 2026-11-21
 
-**Status**: Draft for review. Owner approved starting S1 on 2026-11-21 ("Yes, start S1"). This is a VISIBLE change: implementation waits for the owner's approval of the demo below.
+**Status**: Approved. Owner approved starting S1 on 2026-11-21 ("Yes, start S1") and approved the demo's to-be on 2026-11-23 (see below). Reviewed in two passes ([`review.md`](review.md)).
 
 **Input**: "Slice S1 of the hub accessibility program: move `sessions/SessionKanban.svelte` (→ `tasks/KanbanCol.svelte` → `tasks/TaskCard.svelte`, the only mouse-only board) onto the shared `data-view/BoardView.svelte`, so it gets the existing per-card 'Move to…' menu and live region. Keyboard drag is S3, inside BoardView; do not build it here."
 
@@ -25,7 +25,10 @@ Scope note: the proposal's S1 also lists NavigationGuardModal and CommandPalette
 
 - File: [`session-board.figcraft`](session-board.figcraft), page "Spec 146 · session board".
 - Frames: [as-is](demo/as-is.png), [to-be](demo/to-be.png), [to-be with the "Move to…" menu open](demo/to-be-move-menu.png).
-- Interactive preview: see the PR description.
+- Interactive preview: https://claude.ai/artifact/TfSasuc2DeyzMHWpxpwPMU (private to the owner).
+- **Approved by the owner on 2026-11-23**, verbatim: "Approve the to-be". Relayed instruction: implement exactly as shown (shared board look, "Move to…" button, blank empty column, drop-target highlight), with the three BoardView additions as opt-in props so the Agenda and POS boards stay identical. This approves the design, not the merge.
+- As built (real component, Chromium): [board](demo/built-board.png), [move menu](demo/built-move-menu.png).
+- One correction after approval: the first version of the menu frame drew a coloured dot per column and a check mark on the current one. The board uses the shared menu unchanged, so the frame now shows what ships: plain labels, the current column dimmed and not selectable, exactly as on the Agenda and POS boards.
 
 ## AS-IS (hub master `5347ff01`, read 2026-11-21)
 
