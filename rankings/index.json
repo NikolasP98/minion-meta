@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T05:26:15.618Z",
+	"generatedAt": "2026-11-23T05:47:05.134Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2485,6 +2485,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T09:48:05.770Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "9f6d219add32d40acaa9d7ba5c4bde12f02aa2be38a0500cb23e2c0fa75297db",
+			"score": 70,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles many distinct high-stakes concerns (crash risk, auth gating, race conditions, unbounded JSON reads) into one oversized ledger proposal that should be split into individually scoped specs before work can start.",
+			"evidence": [
+				"postgres-js nextWrite null-socket crash on backend loss before rollout",
+				"provider JSON reader is not byte bounded before res.json()",
+				"this read and moveGroup are two transactions, so a visit [could race]"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:47:04.915Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-d1c5d80",
@@ -13004,38 +13037,6 @@
 			"scoredAt": "2026-11-21T07:52:41.575Z"
 		},
 		{
-			"key": "pr:minion_hub#708",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#708 feat(settings): set a shared Hub name in Appearance",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/708",
-			"sourceUpdatedAt": "2026-11-23T05:22:57Z",
-			"sourceFingerprint": "f371e3bfacfc6aee69320b3b3cf177649487fa27d470897e9f304f0fa08e7bbe",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Second approved slice of a spec'd roadmap feature is implementation-ready but explicitly held pending PR707's migration deploy and a separate required CI gate.",
-			"evidence": [
-				"Hold merge until 707 deploys and its additive migration is confirmed",
-				"Required hosted CI on this exact head remains a separate gate"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:26:15.405Z"
-		},
-		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -15163,6 +15164,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T07:47:54.098Z"
+		},
+		{
+			"key": "pr:minion_hub#708",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#708 feat(settings): set a shared Hub name in Appearance",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/708",
+			"sourceUpdatedAt": "2026-11-23T05:43:52Z",
+			"sourceFingerprint": "a9f7b6d8c979c9a57dc37f7999833bbe735873be93b1e599f78baa88a0531238",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Well-tested UI/naming slice of a multi-slice spec but gated on PR707 deploy and still awaiting required hosted CI, so merge timing is externally blocked.",
+			"evidence": [
+				"Hold merge until 707 deploys and its additive migration is confirmed",
+				"Required hosted CI on this exact head remains a separate gate"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:47:04.915Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
@@ -38182,38 +38215,6 @@
 			"scoredAt": "2026-11-23T01:56:31.892Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "282a25cae490e1b3df598c91c9e6dda4ae635860ba242c14e6e55aa5f5b95631",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a self-referential ledger marker aggregating many unrelated line-pointers into the ranking data file itself rather than a single scoped, verifiable outcome.",
-			"evidence": [
-				"source: handoff-sweep",
-				"rankings/index.json:1616 ... 8371 (many disparate unrelated markers bundled into one item)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:26:15.405Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-5ff1c51",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -40853,6 +40854,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T01:54:24.804Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-547915024",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/+layout.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-547915024.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "97188c92d19be97927a6e8bcabedef50664d721326cd0eaa86e05f040f52212b",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single low-severity SSR-audit marker in one file with narrow scope and no urgency indicated.",
+			"evidence": [
+				"First-document branding needs an SSR compatibility audit",
+				"+layout.ts:17"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:47:04.915Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1893740593",
@@ -49109,6 +49142,38 @@
 			"scoredAt": "2026-11-23T01:57:39.197Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-815818272",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — scripts/qa/seed/seed.contract.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-815818272.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "1c40a5d4cbf6246572ec86ca37a3b4e9a09f601f210da81060695f356d230826",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Marker merely documents an expected local dev-env fact (service role key generated by supabase start) rather than an actionable defect.",
+			"evidence": [
+				"SUPABASE_SERVICE_ROLE_KEY is generated by supabase start",
+				"seed.contract.test.ts:116"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:47:04.915Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3062843045",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -50635,37 +50700,6 @@
 			"scoredAt": "2026-11-23T01:56:31.892Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-815818272",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — scripts/qa/seed/seed.contract.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-815818272.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "36ebdf4f1824eec4f482c6584cae3d2ef9bfdb043207e602c29739efa689e1b6",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Marker is an informational note about test env var provenance with no indicated defect or urgency.",
-			"evidence": [
-				"seed.contract.test.ts:92 note on SUPABASE_SERVICE_ROLE_KEY generation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T01:58:36.099Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-04976b77c87e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -50948,38 +50982,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T04:17:01.388Z"
-		},
-		{
-			"key": "run:minion_hub#45117456583",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45117456583",
-			"sourceUpdatedAt": "2026-11-23T05:23:24Z",
-			"sourceFingerprint": "ec3188a27c0490ab149770f5b7639b79de5021b86214fbf4da28c4a47d6682cf",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress CI run status, not a scoped work item to rank as a board goal.",
-			"evidence": [
-				"storybook-deploy",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:26:15.405Z"
 		},
 		{
 			"key": "run:minion_hub#45117456668",
