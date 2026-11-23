@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T04:47:48.594Z",
+	"generatedAt": "2026-11-23T04:54:06.212Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4370,78 +4370,6 @@
 			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
-			"key": "pr:minion (gateway)#380",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#380 fix(gateway): a person can only open their own conversations",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/380",
-			"sourceUpdatedAt": "2026-11-16T04:23:46Z",
-			"sourceFingerprint": "1a95f6306b9d8ec9ca103607e2126034f285651554f0bc3e94d65f99af2887ea",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#381",
-				"pr:minion-meta#1035"
-			],
-			"rationale": "A gated, spec-referenced permission fix with passing tests that has no current production effect but is a named precursor to enabling user tokens.",
-			"evidence": [
-				"Named test files 108/108, test/ci 300/300, pnpm tsgo 0",
-				"Effect in production today: None — no gateways validate user tokens yet",
-				"Spec 117 pass 3, slice 3 of 4"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:47:45.969Z"
-		},
-		{
-			"key": "pr:minion (gateway)#381",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#381 fix(gateway): chat is delivered only to its owner",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/381",
-			"sourceUpdatedAt": "2026-11-16T04:23:47Z",
-			"sourceFingerprint": "7eeacb684a79570ebfff2910ab0d4f5aa6552a7e035060a2c808998046cf0ff1",
-			"score": 64,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 8,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion (gateway)#380",
-				"pr:minion-meta#1035"
-			],
-			"rationale": "Final slice of the same security spec, gated and tested, must merge after slice 3 and shares its readiness profile.",
-			"evidence": [
-				"Merge after the slice 3 PR (this branch contains it)",
-				"Named test files 82/82, test/ci 300/300, pnpm check 0 errors",
-				"Effect in production today: None, same reason as slice 3"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:47:45.969Z"
-		},
-		{
 			"key": "pr:minion_hub#678",
 			"kind": "pr",
 			"stage": "development",
@@ -4475,6 +4403,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T04:47:48.374Z"
+		},
+		{
+			"key": "pr:minion-meta#1035",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1035 docs(specs): 116–119 — state hardening from the implicit state machine audit",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1035",
+			"sourceUpdatedAt": "2026-11-16T04:24:22Z",
+			"sourceFingerprint": "bd20f3651e19accdad30e5a75270eaeca74b4f3b821c9435c928df2040cb9f05",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion (gateway)#380",
+				"pr:minion (gateway)#381"
+			],
+			"rationale": "Three of four specs passed review but spec 117 has changes requested over a fail-closed filter that would drop all replies given zero rows in user_agents, so the bundle isn't uniformly ready.",
+			"evidence": [
+				"\"117: Changes requested by review. Production user_agents has 0 rows... the designed fail-closed filter would drop all their replies\"",
+				"116/118/119 each at Pass 2 after EGM review"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
 		},
 		{
 			"key": "pr:minion-meta#810",
@@ -5451,6 +5414,76 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:39:28.987Z"
+		},
+		{
+			"key": "pr:minion (gateway)#380",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#380 fix(gateway): a person can only open their own conversations",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/380",
+			"sourceUpdatedAt": "2026-11-16T04:23:46Z",
+			"sourceFingerprint": "1a95f6306b9d8ec9ca103607e2126034f285651554f0bc3e94d65f99af2887ea",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#381",
+				"pr:minion-meta#1035"
+			],
+			"rationale": "Session-scoping security fix has passing gates and clear scope but no current production effect since no gateway validates user tokens yet.",
+			"evidence": [
+				"Named test files 108/108; pnpm tsgo 0; pnpm check 0 errors",
+				"\"Effect in production today: None... every browser is a shared-token admin\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
+		},
+		{
+			"key": "pr:minion (gateway)#381",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#381 fix(gateway): chat is delivered only to its owner",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/381",
+			"sourceUpdatedAt": "2026-11-16T04:23:47Z",
+			"sourceFingerprint": "7eeacb684a79570ebfff2910ab0d4f5aa6552a7e035060a2c808998046cf0ff1",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion (gateway)#380",
+				"pr:minion-meta#1035"
+			],
+			"rationale": "Final slice of the chat-event scoping spec, gated by tests, sequenced to merge after slice 3 with the same deferred production impact.",
+			"evidence": [
+				"Named test files 82/82; pnpm check 0 errors",
+				"\"Merge after the slice 3 PR (this branch contains it)\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
 		},
 		{
 			"key": "pr:minion-meta#1065",
@@ -11095,42 +11128,6 @@
 			"scoredAt": "2026-11-21T01:17:17.203Z"
 		},
 		{
-			"key": "pr:minion-meta#1035",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1035 docs(specs): 116–119 — state hardening from the implicit state machine audit",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1035",
-			"sourceUpdatedAt": "2026-11-16T04:24:22Z",
-			"sourceFingerprint": "bd20f3651e19accdad30e5a75270eaeca74b4f3b821c9435c928df2040cb9f05",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion (gateway)#380",
-				"pr:minion (gateway)#381"
-			],
-			"rationale": "Four reviewed specs lay useful groundwork for hub and gateway hardening, but spec 117 is explicitly flagged as needing changes before its dev work can proceed.",
-			"evidence": [
-				"Spec 117: 'Changes requested by review' — production user_agents has 0 rows, breaking the designed fail-closed filter",
-				"No defect was reproduced on a running system; evidence is code reading plus read-only counts",
-				"116 and 118 are pass 2 with hub draft PRs being opened per slice"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:47:45.969Z"
-		},
-		{
 			"key": "pr:minion-meta#885",
 			"kind": "pr",
 			"stage": "development",
@@ -15103,41 +15100,6 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
-			"key": "pr:minion-meta#1075",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1075 spec(145): calendar on phones — the calendar takes the screen, touch that scrolls, and a list view",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1075",
-			"sourceUpdatedAt": "2026-11-22T01:31:56Z",
-			"sourceFingerprint": "acfd81a2a685595249ef9e2097241aadc59dae1d7837d56a8316163b6d5d8a58",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 10,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#706"
-			],
-			"rationale": "Thoroughly reviewed Spec Kit package that already unblocked slice S1's draft PR, so merging it formalizes the plan for the remaining three slices.",
-			"evidence": [
-				"two EGM review rounds (five then two reviewers)",
-				"slice S1 PR #706 already implements this spec",
-				"owner decided option B, day-view default, list view available on 2026-11-21"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-22T01:47:51.100Z"
-		},
-		{
 			"key": "pr:minion-meta#833",
 			"kind": "pr",
 			"stage": "development",
@@ -19036,39 +18998,6 @@
 			"scoredAt": "2026-11-19T18:48:21.281Z"
 		},
 		{
-			"key": "pr:minion_hub#706",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#706 feat(scheduling): on phones the calendar takes the screen — one toolbar row, a week strip and a floating \"+\"",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/706",
-			"sourceUpdatedAt": "2026-11-23T04:28:04Z",
-			"sourceFingerprint": "e0272f6db149e8fdde8128158d8ac64fc561b02b41f4d4bcf962bfb6b2307277",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Owner-approved mobile calendar slice with extensive automated and manual verification ready to ship.",
-			"evidence": [
-				"Owner approved spec 145 on 2026-11-21",
-				"10,406 tests passed; 28/30 targeted e2e passed",
-				"Browser run at 390x844 found and fixed real compile/effect bugs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T04:47:48.374Z"
-		},
-		{
 			"key": "pr:minion-meta#1058",
 			"kind": "pr",
 			"stage": "development",
@@ -21888,6 +21817,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:22:05.696Z"
+		},
+		{
+			"key": "pr:minion-meta#1075",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1075 spec(145): calendar on phones — the calendar takes the screen, touch that scrolls, and a list view",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1075",
+			"sourceUpdatedAt": "2026-11-23T04:51:33Z",
+			"sourceFingerprint": "5c5e258001a979807b96b6cc9533b68dd358e926d857ff9079b72a5be7d06f05",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 2
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A thorough, owner-decided Spec Kit package with measured as-is data and sliced plan, ready to move into tasks/implementation though no code exists yet.",
+			"evidence": [
+				"\"Owner picked option B... on 2026-11-21\"",
+				"Two EGM rounds completed; \"Not done: Spec Kit tasks\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
@@ -40854,6 +40815,38 @@
 			"scoredAt": "2026-11-21T12:20:19.864Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-a759be67b2ab",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a759be67b2ab.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "b5066b485666ebfdf2c47e646c0d62ca867e6b780598eda77903bc6cf259f707",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A UI anchoring bug in a floating component used across pages, clearly described but not yet triaged into a scoped fix.",
+			"evidence": [
+				"\"only the launcher clears a reserved corner; the OPEN panel still anchors at...\"",
+				"Diagnosis proposes conditional inset/margin logic keyed on isOpen"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-b59a855e018b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41883,6 +41876,38 @@
 			"scoredAt": "2026-11-21T08:33:43.235Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-0cdc0fb4e7a3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0cdc0fb4e7a3.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "cce087a85c171e81f70d5a1d431f3cb75633b21d7cb95534eba7d9e0b68b1612",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The TODO marker text is truncated and the diagnosis is speculative, so scope must be recovered from the file before this is actionable.",
+			"evidence": [
+				"Marker text ends mid-sentence: \"...and the unscheduled sheet have\"",
+				"Diagnosis labeled auto-generated with no reproduction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41945,38 +41970,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T08:48:42.067Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-315b73ded9bb",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/calendar-mobile.spec.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-315b73ded9bb.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "9829432eeb738ae680bbad7ea7ac3a41d303ebc88dc5e362c714d93a8f0e129c",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The auto-diagnosis itself flags the handoff marker text as truncated and unclear, so the scope must be clarified before this can be executed.",
-			"evidence": [
-				"diagnosis: 'the truncated detail suggests the handoff comment itself may be unclear'",
-				"fix direction step 1 is to read the full TODO because the scan cut it off"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T12:47:58.739Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-380ed33fff7f",
@@ -42118,6 +42111,40 @@
 			"scoredAt": "2026-11-16T10:22:41.977Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-832e1dde4bdc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-832e1dde4bdc.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "0271ed20e6df2c943eccebfee77925033bda3e63d8d0b7313795967d844c2cef",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-955c2e2066ec"
+			],
+			"rationale": "Same router-not-started/view=day defect as the calendar page finding, so the two should become one fix rather than two separate goals.",
+			"evidence": [
+				"Identical marker text: \"if the router is not started yet the address keeps no view=day\"",
+				"Appointments PageBody.svelte vs scheduling/calendar PageBody.svelte, same merged PR #706"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-9388338cb205",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42150,6 +42177,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:23:57.768Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-955c2e2066ec",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/scheduling/calendar/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-955c2e2066ec.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "f84dcdd7cb77a524497ffd7c0ddb6970e36d9567b3915b9ecf1e445b8b32a5e3",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-832e1dde4bdc"
+			],
+			"rationale": "Duplicate of the appointments-page router/view=day finding in a different file from the same merged PR.",
+			"evidence": [
+				"Identical marker text to the appointments finding",
+				"\"merged PR: https://github.com/NikolasP98/minion_hub/pull/706 (#706)\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-96f1290718f8",
@@ -52009,6 +52070,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
+		},
+		{
+			"key": "run:minion_hub#45114250660",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45114250660",
+			"sourceUpdatedAt": "2026-11-23T04:51:01Z",
+			"sourceFingerprint": "3b65ed9c745e8c30e07da0c786cac6f70b6c24f23ebf288f435076a1e0608c63",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A routine in-progress CI run triggered by a push, not an actionable backlog goal.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
+		},
+		{
+			"key": "run:minion_hub#45114250705",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45114250705",
+			"sourceUpdatedAt": "2026-11-23T04:51:01Z",
+			"sourceFingerprint": "8305d1518026862eae0b1c82a44fa5184310daf0674819b55d8b7405729ae9df",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine storybook-deploy CI run on push, not a goal requiring ranking.",
+			"evidence": [
+				"status: in_progress",
+				"summary: push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:54:05.996Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
