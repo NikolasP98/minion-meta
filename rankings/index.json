@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T05:47:05.134Z",
+	"generatedAt": "2026-11-23T06:17:55.138Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1853,6 +1853,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T00:18:17.144Z"
+		},
+		{
+			"key": "proposal:2026-11-06-agent-transcript-evals-and-runtime-improvements",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Evaluate real agent traces and correct date, outcome, access, and completion behavior",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md",
+			"sourceUpdatedAt": "2026-11-11",
+			"sourceFingerprint": "52b9de19221129dfb9b4b55633e73903738efd3e7b35bcdb83b17a3626de468a",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Flags real correctness and secret-exposure risks across the agent runtime but remains proposal-stage and needs to be split into scoped specs before work can start.",
+			"evidence": [
+				"Observed persistence of unmasked secret-bearing fields in transcripts (finding F12)",
+				"Six distinct DELTA items spanning date/metric correctness, receipts, and memory provenance",
+				"Status is in-spec, not yet a bounded spec"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-current-org-getter-spec",
@@ -4343,6 +4376,41 @@
 			"band": "medium",
 			"axes": {
 				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"spec:2026-11-11-agent-fixture-audit-portability-spec"
+			],
+			"rationale": "Reproduces a real correctness bug where an aborted agent attempt can surface a stale earlier success as the current result, risking misrepresented outcomes to users.",
+			"evidence": [
+				"Independent probe confirms abort before message_end selects an earlier successful assistant and returns its old text/reasoning as the new result",
+				"Confirmed via real SDK AgentSession and the actual channel payload builder, not a fabricated fixture",
+				"Owner instruction already authorizes scoped repair of this specific defect"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
+			"key": "spec:2026-11-12-agent-release-forward-base-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Restore working runners while qualifying the agent release on fixed main D585",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-12-agent-release-forward-base-spec.md",
+			"sourceUpdatedAt": "2026-11-12",
+			"sourceFingerprint": "54572041bd5979a4c7a6777c8fbdd7eb9454c595a9caaa7f0c3986f2f4fb17cc",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
 				"importance": 6,
 				"impact": 6
 			},
@@ -4351,20 +4419,17 @@
 				"implementation": 5
 			},
 			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-11-11-agent-fixture-audit-portability-spec",
-				"spec:2026-11-12-agent-release-forward-base-spec",
-				"spec:2026-11-13-agent-audit-contents-read-proof-spec"
-			],
-			"rationale": "Fixes a real correctness bug where an aborted attempt can return stale successful output, but is part of the same fragmented PR369 release chain as the other specs.",
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An upstream runner migration to Blacksmith queues indefinitely on this account, blocking CI for the in-flight agent release until runners are restored.",
 			"evidence": [
-				"probe shows abort before message_end selects an earlier successful assistant, returning stale success/reasoning",
-				"part of chain extending 2026-11-11 and feeding 2026-11-13"
+				"Root observed the actual main Docker run queued with no assigned Blacksmith runner",
+				"Owner reports Blacksmith is unsupported on this personal account",
+				"Independent annotated-pair replay passes 84/84 main consumers as a local qualification receipt"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
+			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
 			"key": "pr:minion (gateway)#330",
@@ -5111,39 +5176,6 @@
 			"scoredAt": "2026-11-21T08:31:05.042Z"
 		},
 		{
-			"key": "proposal:2026-11-06-agent-transcript-evals-and-runtime-improvements",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Evaluate real agent traces and correct date, outcome, access, and completion behavior",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-06-agent-transcript-evals-and-runtime-improvements.md",
-			"sourceUpdatedAt": "2026-11-11",
-			"sourceFingerprint": "52b9de19221129dfb9b4b55633e73903738efd3e7b35bcdb83b17a3626de468a",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Bundles six distinct correctness/security deltas (secrets, outcomes, dates, booking, receipts, memory) under one proposal, which is too broad to size as a single delivery unit yet.",
-			"evidence": [
-				"\"environment enumeration ... persisted unmasked secret-bearing fields\"",
-				"6 separate DELTA items spanning unrelated subsystems",
-				"status in-spec, no PR yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3174605053",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -5782,78 +5814,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:28:18.225Z"
-		},
-		{
-			"key": "spec:2026-11-12-agent-release-forward-base-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion",
-			"title": "Restore working runners while qualifying the agent release on fixed main D585",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-12-agent-release-forward-base-spec.md",
-			"sourceUpdatedAt": "2026-11-12",
-			"sourceFingerprint": "54572041bd5979a4c7a6777c8fbdd7eb9454c595a9caaa7f0c3986f2f4fb17cc",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-11-11-agent-fixture-audit-portability-spec",
-				"spec:2026-11-12-agent-current-attempt-output-spec",
-				"spec:2026-11-13-agent-audit-contents-read-proof-spec"
-			],
-			"rationale": "Addresses a CI-runner infra blocker (Blacksmith incompatible with the account) that is stalling the same PR369 release as the sibling specs.",
-			"evidence": [
-				"\"Blacksmith does not support this personal account\"; Docker run queued with no assigned runner",
-				"annotated pair passes 84/84 main consumers locally"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
-		},
-		{
-			"key": "spec:2026-11-13-agent-audit-contents-read-proof-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion",
-			"title": "Verify the fixed agent audit source with contents-read Git proof",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-13-agent-audit-contents-read-proof-spec.md",
-			"sourceUpdatedAt": "2026-11-13",
-			"sourceFingerprint": "bc4f456cd7e3b13369dec2b641a8f510f92d5b4b2669e5b20802982ce4cac729",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-11-12-agent-release-forward-base-spec",
-				"spec:2026-11-12-agent-current-attempt-output-spec",
-				"spec:2026-11-11-agent-fixture-audit-portability-spec"
-			],
-			"rationale": "Fixes a CI token-permission gap (needs Pull requests read, token only has Contents read) that is the latest blocker in the same PR369 release chain.",
-			"evidence": [
-				"security job exits 1 on 'Audited fixture baseline transition rejected'",
-				"token has Actions/Contents/Metadata read but no Pull requests read"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -8773,42 +8733,6 @@
 			"scoredAt": "2026-11-21T08:39:28.987Z"
 		},
 		{
-			"key": "spec:2026-11-11-agent-fixture-audit-portability-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion",
-			"title": "Qualify portable audit fixtures through an exact technical source",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-11-agent-fixture-audit-portability-spec.md",
-			"sourceUpdatedAt": "2026-11-11",
-			"sourceFingerprint": "bd674bafe56e011755b794507b81a7a1d29f05d848b9fc274fadac8f8a01f014",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-11-12-agent-current-attempt-output-spec",
-				"spec:2026-11-12-agent-release-forward-base-spec",
-				"spec:2026-11-13-agent-audit-contents-read-proof-spec"
-			],
-			"rationale": "One of four sequential narrow specs each unblocking the next for the same stalled PR369 release, so they should be tracked as one release effort.",
-			"evidence": [
-				"reproduced test-portability defect: audit subset passed 52/57, full invocation 136/141",
-				"status implementing, extends two prior specs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
-		},
-		{
 			"key": "proposal:2026-09-26-hub-custom-columns-next-phases",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11062,6 +10986,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T20:49:49.904Z"
+		},
+		{
+			"key": "spec:2026-11-13-agent-audit-contents-read-proof-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Verify the fixed agent audit source with contents-read Git proof",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-13-agent-audit-contents-read-proof-spec.md",
+			"sourceUpdatedAt": "2026-11-13",
+			"sourceFingerprint": "bc4f456cd7e3b13369dec2b641a8f510f92d5b4b2669e5b20802982ce4cac729",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A CI helper calls a GitHub pulls API endpoint outside the job token's granted permissions, failing the security job and blocking the release's admission check.",
+			"evidence": [
+				"Job token has Actions/Contents/Metadata read but no Pull requests read, per root's report",
+				"Helper's GET /pulls/373 call requires a permission outside that set, reproduced by a controlled denial replay",
+				"Fix is scoped to replacing the PR metadata call with two Git-reference reads"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
 			"key": "issue:minion_hub#205",
@@ -15166,38 +15123,6 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
-			"key": "pr:minion_hub#708",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#708 feat(settings): set a shared Hub name in Appearance",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/708",
-			"sourceUpdatedAt": "2026-11-23T05:43:52Z",
-			"sourceFingerprint": "a9f7b6d8c979c9a57dc37f7999833bbe735873be93b1e599f78baa88a0531238",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Well-tested UI/naming slice of a multi-slice spec but gated on PR707 deploy and still awaiting required hosted CI, so merge timing is externally blocked.",
-			"evidence": [
-				"Hold merge until 707 deploys and its additive migration is confirmed",
-				"Required hosted CI on this exact head remains a separate gate"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:47:04.915Z"
-		},
-		{
 			"key": "pr:minion-meta#833",
 			"kind": "pr",
 			"stage": "development",
@@ -17311,6 +17236,39 @@
 			"scoredAt": "2026-11-18T10:17:28.752Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f5cf20d1ded2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/+layout.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f5cf20d1ded2.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "70068b89b618158f88b8f77acbb3bde0c944be64f859cde5f9b36e0c96b8b347",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, bounded SSR audit of the root layout branding code, which could cause hydration mismatches or build failures on the hub's SSR deployment.",
+			"evidence": [
+				"Status approved with explicit definition of done",
+				"Root +layout.ts affects every route, raising the blast radius of any SSR incompatibility",
+				"Hub deploys via SvelteKit adapter-vercel with SSR enabled"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
 			"key": "issue:minion-meta#356",
 			"kind": "issue",
 			"stage": "proposal",
@@ -18897,6 +18855,39 @@
 			"scoredAt": "2026-11-16T14:51:11.850Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-0cdc0fb4e7a3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0cdc0fb4e7a3.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "d089f16ccc85c74446c0ad8e09efbfceee07a079b10171795a6e012d934ae7c0",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, bounded cleanup of a truncated handoff TODO touching shared state across appointment rows, shift dialog, and unscheduled sheet in a production POS flow.",
+			"evidence": [
+				"Status approved with explicit definition of done",
+				"Marker text is truncated mid-sentence ('...have'), itself a handoff-contract defect",
+				"Affects shared state across appointment rows, shift dialog, and unscheduled sheet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-92e3e453a2ae",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18960,38 +18951,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T08:17:25.797Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f5cf20d1ded2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/+layout.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f5cf20d1ded2.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "d6f44d5cc2c6160fc6ba3c78b64601ee11079fbbbdbcfc67aedb7a35a77a14be",
-			"score": 45,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Still draft with an open-ended 'audit' scope rather than a bounded fix, so readiness lags the plausible SSR/deploy risk on Vercel.",
-			"evidence": [
-				"TODO(handoff): First-document branding needs an SSR compatibility audit",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:26:15.405Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-scheduling-link-mutations-spec",
@@ -21917,6 +21876,39 @@
 			"scoredAt": "2026-11-21T08:22:05.696Z"
 		},
 		{
+			"key": "pr:minion (gateway)#377",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion (gateway)",
+			"title": "#377 test(load): k6 load suite for the gateway",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/377",
+			"sourceUpdatedAt": "2026-11-16T05:33:36Z",
+			"sourceFingerprint": "095864c9fc1f0999fe08a297284e6e6c036aa0e7c9e8cbf03be27dc615b60faa",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Bounded, tested k6 load suite is ready to merge as an opt-in path with no CI or production risk.",
+			"evidence": [
+				"Thresholds passed on workstation and netcup replica per PR body",
+				"Explicitly not wired into pnpm test or CI, and refuses non-loopback targets without ALLOW_REMOTE",
+				"oxfmt/oxlint checks run on test/load"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
 			"key": "pr:minion-meta#827",
 			"kind": "pr",
 			"stage": "development",
@@ -22576,6 +22568,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T08:17:41.744Z"
+		},
+		{
+			"key": "spec:2026-11-11-agent-fixture-audit-portability-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion",
+			"title": "Qualify portable audit fixtures through an exact technical source",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-11-agent-fixture-audit-portability-spec.md",
+			"sourceUpdatedAt": "2026-11-11",
+			"sourceFingerprint": "bd674bafe56e011755b794507b81a7a1d29f05d848b9fc274fadac8f8a01f014",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-11-12-agent-current-attempt-output-spec"
+			],
+			"rationale": "Narrow, reproduced test-portability fix for audit fixtures is detailed but explicitly gated behind a required normally-signed approval before implementation.",
+			"evidence": [
+				"Confirmed defect: audit subset passed 52 of 57 against mismatched fixture bytes",
+				"States implementation is permitted 'after this approved state is normally signed'",
+				"Scope limited to CI fixture qualification, not runtime behavior"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
@@ -24777,40 +24804,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:20:28.477Z"
-		},
-		{
-			"key": "pr:minion (gateway)#377",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion (gateway)",
-			"title": "#377 test(load): k6 load suite for the gateway",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/pull/377",
-			"sourceUpdatedAt": "2026-11-16T05:33:36Z",
-			"sourceFingerprint": "095864c9fc1f0999fe08a297284e6e6c036aa0e7c9e8cbf03be27dc615b60faa",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1030"
-			],
-			"rationale": "Load-test suite is scoped, isolated from prod paths, and already validated twice with passing thresholds.",
-			"evidence": [
-				"\"Run on 2026-11-14: all thresholds passed\" on workstation and netcup replica",
-				"refuses non-loopback targets unless ALLOW_REMOTE=1"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "pr:minion_hub#626",
@@ -27457,39 +27450,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T07:17:24.127Z"
-		},
-		{
-			"key": "proposal:2026-11-13-cloudflare-worker-deploy-readiness",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Make Cloudflare worker deployment validate readiness and report measured results",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-13-cloudflare-worker-deploy-readiness.md",
-			"sourceUpdatedAt": "2026-11-16",
-			"sourceFingerprint": "0a851f22636e4b53298b24f5f5d360efbb265bb5c88f49a31bf026d1014a173f",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Well-evidenced but ancillary (non-gateway) pipeline issue still at proposal/draft stage with no implementation started.",
-			"evidence": [
-				"Node20 vs Wrangler-required Node22.12 mismatch confirmed from actual job log",
-				"CF_ACCOUNT_ID/CF_API_TOKEN render empty in the run",
-				"before/after benchmark numbers are static, not measured"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T05:48:58.413Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1402049621",
@@ -39727,6 +39687,38 @@
 			"scoredAt": "2026-11-17T17:47:29.103Z"
 		},
 		{
+			"key": "pr:minion-meta#1077",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1077 docs(hub): verify organization names throughout Hub",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1077",
+			"sourceUpdatedAt": "2026-11-23T06:01:57Z",
+			"sourceFingerprint": "f69e73abe531f24003ea67f9bece0c7edf90c7bb2de183e9b68b99eda25c915e",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Draft doc tracks a partially verified release with explicit pending gates, so it is not yet a finished deliverable.",
+			"evidence": [
+				"Draft status explicitly tracks 'remaining identity consumers through final CI, deployment and runtime verification'",
+				"SPA first-document exception is explicitly unresolved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42107,38 +42099,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:33:43.235Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-0cdc0fb4e7a3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0cdc0fb4e7a3.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "cce087a85c171e81f70d5a1d431f3cb75633b21d7cb95534eba7d9e0b68b1612",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The TODO marker text is truncated and the diagnosis is speculative, so scope must be recovered from the file before this is actionable.",
-			"evidence": [
-				"Marker text ends mid-sentence: \"...and the unscheduled sheet have\"",
-				"Diagnosis labeled auto-generated with no reproduction"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T04:54:05.996Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-1f676fb29e24",
@@ -44715,6 +44675,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T20:48:27.701Z"
+		},
+		{
+			"key": "proposal:2026-11-13-cloudflare-worker-deploy-readiness",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Make Cloudflare worker deployment validate readiness and report measured results",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-13-cloudflare-worker-deploy-readiness.md",
+			"sourceUpdatedAt": "2026-11-16",
+			"sourceFingerprint": "0a851f22636e4b53298b24f5f5d360efbb265bb5c88f49a31bf026d1014a173f",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Documents a readiness gap in an explicitly ancillary worker pipeline and authorizes no credential or deployment action until the owner decides.",
+			"evidence": [
+				"Proposal explicitly 'authorizes no credential change, worker deployment, live probe or behavior implementation'",
+				"Node20/Wrangler22 incompatibility and empty CF secret bindings are identified but unresolved",
+				"Explicitly stated as separate from and not blocking the scoped Gateway release"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1509650200",
@@ -50984,39 +50977,6 @@
 			"scoredAt": "2026-11-18T04:17:01.388Z"
 		},
 		{
-			"key": "run:minion_hub#45117456668",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45117456668",
-			"sourceUpdatedAt": "2026-11-23T05:23:53Z",
-			"sourceFingerprint": "32a4936fac45edf0416a5575f5887d6ed68c56ca83ab312cc3156206aa10bd72",
-			"score": 15,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an in-progress CI run status, not a scoped work item to rank as a board goal.",
-			"evidence": [
-				"CI",
-				"push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:26:15.405Z"
-		},
-		{
 			"key": "issue:minion-meta#689",
 			"kind": "issue",
 			"stage": "proposal",
@@ -52304,6 +52264,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
+		},
+		{
+			"key": "run:minion_hub#45122722684",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45122722684",
+			"sourceUpdatedAt": "2026-11-23T06:14:03Z",
+			"sourceFingerprint": "0ad93c31d58098e008bc356a61311cea296df55fd89edb68e6888394c964a6b5",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on master with no reported failure carries no actionable content until it completes.",
+			"evidence": [
+				"status: in_progress, push on master",
+				"No failure or error detail present in the record"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
+			"key": "run:minion_hub#45122722749",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45122722749",
+			"sourceUpdatedAt": "2026-11-23T06:14:13Z",
+			"sourceFingerprint": "96bc839e6124a95619c29f59615e030af57f79e7d5cd1bf2cfd416d9a62fc4d9",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress CI run on master with no reported failure carries no actionable content until it completes.",
+			"evidence": [
+				"status: in_progress, push on master",
+				"No failure or error detail present in the record"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
