@@ -1,12 +1,12 @@
 # Tasks: Organization names throughout Hub
 
 **Input**: spec.md, plan.md, research.md, data-model.md, contracts/branding.md, coverage.md.
-**State**: No application implementation started. Unchecked items are planned work, not failed tests. Owner spec approval required before T002 onward.
+**State**: Owner approved implementation and scoped release on 2026-11-22. Unchecked items remain planned work; completion requires the evidence named below.
 
 ## Phase 1: Setup
 
-- [ ] T001 Obtain owner approval for this data/security-tagged spec and record the decision in the top-level spec frontmatter.
-- [ ] T002 Create an isolated Hub implementation branch against the current registry PR base and reconcile coverage.md/source-evidence.json with the actual base; update plan.md for changed paths and access rules.
+- [x] T001 Obtain owner approval for this data/security-tagged spec and record the decision in the top-level spec frontmatter.
+- [x] T002 Create an isolated Hub implementation branch against the current registry PR base and reconcile coverage.md/source-evidence.json with the actual base; update plan.md for changed paths and access rules.
 
 ## Phase 2: Foundation — slice 1
 

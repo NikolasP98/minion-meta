@@ -3,7 +3,7 @@ id: 2026-11-21-hub-white-label
 title: Organization names throughout Hub
 status: in-spec
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-22
 repos: [minion_hub]
 spawned_spec: 2026-11-21-hub-white-label-spec
 tags: [data, security]
@@ -31,4 +31,4 @@ Text identity in Hub web UI only. No logo/favicons/colors, native installer rena
 
 Definition of done: all identity inventory entries converted; Faces/default/owner-edit/create/retry/two-org boundary cases pass; maximum-length layouts are measured; localization, access, design-token and existing application gates pass; independent Standards/Spec review and human merge precede deployment proof.
 
-This request produces specification/review artifacts. Planned implementation tasks remain unchecked. Data/security-tagged owner approval is required before application edits, and human merge remains required.
+The owner approved implementation and scoped release on 2026-11-22: “approved. lmk when its all live”. Application work is in progress; task and release evidence are tracked with the spec.

@@ -1,14 +1,15 @@
 ---
-status: review
-verdict: pending
-owner_approval: pending
+status: implementing
+verdict: approved
+owner_approval: approved
+owner_approved_at: 2026-11-22
 ---
 
 # Feature Specification: Organization names throughout Hub
 
 **Feature**: `145-hub-white-label`
 **Created**: 2026-11-21
-**Status**: Owner approval pending; EGM evidence is recorded in egm/
+**Status**: Owner approved implementation and release on 2026-11-22: “approved. lmk when its all live”. Implementation in progress; EGM evidence is recorded in egm/
 **Input**: Make MINION branding configurable per organization. Default MINION; organization onboarding uses the organization name. Faces should see Faces Hub. Only the name changes; Hub remains fixed. Bound the name so it fits.
 
 ## User Scenarios & Testing

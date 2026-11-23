@@ -1,14 +1,16 @@
 ---
 id: 2026-11-21-hub-white-label-spec
 title: Organization names throughout Hub
-stage: spec
-status: review
+stage: dev
+status: implementing
 pass: 1
 created: 2026-11-21
-updated: 2026-11-21
+updated: 2026-11-22
 repos: [minion_hub]
 proposal: 2026-11-21-hub-white-label
-verdict: pending
+verdict: approved
+owner_approval: approved
+owner_approved_at: 2026-11-22
 pr: 1074
 type: feature
 tags: [data, security]
@@ -33,7 +35,7 @@ Make the MINION part of Hub's identity configurable per organization. Faces shou
 
 ## 2. Approval and delivery
 
-Speckit/EGM document work only. No Hub implementation, production mutation, migration, merge, deployment or runtime qualification is implied. This data/security-tagged spec requires owner approval before code and human merge. EGM evidence is recorded in the feature directory; its status does not substitute for owner approval.
+The owner approved implementation and scoped release on 2026-11-22: “approved. lmk when its all live”. Development now proceeds through the three approved slices, required qualification, reviewed PRs, merge and runtime verification. EGM evidence is recorded in the feature directory. Approval is authorization, not evidence of deployment.
 
 ## 3. Out of scope
 
@@ -47,4 +49,4 @@ Run the [qualification runbook](145-hub-white-label/quickstart.md) on an isolate
 
 The full EGM run passed. Feature critics converged in rounds 4–5; implementation-readiness reviewers converged in rounds 4–5, with no findings in the final round. See the [consolidated report](145-hub-white-label/egm/consolidated_review_report.md), [exact final reviewed package](145-hub-white-label/egm/final-review-package.zip), and [interactive proposal preview](145-hub-white-label/review.html). The preview uses the Hub's shared design tokens; it is illustrative rather than application runtime evidence.
 
-Owner approval is still pending. EGM readiness is not owner approval of this data/security-tagged implementation.
+Owner approval was received on 2026-11-22. Release completion remains pending application qualification and live verification.
