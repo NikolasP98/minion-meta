@@ -12,7 +12,7 @@ Separate private clones own data/server, shared shell/setup/editor and remaining
 |---|---|---|---|---|
 | Data and guarded service | Implemented | Focused/native checks and all 15 hosted checks passed | [PR707](https://github.com/NikolasP98/minion_hub/pull/707), merged `0aab78ecb089b548f057ae67ce87ee1820b42536` | Production Ready; migration applied once. Data slice only. |
 | Shared delivery, shell, creation and editor | Complete | All19reported hosted checks passed on exacta3b93889 | PR708 merged896da2e0 | ProductionReady; authenticated editor and keyboard qualified |
-| Remaining identity consumers and final qualification | Complete candidate | Final check/pipeline/hosted CI pending | Candidate5de104dd | Pending |
+| Remaining identity consumers and final qualification | Complete candidate | Corrective review/105focused/dual-host/check passed; hosted CI running | PR709,head11600a99 | Pending |
 
 ## First-document architecture amendment
 

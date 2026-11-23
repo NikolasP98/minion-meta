@@ -307,7 +307,7 @@ The architecture view depicts global deployed software and its real endpoints; i
 
 ## Final source inventory reconciliation
 
-This source-only reconciliation uses the approved 275-row scan in `source-evidence.json` and clean pushed candidate `45aead23be155c9e7a551932893e5434d069837f`, inspected in `/tmp/minion-white-label-145-final-ci`. The CRT correction and mounted regression are now included. Per-file hashes, refreshed binding anchors and every excluded row are recorded under `final_source_inventory` in [implementation/consumer-reconciliation.json](implementation/consumer-reconciliation.json). PR709 is open; this source closure does not claim that hosted CI, final browser qualification or deployment has completed.
+This source-only reconciliation uses the approved 275-row scan in `source-evidence.json` and clean pushed candidate `11600a993f61b564500cee540880988e0a92ff29`, inspected in `/tmp/minion-white-label-145-final-ci`. The CRT correction, prefix-only personal-logo preset color, personal-logo suffix styling and mounted regressions are included. The four-file refresh from `45aead23be155c9e7a551932893e5434d069837f` adds no source files; its source hashes are recorded separately in `final_source_inventory.source_refresh`. The `vitest.config.ts` delta adds only the handoff TODO for the separately tracked CSS-producer audit. Per-file hashes, refreshed binding anchors and every excluded row are recorded under `final_source_inventory` in [implementation/consumer-reconciliation.json](implementation/consumer-reconciliation.json). PR709 is open; this source closure does not claim that hosted CI, final browser qualification or deployment has completed.
 
 All 51 approved Hub-identity rows have source dispositions: 41 Svelte occurrences across 34 paths, plus 10 message values across EN and ES. All five named localized callers pass the required current prefix/full-name interpolation in source. No identity row remains unclosed by source inspection.
 
@@ -323,14 +323,14 @@ The earlier consumer checkpoint covered 32 owned paths, 33 identity rows and fiv
 | `technical/deployed-service` | 2 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
 | `historical/release-provenance` | 1 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
 
-Of the 224 excluded rows, 220 literal snippets remain exact. Four benign source changes retain the approved meaning: MinionLogo keeps its `minion` preset id and secondary-color styling through a style directive; Sidebar replaces its private `.brand-minion` presentation selector with `.brand-name`; two watermark comments now describe organization identity. Native updater text, deployed service identities, provider/email attribution, author samples, persistence keys and runtime identifiers remain outside tenant renaming. New literal `MINION` references in the validator and owner editor represent the required default/reset choice and its validation.
+Of the 224 excluded rows, 220 literal snippets remain exact. Four benign source changes retain the approved meaning: MinionLogo keeps its `minion` preset id and secondary-color styling through the typed `prefixColor` prop and the prefix-only style directive in HubWordmark; Sidebar replaces its private `.brand-minion` presentation selector with `.brand-name`; two watermark comments now describe organization identity. Native updater text, deployed service identities, provider/email attribution, author samples, persistence keys and runtime identifiers remain outside tenant renaming. New literal `MINION` references in the validator and owner editor represent the required default/reset choice and its validation.
 
 ### Identity row closure
 
 | Approved source | Final source binding or disposition |
 |---|---|
 | `src/lib/components/layout/DesktopTitlebar.svelte:23` | Current line(s) 24: `<span class="t-label" data-tauri-drag-region>{getBranding().fullName}</span>` |
-| `src/lib/components/layout/MinionLogo.svelte:368` | Current line(s) 294: `<HubWordmark inheritStyles />` |
+| `src/lib/components/layout/MinionLogo.svelte:368` | Current line(s) 291, 292, 293, 294, 295: `<HubWordmark / inheritStyles / prefixColor={currentPreset.id === 'minion' ? brandPink : currentPreset.secondaryColor} / logoSuffixStyles / />` |
 | `src/lib/components/layout/Sidebar.svelte:572` | Current line(s) 581: `aria-label={getBranding().fullName}` |
 | `src/lib/components/layout/Sidebar.svelte:575` | Current line(s) 584: `<span class="brand-name t-body"><HubWordmark /></span>` |
 | `src/lib/components/layout/Topbar.svelte:213` | Current line(s) 196, 229: `aria-label={getBranding().fullName} / aria-label={getBranding().fullName}` |
@@ -430,6 +430,6 @@ The clean pushed candidate contains all 26 scoped new Hub files: 16 planned addi
 | `desktop/main.ts` | Unchanged |
 | `desktop/vite.config.ts` | Unchanged |
 
-PublicTaskShell retains its existing public chip wrapper and contrast styles while binding the prefix through `getBranding().name` beside the unchanged `Hub` suffix. Sidebar, Topbar and MinionLogo compose the shared HubWordmark. CSS watermarks consume a bound text attribute through `attr()`; authored Markdown sample content remains separate from the resolved preview heading. These observations close identity text rows only.
+PublicTaskShell retains its existing public chip wrapper and contrast styles while binding the prefix through `getBranding().name` beside the unchanged `Hub` suffix. Sidebar, Topbar and MinionLogo compose the shared HubWordmark. MinionLogo supplies its trusted preset color only to the prefix, and opts into its existing suffix foreground opacity (90%) and bold weight; the ordinary shell wordmark defaults remain unchanged. CSS watermarks consume a bound text attribute through `attr()`; authored Markdown sample content remains separate from the resolved preview heading. These observations close identity text rows only.
 
 Separate [T014 provisioning evidence](implementation/provision-native/README.md) records three completed local native cases against the actual creation/provision services and both creation models, with only outbound transports mocked. All three exercised application sources match this pushed head byte-for-byte. Those cases prove creation/partial-retry persistence and admission within their stated boundary; they do not claim external Workforce/workstation success, browser authentication, final hosted CI or deployment. Other runtime and release states remain in the separate implementation evidence package.
