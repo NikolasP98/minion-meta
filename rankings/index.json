@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T21:47:39.234Z",
+	"generatedAt": "2026-11-23T22:18:01.492Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3811,6 +3811,41 @@
 			"scoredAt": "2026-11-21T08:33:43.235Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-d559a7b185ad",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-slots.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d559a7b185ad.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "11dea1fe62adcffe711ef00f4fbe603e0958f3142c8a39f0f9818a4ec903d190",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a24223dc6360",
+				"pr:minion-meta#1090"
+			],
+			"rationale": "This is a core correctness gap defeating the closures feature's purpose (slots still offered during closed periods) and belongs in the same spec-147 implementation as the related closures findings.",
+			"evidence": [
+				"TODO(handoff): agenda closures are NOT subtracted here",
+				"causes no-shows, conflicts, or misuse per the diagnosis"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T22:18:01.299Z"
+		},
+		{
 			"key": "spec:2026-10-03-readiness-current-org-getter-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -4011,6 +4046,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T01:17:31.665Z"
+		},
+		{
+			"key": "pr:minion-meta#1090",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1090 spec(147): close the agenda with a reason, without booking a fake patient",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1090",
+			"sourceUpdatedAt": "2026-11-23T22:05:53Z",
+			"sourceFingerprint": "f423fd503ea9094b242510a4e9ec6a962ad29e2b56c90778eb6c59a5224c5612",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-a24223dc6360",
+				"proposal:postmerge-minion-hub-d559a7b185ad"
+			],
+			"rationale": "Owner-approved spec with full AS-IS/TO-BE/DELTA and plan/tasks replaces a real fake-patient booking workaround and is explicitly slated to go live ASAP.",
+			"evidence": [
+				"Owner approved 2026-11-23: 'Use EGM + Spec Kit, then go live asap'",
+				"today staff book a fake Control patient to close the agenda"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T22:18:01.299Z"
 		},
 		{
 			"key": "spec:2026-10-03-gw022a-linux-filesystem-atomicity",
@@ -6886,40 +6956,6 @@
 			"scoredAt": "2026-11-22T04:17:13.430Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d559a7b185ad",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/scheduling-slots.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d559a7b185ad.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "4ffe2d295391701008767608cc2db1a22edc40de700e65e6a91e0ddb866a611a",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-a24223dc6360"
-			],
-			"rationale": "Scheduling-slots service not subtracting sched_closures lets users book during blocked time, the same closures gap underlying the related calendar-warning finding, so both should merge into one goal.",
-			"evidence": [
-				"TODO(handoff): agenda closures (spec 147, sched_closures) are NOT subtracted here",
-				"same merged PR #725 (minion_hub) as the sibling BookingCalendar finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T21:36:47.041Z"
-		},
-		{
 			"key": "spec:2026-08-17-gw-whatsapp-cloud-template-fallback-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7540,21 +7576,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 5
+				"specification": 8,
+				"implementation": 4
 			},
 			"confidence": 5,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Load-test spec surfaces a real migration-shipping bug but the PR is still draft and needs human review before the underlying fix is actioned.",
+			"rationale": "The load-suite spec is well documented but the significant blocking finding it surfaced (unshipped migration SQL preventing free-tier API start) is only noted inline and needs its own actionable follow-up before this can be called done.",
 			"evidence": [
-				"status: draft",
-				"Results in specs/115-gateway-k6-load-suite/spec.md §Results",
-				"surfaced bug: built gateway cannot start free-tier API because migration SQL is not shipped"
+				"migration SQL is not shipped so the built gateway cannot start the free-tier API",
+				"status: draft, results only in spec.md §Results"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T22:17:02.632Z"
+			"scoredAt": "2026-11-23T22:18:01.299Z"
 		},
 		{
 			"key": "pr:minion-meta#1056",
@@ -12043,41 +12078,6 @@
 			"scoredAt": "2026-11-19T23:47:21.098Z"
 		},
 		{
-			"key": "pr:minion-meta#1090",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1090 spec(147): close the agenda with a reason, without booking a fake patient",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1090",
-			"sourceUpdatedAt": "2026-11-23T20:39:29Z",
-			"sourceFingerprint": "1dc5619d6b1e201defb283a8e44620193176eec84d8ecf8b9f6f850d1ca3bf53",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 3
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#725"
-			],
-			"rationale": "Owner-approved spec with EGM review folded in, ASAP urgency, directly enabling the paired implementation PR.",
-			"evidence": [
-				"owner approved 2026-11-23 'go live asap'",
-				"EGM round findings folded into spec",
-				"FigCraft proposal explicitly skipped for speed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T20:47:33.667Z"
-		},
-		{
 			"key": "proposal:2026-08-13-crm-customers-server-pagination",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15276,40 +15276,6 @@
 			"scoredAt": "2026-11-21T08:35:30.613Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-a24223dc6360",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a24223dc6360.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "b2b7f8d03e297bd84f03a75da8a0ced1726d8616f094273ab8b081a467a2bd84",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-d559a7b185ad"
-			],
-			"rationale": "The calendar drag-into-closure warning gap shares its root cause with the sibling scheduling-slots closures bug from the same merged PR and should become one closure-enforcement goal.",
-			"evidence": [
-				"TODO(handoff): dragging/dropping an event INTO a closure is not warned",
-				"same merged PR #725 (minion_hub) as the related closures finding"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T21:36:47.041Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b252c0822c83",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -17085,6 +17051,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T23:48:28.733Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-a24223dc6360",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a24223dc6360.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "518481a24ece8d7c32659c9002367ad26a5ebc6913d3afdbfbb769a8e4cfd681",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-d559a7b185ad",
+				"pr:minion-meta#1090"
+			],
+			"rationale": "This drag-drop closure-collision gap is part of the same spec-147 closures effort and should be folded into that implementation rather than tracked standalone.",
+			"evidence": [
+				"TODO(handoff): dragging/dropping an event INTO a closure is not warned",
+				"fix direction: validate drop target against closure periods before commit"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T22:18:01.299Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ac3dd6e80c62",
@@ -41495,6 +41496,38 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
+			"key": "pr:minion_hub#726",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#726 fix(scheduling): the closed-agenda label stays inside its day",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/726",
+			"sourceUpdatedAt": "2026-11-23T22:10:26Z",
+			"sourceFingerprint": "4d8d6ac237f6ea4f36773cb521a234fa0cc710a5e6041ff182ab8f7f4c7a3ba3",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A scoped, already-tested CSS fix for a cosmetic week-view overflow with passing gates is ready to merge as-is.",
+			"evidence": [
+				"overflow: hidden fix with left-aligned shrinkable span",
+				"prettier, lint:design and lint:tokens pass, CSS only"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T22:18:01.299Z"
+		},
+		{
 			"key": "proposal:2026-10-09-gateway-native-formatter-reproducibility",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -52835,38 +52868,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
-		},
-		{
-			"key": "run:minion_hub#45270871364",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45270871364",
-			"sourceUpdatedAt": "2026-11-23T21:33:31Z",
-			"sourceFingerprint": "6498d3c0ac65e1d5620e78206d563f1e5102f778f37dc86edb1697b349a9fa42",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "In-progress routine CI run with no failure or actionable signal yet.",
-			"evidence": [
-				"CI run status in_progress",
-				"triggered by push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T21:36:47.041Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
