@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T23:17:16.288Z",
+	"generatedAt": "2026-11-23T23:47:06.668Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26819,6 +26819,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T12:18:02.058Z"
+		},
+		{
+			"key": "issue:minion-meta#1091",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1091 [monitor:unstick] Run 016408d5 (rank board goals) failed: both LLM providers rejected ranking batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1091",
+			"sourceUpdatedAt": "2026-11-23T23:17:22Z",
+			"sourceFingerprint": "55680142eef2061e96de624d14b38c7820a6ce7bfadc2f0a4e6cb19ab56f9026",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Transient dual-provider failure on batch 1 of a rank run looks like infra/provider flakiness rather than a fixable spec defect, so a retry or provider-health check is the actionable next step.",
+			"evidence": [
+				"both bounded providers rejected batch 1, exit_code 1",
+				"failed before any real ranking work completed per run note"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T23:47:06.492Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
