@@ -26,17 +26,17 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-23)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:276` — tagOptions is the FILTER's list — the event-scope registry
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L276
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1039` — the reported range is exactly what is ON SCREEN, while the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1039
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1413` — HC-017 — while a copy is being dragged only THAT copy
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1413
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1783` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1783
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2170` — ondragover/ondrop live on .track, an ANCESTOR of the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2170
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3257` — a drop reclassifies only for a custom column (its
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3257
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3601` — the agenda lists every booking in bookings — the whole
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3601
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:281` — tagOptions is the FILTER's list — the event-scope registry
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L281
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1045` — the reported range is exactly what is ON SCREEN, while the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1045
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1419` — HC-017 — while a copy is being dragged only THAT copy
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1419
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1802` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1802
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2189` — ondragover/ondrop live on .track, an ANCESTOR of the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2189
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3276` — a drop reclassifies only for a custom column (its
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3276
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3619` — the agenda lists every booking in bookings — the whole
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3619
