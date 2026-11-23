@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T05:18:22.560Z",
+	"generatedAt": "2026-11-23T05:26:15.618Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -13004,14 +13004,14 @@
 			"scoredAt": "2026-11-21T07:52:41.575Z"
 		},
 		{
-			"key": "pr:minion_hub#707",
+			"key": "pr:minion_hub#708",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#707 feat(settings): owners can choose their organization’s Hub name",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/707",
-			"sourceUpdatedAt": "2026-11-23T04:57:28Z",
-			"sourceFingerprint": "43e51b0f1c386253463bb7a08d982f0ed2685df0f29343e8bc0297b905edf273",
+			"title": "#708 feat(settings): set a shared Hub name in Appearance",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/708",
+			"sourceUpdatedAt": "2026-11-23T05:22:57Z",
+			"sourceFingerprint": "f371e3bfacfc6aee69320b3b3cf177649487fa27d470897e9f304f0fa08e7bbe",
 			"score": 52,
 			"band": "medium",
 			"axes": {
@@ -13024,17 +13024,16 @@
 				"implementation": 7
 			},
 			"confidence": 7,
-			"recommendation": "execute",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Approved, heavily tested first slice of an owner-approved org-branding spec, blocked only on a CI auth gate rather than test or review failure.",
+			"rationale": "Second approved slice of a spec'd roadmap feature is implementation-ready but explicitly held pending PR707's migration deploy and a separate required CI gate.",
 			"evidence": [
-				"136 unit + 19 native PostgreSQL tests passing",
-				"Owner approved implementation and release on 2026-11-22",
-				"CI/PR stage skipped due to GitHub auth failure, not a test failure"
+				"Hold merge until 707 deploys and its additive migration is confirmed",
+				"Required hosted CI on this exact head remains a separate gate"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:18:22.360Z"
+			"scoredAt": "2026-11-23T05:26:15.405Z"
 		},
 		{
 			"key": "pr:minion-meta#775",
@@ -14538,38 +14537,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T01:54:24.804Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "5780281d75be59367efa62ba2b6e8186d7e2472ce290fc2c33fdbe6fadbc4d85",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Lumps over a dozen distinct backend risk items (race conditions, auth gating, byte-bounding, durability) into one undifferentiated proposal so none can be executed as a single bounded outcome.",
-			"evidence": [
-				"15+ markers spanning postgres-js crashes, capability gating, stock-release durability, and tenant-deletion reconciliation",
-				"Markers target rankings/index.json data rather than a single code site"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:18:22.360Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-609333478",
@@ -18962,6 +18929,38 @@
 			"scoredAt": "2026-11-17T08:17:25.797Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-f5cf20d1ded2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/+layout.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f5cf20d1ded2.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "d6f44d5cc2c6160fc6ba3c78b64601ee11079fbbbdbcfc67aedb7a35a77a14be",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Still draft with an open-ended 'audit' scope rather than a bounded fix, so readiness lags the plausible SSR/deploy risk on Vercel.",
+			"evidence": [
+				"TODO(handoff): First-document branding needs an SSR compatibility audit",
+				"status: draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:26:15.405Z"
+		},
+		{
 			"key": "spec:2026-10-03-readiness-scheduling-link-mutations-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -21013,41 +21012,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T06:18:21.504Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-955c2e2066ec",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/scheduling/calendar/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-955c2e2066ec.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "2c8647d0536243a9500f9ddbec94dbef3228605098d085c164c0b6b54b887265",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-11-21-hub-calendar-phones-followups"
-			],
-			"rationale": "Well-scoped single router-timing bug with a concrete fix direction already given, but it duplicates item 2 of the batched calendar-phones follow-ups and should be consolidated with it.",
-			"evidence": [
-				"Diagnosis and two candidate fix directions already documented",
-				"Merged from handoff-minion-hub-1511828072, same marker at PageBody.svelte:365",
-				"Matches item 2 of proposal:2026-11-21-hub-calendar-phones-followups"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:18:22.360Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-98cb61c2223d",
@@ -28260,6 +28224,74 @@
 			"scoredAt": "2026-11-17T04:17:59.915Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-832e1dde4bdc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-832e1dde4bdc.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "a767309ba7bac9c3ec3423dc2bc5975143ff34f1832b839209c16fffc783eeba",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-955c2e2066ec"
+			],
+			"rationale": "Same router-init 'view=day' persistence marker and fix direction as the calendar PageBody finding from the same merged PR, so they should become one goal.",
+			"evidence": [
+				"TODO(handoff): if the router is not started yet the address keeps no view=day",
+				"merged PR #706"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:26:15.405Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-955c2e2066ec",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/scheduling/calendar/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-955c2e2066ec.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "293895b21d030986a2745ce6066ba9dfe394802306a577c9da9f10f58d9a7ef4",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-832e1dde4bdc"
+			],
+			"rationale": "Identical router-init 'view=day' marker and fix direction as the appointments PageBody finding from the same PR #706, warranting one combined fix.",
+			"evidence": [
+				"TODO(handoff): if the router is not started yet the address keeps no view=day",
+				"Merged from handoff-minion-hub-1511828072 (handoff-sweep, same marker)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:26:15.405Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-b9ec3f0147a5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35028,6 +35060,38 @@
 			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-a759be67b2ab",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a759be67b2ab.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "857c2826799a7f8a44fbe35c6d89efe19aabcd0aeb15238aba6cccf3959f3bff",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, concretely-scoped UI overlap fix with a clear CSS-based fix direction for the FloatingAssistant's OPEN panel.",
+			"evidence": [
+				"TODO(handoff): only the launcher clears a reserved corner; the OPEN panel still anchors at",
+				"status: approved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:26:15.405Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-b1533fc3bb8c",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38118,6 +38182,38 @@
 			"scoredAt": "2026-11-23T01:56:31.892Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "282a25cae490e1b3df598c91c9e6dda4ae635860ba242c14e6e55aa5f5b95631",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a self-referential ledger marker aggregating many unrelated line-pointers into the ranking data file itself rather than a single scoped, verifiable outcome.",
+			"evidence": [
+				"source: handoff-sweep",
+				"rankings/index.json:1616 ... 8371 (many disparate unrelated markers bundled into one item)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:26:15.405Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-ai-5ff1c51",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -40951,38 +41047,6 @@
 			"scoredAt": "2026-11-21T12:20:19.864Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-a759be67b2ab",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-a759be67b2ab.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "b5066b485666ebfdf2c47e646c0d62ca867e6b780598eda77903bc6cf259f707",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A UI anchoring bug in a floating component used across pages, clearly described but not yet triaged into a scoped fix.",
-			"evidence": [
-				"\"only the launcher clears a reserved corner; the OPEN panel still anchors at...\"",
-				"Diagnosis proposes conditional inset/margin logic keyed on isOpen"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T04:54:05.996Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b59a855e018b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42245,40 +42309,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:22:41.977Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-832e1dde4bdc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/pos/appointments/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-832e1dde4bdc.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "0271ed20e6df2c943eccebfee77925033bda3e63d8d0b7313795967d844c2cef",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-955c2e2066ec"
-			],
-			"rationale": "Same router-not-started/view=day defect as the calendar page finding, so the two should become one fix rather than two separate goals.",
-			"evidence": [
-				"Identical marker text: \"if the router is not started yet the address keeps no view=day\"",
-				"Appointments PageBody.svelte vs scheduling/calendar PageBody.svelte, same merged PR #706"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T04:54:05.996Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9388338cb205",
@@ -50920,6 +50950,71 @@
 			"scoredAt": "2026-11-18T04:17:01.388Z"
 		},
 		{
+			"key": "run:minion_hub#45117456583",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45117456583",
+			"sourceUpdatedAt": "2026-11-23T05:23:24Z",
+			"sourceFingerprint": "ec3188a27c0490ab149770f5b7639b79de5021b86214fbf4da28c4a47d6682cf",
+			"score": 15,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI run status, not a scoped work item to rank as a board goal.",
+			"evidence": [
+				"storybook-deploy",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:26:15.405Z"
+		},
+		{
+			"key": "run:minion_hub#45117456668",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45117456668",
+			"sourceUpdatedAt": "2026-11-23T05:23:53Z",
+			"sourceFingerprint": "32a4936fac45edf0416a5575f5887d6ed68c56ca83ab312cc3156206aa10bd72",
+			"score": 15,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an in-progress CI run status, not a scoped work item to rank as a board goal.",
+			"evidence": [
+				"CI",
+				"push on master",
+				"status: in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T05:26:15.405Z"
+		},
+		{
 			"key": "issue:minion-meta#689",
 			"kind": "issue",
 			"stage": "proposal",
@@ -52207,38 +52302,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
-		},
-		{
-			"key": "run:minion_hub#45114250660",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45114250660",
-			"sourceUpdatedAt": "2026-11-23T04:51:01Z",
-			"sourceFingerprint": "3b65ed9c745e8c30e07da0c786cac6f70b6c24f23ebf288f435076a1e0608c63",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A routine in-progress CI run triggered by a push, not an actionable backlog goal.",
-			"evidence": [
-				"status: in_progress",
-				"summary: push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T04:54:05.996Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
