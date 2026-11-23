@@ -3,7 +3,7 @@ id: 2026-11-17-hub-faces-stock-reconciliation-handoff
 title: FACES stock reconciliation (spec 122) - open implementation ends (handoff ledger)
 status: draft
 created: 2026-11-17
-updated: 2026-11-17
+updated: 2026-11-23
 repos: [minion_hub]
 effort: M
 source: spec-122-implementation
@@ -18,3 +18,4 @@ Branch `feat/122-faces-stock-reconciliation` (hub). Each item also has a `TODO(h
 4. Garment compensation rehearsal (`action=compensate`) is covered by pure tests only; no native run yet.
 5. `updateSellable` and raw-SQL `stk_consumption` scripts are not behind the gate pair (mapping cutover relies on drain evidence).
 6. Evidence files under `audits/2026-11-16-faces-followups/F1/` (T010, T016, T018, T020-T022) are not produced; production diagnosis, mapping apply and garment apply are OWNER actions after F2 and F3 rollout.
+7. Spec 144: the reconciliation report should also list ledger value gaps (items whose Σ movement value ≠ qty × average). The read is `ledgerValueGaps(ctx)` in hub `stock.service.ts` (hub PR for spec 144); call it from the report when spec 122's report reaches master. `TODO(handoff)` at the function.
