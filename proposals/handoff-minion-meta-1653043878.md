@@ -1,7 +1,7 @@
 ---
 id: handoff-minion-meta-1653043878
 title: Handoff marker — specs/145-hub-white-label/source-evidence.json (minion-meta)
-status: draft
+status: closed
 created: 2026-11-23
 updated: 2026-11-23
 repos: [minion-meta]
@@ -28,3 +28,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion-meta@dev specs/145-hub-white-label/source-evidence.json:2244` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md",
   https://github.com/NikolasP98/minion-meta/blob/dev/specs/145-hub-white-label/source-evidence.json#L2244
+
+## Disposition (2026-11-23)
+
+Closed as a duplicate evidence pointer. The quoted HS-011 marker belongs to the pre-existing readiness work already tracked by `2026-10-02-hub-gateway-production-readiness-recon`. Spec145 records that source comment as an excluded technical/documentation reference; it is not a new white-label implementation open end. The pinned source evidence remains intact. This closes only the generated duplicate and does not resolve or resume the original paused readiness work.

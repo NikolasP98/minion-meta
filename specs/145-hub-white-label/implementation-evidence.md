@@ -77,3 +77,11 @@ A standalone local build of older47add0ce9 bundled7320SSR/9335client modules but
 Setup deployment reachedReady with hub.minion-ai.org assigned. Production build cloned896da2e and reports0migrationsapplied. Authenticated Appearance shows the shared organization name,15character limit,counter,preview and both reset actions. Native Tab traversal reaches the input,Use organization name,Use MINION andSave shared name. An unauthenticated empty-body PATCHreturns401. No valid production rename was requested. Full-feature completion still waits for the final consumer release.
 
 The additional T014 native exercise passes3/3cases using actual admission/provision/bootstrap and real localGoTrue/Postgres, mocking only outbound transports. It verifies both role models, original identity/grants on partial retry,staff403,invalid400 and exact cleanup. See implementation/provision-native/README.md for source hashes and limits.
+
+### Final consumer delivery candidate
+
+Final pipeline01M83GQFTXACRMYZQA9T5W6ZHR pushed45aead23be155c9e7a551932893e5434d069837f. Independent review found0issues;98focusedtests and synthetic actual-component browser checks passed at rebased2cd6b1b1. The final three-file delta adds the existing guide coverage and mechanically formats two consumers; emitted client JavaScript ASTs are identical before/after,with0compilerwarnings. Phase receipts and screenshots are retained under implementation/final-pipeline/.
+
+The tool skipped PR/CI because its aggregate authentication check rejected an unrelated inactive GitHub account. The active personal CLI remained functional. No account/configuration was changed. Executor opened and readied HubPR709 at exact45aead23; actual hosted CI is in progress. Guarded tool sync refused divergence without changing refs/files,so the original local clone remains clean5de104dd and a fresh remote clone owns any needed follow-up.
+
+Final source inventory at45aead23 closes51identityrows(41Svelteoccurrences/34paths+10localevalues),all5localizedcallers,224explicitexclusions and26presentnewfiles. All191scopedsourcehashes/anchors were refreshed. This is source closure; final hosted CI and production completion remain pending.

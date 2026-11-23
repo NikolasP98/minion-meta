@@ -304,3 +304,132 @@ The architecture view depicts global deployed software and its real endpoints; i
 | `src/server/services/email.service.ts:174` | technical/external-provenance | A new access request is ready for review in Minion Hub. — Provider request attribution, gateway audit note, email or issue provenance; outside Hub text identity scope. |
 | `src/server/services/email.service.ts:182` | technical/external-provenance | subject: 'New access request on Minion Hub', — Provider request attribution, gateway audit note, email or issue provenance; outside Hub text identity scope. |
 | `src/server/services/github-issues.service.ts:166` | technical/external-provenance | sections.push(---\n*Reported from Minion Hub at ${new Date().toISOString()}*); — Provider request attribution, gateway audit note, email or issue provenance; outside Hub text identity scope. |
+
+## Final source inventory reconciliation
+
+This source-only reconciliation uses the approved 275-row scan in `source-evidence.json` and clean pushed candidate `45aead23be155c9e7a551932893e5434d069837f`, inspected in `/tmp/minion-white-label-145-final-ci`. The CRT correction and mounted regression are now included. Per-file hashes, refreshed binding anchors and every excluded row are recorded under `final_source_inventory` in [implementation/consumer-reconciliation.json](implementation/consumer-reconciliation.json). PR709 is open; this source closure does not claim that hosted CI, final browser qualification or deployment has completed.
+
+All 51 approved Hub-identity rows have source dispositions: 41 Svelte occurrences across 34 paths, plus 10 message values across EN and ES. All five named localized callers pass the required current prefix/full-name interpolation in source. No identity row remains unclosed by source inspection.
+
+The earlier consumer checkpoint covered 32 owned paths, 33 identity rows and five localized callers. That was a slice count. The full inventory adds eight identity rows from five shared shell paths and ten EN/ES message rows. Three of the 32 consumer paths contain localized callers but no raw identity occurrence in the approved scan; the complete Svelte consumer set therefore contains 37 existing paths, while the raw inventory still spans 34.
+
+| Approved category | Rows | Final source disposition |
+|---|---:|---|
+| `technical/distinct-service` | 81 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
+| `technical/comment` | 97 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
+| `native installer identity` | 7 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
+| `component/preset` | 11 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
+| `technical/external-provenance` | 25 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
+| `technical/deployed-service` | 2 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
+| `historical/release-provenance` | 1 | Excluded from tenant-text substitution; exact row dispositions are in the JSON reconciliation. |
+
+Of the 224 excluded rows, 220 literal snippets remain exact. Four benign source changes retain the approved meaning: MinionLogo keeps its `minion` preset id and secondary-color styling through a style directive; Sidebar replaces its private `.brand-minion` presentation selector with `.brand-name`; two watermark comments now describe organization identity. Native updater text, deployed service identities, provider/email attribution, author samples, persistence keys and runtime identifiers remain outside tenant renaming. New literal `MINION` references in the validator and owner editor represent the required default/reset choice and its validation.
+
+### Identity row closure
+
+| Approved source | Final source binding or disposition |
+|---|---|
+| `src/lib/components/layout/DesktopTitlebar.svelte:23` | Current line(s) 24: `<span class="t-label" data-tauri-drag-region>{getBranding().fullName}</span>` |
+| `src/lib/components/layout/MinionLogo.svelte:368` | Current line(s) 294: `<HubWordmark inheritStyles />` |
+| `src/lib/components/layout/Sidebar.svelte:572` | Current line(s) 581: `aria-label={getBranding().fullName}` |
+| `src/lib/components/layout/Sidebar.svelte:575` | Current line(s) 584: `<span class="brand-name t-body"><HubWordmark /></span>` |
+| `src/lib/components/layout/Topbar.svelte:213` | Current line(s) 196, 229: `aria-label={getBranding().fullName} / aria-label={getBranding().fullName}` |
+| `src/lib/components/layout/Topbar.svelte:217` | Current line(s) 199: `<span class="mobile-brand-wordmark t-label"><HubWordmark /></span>` |
+| `src/lib/components/marketplace/AgentCard.svelte:214` | Current line(s) 72, 215: ``<div class="id-card" data-brand-watermark={`${getBranding().name}  `.repeat(100)}> / content: attr(data-brand-watermark);`` |
+| `src/lib/components/marketplace/_agent-card/IdFooter.svelte:13` | Current line(s) 14: `<div class="company-brand">{getBranding().name}</div>` |
+| `src/lib/components/navigation/PersonalHome.svelte:107` | Current line(s) 108: `<svelte:head><title>{m.nav_personalHome()} · {getBranding().name} hub</title></svelte:head>` |
+| `src/lib/components/settings/CRTConfigModal.svelte:245` | Current line(s) 250: `>[{getBranding().name}]</span` |
+| `src/lib/components/ui/foundations/PublicTaskShell.svelte:50` | Current line(s) 51, 52: `<span class="wordmark-minion">{getBranding().name}</span> / <span class="wordmark-hub">Hub</span>` |
+| `src/lib/components/ui/foundations/PublicTaskShell.svelte:172` | Current line(s) 51, 52: `<span class="wordmark-minion">{getBranding().name}</span> / <span class="wordmark-hub">Hub</span>`; presentation selector retained. |
+| `src/lib/stories/Shared/Markdown.stories.svelte:6` | Current line(s) 114, 122: `<h1 class="t-heading">{getBranding().name} hub</h1> / <h1 class="t-heading">{getBranding().name} hub</h1>` |
+| `src/routes/(app)/agents/builder/+page.svelte:11` | Current line(s) 12: `<title>Agent Builder · {getBranding().name}</title>` |
+| `src/routes/(app)/capabilities/+page.svelte:41` | Current line(s) 42: `<title>Capabilities · {getBranding().name}</title>` |
+| `src/routes/(app)/cloud/+page.svelte:52` | Current line(s) 53: `<svelte:head><title>{m.cloud_overview_title()} · {getBranding().name} hub</title></svelte:head>` |
+| `src/routes/(app)/cloud/gui/+page.svelte:35` | Current line(s) 36: `<svelte:head><title>{m.cloud_gui_title()} · {getBranding().name} hub</title></svelte:head>` |
+| `src/routes/(app)/cloud/settings/+page.svelte:76` | Current line(s) 77: `<svelte:head><title>{m.cloud_settings_title()} · {getBranding().name} hub</title></svelte:head>` |
+| `src/routes/(app)/cloud/terminal/+page.svelte:35` | Current line(s) 36: `<svelte:head><title>{m.cloud_terminal_title()} · {getBranding().name} hub</title></svelte:head>` |
+| `src/routes/(app)/home/+page.svelte:932` | Current line(s) 933: `<title>My Agent · {getBranding().name}</title>` |
+| `src/routes/(app)/killswitches/+page.svelte:104` | Current line(s) 105: `<svelte:head><title>Kill Switches · {getBranding().name} hub</title></svelte:head>` |
+| `src/routes/(app)/marketplace/agents/+page.svelte:281` | Current line(s) 282: `<span class="list-brand">{getBranding().name}</span>` |
+| `src/routes/(app)/marketplace/agents/+page.svelte:702` | Current line(s) 268, 707: ``<div class="list-card" data-brand-watermark={`${getBranding().name}  `.repeat(100)}> / content: attr(data-brand-watermark);`` |
+| `src/routes/(app)/marketplace/agents/[slug]/_components/IdBadgeCard.svelte:135` | Current line(s) 136: `<span class="company-brand">{getBranding().name}</span>` |
+| `src/routes/(app)/prompt/+page.svelte:10` | Current line(s) 11: `<title>Prompt Engineering · {getBranding().fullName}</title>` |
+| `src/routes/(app)/sessions/[sessionKey]/debug/+page.svelte:87` | Current line(s) 88: `<title>Debug · {sessionKey} · {getBranding().fullName}</title>` |
+| `src/routes/(app)/team/PageBody.svelte:45` | Current line(s) 46: `<title>{TITLES[tab]()} · {m.team_title()} · {getBranding().name}</title>` |
+| `src/routes/(app)/tools/+page.svelte:6` | Current line(s) 7: `<title>Tools · {getBranding().name}</title>` |
+| `src/routes/+error.svelte:34` | Current line(s) 35: `<svelte:head><title>{title} — {getBranding().fullName}</title></svelte:head>` |
+| `src/routes/auth/reset/+page.svelte:57` | Current line(s) 58: `<svelte:head><title>{m.reset_title()} — {getBranding().fullName}</title></svelte:head>` |
+| `src/routes/invite/accept/+page.svelte:14` | Current line(s) 16: `<svelte:head><title>Invitation — {getBranding().fullName}</title></svelte:head>` |
+| `src/routes/invite/accept/+page.svelte:21` | Current line(s) 23: `description={m.invite_accessFlowDescription({ hubName: getBranding().name })}` |
+| `src/routes/join/+page.svelte:31` | Current line(s) 32: `<title>Request Access — {getBranding().fullName}</title>` |
+| `src/routes/join/sent/+page.svelte:11` | Current line(s) 12: `<svelte:head><title>{m.join_pendingEyebrow()} — {getBranding().fullName}</title></svelte:head>` |
+| `src/routes/link/[code]/+page.svelte:26` | Current line(s) 28: `<title>Link Your Channel — {getBranding().fullName}</title>` |
+| `src/routes/link/[code]/+page.svelte:37` | Current line(s) 39, 40, 41, 42: `? m.link_accountRecognizedDescription({ / channel: data.channelLabel, / hubFullName: getBranding().fullName, / })` |
+| `src/routes/login/+page.svelte:248` | Current line(s) 249: `<title>{mode === 'signup' ? 'Create account' : 'Sign in'} — {getBranding().fullName}</title>` |
+| `src/routes/login/+page.svelte:258` | Current line(s) 259: `? m.login_signupIdentityDescription({ hubFullName: getBranding().fullName })` |
+| `src/routes/login/forgot/+page.svelte:30` | Current line(s) 31: `<svelte:head><title>{m.login_forgot_title()} — {getBranding().fullName}</title></svelte:head>` |
+| `src/routes/oauth/authorize/+page.svelte:34` | Current line(s) 35: `<svelte:head><title>{m.oauth_authorize_eyebrow()} — {getBranding().fullName}</title></svelte:head>` |
+| `src/routes/onboarding/+page.svelte:58` | Current line(s) 59: `<title>{eyebrow} — {getBranding().fullName}</title>` |
+| `messages/en.json:3061` | Current line 3061: `marketplace_pluginsSubtitle` → `Find and install plugins that extend {hubFullName}` |
+| `messages/en.json:3109` | Current line 3109: `marketplace_wizardStep5SyncHeading` → `Then sync in {hubFullName}:` |
+| `messages/en.json:5448` | Current line 5448: `welcome_heading` → `Welcome to {hubFullName}` |
+| `messages/en.json:6983` | Current line 6983: `onboarding_userTitle` → `Welcome to {hubName}` |
+| `messages/en.json:7691` | Current line 7691: `oauth_authorize_title` → `{app} wants to connect to {hubFullName}` |
+| `messages/es.json:3061` | Current line 3061: `marketplace_pluginsSubtitle` → `Encuentra e instala plugins que amplían {hubFullName}` |
+| `messages/es.json:3109` | Current line 3109: `marketplace_wizardStep5SyncHeading` → `Luego sincroniza en {hubFullName}:` |
+| `messages/es.json:5448` | Current line 5448: `welcome_heading` → `Bienvenido a {hubFullName}` |
+| `messages/es.json:6983` | Current line 6983: `onboarding_userTitle` → `Bienvenido a {hubName}` |
+| `messages/es.json:7691` | Current line 7691: `oauth_authorize_title` → `{app} quiere conectarse a {hubFullName}` |
+
+### New and unchanged files
+
+All 16 planned Create actions are present. Their source hashes are recorded in the JSON reconciliation.
+
+| Planned new file | Source state |
+|---|---|
+| `src/lib/branding.svelte.ts` | Present |
+| `src/lib/branding.test.ts` | Present |
+| `src/lib/branding.ts` | Present |
+| `src/lib/components/layout/HubWordmark.mounted.test.ts` | Present |
+| `src/lib/components/layout/HubWordmark.svelte` | Present |
+| `src/lib/components/settings/OrganizationBranding.mounted.test.ts` | Present |
+| `src/lib/components/settings/OrganizationBranding.svelte` | Present |
+| `src/routes/(app)/settings/appearance/+page.server.ts` | Present |
+| `src/routes/api/organizations/branding/+server.ts` | Present |
+| `src/routes/api/organizations/branding/server.test.ts` | Present |
+| `src/routes/api/tenants/me/server.test.ts` | Present |
+| `src/routes/layout.server.test.ts` | Present |
+| `src/server/services/organization-branding.service.test.ts` | Present |
+| `src/server/services/organization-branding.service.ts` | Present |
+| `src/server/services/organization-branding.sql.integration.test.ts` | Present |
+| `supabase/migrations/20261122000000_organization_hub_name.sql` | Present |
+
+Ten additional supporting files are present, including the CRT lifecycle regression. These are supporting source artifacts; their presence is not a passing-test claim.
+
+| Additional supporting file | Source state |
+|---|---|
+| `scripts/qa/seed/tenancy-branding.test.ts` | Present |
+| `src/lib/branding-fixtures.json` | Present |
+| `src/lib/components/layout/MinionLogo.branding.mounted.test.ts` | Present |
+| `src/lib/components/marketplace/branding-consumers.mounted.test.ts` | Present |
+| `src/lib/components/ui/foundations/PublicTaskShell.mounted.test.ts` | Present |
+| `src/routes/(app)/settings/appearance/page.server.test.ts` | Present |
+| `src/routes/(app)/settings/organizations/page.mounted.test.ts` | Present |
+| `src/server/test-utils/env-stubs/app-forms.ts` | Present |
+| `tests/fixtures/branding/consumer-page.svelte.ts` | Present |
+| `src/lib/components/settings/CRTConfigModal.mounted.test.ts` | Present |
+
+The clean pushed candidate contains all 26 scoped new Hub files: 16 planned additions and 10 supporting additions. The CRT test is present and hashed; no pending source artifact remains in this inventory. The following explicit no-change files match implementation base `5347ff0148a3600fd3963d94db57e95c8e5a2779` byte-for-byte:
+
+| Explicit no-change file | Comparison |
+|---|---|
+| `src/lib/routes/route-design-manifest.ts` | Unchanged |
+| `src/lib/routes/route-access-registry.ts` | Unchanged |
+| `vitest.qa-native-postgres.config.ts` | Unchanged |
+| `src/lib/components/desktop-updater/Updater.svelte` | Unchanged |
+| `desktop/main.ts` | Unchanged |
+| `desktop/vite.config.ts` | Unchanged |
+
+PublicTaskShell retains its existing public chip wrapper and contrast styles while binding the prefix through `getBranding().name` beside the unchanged `Hub` suffix. Sidebar, Topbar and MinionLogo compose the shared HubWordmark. CSS watermarks consume a bound text attribute through `attr()`; authored Markdown sample content remains separate from the resolved preview heading. These observations close identity text rows only.
+
+Separate [T014 provisioning evidence](implementation/provision-native/README.md) records three completed local native cases against the actual creation/provision services and both creation models, with only outbound transports mocked. All three exercised application sources match this pushed head byte-for-byte. Those cases prove creation/partial-retry persistence and admission within their stated boundary; they do not claim external Workforce/workstation success, browser authentication, final hosted CI or deployment. Other runtime and release states remain in the separate implementation evidence package.
