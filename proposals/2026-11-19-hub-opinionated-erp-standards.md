@@ -3,7 +3,7 @@ id: 2026-11-19-hub-opinionated-erp-standards
 title: Hub ERP house rules — eleven enforced standards for documents, server paths, the database and pages
 status: in-spec
 created: 2026-11-19
-updated: 2026-11-20
+updated: 2026-11-23
 spawned_spec: 138-hub-house-rules-s0-s2
 repos: [minion_hub, minion-meta]
 value: 8
@@ -406,6 +406,26 @@ were already gone before 2026-10-13 and their removal is not recorded. Consequen
 removing the app role's DELETE grant does not block such a sweep, which runs on the owner
 connection. The rules file names it as the one exception: owner-requested, snapshot first, one
 transaction, stock balances rebuilt.
+
+## Follow-ups from the write-endpoint review (2026-11-21 to 2026-11-23)
+
+Three review passes read all 137 write endpoints the H5 inventory lists as unclassified. Fixed and
+merged on hub `master` on 2026-11-23: #711 (agent-group members), #712 (server-scoped writes),
+#713 (identity removal), #714 (void versus stock post), #716 (gateway-token routes), #717 (write
+permissions for automations and the gateway). Still open, each with its code anchor:
+
+| Item | AS-IS | TO-BE | Anchor |
+|---|---|---|---|
+| Retry stock post has no permission | `POST /api/pos/tickets/[id]/post-stock` checks only that the POS module is on | Require the capability the sell page uses to charge | `src/routes/api/pos/tickets/[id]/post-stock/+server.ts` |
+| No real race test for void versus stock post | The row lock is asserted by a unit test only | A two-connection test in the `pos-money` database fixture | `TODO(handoff)` at `postTicketStockInTx`, `src/server/services/pos.service.ts` |
+| Marketplace install is gated by plan only | `requireFeature` only logs unless `ENTITLEMENTS_ENFORCED=true` | An organization capability on the install | `TODO(handoff)` in `src/routes/api/marketplace/install/+server.ts` |
+| Server id not checked on some `servers/[id]/…` routes | `missions`, `sessions`, `backups`, `provision` read the id without a server-ownership check (they write through row-level security or behind the platform-admin role) | Decide per route whether `serverScope` applies | `src/server/auth/server-scope.ts` |
+| Organization data gated by the platform-admin role | 13 endpoints (artifacts, assignment rules, workflow definitions, organization areas, default dashboard layout, flow exports) answer 403 to an organization's own owner | `requireOrgCapability` with the matching module | hub `AGENTS.md`, RBAC section |
+| Any member can change shared agent data | Agent memories (browser path `agent-memories/scatter`), workshop runs and saves, missions, session tasks, skills mirror have no capability | A capability or owner check per resource | H5 inventory entries |
+| Sessions have no per-person owner | Any member reads and appends to any session in the organization | Per spec 117 | `src/server/services/chat.service.ts` |
+| Entitlements are not enforced | `ENTITLEMENTS_ENFORCED` is unset in production, so plan-only gates admit any signed-in member | Owner decision: enforce, or stop treating entitlement as a gate | `src/server/services/entitlements.service.ts` |
+| Managers cannot edit automations | After #717 only owners and administrators can; managers hold view | Owner decision: grant `flows` to managers or leave as is | role settings |
+| Inventory not refreshed | `scripts/house-rules/write-inventory.json` (hub #698, unmerged) predates these fixes | Refresh when #698 is rebased | hub #698 |
 
 ## Definition of done
 
