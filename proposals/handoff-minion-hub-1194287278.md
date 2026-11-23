@@ -44,5 +44,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3719
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4228` — dragging/dropping an event INTO a closure is not warned
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4228
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:5662` — on blocks 72 to 90 px tall the products marker (absolute, bottom right)
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L5662
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:5670` — on blocks 72 to 90 px tall the products marker (absolute, bottom right)
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L5670
