@@ -62,4 +62,4 @@ Temporary config SHA-256: `a57f5a4ed7e750e349eeb63d360c6a0d54acc1960ecff5b39108a
 
 This closes local server-side T014 creation/partial-retry persistence evidence for both creation models, preserving the platform-admin gate and legal name. Both attempts intentionally remain partial at the injected Workforce outage. It does not claim completed workstation provisioning, external Workforce readiness, successful browser form interaction, or final-pipeline/full-feature deployment. The active final branch and pipeline were untouched.
 
-Durable copies beside this report: [test](provision-native.test.ts), [config](vitest.config.ts), [guarded runner](replay.py), [log](run.log), [receipts](receipts.json). The original paths above describe the actual execution checkout; replaying elsewhere requires re-establishing that guarded QA checkout.
+Durable copies beside this report: [test](provision-native.test.ts), [config](vitest.config.ts), [guarded runner](replay.py), [log](run-output.txt), [receipts](receipts.json). The original paths above describe the actual execution checkout; replaying elsewhere requires re-establishing that guarded QA checkout.
