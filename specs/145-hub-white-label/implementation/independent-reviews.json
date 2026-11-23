@@ -1,0 +1,67 @@
+{
+  "consumer_commit": "7c901bdf9c437e6c1c8d93c70ea879b50627c26b",
+  "data_reviewed_revision": "cafed572f2ff9084a1bf1752a0acfe2ba8212105",
+  "setup_reviewed_revision": "48104cc50e6c13c0fae6e2f82f4d8550499e4462",
+  "standards": {
+    "data": "Reviewed pure validator, exact schema bounded body reader, parametrized scoped writer, canonical membership/profile/owner/admin/capability admission, both role models, simulation refusal and lock order114->112; no further defect found after two fixes.",
+    "setup": "Reviewed page-owned getter, scope/profile/org/generation/runtime-version fences, response structural and canonical name validation, acknowledged refresh-only reconciliation vs preserved unknown action history, independent Appearance card admission, and query budget. No further defect found after listed fixes."
+  },
+  "spec": {
+    "unicode": "Executed all23 exact approved contract fixtures independently; all pass. Fixture file byte comparison matches approved package.",
+    "delivery": "Existing root ssr=false remains unchanged under the parent documented SPA amendment. Server-load unit source proof is not rendered SSR markup proof.",
+    "layouts": "Root skips app identity lookup; app combines identity/kind in one getTenant read per layout refresh; verified non-app root lookup only. Current-scope unavailable fallback does not persist.",
+    "native_and_browser": "Reviewed native test design/final RLS source, but did not execute native SQL or browser in this review; parent/worker receipts own those proofs."
+  },
+  "findings": [
+    {
+      "id": "DATA-1",
+      "original_site": "organization-branding.service.ts:109-112 and35-42",
+      "scenario": "Unsupported Segmenter incorrectly returned403 for authorized metadata update",
+      "original_proof": "Actual service unit seam: expected503,received403",
+      "resolution": "Explicit unavailable503 check added to metadata writer",
+      "retest": "Independent copied actual service regression now passes1/1"
+    },
+    {
+      "id": "DATA-2",
+      "original_site": "scripts/qa/seed/tenancy.ts:735",
+      "scenario": "Existing/server-assigned GoTrue ID discarded when later inserting memberships",
+      "original_proof": "Executed exported seed with alternate existing GoTrue IDs; first membership referenced nonexistent deterministic ID",
+      "resolution": "Store persona-to-returned-profile map and consume it for membership inserts",
+      "retest": "Executed exported fixed seed; all15 memberships use one of3 actual profile IDs"
+    },
+    {
+      "id": "SETUP-1",
+      "original_site": "settings/organizations/+page.svelte:44",
+      "scenario": "Long untouched organization silently submitted explicit MINION override",
+      "original_proof": "Actual mounted submit:1POST with long legal name andhubName MINION instead of expected0",
+      "resolution": "No valid suggestion produces empty prefix requiring explicit input",
+      "retest": "Actual mounted no-dispatch counterexample now passes"
+    },
+    {
+      "id": "SETUP-2",
+      "original_site": "OrganizationBranding.svelte:237,270-272;messages/en.json7731",
+      "scenario": "Byte overflow discarded its reason; unsupported browser mislabeled as permission denial",
+      "resolution": "Localized byte-complexity/suffix/runtime-unavailable reasons",
+      "retest": "Actual mounted byte-envelope and unsupported-browser checks now both pass with coherent compiled messages"
+    },
+    {
+      "id": "SETUP-3",
+      "original_site": "PublicTaskShell.svelte:172",
+      "scenario": "Inherited uppercase transforms customized casing",
+      "resolution": "Prefix text-transform none while preserving fixed suffix and new contrast implementation",
+      "retest": "Source verified in48104cc5; computed browser style remains parent proof"
+    },
+    {
+      "id": "SETUP-4",
+      "original_site": "Topbar.svelte:189 single controls row",
+      "scenario": "Approved401-767 separate wrapping identity row was missing",
+      "resolution": "Separate wordmark row, wrapping controls row, <=400 icon-only policy and min-height token",
+      "retest": "Source verified in48104cc5; actual geometry remains parent proof"
+    }
+  ],
+  "final_review_retest": {
+    "command": "bunx vitest run src/lib/components/settings/OrganizationBranding-review.mounted.test.ts src/routes/(app)/settings/organizations/page-branding-review.mounted.test.ts -t review",
+    "result": "3passed,17 unrelated skipped;2files;32.34s"
+  },
+  "workspace": "All review reproducer files and borrowed dependencies are confined to consumers clone and uncommitted; data/setup clones were inspected read-only."
+}
