@@ -2,6 +2,12 @@
 
 All tables live in `public`, carry `org_id text not null`, and use the same RLS shape as `org_api_keys` (`supabase/migrations/20261116100000_org_api_keys.sql`): `enable` + `force row level security`, one policy on `org_id = current_setting('app.current_org_id', true)` for `using` and `with check`, `revoke all … from public, anon, authenticated`, grants to `app_ledger`. Every statement is idempotent (`create table if not exists`, `create index if not exists`, policies inside `do $$ … if not exists`). Migrations run in the production build.
 
+**Audit correction (PR #723, 2026-11-23):** `org_api_keys` is not append-only, so its shape is not enough for `org_lock_events` and `org_record_locks`.
+- **Revoke `service_role` too** (as `20261116193000_stock_corrections.sql` does). Supabase default privileges grant it all rights, and it bypasses RLS.
+- **`org_lock_events`** uses separate SELECT and INSERT policies, plus `BEFORE UPDATE OR DELETE` and `BEFORE TRUNCATE` triggers that raise. The triggers are the only guard against the BYPASSRLS `postgres` login.
+- **`org_record_locks`** refuses DELETE the same way; a lock is lifted by updating `lifted_at`.
+- **The chain walk fails closed:** at the step cap, or when a posting time is missing, the record counts as locked (`chain_unverified`).
+
 Drizzle mirrors go in `src/server/db/pg-org-integrations-schema.ts` beside `orgApiKeys`.
 
 ## Migration 1 — `20261124100000_record_lock_policy.sql` (S1)
