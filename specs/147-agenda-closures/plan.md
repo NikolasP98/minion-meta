@@ -14,7 +14,6 @@ SvelteKit 2 / Svelte 5 runes, Drizzle on Supabase Postgres (RLS via `app.current
 create table public.sched_closures (
   id uuid primary key default gen_random_uuid(),
   org_id text not null,
-  resource_id uuid null references public.sched_resources(id) on delete cascade, -- null = whole agenda (only value written in this slice)
   starts_at timestamptz not null,
   ends_at timestamptz not null check (ends_at > starts_at),
   reason text not null check (char_length(reason) between 1 and 120),
@@ -45,12 +44,12 @@ Drizzle table in `src/server/db/pg-scheduling-schema.ts` next to `schedBookings`
 - `loadCalendarWindow` (calendar-window.service.ts) returns `closures` for `[from,to)`; both `+page.server.ts` and the window-cache client refetch path carry it (follow how `bookings` flows through `window-cache.svelte.ts` and `/api/pos/appointments`).
 - BC prop `closures?: CalendarClosure[]` (`{id, groupId, groupSize, start, end, reason}`) and `onclosure?: (c) => void`. Grid: an absolutely positioned band per day column, drawn after `.offhours` and before events, `--color-danger-*` tokens + the existing hatch pattern, reason label at the top (truncate with title). Month: a line in the day cell. List: a row in the day group. Band is a `<button>` with an accessible name "Agenda cerrada de 09:00 a 14:00: Viaje del doctor".
 - Popover (existing popover/tooltip primitive used by the hover card) → reason, time, "Reabrir este día", "Reabrir todos (N días)" when `groupSize > 1`. Optimistic removal via `createOptimistic()`.
-- `BookingCreateDrawer`: a segmented switch "Cita | Cerrar agenda" at the top; the closure form = Desde, Hasta, Todo el día toggle, De/A times (prefilled from the clicked slot), Motivo. Toolbar "…" menu item "Cerrar agenda" opens the drawer in closure mode with today.
-- Overlap confirm: before booking create / drag-move commit in POS and SCHED, if the target interval overlaps a loaded closure → existing confirm dialog primitive with the reason.
+- `BookingCreateDrawer`: a segmented switch "Agendar cita | Cerrar agenda" at drawer level that swaps whole panels (not inside `AppointmentCreatePanel`, which has its own Cita|Control switch); the closure form = Desde, Hasta, Todo el día toggle, De/A times (prefilled from the clicked slot), Motivo. Toolbar "…" menu item "Cerrar agenda" opens the drawer in closure mode with today.
+- No client overlap check (cut, EGM F3): the band intercepts clicks; its popover's "Agendar aquí igual" calls `onslot` for the clicked time. Events stay above the band and drops still reach the grid.
 
 ### Slot engine
 
-`scheduling-slots.service.ts` and `scheduling-bookings.service.ts` (the two `loadDayOffOverrides` callers): load closures for the range and append them as `BusyInterval`s for every resource (`slots.ts` `bookings` input), so the assistant and public page never offer a closed slot.
+`scheduling-slots.service.ts`: load closures for the range and append them as `BusyInterval`s for every resource. `scheduling-bookings.service.ts` `createBooking`: same, ONLY when `!input.bypassRules` (public/assistant path); staff paths are untouched (EGM F1).
 
 ## Tests
 
@@ -60,3 +59,7 @@ Unit: `closures.test.ts` (expansion/validation), slots test (closure subtracts),
 
 - BC is 5k lines and shared by two pages plus phone layout (spec 145): keep the change additive (new prop, new layer). 
 - Window cache keys: closures must invalidate with the window like bookings do, or a reopen reappears on refetch.
+
+## EGM round-1 resolutions (2026-11-23)
+
+See spec §Review. These supersede the sections above where they conflict: no slot-engine change; POS twin route + `[id]/reopen` POST; band `pointer-events: none` with only the label as a button; drawer banner; closures in both pages' seed/merge/refetch paths; `groupSize` from the server; tz via `schedulingTimeZone(resources)`.
