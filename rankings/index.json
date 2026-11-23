@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T14:30:07.241Z",
+	"generatedAt": "2026-11-23T14:50:14.342Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4202,6 +4202,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:33:43.235Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-670e33d9ad13",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/server/auth/dataset-ctx.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-670e33d9ad13.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "2b5591c7c476adc24b830cb2b51fbb7fee26c5e672e9e291aad4394ca6e2a17b",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-8ef9cc8545b6",
+				"proposal:postmerge-minion-hub-b18f54dbf1b4",
+				"proposal:postmerge-minion-hub-6fa8545417df"
+			],
+			"rationale": "All 13 findings share one root cause (scan gap across PR #604) and the auth file is the highest-sensitivity instance, so a single consolidated review/tool-fix goal is more effective than 13 parallel proposals.",
+			"evidence": [
+				"file src/server/auth/dataset-ctx.ts, merged PR #604",
+				"10 unknown changes unverified in auth handling"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-774c6bbb4186",
@@ -10863,6 +10899,42 @@
 			"scoredAt": "2026-11-23T14:24:09.888Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-777c7720745d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/sales/[id]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-777c7720745d.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "14d5fa09fce22e947e4d9faf16ccf3d679d8c2b30a8851c2d2210b6a63feaf86",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-7361920573d8",
+				"proposal:postmerge-minion-hub-78dfeed90773",
+				"proposal:postmerge-minion-hub-8ef9cc8545b6"
+			],
+			"rationale": "Touches a sensitive business route (sales) but is otherwise the same PR #604 scan-gap pattern seen across the batch, best resolved as one consolidated review.",
+			"evidence": [
+				"197-line change in sales/[id]/+page.svelte, flagged as sensitive business area",
+				"merged PR #604"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-bb9baf1f3156",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13327,42 +13399,6 @@
 			"scoredAt": "2026-11-23T02:04:46.801Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-670e33d9ad13",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/server/auth/dataset-ctx.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-670e33d9ad13.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "2b5591c7c476adc24b830cb2b51fbb7fee26c5e672e9e291aad4394ca6e2a17b",
-			"score": 52,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-5c9adae4137a",
-				"proposal:postmerge-minion-hub-2fa8f1f0001f",
-				"proposal:postmerge-minion-hub-1a2ef603c0aa"
-			],
-			"rationale": "Unverified auth-context file changes are the highest-risk item in the batch and should anchor the consolidated PR #604 scan-failure remediation goal.",
-			"evidence": [
-				"file is src/server/auth/dataset-ctx.ts",
-				"10 unverified auth-sensitive changes"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-7cff7d845501",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13393,6 +13429,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:24:09.888Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8ef9cc8545b6",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8ef9cc8545b6.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "6d30a0b0de626b7ee0027463c00bc97aa3f80007588e29164fbb0433122f9f2b",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-670e33d9ad13",
+				"proposal:postmerge-minion-hub-b18f54dbf1b4",
+				"proposal:postmerge-minion-hub-6fa8545417df"
+			],
+			"rationale": "Server-side load/action file handling mutations was skipped by the same PR #604 scan failure; slightly higher criticality than UI files but still fits one consolidated remediation goal.",
+			"evidence": [
+				"9 changes to campaigns/+page.server.ts",
+				"merged PR #604"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-f67a7acec33b",
@@ -14929,6 +15001,114 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T19:47:26.616Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-6fa8545417df",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6fa8545417df.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "96343721ed543e5ae6ca0e41bd8fb160563621106386aae596d59578b39952af",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-670e33d9ad13",
+				"proposal:postmerge-minion-hub-7361920573d8",
+				"proposal:postmerge-minion-hub-777c7720745d"
+			],
+			"rationale": "Same PR #604 scan-gap pattern as the other 12 findings; combining into one scan/diff-review goal avoids 13 duplicate manual-review tasks.",
+			"evidence": [
+				"357-line change in socials/campaigns/+page.svelte",
+				"same merged PR #604 as all other scan-gap findings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-78dfeed90773",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/settings/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-78dfeed90773.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "0df864e93f9643763039b8ebcea4fcee820f77c289c27e36a62b4cfca90005c3",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-777c7720745d",
+				"proposal:postmerge-minion-hub-8d11460611fa",
+				"proposal:postmerge-minion-hub-6fa8545417df"
+			],
+			"rationale": "Largest single diff in the batch (525 lines) but same unverified PR #604 scan gap as the rest, so it belongs in one combined remediation goal.",
+			"evidence": [
+				"525-line change in socials/settings/+page.svelte",
+				"merged PR #604"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-8d11460611fa",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8d11460611fa.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "2e62d6a53efe599cd1906f77b91f805ce65cf6462f7970753c2894d557aa99cd",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-89539c90dcf1",
+				"proposal:postmerge-minion-hub-78dfeed90773",
+				"proposal:postmerge-minion-hub-b1ceedf4c734"
+			],
+			"rationale": "Same PR #604 scan-gap pattern as the other socials route findings; best consolidated into a single diff-review goal rather than tracked individually.",
+			"evidence": [
+				"393-line change in socials/+page.svelte",
+				"merged PR #604"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9b86db24576e",
@@ -19096,6 +19276,42 @@
 			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-7361920573d8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7361920573d8.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "58c92ce12845ee2a25df06919f6bd312ea0071e28881a7700e207592c350ce4b",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-6fa8545417df",
+				"proposal:postmerge-minion-hub-777c7720745d",
+				"proposal:postmerge-minion-hub-78dfeed90773"
+			],
+			"rationale": "Identical root cause to the batch (PR #604 scan gap) with no confirmed defect, so it should be folded into one consolidated review rather than tracked separately.",
+			"evidence": [
+				"305-line change in support/+page.svelte",
+				"merged PR #604, checked 2026-10-26"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-92e3e453a2ae",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19159,6 +19375,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T08:17:25.797Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b18f54dbf1b4",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/[id]/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b18f54dbf1b4.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "4cf69431f71a4f099ca5626f668661a053bde0510b91701bcc53d39b59965335",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-8ef9cc8545b6",
+				"proposal:postmerge-minion-hub-7361920573d8",
+				"proposal:postmerge-minion-hub-670e33d9ad13"
+			],
+			"rationale": "Another server-side scan gap from the same PR #604; grouping with the other server.ts and auth findings consolidates security-relevant review into one goal.",
+			"evidence": [
+				"8 changes to support/[id]/+page.server.ts",
+				"merged PR #604"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
 		},
 		{
 			"key": "pr:minion (gateway)#331",
@@ -21116,6 +21368,42 @@
 			"scoredAt": "2026-11-22T12:47:43.080Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-1a2ef603c0aa",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/[campaignId]/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1a2ef603c0aa.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "12c7913ae0adce411b20f9e9667a7e355c3f549901099c873a599233d6336c7f",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-09834583e2d0",
+				"proposal:postmerge-minion-hub-119942b6f8e8",
+				"proposal:postmerge-minion-hub-4f854d1a7707"
+			],
+			"rationale": "Part of the same PR #604 scan-gap cluster; touches a campaign server route with 17 unreviewed changes, slightly higher stakes than the rest but same root cause.",
+			"evidence": [
+				"17 changes on a campaign management server route post-merge",
+				"campaigns likely involve payment, user data, or multi-tenant isolation"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-1d6db60d6d7b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21149,6 +21437,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T12:47:43.080Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-2fa8f1f0001f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/server/services/crm-journey.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2fa8f1f0001f.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "16919e8990531ed51a5e2661d2319ac82f640d118f82f19d22fb0c3e5aea8950",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-09834583e2d0",
+				"proposal:postmerge-minion-hub-5c9adae4137a",
+				"proposal:postmerge-minion-hub-574186478082"
+			],
+			"rationale": "Same PR #604 scan-gap cluster; CRM journey service touches customer data flow so warrants manual verification but shares the same underlying tooling gap.",
+			"evidence": [
+				"modified CRM journey service file with 17 changes wasn't scanned post-merge",
+				"could touch payment logic, customer data flow, or journey state transitions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-37ac95d53900",
@@ -21213,6 +21537,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T08:17:10.976Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-5c9adae4137a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/server/services/crm-contacts.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5c9adae4137a.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "ff33f1e69a05e2d84a74bf24d217f2d543e4746147b2bceaa50b3a48fb2ccbdc",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-2fa8f1f0001f",
+				"proposal:postmerge-minion-hub-574186478082",
+				"proposal:postmerge-minion-hub-5e2bea47c84a"
+			],
+			"rationale": "Same PR #604 scan-gap cluster; CRM contacts service with 15 unreviewed changes to customer data handling, higher stakes but same systemic cause.",
+			"evidence": [
+				"scan couldn't retrieve a diff for 15 changes in a CRM service file",
+				"potential regressions, data mutations, or schema impacts in contact handling are unverified"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-66d88ed81830",
@@ -24561,6 +24921,114 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:34:33.316Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-802097b5127b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-802097b5127b.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "e34f434df8a150217928cd2a169ddfd5276a62bbdb5dd4a01ef4eb39e61a0bb1",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-89539c90dcf1",
+				"proposal:postmerge-minion-hub-8e53099c6941",
+				"proposal:postmerge-minion-hub-8d11460611fa"
+			],
+			"rationale": "A newly added file skipped by the same PR #604 scan failure; grouping with the other new-file gaps avoids duplicate lint/typecheck review tasks.",
+			"evidence": [
+				"359-line new file campaigns/PageBody.svelte",
+				"merged PR #604"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-89539c90dcf1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-89539c90dcf1.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "e6b96384cb2a762be5fcdd106781bcb8e1216524e62c2773631c46a90f11c661",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-802097b5127b",
+				"proposal:postmerge-minion-hub-8e53099c6941",
+				"proposal:postmerge-minion-hub-8d11460611fa"
+			],
+			"rationale": "Same new-file scan-gap pattern from PR #604 as the other socials PageBody findings; one combined check is more efficient than separate goals.",
+			"evidence": [
+				"394-line new file socials/PageBody.svelte",
+				"merged PR #604"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-b1ceedf4c734",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b1ceedf4c734.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "95e85e3e36052766b0164b730f5f8bfccf5f5afea50752b7420b131caafc76e9",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-8e53099c6941",
+				"proposal:postmerge-minion-hub-8d11460611fa",
+				"proposal:postmerge-minion-hub-802097b5127b"
+			],
+			"rationale": "Same PR #604 scan-gap pattern as the rest of the batch with no confirmed defect; should be folded into one consolidated review goal.",
+			"evidence": [
+				"247-line change in socials/posts/+page.svelte",
+				"merged PR #604"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:49:32.623Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c14a5898d7d0",
@@ -27986,42 +28454,6 @@
 			"scoredAt": "2026-11-21T03:47:15.280Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-777c7720745d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/sales/[id]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-777c7720745d.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "14d5fa09fce22e947e4d9faf16ccf3d679d8c2b30a8851c2d2210b6a63feaf86",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4",
-				"proposal:postmerge-minion-hub-78dfeed90773"
-			],
-			"rationale": "Touches a sensitive sales route but is the same systemic scan-gap as the other 11 findings from PR #604, so it should be grouped into one fix rather than tracked individually.",
-			"evidence": [
-				"197-line change to sales/[id]/+page.svelte unreviewed post-merge",
-				"diagnosis flags sales as a 'sensitive business area'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28054,14 +28486,14 @@
 			"scoredAt": "2026-11-21T22:17:37.907Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-8ef9cc8545b6",
+			"key": "proposal:postmerge-minion-hub-8e53099c6941",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8ef9cc8545b6.md",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8e53099c6941.md",
 			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "6d30a0b0de626b7ee0027463c00bc97aa3f80007588e29164fbb0433122f9f2b",
+			"sourceFingerprint": "bd3840842475c7f796cd466f22f52c44fef0c0db81f76499d864074b7b1269db",
 			"score": 38,
 			"band": "low",
 			"axes": {
@@ -28070,24 +28502,24 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 6,
 				"implementation": 6
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4",
-				"proposal:postmerge-minion-hub-78dfeed90773"
+				"proposal:postmerge-minion-hub-802097b5127b",
+				"proposal:postmerge-minion-hub-b1ceedf4c734",
+				"proposal:postmerge-minion-hub-89539c90dcf1"
 			],
-			"rationale": "A server-side load/action file is slightly higher-risk than the sibling UI-only findings but shares the same root cause and should be grouped.",
+			"rationale": "Smallest new-file gap in the batch, same PR #604 root cause; grouping with sibling socials/posts findings is more efficient than a standalone goal.",
 			"evidence": [
-				"9 unscanned changes to socials/campaigns/+page.server.ts, which handles form submissions/mutations",
-				"same merged PR #604 / commit 3acc0ff as other findings"
+				"248-line new file socials/posts/PageBody.svelte",
+				"merged PR #604"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
+			"scoredAt": "2026-11-23T14:49:32.623Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-91262d537ce6",
@@ -28157,42 +28589,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T04:17:59.915Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b18f54dbf1b4",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/[id]/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b18f54dbf1b4.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "4cf69431f71a4f099ca5626f668661a053bde0510b91701bcc53d39b59965335",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-7361920573d8"
-			],
-			"rationale": "Server-side support route logic went unreviewed, slightly higher risk than static UI findings, but still part of the same PR #604 scan-gap batch.",
-			"evidence": [
-				"8 unscanned changes to support/[id]/+page.server.ts request handling",
-				"diagnosis recommends switching scan pipeline to git CLI fallback"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e0651859d6e7",
@@ -30138,6 +30534,42 @@
 			"scoredAt": "2026-11-18T05:17:36.013Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-119942b6f8e8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/[campaignId]/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-119942b6f8e8.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "b5d0c56559d6e05fa32fa9df35e9bedb033e59d23e8a548354923ef6678df060",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-09834583e2d0",
+				"proposal:postmerge-minion-hub-1a2ef603c0aa",
+				"proposal:postmerge-minion-hub-3df402a5806c"
+			],
+			"rationale": "Same PR #604 scan-gap cluster; campaigns feature file but root cause is the shared scan-access failure, not file-specific.",
+			"evidence": [
+				"merged PR #604, file socials/campaigns/[campaignId]/PageBody.svelte",
+				"403 suggests GitHub API permission issue or rate limiting in the scan tool"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-121dc587ec1f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -30330,6 +30762,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T07:17:14.112Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-5e2bea47c84a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/[campaignId]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5e2bea47c84a.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "4fa8fb5312f4d78d9602c812dbd0c413ca7e94463720791bab628d4a23b8fe13",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-4f854d1a7707",
+				"proposal:postmerge-minion-hub-5c9adae4137a",
+				"proposal:postmerge-minion-hub-656837531153"
+			],
+			"rationale": "Same PR #604 scan-gap cluster; a 402-line campaign route modification unscanned, part of the same tooling gap as the rest of the batch.",
+			"evidence": [
+				"402-line modification in a Svelte route went unscanned",
+				"if this file handles sensitive logic, unaudited changes could hide regressions"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5ecd8380b71c",
@@ -31130,78 +31598,6 @@
 			"scoredAt": "2026-11-19T09:48:05.770Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-1a2ef603c0aa",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/[campaignId]/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1a2ef603c0aa.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "12c7913ae0adce411b20f9e9667a7e355c3f549901099c873a599233d6336c7f",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-2fa8f1f0001f",
-				"proposal:postmerge-minion-hub-5c9adae4137a",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
-			],
-			"rationale": "A campaign server route with 17 unverified changes carries more risk than UI-only gaps but still belongs to the same PR #604 scan-failure cluster.",
-			"evidence": [
-				"17 changes to campaign server route",
-				"same merged PR #604"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-2fa8f1f0001f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/server/services/crm-journey.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-2fa8f1f0001f.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "16919e8990531ed51a5e2661d2319ac82f640d118f82f19d22fb0c3e5aea8950",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-5c9adae4137a",
-				"proposal:postmerge-minion-hub-1a2ef603c0aa",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
-			],
-			"rationale": "CRM journey service has 17 unverified changes touching customer data flow, part of the same systemic PR #604 scan-failure cluster.",
-			"evidence": [
-				"17 changes to crm-journey.service.ts",
-				"same merged PR #604"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-559bcf211073",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31234,42 +31630,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:34:33.316Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-5c9adae4137a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/server/services/crm-contacts.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5c9adae4137a.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "ff33f1e69a05e2d84a74bf24d217f2d543e4746147b2bceaa50b3a48fb2ccbdc",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-2fa8f1f0001f",
-				"proposal:postmerge-minion-hub-1a2ef603c0aa",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
-			],
-			"rationale": "CRM contacts service with 15 unverified changes to customer data handling, part of the PR #604 scan-failure cluster.",
-			"evidence": [
-				"15 changes to crm-contacts.service.ts",
-				"same merged PR #604"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-ce10a6641861",
@@ -35478,6 +35838,42 @@
 			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-b59a855e018b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b59a855e018b.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "3e7fd2217f43fa1585d48166ff889328b7fb4595d3a63a259971f46021cf6751",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ba93210c90e8",
+				"proposal:postmerge-minion-hub-d5093998b234",
+				"proposal:postmerge-minion-hub-fcdf3627c1c5"
+			],
+			"rationale": "One of ten identical scan-gap findings from the same merged PR #604, pointing to a scanner patch-retrieval failure rather than a confirmed defect.",
+			"evidence": [
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/604",
+				"36-line change to +page.server.ts unscanned"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-bd7700d5dd6a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35510,6 +35906,78 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T07:47:46.293Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d5093998b234",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/sales/[id]/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d5093998b234.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "e5ece003834b57412427f32103c92215f1b46fec21e1c168b1cef7f45360df20",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b59a855e018b",
+				"proposal:postmerge-minion-hub-ba93210c90e8",
+				"proposal:postmerge-minion-hub-fcdf3627c1c5"
+			],
+			"rationale": "Sales route server file scan-gap from the same PR #604 batch; grouping the batch into one scanner-fix goal is more effective than ten micro-goals.",
+			"evidence": [
+				"merged PR #604",
+				"8 changes unscanned in sales/[id]/+page.server.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-e27dc3b9754c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/server/services/connections.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e27dc3b9754c.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "edfa5a55a77341a08c3f6b8f41c3a308cce9a09020c4fbc4e497c2c6345ab198",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b59a855e018b",
+				"proposal:postmerge-minion-hub-d5093998b234",
+				"proposal:postmerge-minion-hub-fcdf3627c1c5"
+			],
+			"rationale": "connections.service.ts touches external integrations so is slightly more consequential, but it's still one of ten identical PR #604 scan-gap findings sharing the same scanner root cause.",
+			"evidence": [
+				"merged PR #604",
+				"5 unscanned changes in connections.service.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e41a33a864a1",
@@ -35639,6 +36107,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T11:17:18.080Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fcdf3627c1c5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/settings/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fcdf3627c1c5.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "21262575a974aaf4626a9c068781ba1b39f80aa4df32374584980a8f167384ed",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b59a855e018b",
+				"proposal:postmerge-minion-hub-d5093998b234",
+				"proposal:postmerge-minion-hub-ba93210c90e8"
+			],
+			"rationale": "15 unscanned changes in a socials settings server file, part of the same PR #604 batch that should be grouped into a single scanner-reliability goal.",
+			"evidence": [
+				"merged PR #604",
+				"15 changes unscanned in socials/settings/+page.server.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fdcedcc97f88",
@@ -36699,6 +37203,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T04:48:02.180Z"
+		},
+		{
+			"key": "issue:minion-meta#1087",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1087 [monitor:unstick] rank run 4c047867 (minion-meta): batch 2 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1087",
+			"sourceUpdatedAt": "2026-11-23T14:18:02Z",
+			"sourceFingerprint": "7b5df20591966daf47061dbc0a3a266494cba2e58862ddf5c546c9a86b1771a0",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1088"
+			],
+			"rationale": "Transient claude/codex provider outage already diagnosed as self-recovering and duplicates #1088's same signature.",
+			"evidence": [
+				"batch 2 failed - claude unavailable/invalid, codex fallback hit transient provider failures",
+				"same signature recurs across 5 other rank runs today (11:15-13:45)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
+		},
+		{
+			"key": "issue:minion-meta#1088",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1088 [monitor:unstick] rank run ac67694a (minion-meta): batch 2 provider failure",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1088",
+			"sourceUpdatedAt": "2026-11-23T14:18:03Z",
+			"sourceFingerprint": "64b6889d1a5ff3389452fea0f23914939ec9b15db3c3b621d14127df49076104",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"issue:minion-meta#1087"
+			],
+			"rationale": "Identical transient provider-outage signature to #1087; best combined into one host-classifier auto-retry goal rather than tracked twice.",
+			"evidence": [
+				"identical pattern to 4c047867",
+				"cluster of 6 rank runs failing the same way between 11:15 and 13:45 today"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
 		},
 		{
 			"key": "issue:minion-meta#430",
@@ -38624,6 +39196,78 @@
 			"scoredAt": "2026-11-21T08:33:43.235Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-09834583e2d0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/[id]/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-09834583e2d0.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "77287e6a23e998c773b28c1f5db5e04361018c2d191a7c342c923e4898739bc6",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-119942b6f8e8",
+				"proposal:postmerge-minion-hub-1a2ef603c0aa",
+				"proposal:postmerge-minion-hub-2fa8f1f0001f"
+			],
+			"rationale": "One of ten identical scan-gap findings from the same merged PR #604, sharing one likely root cause (scan tool/API access) rather than ten separate reviews.",
+			"evidence": [
+				"merged PR https://github.com/NikolasP98/minion_hub/pull/604",
+				"new 276-line component bypassed automated quality scanning"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-3df402a5806c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3df402a5806c.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "2a59302c4485d23214084956303f2693970c17b00fd4ad77ca0b7bf446647a2e",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-09834583e2d0",
+				"proposal:postmerge-minion-hub-119942b6f8e8",
+				"proposal:postmerge-minion-hub-656837531153"
+			],
+			"rationale": "Same PR #604 scan-gap cluster for a support-page server route; lower stakes than CRM/campaign files but same shared root cause.",
+			"evidence": [
+				"discovery tool couldn't fetch the actual diff for support/+page.server.ts",
+				"23-line diff against the spec it was meant to implement"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-4f854d1a7707",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38640,34 +39284,34 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 5,
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-6fa8545417df",
-				"proposal:postmerge-minion-hub-5e2bea47c84a",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
+				"proposal:postmerge-minion-hub-1a2ef603c0aa",
+				"proposal:postmerge-minion-hub-574186478082",
+				"proposal:postmerge-minion-hub-5e2bea47c84a"
 			],
-			"rationale": "Largest diff in the batch (651 lines) on a user-facing route, but still just one symptom of the same PR #604 scan-tool failure.",
+			"rationale": "Same PR #604 scan-gap cluster; a large 651-line user-facing route diff that went unscanned, but the fix is the shared scan-tool access issue, not per-file work.",
 			"evidence": [
-				"651-line diff",
-				"same merged PR #604"
+				"651-line diff that the scan tool couldn't fetch",
+				"socials/posts route is user-facing and likely integrates with other systems"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
+			"scoredAt": "2026-11-23T14:48:37.956Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-5e2bea47c84a",
+			"key": "proposal:postmerge-minion-hub-574186478082",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/[campaignId]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5e2bea47c84a.md",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-574186478082.md",
 			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "4fa8fb5312f4d78d9602c812dbd0c413ca7e94463720791bab628d4a23b8fe13",
+			"sourceFingerprint": "7a3510f32dafc10b8e2c46e778a4d7227df7bb0fcb81df02974381bf8d3740f3",
 			"score": 30,
 			"band": "low",
 			"axes": {
@@ -38676,24 +39320,60 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 4
+				"specification": 5,
+				"implementation": 3
 			},
 			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-6fa8545417df",
+				"proposal:postmerge-minion-hub-2fa8f1f0001f",
 				"proposal:postmerge-minion-hub-4f854d1a7707",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
+				"proposal:postmerge-minion-hub-5c9adae4137a"
 			],
-			"rationale": "402-line route modification unscanned, consistent with the same systemic PR #604 scan-tool failure.",
+			"rationale": "Same PR #604 scan-gap cluster for a socials/posts server route with 9 unreviewed changes; same root cause as the other nine findings.",
 			"evidence": [
-				"402-line modification",
-				"same merged PR #604"
+				"scanner detected 9 changes to this file but couldn't fetch the actual diff from GitHub",
+				"changes are unreviewed at the code level"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
+			"scoredAt": "2026-11-23T14:48:37.956Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-656837531153",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/sales/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-656837531153.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "dd5374e09f8d2036db5cc021528c20a9f97a0d2a68868b94e1ac85ec4fb8d881",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-3df402a5806c",
+				"proposal:postmerge-minion-hub-5e2bea47c84a",
+				"proposal:postmerge-minion-hub-09834583e2d0"
+			],
+			"rationale": "Same PR #604 scan-gap cluster; new sales PageBody component bypassed quality/design-token scanning, lowest-stakes of the ten but same root cause.",
+			"evidence": [
+				"new Svelte component was added to minion_hub but wasn't scanned for code quality, design-token compliance, or security issues",
+				"run bun run lint:design && bun run lint:tokens to catch token violations"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:48:37.956Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-6e3297fea67e",
@@ -38728,114 +39408,6 @@
 			"scoredAt": "2026-11-21T08:34:33.316Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-6fa8545417df",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6fa8545417df.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "96343721ed543e5ae6ca0e41bd8fb160563621106386aae596d59578b39952af",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-5e2bea47c84a",
-				"proposal:postmerge-minion-hub-4f854d1a7707",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
-			],
-			"rationale": "357-line campaigns route modification unscanned, same PR #604 cluster as the rest of the batch.",
-			"evidence": [
-				"357-line modification",
-				"same merged PR #604"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-7361920573d8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7361920573d8.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "58c92ce12845ee2a25df06919f6bd312ea0071e28881a7700e207592c350ce4b",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "One of a dozen identical scan-gap findings from the same merged PR #604; best resolved as a single discovery-tool fallback fix rather than 12 separate goals.",
-			"evidence": [
-				"305-line change to support/+page.svelte scanned via GitHub API, no patch retrieved",
-				"same merged PR #604 / commit 3acc0ff as the other scan-gap findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-78dfeed90773",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/settings/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-78dfeed90773.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "0df864e93f9643763039b8ebcea4fcee820f77c289c27e36a62b4cfca90005c3",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "Largest of the identical scan-gap findings tied to PR #604; grouping avoids 12 near-duplicate goals for one tool limitation.",
-			"evidence": [
-				"525-line change to socials/settings/+page.svelte not diffed by scan",
-				"same merged PR #604 as sibling findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-7ec5d7436363",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38868,78 +39440,6 @@
 			"scoredAt": "2026-11-18T08:18:21.705Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-802097b5127b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-802097b5127b.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "e34f434df8a150217928cd2a169ddfd5276a62bbdb5dd4a01ef4eb39e61a0bb1",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "New 359-line file skipped by the same scan mechanism as 11 other findings from PR #604; one consolidated fix addresses them all.",
-			"evidence": [
-				"359-line new file socials/campaigns/PageBody.svelte not scanned",
-				"diagnosis suggests manual bun run check as stopgap"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-89539c90dcf1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-89539c90dcf1.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "e6b96384cb2a762be5fcdd106781bcb8e1216524e62c2773631c46a90f11c661",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "Another new-file scan-gap from the identical PR #604 sweep; should be bundled with the other 11 into one discovery-tool fix.",
-			"evidence": [
-				"394-line new file socials/PageBody.svelte not captured by scan",
-				"recommends manual inspection plus retry of the scan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-8b993a41e7c7",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -38970,78 +39470,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T04:17:59.915Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8d11460611fa",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8d11460611fa.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "2e62d6a53efe599cd1906f77b91f805ce65cf6462f7970753c2894d557aa99cd",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "Same scan-gap pattern as the 11 sibling findings from PR #604; grouping is more effective than one goal per file.",
-			"evidence": [
-				"393-line change to socials/+page.svelte unreviewed post-merge",
-				"diagnosis notes unclear whether change was feature, refactor, or bad merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-8e53099c6941",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-8e53099c6941.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "bd3840842475c7f796cd466f22f52c44fef0c0db81f76499d864074b7b1269db",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "Yet another new-file scan-gap from the same PR #604; consolidating all 12 avoids redundant per-file goals for one tool limitation.",
-			"evidence": [
-				"248-line new file socials/posts/PageBody.svelte not diffed",
-				"diagnosis flags potential 'any' types/unvalidated props as unverified risk"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-948e27d654f8",
@@ -39143,78 +39571,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T12:20:19.864Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b1ceedf4c734",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b1ceedf4c734.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "95e85e3e36052766b0164b730f5f8bfccf5f5afea50752b7420b131caafc76e9",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "Same scan-gap mechanism and PR as the other 11 findings; a single fix (git fallback in the scan script) resolves all of them.",
-			"evidence": [
-				"247-line change to socials/posts/+page.svelte not retrieved by scan",
-				"diagnosis suggests checking GitHub API rate-limit/auth logs"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-b841c1438bbc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/settings/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b841c1438bbc.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "e34d0351ac519d9f0d0eec4416c9cfd4f309607e656c97c6fb7ed2bff26c2024",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "Largest new-file scan-gap (526 lines) in the batch, but same root cause as the other 11 findings and should be grouped into one tool fix.",
-			"evidence": [
-				"526-line new file socials/settings/PageBody.svelte not analyzed by discovery scan",
-				"diagnosis recommends a git-based fallback when GitHub's patch endpoint fails"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c237b00d27fa",
@@ -41284,42 +41640,6 @@
 			"scoredAt": "2026-11-21T12:20:19.864Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-b59a855e018b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b59a855e018b.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "3e7fd2217f43fa1585d48166ff889328b7fb4595d3a63a259971f46021cf6751",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-777c7720745d",
-				"proposal:postmerge-minion-hub-8ef9cc8545b6",
-				"proposal:postmerge-minion-hub-b18f54dbf1b4"
-			],
-			"rationale": "Smallest diff (36 lines) of the batch, server-side but low blast radius; still the same systemic scan-gap as the other 11 findings.",
-			"evidence": [
-				"36-line change to socials/+page.server.ts flagged as medium risk due to auth/session touch",
-				"same merged PR #604 as sibling findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:19:28.406Z"
-		},
-		{
 			"key": "run:minion (gateway)#31686911500",
 			"kind": "run",
 			"stage": "testing",
@@ -42841,6 +43161,42 @@
 			"scoredAt": "2026-11-23T14:25:22.596Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-b841c1438bbc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/settings/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-b841c1438bbc.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "e34d0351ac519d9f0d0eec4416c9cfd4f309607e656c97c6fb7ed2bff26c2024",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-efe9338c4a71",
+				"proposal:postmerge-minion-hub-f99cd8fabdc4",
+				"proposal:postmerge-minion-hub-e1a5cc54b7e4"
+			],
+			"rationale": "Same PR #604 scan-gap pattern on a new 526-line Svelte file, best resolved by fixing the scanner's fallback for added files rather than as a standalone goal.",
+			"evidence": [
+				"merged PR #604",
+				"526-line Svelte component added, no patch retrieved"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-ba5345e2cb9d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42873,6 +43229,78 @@
 			"scoredAt": "2026-11-21T08:35:30.613Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-ba93210c90e8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/[postId]/+page.server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba93210c90e8.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "7dd95400f2617d1779e7823b1d0c85e03896930e3128003c6c593b6c06333208",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b59a855e018b",
+				"proposal:postmerge-minion-hub-d5093998b234",
+				"proposal:postmerge-minion-hub-fcdf3627c1c5"
+			],
+			"rationale": "Another of the identical PR #604 scan-gap findings (8 unscanned changes), same root cause as its siblings.",
+			"evidence": [
+				"merged PR #604",
+				"8 changes unscanned in posts/[postId]/+page.server.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-e1a5cc54b7e4",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e1a5cc54b7e4.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "d16db59b29020b6c97bfe9768297dabec23436949014fe0877a96ad5cf3571bf",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-f7a735ff23a5",
+				"proposal:postmerge-minion-hub-b841c1438bbc",
+				"proposal:postmerge-minion-hub-efe9338c4a71"
+			],
+			"rationale": "306-line support UI file scan-gap, same PR #604 pattern; part of the same batch that should become one scanner-reliability goal.",
+			"evidence": [
+				"merged PR #604",
+				"306-line Svelte file unscanned"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-e263984cb0f6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42903,6 +43331,114 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:36:56.603Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-efe9338c4a71",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/[postId]/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-efe9338c4a71.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "e03f4a24584cc7c782c7b8df2d2435210b8d39c99658f1ff3fe2a99a86c37fab",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-b841c1438bbc",
+				"proposal:postmerge-minion-hub-f99cd8fabdc4",
+				"proposal:postmerge-minion-hub-e1a5cc54b7e4"
+			],
+			"rationale": "652-line new Svelte file scan-gap, same PR #604 batch and same likely root cause (empty patch for added files).",
+			"evidence": [
+				"merged PR #604",
+				"652-line new file unscanned"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f7a735ff23a5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/[id]/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f7a735ff23a5.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "3afa2462e54ba5f0784377710058ccc975e7aa4e89015a7590dcc1f608d343aa",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-e1a5cc54b7e4",
+				"proposal:postmerge-minion-hub-f99cd8fabdc4",
+				"proposal:postmerge-minion-hub-b841c1438bbc"
+			],
+			"rationale": "275-line support route scan-gap, one of the same ten PR #604 findings that should be consolidated into a scanner-fix goal.",
+			"evidence": [
+				"merged PR #604",
+				"275-line file unscanned"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f99cd8fabdc4",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — scan-gap in src/routes/(app)/sales/[id]/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f99cd8fabdc4.md",
+			"sourceUpdatedAt": "2026-10-26",
+			"sourceFingerprint": "1847acd746c25112219a3a3372db08a7a78345afe848b830c34f94b902e5a545",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-efe9338c4a71",
+				"proposal:postmerge-minion-hub-e1a5cc54b7e4",
+				"proposal:postmerge-minion-hub-f7a735ff23a5"
+			],
+			"rationale": "198-line new sales UI file scan-gap, same PR #604 batch sharing the probable 'added file returns empty patch' scanner bug.",
+			"evidence": [
+				"merged PR #604",
+				"198-line new file unscanned"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T14:50:14.111Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-operations-guidance-spec",
@@ -43168,78 +43704,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T03:16:58.430Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-3df402a5806c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-3df402a5806c.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "2a59302c4485d23214084956303f2693970c17b00fd4ad77ca0b7bf446647a2e",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-574186478082",
-				"proposal:postmerge-minion-hub-670e33d9ad13",
-				"proposal:postmerge-minion-hub-09834583e2d0"
-			],
-			"rationale": "Small 23-line support-route diff with the same suspected auth/rate-limit scan failure as the rest of the PR #604 batch.",
-			"evidence": [
-				"23-line diff",
-				"likely auth/permissions issue with GitHub API"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-574186478082",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-574186478082.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "7a3510f32dafc10b8e2c46e778a4d7227df7bb0fcb81df02974381bf8d3740f3",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-3df402a5806c",
-				"proposal:postmerge-minion-hub-4f854d1a7707",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
-			],
-			"rationale": "9-change server route diff unscanned, same PR #604 cluster, low standalone impact.",
-			"evidence": [
-				"9 changes",
-				"same merged PR #604"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
 		},
 		{
 			"key": "issue:minion-meta#1004",
@@ -46045,42 +46509,6 @@
 			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ba93210c90e8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/[postId]/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ba93210c90e8.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "7dd95400f2617d1779e7823b1d0c85e03896930e3128003c6c593b6c06333208",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-d5093998b234",
-				"proposal:postmerge-minion-hub-e1a5cc54b7e4"
-			],
-			"rationale": "One of eight identical auto-filed scan-gap findings from the same merged PR #604, better handled as a single root-cause fix to the discovery scanner than eight separate goals.",
-			"evidence": [
-				"merged PR #604 in NikolasP98/minion_hub@3acc0ff",
-				"8 changes in +page.server.ts went unscanned",
-				"status: review, no confirmed bug, just a coverage gap"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:20:04.792Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-bb9cd7740cf0",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -46211,42 +46639,6 @@
 			"scoredAt": "2026-11-18T20:49:49.904Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-d5093998b234",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/sales/[id]/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d5093998b234.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "e5ece003834b57412427f32103c92215f1b46fec21e1c168b1cef7f45360df20",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-e27dc3b9754c",
-				"proposal:postmerge-minion-hub-efe9338c4a71"
-			],
-			"rationale": "Same PR #604 scan-gap pattern as other findings in this batch; grouping into one scanner-fix goal is more actionable than per-file tickets.",
-			"evidence": [
-				"merged PR #604 in NikolasP98/minion_hub@3acc0ff",
-				"8 unscanned changes in sales/[id]/+page.server.ts",
-				"diagnosis suggests transient API/patch-size cause shared across files"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:20:04.792Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -46314,78 +46706,6 @@
 			"scoredAt": "2026-11-18T23:48:28.733Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-e1a5cc54b7e4",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e1a5cc54b7e4.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "d16db59b29020b6c97bfe9768297dabec23436949014fe0877a96ad5cf3571bf",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-f7a735ff23a5",
-				"proposal:postmerge-minion-hub-f99cd8fabdc4"
-			],
-			"rationale": "Another scan-gap from merged PR #604, best consolidated with sibling findings into a single scanner-reliability fix rather than reviewed file-by-file.",
-			"evidence": [
-				"306-line Svelte component added, diff unscanned",
-				"merged PR #604, branch master",
-				"same 2026-10-26 checked date as other findings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:20:04.792Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-e27dc3b9754c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/server/services/connections.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-e27dc3b9754c.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "edfa5a55a77341a08c3f6b8f41c3a308cce9a09020c4fbc4e497c2c6345ab198",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-fcdf3627c1c5",
-				"proposal:postmerge-minion-hub-d5093998b234"
-			],
-			"rationale": "Connections service scan-gap shares the identical root-cause template with 7 other PR #604 findings; group to avoid redundant parallel fixes.",
-			"evidence": [
-				"5 unscanned changes in connections.service.ts",
-				"merged PR #604 in NikolasP98/minion_hub@3acc0ff",
-				"diagnosis cites same GitHub API/patch-retrieval suspicion as siblings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:20:04.792Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-e5bc9fd11deb",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -46448,150 +46768,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-efe9338c4a71",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/posts/[postId]/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-efe9338c4a71.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "e03f4a24584cc7c782c7b8df2d2435210b8d39c99658f1ff3fe2a99a86c37fab",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-ba93210c90e8",
-				"proposal:postmerge-minion-hub-f7a735ff23a5"
-			],
-			"rationale": "652-line added file scan-gap from the same PR #604 sweep; the repeated pattern across this batch points to one scanner fix, not eight.",
-			"evidence": [
-				"652-line new Svelte component, patch retrieval failed",
-				"merged PR #604, branch master",
-				"checked 2026-10-26, same as other batch members"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:20:04.792Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f7a735ff23a5",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/[id]/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f7a735ff23a5.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "3afa2462e54ba5f0784377710058ccc975e7aa4e89015a7590dcc1f608d343aa",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-f99cd8fabdc4",
-				"proposal:postmerge-minion-hub-fcdf3627c1c5"
-			],
-			"rationale": "275-line scan-gap sharing the exact PR #604 pattern with seven siblings; grouping yields one actionable scanner/retry fix.",
-			"evidence": [
-				"275-line change in support/[id]/+page.svelte unscanned",
-				"merged PR #604 in NikolasP98/minion_hub@3acc0ff",
-				"fix direction repeats 'check GitHub API rate limit' seen across siblings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:20:04.792Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f99cd8fabdc4",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/sales/[id]/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f99cd8fabdc4.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "1847acd746c25112219a3a3372db08a7a78345afe848b830c34f94b902e5a545",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-e1a5cc54b7e4",
-				"proposal:postmerge-minion-hub-efe9338c4a71"
-			],
-			"rationale": "198-line added-file scan-gap from PR #604; part of the same batch of identical findings best merged into a single scanner-fix goal.",
-			"evidence": [
-				"198-line file, missing GitHub patch suspected cause",
-				"merged PR #604, branch master",
-				"diagnosis explicitly flags status=added files as a scanner limitation shared with siblings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:20:04.792Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-fcdf3627c1c5",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/settings/+page.server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fcdf3627c1c5.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "21262575a974aaf4626a9c068781ba1b39f80aa4df32374584980a8f167384ed",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-e27dc3b9754c",
-				"proposal:postmerge-minion-hub-d5093998b234"
-			],
-			"rationale": "15 unscanned changes in socials/settings scan-gap, same PR #604 pattern; grouping with the seven related findings avoids duplicated per-file remediation.",
-			"evidence": [
-				"15 unscanned changes, largest change count in this batch",
-				"merged PR #604 in NikolasP98/minion_hub@3acc0ff",
-				"diagnosis suspects file-size/API-limit cause common across the batch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:20:04.792Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-ff95288edb8a",
@@ -49726,78 +49902,6 @@
 			"scoredAt": "2026-11-19T09:48:05.770Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-09834583e2d0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/support/[id]/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-09834583e2d0.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "77287e6a23e998c773b28c1f5db5e04361018c2d191a7c342c923e4898739bc6",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-670e33d9ad13",
-				"proposal:postmerge-minion-hub-656837531153",
-				"proposal:postmerge-minion-hub-119942b6f8e8"
-			],
-			"rationale": "One of 12 scan-gap findings from the same merged PR #604, all caused by the same underlying scan-tool failure and better fixed as one systemic goal.",
-			"evidence": [
-				"same PR #604 merge",
-				"276-line new component, non-security route"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-119942b6f8e8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/socials/campaigns/[campaignId]/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-119942b6f8e8.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "b5d0c56559d6e05fa32fa9df35e9bedb033e59d23e8a548354923ef6678df060",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-09834583e2d0",
-				"proposal:postmerge-minion-hub-1a2ef603c0aa",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
-			],
-			"rationale": "Scan-gap explicitly attributes failure to a possible 403/rate-limit, indicating this is a tooling bug affecting the whole PR #604 batch rather than an isolated risk.",
-			"evidence": [
-				"PR #604 same merge",
-				"403 suggests GitHub API permission issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-1e5110f43ed5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -49862,42 +49966,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T23:48:28.733Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-656837531153",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — scan-gap in src/routes/(app)/sales/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-656837531153.md",
-			"sourceUpdatedAt": "2026-10-26",
-			"sourceFingerprint": "dd5374e09f8d2036db5cc021528c20a9f97a0d2a68868b94e1ac85ec4fb8d881",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-09834583e2d0",
-				"proposal:postmerge-minion-hub-119942b6f8e8",
-				"proposal:postmerge-minion-hub-670e33d9ad13"
-			],
-			"rationale": "New non-security UI component unscanned; part of the same PR #604 scan-failure cluster with low standalone stakes.",
-			"evidence": [
-				"new Svelte component in sales route",
-				"same merged PR #604"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T14:18:24.410Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-66cd0246e677",
