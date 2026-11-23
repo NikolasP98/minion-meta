@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-meta-2157041367
 title: Handoff marker — specs/145-hub-white-label/implementation/consumer-reconciliation.json (minion-meta)
-status: draft
+status: review
+duplicate_candidate: 2026-10-02-hub-gateway-production-readiness-recon
 created: 2026-11-23
 updated: 2026-11-23
 repos: [minion-meta]
