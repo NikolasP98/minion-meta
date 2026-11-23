@@ -99,3 +99,11 @@ A four-file uncommitted correction is independently Standards/SpecPASS: story-pr
 The completed warm experiment measures1,211stories/0unmeasured withcorrectedCSSprocessing:1,119violations vs799ledger,260regression rows and81improvements. Allfive logo stories are0violations. The global producer/baseline migration is not being folded into the naming release; no baseline was increased. Proposal2026-11-23-storybook-vitest-css-producer-parity and the exact-site Vitest handoff track that separate audit.
 
 The bounded release correction instead restores the original inline preset color scope on the prefix alone, alongside original logo suffix90%/700. This is presentation-contract preservation, not a hardcoded test-host fallback. Default shell styling and the existing test-lane producer remain unchanged. Focused evidence and independent review are required before pushing this follow-up.
+
+### Scoped correction validated and pushed
+
+Commit11600a993f61b564500cee540880988e0a92ff29 restores trusted palette ownership on the prefix span alone and the original personal logo suffix90%/700; default shell styling is unchanged. The Vitest test producer is unchanged,with its separate audit recorded by an exact-site handoff and matching proposal. No baseline was raised.
+
+Canonical guarded check returns0errors/0warnings. Follow-up validation run01M83M31W5V4XTENG6F3GJ53F8 completes with0reviewfindings,105focusedtests passing,existing logo story ledger comparison passing(all5measured,no regressions),and proper full-host logo variants with0violations/incomplete findings. The same mounted preview updatesFaces→ClínicaFaces. Documentation/lint/push complete; forgePR/CI phases again skipped due the known aggregate-auth issue. Source is clean and pushed; no pipeline or local test is being repeated after the Orca restart.
+
+Actual hosted CIrun45131452294 is now running on exact11600a99 in PR709. The prior45aead23 run ended with only the diagnosed a11y failure; all10othercore jobs passed. Final consumer merge/deployment/runtime remain pending. See implementation/final-correction/ for bounded exact-head receipts and screenshots.
