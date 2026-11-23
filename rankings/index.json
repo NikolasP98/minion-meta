@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T20:47:33.857Z",
+	"generatedAt": "2026-11-23T21:17:15.986Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11431,6 +11431,39 @@
 			"scoredAt": "2026-11-21T01:17:17.203Z"
 		},
 		{
+			"key": "pr:minion_hub#724",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#724 feat(scheduling): a client's \"no\" to a reminder opens a follow-up for staff instead of cancelling the appointment",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/724",
+			"sourceUpdatedAt": "2026-11-23T21:06:10Z",
+			"sourceFingerprint": "e704b978dd7809476c1d3da4bac81d180b74e07ad97fd9be14acfc4495f44583",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Prevents appointment cancellations from ambiguous negation replies by routing to a staff reconfirmation case, backed by passing tests, though it depends on reminders/WhatsApp wiring not yet scheduled.",
+			"evidence": [
+				"89 focused tests green, live JEV smoke confirmed negation classification",
+				"Depends on unscheduled /api/scheduling/reminders/tick wiring",
+				"TODO(handoff) notes PII masking and status mapping open ends"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T21:17:15.753Z"
+		},
+		{
 			"key": "pr:minion-meta#885",
 			"kind": "pr",
 			"stage": "development",
@@ -22458,8 +22491,8 @@
 			"repo": "minion_hub",
 			"title": "#723 feat(stock): purchase corrections follow one organization lock policy (default unchanged)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/723",
-			"sourceUpdatedAt": "2026-11-23T20:36:24Z",
-			"sourceFingerprint": "d1ed6110e51287ac1ddd6f14fb1b8cbb2533f39ad4b7dff16416c2dbbf07edc6",
+			"sourceUpdatedAt": "2026-11-23T21:10:00Z",
+			"sourceFingerprint": "df896d50fb0f4af3be9e7432c9cf975f7b989670d252513fd04df7ebef4185eb",
 			"score": 42,
 			"band": "low",
 			"axes": {
@@ -22469,57 +22502,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 7
 			},
 			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1064"
-			],
-			"rationale": "Spec'd, tested, byte-identical no-op today, so low urgency but ready, well-scoped foundation work.",
+			"relatedKeys": [],
+			"rationale": "Backend-only lock policy slice with no behavior change today, strong test gates, and clear S2/S3 handoff TODOs make it ready and low-risk to merge.",
 			"evidence": [
-				"migration additive/idempotent with parity test",
-				"focused vitest 77 tests green",
-				"no visible change until S2 policy row exists"
+				"Byte-identical behavior with no policy row, parity test added",
+				"77 focused tests green, prettier clean",
+				"TODO(handoff) documents S3 unlock scope"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T20:47:33.667Z"
-		},
-		{
-			"key": "pr:minion_hub#724",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#724 feat(scheduling): a client's \"no\" to a reminder opens a follow-up for staff instead of cancelling the appointment",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/724",
-			"sourceUpdatedAt": "2026-11-23T20:44:59Z",
-			"sourceFingerprint": "de783343c42e592357793b6872f4b482448673503c6090f3c6ca1fef8a99b9d6",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#1063"
-			],
-			"rationale": "Well-specified and tested logic change but its effect is gated behind an unscheduled cron job and other FACES prerequisites outside this code.",
-			"evidence": [
-				"reminders tick endpoint is wiring: 'unscheduled'",
-				"depends on FACES enabling reminders and reconnecting WhatsApp",
-				"vitest 89 green, live JEV smoke passed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T20:47:33.667Z"
+			"scoredAt": "2026-11-23T21:17:15.753Z"
 		},
 		{
 			"key": "pr:minion-base#43",
