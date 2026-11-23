@@ -4,7 +4,7 @@ Owner approval received 2026-11-22: “approved. lmk when its all live”.
 
 Implementation base: Hub master `5347ff0148a3600fd3963d94db57e95c8e5a2779`. Compared with reviewed source `3d39cbb640da894c9d78bc840af6153b5d896724`, six changed files contain accessibility fixes to DataTable, public wordmark contrast and the accessibility ledger. No creation/authority/layout architecture drift was found. The public contrast fix and its regression test must be preserved.
 
-Separate private clones own data/server, shared shell/setup/editor and remaining identity consumers. The shared checkout and the frozen EGM source remain untouched. Dependencies installed with the frozen Bun lockfile; application implementation and qualification are in progress. No full-feature deployment or runtime completion is claimed.
+Separate private clones own data/server, shared shell/setup/editor and remaining identity consumers. The shared checkout and the frozen EGM source remain untouched. Dependencies installed with the frozen Bun lockfile. The full feature shipped on 2026-11-23. The release ledger and final release section describe current state; subsequent checkpoint sections preserve historical results.
 
 ## Release ledger
 
@@ -12,7 +12,7 @@ Separate private clones own data/server, shared shell/setup/editor and remaining
 |---|---|---|---|---|
 | Data and guarded service | Implemented | Focused/native checks and all 15 hosted checks passed | [PR707](https://github.com/NikolasP98/minion_hub/pull/707), merged `0aab78ecb089b548f057ae67ce87ee1820b42536` | Production Ready; migration applied once. Data slice only. |
 | Shared delivery, shell, creation and editor | Complete | All19reported hosted checks passed on exacta3b93889 | PR708 merged896da2e0 | ProductionReady; authenticated editor and keyboard qualified |
-| Remaining identity consumers and final qualification | Complete candidate | Corrective review/105focused/dual-host/check passed; hosted CI running | PR709,head11600a99 | Pending |
+| Remaining identity consumers and final qualification | Complete | All 14 reported checks SUCCESS on exact `11600a99` | [PR709](https://github.com/NikolasP98/minion_hub/pull/709), merged `945e1a15` | Production Ready; authenticated Home title, wordmark and Appearance verified |
 
 ## First-document architecture amendment
 
@@ -107,3 +107,14 @@ Commit11600a993f61b564500cee540880988e0a92ff29 restores trusted palette ownershi
 Canonical guarded check returns0errors/0warnings. Follow-up validation run01M83M31W5V4XTENG6F3GJ53F8 completes with0reviewfindings,105focusedtests passing,existing logo story ledger comparison passing(all5measured,no regressions),and proper full-host logo variants with0violations/incomplete findings. The same mounted preview updatesFaces→ClínicaFaces. Documentation/lint/push complete; forgePR/CI phases again skipped due the known aggregate-auth issue. Source is clean and pushed; no pipeline or local test is being repeated after the Orca restart.
 
 Actual hosted CIrun45131452294 is now running on exact11600a99 in PR709. The prior45aead23 run ended with only the diagnosed a11y failure; all10othercore jobs passed. Final consumer merge/deployment/runtime remain pending. See implementation/final-correction/ for bounded exact-head receipts and screenshots.
+
+
+## Final release — 2026-11-23
+
+All three slices are live at https://hub.minion-ai.org. PR709 merged at 07:53:58 UTC as `945e1a15207bff942f967f1d53c90be815852dd6`, preserving the concurrently released calendar parent `ba9a88ae`. All 14 reported checks on exact head `11600a993f61b564500cee540880988e0a92ff29` were SUCCESS before merge, including the full browser matrix, QA stack, accessibility, build, ordinary tests, native/security gates and Vercel. Existing owner approval and administrator exemption were used; branch protection was unchanged.
+
+Exact-head ordinary tests passed 1,156 files and 10,557 tests, with five files/320 tests intentionally skipped. The separate native lanes and seeded QA checks qualify their own boundaries. Accessibility measured 1,211 stories with zero regressions and no unmeasured stories against the existing ledger: 777 violations versus baseline 799. Suppressions, 153 pattern tests and 7+6 specification cases passed. The hosted page sweep is skipped; the historical local full-sweep failure remains recorded above. No claim of zero application-wide accessibility debt or a passing final `a11y --all` is made.
+
+Production deployment `https://minion-rdu4tndxr-nikolasp98s-projects.vercel.app` reached Ready with hub.minion-ai.org assigned. Its completed build cloned `945e1a1` and applied zero additional migrations. The additive column migration already applied exactly once in the data slice. With the service worker bypassed, authenticated Home shows the current organization prefix in its title and wordmarks with the fixed Hub suffix. Appearance shows the shared editor, 15-character counter, matching preview and both reset/save controls. Production checks were read-only; no valid rename or new organization was requested. Private business screenshots were inspected locally and are not committed.
+
+[Final release receipts](implementation/final-release/) retain exact-head forge results, test/accessibility summaries, merge/deployment proof and bounded runtime observations. T022 and T024 are complete with the explicit qualification limits above. The separate first-document SSR migration and Storybook CSS-producer audit retain their exact-site handoffs and proposals; neither was silently folded into this release. Frozen EGM artifacts and earlier failed evidence remain unchanged.

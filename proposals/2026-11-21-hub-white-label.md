@@ -1,9 +1,9 @@
 ---
 id: 2026-11-21-hub-white-label
 title: Organization names throughout Hub
-status: in-spec
+status: done
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-23
 repos: [minion_hub]
 spawned_spec: 2026-11-21-hub-white-label-spec
 tags: [data, security]
@@ -23,7 +23,7 @@ One short organization-owned prefix appears across Hub text identity, with the f
 
 ## DELTA
 
-Add an optional organization override, guarded owner-scoped writer covering both the new prefix and existing full-org-name source of automatic branding, server-rendered identity, onboarding suggestion/editor and complete text-consumer conversion. No production backfill is needed for existing short org names. Full [spec](../specs/145-hub-white-label/spec.md), [plan](../specs/145-hub-white-label/plan.md) and [tasks](../specs/145-hub-white-label/tasks.md) define the behavior and tests.
+Add an optional organization override, guarded owner-scoped writer covering both the new prefix and existing full-org-name source of automatic branding, request-owned identity through the existing SPA route-data flow (documented SSR exception), onboarding suggestion/editor and complete text-consumer conversion. No production backfill is needed for existing short org names. Full [spec](../specs/145-hub-white-label/spec.md), [plan](../specs/145-hub-white-label/plan.md) and [tasks](../specs/145-hub-white-label/tasks.md) define the behavior and tests.
 
 ## Scope and completion
 
@@ -31,4 +31,4 @@ Text identity in Hub web UI only. No logo/favicons/colors, native installer rena
 
 Definition of done: all identity inventory entries converted; Faces/default/owner-edit/create/retry/two-org boundary cases pass; maximum-length layouts are measured; localization, access, design-token and existing application gates pass; independent Standards/Spec review and human merge precede deployment proof.
 
-The owner approved implementation and scoped release on 2026-11-22: “approved. lmk when its all live”. Application work is in progress; task and release evidence are tracked with the spec.
+The owner approved implementation and scoped release on 2026-11-22: “approved. lmk when its all live”. All three implementation slices shipped through Hub PRs #707, #708 and #709 on 2026-11-23. Final production deployment is Ready at hub.minion-ai.org; authenticated title, wordmark and shared Appearance editor were verified read-only. Exact CI/deployment/runtime evidence and the documented SPA and Storybook follow-ups are tracked in the spec package.

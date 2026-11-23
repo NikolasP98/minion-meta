@@ -1,7 +1,7 @@
 # Tasks: Organization names throughout Hub
 
 **Input**: spec.md, plan.md, research.md, data-model.md, contracts/branding.md, coverage.md.
-**State**: Owner approved implementation and scoped release on 2026-11-22. Unchecked items remain planned work; completion requires the evidence named below.
+**State**: Owner approved implementation and scoped release on 2026-11-22. All tasks are complete; all three slices are live and runtime-verified on 2026-11-23. Qualification boundaries are recorded below and in implementation-evidence.md.
 
 ## Phase 1: Setup
 
@@ -47,9 +47,9 @@
 - [x] T019 Register the new API and changed setting surface in rbac.service.test.ts, route-access-authority.test.ts and route-design-contracts.test.ts per implementation-files.md; retain existing route manifests as explicitly no-change; prove shell branding reads are available to members who cannot visit Settings (FR-007,013).
 - [x] T020 Qualify actual wordmark layouts at 320/390/401/430/768/1280px, narrow expanded sidebar, 200% zoom, light/dark and EN/ES using browser-harness; use full boundary names and measured bounds; preserve icon-only accessible names (FR-012; SC-003).
 - [x] T021 Verify keyboard/accessibility, form save/failure feedback, SSR/hydration and actual marketplace CSS watermark output; attach provenance-labelled screenshots (FR-009,012,013).
-- [ ] T022 Run focused/native SQL tests, all tests, check, build under disposable QA env, design/token lints, bun run a11y, bun run a11y --all on QA, and current access-route gates; record exact results in implementation evidence (quickstart.md).
+- [x] T022 Run focused/native SQL tests, all tests, check, build under disposable QA env, design/token lints, bun run a11y, bun run a11y --all on QA, and current access-route gates; record exact results in implementation evidence (quickstart.md).
 - [x] T023 Reconcile and close coverage.md against final base and implementation; independently review Standards and Spec; document discovered defects through exact-site TODO(handoff) and matching proposal before stopping (SC-001–005).
-- [ ] T024 Deliver slice PRs against registry base; human merge; verify CI, branch deployment, then authorized runtime separately. Keep all release states truthful; do not report live from local tests (plan: release).
+- [x] T024 Deliver slice PRs against registry base; human merge; verify CI, branch deployment, then authorized runtime separately. Keep all release states truthful; do not report live from local tests (plan: release).
 
 ## Dependencies and parallel opportunities
 
@@ -61,4 +61,4 @@ After foundation, creation form work and owner editor work can run in parallel b
 
 Deliver additive data/guarded-service slice first; request-owned layout delivery and shared shell wordmark before owner/create editor in slice 2; then remaining consumer conversions and qualification in slice 3. Keep legacy UI compatible while the new column is unused. Do not deploy a partial wordmark conversion as feature completion. Follow quickstart.md for explicit test/runtime evidence and rollback.
 
-Qualification checkpoint: T008/T021 use the explicitly documented SPA architecture exception; they do not claim JavaScript-disabled HTML branding. T014 is now backed by3native partial-retry cases with only outbound transports mocked. T023 is closed by the final11600a99 source inventory and independent review. T022/T024 remain open until hosted CI and final deployment/runtime completion.
+Qualification checkpoint: T008/T021 use the explicitly documented SPA architecture exception; they do not claim JavaScript-disabled HTML branding. T014 is now backed by3native partial-retry cases with only outbound transports mocked. T023 is closed by the final11600a99 source inventory and independent review. T022 closes with exact-head hosted tests/build/accessibility/native/browser checks and the bounded local QA receipts in implementation-evidence.md. The historical `a11y --all` failure and broader producer experiment remain explicitly recorded; neither is described as a final full-page accessibility pass. T024 closes with all three merged slices, production Ready and authenticated read-only runtime proof on 2026-11-23.

@@ -1,11 +1,11 @@
 ---
 id: 2026-11-21-hub-white-label-spec
 title: Organization names throughout Hub
-stage: dev
-status: implementing
+stage: done
+status: shipped
 pass: 1
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-23
 repos: [minion_hub]
 proposal: 2026-11-21-hub-white-label
 verdict: approved
@@ -35,7 +35,7 @@ Make the MINION part of Hub's identity configurable per organization. Faces shou
 
 ## 2. Approval and delivery
 
-The owner approved implementation and scoped release on 2026-11-22: “approved. lmk when its all live”. Development now proceeds through the three approved slices, required qualification, reviewed PRs, merge and runtime verification. EGM evidence is recorded in the feature directory. Approval is authorization, not evidence of deployment.
+The owner approved implementation and scoped release on 2026-11-22: “approved. lmk when its all live”. All three slices shipped through Hub PRs #707, #708 and #709. Final merge `945e1a15207bff942f967f1d53c90be815852dd6` is Ready on hub.minion-ai.org, with authenticated title, wordmark and shared-editor runtime proof. EGM evidence is recorded in the feature directory. Approval is authorization, not evidence of deployment.
 
 ## 3. Out of scope
 
@@ -49,4 +49,4 @@ Run the [qualification runbook](145-hub-white-label/quickstart.md) on an isolate
 
 The full EGM run passed. Feature critics converged in rounds 4–5; implementation-readiness reviewers converged in rounds 4–5, with no findings in the final round. See the [consolidated report](145-hub-white-label/egm/consolidated_review_report.md), [exact final reviewed package](145-hub-white-label/egm/final-review-package.zip), and [interactive proposal preview](145-hub-white-label/review.html). The preview uses the Hub's shared design tokens; it is illustrative rather than application runtime evidence.
 
-Owner approval was received on 2026-11-22. Release completion remains pending application qualification and live verification.
+Owner approval was received on 2026-11-22. Release completed on 2026-11-23. See [implementation and release evidence](145-hub-white-label/implementation-evidence.md) for exact heads, checks, deployments and bounded runtime proof.
