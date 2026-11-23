@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-4210186007
 title: Handoff marker — src/server/services/scheduling-slots.service.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-d559a7b185ad
 created: 2026-11-23
 updated: 2026-11-23
 repos: [minion-hub]
