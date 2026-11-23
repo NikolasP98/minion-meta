@@ -112,3 +112,24 @@ Checked on production (2026-11-21):
 
 Still open at rollout: the first real approval in a browser by the owner (`/mcp` → minion-hub → Authenticate in an interactive Claude Code session), then `whoami`, one query, one block write and remove, and ending the connection. Round 2 #18 (the harness uses the OAuth document, not the gateway's OpenID document) is confirmed up to the point where Claude Code asks for authentication.
 
+
+### First real approval (2026-11-23)
+
+The owner's first Approve click on production failed with "Cross-site POST form submissions are forbidden".
+
+| Step | Finding | Action |
+|---|---|---|
+| 1 | `Referrer-Policy: no-referrer` on the approval page makes a browser send `Origin: null` on the same-origin form post. Every earlier approve check used a script with a hand-set `Origin`, so none caught it. | Hub #715 (merged 08:12 UTC, live 08:15:44 UTC): the page now sends `same-origin`. |
+| 2 | The owner retried at 08:23 UTC, on the fixed deployment, in Zen (Firefox 160), and got the same refusal. | Not reproduced, see below. |
+| 3 | Between 08:32 and 08:37 UTC `/api/oauth/token` and `/api/oauth/register` answered 500: every database call in those requests failed (16 logged failures), then recovered without a deploy. Signed-in routes kept working. Cause not found. | None. Open item. |
+
+What was measured for step 2, all against production with the #715 rule:
+
+- Clean headless Chromium, real approval page, Deny button: lands on the app's return address with `error=access_denied`.
+- Clean headless Zen and the owner's own Zen profile, same-origin form post to a local echo server under `Referrer-Policy: same-origin`: `Origin` correct, `Sec-Fetch-Site: same-origin`.
+- The owner's own Zen, form post from the hub login page to the approve URL: passes the check.
+- The "Moesif Origin & CORS Changer" extension is installed in that profile; its stored switch reads off.
+
+The one path not measured is the real approval page after the owner signs in. Hub #720 makes the rule accept `Sec-Fetch-Site: same-origin` as well as a matching `Origin`, in the hook and in the approve/deny actions, and logs the `Origin` and `Sec-Fetch-Site` of every refused form post. It changes the rule for every form on the hub, so it waits for the owner's merge.
+
+Left on production by the probes: one unused app registration named `origin-probe` (no connection, no credential).
