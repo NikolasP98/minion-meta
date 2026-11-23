@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T03:46:50.642Z",
+	"generatedAt": "2026-11-23T04:17:26.001Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7590,39 +7590,6 @@
 			"scoredAt": "2026-11-16T14:53:38.991Z"
 		},
 		{
-			"key": "proposal:ci-minion-site-claude-code",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "CI red — Claude Code on minion-site dev",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-site-claude-code.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "9566dfbb0987108f66e62f787e2d679e804bcac495ea183f555a688a1e08c354",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "CI is red on the minion-site deploy branch with a clear definition of done, but the actual failure log is empty in this record so the root cause and fix direction are unknown.",
-			"evidence": [
-				"latest completed run on dev branch failed per factory CI watch",
-				"failure log block is empty, no error detail captured",
-				"definition of done is explicit: green run or deliberate removal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T03:47:52.021Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-1480236091",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11199,39 +11166,6 @@
 			"scoredAt": "2026-11-22T09:47:18.529Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-519a349c5d17",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A shared database schema file consumed by both minion_hub and minion_site was touched in a merged PR, and the finding lays out concrete, boundable verification steps (migrations, type-check, dev-db test).",
-			"evidence": [
-				"unified-events.ts is consumed by both minion_hub and minion_site per AGENTS.md",
-				"merged PR #431 on minion_hub master touched this schema file",
-				"fix direction lists four concrete verification actions"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T03:47:52.021Z"
-		},
-		{
 			"key": "spec:2026-08-03-crm-icp-score-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -12513,6 +12447,38 @@
 			"scoredAt": "2026-11-18T09:48:23.090Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-519a349c5d17",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — blast-radius in src/server/db/schema/unified-events.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-519a349c5d17.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "5dde33b8d04e6db627112c0f22d35fbd389194b06daaaf8ed8766c2d7e60d24b",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Shared schema file change spans hub and site via @minion-stack/db and carries migration/type-check risk, with a concrete four-step verification path given.",
+			"evidence": [
+				"unified-events.ts is consumed by both minion_hub and minion_site",
+				"fix direction: verify migrations, run bun run check in each, test against shared dev DB"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:17:25.801Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-547fb86d71ab",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13105,6 +13071,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:19:54.006Z"
+		},
+		{
+			"key": "proposal:ci-minion-site-claude-code",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "CI red — Claude Code on minion-site dev",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/ci-minion-site-claude-code.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "9566dfbb0987108f66e62f787e2d679e804bcac495ea183f555a688a1e08c354",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "CI red on minion-site dev blocks deploy confidence, but the finding is 7 weeks stale so current failure status needs reconfirmation before committing execution work.",
+			"evidence": [
+				"latest failure checked 2026-10-05, run link provided",
+				"definition of done requires the workflow's latest run on dev to be green"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:17:25.801Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-1628087065",
@@ -39315,24 +39313,23 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#892",
 				"issue:minion-meta#932"
 			],
-			"rationale": "This is the third near-identical monitor report of a transient dual-provider batch failure during ranking runs, so it should be consolidated with the other two into one classifier-rule goal rather than tracked separately.",
+			"rationale": "Transient dual-provider failure on batch 8, already retried past, same recurring pattern as two sibling issues suggesting one classifier-rule goal instead of three.",
 			"evidence": [
-				"batch 8 primary+fallback both failed, exit 1",
-				"prior batches 1-7 succeeded, suggests transient provider issue",
-				"recommends adding a classifier rule for recurring pattern"
+				"batches 1-7 succeeded, batch 8 failed both bounded providers",
+				"diagnosis calls it transient upstream outage, not a spec/data defect"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T03:47:52.021Z"
+			"scoredAt": "2026-11-23T04:17:25.801Z"
 		},
 		{
 			"key": "issue:minion-meta#892",
@@ -39351,24 +39348,23 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#1040",
 				"issue:minion-meta#932"
 			],
-			"rationale": "Same dual-provider transient batch-failure pattern as two other open monitor issues in this batch, warranting consolidation into a single classifier/auto-retry goal.",
+			"rationale": "Identical dual-provider transient failure signature as #1040 and #932, best consolidated into one 'auto-retry classifier' goal rather than tracked separately.",
 			"evidence": [
-				"batch 11 of 11 prior clean batches failed on both providers",
-				"checkpointed progress means retry only needs ~154/1225 remaining",
-				"identical recommendation text to issues #1040 and #932"
+				"batches 1-10 clean, batch 11 failed both providers, checkpointed so retry resumes near batch 11",
+				"note explicitly suggests a new host classifier signature"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T03:47:52.021Z"
+			"scoredAt": "2026-11-23T04:17:25.801Z"
 		},
 		{
 			"key": "issue:minion-meta#932",
@@ -39387,24 +39383,23 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 3
+				"specification": 3,
+				"implementation": 2
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "group",
 			"relatedKeys": [
 				"issue:minion-meta#1040",
 				"issue:minion-meta#892"
 			],
-			"rationale": "A third occurrence of the identical dual-provider transient batch-failure signature; grouping with #1040 and #892 avoids three separate low-value tickets for the same fix.",
+			"rationale": "Third occurrence of the same dual-provider transient-failure pattern, small blast radius (6/1304 pending), fits the same consolidated classifier-rule goal.",
 			"evidence": [
-				"failed on batch 1 with only 6/1304 candidates pending",
-				"codex fallback logged two transient retries before exit 1",
-				"diagnosis explicitly flags this as a recurring candidate for a classifier rule"
+				"only 6/1304 candidates pending at failure",
+				"diagnosis: transient/infra fault, not a genuine task failure"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T03:47:52.021Z"
+			"scoredAt": "2026-11-23T04:17:25.801Z"
 		},
 		{
 			"key": "pr:minion (gateway)#315",
@@ -39856,39 +39851,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T02:00:57.259Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
-			"sourceUpdatedAt": "2026-10-05",
-			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "An approved, already-scoped finding that a TODO(handoff) marker in minion_hub's AGENTS.md still contains placeholder template text instead of real details, which is a bounded documentation fix.",
-			"evidence": [
-				"status is already approved",
-				"marker text shows the literal template placeholder <what, why, pointer>",
-				"fix direction specifies locating the TODO and filing a companion proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T03:47:52.021Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dc247fbe1f2a",
@@ -45761,6 +45723,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T14:20:04.792Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-d57ab49bab2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in AGENTS.md (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d57ab49bab2f.md",
+			"sourceUpdatedAt": "2026-10-05",
+			"sourceFingerprint": "cdcc5247a0ef0c42d8fbd213c34afea4a80320fbd666dc3aa5f3fb1c12a0e153",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Approved but the actual unfinished work behind the TODO placeholder is unknown, so the task needs investigation before it can be executed as scoped.",
+			"evidence": [
+				"marker text is itself a template placeholder, not concrete detail",
+				"fix direction says locate TODO and replace placeholder with specifics"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:17:25.801Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-e10f8d3cc4ce",
