@@ -93,3 +93,9 @@ HubPR709 at45aead23 passed its build,ordinarytests,native/security checks and QA
 The exact Vitest browser lane reproduced missing canonical tokens and font weights: both prefix/suffixpink400at16px on white,ratio3.51. Normal Storybook/app hosts correctly process the sameCSS. The Vitest Storybook project omitted Tailwind processing,leaving token defaults inside unprocessed@theme. The helper also changed the personal logo suffix from foreground90%/700 to opaqueprimary/600.
 
 A four-file uncommitted correction is independently Standards/SpecPASS: story-project-only Tailwind parity plus explicit personal-logo suffix90%/700 restoration using canonical primary; default shell suffix/prefix and personal prefixpalette/900 remain unchanged. Actual focused proof is15mounted tests and all5actual logo stories with0axe violations. The first fullstory run ended143without a report and is explicitly incomplete. One warm-cache fullgate retry is in progress; no correction commit/push or final CI/live claim yet. See implementation/storybook-ci-correction/ for source/runtime reviews and the failedCI rows.
+
+### Broader Storybook producer experiment
+
+The completed warm experiment measures1,211stories/0unmeasured withcorrectedCSSprocessing:1,119violations vs799ledger,260regression rows and81improvements. Allfive logo stories are0violations. The global producer/baseline migration is not being folded into the naming release; no baseline was increased. Proposal2026-11-23-storybook-vitest-css-producer-parity and the exact-site Vitest handoff track that separate audit.
+
+The bounded release correction instead restores the original inline preset color scope on the prefix alone, alongside original logo suffix90%/700. This is presentation-contract preservation, not a hardcoded test-host fallback. Default shell styling and the existing test-lane producer remain unchanged. Focused evidence and independent review are required before pushing this follow-up.
