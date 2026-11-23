@@ -21,9 +21,13 @@
 ## Phase 4: Proof
 
 - [x] T008 Render the built component in Chromium: equal columns, no page overflow, keyboard move, focus, announcement, Escape; compare with the demo
-- [ ] T009 Foreground gates: `bun run check`, unit suite, `lint:design && lint:tokens`, `bun run a11y` (ratchet if counts fall), `bun run build`
-- [ ] T010 Hub PR (base `master`) with what changed for users, baseline deltas and what was not verified; every check green; never merge
+- [x] T009 Foreground gates: `bun run check`, unit suite, `lint:design && lint:tokens`, `bun run a11y` (ratchet if counts fall), `bun run build`
+- [x] T010 Hub PR (base `master`) with what changed for users, baseline deltas and what was not verified; every check green; never merge
 - [x] T011 Open ends: `TODO(handoff)` in `Dropdown.svelte` + entry in `proposals/2026-11-20-hub-accessibility-program.md`
+
+## Status (2026-11-23)
+
+Implemented in hub PR #719 (`c5af325f`, base `master`): every check green on CI run 45135919669, including `a11y` and the `qa-stack` page gate. Not merged; the merge needs the owner's approval. Story baseline 799 → 790 (rows of the deleted stories); pages 329 and suppressions 84 unchanged.
 
 ## Dependencies
 
