@@ -205,6 +205,8 @@ Tests: `src/server/locks/caller.test.ts`, `src/routes/api/hooks/record-locks/ser
 
 ## FigCraft demo
 
+Demo built 2026-11-23: [record-locks.figcraft](record-locks.figcraft), page "Spec 140 · demo" (as-is copied from the master where the screen exists; the rest hand-built). Build script `~/.cache/claude-tmp/fc134/build140.py` (local).
+
 Frames the orchestrator builds (as-is / to-be pairs):
 
 1. **Entrada de stock, bloqueada** — as-is: "Corregir entrada" opens the dialog and the refusal appears only after "Revisar el cambio". To-be: lock notice with reasons ("Bloqueado: más de 60 días", "Bloqueado: exportado a contabilidad hasta el 31/10 (Contabilidad, webhook)"), action disabled, "Pide a un propietario que lo desbloquee".
