@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T07:56:59.007Z",
+	"generatedAt": "2026-11-23T08:08:02.261Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6922,6 +6922,41 @@
 			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
+			"key": "proposal:2026-11-23-storybook-vitest-css-producer-parity",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Process real theme CSS in Storybook tests and requalify the baseline",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-23-storybook-vitest-css-producer-parity.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "20000e084ec8f23de387f8cd549c45b27204019cd1a19e8263ccb32dea7ac383",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:handoff-minion-hub-3021873535"
+			],
+			"rationale": "The CSS-producer mismatch risks masking real a11y regressions across the whole Storybook test lane, but the proposal itself admits 260 unaudited rows of unknown cause before any fix can be scoped as actionable work.",
+			"evidence": [
+				"complete measurement reports 1,211 stories, 1,119 violations against the 799-count ledger: 260 regression rows",
+				"the first incomplete 143/no-report attempt is excluded from passing or failing product evidence",
+				"Audit the 260 rows by source/fixture/measurement cause ... before any baseline policy decision"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:08:02.005Z"
+		},
+		{
 			"key": "spec:2026-08-18-base-attention-queue-responsive-runs-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -8243,6 +8278,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T01:58:36.099Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "3d8a0bbc958ace9d80501f96606d7dfd28f55b29fcdfe18e124496e1fdfaa35f",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The marker bundles over a dozen unrelated findings (admin-authority audit, capability gating, race conditions, tenant-deletion reconciliation) into one proposal, so it needs splitting into separately scoped goals before any one of them is actionable.",
+			"evidence": [
+				"rankings/index.json:4263 — Gate constrained capabilities before component mounting, audit token/method authority",
+				"rankings/index.json:10502 — a full per-handler audit of the remaining requireAdmin",
+				"rankings/index.json:8401 — this read and moveGroup are two transactions, so a visit could race"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:08:02.005Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3082127154",
@@ -10672,41 +10740,6 @@
 			"scoredAt": "2026-11-22T06:16:58.546Z"
 		},
 		{
-			"key": "pr:minion_hub#711",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#711 fix(agents): only you can change the members of your own agent groups",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/711",
-			"sourceUpdatedAt": "2026-11-23T07:36:07Z",
-			"sourceFingerprint": "c0f1e4dbffb7ac840ccf32ac8302286e966163b1b06b7895a6b7a7a590d9e711",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#712",
-				"pr:minion_hub#713"
-			],
-			"rationale": "Small, well-tested ownership-check fix closing a cross-user write gap in a personal feature.",
-			"evidence": [
-				"PUT previously accepted writes to another user's group with no effect, now 404s",
-				"68 tests pass across route and service tests"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:47:59.202Z"
-		},
-		{
 			"key": "proposal:2026-08-17-hub-funnel-atomic-write",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11286,6 +11319,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T01:17:17.203Z"
+		},
+		{
+			"key": "pr:minion_hub#719",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#719 feat(a11y): the session task board works without a mouse — it moves onto the shared board (spec 146)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/719",
+			"sourceUpdatedAt": "2026-11-23T08:06:09Z",
+			"sourceFingerprint": "42bbe5fa29a7a80c5b03c579940a17926ed6c6a67317506839cdb181486e8caf",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Owner-approved accessibility slice with real-Chromium verification, zero a11y regressions against the pinned baseline, and clean check/build gates makes this ready to land.",
+			"evidence": [
+				"Owner, 2026-11-23: 'Approve the to-be' (design approval)",
+				"bun run a11y --ci: ok:true, stories 783 vs baseline 790, 0 regressions",
+				"SessionKanban.mounted.test.ts (6 tests) covers keyboard move, revert-on-failure, and mouse drag"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:08:02.005Z"
 		},
 		{
 			"key": "pr:minion-meta#885",
@@ -12298,6 +12364,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T01:54:24.804Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-3021873535",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — vitest.config.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-3021873535.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "290541d6220b4770bdfc30a6fdf402509dd76a674af18763c83b9faf4c992bc6",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-11-23-storybook-vitest-css-producer-parity"
+			],
+			"rationale": "This auto-filed marker names the identical vitest.config.ts Tailwind-processing gap already scoped in depth by the parity proposal, so it should fold into that single goal rather than be tracked separately.",
+			"evidence": [
+				"NikolasP98/minion_hub@master vitest.config.ts:66 — This lane omits Tailwind processing; align its CSS producer",
+				"Filed automatically by the factory handoff-ledger sweep"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:08:02.005Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2456427302",
@@ -14599,38 +14699,6 @@
 			"scoredAt": "2026-11-23T01:54:24.804Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "bd334fc794f0dba70e6a7fee6fdeb3565182682861d3414e4cb867c38b3db67b",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This is an auto-generated aggregation of 15+ unrelated handoff markers bundled into one proposal, so it cannot be executed as a single scoped unit.",
-			"evidence": [
-				"bundles markers spanning auth, inventory, POS, and tenant-deletion concerns",
-				"definition of done only closes when all markers across the file are resolved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:48:10.187Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-609333478",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15257,6 +15325,39 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
+			"key": "pr:minion_hub#718",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#718 feat(scheduling): on phones the list shows client, staff and status for every day, and the month shows a count per day",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/718",
+			"sourceUpdatedAt": "2026-11-23T08:03:37Z",
+			"sourceFingerprint": "01aaefcce23d9e8287d69bde43ec96aee7c654709c36754eab1c648fa12f98d1",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A spec-anchored slice (S3 of spec 145) with documented deviation, fixture tests, and an independent audit leaves it ready to merge with only minor follow-ups tracked.",
+			"evidence": [
+				"Slice S3 of spec 145, S1 (#706) and S2 (#710) are live",
+				"Independent code audit: 1 high fixed, 1 medium reduced, 3 low (1 fixed)",
+				"New calendar-list-month.mounted.test.ts (9 tests) plus compact/touch/toolbar/s4 suites pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:08:02.005Z"
+		},
+		{
 			"key": "pr:minion-meta#833",
 			"kind": "pr",
 			"stage": "development",
@@ -15881,42 +15982,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:26:28.261Z"
-		},
-		{
-			"key": "spec:2026-11-21-hub-white-label-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Organization names throughout Hub",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-21-hub-white-label-spec.md",
-			"sourceUpdatedAt": "2026-11-22",
-			"sourceFingerprint": "d41f842f600b3cc7b7ffb7c369587a9bfde33e9d0c07ac081563d1b82f10774c",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-11-21-hub-white-label",
-				"proposal:2026-11-22-hub-first-document-ssr"
-			],
-			"rationale": "Owner-approved, EGM-reviewed spec actively implementing; remaining work is qualification and live verification.",
-			"evidence": [
-				"Owner approved implementation and scoped release on 2026-11-22",
-				"EGM review passed, converged in rounds 4-5 with no findings in final round",
-				"Status implementing, release completion pending application qualification"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T04:47:48.374Z"
 		},
 		{
 			"key": "issue:minion-meta#328",
@@ -22106,38 +22171,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T06:17:54.961Z"
-		},
-		{
-			"key": "pr:minion_hub#718",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#718 feat(scheduling): on phones the list shows client, staff and status for every day, and the month shows a count per day",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/718",
-			"sourceUpdatedAt": "2026-11-23T07:52:23Z",
-			"sourceFingerprint": "638aa41df63cac495d67cd0f04587731ec6e77260df04973db975c7516522666",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Completes a spec-driven mobile calendar slice with fixture verification and clearly documented deviations and open ends.",
-			"evidence": [
-				"Slice S3 of spec 145, S1/S2 already live",
-				"fixture-verified at 390x844 and 1280x800"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:56:58.781Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
@@ -40115,41 +40148,6 @@
 			"scoredAt": "2026-11-16T10:19:54.006Z"
 		},
 		{
-			"key": "proposal:2026-11-21-hub-white-label",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Organization names throughout Hub",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-21-hub-white-label.md",
-			"sourceUpdatedAt": "2026-11-22",
-			"sourceFingerprint": "30450000f8b55635dc74cad083d3ec18ef24fd1d5fd8655c4e9953034df01eac",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 2
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"spec:2026-11-21-hub-white-label-spec"
-			],
-			"rationale": "This proposal has already been formalized into an approved, implementing Spec Kit spec with its own EGM review, making the standalone proposal redundant.",
-			"evidence": [
-				"spec:2026-11-21-hub-white-label-spec status is implementing with owner approval 2026-11-22",
-				"EGM review passed, converged in rounds 4-5 with no findings",
-				"Both artifacts describe identical scope and owner approval"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T04:47:48.374Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2152030568",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41685,40 +41683,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T17:47:29.103Z"
-		},
-		{
-			"key": "pr:minion-meta#1077",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1077 docs(hub): verify organization names throughout Hub",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1077",
-			"sourceUpdatedAt": "2026-11-23T07:42:37Z",
-			"sourceFingerprint": "5ca2004facb22bda7376382ddbe389cf472708f74928c119ced3602a466f6563",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#709"
-			],
-			"rationale": "Tracking/documentation draft for spec145 release evidence rather than an independent unit of work.",
-			"evidence": [
-				"draft tracking shared editor/shell release and CI/deploy verification",
-				"no new code change described beyond already-deployed slice"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:47:59.202Z"
 		},
 		{
 			"key": "pr:minion-meta#555",
@@ -45774,38 +45738,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T11:48:03.354Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-48d80da185e0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in vitest.config.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-48d80da185e0.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "ebc220fc043da286aa57c4c099694a871fe14ea70a4063998ff4d1045854aa36",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Low-impact tech-debt TODO about Tailwind CSS handling in vitest config with no clear bounded scope or verified diagnosis.",
-			"evidence": [
-				"TODO(handoff) marker about aligning CSS producer",
-				"auto-filed finding with incomplete diagnosis section"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:56:58.781Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-753e08fe9f5a",
@@ -50674,6 +50606,70 @@
 			"scoredAt": "2026-11-21T12:18:02.058Z"
 		},
 		{
+			"key": "run:minion_hub#45135746822",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45135746822",
+			"sourceUpdatedAt": "2026-11-23T08:05:19Z",
+			"sourceFingerprint": "00d1974ea6452745b19b7a2f479944462276803f075998706e6e8b71b7da5fe1",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A queued routine CI run on master carries no decision content and is not an actionable goal in itself.",
+			"evidence": [
+				"status: queued",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:08:02.005Z"
+		},
+		{
+			"key": "run:minion_hub#45135747081",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45135747081",
+			"sourceUpdatedAt": "2026-11-23T08:05:01Z",
+			"sourceFingerprint": "c2d3266b19199fcfcf8551816e11fc39c2b1d9bd2b6c4f3abf7cf4b72ec7b6a0",
+			"score": 18,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "An in-progress storybook-deploy CI run is routine pipeline status, not a prioritizable work item.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:08:02.005Z"
+		},
+		{
 			"key": "pr:minion-meta#561",
 			"kind": "pr",
 			"stage": "development",
@@ -52075,40 +52071,6 @@
 			"scoredAt": "2026-11-23T01:52:34.833Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-1186952292",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — specs/145-hub-white-label/coverage.md (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1186952292.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "a862fee7e18d27652829fd4262fd0445d225946492f6f578f3fefa72a884ccde",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:handoff-minion-meta-1653043878"
-			],
-			"rationale": "The single marker on a generated evidence doc explicitly says to preserve the content, indicating no action is needed.",
-			"evidence": [
-				"Marker text: 'Source import, comment or documentation; preserve.'",
-				"Target is a generated coverage.md doc, not executable code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:18:22.360Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-1254928260",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -52169,40 +52131,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T01:58:36.099Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-1653043878",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — specs/145-hub-white-label/source-evidence.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-1653043878.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "2714d2f4482f7fec718b1ec94fc0b32507752b667bae2d24842e171f4d47f87e",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:handoff-minion-meta-1186952292"
-			],
-			"rationale": "Duplicate of the coverage.md marker, pointing at the same HS-011 note inside a generated source-evidence.json artifact that calls for preservation, not action.",
-			"evidence": [
-				"Same HS-011 reference as handoff-minion-meta-1186952292",
-				"Target is a generated source-evidence.json data file, not code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:18:22.360Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3236367837",
@@ -52531,146 +52459,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
-		},
-		{
-			"key": "run:minion_hub#45134444770",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45134444770",
-			"sourceUpdatedAt": "2026-11-23T07:54:01Z",
-			"sourceFingerprint": "e8dd09f4e0141fc0f0ef8aa6d11e94677a047f627748f7ce78660aa4dec6c03e",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion_hub#45134444881",
-				"run:minion_hub#45134445042"
-			],
-			"rationale": "A queued CI workflow run triggered automatically by a push, not an actionable work goal.",
-			"evidence": [
-				"status: queued",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:56:58.781Z"
-		},
-		{
-			"key": "run:minion_hub#45134444881",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45134444881",
-			"sourceUpdatedAt": "2026-11-23T07:54:01Z",
-			"sourceFingerprint": "534f8c37c7a41058cf869cca62bd1b278f928fc4e93ae047cdbf44d70689f57a",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion_hub#45134444770",
-				"run:minion_hub#45134445042"
-			],
-			"rationale": "A queued CI workflow run triggered automatically by a push, not an actionable work goal.",
-			"evidence": [
-				"status: queued",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:56:58.781Z"
-		},
-		{
-			"key": "run:minion_hub#45134445042",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "Release notes",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45134445042",
-			"sourceUpdatedAt": "2026-11-23T07:54:01Z",
-			"sourceFingerprint": "e919ec49d85989a30fbcb39dee7291bbcded26f59cb27a6afb6409e613b21b2b",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion_hub#45134444770",
-				"run:minion_hub#45134444881"
-			],
-			"rationale": "A queued CI workflow run triggered automatically by a push, not an actionable work goal.",
-			"evidence": [
-				"status: queued",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:56:58.781Z"
-		},
-		{
-			"key": "run:minion_hub#45134445051",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "Factory Notify",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45134445051",
-			"sourceUpdatedAt": "2026-11-23T07:54:01Z",
-			"sourceFingerprint": "0077b1d568c1a367b3568d399a5d16ff6f50f02c5a8e4666d31f1a0a7a2b111e",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion_hub#45134444770",
-				"run:minion_hub#45134444881"
-			],
-			"rationale": "A queued CI workflow run triggered automatically by a push, not an actionable work goal.",
-			"evidence": [
-				"status: queued",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:56:58.781Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
