@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T16:17:06.425Z",
+	"generatedAt": "2026-11-23T16:47:09.762Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -41254,6 +41254,39 @@
 			"scoredAt": "2026-11-21T08:24:19.700Z"
 		},
 		{
+			"key": "issue:minion-meta#898",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#898 [monitor:unstick] rank run e5bba43a: batch 5 provider exhaustion",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/898",
+			"sourceUpdatedAt": "2026-10-26T14:17:28Z",
+			"sourceFingerprint": "1170646cec5af21b3cd4cb19e571864d3df01e7f5e5c17dd07fc0d280440fd18",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Transient infra/provider exhaustion in a single batch of an automated ranking run, with prior batches confirmed durable, so a simple retry resolves it rather than requiring a tracked goal.",
+			"evidence": [
+				"Batches 1-4 of 5 completed cleanly",
+				"catalog and index writes for batches 1-4 succeeded and persisted",
+				"Recommendation: retry the run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T16:47:09.558Z"
+		},
+		{
 			"key": "issue:minion-meta#999",
 			"kind": "issue",
 			"stage": "proposal",
@@ -43775,39 +43808,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T12:47:03.530Z"
-		},
-		{
-			"key": "issue:minion-meta#898",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#898 [monitor:unstick] rank run e5bba43a: batch 5 provider exhaustion",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/898",
-			"sourceUpdatedAt": "2026-10-26T14:17:28Z",
-			"sourceFingerprint": "1170646cec5af21b3cd4cb19e571864d3df01e7f5e5c17dd07fc0d280440fd18",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A single transient provider-exhaustion failure on batch 5 with durable prior progress and a suggested retry is a monitoring blip, not an actionable engineering goal.",
-			"evidence": [
-				"Batches 1-4 of 5 completed cleanly, only batch 5 failed with exit_code 1",
-				"Diagnosis states transient infra fault, not a task-logic failure",
-				"No corruption evident; catalog and index writes persisted"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T16:17:45.369Z"
 		},
 		{
 			"key": "issue:minion-meta#984",
