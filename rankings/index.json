@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T08:24:04.416Z",
+	"generatedAt": "2026-11-23T08:47:45.810Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3264,41 +3264,6 @@
 			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
-			"key": "pr:minion_hub#712",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#712 fix(servers): agent and activity data can only be written for a server in your own organization",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/712",
-			"sourceUpdatedAt": "2026-11-23T07:37:07Z",
-			"sourceFingerprint": "2a6d64b7693053eef293866557a318d6d6af12204f7b8db8ff32594a7f70b554",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#711",
-				"pr:minion_hub#716"
-			],
-			"rationale": "Fixes cross-tenant write exposure on server-scoped agent/activity routes, a multi-tenant isolation defect with strong test coverage.",
-			"evidence": [
-				"foreign-org server writes previously succeeded, now 404",
-				"114 tests pass including in-memory LibSQL tenant-isolation check"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:47:59.202Z"
-		},
-		{
 			"key": "pr:minion-meta#1055",
 			"kind": "pr",
 			"stage": "development",
@@ -3871,6 +3836,39 @@
 			"scoredAt": "2026-11-16T10:26:28.261Z"
 		},
 		{
+			"key": "pr:minion-meta#1072",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1072 spec(144): stock value always adds up",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1072",
+			"sourceUpdatedAt": "2026-11-23T08:30:48Z",
+			"sourceFingerprint": "f802f472982445d9a32c00f037e08840aed508650b89a5bca4e2a2bea5caf4d4",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This spec future-proofs stock valuation after a real cross-org data discrepancy was already repaired, with a clear plan pending owner approval before merge.",
+			"evidence": [
+				"9 FACES items had movements that did not add up to stock value (S/4,399.55), now repaired",
+				"spec adds residual booking, gap warning, and removes the one-time repair script",
+				"tagged data: owner approves before code and merges"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:47:45.568Z"
+		},
+		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4037,6 +4035,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T18:48:21.281Z"
+		},
+		{
+			"key": "pr:minion_hub#720",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#720 fix(mcp): approving an app works in browsers that blank or rewrite the Origin header",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/720",
+			"sourceUpdatedAt": "2026-11-23T08:45:54Z",
+			"sourceFingerprint": "18eddf92845172d7eca41f8ee2dc27be145f0740305aebe4418fdf88492931ca",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This hotfix resolves a reproducible OAuth-approval failure tied to browser Origin-header handling and ships with passing tests and documented scope/risk.",
+			"evidence": [
+				"approving an app failed with 'Cross-site POST form submissions are forbidden'",
+				"27 tests passed in csrf.test.ts and authorize/server.test.ts",
+				"refused posts now log Origin and Sec-Fetch-Site for recurrence diagnosis"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:47:45.568Z"
 		},
 		{
 			"key": "proposal:2026-08-29-base-meta-status-revision-binding-required",
@@ -4914,38 +4945,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T18:47:17.857Z"
-		},
-		{
-			"key": "pr:minion-meta#1072",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1072 spec(144): stock value always adds up",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1072",
-			"sourceUpdatedAt": "2026-11-21T20:49:22Z",
-			"sourceFingerprint": "addbbbbf521a589cd79b1fd830f7201479419ac50c8ee7feeb5e286b05dc3d7f",
-			"score": 63,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Addresses a real recurring data-integrity defect (S/ 4,399.55 mismatch already repaired once) with a future-proofing engine fix, gated by required owner approval before code.",
-			"evidence": [
-				"9 FACES items had movements that did not add up to their stock value (S/ 4,399.55)",
-				"Tagged data: owner approves before code and merges"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T21:17:25.624Z"
 		},
 		{
 			"key": "pr:minion-meta#936",
@@ -6783,38 +6782,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T23:18:05.985Z"
-		},
-		{
-			"key": "pr:minion_hub#705",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#705 feat(stock): trade products with a supplier (canje)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/705",
-			"sourceUpdatedAt": "2026-11-21T20:52:25Z",
-			"sourceFingerprint": "f67da742bcf88a4a133beb0d298153c6593616616bd496442fade53c61ab0c46",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A fully spec-driven stock feature with transactional value-conservation logic, explicit rules, and new PGlite integration tests covering success, shortage, and finance isolation.",
-			"evidence": [
-				"Spec 142 — canje: trade products with a supplier",
-				"new stock.exchange.test.ts with real SQL covering cancel, shortage, finance isolation"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T21:17:25.624Z"
 		},
 		{
 			"key": "pr:minion-meta#1062",
@@ -11185,6 +11152,39 @@
 			"scoredAt": "2026-11-21T01:17:17.203Z"
 		},
 		{
+			"key": "pr:minion_hub#705",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#705 feat(stock): trade products with a supplier (canje)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/705",
+			"sourceUpdatedAt": "2026-11-23T08:34:24Z",
+			"sourceFingerprint": "c774a0bd98174f8f41811c80a367c1e8915a83bbbd7d11ec68f11e3b70c4db6d",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The canje feature is extensively specified and already implemented with transaction-level value-splitting logic and dedicated PGlite tests.",
+			"evidence": [
+				"new exchange entry type with submit-time validation rules",
+				"embedded PGlite tests cover split, shortage refusal, cancel, and finance isolation",
+				"status draft, ready for review"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:47:45.568Z"
+		},
+		{
 			"key": "pr:minion-meta#885",
 			"kind": "pr",
 			"stage": "development",
@@ -15190,39 +15190,6 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
-			"key": "pr:minion_hub#718",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#718 feat(scheduling): on phones the list shows client, staff and status for every day, and the month shows a count per day",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/718",
-			"sourceUpdatedAt": "2026-11-23T08:03:37Z",
-			"sourceFingerprint": "01aaefcce23d9e8287d69bde43ec96aee7c654709c36754eab1c648fa12f98d1",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A spec-anchored slice (S3 of spec 145) with documented deviation, fixture tests, and an independent audit leaves it ready to merge with only minor follow-ups tracked.",
-			"evidence": [
-				"Slice S3 of spec 145, S1 (#706) and S2 (#710) are live",
-				"Independent code audit: 1 high fixed, 1 medium reduced, 3 low (1 fixed)",
-				"New calendar-list-month.mounted.test.ts (9 tests) plus compact/touch/toolbar/s4 suites pass"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:08:02.005Z"
-		},
-		{
 			"key": "pr:minion-meta#833",
 			"kind": "pr",
 			"stage": "development",
@@ -17202,6 +17169,39 @@
 			"scoredAt": "2026-11-18T16:47:59.842Z"
 		},
 		{
+			"key": "pr:minion-meta#1058",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1058 spec(136): org pages on the fly — an agent builds a page for one org over MCP, live without a deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1058",
+			"sourceUpdatedAt": "2026-11-23T08:43:18Z",
+			"sourceFingerprint": "e9e7650f4a61c855ca4b54a5ebaa2373df75f0c1848281495c5e602a9cdc0213",
+			"score": 47,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The agentic org-pages capability is strategically requested but only one of five slices is specified to implementation depth and a security/data merge gate is still open.",
+			"evidence": [
+				"S5 specified to implementation depth, S1-S4 only to planning depth",
+				"tagged security and data: owner approval before merge of hub PR for S5",
+				"API key scoping decision explicitly flagged for review"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:47:45.568Z"
+		},
+		{
 			"key": "proposal:2026-10-10-hub-uiux-consistency-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -19151,38 +19151,6 @@
 			"scoredAt": "2026-11-23T08:24:04.178Z"
 		},
 		{
-			"key": "pr:minion-meta#1058",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1058 spec(136): org pages on the fly — an agent builds a page for one org over MCP, live without a deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1058",
-			"sourceUpdatedAt": "2026-11-21T03:03:26Z",
-			"sourceFingerprint": "7b660c065dc6eeab01b2d039cdd94222d77d691755c4a8c9fa78fd3a45e88eeb",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A multi-slice spec/PR for live org-page MCP tooling is well-documented but only one of five slices is specified to implementation depth and the risky slice carries a security/data human gate.",
-			"evidence": [
-				"Slice S5 (hub MCP endpoint, sandbox-scoped API key) is specified to implementation depth; S1–S4 only to planning depth",
-				"Tagged security and data: owner approval required before merge of the hub PR for S5"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T03:17:21.714Z"
-		},
-		{
 			"key": "pr:minion-meta#971",
 			"kind": "pr",
 			"stage": "development",
@@ -20120,38 +20088,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T19:47:23.371Z"
-		},
-		{
-			"key": "pr:minion_hub#714",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#714 fix(pos): voiding a sale can no longer leave its stock deducted when stock is posted at the same moment",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/714",
-			"sourceUpdatedAt": "2026-11-23T07:39:20Z",
-			"sourceFingerprint": "c12bfab69f7178672c8b01e121efe3b033186f67e3dacfacd4429712211fd734",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Closes a documented POS stock/void race with a row lock, though production shows no occurrence yet and true concurrent interleaving is untested.",
-			"evidence": [
-				"production check found zero void tickets with stock entries",
-				"real two-connection interleaving explicitly not tested"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:47:59.202Z"
 		},
 		{
 			"key": "proposal:2026-08-29-hub-pos-bookings-stock-gate-drift",
@@ -22035,6 +21971,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
+			"key": "pr:minion_hub#718",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#718 feat(scheduling): on phones the list shows client, staff and status for every day, and the month shows a count per day",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/718",
+			"sourceUpdatedAt": "2026-11-23T08:30:51Z",
+			"sourceFingerprint": "cbecc8b3b2cf56281f9c0dba9a90eaece8c6bbeded167c5954430a4753cd037d",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This mobile calendar slice is implemented and checked against a phone fixture with an independent audit that already fixed the high-severity finding.",
+			"evidence": [
+				"independent code audit found 1 high (fixed), 1 medium, 3 low",
+				"bun run check 0 errors, lint:design and lint:tokens pass",
+				"open ends logged for follow-up rather than left silent"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:47:45.568Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
@@ -31261,6 +31230,39 @@
 			"scoredAt": "2026-11-21T15:16:56.624Z"
 		},
 		{
+			"key": "pr:minion-meta#1076",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1076 spec(146): the session task board works without a mouse — it moves onto the shared board (a11y S1)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1076",
+			"sourceUpdatedAt": "2026-11-23T08:36:15Z",
+			"sourceFingerprint": "2b36ca2ccaf331059ed766d06e83ca5d94452bdc28fcc8f0114a4210acf48bc6",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The accessibility slice is well-specified with a demo but implementation is explicitly blocked pending owner approval and plan/tasks have not yet been produced.",
+			"evidence": [
+				"implementation waits for the owner's approval of the demo",
+				"draft until then; plan and tasks follow",
+				"keyboard drag deferred to a later slice (S3)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:47:45.568Z"
+		},
+		{
 			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35678,38 +35680,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:18:41.725Z"
-		},
-		{
-			"key": "pr:minion-meta#1076",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1076 spec(146): the session task board works without a mouse — it moves onto the shared board (a11y S1)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1076",
-			"sourceUpdatedAt": "2026-11-23T07:24:34Z",
-			"sourceFingerprint": "1fb093173cf73df99b067d1e48208a7720fe6f7230288cc44a9d7d69d19993c9",
-			"score": 31,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Accessibility slice has a reviewed spec and demo but implementation is explicitly blocked pending owner approval.",
-			"evidence": [
-				"draft until owner approves the demo",
-				"plan and tasks not yet produced"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T07:47:59.202Z"
 		},
 		{
 			"key": "pr:minion-meta#853",
@@ -50502,38 +50472,6 @@
 			"scoredAt": "2026-11-21T12:18:02.058Z"
 		},
 		{
-			"key": "run:minion_hub#45137842696",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45137842696",
-			"sourceUpdatedAt": "2026-11-23T08:21:14Z",
-			"sourceFingerprint": "a990ff4a97e0828049b4e0405ee8181b3a10c37837f7640055ecf51415dca195",
-			"score": 18,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress automated CI run on master is pipeline status, not an actionable goal.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T08:24:04.178Z"
-		},
-		{
 			"key": "pr:minion-meta#561",
 			"kind": "pr",
 			"stage": "development",
@@ -52323,6 +52261,72 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
+		},
+		{
+			"key": "run:minion_hub#45141211470",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45141211470",
+			"sourceUpdatedAt": "2026-11-23T08:45:41Z",
+			"sourceFingerprint": "5449f67c8c480c242830d033eac43500595e87258a0dd7f8f20d882d44946b4c",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated CI run status on a push, not a work item that warrants a ranking decision.",
+			"evidence": [
+				"kind run, stage testing",
+				"push on master",
+				"status in_progress"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:47:45.568Z"
+		},
+		{
+			"key": "run:minion_hub#45141211586",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45141211586",
+			"sourceUpdatedAt": "2026-11-23T08:45:47Z",
+			"sourceFingerprint": "f456cf33a0976a995e79d8f9d14d06159c7fffc6c5db7714a9b8aa080232dde8",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is an automated CI run status on a push, not a work item that warrants a ranking decision.",
+			"evidence": [
+				"kind run, stage testing",
+				"push on master",
+				"status queued"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T08:47:45.568Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
