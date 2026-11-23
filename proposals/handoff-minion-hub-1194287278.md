@@ -26,17 +26,21 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-23)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:281` — tagOptions is the FILTER's list — the event-scope registry
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L281
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1045` — the reported range is exactly what is ON SCREEN, while the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1045
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1419` — HC-017 — while a copy is being dragged only THAT copy
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1419
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1802` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1802
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2189` — ondragover/ondrop live on .track, an ANCESTOR of the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2189
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3276` — a drop reclassifies only for a custom column (its
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3276
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3619` — the agenda lists every booking in bookings — the whole
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3619
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:282` — tagOptions is the FILTER's list — the event-scope registry
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L282
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1054` — the reported range is exactly what is ON SCREEN, while the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1054
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1428` — HC-017 — while a copy is being dragged only THAT copy
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1428
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1801` — this counts appointments, so a visit drawn as ONE block with two
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1801
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1857` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1857
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2244` — ondragover/ondrop live on .track, an ANCESTOR of the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2244
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3331` — a drop reclassifies only for a custom column (its
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3331
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3675` — the agenda lists every booking in bookings — the whole
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3675
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:5498` — on blocks 72 to 90 px tall the products marker (absolute, bottom right)
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L5498
