@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T04:17:26.001Z",
+	"generatedAt": "2026-11-23T04:47:48.594Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2183,6 +2183,41 @@
 			"scoredAt": "2026-11-16T10:27:42.973Z"
 		},
 		{
+			"key": "pr:minion_hub#679",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#679 fix(chat): stored conversations are only readable by their owner",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/679",
+			"sourceUpdatedAt": "2026-11-16T04:12:43Z",
+			"sourceFingerprint": "85ebb57fe1c6663edd9da0424917f28e0697150827e1d81a3b78df9f23c2bebd",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#678"
+			],
+			"rationale": "Closes a real access-control gap letting non-admins read stored sessions not belonging to their assistant, well tested and ready after #678.",
+			"evidence": [
+				"138/138 new route tests plus RLS/dataset/route-gate ratchets",
+				"Non-admins previously reached sessions beyond their own assistant",
+				"Branch depends on and merges after #678"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:47:48.374Z"
+		},
+		{
 			"key": "pr:minion-factory#199",
 			"kind": "pr",
 			"stage": "development",
@@ -3736,42 +3771,6 @@
 			"scoredAt": "2026-11-16T10:26:28.261Z"
 		},
 		{
-			"key": "pr:minion_hub#679",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#679 fix(chat): stored conversations are only readable by their owner",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/679",
-			"sourceUpdatedAt": "2026-11-16T04:12:43Z",
-			"sourceFingerprint": "85ebb57fe1c6663edd9da0424917f28e0697150827e1d81a3b78df9f23c2bebd",
-			"score": 66,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#678",
-				"pr:minion-meta#1035"
-			],
-			"rationale": "Broad, heavily-tested route-level ownership enforcement that changes staff-visible access and explicitly flags the loss for owner sign-off.",
-			"evidence": [
-				"138/138 new tests plus 84/84 existing ratchets",
-				"non-admins lose access to stored sessions not belonging to their own assistant",
-				"depends on and must merge after #678"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:17:44.921Z"
-		},
-		{
 			"key": "proposal:2026-08-22-ci-compute-savings-bun-test-roadmap",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -4441,6 +4440,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T04:47:45.969Z"
+		},
+		{
+			"key": "pr:minion_hub#678",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#678 fix(gateway-auth): a member's token names their own assistant",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/678",
+			"sourceUpdatedAt": "2026-11-16T04:14:00Z",
+			"sourceFingerprint": "94612d324ed617d1bd90b399c56c43fdc2bf37340f8c1571ae5250fb6a637c85",
+			"score": 64,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#679"
+			],
+			"rationale": "Foundational security slice with passing tests across multiple suites, ready for owner review and merge.",
+			"evidence": [
+				"26/26 new tests; neighbouring suites 85/85 and 45/45",
+				"Must be deployed before spec 045 step T051",
+				"No visible production effect yet since tokens aren't validated"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:47:48.374Z"
 		},
 		{
 			"key": "pr:minion-meta#810",
@@ -6624,42 +6658,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:18:41.725Z"
-		},
-		{
-			"key": "pr:minion_hub#678",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#678 fix(gateway-auth): a member's token names their own assistant",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/678",
-			"sourceUpdatedAt": "2026-11-16T04:14:00Z",
-			"sourceFingerprint": "94612d324ed617d1bd90b399c56c43fdc2bf37340f8c1571ae5250fb6a637c85",
-			"score": 59,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#679",
-				"pr:minion-meta#1035"
-			],
-			"rationale": "Narrow, well-tested security slice that adds a user's own assistant to their token and must land before spec 045 enforces per-user tokens.",
-			"evidence": [
-				"26/26 new tests plus 85/85 and 45/45 neighboring suites",
-				"must be deployed before spec 045 step T051",
-				"no visible production effect today since gateways don't validate user tokens yet"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:17:44.921Z"
 		},
 		{
 			"key": "pr:minion_hub#698",
@@ -13301,39 +13299,6 @@
 			"scoredAt": "2026-11-21T22:17:37.907Z"
 		},
 		{
-			"key": "pr:minion_hub#706",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#706 feat(scheduling): on phones the calendar takes the screen — one toolbar row, a week strip and a floating \"+\"",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/706",
-			"sourceUpdatedAt": "2026-11-22T02:08:03Z",
-			"sourceFingerprint": "b6fee1f824ad5d30b24a88566637aa27c539d345360016b4ee328b6a03acb305",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A spec-backed mobile scheduling UI slice with measured results and passing checks, with remaining gaps documented in a linked ledger.",
-			"evidence": [
-				"Slice S1 of spec 145, owner approved 2026-11-21",
-				"lint:design, lint:tokens, check, test, a11y, and e2e checks reported passing",
-				"open ends logged in proposals/2026-11-21-hub-calendar-phones-followups.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-22T02:17:00.601Z"
-		},
-		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -13691,41 +13656,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T08:17:41.744Z"
-		},
-		{
-			"key": "proposal:2026-11-13-doors-site-sdk-low-boilerplate",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "A site connects a lead form to a Minion door in minutes, not 800 lines",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-13-doors-site-sdk-low-boilerplate.md",
-			"sourceUpdatedAt": "2026-11-13",
-			"sourceFingerprint": "417dc6c5bd585e6343f7f493f8514035d92ba7bb70e593833f620b4e565bd92d",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-11-13-doors-site-sdk-spec"
-			],
-			"rationale": "Concrete owner problem with detailed AS-IS evidence and a staged TO-BE, but no production incident and overlaps the parked spec that already captures slice S0.",
-			"evidence": [
-				"door only offers three public endpoints and no shared package",
-				"rate limit counts the wrong address behind a proxy",
-				"hub has no API keys or domain records for an org"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:24:01.321Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3527154209",
@@ -15832,6 +15762,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:26:28.261Z"
+		},
+		{
+			"key": "spec:2026-11-21-hub-white-label-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Organization names throughout Hub",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-21-hub-white-label-spec.md",
+			"sourceUpdatedAt": "2026-11-22",
+			"sourceFingerprint": "d41f842f600b3cc7b7ffb7c369587a9bfde33e9d0c07ac081563d1b82f10774c",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-11-21-hub-white-label",
+				"proposal:2026-11-22-hub-first-document-ssr"
+			],
+			"rationale": "Owner-approved, EGM-reviewed spec actively implementing; remaining work is qualification and live verification.",
+			"evidence": [
+				"Owner approved implementation and scoped release on 2026-11-22",
+				"EGM review passed, converged in rounds 4-5 with no findings in final round",
+				"Status implementing, release completion pending application qualification"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:47:48.374Z"
 		},
 		{
 			"key": "issue:minion-meta#328",
@@ -19070,6 +19036,39 @@
 			"scoredAt": "2026-11-19T18:48:21.281Z"
 		},
 		{
+			"key": "pr:minion_hub#706",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#706 feat(scheduling): on phones the calendar takes the screen — one toolbar row, a week strip and a floating \"+\"",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/706",
+			"sourceUpdatedAt": "2026-11-23T04:28:04Z",
+			"sourceFingerprint": "e0272f6db149e8fdde8128158d8ac64fc561b02b41f4d4bcf962bfb6b2307277",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Owner-approved mobile calendar slice with extensive automated and manual verification ready to ship.",
+			"evidence": [
+				"Owner approved spec 145 on 2026-11-21",
+				"10,406 tests passed; 28/30 targeted e2e passed",
+				"Browser run at 390x844 found and fixed real compile/effect bugs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:47:48.374Z"
+		},
+		{
 			"key": "pr:minion-meta#1058",
 			"kind": "pr",
 			"stage": "development",
@@ -19100,39 +19099,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T03:17:21.714Z"
-		},
-		{
-			"key": "pr:minion-meta#1074",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1074 spec(145): use your organization's name throughout Hub",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1074",
-			"sourceUpdatedAt": "2026-11-21T22:03:32Z",
-			"sourceFingerprint": "590138aed6f55e02207f9f0ea518aecae77ae9c5e1b452cf6fa921412dde6ef5",
-			"score": 44,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "The white-label spec is fully reviewed via EGM but explicitly withholds implementation authorization pending data/security owner approval.",
-			"evidence": [
-				"EGM result: all five stages completed; feature critics and implementation-readiness reviewers each reached two consecutive clean rounds",
-				"Data/security owner approval remains pending",
-				"This draft does not authorize application implementation or merge"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T22:17:37.907Z"
 		},
 		{
 			"key": "pr:minion-meta#1076",
@@ -22190,6 +22156,41 @@
 			"scoredAt": "2026-11-19T08:17:41.744Z"
 		},
 		{
+			"key": "proposal:2026-11-22-hub-first-document-ssr",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Render verified Hub identity in the first HTML document",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-22-hub-first-document-ssr.md",
+			"sourceUpdatedAt": "2026-11-22",
+			"sourceFingerprint": "37a3ef4c842e4ef7fcf643b7035abac0c58a44b8db81611e64997acceffaef16",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"spec:2026-11-21-hub-white-label-spec"
+			],
+			"rationale": "A real gap found during white-label implementation (no SSR means JS-disabled branding can't be proven) but still needs its own Spec Kit artifacts before actionable work starts.",
+			"evidence": [
+				"src/routes/+layout.ts exports ssr = false",
+				"Spec 145 overlooked requiring JavaScript-disabled branding proof",
+				"TODO(handoff) recorded at the source site"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:47:48.374Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-277751425",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -22516,41 +22517,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T08:17:41.744Z"
-		},
-		{
-			"key": "spec:2026-11-13-doors-site-sdk-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "A lead form on any site with two lines — Doors site SDK",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-13-doors-site-sdk-spec.md",
-			"sourceUpdatedAt": "2026-11-13",
-			"sourceFingerprint": "6e09b602cc6a9ddccf36d244175a28d820ad36a2c5c29cfde141cbef4135812f",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 2
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:2026-11-13-doors-site-sdk-low-boilerplate"
-			],
-			"rationale": "Well-structured Spec Kit artifact but explicitly parked by the owner pending a different direction (hub-hosted form builder), so execution now would be superseded work.",
-			"evidence": [
-				"Status: Parked on 2026-11-13 by the owner after slice S0 (hub PR 659)",
-				"owner's later direction is a hub-hosted form builder on a customer subdomain",
-				"Nothing is verified yet: this spec precedes the code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-16T04:24:01.321Z"
 		},
 		{
 			"key": "issue:minion-meta#421",
@@ -28163,6 +28129,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T20:48:35.267Z"
+		},
+		{
+			"key": "proposal:2026-11-13-doors-site-sdk-low-boilerplate",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "A site connects a lead form to a Minion door in minutes, not 800 lines",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-13-doors-site-sdk-low-boilerplate.md",
+			"sourceUpdatedAt": "2026-11-13",
+			"sourceFingerprint": "417dc6c5bd585e6343f7f493f8514035d92ba7bb70e593833f620b4e565bd92d",
+			"score": 37,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"spec:2026-11-13-doors-site-sdk-spec"
+			],
+			"rationale": "Owner has since redirected Doors work toward a hosted form builder with DNS validation, so this boilerplate-reduction angle needs reframing before becoming a spec.",
+			"evidence": [
+				"Linked spec notes it was parked by the owner after slice S0",
+				"Owner's later direction is a hub-hosted form builder with DNS validation",
+				"Hub currently has no API keys or allowed-domains concept"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:47:48.374Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-69f97a2d64c9",
@@ -39695,6 +39696,41 @@
 			"scoredAt": "2026-11-16T10:19:54.006Z"
 		},
 		{
+			"key": "proposal:2026-11-21-hub-white-label",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Organization names throughout Hub",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-21-hub-white-label.md",
+			"sourceUpdatedAt": "2026-11-22",
+			"sourceFingerprint": "30450000f8b55635dc74cad083d3ec18ef24fd1d5fd8655c4e9953034df01eac",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 2
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"spec:2026-11-21-hub-white-label-spec"
+			],
+			"rationale": "This proposal has already been formalized into an approved, implementing Spec Kit spec with its own EGM review, making the standalone proposal redundant.",
+			"evidence": [
+				"spec:2026-11-21-hub-white-label-spec status is implementing with owner approval 2026-11-22",
+				"EGM review passed, converged in rounds 4-5 with no findings",
+				"Both artifacts describe identical scope and owner approval"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:47:48.374Z"
+		},
+		{
 			"key": "proposal:handoff-minion-hub-2152030568",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -50651,6 +50687,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-17T23:48:15.734Z"
+		},
+		{
+			"key": "spec:2026-11-13-doors-site-sdk-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "A lead form on any site with two lines — Doors site SDK",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-11-13-doors-site-sdk-spec.md",
+			"sourceUpdatedAt": "2026-11-13",
+			"sourceFingerprint": "6e09b602cc6a9ddccf36d244175a28d820ad36a2c5c29cfde141cbef4135812f",
+			"score": 16,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 1
+			},
+			"confidence": 7,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-11-13-doors-site-sdk-low-boilerplate"
+			],
+			"rationale": "Explicitly parked by the owner in favor of a different hub-hosted form-builder direction captured in the newer proposal.",
+			"evidence": [
+				"Status line: Parked on 2026-11-13 by the owner after slice S0",
+				"Owner's later direction is a hub-hosted form builder with DNS validation",
+				"Nothing verified yet: this spec precedes the code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T04:47:48.374Z"
 		},
 		{
 			"key": "issue:minion-meta#995",
