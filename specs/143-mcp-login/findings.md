@@ -133,3 +133,18 @@ What was measured for step 2, all against production with the #715 rule:
 The one path not measured is the real approval page after the owner signs in. Hub #720 makes the rule accept `Sec-Fetch-Site: same-origin` as well as a matching `Origin`, in the hook and in the approve/deny actions, and logs the `Origin` and `Sec-Fetch-Site` of every refused form post. It changes the rule for every form on the hub, so it waits for the owner's merge.
 
 Left on production by the probes: one unused app registration named `origin-probe` (no connection, no credential).
+
+### Sign-in confirmed (2026-11-23)
+
+Hub #720 merged 19:00 UTC (`5db0cdd0`) on the owner's go and was probed live: a form post with `Origin: null` and `Sec-Fetch-Site: same-origin` passes; `cross-site` and a foreign `Origin` are still refused; the token endpoint answers 400 `invalid_grant` for a bogus code.
+
+The owner then approved the connection in Zen ("Authentication successful", 21:31 UTC). From this Claude Code session, over the signed-in connection:
+
+| Check | Result |
+|---|---|
+| `whoami` | the owner, FACES SCULPTORS, role `owner`, may manage the Sandbox, eight datasets |
+| `sandbox_pages` | one page, five elements |
+
+Not run: a block write and remove over the signed-in connection, and ending a connection followed by a 401. What the owner's browser sent on the refused posts was never captured, so the cause of the second refusal stays unconfirmed; #720 removed the symptom.
+
+Step 3 above has a likely cause: diagnostic `psql` calls from this session ran `set default_transaction_read_only=on` as a session-level statement on the transaction pooler (:6543). The setting stays on the shared server connection, and the hub's next writes on it fail.
