@@ -3,7 +3,7 @@ id: 140-record-lock-policy
 title: Record lock policy — each org decides when past records stop being editable (after X days, after a webhook, after SUNAT/period close)
 stage: spec
 status: draft
-verdict: pending
+verdict: approved
 pass: 1
 created: 2026-11-20
 updated: 2026-11-20
@@ -21,6 +21,8 @@ related: [135-stock-checkpoints, 124-stock-correction-workflow]
 **Status**: Draft
 
 **Input**: Owner, 2026-11-20: "The staff should be able to correct the qty of any past purchase. It should always be audit logged, though so that we know how qtys changed over time. The org can set this: lock after X days, lock after a webhook is run, after SUNAT is locked, etc."
+
+Go-ahead, owner 2026-11-23: "address all items without overlap first. When they're live, list out the items with overlap with their updated status in case another session addressed them and what your recommended approach is." This spec was reported as having no overlap with other work (overlap check of 2026-11-23, spec 134 PR #1056).
 
 ## AS-IS (hub `origin/master` `63c4313b`)
 
