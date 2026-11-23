@@ -214,6 +214,8 @@ S1 → S2 → S4 on the backend. S3 needs S1 only and can ship before or after S
 
 ## FigCraft demo
 
+Demo built 2026-11-23: [reminder-followup.figcraft](reminder-followup.figcraft), page "Spec 139 · demo" (as-is copied from the master where the screen exists; the rest hand-built). Build script `~/.cache/claude-tmp/fc134/build139.py` (local).
+
 Frames the orchestrator builds, as-is and to-be, linked from the spec before S3 starts:
 
 1. **Booking drawer, overview** — as-is: status badge only. To-be: status badge + "Por reconfirmar" badge.
