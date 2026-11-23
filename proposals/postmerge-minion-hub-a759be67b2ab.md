@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-a759be67b2ab
 title: "Post-merge finding — todo-handoff in src/lib/components/layout/FloatingAssistant.svelte (minion_hub)"
-status: draft
+status: approved
 created: 2026-11-23
 updated: 2026-11-23
 repos: [minion-hub]
