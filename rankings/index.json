@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-23T06:17:55.138Z",
+	"generatedAt": "2026-11-23T06:47:35.044Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2518,39 +2518,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T09:48:05.770Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-23",
-			"sourceFingerprint": "9f6d219add32d40acaa9d7ba5c4bde12f02aa2be38a0500cb23e2c0fa75297db",
-			"score": 70,
-			"band": "high",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "Bundles many distinct high-stakes concerns (crash risk, auth gating, race conditions, unbounded JSON reads) into one oversized ledger proposal that should be split into individually scoped specs before work can start.",
-			"evidence": [
-				"postgres-js nextWrite null-socket crash on backend loss before rollout",
-				"provider JSON reader is not byte bounded before res.json()",
-				"this read and moveGroup are two transactions, so a visit [could race]"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T05:47:04.915Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-d1c5d80",
@@ -13154,6 +13121,38 @@
 			"scoredAt": "2026-11-23T01:47:55.681Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-23",
+			"sourceFingerprint": "0f1c494acfe5e5cd84257421b466f60b06137e3fa2c053ed1e0a335b03ed2eb5",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles 15+ unrelated TODO markers spanning security gating, race conditions, and data wiring into a single proposal that cannot produce one actionable outcome.",
+			"evidence": [
+				"markers span postgres crash handling, gateway/org binding, capability gating, admin audit, and tenant-deletion reconciliation",
+				"proposal auto-closes only once the file carries no markers, which rewards bulk clearing rather than a scoped fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:47:34.822Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-570048615",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21907,6 +21906,74 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
+			"key": "pr:minion_hub#709",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#709 feat(hub): show your organization name throughout Hub",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/709",
+			"sourceUpdatedAt": "2026-11-23T06:32:21Z",
+			"sourceFingerprint": "59087d04410c7f411d488e1ec6d9c73d02e26516f79940bb695aeec63c6484dc",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1077"
+			],
+			"rationale": "Implements approved spec145 org-naming work with test/component evidence and is only waiting on hosted CI before merge.",
+			"evidence": [
+				"builds on deployed #707/#708",
+				"98 focused tests, canonical check 0 errors/0 warnings",
+				"hosted CI required before merge"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:47:34.822Z"
+		},
+		{
+			"key": "pr:minion_hub#710",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#710 feat(scheduling): on touch screens a finger scrolls the calendar, press-and-hold creates or moves, and a tap shows a summary",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/710",
+			"sourceUpdatedAt": "2026-11-23T06:43:53Z",
+			"sourceFingerprint": "7dc0f6ce39e4d2110a04c73b38ea1e8c685fc4bc6b91cab16135de103f8bf954",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Extensive scripted testing exists but the PR itself flags unmet spec-required real-device verification and an open UX decision.",
+			"evidence": [
+				"spec asks for one iPhone and one Android check before merge; not done, touch only driven in Chromium",
+				"POS page never opened in a browser because local QA DB could not decrypt secrets",
+				"pen-on-desktop now behaves like touch and is explicitly left as an undecided open end"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-23T06:47:34.822Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
@@ -39693,8 +39760,8 @@
 			"repo": "minion-meta",
 			"title": "#1077 docs(hub): verify organization names throughout Hub",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1077",
-			"sourceUpdatedAt": "2026-11-23T06:01:57Z",
-			"sourceFingerprint": "f69e73abe531f24003ea67f9bece0c7edf90c7bb2de183e9b68b99eda25c915e",
+			"sourceUpdatedAt": "2026-11-23T06:34:41Z",
+			"sourceFingerprint": "ba320be00d5840d1d63bf31be0caf12b996b080dbaf258f522610e867869da5f",
 			"score": 29,
 			"band": "low",
 			"axes": {
@@ -39703,20 +39770,22 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 5,
+				"implementation": 4
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Draft doc tracks a partially verified release with explicit pending gates, so it is not yet a finished deliverable.",
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"pr:minion_hub#709"
+			],
+			"rationale": "This draft is a tracking/evidence document for the same spec145 org-naming effort implemented in #709 and should be consolidated with it.",
 			"evidence": [
-				"Draft status explicitly tracks 'remaining identity consumers through final CI, deployment and runtime verification'",
-				"SPA first-document exception is explicitly unresolved"
+				"draft PR tracking spec145 release evidence and Speckit review",
+				"shared editor/shell release pending final CI, deployment and runtime verification"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T06:17:54.961Z"
+			"scoredAt": "2026-11-23T06:47:34.822Z"
 		},
 		{
 			"key": "proposal:2026-08-18-agent-instruction-parity-and-repo-policy",
@@ -52264,70 +52333,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-16T10:25:11.905Z"
-		},
-		{
-			"key": "run:minion_hub#45122722684",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45122722684",
-			"sourceUpdatedAt": "2026-11-23T06:14:03Z",
-			"sourceFingerprint": "0ad93c31d58098e008bc356a61311cea296df55fd89edb68e6888394c964a6b5",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on master with no reported failure carries no actionable content until it completes.",
-			"evidence": [
-				"status: in_progress, push on master",
-				"No failure or error detail present in the record"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T06:17:54.961Z"
-		},
-		{
-			"key": "run:minion_hub#45122722749",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45122722749",
-			"sourceUpdatedAt": "2026-11-23T06:14:13Z",
-			"sourceFingerprint": "96bc839e6124a95619c29f59615e030af57f79e7d5cd1bf2cfd416d9a62fc4d9",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run on master with no reported failure carries no actionable content until it completes.",
-			"evidence": [
-				"status: in_progress, push on master",
-				"No failure or error detail present in the record"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
