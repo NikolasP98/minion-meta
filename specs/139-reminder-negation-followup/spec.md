@@ -3,7 +3,7 @@ id: 139-reminder-negation-followup
 title: When a client says "no" to a reminder — the agent confirms, asks how to proceed, and reports to staff (no automatic cancel)
 stage: spec
 status: draft
-verdict: pending
+verdict: approved
 pass: 1
 created: 2026-11-20
 updated: 2026-11-20
@@ -21,6 +21,8 @@ related: [134-booking-closure]
 **Status**: Draft
 
 **Input**: Owner, 2026-11-20: "anything interpreted as a negation (jev eval) should initiate a process where the agent confirms the negation, asks the patient how they want to proceed and reports this to the staff."
+
+Go-ahead, owner 2026-11-23: "address all items without overlap first. When they're live, list out the items with overlap with their updated status in case another session addressed them and what your recommended approach is." This spec was reported as having no overlap with other work (overlap check of 2026-11-23, spec 134 PR #1056).
 
 ## AS-IS (observed 2026-11-20, prod read-only, hub `origin/master` `63c4313b`)
 
