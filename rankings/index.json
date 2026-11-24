@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-24T22:47:25.690Z",
+	"generatedAt": "2026-11-24T23:17:27.670Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11580,6 +11580,40 @@
 			"scoredAt": "2026-11-24T03:47:05.806Z"
 		},
 		{
+			"key": "spec:2026-09-29-hub-table-toolbar-notion-filters-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Tables — Notion-style filters (basic + advanced rule tree), group-by picker, trailing add-column, table options menu; catalog \"Show inactive\" becomes an Active filter",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-29-hub-table-toolbar-notion-filters-spec.md",
+			"sourceUpdatedAt": "2026-09-29",
+			"sourceFingerprint": "9a30dc708a8e551de466b7b953b11c4be47f2865bc7645a680cbda3c45e8ecff",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:2026-09-29-hub-data-view-container"
+			],
+			"rationale": "Already in the implementing stage with a thorough AS-IS/TO-BE spec and explicit scope boundaries on a widely-used shared DataTable component, making it concretely executable.",
+			"evidence": [
+				"status: implementing with detailed AS-IS of DataTable.svelte (4366 lines) and filters.ts",
+				"explicit Out of scope section bounding server-mode and persistence work"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T23:17:27.486Z"
+		},
+		{
 			"key": "issue:minion-meta#354",
 			"kind": "issue",
 			"stage": "proposal",
@@ -14008,41 +14042,6 @@
 			"scoredAt": "2026-11-24T08:47:59.399Z"
 		},
 		{
-			"key": "spec:2026-09-29-hub-table-toolbar-notion-filters-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Tables — Notion-style filters (basic + advanced rule tree), group-by picker, trailing add-column, table options menu; catalog \"Show inactive\" becomes an Active filter",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-09-29-hub-table-toolbar-notion-filters-spec.md",
-			"sourceUpdatedAt": "2026-09-29",
-			"sourceFingerprint": "9a30dc708a8e551de466b7b953b11c4be47f2865bc7645a680cbda3c45e8ecff",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-09-29-hub-data-view-container"
-			],
-			"rationale": "Already in the implementing stage with a detailed AS-IS/behavior spec for Notion-style table filters that unblocks the broader DataView proposal.",
-			"evidence": [
-				"status implementing",
-				"detailed AS-IS of DataTable.svelte filters/toolbar at specific line numbers",
-				"explicitly named as the dependency for the DataView container proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
-		},
-		{
 			"key": "spec:2026-10-07-readiness-date-range-menu-keyboard-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -15566,23 +15565,22 @@
 				"impact": 7
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 2
+				"specification": 6,
+				"implementation": 3
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [
 				"spec:2026-09-29-hub-table-toolbar-notion-filters-spec"
 			],
-			"rationale": "A thorough AS-IS inventory of a large UI unification effort across 46 DataTable instances, but it has no plan/tasks yet and depends on the in-flight filters spec.",
+			"rationale": "Broad, well-inventoried UI consolidation (46 DataTable instances, 34 files) but explicitly depends on the in-flight filter/group spec it wants to absorb, so it isn't independently actionable yet.",
 			"evidence": [
-				"46 DataTable instances across 34 files surveyed",
-				"depends on in-flight spec 2026-09-29-hub-table-toolbar-notion-filters-spec",
-				"no TO-BE/plan content shown, proposal stage only"
+				"\"let the new component own the filter / group / advanced-filter configuration that the in-flight spec ... is adding to DataTable\"",
+				"46 DataTable instances across 34 files per AS-IS inventory"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
+			"scoredAt": "2026-11-24T23:17:27.486Z"
 		},
 		{
 			"key": "proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns",
@@ -22443,21 +22441,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 8,
+				"implementation": 8
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 7,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Two narrow, file:line-cited tooling bugs (silent error swallowing, unvalidated filename input) in minion-factory scripts, but filed as raw findings without a fix spec/plan yet.",
+			"rationale": "Two precisely located, bounded bug fixes (silent write-failure contract violation and unvalidated filename input) in a single small script make this low-risk, immediately actionable work.",
 			"evidence": [
-				"agent/lib/jev.sh:131 empty-catch silently returns rc 0 on write failure",
-				"agent/lib/jev.sh:56 unvalidated tag param risks path traversal in filenames",
-				"auto-filed by merge-scan with no accompanying implementation plan"
+				"high: jev.sh:131 empty-catch, rc 0 returned despite redirection failure",
+				"medium: jev.sh:56 tag parameter unvalidated, possible path traversal"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T22:48:03.454Z"
+			"scoredAt": "2026-11-24T23:17:27.486Z"
 		},
 		{
 			"key": "issue:minion-meta#1059",
