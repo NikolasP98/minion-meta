@@ -1,0 +1,48 @@
+$ node scripts/design-lint.mjs
+
+  design-lint — design-system debt report
+
+  raw-color         0  (literal rgba()/rgb()/#hex in .svelte — use design tokens instead)  = global ceiling; +197 reason-coded
+                     46  src/lib/components/settings/CRTConfigModal.svelte
+                     35  src/lib/components/layout/MinionLogo.svelte
+                     27  src/routes/(app)/reliability/+page.svelte
+  palette-utility    0  (Tailwind palette utility in .svelte — use a semantic color role instead)  = global ceiling
+  raw-radius        4  (arbitrary radius in .svelte — use the radius scale or a named variant)  = global ceiling; +11 reason-coded
+                      5  src/lib/components/marketplace/AgentCard.svelte
+                      5  src/lib/components/marketplace/_agent-card/CardBack.svelte
+                      4  src/app.css
+  raw-spacing       1  (arbitrary spacing in .svelte — use the spacing scale or semantic layout aliases)  = global ceiling; +27 reason-coded
+                     12  src/lib/components/marketplace/_agent-card/CardBack.svelte
+                      6  src/lib/components/settings/CRTConfigModal.svelte
+                      4  src/lib/components/marketplace/AgentCard.svelte
+  raw-shadow        1  (arbitrary shadow in .svelte — use an elevation/focus/status recipe)  = global ceiling; +32 reason-coded
+                     26  src/app.css
+                      3  src/lib/components/settings/CRTConfigModal.svelte
+                      1  src/lib/components/marketplace/AgentCard.svelte
+  raw-motion        0  (literal UI duration in .svelte — use duration/easing or motion recipes)  = global ceiling; +3 reason-coded
+                      3  src/lib/components/marketplace/AgentCard.svelte
+  raw-easing        0  (literal easing in .svelte — use the standard enter/exit/spring recipes)  = global ceiling
+  raw-layer         0  (numeric z-index in .svelte — use a named layer token)  = global ceiling; +25 reason-coded
+                      7  src/app.css
+                      5  src/lib/components/marketplace/AgentCard.svelte
+                      5  src/lib/components/workshop/WorkshopCanvas.svelte
+  raw-type-size     1  (arbitrary type size in .svelte — use a typography role)  = global ceiling; +7 reason-coded
+                      7  src/lib/components/settings/CRTConfigModal.svelte
+                      1  src/app.css
+  bare-button       0  (bare <button> outside ui/ — prefer <Button> from $lib/components/ui)  = global ceiling
+  native-select     0  (native <select> outside ui/ — prefer the themed Select primitive)  = global ceiling
+  raw-icon-size    92  (hardcoded numeric size={N} — use iconSizes from $lib/components/ui (mirrors --icon-size-*))  = global ceiling
+                      4  src/lib/components/layout/Sidebar.svelte
+                      4  src/lib/components/ui/MultiSelectFilter.svelte
+                      4  src/lib/components/ui/foundations/AsyncBoundary.svelte
+  raw-loading      34  (hand-rolled animate-spin/pulse outside ui/ — use Spinner/Skeleton or the .skeleton utility)  ▼ -4
+                      4  src/lib/components/workshop/ConversationSidebar.svelte
+                      3  src/lib/components/crm/CrmHygiene.svelte
+                      3  src/routes/(app)/settings/plugins/+page.svelte
+  raw-control-height  188  (raw 20–48px height outside ui/ — use a --control-height-* token)  ▼ -2
+                      7  src/lib/components/settings/PatternSettings.svelte
+                      5  src/lib/components/layout/FloatingAssistant.svelte
+                      5  src/lib/components/my-agent/EmailModal.svelte
+
+  per-file base  origin/master
+  per-file debt  no changed file increased governed debt

@@ -1,0 +1,52 @@
+
+ RUN  v4.1.11 /home/nikolas/.cache/codex-work/hub-answer-history-polish-20261021
+
+ ❯ src/lib/chat/blocks.test.ts (7 tests | 2 failed) 18ms
+     × preserves an oversized notice boundary after tools (metadata=true) 8ms
+     × preserves an oversized notice boundary after tools (metadata=false) 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/lib/chat/blocks.test.ts > foldToolTurns > preserves an oversized notice boundary after tools (metadata=true)
+AssertionError: expected [ { role: 'assistant', …(3) }, …(1) ] to have a length of 3 but got 2
+
+- Expected
++ Received
+
+- 3
++ 2
+
+ ❯ src/lib/chat/blocks.test.ts:51:17
+     49|     const original = JSON.stringify(input);
+     50|     const out = foldToolTurns(input);
+     51|     expect(out).toHaveLength(3);
+       |                 ^
+     52|     expect(out[1]).toBe(omitted);
+     53|     expect(historyOmissionNotice(out[1])).toBe('This earlier message i…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/lib/chat/blocks.test.ts > foldToolTurns > preserves an oversized notice boundary after tools (metadata=false)
+AssertionError: expected [ { role: 'assistant', …(2) }, …(1) ] to have a length of 3 but got 2
+
+- Expected
++ Received
+
+- 3
++ 2
+
+ ❯ src/lib/chat/blocks.test.ts:51:17
+     49|     const original = JSON.stringify(input);
+     50|     const out = foldToolTurns(input);
+     51|     expect(out).toHaveLength(3);
+       |                 ^
+     52|     expect(out[1]).toBe(omitted);
+     53|     expect(historyOmissionNotice(out[1])).toBe('This earlier message i…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 5 passed (7)
+   Start at  00:33:16
+   Duration  2.69s (transform 1.88s, setup 36ms, import 2.46s, tests 18ms, environment 0ms)
