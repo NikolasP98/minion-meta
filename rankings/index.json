@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-24T06:46:58.879Z",
+	"generatedAt": "2026-11-24T07:17:25.149Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1854,6 +1854,39 @@
 			"scoredAt": "2026-11-22T00:18:17.144Z"
 		},
 		{
+			"key": "proposal:2026-10-29-hub-org-entitlements-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Org entitlements — open ends deferred from spec 043",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-29-hub-org-entitlements-followups.md",
+			"sourceUpdatedAt": "2026-10-29",
+			"sourceFingerprint": "c2066c909785926421591a04195b75f1869996964106a3c309ec7071ae90c060",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 5
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Detailed AS-IS/TO-BE/DELTA entitlement gaps with code pointers (background AI, channel gating, shared-token leak) carry real security/data exposure across the multi-tenant hub.",
+			"evidence": [
+				"R1: cron/heartbeat/webhook agent runs are not org-gated (server-cron.ts, heartbeat-runner.ts)",
+				"R6: shared operator.admin token handed to every Premium-org browser via token endpoint",
+				"Items carry Severity High and have explicit TODO(handoff) pointers per design.md"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T07:17:24.934Z"
+		},
+		{
 			"key": "proposal:2026-11-06-agent-transcript-evals-and-runtime-improvements",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3567,42 +3600,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T10:48:05.478Z"
-		},
-		{
-			"key": "proposal:2026-10-29-hub-org-entitlements-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Org entitlements — open ends deferred from spec 043",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-29-hub-org-entitlements-followups.md",
-			"sourceUpdatedAt": "2026-10-29",
-			"sourceFingerprint": "c2066c909785926421591a04195b75f1869996964106a3c309ec7071ae90c060",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"spec:2026-10-29-hub-org-entitlements-spec",
-				"spec:2026-10-29-gateway-per-org-credentials-spec"
-			],
-			"rationale": "Documents multiple deferred security/entitlement gaps (R1-R8) directly derived from specs 043/045 and should be tracked alongside them as follow-on execution items.",
-			"evidence": [
-				"R1: cron/heartbeat/webhook agent runs are not gated by org AI entitlement",
-				"R6: shared operator.admin token exposed to every Premium-org browser",
-				"Explicitly scoped out of specs 043 and 045 into this proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T06:47:14.143Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-1767155690",
@@ -31083,41 +31080,6 @@
 			"scoredAt": "2026-11-21T12:20:19.864Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-bdc3ef8ab34d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bdc3ef8ab34d.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "fc4eadc605943befdf0eafe7056df1bedff1fb004051dc216d830bf60ee025c4",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-948e27d654f8"
-			],
-			"rationale": "Companion auto-filed finding for the same file describing the same 'part 2' per-org sequence column work, likely one underlying task split across two findings.",
-			"evidence": [
-				"Same file src/lib/tables/defs/index.ts and same merged PR #357",
-				"Marker: 'UUID-only today — part 2 adds a per-org sequence column'",
-				"Fix direction requires migration, increment logic, query layer and UI updates"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T06:47:14.143Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-be298870a398",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35679,6 +35641,40 @@
 			"scoredAt": "2026-11-23T14:24:09.888Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-948e27d654f8",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-948e27d654f8.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "90325fb24db15ab491f8b4262e1840ee73e5c847b12b910e080aa74c13e8af31",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-bdc3ef8ab34d"
+			],
+			"rationale": "A narrow leftover TODO about per-org customer numbering in the same file/PR as a sibling finding about a per-org sequence column, so the two should become one schema-sequencing goal.",
+			"evidence": [
+				"TODO(handoff): same as crm.customers — numbered in part 2",
+				"same repo NikolasP98/minion_hub@b76d58f, same merged PR #357, same file src/lib/tables/defs/index.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T07:17:24.934Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-94d4eedca2dc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35949,6 +35945,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T07:47:46.293Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-bdc3ef8ab34d",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bdc3ef8ab34d.md",
+			"sourceUpdatedAt": "2026-09-22",
+			"sourceFingerprint": "fc4eadc605943befdf0eafe7056df1bedff1fb004051dc216d830bf60ee025c4",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-948e27d654f8"
+			],
+			"rationale": "UUID-only identifiers blocking per-org sequence numbers is the same 'part 2' schema work flagged by the sibling customers-numbering TODO in the identical file and PR.",
+			"evidence": [
+				"TODO(handoff): UUID-only today — part 2 adds a per-org sequence column",
+				"same repo NikolasP98/minion_hub@b76d58f, same merged PR #357, same file src/lib/tables/defs/index.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T07:17:24.934Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d5093998b234",
@@ -39578,41 +39608,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T08:18:21.705Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-948e27d654f8",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/tables/defs/index.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-948e27d654f8.md",
-			"sourceUpdatedAt": "2026-09-22",
-			"sourceFingerprint": "90325fb24db15ab491f8b4262e1840ee73e5c847b12b910e080aa74c13e8af31",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-bdc3ef8ab34d"
-			],
-			"rationale": "Auto-filed TODO-handoff finding about applying a numbering pattern from crm.customers to another table def, low severity and underspecified beyond a grep-and-apply direction.",
-			"evidence": [
-				"Marker text: 'same as crm.customers — numbered in part 2'",
-				"Auto diagnosis suggests grep for pattern and apply or migrate to proposal",
-				"File: src/lib/tables/defs/index.ts"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T06:47:14.143Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-99fd34b5696d",
