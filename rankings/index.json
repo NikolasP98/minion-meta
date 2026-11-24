@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-24T18:47:05.814Z",
+	"generatedAt": "2026-11-24T19:17:31.453Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3534,38 +3534,6 @@
 			"scoredAt": "2026-11-23T14:21:17.361Z"
 		},
 		{
-			"key": "proposal:2026-10-13-hub-first-paint-performance",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 7,
-				"impact": 8
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 6
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Measured production data shows FCP of 3.2-7.7s driven by a 246.5KB dual-locale Paraglide chunk and SSR disabled, with a clear, high-impact fix path already identified but unimplemented.",
-			"evidence": [
-				"FCP ≈3.2s on /en/login, 3.5-7.7s on authenticated pages per PostHog",
-				"chunks/0o58oGzS2.js is 246.5KB br / 1,059.2KB raw, 59% of first-paint JS, shipping both locales to every visitor"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T18:47:18.044Z"
-		},
-		{
 			"key": "proposal:2026-10-18-assistant-navigation-confirmation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3972,6 +3940,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T01:17:31.665Z"
+		},
+		{
+			"key": "proposal:2026-10-13-hub-first-paint-performance",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Hub first paint — 478 KB brotli / 1.9 MB parse before a single pixel",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-13-hub-first-paint-performance.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "094c827cce06616bca33c1772c504dbd11ca48182657ee9102b9801bf18af803",
+			"score": 66,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Measured FCP of 3.2–7.7s with root causes pinpointed (ssr disabled, both locales shipped, unused floating-ui) gives a clear, actionable path to broad UX improvement.",
+			"evidence": [
+				"FCP ≈3.2s login, up to 7.7s appointments per PostHog",
+				"ssr=false means nothing paints until 477.8KB br / 1.9MB parsed",
+				"Paraglide barrel ships both en+es locales, 59% of first-paint JS"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T19:17:31.195Z"
 		},
 		{
 			"key": "spec:2026-10-03-gw022a-linux-filesystem-atomicity",
@@ -39164,37 +39165,6 @@
 			"scoredAt": "2026-11-21T19:47:26.616Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-f2de5e0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ f2de5e0",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f2de5e0.md",
-			"sourceUpdatedAt": "2026-10-13",
-			"sourceFingerprint": "1fb11ec5ec82bfe0f2cce6bdac4febb1573f7dd6ae1c49943c69a29f40b4126d",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Two small, well-localized medium-severity hardcoded-IP findings in cutover.sh are low-effort to externalize to env vars.",
-			"evidence": [
-				"cutover.sh:6 and cutover.sh:9 hardcode production host IP 152.53.91.108"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T18:47:18.044Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-f4c1a23",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -50237,6 +50207,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T06:17:43.064Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-f2de5e0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ f2de5e0",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-f2de5e0.md",
+			"sourceUpdatedAt": "2026-10-13",
+			"sourceFingerprint": "1fb11ec5ec82bfe0f2cce6bdac4febb1573f7dd6ae1c49943c69a29f40b4126d",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Trivial, bounded fix for a hardcoded production IP in two lines of cutover.sh with no urgency or broad consequence.",
+			"evidence": [
+				"cutover.sh:6 and :9 hardcode IP 152.53.91.108",
+				"severity rated medium by automated merge-scan",
+				"fix is externalizing to an env var"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T19:17:31.195Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-factory-5e28c7a",
