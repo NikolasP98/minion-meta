@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-24T03:16:57.710Z",
+	"generatedAt": "2026-11-24T03:47:06.074Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -11769,15 +11769,15 @@
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "This is a well-evidenced, already-authorized-to-implement UX spec with concrete code anchors and a clear path to extend existing optimistic-update infrastructure.",
+			"rationale": "A well-evidenced, already-partially-implemented UX spec covering optimistic interactions and autosave with merged initial work and authorized continued implementation, improving core Hub reliability/UX across many surfaces.",
 			"evidence": [
-				"user authorized beginning implementation and merge/deployment per the 2026-09-21 update",
-				"Action Service implementation merged via Hub PR #352 (698aaa71)",
-				"scanner inspected 1,055 client source files with concrete anchors like optimistic.ts:15 and BookingCalendar.svelte:511"
+				"Action Service implementation merged via Hub PR #352 (698aaa71), user authorized merge/deployment",
+				"reproducible scanner inspected 1,055 client source files with async/motion signals in 507",
+				"booking PATCH lacks expected version guard, flagged as needing atomic stale-write detection before enabling optimistic move persistence"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T03:16:58.430Z"
+			"scoredAt": "2026-11-24T03:47:05.806Z"
 		},
 		{
 			"key": "issue:minion-meta#354",
@@ -41355,6 +41355,39 @@
 			"scoredAt": "2026-11-23T16:47:09.558Z"
 		},
 		{
+			"key": "issue:minion-meta#984",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#984 [monitor:unstick] rank run c5145356 died silently after batch 9 (exit 1)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/984",
+			"sourceUpdatedAt": "2026-11-10T02:17:28Z",
+			"sourceFingerprint": "60465c66ba1e386c57911fd4d29fcfc6879c1b82142b559f74cf1c81d4ace212",
+			"score": 28,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A monitor-flagged silent exit on a rank run with a plausible transient-race explanation and a retry-as-is recommendation, not an urgent production failure.",
+			"evidence": [
+				"batches 1-9 succeeded cleanly (12 scored/0 failed each)",
+				"no error/stack trace, note suggests candidate set mutated mid-run",
+				"recommendation: safe to retry as-is"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T03:47:05.806Z"
+		},
+		{
 			"key": "issue:minion-meta#999",
 			"kind": "issue",
 			"stage": "proposal",
@@ -44036,39 +44069,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T12:47:03.530Z"
-		},
-		{
-			"key": "issue:minion-meta#984",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#984 [monitor:unstick] rank run c5145356 died silently after batch 9 (exit 1)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/984",
-			"sourceUpdatedAt": "2026-11-10T02:17:28Z",
-			"sourceFingerprint": "60465c66ba1e386c57911fd4d29fcfc6879c1b82142b559f74cf1c81d4ace212",
-			"score": 25,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A monitor-intake report of a single silent exit after 9 clean batches looks like a transient race rather than a systemic defect needing immediate action.",
-			"evidence": [
-				"batches 1-9 succeeded cleanly (12 scored/0 failed each)",
-				"note suggests candidate set changed mid-run, not a spec/box failure",
-				"report itself recommends safe retry as-is"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T03:16:58.430Z"
 		},
 		{
 			"key": "deploy:minion (gateway)",
