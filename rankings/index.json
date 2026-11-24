@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-24T08:47:59.594Z",
+	"generatedAt": "2026-11-24T09:17:24.958Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1329,6 +1329,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T07:48:50.521Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-96528a1d8ee1",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/api/internal/flows/[id]/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96528a1d8ee1.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "02d79ec46508c6a35dbcf961a095a2f3bf1753eea47908d25a73030e372e0d16",
+			"score": 78,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "NULL tenant_id flows bypassing tenant gating in a multi-tenant system is a concrete data-isolation/privilege-escalation risk with a clear three-step fix.",
+			"evidence": [
+				"TODO: 'flows with a NULL tenant_id are never gated (aiEnabled true); backfill'",
+				"diagnosis cites data-leakage and privilege-escalation risk",
+				"fix direction specifies backfill, NOT NULL constraint, and tenant_id filter"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T09:17:24.738Z"
 		},
 		{
 			"key": "spec:2026-10-03-notification-tenant-boundaries-spec",
@@ -8533,38 +8566,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:24:09.888Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-96528a1d8ee1",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/api/internal/flows/[id]/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-96528a1d8ee1.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "02d79ec46508c6a35dbcf961a095a2f3bf1753eea47908d25a73030e372e0d16",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Flows with NULL tenant_id bypassing tenant isolation is a concrete multi-tenant data-leakage risk with a clear, bounded fix path.",
-			"evidence": [
-				"TODO(handoff): flows with a NULL tenant_id are never gated (aiEnabled true); backfill",
-				"diagnosis flags privilege-escalation/data-leakage risk with specific backfill+constraint+filter fix steps"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T08:47:26.750Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b6022e2358b3",
@@ -40626,6 +40627,38 @@
 			"scoredAt": "2026-11-24T05:17:03.104Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-d371d2661bc2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/flows/ai-nodes.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d371d2661bc2.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "feac23673499c1ea85a271ee4589e954c6016c5a197526fc8e3ff28452a2b9c7",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The hardcoded AI-node logic only becomes a real problem when a third AI action is added, so there is no current pain forcing immediate execution.",
+			"evidence": [
+				"TODO: 'move to an ai flag ... when a third AI action'",
+				"fix direction proposes a manifest schema flag plus refactor, but trigger condition not yet met"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T09:17:24.738Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-d62428971ed9",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -46623,38 +46656,6 @@
 			"scoredAt": "2026-11-18T11:48:03.354Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-753e08fe9f5a",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/modules/availability.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-753e08fe9f5a.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "9bb9862c2e9c956bd0655dedea8e3c450d06390b575d13b4e5d09c80c90a4efc",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Cleanup TODO is explicitly gated on unshipped JWT plugin auth work, so it isn't actionable until that dependency lands.",
-			"evidence": [
-				"TODO(handoff): drop these two once plugin UIs get a JWT path (spec 043 R8)",
-				"diagnosis says to defer formal tracking if JWT auth is deprioritized"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T08:47:26.750Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-77196cfff827",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -50434,6 +50435,38 @@
 			"scoredAt": "2026-11-18T05:17:36.013Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-753e08fe9f5a",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/modules/availability.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-753e08fe9f5a.md",
+			"sourceUpdatedAt": "2026-11-03",
+			"sourceFingerprint": "9bb9862c2e9c956bd0655dedea8e3c450d06390b575d13b4e5d09c80c90a4efc",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Cleanup is explicitly gated on JWT plugin auth landing first, so there is no actionable work yet beyond documenting the dependency.",
+			"evidence": [
+				"TODO depends on 'plugin UIs get a JWT path (spec 043 R8)'",
+				"definition of done allows leaving it with an updated rationale instead of removal"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-24T09:17:24.738Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-77c392e264f4",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -50877,38 +50910,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T06:18:21.504Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-d371d2661bc2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/flows/ai-nodes.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-d371d2661bc2.md",
-			"sourceUpdatedAt": "2026-11-03",
-			"sourceFingerprint": "feac23673499c1ea85a271ee4589e954c6016c5a197526fc8e3ff28452a2b9c7",
-			"score": 19,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Refactor is explicitly premised on a third AI flow-node action existing, which hasn't happened yet, so the trigger condition for action isn't met.",
-			"evidence": [
-				"TODO(handoff): move to an `ai` flag on plugin flow-node manifests when a third AI action",
-				"diagnosis: pattern breaks once a third AI-powered action is added"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T08:47:26.750Z"
 		},
 		{
 			"key": "issue:minion-meta#1049",
