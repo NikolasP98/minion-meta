@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-24T20:17:06.330Z",
+	"generatedAt": "2026-11-24T20:47:09.546Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -45597,21 +45597,21 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 6,
+				"specification": 5,
 				"implementation": 3
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "Diagnosis indicates a transient provider outage, not a genuine repo defect, so it should be monitored for recurrence rather than acted on now.",
+			"rationale": "Automated monitor log indicates a transient provider outage during a rank run, not a genuine spec or code defect to fix.",
 			"evidence": [
-				"both ranking providers failed on batch 1",
-				"log shows transient/infra provider outage or rate-limit, not a genuine spec/task defect",
-				"recommendation: safe to retry the run as-is"
+				"exit 1 after ranking catalog built",
+				"both bounded providers failed or returned invalid JSON",
+				"Recommendation: safe to retry the run as-is; no spec or box fix indicated"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-17T20:17:10.298Z"
+			"scoredAt": "2026-11-24T20:47:09.316Z"
 		},
 		{
 			"key": "pr:minion (gateway)#341",
