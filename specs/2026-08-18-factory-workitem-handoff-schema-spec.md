@@ -2,15 +2,15 @@
 id: 2026-08-18-factory-workitem-handoff-schema-spec
 title: Typed WorkItem fields + commit-pinned, structured handoffs across the factory pipeline
 stage: spec
-status: review
+status: approved
 pass: 3
 next_slice: 5
 created: 2026-08-18
 updated: 2026-10-17
 repos: [minion-factory, minion-meta]
 proposal: 2026-08-17-factory-workitem-handoff-schema
-verdict: pending
-review_reason: "Consumer-first correction awaits renewed review and owner security approval; do not repeat the stale whole-spec task or deploy producer retrofit before strict trust checks."
+verdict: approved
+review_reason: "Owner NikolasP98 merged reviewed plan PR #835 at 0dc0ece6 and confirmed done on 2026-10-17. Approval covers Factory S5 consumers only; implementation merge and later S4/S6 remain human-gated."
 tags: [logic, infra, security, test, docs]
 type: infra
 ---
@@ -22,6 +22,13 @@ The remaining trust/admission work is specified in
 [implementation plan](104-workitem-consumer-first/plan.md) and
 [ordered tasks](104-workitem-consumer-first/tasks.md). This parent remains the
 single board goal. Security approval and merge remain human gates.
+
+Owner approval of the reviewed S5 plan is recorded from
+[`minion-meta#835`](https://github.com/NikolasP98/minion-meta/pull/835), merged
+by `NikolasP98` at `0dc0ece6c615e157133160bab62eaf945e724bf8` on
+2026-10-17T23:27:51Z, followed by the owner's `done` confirmation to the plan
+approval request. This authorizes implementation of the reviewed Factory S5
+slice, not its merge/deployment or the later S4/S6 producer and intake releases.
 
 ## 0. Product
 

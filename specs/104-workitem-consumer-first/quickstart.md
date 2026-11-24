@@ -4,6 +4,12 @@ Prerequisites: owner security approval recorded on the revised spec, an isolated
 Factory feature branch, and the repository's declared runner dependencies.
 Use temporary DB fixtures; production proposals are not test fixtures.
 
+Interactive implementation may use the manual SDLC path recorded in `plan.md`:
+load the full reviewed artifacts into an isolated Factory feature branch after
+recording owner approval, without creating a production run or changing pause
+authority. The following held-dispatch procedure applies only when automated
+Factory execution is chosen; it is not needed for that manual path.
+
 The legacy parent needs explicit Factory-only S5 dispatch. Fetch this feature's
 plan/tasks from the same reviewed meta commit as its approved flat spec, include
 their full contents in the task payload. Before POST, establish and verify the

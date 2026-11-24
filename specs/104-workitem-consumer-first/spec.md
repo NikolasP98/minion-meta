@@ -2,10 +2,19 @@
 
 **Feature Branch**: `fix/workitem-consumer-first-plan`
 **Created**: 2026-10-17
-**Status**: Review; owner security approval required before implementation
+**Status**: Owner-approved S5 implementation plan; implementation merge remains gated
 **Input**: Keep eligible board work moving while reconciling invalid approvals,
 duplicate implementations and exhausted runs. Finish the missing trust gate
 from the existing WorkItem goal before migrating its producers.
+
+## Clarifications
+
+### Session 2026-10-17
+
+- Q: Is the reviewed plan in PR #835 approved for implementation? → A: The owner
+  merged PR #835 at `0dc0ece6c615e157133160bab62eaf945e724bf8` and confirmed
+  `done` after the explicit approval request. Factory S5 is approved; code merge
+  and separately reviewed producer/intake releases remain owner-gated.
 
 ## User Scenarios & Testing
 
@@ -116,5 +125,6 @@ compare stored work, manifests, ordering and approval history.
   role or permission mapping is invented.
 - Current topic policy determines risk. Existing operator credentials and
   approved-spec dispatch remain separate established authorities.
-- Planning and research may proceed now. Owner security approval of the revised
-  spec and owner merge of implementation are required before executing changes.
+- Owner security approval of this S5 plan is recorded above before code. Owner
+  merge of implementation remains required; later producer/intake changes keep
+  their own review and approval gates.
