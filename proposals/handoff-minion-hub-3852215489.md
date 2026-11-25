@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-3852215489
 title: Handoff marker — src/server/services/record-locks.logic.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-1af496512de2
+merged_into: postmerge-minion-hub-1af496512de2
 ---
 
 # Handoff marker — src/server/services/record-locks.logic.ts

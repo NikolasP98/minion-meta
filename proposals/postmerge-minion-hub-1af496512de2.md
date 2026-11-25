@@ -9,6 +9,8 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- reconcile: absorbed handoff-minion-hub-3852215489 (handoff-sweep marker, same file/marker text at line 56) -->
+
 # Post-merge finding — todo-handoff in `src/server/services/record-locks.logic.ts`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
@@ -40,3 +42,10 @@ The `TODO(handoff)` marker at `src/server/services/record-locks.logic.ts` is rem
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/731
 - file: `src/server/services/record-locks.logic.ts`
 - checked: 2026-11-25
+
+## Merged from handoff-minion-hub-3852215489
+
+The factory handoff-ledger sweep independently flagged the same marker:
+
+- `NikolasP98/minion_hub@master src/server/services/record-locks.logic.ts:56`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/record-locks.logic.ts#L56

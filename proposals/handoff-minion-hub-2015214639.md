@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2015214639
 title: Handoff marker — src/routes/(app)/settings/record-locks/+page.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-59d73ac679ec
+merged_into: postmerge-minion-hub-59d73ac679ec
 ---
 
 # Handoff marker — src/routes/(app)/settings/record-locks/+page.svelte

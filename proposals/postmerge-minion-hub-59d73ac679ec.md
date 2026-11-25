@@ -9,6 +9,8 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- reconcile: absorbed handoff-minion-hub-2015214639 (handoff-sweep marker, same file/marker text at line 13) -->
+
 # Post-merge finding — todo-handoff in `src/routes/(app)/settings/record-locks/+page.svelte`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
@@ -42,3 +44,10 @@ Run `bun run a11y` targeting the new `record-locks` page, remediate any violatio
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/731
 - file: `src/routes/(app)/settings/record-locks/+page.svelte`
 - checked: 2026-11-25
+
+## Merged from handoff-minion-hub-2015214639
+
+The factory handoff-ledger sweep independently flagged the same marker:
+
+- `NikolasP98/minion_hub@master src/routes/(app)/settings/record-locks/+page.svelte:13`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/settings/record-locks/+page.svelte#L13
