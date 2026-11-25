@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T09:48:01.427Z",
+	"generatedAt": "2026-11-25T10:18:31.869Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3051,6 +3051,39 @@
 			"scoredAt": "2026-11-22T12:47:43.080Z"
 		},
 		{
+			"key": "spec:2026-10-24-hub-collection-points-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Hub collection points — doors, attribution, follow-up, FAQ, offers",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-24-hub-collection-points-spec.md",
+			"sourceUpdatedAt": "2026-10-24",
+			"sourceFingerprint": "40659858bac2825471d56017a0cdf413d2e66e9bb43c3ea55d6870ae74d477ef",
+			"score": 69,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A well-specified, security/data-tagged multi-slice feature that replaces a patient-data-losing intake form and is gated by explicit owner approval and per-slice verification.",
+			"evidence": [
+				"replaces the FACES intake form, which loses patient data today",
+				"Seven hub slices with S0 as serial gate; security and data tagged with owner approval required",
+				"Verification criteria SC-001 to SC-006 defined in spec"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:31.689Z"
+		},
+		{
 			"key": "issue:minion-meta#595",
 			"kind": "issue",
 			"stage": "proposal",
@@ -5023,20 +5056,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 7,
 				"implementation": 2
 			},
 			"confidence": 5,
-			"recommendation": "reframe",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "This is a documentation-only ledger bundling several disparate backup/restore follow-ups (host install, prod drill, PITR confirmation, alerting, hardening) with no single bounded scope ready for paid execution.",
+			"rationale": "The ledger names a real backup/restore gap but is docs-only and bundles several unstarted sub-tasks that need separate scoping.",
 			"evidence": [
-				"Docs only",
-				"Lists what is not done: host install, production timing and drill, Supabase PITR confirmation, heartbeat alert"
+				"lists host install, restore drill, PITR confirmation, heartbeat alert as undone",
+				"docs only",
+				"status open"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
+			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-defaces-crm-tools",
@@ -7310,39 +7344,6 @@
 			"scoredAt": "2026-11-23T15:25:38.334Z"
 		},
 		{
-			"key": "spec:2026-10-24-hub-collection-points-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Hub collection points — doors, attribution, follow-up, FAQ, offers",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-24-hub-collection-points-spec.md",
-			"sourceUpdatedAt": "2026-10-24",
-			"sourceFingerprint": "40659858bac2825471d56017a0cdf413d2e66e9bb43c3ea55d6870ae74d477ef",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-structured spec with slices, plan, and verification criteria addresses an active patient-data loss in the FACES intake form, but remains in draft awaiting owner approval.",
-			"evidence": [
-				"replaces the FACES intake form, which loses patient data today",
-				"Security and data tagged: the owner approves the spec and merges every slice",
-				"Seven hub slices... S0 (foundation) is the only serial gate"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:35.003Z"
-		},
-		{
 			"key": "spec:2026-11-10-hub-pos-receivables-price-zero-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -7408,6 +7409,114 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T23:18:05.985Z"
+		},
+		{
+			"key": "pr:minion_hub#728",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#728 feat(scheduling): the agent asks a client who said \"no\" how to continue, and replies are handled as they arrive",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/728",
+			"sourceUpdatedAt": "2026-11-25T09:56:50Z",
+			"sourceFingerprint": "1d957303eeb41cdd6c217062d930a37cd0a6b68d4f56416fc9c6b724aaeca03e",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#729",
+				"pr:minion_hub#730"
+			],
+			"rationale": "Scoped slice (S2) of an active scheduling stack with clear spec and draft code ready for review.",
+			"evidence": [
+				"Spec 139 S2, stacked with S3/S4",
+				"tags: ui, logic, test",
+				"updated today, draft"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:23.328Z"
+		},
+		{
+			"key": "pr:minion_hub#729",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#729 feat(scheduling): staff see each reminder follow-up on the appointment and in the inbox",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/729",
+			"sourceUpdatedAt": "2026-11-25T09:56:51Z",
+			"sourceFingerprint": "e7ffcc2a4e71081a8e289abef0c75d6aaab587feccd2b8d986e06b44d01a0438",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#728",
+				"pr:minion_hub#730"
+			],
+			"rationale": "Follow-on slice with owner-approved UI, ready to land once S2 merges.",
+			"evidence": [
+				"UI approved by owner (FigCraft demo)",
+				"stacked on S2",
+				"PII masking noted"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:23.328Z"
+		},
+		{
+			"key": "pr:minion_hub#730",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#730 feat(scheduling): the agent offers free times and rebooks only when the client picks one",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/730",
+			"sourceUpdatedAt": "2026-11-25T09:56:45Z",
+			"sourceFingerprint": "1891aad3c98237f7fb80f059189a1678b4ffab928654092cf8e90df1ada7185e",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#728",
+				"pr:minion_hub#729"
+			],
+			"rationale": "Final slice of the reminder-followup stack with live-verified classification logic.",
+			"evidence": [
+				"answer classification verified live 2026-11-25",
+				"stacked on S3",
+				"AI orgs only scope"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -10548,22 +10657,21 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 5,
+				"specification": 6,
 				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-40a4a290126b"
-			],
-			"rationale": "Fifteen open items of mixed urgency (billing, security/clinical-data access, SSR, DNS hazard) are bundled together and need to be split into individually actionable goals.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A security-relevant clinical-data access gap is buried inside a 15-item ledger spanning payments, i18n, and SSR that needs splitting into separate actionable goals.",
 			"evidence": [
-				"Online payment links on offer doors ... Billing-tagged",
-				"owner/admin only ... S2 must gate GET /api/crm/doors/[id]/submissions on crm:manage"
+				"item 11: submissions access gate flagged security-relevant, needs S2 fix",
+				"tags: crm, security, data",
+				"15 bundled items added across multiple dates"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
+			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
 			"key": "proposal:handoff-minion-factory-1378118597",
@@ -12931,40 +13039,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T08:48:16.137Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-40a4a290126b",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/doors/offer/Public.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-40a4a290126b.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "2a34c6afb292d58ed78b805c11651773c743c68bbb4204b7cee6b8e37643792a",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:2026-10-24-hub-collection-points-followups"
-			],
-			"rationale": "The payment integration cannot proceed without merchant credentials and a provider decision from the owner, so it is blocked on a business decision rather than ready for engineering execution.",
-			"evidence": [
-				"online payment link (Culqi / Mercado Pago) — no credentials yet",
-				"No merchant credentials exist"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-519a349c5d17",
@@ -15388,6 +15462,41 @@
 			"scoredAt": "2026-11-24T10:17:57.262Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-40a4a290126b",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/doors/offer/Public.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-40a4a290126b.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "2a34c6afb292d58ed78b805c11651773c743c68bbb4204b7cee6b8e37643792a",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:2026-10-24-hub-collection-points-followups"
+			],
+			"rationale": "Blocks real payments on offer doors but is not actionable until merchant credentials exist, duplicating the same item in the collection-points ledger.",
+			"evidence": [
+				"no merchant credentials exist yet",
+				"duplicates item 1 of proposal:2026-10-24-hub-collection-points-followups",
+				"status approved but blocked"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:23.328Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-676808e46687",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15927,114 +16036,6 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
-			"key": "pr:minion_hub#728",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#728 feat(scheduling): the agent asks a client who said \"no\" how to continue, and replies are handled as they arrive",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/728",
-			"sourceUpdatedAt": "2026-11-25T09:07:02Z",
-			"sourceFingerprint": "873d9f6e20a87af0a8ea16ca54004aa3e899d011fab826cb99d296cee9bf467f",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#729",
-				"pr:minion_hub#730"
-			],
-			"rationale": "First slice of a scoped reminder-negation spec with tests; stacked work with clear scope.",
-			"evidence": [
-				"Spec 139 S2, meta specs/139-reminder-negation-followup",
-				"draft status, tagged logic/test",
-				"inbound replies processed on ingest with tick fallback"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T09:18:11.556Z"
-		},
-		{
-			"key": "pr:minion_hub#729",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#729 feat(scheduling): staff see each reminder follow-up on the appointment and in the inbox",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/729",
-			"sourceUpdatedAt": "2026-11-25T09:05:47Z",
-			"sourceFingerprint": "56ddd25db9a44b1bfe4df18954b39f6b3b662d01c8bfaf72575bcc5a835527e2",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#728",
-				"pr:minion_hub#730"
-			],
-			"rationale": "Mid-stack reminder follow-up UI slice with owner-approved demo and tests is ready to progress its PR stack.",
-			"evidence": [
-				"UI approved by owner (FigCraft demo)",
-				"stacked on S2 (#728), S4 (#730) follows",
-				"tagged ui, logic, test"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T09:18:11.556Z"
-		},
-		{
-			"key": "pr:minion_hub#730",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#730 feat(scheduling): the agent offers free times and rebooks only when the client picks one",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/730",
-			"sourceUpdatedAt": "2026-11-25T09:07:28Z",
-			"sourceFingerprint": "e4525645839c8b3a9eba2ca84a3405f7d1462498fe10ccc48a1889c9bb4e16c7",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#728",
-				"pr:minion_hub#729"
-			],
-			"rationale": "Final stacked slice adds rebooking logic with live-verified answer classification, narrowly scoped to AI orgs.",
-			"evidence": [
-				"Spec 139 S4, stacked on S3 (#729)",
-				"answer classification verified live 2026-11-25",
-				"rebooking only on explicit pick, AI orgs only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T09:18:11.556Z"
-		},
-		{
 			"key": "pr:minion_hub#731",
 			"kind": "pr",
 			"stage": "development",
@@ -16283,21 +16284,22 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 7
+				"implementation": 8
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
 				"proposal:postmerge-minion-hub-6200323e3d73"
 			],
-			"rationale": "Clear AS-IS/TO-BE/verification with two implementation parts already landed (migration script, tests, idempotent backfill) and a bounded remaining step (drop legacy columns after verification).",
+			"rationale": "Owner-requested schema cleanup with both migration code and tests already implemented on a pushed branch, just needing landing/verification.",
 			"evidence": [
-				"Branch feat/stock-optional-fields-custom ... 5cc6ae6d ... cdbd69e0",
-				"scripts/stock-optional-fields-to-custom.test.ts for planOrgBackfill"
+				"Part 1 and Part 2 implemented on feat/stock-optional-fields-custom, pushed to origin",
+				"dry-run/apply migration script with tests",
+				"owner request 2026-09-30"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
+			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
 			"key": "proposal:2026-10-09-hub-notification-worker-production-activation",
@@ -23543,20 +23545,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 4,
+				"specification": 6,
 				"implementation": 3
 			},
 			"confidence": 5,
-			"recommendation": "reframe",
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Eight loosely related UI follow-ups of varying maturity are bundled into one ledger, with only item 3 actually closed, so it needs decomposition into individually scoped goals.",
+			"rationale": "Bundles eight unrelated-severity follow-ups with no single bounded next action.",
 			"evidence": [
-				"ledger for hub branches feat/table-filters-core, feat/table-toolbar",
-				"GroupByPicker ... CLOSED 2026-09-29"
+				"8 distinct open ends",
+				"one item already closed 2026-09-29",
+				"no deadline signal"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
+			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
 			"key": "proposal:2026-10-21-windows-heartbeat-qualification-timing",
@@ -25558,19 +25561,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "A single-file, well-diagnosed POS UX trap (discount editor cannot be closed) with a concrete fix direction is bounded and actionable now.",
+			"rationale": "Single-file, approved, clearly scoped UX trap fix in the POS discount editor.",
 			"evidence": [
-				"the affordance is one-way — once opened, a line's discount",
-				"Add a close affordance (dismiss button or click-outside behavior)"
+				"status approved",
+				"one-way discount editor affordance traps users",
+				"single file fix"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
+			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-749c9f202140",
@@ -26804,41 +26808,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T04:48:02.180Z"
-		},
-		{
-			"key": "proposal:2026-10-24-site-stay-in-touch-updates",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_site",
-			"title": "minion_site: open ends from spec 040 (stay-in-touch list, light-theme mascot, real proof)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-24-site-stay-in-touch-updates.md",
-			"sourceUpdatedAt": "2026-10-24",
-			"sourceFingerprint": "0465d10ec4ccf00f76927d497287569033664f97b85beedfe968c9d76ffe0ba3",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-site-b0b6fc0066d7",
-				"proposal:postmerge-minion-site-ca055449de0c"
-			],
-			"rationale": "This ledger already documents the same two open ends (stay-in-touch list, AI-premium pricing) that the two postmerge findings file separately, so they should become one goal.",
-			"evidence": [
-				"No opt-in updates list ... TODO(handoff) above #stay",
-				"Free Personal plan ... The site has a TODO(handoff) there"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
 		},
 		{
 			"key": "proposal:2026-11-10-crm-conversation-restricted-role-support",
@@ -31744,40 +31713,6 @@
 			"scoredAt": "2026-11-18T10:48:05.478Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-site-b0b6fc0066d7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/sections/FinalCTA.svelte (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-b0b6fc0066d7.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "3be731ffd8db39c0c08d13c0b242efbade9edd89b891cb62db430bcf646910bb",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-24-site-stay-in-touch-updates"
-			],
-			"rationale": "This is the same stay-in-touch/newsletter TODO already tracked in the site open-ends proposal and should be merged into it.",
-			"evidence": [
-				"a \"send me updates\" list (newsletter or WhatsApp broadcast",
-				"merged PR https://github.com/NikolasP98/minion-site/pull/37"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
-		},
-		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -35839,40 +35774,6 @@
 			"scoredAt": "2026-11-21T08:34:33.316Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-6200323e3d73",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
-			"sourceUpdatedAt": "2026-09-30",
-			"sourceFingerprint": "c780367e267d02cc2dcd76e815abb7d4ed88e0ba6adb28318e8366d598f0e543",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns"
-			],
-			"rationale": "This TODO's underlying item_group/reorder_qty/moq schema concern is already being resolved by the custom-columns migration in the sibling proposal, so they should be tracked as one goal rather than two.",
-			"evidence": [
-				"TODO(handoff): item_group/reorder_qty/moq (this column + reorderQty +",
-				"decide whether moq is per-item, per-vendor, or inherited from item_group"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-66cd0246e677",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36576,40 +36477,6 @@
 			"scoredAt": "2026-11-21T03:47:15.280Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-site-ca055449de0c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-site",
-			"title": "Post-merge finding — todo-handoff in src/lib/data/pricing.ts (minion-site)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ca055449de0c.md",
-			"sourceUpdatedAt": "2026-10-28",
-			"sourceFingerprint": "f6311e41fcc6545e2388a3b687e384cfafe8f4b8e322e6ab6fbfb4c3f0470b4b",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:2026-10-24-site-stay-in-touch-updates"
-			],
-			"rationale": "This duplicates the Free Personal plan / AI-premium pricing open end already listed in the site proposal, and its auto-diagnosis section is corrupted (contains broken tool-call artifacts) rather than real analysis.",
-			"evidence": [
-				"owner rule 2026-10-26 says AI is a premium upgrade, yet this",
-				"Diagnosis section shows malformed function_calls output instead of analysis"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T09:48:23.090Z"
-		},
-		{
 			"key": "pr:minion-meta#809",
 			"kind": "pr",
 			"stage": "development",
@@ -36802,6 +36669,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:31:05.042Z"
+		},
+		{
+			"key": "proposal:2026-10-24-site-stay-in-touch-updates",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_site",
+			"title": "minion_site: open ends from spec 040 (stay-in-touch list, light-theme mascot, real proof)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-24-site-stay-in-touch-updates.md",
+			"sourceUpdatedAt": "2026-10-24",
+			"sourceFingerprint": "0465d10ec4ccf00f76927d497287569033664f97b85beedfe968c9d76ffe0ba3",
+			"score": 31,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-site-b0b6fc0066d7"
+			],
+			"rationale": "Marketing-site ledger bundling multiple items that each need an owner decision before any is actionable.",
+			"evidence": [
+				"items 1, 3, 4 explicitly need owner decision first",
+				"no real proof/testimonials yet",
+				"pricing lacks an amount"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
 			"key": "proposal:2026-11-03-hub-clinic-theme",
@@ -43548,6 +43450,41 @@
 			"scoredAt": "2026-11-23T14:24:09.888Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-6200323e3d73",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/db/pg-schema/stock.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-6200323e3d73.md",
+			"sourceUpdatedAt": "2026-09-30",
+			"sourceFingerprint": "c780367e267d02cc2dcd76e815abb7d4ed88e0ba6adb28318e8366d598f0e543",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-09-30-hub-stock-item-optional-fields-to-custom-columns"
+			],
+			"rationale": "The same stock schema TODO is already being resolved by the in-progress stock custom-columns migration proposal.",
+			"evidence": [
+				"checked 2026-09-30, same day the resolving proposal was filed",
+				"proposal 2026-09-30 explicitly keeps these columns read-only pending drop",
+				"same file/columns"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:23.328Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-644a4610559d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -44306,6 +44243,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T00:17:59.485Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-b0b6fc0066d7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/sections/FinalCTA.svelte (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-b0b6fc0066d7.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "3be731ffd8db39c0c08d13c0b242efbade9edd89b891cb62db430bcf646910bb",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-10-24-site-stay-in-touch-updates"
+			],
+			"rationale": "Duplicates item 1 of the stay-in-touch-updates ledger, which already tracks the same missing opt-in list on the same component.",
+			"evidence": [
+				"same file FinalCTA.svelte",
+				"matches item 1 of proposal:2026-10-24-site-stay-in-touch-updates",
+				"no channel decision made yet"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-c268d8c264ba",
@@ -51272,6 +51244,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-18T23:48:28.733Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-site-ca055449de0c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-site",
+			"title": "Post-merge finding — todo-handoff in src/lib/data/pricing.ts (minion-site)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-site-ca055449de0c.md",
+			"sourceUpdatedAt": "2026-10-28",
+			"sourceFingerprint": "f6311e41fcc6545e2388a3b687e384cfafe8f4b8e322e6ab6fbfb4c3f0470b4b",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A leftover TODO(handoff) marker about pricing/premium-AI rationale needs a human decision but has no urgency or evidence of broader impact.",
+			"evidence": [
+				"TODO(handoff) marker in src/lib/data/pricing.ts",
+				"Definition of done: marker removed or left with updated rationale"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T10:18:31.689Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
