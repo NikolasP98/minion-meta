@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T14:47:41.980Z",
+	"generatedAt": "2026-11-25T15:17:32.055Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16106,41 +16106,6 @@
 			"scoredAt": "2026-11-21T12:19:20.394Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-1ca9f75831b7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/record-locks.logic.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1ca9f75831b7.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "c56e76a0c790132e9e06d3de82d48214a80779fd962d858b08c05fd2eef1763f",
-			"score": 49,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-21876c702aa7",
-				"proposal:postmerge-minion-hub-961a361a809c"
-			],
-			"rationale": "A concrete record-locks usability gap from merged PR #733 that shares its file area and root cause with two other open findings from the same PR, so they should become one hardening goal.",
-			"evidence": [
-				"ids are hub uuids of stock entries only; there is no lookup by document number",
-				"merged PR #733"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:28:04.956Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-951241bdcf7e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -21469,6 +21434,40 @@
 			"scoredAt": "2026-11-25T09:18:11.556Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-21876c702aa7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/settings/record-locks/ExternalLocksSection.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-21876c702aa7.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "b1f2f6fb2cea3d718812fdb20db94ea8b22ccf22af6e794d3f2ebace44909d5f",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-1ca9f75831b7"
+			],
+			"rationale": "A grouped lock-lift that silently partial-fails is a real correctness issue in the same record-locks feature and should be combined with the sibling finding into one hardening goal.",
+			"evidence": [
+				"marker states a grouped row lifts locks one request each and stops at first refusal",
+				"this finding was independently flagged twice (handoff-ledger + post-merge sweep) and merged, same PR #733"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T15:17:31.859Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-2fa8f1f0001f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25384,38 +25383,6 @@
 			"scoredAt": "2026-11-25T10:18:23.328Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-21876c702aa7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/settings/record-locks/ExternalLocksSection.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-21876c702aa7.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "3c829632805420d58371523b0060931f132ac78387602050ddbe847aaebd300e",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Partial lock-lift failures leave the record-locks UI silently inconsistent, and the fix needs a design choice between atomic and best-effort batch semantics before implementation.",
-			"evidence": [
-				"a grouped row lifts its locks one request each and stops at the first refusal",
-				"PR #733 merged, diagnosis + fix options provided"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:48:25.420Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-749c9f202140",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -26975,6 +26942,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T06:49:26.004Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-1ca9f75831b7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/record-locks.logic.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1ca9f75831b7.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "a96f98c1f4d7a30a54fdc62164396325b6c5a214714739503f7690943e7a38b2",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-21876c702aa7"
+			],
+			"rationale": "A missing doc-number lookup is a usability gap in the lock service, not an active incident, and pairs naturally with the sibling record-locks finding from the same PR.",
+			"evidence": [
+				"TODO(handoff) notes ids are hub uuids with no lookup by document number",
+				"finding references merged PR #733 in minion_hub record-locks.logic.ts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T15:17:31.859Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-234ac5245d15",
