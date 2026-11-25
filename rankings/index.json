@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T13:48:25.636Z",
+	"generatedAt": "2026-11-25T14:17:53.461Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6013,40 +6013,6 @@
 			"scoredAt": "2026-11-25T06:49:26.004Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-f2d74b8d87a0",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm-answer.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f2d74b8d87a0.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "ce5bd8fcbdbdb3f19ccc28fa5349221aa95210db4701da29df85b437fb17a996",
-			"score": 62,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-5018f7c9e276"
-			],
-			"rationale": "A race between the ingest trigger and the periodic tick double-classifies messages, risking billing/analytics corruption, and shares the same file as another reconfirm-answer finding worth bundling.",
-			"evidence": [
-				"two overlapping runs (ingest trigger + tick) both classify this message",
-				"fix direction: idempotency guard or unique constraint on (message_id, classification_type)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:48:25.420Z"
-		},
-		{
 			"key": "pr:minion-meta#837",
 			"kind": "pr",
 			"stage": "development",
@@ -8630,7 +8596,7 @@
 			"title": "Post-merge finding — todo-handoff in src/server/services/record-locks.service.ts (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-961a361a809c.md",
 			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "210804077091e781fc2bf17a777983eb1c9841d46586501791c9838970e1ee33",
+			"sourceFingerprint": "5ba84d97ce5d9bee0e0e737ab123cf5f0587f403282a24ebe2da8198507458ed",
 			"score": 58,
 			"band": "medium",
 			"axes": {
@@ -8643,19 +8609,16 @@
 				"implementation": 4
 			},
 			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-1ca9f75831b7",
-				"proposal:postmerge-minion-hub-21876c702aa7"
-			],
-			"rationale": "Silent ON CONFLICT DO NOTHING handling could mask real data races in the same record-locks service covered by two sibling findings from PR #733, best resolved as one combined goal.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "A real idempotency gap in record-locks.service.ts is flagged but the auto-diagnosis offers three alternative fix directions rather than one bounded task.",
 			"evidence": [
-				"ON CONFLICT DO NOTHING silently ignores constraint violations",
-				"spec 140 S4 idempotency relies on two partial unique indexes"
+				"ON CONFLICT DO NOTHING against two partial unique indexes, spec 140 S4",
+				"fix direction lists 3 alternative approaches (docs, logging, or upsert)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:28:04.956Z"
+			"scoredAt": "2026-11-25T14:17:53.250Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b6022e2358b3",
@@ -8787,6 +8750,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T06:50:30.410Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f2d74b8d87a0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm-answer.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f2d74b8d87a0.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "46658e6df9fa3cbba0569322b734208d9e87514475271b225f74a1b6f9bb52a7",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-f52f82272322"
+			],
+			"rationale": "A concrete race condition causing duplicate billing/analytics classification in the reconfirm flow should be grouped with the sibling reconfirm.service.ts finding from the same merged PR into one hardening goal.",
+			"evidence": [
+				"two overlapping runs (ingest trigger + tick) both classify the same message",
+				"merged PR #730, same repo state 133c415 as f52f82272322"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T14:17:53.250Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-site-d5d1a8c9d6a9",
@@ -26355,6 +26352,38 @@
 			"scoredAt": "2026-11-21T20:47:23.388Z"
 		},
 		{
+			"key": "pr:minion-meta#1096",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1096 specs(139,140): slices 1–4 live; reminders stay paused until WhatsApp is relinked",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1096",
+			"sourceUpdatedAt": "2026-11-25T13:54:29Z",
+			"sourceFingerprint": "393b32c2d22dda638963e9c55f2a27891b1d52a2d56e0c475ac142aa1d1871c9",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "This tracking PR already records the observed go-live state of specs 139/140 and just needs merging to keep board status accurate.",
+			"evidence": [
+				"spec 140 -> shipped, slices 1-4 live on hub 133c4154",
+				"spec 139 -> merged, reminders tick paused until WhatsApp relink (#1095)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T14:17:53.250Z"
+		},
+		{
 			"key": "pr:minion-meta#808",
 			"kind": "pr",
 			"stage": "development",
@@ -29441,6 +29470,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T12:20:19.864Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f52f82272322",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f52f82272322.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "3c84499ff2aa5f6c5215ed411960ade10e857cc261f56757cfa367db928b54d9",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-f2d74b8d87a0"
+			],
+			"rationale": "Opted-out clients produce a vague staff-facing failure message; this and the sibling race-condition finding from the same PR belong in one reconfirm-flow hardening goal.",
+			"evidence": [
+				"opted-out client ends as send_failed with vague Spanish staff message",
+				"merged PR #730, spec 139, same repo state as f2d74b8d87a0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T14:17:53.250Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-nightly-ci-outcome-spec",
@@ -39916,38 +39979,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T13:28:04.956Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f52f82272322",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f52f82272322.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "7403805ac378e476c1927e38f26b16fe83e3eb13a9d587cecd0c07986acc5d55",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Staff see a vague failure message for opted-out clients during reconfirm, but the correct behavior depends on undocumented spec 139 semantics that need to be confirmed first.",
-			"evidence": [
-				"an opted-out client ends as send_failed, so staff read a vague generic message",
-				"diagnosis references spec 139 without confirming its exact handling rule"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:48:25.420Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-mention-contrast-spec",
@@ -53445,8 +53476,8 @@
 			"repo": "minion_hub",
 			"title": "CI",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45623530664",
-			"sourceUpdatedAt": "2026-11-25T13:26:54Z",
-			"sourceFingerprint": "8219f24c936c6ed337ca29f291afe59ad951a51d2e3c47984b50546dd9ffca7c",
+			"sourceUpdatedAt": "2026-11-25T13:53:42Z",
+			"sourceFingerprint": "6b8614562abac7b94a8204c7fdcce1ac6621b13248dcf880df054fb44e555c0e",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -53458,17 +53489,17 @@
 				"specification": 0,
 				"implementation": 0
 			},
-			"confidence": 2,
+			"confidence": 8,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run triggered by a push to master, not an actionable work item.",
+			"rationale": "This is a transient in-progress CI run status, not an actionable work item.",
 			"evidence": [
-				"push on master",
-				"status: in_progress"
+				"status: in_progress",
+				"push on master"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:48:25.420Z"
+			"scoredAt": "2026-11-25T14:17:53.250Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
