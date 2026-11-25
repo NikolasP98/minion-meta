@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T03:17:07.902Z",
+	"generatedAt": "2026-11-25T03:47:05.046Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -16483,6 +16483,38 @@
 			"scoredAt": "2026-11-21T12:18:02.058Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ f0ba8a3",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f0ba8a3.md",
+			"sourceUpdatedAt": "2026-09-01",
+			"sourceFingerprint": "eb63e9bd660af5c072a36be65d89a79ffa35b517763263c7bd11938739d44bcd",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Concrete unchecked-access findings with exact file/line locations in merged test code are actionable and low-risk to fix.",
+			"evidence": [
+				"res.rows[0] accessed without checking if rows array exists or has elements",
+				"Destructured row from db.select() is used without null check"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T03:47:04.849Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-f97efb2",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -28418,39 +28450,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T15:24:13.858Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-f0ba8a3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ f0ba8a3",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f0ba8a3.md",
-			"sourceUpdatedAt": "2026-09-01",
-			"sourceFingerprint": "eb63e9bd660af5c072a36be65d89a79ffa35b517763263c7bd11938739d44bcd",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Automated merge-scan flags concrete unchecked-access defects in test files with exact file/line locations that are quick, low-risk fixes.",
-			"evidence": [
-				"high severity unchecked-access at contact-update.server.test.ts:189 and :305",
-				"high severity destructured row used without null check in crm-contacts.custom-fields.test.ts:179",
-				"medium finding masks undefined via String() coercion in test assertion"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T03:17:02.003Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-121dc587ec1f",
@@ -48750,22 +48749,21 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 2
+				"implementation": 3
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [
 				"issue:minion-meta#994"
 			],
-			"rationale": "Transient dual-provider infra failure on a retry-only ranking run with no code or spec defect indicated.",
+			"rationale": "Transient provider-outage retry notice with no recurring pattern yet to act on beyond retrying the run.",
 			"evidence": [
-				"exit code 1 after catalog built with 1272 goals",
-				"both claude and codex failed/invalid JSON on batch 1",
-				"diagnosis explicitly says transient infra fault, not spec/code bug"
+				"Diagnosis: transient infra fault, not a spec or code bug",
+				"Recommendation: retry the run"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T03:17:02.003Z"
+			"scoredAt": "2026-11-25T03:47:04.849Z"
 		},
 		{
 			"key": "issue:minion-meta#902",
@@ -49580,22 +49578,21 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 2
+				"implementation": 3
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [
 				"issue:minion-meta#899"
 			],
-			"rationale": "Same transient dual-provider outage pattern as a near-identical prior monitor intake, safe to retry rather than act on.",
+			"rationale": "Same transient dual-provider failure pattern as #899, safe to retry with no durable action required yet.",
 			"evidence": [
-				"1403 goals ranked successfully before batch 1 failure",
-				"both bounded providers failed/retrying when run errored",
-				"recommendation explicitly says safe to retry, no spec/code change indicated"
+				"safe to retry the run as-is; no spec or code change indicated",
+				"Both bounded providers failing together points to a provider-side outage"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T03:17:02.003Z"
+			"scoredAt": "2026-11-25T03:47:04.849Z"
 		},
 		{
 			"key": "pr:minion-meta#861",
