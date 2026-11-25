@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-460171875
 title: Handoff marker — src/server/services/pos-auto-close.service.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-a6001e0040b4
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
