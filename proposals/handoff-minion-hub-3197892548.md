@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-3197892548
 title: Handoff marker — src/server/services/reminders.service.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-be63058477f5
+merged_into: postmerge-minion-hub-efd512b23522
 ---
 
 # Handoff marker — src/server/services/reminders.service.ts
@@ -30,3 +32,10 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/reminders.service.ts#L432
 - `NikolasP98/minion_hub@master src/server/services/reminders.service.ts:548` — spec 139 - messages.is_bot is not set reliably on gateway outbound rows. Narrow this
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/reminders.service.ts#L548
+
+## Reconciliation note
+
+Both markers above duplicate already-filed postmerge-discovery findings for
+this file: line 432 → postmerge-minion-hub-efd512b23522 (merged into, this
+proposal's canonical), line 548 → postmerge-minion-hub-be63058477f5 (flagged
+via duplicate_candidate for human confirmation).

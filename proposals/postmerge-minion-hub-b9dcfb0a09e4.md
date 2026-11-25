@@ -9,6 +9,9 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- reconcile: absorbed handoff-minion-hub-2601657213 (handoff-sweep marker, same file/marker text at line 79) -->
+
+
 # Post-merge finding — todo-handoff in `src/server/services/reconfirm.service.ts`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
@@ -49,3 +52,12 @@ Should I read the file to see the exact pattern and suggest a concrete change?
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/724
 - file: `src/server/services/reconfirm.service.ts`
 - checked: 2026-11-25
+
+## Merged from handoff-minion-hub-2601657213
+
+The factory handoff-ledger sweep independently flagged the same marker (plus a
+second, unrelated marker in the same file already tracked separately at
+postmerge-minion-hub-8ea7f9c1a2f4):
+
+- `NikolasP98/minion_hub@master src/server/services/reconfirm.service.ts:79`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/reconfirm.service.ts#L79

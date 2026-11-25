@@ -9,6 +9,9 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- reconcile: absorbed handoff-minion-hub-3934531208 (handoff-sweep marker, same file/marker text) -->
+
+
 # Post-merge finding — todo-handoff in `src/server/scheduling/reconfirm.ts`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
@@ -40,3 +43,10 @@ This matters because **spec 134 is a blocking architectural dependency**: the cu
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/724
 - file: `src/server/scheduling/reconfirm.ts`
 - checked: 2026-11-25
+
+## Merged from handoff-minion-hub-3934531208
+
+The factory handoff-ledger sweep independently flagged the same marker:
+
+- `NikolasP98/minion_hub@master src/server/scheduling/reconfirm.ts:23`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/scheduling/reconfirm.ts#L23

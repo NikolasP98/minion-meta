@@ -1,11 +1,13 @@
 ---
 id: handoff-minion-hub-2799548270
 title: Handoff marker — src/server/scheduling/reminders.ts (minion_hub)
-status: draft
+status: merged
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-322efa197ca6
+merged_into: postmerge-minion-hub-322efa197ca6
 ---
 
 # Handoff marker — src/server/scheduling/reminders.ts

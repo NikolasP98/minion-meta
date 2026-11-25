@@ -9,6 +9,9 @@ tags: [logic]
 source: postmerge-discovery
 ---
 
+<!-- reconcile: absorbed handoff-minion-hub-2799548270 (handoff-sweep marker, same file/marker text) -->
+
+
 # Post-merge finding — todo-handoff in `src/server/scheduling/reminders.ts`
 
 Filed automatically by the factory post-merge discovery loop: a deterministic
@@ -40,3 +43,10 @@ This is technical debt from spec 139 implementation. Stale documentation in hot-
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/724
 - file: `src/server/scheduling/reminders.ts`
 - checked: 2026-11-25
+
+## Merged from handoff-minion-hub-2799548270
+
+The factory handoff-ledger sweep independently flagged the same marker:
+
+- `NikolasP98/minion_hub@master src/server/scheduling/reminders.ts:122`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/scheduling/reminders.ts#L122
