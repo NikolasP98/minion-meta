@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-322efa197ca6
 title: "Post-merge finding — todo-handoff in src/server/scheduling/reminders.ts (minion_hub)"
-status: approved
+status: closed
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 <!-- reconcile: absorbed handoff-minion-hub-2799548270 (handoff-sweep marker, same file/marker text) -->
