@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T13:28:05.173Z",
+	"generatedAt": "2026-11-25T13:48:25.636Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -6011,6 +6011,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T06:49:26.004Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f2d74b8d87a0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm-answer.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f2d74b8d87a0.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "ce5bd8fcbdbdb3f19ccc28fa5349221aa95210db4701da29df85b437fb17a996",
+			"score": 62,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-5018f7c9e276"
+			],
+			"rationale": "A race between the ingest trigger and the periodic tick double-classifies messages, risking billing/analytics corruption, and shares the same file as another reconfirm-answer finding worth bundling.",
+			"evidence": [
+				"two overlapping runs (ingest trigger + tick) both classify this message",
+				"fix direction: idempotency guard or unique constraint on (message_id, classification_type)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T13:48:25.420Z"
 		},
 		{
 			"key": "pr:minion-meta#837",
@@ -12125,39 +12159,6 @@
 			"scoredAt": "2026-11-18T19:47:23.371Z"
 		},
 		{
-			"key": "pr:minion_hub#730",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#730 feat(scheduling): the agent offers free times and rebooks only when the client picks one",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/730",
-			"sourceUpdatedAt": "2026-11-25T13:25:53Z",
-			"sourceFingerprint": "61aa1de0362819d3db86a9930d2626bbd73b83514ade415c8f182bf51826e846",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Active draft PR implementing a scoped scheduling spec slice with stated live-verified behavior, ready to continue toward merge.",
-			"evidence": [
-				"Spec 139 S4 stacked on S3",
-				"draft PR #730 open",
-				"AI orgs only scope"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:28:04.956Z"
-		},
-		{
 			"key": "pr:minion_hub#734",
 			"kind": "pr",
 			"stage": "development",
@@ -15107,41 +15108,6 @@
 			"scoredAt": "2026-11-21T12:19:20.394Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-21876c702aa7",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/settings/record-locks/ExternalLocksSection.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-21876c702aa7.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "f5c75efcd42ade2574319134890843e707771a350d285128ad3af747b2a74dd1",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-1ca9f75831b7",
-				"proposal:postmerge-minion-hub-961a361a809c"
-			],
-			"rationale": "Silent partial lock-lift failures are a real UX correctness bug in the same record-locks feature area touched by two other findings from PR #733, warranting one combined fix goal.",
-			"evidence": [
-				"a grouped row lifts its locks one request each and stops at the first refusal",
-				"partial lock-lift failures leave the UI in an inconsistent state"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:28:04.956Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-24d84a5a0c20",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15173,6 +15139,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:23:09.157Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-31d934e869b3",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/reminder-compose.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-31d934e869b3.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "4e5040552c2a9b29a6988ebe3acf3b45b01f78ad48e06c18ef852d88a19a8e88",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Whether the reminder endpoint correctly handles multiple choice questions per request is unverified, risking silent drops or data loss until an integration test establishes actual behavior.",
+			"evidence": [
+				"that the endpoint accepts several choice questions in one request is unverified",
+				"PR #730 merged, fix direction requires writing a test first"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T13:48:25.420Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-36ffd7884690",
@@ -15275,6 +15273,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T10:18:23.328Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-5018f7c9e276",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm-answer.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-5018f7c9e276.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "0f363360b0b3656ab4eac5521fb24655de3b0479426a27b38f5df197a430543c",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-f2d74b8d87a0"
+			],
+			"rationale": "Grouped visits get a reconfirm prompt but strict-move slot logic rejects them, breaking the flow, and this shares a file with another open finding so both could be addressed in one hardening pass.",
+			"evidence": [
+				"a grouped (merged) visit gets the question but no slot offer: the strict move refuses groups",
+				"PR #730 merged, same file as postmerge-minion-hub-f2d74b8d87a0"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T13:48:25.420Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-676808e46687",
@@ -18643,38 +18675,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T02:23:22.366Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "25e93350387e89207448d94cba3f8abc40f310530a9d60af74eabe450a82ac11",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This ledger bundles 16+ unrelated markers (PII masking, stock release, auth gating, idempotency) under one proposal with no single verifiable outcome, so it needs splitting into per-item specs rather than being executed as filed.",
-			"evidence": [
-				"16 distinct marker lines spanning unrelated concerns across rankings/index.json",
-				"Definition of done requires clearing all markers from one file, not a coherent single outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:28:04.956Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-3db71f4",
@@ -25195,38 +25195,6 @@
 			"scoredAt": "2026-11-25T02:27:21.597Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-408424151",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/server/services/stock-corrections.sql.integration.test.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-408424151.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "2dceca7b9837790ed19471319eef08cd103287a0466bddbeab4728d701b645df",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Handoff markers point at real unbuilt pieces but the quoted marker text is truncated and unclear enough to block confident scoping.",
-			"evidence": [
-				"marker: 'the private owner-approved stock_only entrypoint ... is not built'",
-				"marker: 'the F1 mapping cutover writer and its cutover_pending_sources census refusal do' (incomplete)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T12:47:40.264Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-919278633",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25451,6 +25419,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T10:18:23.328Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-21876c702aa7",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/settings/record-locks/ExternalLocksSection.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-21876c702aa7.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "3c829632805420d58371523b0060931f132ac78387602050ddbe847aaebd300e",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Partial lock-lift failures leave the record-locks UI silently inconsistent, and the fix needs a design choice between atomic and best-effort batch semantics before implementation.",
+			"evidence": [
+				"a grouped row lifts its locks one request each and stops at the first refusal",
+				"PR #733 merged, diagnosis + fix options provided"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T13:48:25.420Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-749c9f202140",
@@ -35288,6 +35288,38 @@
 			"scoredAt": "2026-11-25T02:26:23.940Z"
 		},
 		{
+			"key": "proposal:handoff-minion-hub-408424151",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/stock-corrections.sql.integration.test.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-408424151.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "d64dea7722cbd66d18118bdbd92503f2a5e470b721fbb04b11a5797d9443bae4",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Raw marker quotes describe an unbuilt entrypoint and a truncated cutover-writer note without diagnosis or scope, so the real problem needs clarification before it is actionable.",
+			"evidence": [
+				"the private owner-approved stock_only entrypoint (garment-envelope.md) is not built",
+				"marker text cuts off mid-sentence: 'census refusal do'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T13:48:25.420Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2278437967",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -35641,38 +35673,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T07:47:46.293Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-49f7f7c8dc6f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/settings/record-locks/LockPolicySection.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-49f7f7c8dc6f.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "3c542d8dafc4bea8d388b04ea0fa06a5980cfa8b98bd93e2f122a2dbcafd3508",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "This is an intentional deferral pending a future spec (140 S5) rather than an independently actionable defect right now.",
-			"evidence": [
-				"Tras SUNAT only governs sales; it stays off and disabled until that slice ships",
-				"spec 140 S5"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:28:04.956Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
@@ -39916,6 +39916,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T13:28:04.956Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f52f82272322",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f52f82272322.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "7403805ac378e476c1927e38f26b16fe83e3eb13a9d587cecd0c07986acc5d55",
+			"score": 30,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Staff see a vague failure message for opted-out clients during reconfirm, but the correct behavior depends on undocumented spec 139 semantics that need to be confirmed first.",
+			"evidence": [
+				"an opted-out client ends as send_failed, so staff read a vague generic message",
+				"diagnosis references spec 139 without confirming its exact handling rule"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T13:48:25.420Z"
 		},
 		{
 			"key": "spec:2026-10-03-readiness-mention-contrast-spec",
@@ -47173,6 +47205,38 @@
 			"scoredAt": "2026-11-19T23:17:02.016Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-49f7f7c8dc6f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/settings/record-locks/LockPolicySection.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-49f7f7c8dc6f.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "768ba5ad5a5e2886cefe3decb0e8c0ee18f985ca8f493d56760c27d60832918b",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "This is an intentional UI deferral for the unshipped 'Tras SUNAT' feature, so it stays low priority until spec 140 S5 lands and needs only a guard added at that time.",
+			"evidence": [
+				"\"Tras SUNAT\" only governs sales; it stays off and disabled until that slice ships",
+				"PR #733 merged"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T13:48:25.420Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-77196cfff827",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -53052,6 +53116,38 @@
 			"scoredAt": "2026-11-25T02:21:55.963Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "838151d92963f512c649b9b9d28159b0ed322e8a3a6f32036234b022db8563e3",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "All 16 quoted markers come from rankings/index.json, a generated ranking-data file that stores past evidence text, so this is a sweep mis-scan rather than a real source TODO.",
+			"evidence": [
+				"file: rankings/index.json",
+				"16 unrelated marker quotes (postgres-js, brain-agent, PII masking, etc.) bundled from one data file"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T13:48:25.420Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-3236367837",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -53343,46 +53439,14 @@
 			"scoredAt": "2026-11-23T14:26:41.054Z"
 		},
 		{
-			"key": "run:minion_hub#45623215353",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45623215353",
-			"sourceUpdatedAt": "2026-11-25T13:24:18Z",
-			"sourceFingerprint": "c335c062921a6760c0fa56aa26c75383843ee3f2d1aa48e1fa218b6699eb5956",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run artifact, not an independent work item to rank.",
-			"evidence": [
-				"push on master",
-				"status in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:28:04.956Z"
-		},
-		{
-			"key": "run:minion_hub#45623215480",
+			"key": "run:minion_hub#45623530664",
 			"kind": "run",
 			"stage": "testing",
 			"repo": "minion_hub",
 			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45623215480",
-			"sourceUpdatedAt": "2026-11-25T13:24:27Z",
-			"sourceFingerprint": "82b54536a4b7ad4e7e56d38e56438c3180ffc718fd9e6663ed57d19e3a9eef0e",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45623530664",
+			"sourceUpdatedAt": "2026-11-25T13:26:54Z",
+			"sourceFingerprint": "8219f24c936c6ed337ca29f291afe59ad951a51d2e3c47984b50546dd9ffca7c",
 			"score": 10,
 			"band": "low",
 			"axes": {
@@ -53391,20 +53455,20 @@
 				"impact": 1
 			},
 			"readiness": {
-				"specification": 1,
-				"implementation": 1
+				"specification": 0,
+				"implementation": 0
 			},
-			"confidence": 8,
+			"confidence": 2,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "This is a routine in-progress CI run artifact, not an independent work item to rank.",
+			"rationale": "This is a routine in-progress CI run triggered by a push to master, not an actionable work item.",
 			"evidence": [
 				"push on master",
-				"status in_progress"
+				"status: in_progress"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T13:28:04.956Z"
+			"scoredAt": "2026-11-25T13:48:25.420Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
