@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T02:47:02.345Z",
+	"generatedAt": "2026-11-25T03:17:07.902Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9003,38 +9003,6 @@
 			"scoredAt": "2026-11-23T15:25:38.334Z"
 		},
 		{
-			"key": "issue:minion-meta#1047",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#1047 [monitor:unstick] run 9180e457 (rank board goals) crashed on ranking-contract validation",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1047",
-			"sourceUpdatedAt": "2026-11-18T02:17:27Z",
-			"sourceFingerprint": "00843895cf454cc8f5d98ef74dd6ecd716e579bb870e1bb2f9b7ba22abbc0fe5",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A malformed agent score key crashes the whole ranking batch instead of being skipped, blocking progress on pending candidates with a clearly located, bounded fix.",
-			"evidence": [
-				"ranking-contract.mjs:91 throws on any key not in its allowed set, uncaught inside ranking-index.mjs:69 map",
-				"batch 4 of 173 crashed after batches 1-3 (36 goals) scored fine"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T02:47:06.301Z"
-		},
-		{
 			"key": "issue:minion-meta#333",
 			"kind": "issue",
 			"stage": "proposal",
@@ -11591,6 +11559,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-24T23:17:27.486Z"
+		},
+		{
+			"key": "issue:minion-meta#1047",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1047 [monitor:unstick] run 9180e457 (rank board goals) crashed on ranking-contract validation",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1047",
+			"sourceUpdatedAt": "2026-11-18T02:17:27Z",
+			"sourceFingerprint": "00843895cf454cc8f5d98ef74dd6ecd716e579bb870e1bb2f9b7ba22abbc0fe5",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A monitor-reported crash in the ranking pipeline's score validation has a clear root cause and file/line pointers, making a scoped fix (catch and skip malformed per-entry scores instead of aborting the batch) readily actionable.",
+			"evidence": [
+				"scripts/ranking-contract.mjs:91 throws on unexpected keys and the throw is unhandled in ranking-index.mjs:69's Array.map",
+				"batches 1-3 (36 goals) scored fine; batch 4 crashed the whole run on one malformed entry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T03:17:07.710Z"
 		},
 		{
 			"key": "issue:minion-meta#354",
