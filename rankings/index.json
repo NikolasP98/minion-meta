@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T12:18:04.710Z",
+	"generatedAt": "2026-11-25T12:25:28.068Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -3598,38 +3598,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:33:43.235Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-4f4fc95fc017",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/record-locks.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4f4fc95fc017.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "58e8a09448b3dc9185441bf8d4c64c9b1de62d2ac5c1987c90a3ad919a10f10a",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Unbuilt active-unlock read and consumeUnlockInTx can leave records locked indefinitely, blocking concurrent operations, and the proposal is already approved.",
-			"evidence": [
-				"status: approved",
-				"TODO(handoff): active-unlock read and consumeUnlockInTx are not built"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T06:16:31.438Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-d559a7b185ad",
@@ -7406,6 +7374,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T23:18:05.985Z"
+		},
+		{
+			"key": "pr:minion_hub#733",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#733 feat(api): an accounting system can lock past records through an API key",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/733",
+			"sourceUpdatedAt": "2026-11-25T12:23:45Z",
+			"sourceFingerprint": "25706dc4dd5827452cdc3df2dd1ddea7c267e7f2bf725cb158d524f0c1947d4c",
+			"score": 59,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Implements an audited, idempotent record-lock API for accounting integrations, a distinct infrastructure-facing feature ready for review.",
+			"evidence": [
+				"Spec 140 S4 stacked on S3",
+				"webhook POST /api/hooks/record-locks idempotent and audited",
+				"tags ui/logic/data/test"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T12:25:27.883Z"
 		},
 		{
 			"key": "pr:minion-base#43",
@@ -15143,38 +15144,6 @@
 			"scoredAt": "2026-11-19T09:48:05.770Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-1af496512de2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/record-locks.logic.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1af496512de2.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "098c2ab901c96ae3bc36c6dccd9aa34e4b11383599fba9ae6c53fa150db8e1dd",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A relational-validation gap in the month rule could let invalid replacement receipt sequences pass, a bounded logic fix with a clear definition of done.",
-			"evidence": [
-				"TODO(handoff) marker in record-locks.logic.ts flagged twice (post-merge sweep + handoff ledger)",
-				"spec 140 / tasks T048 referenced as the original constraint source"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T11:18:32.545Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-20449cc8b981",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15881,14 +15850,14 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
-			"key": "pr:minion_hub#732",
+			"key": "pr:minion_hub#729",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#732 feat(stock): an owner can unlock one past purchase for one correction, with a reason",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/732",
-			"sourceUpdatedAt": "2026-11-25T10:24:17Z",
-			"sourceFingerprint": "b5493597efa6b7ef5dfe277be0867bc1c00d681eda8e1e7bb646a8dd467e53c5",
+			"title": "#729 feat(scheduling): staff see each reminder follow-up on the appointment and in the inbox",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/729",
+			"sourceUpdatedAt": "2026-11-25T12:23:32Z",
+			"sourceFingerprint": "4fb5ff40de89a9671380e759b84866b7ed0570f4a81caec7a46ac080f23fd4f5",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -15900,18 +15869,20 @@
 				"specification": 8,
 				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Spec 140 S3 stock-unlock feature already addressed a security review fix and is audited, making it close to done.",
+			"relatedKeys": [
+				"pr:minion_hub#730"
+			],
+			"rationale": "Stacked feature PR implementing spec 139 S3 with owner-approved UI and tests is ready to progress.",
 			"evidence": [
-				"Spec 140 S3 stacked on S2",
-				"unlock bound to the hits it was granted for (security review fix)",
-				"audited correction tx"
+				"Spec 139 S3 stacked on S2",
+				"UI approved by the owner (FigCraft demo)",
+				"tags ui/logic/test"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T10:47:53.931Z"
+			"scoredAt": "2026-11-25T12:25:27.883Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
@@ -18315,38 +18286,39 @@
 			"scoredAt": "2026-11-19T18:48:21.281Z"
 		},
 		{
-			"key": "pr:minion_hub#733",
+			"key": "pr:minion_hub#730",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#733 feat(api): an accounting system can lock past records through an API key",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/733",
-			"sourceUpdatedAt": "2026-11-25T10:20:57Z",
-			"sourceFingerprint": "1e7f64eaae1500e36def7b62a88663b558abe17dc4858f955faecc8ab79a2dad",
+			"title": "#730 feat(scheduling): the agent offers free times and rebooks only when the client picks one",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/730",
+			"sourceUpdatedAt": "2026-11-25T12:23:30Z",
+			"sourceFingerprint": "9d8c2c96e08afae65743622fc26b1cff579f7934d4880f7e63c5218757b2fd37",
 			"score": 46,
 			"band": "low",
 			"axes": {
 				"criticality": 4,
-				"importance": 5,
-				"impact": 5
+				"importance": 6,
+				"impact": 4
 			},
 			"readiness": {
 				"specification": 8,
 				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#732"
+				"pr:minion_hub#729"
 			],
-			"rationale": "Draft PR adding an idempotent, audited external API lock integration for accounting systems.",
+			"rationale": "Continuation of the spec 139 stack adding verified AI rebooking logic, scoped to AI orgs only.",
 			"evidence": [
-				"webhook POST /api/hooks/record-locks (by date or ids, idempotent, audited)",
-				"Spec 140 S4 (stacked on S3)"
+				"Spec 139 S4 stacked on S3",
+				"multi-question request verified live 2026-11-25",
+				"AI orgs only"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T10:24:14.854Z"
+			"scoredAt": "2026-11-25T12:25:27.883Z"
 		},
 		{
 			"key": "pr:minion-meta#1041",
@@ -23107,75 +23079,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T06:17:54.961Z"
-		},
-		{
-			"key": "pr:minion_hub#729",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#729 feat(scheduling): staff see each reminder follow-up on the appointment and in the inbox",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/729",
-			"sourceUpdatedAt": "2026-11-25T10:24:48Z",
-			"sourceFingerprint": "f7dc6c1cc470726cdffaad9938ccb0993ea4df1e7a63b4146a88e463c4bfc19b",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Spec 139 S3 feature is UI-approved and in a draft PR with tests, so it is close to mergeable.",
-			"evidence": [
-				"Spec 139 S3 stacked on S2",
-				"UI approved by the owner (FigCraft demo)",
-				"draft PR with tags ui/logic/test"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T10:47:53.931Z"
-		},
-		{
-			"key": "pr:minion_hub#730",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#730 feat(scheduling): the agent offers free times and rebooks only when the client picks one",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/730",
-			"sourceUpdatedAt": "2026-11-25T10:21:35Z",
-			"sourceFingerprint": "011f8a69ba8d696297d2c1b9dd9557590d5a6d1e1c5034ae2aa26ed03d7cd733",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#729",
-				"proposal:postmerge-minion-hub-ce7f047e38a2"
-			],
-			"rationale": "Stacked S4 draft PR implementing the AI slot-offer/rebooking logic that another open proposal is waiting on.",
-			"evidence": [
-				"Spec 139 S4 (stacked on S3)",
-				"Answer classification ... verified live 2026-11-25",
-				"AI orgs only"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T10:24:14.854Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
@@ -51217,6 +51120,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T10:18:31.689Z"
+		},
+		{
+			"key": "run:minion_hub#45613091971",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45613091971",
+			"sourceUpdatedAt": "2026-11-25T12:22:26Z",
+			"sourceFingerprint": "9f8b093fe4f57245c695510d95465e01ee19d3a7bb5cb7534702b81028d4eec1",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress CI run from a push, not an actionable board goal.",
+			"evidence": [
+				"status in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T12:25:27.883Z"
+		},
+		{
+			"key": "run:minion_hub#45613092267",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45613092267",
+			"sourceUpdatedAt": "2026-11-25T12:22:17Z",
+			"sourceFingerprint": "a81fa61a5c1209f9f4f1f8635b3dea46b993b2c6bffb966f8c720b7518ac6c5d",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 4,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Routine in-progress storybook deploy run from a push, not an actionable board goal.",
+			"evidence": [
+				"status in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T12:25:27.883Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
