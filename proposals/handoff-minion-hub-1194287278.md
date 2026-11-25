@@ -38,11 +38,11 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1871
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2258` — ondragover/ondrop live on .track, an ANCESTOR of the
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2258
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3375` — a drop reclassifies only for a custom column (its
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3375
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3719` — the agenda lists every booking in bookings — the whole
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3719
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4228` — dragging/dropping an event INTO a closure is not warned
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4228
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:5670` — on blocks 72 to 90 px tall the products marker (absolute, bottom right)
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L5670
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3381` — a drop reclassifies only for a custom column (its
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3381
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3725` — the agenda lists every booking in bookings — the whole
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3725
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4234` — dragging/dropping an event INTO a closure is not warned
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L4234
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:5676` — on blocks 72 to 90 px tall the products marker (absolute, bottom right)
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L5676
