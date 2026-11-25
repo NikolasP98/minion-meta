@@ -31,5 +31,5 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L471
 - `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:526` — this synthetic line posts finProductId: null, so
   https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L526
-- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:840` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md
-  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L840
+- `NikolasP98/minion_hub@master src/routes/(app)/pos/sell/PageBody.svelte:841` — HS-011 in minion-meta/proposals/2026-10-02-hub-gateway-production-readiness-recon.md
+  https://github.com/NikolasP98/minion_hub/blob/master/src/routes/(app)/pos/sell/PageBody.svelte#L841

@@ -29,5 +29,5 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/server/services/inbox/rules/shift-open-after-hours.ts:136` — same gap as visit-unpaid.ts — proven via the pure
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/rules/shift-open-after-hours.ts#L136
-- `NikolasP98/minion_hub@master src/server/services/inbox/rules/shift-open-after-hours.ts:170` — ?shift= deep-link param is not wired into /pos/shifts yet;
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/rules/shift-open-after-hours.ts#L170
+- `NikolasP98/minion_hub@master src/server/services/inbox/rules/shift-open-after-hours.ts:177` — ?shift= deep-link param is not wired into /pos/shifts yet;
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/rules/shift-open-after-hours.ts#L177
