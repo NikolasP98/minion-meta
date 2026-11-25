@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-1af496512de2
 title: "Post-merge finding — todo-handoff in src/server/services/record-locks.logic.ts (minion_hub)"
-status: approved
+status: closed
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 <!-- reconcile: absorbed handoff-minion-hub-3852215489 (handoff-sweep marker, same file/marker text at line 56) -->
