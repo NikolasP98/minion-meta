@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T22:46:55.798Z",
+	"generatedAt": "2026-11-25T23:17:25.394Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -18569,38 +18569,6 @@
 			"scoredAt": "2026-11-25T09:18:11.556Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-7854cfd",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 7854cfd",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-7854cfd.md",
-			"sourceUpdatedAt": "2026-09-02",
-			"sourceFingerprint": "624c3f0acc54463de45da3d16b8f7a9c7485d1ecf5b462ec907b34fbdd6038b6",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Automated merge-scan found consistent unchecked-access patterns across POS/scheduling/stock components with exact file:line locations and a clear null-check fix.",
-			"evidence": [
-				"SellableWizard.svelte:274 calls match.name.toLowerCase() without checking name is defined",
-				"BookingsView.svelte:357 passes match.name to matched() despite API exposing display_name per the code's own comment"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T22:47:29.716Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-371c7c4e4606",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -18993,6 +18961,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T07:50:03.574Z"
+		},
+		{
+			"key": "issue:minion-meta#1051",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1051 [monitor:unstick] run d50fc73d: rank board goals failed — both ranking providers rejected batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1051",
+			"sourceUpdatedAt": "2026-11-18T22:17:27Z",
+			"sourceFingerprint": "e11be98bee6bee45b632bd85e59e1b6f29bca04c88c827962dff6174580a8e13",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The monitor's own diagnosis attributes the batch-1 failure to a likely-transient provider fault and recommends retrying before treating it as a defect, so no concrete fix is actionable yet.",
+			"evidence": [
+				"both ranking providers rejected batch 1, 0/1506 candidates processed",
+				"diagnosis recommends retry-as-is and only escalate if the signature recurs"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T23:17:25.201Z"
 		},
 		{
 			"key": "issue:minion-meta#1069",
@@ -22678,38 +22678,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T05:48:25.801Z"
-		},
-		{
-			"key": "issue:minion-meta#1051",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "#1051 [monitor:unstick] run d50fc73d: rank board goals failed — both ranking providers rejected batch 1",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1051",
-			"sourceUpdatedAt": "2026-11-18T22:17:27Z",
-			"sourceFingerprint": "e11be98bee6bee45b632bd85e59e1b6f29bca04c88c827962dff6174580a8e13",
-			"score": 42,
-			"band": "low",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The ranking pipeline failed on batch 1 with both providers invalid/unavailable, and the diagnosis gives a concrete next step (check provider config for key/quota issues) rather than blind retries.",
-			"evidence": [
-				"primary provider claude returned unavailable/invalid output, fallback codex also failed or returned invalid JSON per run note",
-				"exited 1 with 0/1506 candidates processed on the very first batch"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T22:47:29.716Z"
 		},
 		{
 			"key": "issue:minion-meta#547",
@@ -29036,6 +29004,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T15:24:13.858Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-hub-7854cfd",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 7854cfd",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-7854cfd.md",
+			"sourceUpdatedAt": "2026-09-02",
+			"sourceFingerprint": "624c3f0acc54463de45da3d16b8f7a9c7485d1ecf5b462ec907b34fbdd6038b6",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The scan lists specific file:line unchecked-access defects across multiple POS/scheduling files with small, bounded null-check fixes ready to implement.",
+			"evidence": [
+				"high severity at SellableWizard.svelte:274 assumes match.name is defined",
+				"7 findings across 4 files (SellableWizard, BookingsView, sell/+page, stock entries/new)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T23:17:25.201Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-121dc587ec1f",
@@ -43841,6 +43841,39 @@
 			"scoredAt": "2026-11-23T14:50:14.111Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-c371d6639113",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
+			"sourceUpdatedAt": "2026-09-16",
+			"sourceFingerprint": "0706e420210c0b31a559be2122b366b36922bfdaa6e0aa279bbc94424f8ae350",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Already approved with a clear definition of done and fix direction (wire in, remove, or document), making this a narrow, low-risk cleanup task ready to execute.",
+			"evidence": [
+				"status: approved",
+				"TODO(handoff) marker: startBackupScheduler() has no call site anywhere in src/",
+				"fix direction specifies searching for init references or removing dead code"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T23:17:25.201Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-cb4eec61bb4f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -47431,38 +47464,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T07:47:46.293Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-c371d6639113",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/backup-scheduler.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c371d6639113.md",
-			"sourceUpdatedAt": "2026-09-16",
-			"sourceFingerprint": "0706e420210c0b31a559be2122b366b36922bfdaa6e0aa279bbc94424f8ae350",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A small, already-approved cleanup task with a clear definition of done: either wire startBackupScheduler into init or remove the dead code.",
-			"evidence": [
-				"TODO(handoff) marker states startBackupScheduler() has no call site anywhere in src/",
-				"fix direction specifies searching for backup-scheduling references and either wiring the call or removing the file"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T22:47:29.716Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c9369d818ed7",
