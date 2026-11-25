@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T10:47:54.100Z",
+	"generatedAt": "2026-11-25T11:18:32.762Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1700,23 +1700,22 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 9,
 				"implementation": 7
 			},
 			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"proposal:2026-10-21-windows-qualification-process-identity",
-				"proposal:2026-10-21-windows-release-qualification-timing"
+				"proposal:2026-10-21-windows-qualification-kernel-containment"
 			],
-			"rationale": "This implementing-stage spec is the authoritative Job Object containment contract gating full Windows qualification and a held production promotion.",
+			"rationale": "This two-pass-reviewed spec is the active, implementing-stage fix for the Windows qualification defect chain that is holding production promotion #339.",
 			"evidence": [
-				"Status is implementing with a detailed Job Object creation/verification plan",
-				"Preserves ten invocations and 74 assertions per run before production promotion"
+				"status implementing",
+				"detailed atomic Job Object containment design with explicit invariants and native CI lane plan"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
+			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
@@ -3482,22 +3481,22 @@
 				"impact": 6
 			},
 			"readiness": {
-				"specification": 7,
-				"implementation": 2
+				"specification": 8,
+				"implementation": 3
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "prune",
 			"relatedKeys": [
 				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
 			],
-			"rationale": "This proposal's containment contract is already superseded by the implementing-stage spec covering the identical Job Object design.",
+			"rationale": "This proposal's structural fix has already advanced to a dedicated, further-along spec artifact that is actively implementing the same work.",
 			"evidence": [
-				"spec:2026-10-21-windows-qualification-kernel-containment-spec is status implementing",
-				"Both describe the same unnamed Job Object / CREATE_SUSPENDED containment contract"
+				"status is in-spec",
+				"matching spec:2026-10-21-windows-qualification-kernel-containment-spec exists with status implementing"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
+			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3174605053",
@@ -5895,23 +5894,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 7,
+				"specification": 8,
 				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-21-windows-qualification-process-identity",
-				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
-			],
-			"rationale": "Flaky Windows test timing blocks full Windows qualification needed for the held production promotion, and a prepared hotfix already passes focused and check suites.",
+			"relatedKeys": [],
+			"rationale": "A prepared, locally-passing three-file test hotfix is still needed to clear the full Windows shard gate blocking production promotion.",
 			"evidence": [
-				"Full Windows shard 2 CI 39546077771 failed four unchanged tests from real-clock TTL and tight timeouts",
-				"Prepared hotfix PR #342 passes 29+74+1 focused tests and pnpm check with 0 errors"
+				"Full Windows shard 2 in CI 39546077771 failed four tests tied to real-clock TTL and CI fixture timing",
+				"prepared hotfix PR #342 changes exactly the three test files and passes focused suites 29+74+1"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
+			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-3701397223",
@@ -8211,75 +8207,6 @@
 			"scoredAt": "2026-11-21T08:31:05.042Z"
 		},
 		{
-			"key": "proposal:2026-10-21-windows-qualification-observer",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Correct Windows qualification observer identity and reviewed test count",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-observer.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "33b833b1051f3219f2d30bf7e4aa0237a3ec156ce55ab00cdffbdc3377eb64aa",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"proposal:2026-10-21-windows-qualification-process-identity"
-			],
-			"rationale": "Its prepared correction PR #343 is reported already merged in the related process-identity proposal, so this fix is already delivered.",
-			"evidence": [
-				"Prepared correction notes Gateway PR #343 changes only the helper and tests",
-				"Process-identity proposal AS-IS states Gateway PR #343 is merged at 85272bfb..."
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
-		},
-		{
-			"key": "proposal:2026-10-21-windows-qualification-process-identity",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Track Windows qualification process ownership by birth identity",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-process-identity.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "75e6290a3cefe43b3cc2ae34b0103a1aff3b7d5ea9e9e9a1620a4465018472a6",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-21-windows-qualification-observer",
-				"spec:2026-10-21-windows-qualification-kernel-containment-spec"
-			],
-			"rationale": "A reused-PID false ownership bug currently blocks native Windows qualification of the held PRs and has a drafted but unmerged correction PR #344.",
-			"evidence": [
-				"CI 39553801479 attempt 2 falsely rejected a run with 74 passed tests over reused PID 5224",
-				"Prepared correction PR #344 head e706031... changes only the qualification helper"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
-		},
-		{
 			"key": "proposal:handoff-minion-ai-3219321730",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8731,39 +8658,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:23:09.157Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-1af496512de2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/record-locks.logic.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1af496512de2.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "cfe67bf21aeafd6a2ad48c69ea72bb45c465527b27aca2a63640b622e809b327",
-			"score": 58,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "The month rule validates a replacement receipt in isolation instead of against the original it supersedes, risking invalid monthly sequences, and has a concrete fix direction.",
-			"evidence": [
-				"TODO(handoff): the month rule judges a replacement receipt by its own criteria",
-				"file src/server/services/record-locks.logic.ts:56",
-				"spec 140 research R4 / tasks T048"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T10:47:53.931Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-364356be46cf",
@@ -10532,6 +10426,38 @@
 			"scoredAt": "2026-11-22T06:16:58.546Z"
 		},
 		{
+			"key": "proposal:2026-10-21-dev-compose-rollback-alias",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Repair DEV Compose rollback image aliases",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-dev-compose-rollback-alias.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "1f68c1c4a5bf00a502cf1b0ea06d2ca2f91ea87c17a1f2be274549db02843444",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Rollback alias mixed-case bug risks a failed production rollback but the cited deploy run itself succeeded and no spec exists yet.",
+			"evidence": [
+				"Docker rejected ghcr.io/NikolasP98/minion-ai:dev-rollback-protopi for mixed-case repo name in run 39543796081",
+				"line 450 tags with || true, silently suppressing alias failure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T11:18:32.545Z"
+		},
+		{
 			"key": "proposal:2026-10-24-hub-collection-points-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11294,6 +11220,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:25:22.596Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-c14a5898d7d0",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/SectionProseEditor.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c14a5898d7d0.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "6045ab7f8d8473186e20e4181098fa7ab32d0d85ccac2cb004b50628275c2c0e",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "The hand-rolled editor modal can silently discard unsaved dirty edits on a stray outside click, a real data-loss bug in an editor component.",
+			"evidence": [
+				"TODO(handoff): 'a stray click discards them' re: slot.dirty edits",
+				"spec-hc028-overlay-dialog-contract referenced for the migration pattern"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-c1b3044762bb",
@@ -15186,6 +15144,38 @@
 			"scoredAt": "2026-11-19T09:48:05.770Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-1af496512de2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/record-locks.logic.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-1af496512de2.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "098c2ab901c96ae3bc36c6dccd9aa34e4b11383599fba9ae6c53fa150db8e1dd",
+			"score": 50,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A relational-validation gap in the month rule could let invalid replacement receipt sequences pass, a bounded logic fix with a clear definition of done.",
+			"evidence": [
+				"TODO(handoff) marker in record-locks.logic.ts flagged twice (post-merge sweep + handoff ledger)",
+				"spec 140 / tasks T048 referenced as the original constraint source"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T11:18:32.545Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-20449cc8b981",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15621,40 +15611,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T06:50:30.410Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ce7f047e38a2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ce7f047e38a2.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "a38c7d0a544bc664a9ab6087f3ff15720e916efa446baa58232baa3512ca5149",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#730"
-			],
-			"rationale": "This TODO is explicitly blocked on spec 139 S4's answer-reading logic, which pr:minion_hub#730 in this same batch already implements, so the two should resolve together.",
-			"evidence": [
-				"spec 139 S4 reads the answer; until then ... any reply is unclear for staff",
-				"pr:minion_hub#730 implements Spec 139 S4"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T10:24:14.854Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-cf95482ec332",
@@ -16658,6 +16614,72 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T03:47:23.600Z"
+		},
+		{
+			"key": "proposal:2026-10-21-windows-qualification-observer",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Correct Windows qualification observer identity and reviewed test count",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-observer.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "33b833b1051f3219f2d30bf7e4aa0237a3ec156ce55ab00cdffbdc3377eb64aa",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-10-21-windows-qualification-process-identity"
+			],
+			"rationale": "Its prepared correction (PR #343) is confirmed merged by a later proposal's AS-IS, so this fix is already satisfied.",
+			"evidence": [
+				"process-identity proposal AS-IS states 'Gateway PR #343 is merged at 85272bfb...'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T11:18:32.545Z"
+		},
+		{
+			"key": "proposal:2026-10-21-windows-qualification-process-identity",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion",
+			"title": "Track Windows qualification process ownership by birth identity",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-windows-qualification-process-identity.md",
+			"sourceUpdatedAt": "2026-10-21",
+			"sourceFingerprint": "75e6290a3cefe43b3cc2ae34b0103a1aff3b7d5ea9e9e9a1620a4465018472a6",
+			"score": 48,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [
+				"proposal:2026-10-21-windows-qualification-kernel-containment"
+			],
+			"rationale": "Its prepared correction (PR #344) is confirmed merged by the kernel-containment proposal's AS-IS, so this fix is already satisfied.",
+			"evidence": [
+				"kernel-containment proposal AS-IS states 'PR #344 merged at 2231ac53aa31...'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-2417326435",
@@ -18593,38 +18615,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T10:47:42.135Z"
-		},
-		{
-			"key": "proposal:2026-10-21-dev-compose-rollback-alias",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion",
-			"title": "Repair DEV Compose rollback image aliases",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-21-dev-compose-rollback-alias.md",
-			"sourceUpdatedAt": "2026-10-21",
-			"sourceFingerprint": "1f68c1c4a5bf00a502cf1b0ea06d2ca2f91ea87c17a1f2be274549db02843444",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Rollback alias casing bug silently breaks DEV rollback recovery readiness without evidence of an actual production outage yet.",
-			"evidence": [
-				"Line 779 builds an invalid uppercase repo reference for rollback lookup",
-				"DEV run 39543796081 rejected the mixed-case GHCR tag for non-lowercase repository name"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
 		},
 		{
 			"key": "proposal:2026-10-22-whatsapp-member-agents-followups",
@@ -22363,38 +22353,6 @@
 			"scoredAt": "2026-11-24T10:17:57.262Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-f91a16126171",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/qa/hc043/resolve.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f91a16126171.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "4e20c205af750761d855221a253929142317bdc2b7ab54d3b67bf6072c7062de",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Solarized-light text-on-surface-3 contrast fails WCAG AA, a broadly visible accessibility defect with a bounded token fix.",
-			"evidence": [
-				"Diagnosis notes roughly 2.5:1 ratio vs 4.5:1 required for #586e75 on surface-3",
-				"Fix direction: adjust palette tokens and rerun lint:design && lint:tokens"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-site-52385ddaa6f6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25645,14 +25603,14 @@
 			"scoredAt": "2026-11-23T14:49:32.623Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-c14a5898d7d0",
+			"key": "proposal:postmerge-minion-hub-ce7f047e38a2",
 			"kind": "proposal",
 			"stage": "proposal",
 			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/agents/SectionProseEditor.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-c14a5898d7d0.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "6045ab7f8d8473186e20e4181098fa7ab32d0d85ccac2cb004b50628275c2c0e",
+			"title": "Post-merge finding — todo-handoff in src/server/services/reconfirm.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ce7f047e38a2.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "b34647620de4660fb8be46443ccf02fff73915b8b62880e83d9e683398e1aae6",
 			"score": 40,
 			"band": "low",
 			"axes": {
@@ -25661,22 +25619,19 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 6,
-				"implementation": 5
+				"specification": 4,
+				"implementation": 3
 			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-f05b351ac858"
-			],
-			"rationale": "The hand-rolled modal has a real data-loss bug where stray outside clicks discard unsaved slot.dirty edits.",
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The reconfirm service intentionally defaults every reply to unclear until a different in-progress spec (139 S4) ships, so this item is blocked on that dependency rather than independently actionable.",
 			"evidence": [
-				"TODO(handoff) notes outside-click dismissal discards unsaved slot.dirty edits today",
-				"Fix direction specifies migrating to shared Dialog with a dirty guard per spec-hc028-overlay-dialog-contract"
+				"TODO(handoff): 'spec 139 S4 reads the answer; until then ... any reply is unclear'"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
+			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-dec76f04d805",
@@ -25775,6 +25730,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T07:47:46.293Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f91a16126171",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in scripts/qa/hc043/resolve.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f91a16126171.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "4e20c205af750761d855221a253929142317bdc2b7ab54d3b67bf6072c7062de",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A flagged Solarized Light text/surface contrast pairing likely fails WCAG AA, a small bounded accessibility fix with lint gates to verify it.",
+			"evidence": [
+				"TODO(handoff) flags #586e75 on --color-surface-3",
+				"diagnosis estimates ~2.5:1 ratio vs 4.5:1 required"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
 			"key": "spec:2026-08-17-gw-msteams-large-upload-spec",
@@ -31345,6 +31332,37 @@
 			"scoredAt": "2026-11-22T00:18:17.144Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-59d73ac679ec",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/routes/(app)/settings/record-locks/+page.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-59d73ac679ec.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "bd5d0a7e0f1c539f371af7c26cc080322444a1e68ce2f2488e69a74e49ee9309",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 6
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A new settings page shipped without the required a11y sweep, a small bounded accessibility-compliance gap.",
+			"evidence": [
+				"TODO(handoff) notes bun run a11y was not run for the new record-locks page"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T11:18:32.545Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-5e2bea47c84a",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31670,40 +31688,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T09:18:48.120Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-f05b351ac858",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/workshop/RelationshipPrompt.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f05b351ac858.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "d5316adf3fbcc9e426366268b3be35fd9e416647ead9811e8b1f4b7e75199b69",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 5,
-			"recommendation": "reframe",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-c14a5898d7d0"
-			],
-			"rationale": "Fixing this requires first deciding and building a new anchor-positioning API for the shared overlay components, not a mechanical modal swap.",
-			"evidence": [
-				"Needs a positioned-dialog decision (Popover vs Dialog with an anchor)",
-				"Shared Dialog centres itself and has no anchor API"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T10:48:05.478Z"
 		},
 		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
@@ -35767,39 +35751,6 @@
 			"scoredAt": "2026-11-21T08:34:33.316Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-59d73ac679ec",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/routes/(app)/settings/record-locks/+page.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-59d73ac679ec.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "2fbc06fe7bc0fd4854d29d0638a68aa25182216406583c62ae03fafcc126b5c6",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "A new settings page shipped without its required a11y sweep, leaving WCAG compliance unverified but with a clear remediation command.",
-			"evidence": [
-				"bun run a11y was not run for this new page",
-				"file src/routes/(app)/settings/record-locks/+page.svelte:13",
-				"spec 140 S2"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T10:47:53.931Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-66cd0246e677",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -36401,6 +36352,37 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-f05b351ac858",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/workshop/RelationshipPrompt.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-f05b351ac858.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "d5316adf3fbcc9e426366268b3be35fd9e416647ead9811e8b1f4b7e75199b69",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "The anchored-modal TODO still requires an unresolved design decision (Popover vs Dialog with anchor API) before implementation work can be scoped.",
+			"evidence": [
+				"TODO(handoff): 'Needs a positioned-dialog decision (Popover vs Dialog with an anchor)'"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-fb0ae19f9ea1",
@@ -53432,38 +53414,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
-		},
-		{
-			"key": "run:minion_hub#45594083884",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45594083884",
-			"sourceUpdatedAt": "2026-11-25T10:20:55Z",
-			"sourceFingerprint": "30308dc3aa6edccb73c30d1d4268e9315a5c1cee824cf6f92389acd8c3be8573",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "An in-progress CI run status entry with no failure or actionable content yet.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T10:24:14.854Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
