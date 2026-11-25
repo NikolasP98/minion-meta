@@ -1,18 +1,23 @@
 ---
 id: 139-reminder-negation-followup
 title: When a client says "no" to a reminder — the agent confirms, asks how to proceed, and reports to staff (no automatic cancel)
-stage: spec
-status: draft
+stage: deploy
+status: merged
 verdict: approved
 pass: 1
 created: 2026-11-20
-updated: 2026-11-20
+updated: 2026-11-25
 repos: [minion_hub, minion]
 tags: [data, ui]
 related: [134-booking-closure]
 ---
 
 # Feature Specification: Reminder negation follow-up
+
+> **Merged and deployed 2026-11-25 (S1–S4), hub master `133c4154`.**
+> - The slices: S1 #724, S2 #728, S3 #729, S4 #730. Three Opus audit rounds were run; round 3's Major was fixed before merge.
+> - **Not running yet.** The reminders tick is wired on netcup but PAUSED: FACES WhatsApp `+51906090526` is unlinked, and a failed send is never retried (`proposals/2026-11-25-reminders-failed-send-retry.md`).
+> - Open ends: `proposals/2026-11-25-specs-139-140-open-ends.md`.
 
 **Feature Branch**: `feat/139-reminder-negation-followup` (hub base `master`; gateway base `DEV` if a gateway change is needed)
 
