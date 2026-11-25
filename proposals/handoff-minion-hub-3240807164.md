@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-25)
 
-- `NikolasP98/minion_hub@master src/server/services/inbox/rules/index.ts:15` — channel.whatsapp_logged_out (spec Slice 4) is SKIPPED — no
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/rules/index.ts#L15
+- `NikolasP98/minion_hub@master src/server/services/inbox/rules/index.ts:16` — channel.whatsapp_logged_out (spec Slice 4) is SKIPPED — no
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/inbox/rules/index.ts#L16
