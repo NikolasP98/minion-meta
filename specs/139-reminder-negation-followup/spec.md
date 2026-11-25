@@ -24,6 +24,8 @@ related: [134-booking-closure]
 
 Go-ahead, owner 2026-11-23: "address all items without overlap first. When they're live, list out the items with overlap with their updated status in case another session addressed them and what your recommended approach is." This spec was reported as having no overlap with other work (overlap check of 2026-11-23, spec 134 PR #1056).
 
+UI approval, owner 2026-11-25 (after the FigCraft demo preview https://claude.ai/artifact/MLm5NPbN3mNfXbriMkVxd4): "I love the UI demos. Implement all and lmk when live."
+
 ## AS-IS (observed 2026-11-20, prod read-only, hub `origin/master` `63c4313b`)
 
 - **Confirmation scan**: `scanConfirmationReplies` (`src/server/services/reminders.service.ts` ~328) runs on the jobs tick.
