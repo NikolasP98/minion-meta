@@ -7,7 +7,10 @@ updated: 2026-11-25
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+updated: 2026-11-25
 ---
+
+<!-- reconcile: absorbed handoff-minion-hub-1764441325 (handoff-sweep marker, same file/marker text at line 68) -->
 
 # Post-merge finding — todo-handoff in `src/lib/components/settings/record-locks/ExternalLocksSection.svelte`
 
@@ -40,3 +43,10 @@ This matters because **partial lock-lift failures leave the UI in an inconsisten
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/733
 - file: `src/lib/components/settings/record-locks/ExternalLocksSection.svelte`
 - checked: 2026-11-25
+
+## Merged from handoff-minion-hub-1764441325
+
+The factory handoff-ledger sweep independently flagged the same marker:
+
+- `NikolasP98/minion_hub@master src/lib/components/settings/record-locks/ExternalLocksSection.svelte:68`
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/settings/record-locks/ExternalLocksSection.svelte#L68

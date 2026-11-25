@@ -1,12 +1,16 @@
 ---
 id: handoff-minion-hub-1209965138
 title: Handoff marker — src/lib/components/settings/record-locks/LockPolicySection.svelte (minion_hub)
-status: draft
+status: merged
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-49f7f7c8dc6f
+merged_into: postmerge-minion-hub-49f7f7c8dc6f
 ---
+
+<!-- reconcile: absorbed into postmerge-minion-hub-49f7f7c8dc6f (postmerge-discovery finding, same file/marker text at line 122) -->
 
 # Handoff marker — src/lib/components/settings/record-locks/LockPolicySection.svelte
 
