@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T09:18:48.317Z",
+	"generatedAt": "2026-11-25T09:48:01.427Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -7052,39 +7052,6 @@
 			"scoredAt": "2026-11-25T02:23:22.366Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-207753540",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/(app)/pos/sell/PageBody.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-207753540.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "bd237246cd36ee8c627a20bf6016003a986b193bab09bab5c8ac7558ec03c26b",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "POS sell-page markers include a synthetic line posting a null finProductId and a click-vs-submit till-draw timing bug, both touching financial transaction correctness.",
-			"evidence": [
-				"PageBody.svelte:526 — synthetic line posts finProductId: null",
-				"PageBody.svelte:471 — till-side draw happens on CLICK, not on submit",
-				"PageBody.svelte:840 — cites HS-011 in hub-gateway-production-readiness-recon.md"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T02:24:22.831Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-2897556733",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -8440,6 +8407,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T02:24:22.831Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-207753540",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/(app)/pos/sell/PageBody.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-207753540.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "7ff6ada82f5f0528afd62789f99ccc84bf0e45b059bbd596102167e37fc6e280",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Three markers point to concrete POS sell-flow defects, including a financial field posted as null, that deserve scoping into a fix.",
+			"evidence": [
+				"synthetic line posts finProductId: null",
+				"till-side draw happens on CLICK, not submit",
+				"references HS-011 in a production-readiness recon doc"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T09:48:01.220Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-2083655976",
@@ -10291,6 +10291,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T23:18:05.985Z"
+		},
+		{
+			"key": "pr:minion_hub#733",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#733 feat(api): an accounting system can lock past records through an API key",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/733",
+			"sourceUpdatedAt": "2026-11-25T09:30:37Z",
+			"sourceFingerprint": "234c26f126d73572bc2556a001e703f2af42c3ecd40f0515b76edd6f8b092723",
+			"score": 56,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#731",
+				"pr:minion_hub#732"
+			],
+			"rationale": "Extends record locking to external accounting systems via an API-key scope and idempotent webhook, broadening impact beyond the UI-only slices.",
+			"evidence": [
+				"locks API-key scope and webhook POST /api/hooks/record-locks",
+				"idempotent, audited, owner lift"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T09:48:01.220Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -12235,6 +12270,41 @@
 			"scoredAt": "2026-11-18T19:47:23.371Z"
 		},
 		{
+			"key": "pr:minion_hub#732",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#732 feat(stock): an owner can unlock one past purchase for one correction, with a reason",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/732",
+			"sourceUpdatedAt": "2026-11-25T09:30:21Z",
+			"sourceFingerprint": "74763246aa1d366e683ab486b0a183b721ce9d9ada21c12eabc08ae214512fdc",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#731",
+				"pr:minion_hub#733"
+			],
+			"rationale": "Stacked S3 adds a security-reviewed one-shot unlock mechanism needed as a safety valve for the new lock feature.",
+			"evidence": [
+				"owner one-shot unlock 24h reason consumed in correction tx",
+				"unlock bound to the hits it was granted for (security review fix)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T09:48:01.220Z"
+		},
+		{
 			"key": "pr:minion_hub#734",
 			"kind": "pr",
 			"stage": "development",
@@ -13958,41 +14028,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
-		},
-		{
-			"key": "pr:minion_hub#733",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#733 feat(api): an accounting system can lock past records through an API key",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/733",
-			"sourceUpdatedAt": "2026-11-25T08:39:20Z",
-			"sourceFingerprint": "18a409ee04d388fe3f45f601a0a52a8c6bf031604f76afd688475dc6fdab5494",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#731",
-				"pr:minion_hub#732"
-			],
-			"rationale": "External API-key lock scope with idempotent audited webhook extends reach to accounting-system integrations, the broadest-impact slice in this stack.",
-			"evidence": [
-				"Spec 140 S4 (stacked on S3)",
-				"`locks` API-key scope, webhook POST /api/hooks/record-locks (by date or ids, idempotent, audited)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T08:48:16.137Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -16000,14 +16035,14 @@
 			"scoredAt": "2026-11-25T09:18:11.556Z"
 		},
 		{
-			"key": "pr:minion_hub#732",
+			"key": "pr:minion_hub#731",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#732 feat(stock): an owner can unlock one past purchase for one correction, with a reason",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/732",
-			"sourceUpdatedAt": "2026-11-25T08:37:36Z",
-			"sourceFingerprint": "274874c2158a01f6a0cabbe77514c6797705411bfc61227460551b57462a657d",
+			"title": "#731 feat(settings): owners choose when past purchases lock, and a locked purchase says why",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/731",
+			"sourceUpdatedAt": "2026-11-25T09:27:00Z",
+			"sourceFingerprint": "e9ab57124da786a59316c6cdddccf63df35365d8e9080e25534d2004510a294f",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -16017,22 +16052,22 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 8
+				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion_hub#731",
+				"pr:minion_hub#732",
 				"pr:minion_hub#733"
 			],
-			"rationale": "Owner unlock slice already incorporates a security-review fix binding the unlock to its granted scope, indicating mature readiness.",
+			"rationale": "Draft PR implements spec 140 S2 with a clear scope (owner lock rules, audit list, named refusals) and is already test-tagged.",
 			"evidence": [
-				"Spec 140 S3 (stacked on S2)",
-				"unlock bound to the hits it was granted for (security review fix)"
+				"Spec 140 S2 settings page with rules and audit list",
+				"draft PR tagged ui/logic/test"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T08:48:16.137Z"
+			"scoredAt": "2026-11-25T09:48:01.220Z"
 		},
 		{
 			"key": "pr:minion-meta#833",
@@ -23226,41 +23261,6 @@
 			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
-			"key": "pr:minion_hub#731",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#731 feat(settings): owners choose when past purchases lock, and a locked purchase says why",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/731",
-			"sourceUpdatedAt": "2026-11-25T08:37:26Z",
-			"sourceFingerprint": "093b0eef9449b059961ee6762adb0f3c916188865c60cb56efc08f42c8c104bc",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#732",
-				"pr:minion_hub#733"
-			],
-			"rationale": "Settings/audit foundation for record-lock policy is a reasonably scoped first slice that unblocks the stacked unlock and API work.",
-			"evidence": [
-				"Spec 140 S2 (meta specs/140-record-lock-policy)",
-				"Settings page with rules (owner edits, others read-only), audit list"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T08:48:16.137Z"
-		},
-		{
 			"key": "pr:minion-meta#827",
 			"kind": "pr",
 			"stage": "development",
@@ -25347,37 +25347,6 @@
 			"scoredAt": "2026-11-25T02:20:40.845Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1097951829",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/routes/api/pos/settings/+server.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1097951829.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "4dea16be279a31dcc96d0f41c3feb4668245baf8f70112214b405cb217925d2b",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 2
-			},
-			"confidence": 3,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "References a confirmed root cause from QA-stack logs for a POS settings endpoint but the marker text is truncated before naming the actual issue or fix.",
-			"evidence": [
-				"pos/settings/+server.ts:79 'the confirmed root cause (QA-stack app logs) was'"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T02:21:55.963Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-388739973",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -25404,38 +25373,6 @@
 			"evidence": [
 				"daily-feed.service.ts:12 — no org business-hours/timezone table exists yet",
 				"daily-feed.service.ts:220 — per-booking check, not the groupId-merged visit"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T02:27:21.597Z"
-		},
-		{
-			"key": "proposal:handoff-minion-hub-4116242517",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4116242517.md",
-			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "54117facb537ee7e9115143ee2f54ec35480b6ff151b7fb5cadb9bc71c7a7485",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Describes a concrete POS deep-link wiring gap but cross-references another file's unresolved issue, needing combined scoping first.",
-			"evidence": [
-				"shift-open-after-hours.ts:170 — ?shift= deep-link param is not wired into /pos/shifts yet",
-				"shift-open-after-hours.ts:136 — same gap as visit-unpaid.ts"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
@@ -29008,6 +28945,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T02:25:20.865Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-4116242517",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/server/services/inbox/rules/shift-open-after-hours.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-4116242517.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "23c46b3442a942f9043767c7ef684a85505233e1c9ef2d93f55f673cda7671c1",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 4,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Two inbox-rule gaps (a parity gap and an unwired deep-link param) are low-urgency internal automation fixes needing light scoping.",
+			"evidence": [
+				"same gap as visit-unpaid.ts",
+				"?shift= deep-link param not wired into /pos/shifts"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T09:48:01.220Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2972777622",
@@ -35322,6 +35291,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T02:21:55.963Z"
+		},
+		{
+			"key": "proposal:handoff-minion-hub-1097951829",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/routes/api/pos/settings/+server.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1097951829.md",
+			"sourceUpdatedAt": "2026-11-25",
+			"sourceFingerprint": "090563a21d22e41612255127c6103a0b8f1242eaa402b8b3ae773f425123bfd2",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#731"
+			],
+			"rationale": "A single thin root-cause note on the pos/settings endpoint needs more scoping before it is actionable, and may overlap with the in-flight lock-policy settings PR.",
+			"evidence": [
+				"confirmed root cause via QA-stack app logs",
+				"single marker at +server.ts:80"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T09:48:01.220Z"
 		},
 		{
 			"key": "proposal:handoff-minion-hub-168406530",
@@ -50626,7 +50629,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-25",
-			"sourceFingerprint": "954ad72a50f035c0af53af3787530b9baeb547718c79618370edec7e53e7f5a9",
+			"sourceFingerprint": "7471ecf25dcad181ece35499e40bccf0a01c1bf647f7ace4de15b24de1908182",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -50635,20 +50638,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 2,
+				"specification": 1,
 				"implementation": 1
 			},
-			"confidence": 3,
+			"confidence": 2,
 			"recommendation": "prune",
 			"relatedKeys": [],
-			"rationale": "The listed \"markers\" are quoted text embedded in rankings/index.json itself (summaries of other proposals), not real code TODO(handoff) markers needing a fix.",
+			"rationale": "The listed markers are fragments of rankings/index.json's own stored rationale/evidence text rather than real source-code TODOs, making this a self-referential sweep artifact, not actionable work.",
 			"evidence": [
-				"source: handoff-sweep, repo rankings/index.json",
-				"entries are quoted proposal summary text, not source code"
+				"source file is rankings/index.json, the ranking pipeline's own output",
+				"16 unrelated snippets resembling prior scoring rationale strings rather than code comments"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-25T06:16:31.438Z"
+			"scoredAt": "2026-11-25T09:48:01.220Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-3062843045",
