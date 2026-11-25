@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-25)
 
-- `NikolasP98/minion_hub@master src/server/services/stock-corrections.sql.integration.test.ts:1321` — the private owner-approved stock_only entrypoint (garment-envelope.md) is not built;
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/stock-corrections.sql.integration.test.ts#L1321
-- `NikolasP98/minion_hub@master src/server/services/stock-corrections.sql.integration.test.ts:1343` — the F1 mapping cutover writer and its cutover_pending_sources census refusal do
-  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/stock-corrections.sql.integration.test.ts#L1343
+- `NikolasP98/minion_hub@master src/server/services/stock-corrections.sql.integration.test.ts:1477` — the private owner-approved stock_only entrypoint (garment-envelope.md) is not built;
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/stock-corrections.sql.integration.test.ts#L1477
+- `NikolasP98/minion_hub@master src/server/services/stock-corrections.sql.integration.test.ts:1499` — the F1 mapping cutover writer and its cutover_pending_sources census refusal do
+  https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/stock-corrections.sql.integration.test.ts#L1499
