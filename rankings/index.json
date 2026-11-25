@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-25T16:47:05.565Z",
+	"generatedAt": "2026-11-25T17:17:37.954Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2218,6 +2218,39 @@
 			"scoredAt": "2026-11-23T14:29:27.473Z"
 		},
 		{
+			"key": "spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "One owned Workshop workspace lifecycle — loads and writes cannot erase state (HC-037)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-workshop-workspace-lifecycle-spec.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "e2bde05c29062664b3bc4e172134b9cb46a1e6095098ec7437224c59691bf4a0",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Addresses silent data loss in workshop save/create/open flows with strong red-test evidence and a concrete ownership-based fix design.",
+			"evidence": [
+				"createBlankSave erases live workspace before server acknowledgement (L459-474)",
+				"red run: 2 files, 11 failed / 1 passed (12)",
+				"failed persistence can still show 'Saved' in the toolbar"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T17:17:37.742Z"
+		},
+		{
 			"key": "pr:minion_hub#679",
 			"kind": "pr",
 			"stage": "development",
@@ -3630,41 +3663,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:28:18.979Z"
-		},
-		{
-			"key": "spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "One owned Workshop workspace lifecycle — loads and writes cannot erase state (HC-037)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-workshop-workspace-lifecycle-spec.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "e2bde05c29062664b3bc4e172134b9cb46a1e6095098ec7437224c59691bf4a0",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-07-hub-readiness-state-integrity-followups"
-			],
-			"rationale": "Red test run (11 failed/12) proves real data-loss defects—create/open can erase or overwrite a live workspace and failed saves report as 'Saved'—making this the most consequential item in the batch.",
-			"evidence": [
-				"evidence-hc037 red run: 2 files, 11 failed / 1 passed (12)",
-				"'Create erases the live workspace before the server answers'",
-				"'Failed persistence looks saved' — saveSync.lastSavedAt set before PUT resolves"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T16:47:59.842Z"
 		},
 		{
 			"key": "spec:2026-10-18-assistant-navigation-confirmation-spec",
@@ -8852,6 +8850,72 @@
 			"scoredAt": "2026-11-23T15:24:13.858Z"
 		},
 		{
+			"key": "spec:2026-10-07-readiness-flow-export-ownership-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Flow export toggles are owned by the (flow, variable) pair they were written for (HC-040)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-flow-export-ownership-spec.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "6cbfbb6acaecce80e6083953135b6b440d038a5e4cec7cf32f143b606401d1ac",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-specified race/ownership bug with reproduced red tests and invariants already drafted, ready for implementation to proceed.",
+			"evidence": [
+				"4 mounted regression failures reproduced against the old component",
+				"localToggles prop is copied once (L19) causing stale cross-flow state",
+				"status: implementing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T17:17:37.742Z"
+		},
+		{
+			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
+			"kind": "spec",
+			"stage": "spec",
+			"repo": "minion_hub",
+			"title": "Every role=\"button\" control honours the native button keyboard contract (HC-027)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-role-button-keyboard-spec.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "cbd7a405347ab606edcf3098bc21d65942b7f195052806a6b4c12139d7380c24",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 7
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Broad accessibility defect across 21+ interactive elements with a detailed defect inventory and clear acceptance criteria, already in progress.",
+			"evidence": [
+				"21 role=\"button\" sites inventoried with Space-scrolls/no-keys/double-fire defects",
+				"acceptance ledger criterion: Tab+Enter/Space must match click exactly once with visible focus",
+				"status: implementing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T17:17:37.742Z"
+		},
+		{
 			"key": "spec:2026-10-23-harness-factory-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -13083,41 +13147,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T09:18:48.120Z"
-		},
-		{
-			"key": "spec:2026-10-07-readiness-flow-export-ownership-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Flow export toggles are owned by the (flow, variable) pair they were written for (HC-040)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-flow-export-ownership-spec.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "6cbfbb6acaecce80e6083953135b6b440d038a5e4cec7cf32f143b606401d1ac",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-07-hub-readiness-state-integrity-followups"
-			],
-			"rationale": "Clear invariants and a red mounted-test suite (4 failed) prove flow-export cross-contamination and duplicate-dispatch bugs that are already mid-implementation.",
-			"evidence": [
-				"mounted test shows 4 failed(4) reproducing cases (a)-(d)",
-				"status implementing, hub master 802a62d0 baseline",
-				"ownership fence + single-in-flight-write invariants defined"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T16:47:59.842Z"
 		},
 		{
 			"key": "spec:2026-10-18-assistant-capability-failure-recovery-spec",
@@ -17401,41 +17430,6 @@
 			"scoredAt": "2026-11-23T15:26:45.438Z"
 		},
 		{
-			"key": "spec:2026-10-07-readiness-role-button-keyboard-spec",
-			"kind": "spec",
-			"stage": "spec",
-			"repo": "minion_hub",
-			"title": "Every role=\"button\" control honours the native button keyboard contract (HC-027)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/specs/2026-10-07-readiness-role-button-keyboard-spec.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "cbd7a405347ab606edcf3098bc21d65942b7f195052806a6b4c12139d7380c24",
-			"score": 48,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-07-hub-readiness-ui-a11y-followups"
-			],
-			"rationale": "Detailed audit of 21 role=button sites with concrete keyboard-contract defects (missing Space, double-fire, invisible focus ring) gives broad accessibility impact and is already in implementation.",
-			"evidence": [
-				"21 inventoried sites with per-site defect table",
-				"status implementing",
-				"two sites have invisible focus ring (EmailCard, EventCard)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T16:47:59.842Z"
-		},
-		{
 			"key": "proposal:2026-10-10-hub-uiux-consistency-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20831,6 +20825,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:21:17.361Z"
+		},
+		{
+			"key": "proposal:2026-10-07-hub-readiness-state-integrity-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "Open-items ledger for the readiness state-integrity batch (HC-040, HC-037) + NOTIF-019",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-07-hub-readiness-state-integrity-followups.md",
+			"sourceUpdatedAt": "2026-10-07",
+			"sourceFingerprint": "d1b9c8311a5927e76a6b635a61a14e3e845eaa338467ce928664ed7af0b7270a",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reframe",
+			"relatedKeys": [
+				"spec:2026-10-07-readiness-flow-export-ownership-spec",
+				"spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec"
+			],
+			"rationale": "This is a bookkeeping ledger of open ends and one unspecced finding (NOTIF-019), not itself an actionable unit of work.",
+			"evidence": [
+				"authorizes no change by itself",
+				"NOTIF-019 is a new finding from the hosted CI lane that has no spec yet",
+				"U2 (silent data loss across sessions) is still open at P2"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-25T17:17:37.742Z"
 		},
 		{
 			"key": "proposal:2026-10-09-native-formatting-coverage",
@@ -25055,42 +25085,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-24T08:47:59.399Z"
-		},
-		{
-			"key": "proposal:2026-10-07-hub-readiness-state-integrity-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "Open-items ledger for the readiness state-integrity batch (HC-040, HC-037) + NOTIF-019",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-07-hub-readiness-state-integrity-followups.md",
-			"sourceUpdatedAt": "2026-10-07",
-			"sourceFingerprint": "d1b9c8311a5927e76a6b635a61a14e3e845eaa338467ce928664ed7af0b7270a",
-			"score": 40,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"spec:2026-10-07-readiness-flow-export-ownership-spec",
-				"spec:2026-10-07-readiness-workshop-workspace-lifecycle-spec"
-			],
-			"rationale": "A tracking ledger of open ends from two in-flight specs, not itself an executable unit of work, though it flags a P2 silent-data-loss gap (U2) worth spinning into its own spec.",
-			"evidence": [
-				"commits pending signing, no PR yet",
-				"U2: 'silent data loss across sessions' marked P2",
-				"HC-040 TODO count=1 marked P3"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-18T16:47:59.842Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-602940411",
