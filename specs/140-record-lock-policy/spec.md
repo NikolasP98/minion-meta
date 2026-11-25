@@ -24,6 +24,8 @@ related: [135-stock-checkpoints, 124-stock-correction-workflow]
 
 Go-ahead, owner 2026-11-23: "address all items without overlap first. When they're live, list out the items with overlap with their updated status in case another session addressed them and what your recommended approach is." This spec was reported as having no overlap with other work (overlap check of 2026-11-23, spec 134 PR #1056).
 
+UI approval, owner 2026-11-25 (after the FigCraft demo preview https://claude.ai/artifact/MLm5NPbN3mNfXbriMkVxd4): "I love the UI demos. Implement all and lmk when live."
+
 ## AS-IS (hub `origin/master` `63c4313b`)
 
 - **Monthly money locks**: `pos_period_locks` (`src/server/db/pg-pos-schema.ts:455`), one row per org and month.
