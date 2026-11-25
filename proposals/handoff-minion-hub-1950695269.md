@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-1950695269
 title: Handoff marker — src/server/services/reminder-compose.ts (minion_hub)
-status: draft
+status: review
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-31d934e869b3
 ---
 
 # Handoff marker — src/server/services/reminder-compose.ts
@@ -28,3 +29,11 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/server/services/reminder-compose.ts:207` — that the endpoint accepts several choice questions in one request is unverified
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/reminder-compose.ts#L207
+
+## Reconciliation note (2026-11-25)
+
+Same marker text, same file/line, and the same merged PR (#730) as
+`postmerge-minion-hub-31d934e869b3`, which is already `status: approved` and
+has therefore left this reconciliation stage. Not merging into it per the
+never-touch rule for approved/in-spec/done proposals — flagged for a human
+to decide whether this marker is already covered by that approved finding.

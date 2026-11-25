@@ -1,11 +1,12 @@
 ---
 id: handoff-minion-hub-3513394147
 title: Handoff marker — src/server/services/reconfirm-answer.service.ts (minion_hub)
-status: draft
+status: review
 created: 2026-11-25
 updated: 2026-11-25
 repos: [minion-hub]
 tags: [handoff-sweep]
+duplicate_candidate: postmerge-minion-hub-f2d74b8d87a0
 ---
 
 # Handoff marker — src/server/services/reconfirm-answer.service.ts
@@ -30,3 +31,12 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/reconfirm-answer.service.ts#L252
 - `NikolasP98/minion_hub@master src/server/services/reconfirm-answer.service.ts:381` — a grouped (merged) visit gets the question but no slot offer: the strict move refuses groups.
   https://github.com/NikolasP98/minion_hub/blob/master/src/server/services/reconfirm-answer.service.ts#L381
+
+## Reconciliation note (2026-11-25)
+
+Both markers above duplicate already-`approved` postmerge findings from the
+same merged PR (#730) and therefore out of scope to merge into (approved
+proposals have left this stage): the line-252 marker matches
+`postmerge-minion-hub-f2d74b8d87a0` (same text, same file) and the line-381
+marker matches `postmerge-minion-hub-5018f7c9e276` (same text, same file).
+Flagged for a human to confirm both are already covered.
