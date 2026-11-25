@@ -1,7 +1,7 @@
 ---
 id: 148-caja-automatica
 title: Automatic cash register — the day opens with the first sale and closes itself at midnight
-stage: spec
+stage: live
 status: approved
 verdict: approved
 pass: 1
@@ -44,7 +44,7 @@ related: [147-agenda-closures]
 
 1. **Setting (P1).** POS settings get **Caja automática** (on/off; default off, so every other org keeps today's behaviour). FACES is switched on after deploy (owner-approved).
 2. **Opens itself (P1).** With the setting on, a sale, refund or correction with no open shift for the actor opens one in the same transaction, with a zero float. No dialog, and no `no_open_shift`. *Acceptance*: a first sale of the day with no shift succeeds and the ticket carries a new shift.
-3. **Closes itself (P1).** A daily job at 00:00 America/Lima (`0 5 * * *` UTC) closes every open shift of every automatic org that opened before that local midnight. It uses the normal close path, with `counted = expected` for every method and the note "Cierre automático". This sends the shift's tickets to SUNAT exactly as a manual close does. *Acceptance*: the job closes yesterday's shift; a second run is a no-op; a shift opened after midnight is untouched.
+3. **Closes itself (P1).** An hourly job (`0 * * * *`) closes, within the hour after each org's local midnight, every open shift of every automatic org that opened before that local midnight. It uses the normal close path, with `counted = expected` for every method and the note "Cierre automático". This sends the shift's tickets to SUNAT exactly as a manual close does. *Acceptance*: the job closes yesterday's shift; a second run is a no-op; a shift opened after midnight is untouched.
 4. **Nothing to do (P1).** In automatic mode the POS banner reads "Caja automática · hoy" with the day's income, and does not ask to open. "Cerrar caja" stays available as a secondary action for a manual cash count. The open-shift-after-hours inbox rule is silent for automatic orgs.
 
 ### Invariants
