@@ -24,6 +24,14 @@
 - [x] T015 Tests: `menus.a11y.mounted.test.ts`
 - [ ] T016 Gates in the foreground, signed commit, hub PR, every check green, baselines ratcheted
 
-## PR C — board moves · PR D — status and labels · PR E — hand-rolled modals
+## PR C — board moves (`feat/152-board-moves`)
+
+- [x] T017 [C1] `src/lib/a11y/announce.ts` + test
+- [x] T018 [C2] `BoardView`, `scheduling/FieldsList`, `dashboard/EditableGrid` use it
+- [x] T019 [C3] `data-view/BoardView.svelte`: keyboard drag; 4 strings in en + es
+- [x] T020 Tests + demo
+- [ ] T021 Gates in the foreground, signed commit, hub PR, every check green
+
+## PR D — status and labels · PR E — hand-rolled modals
 
 Tasks are added here when each PR starts.

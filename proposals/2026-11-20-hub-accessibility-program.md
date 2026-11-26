@@ -230,5 +230,6 @@ Left open by the S0 gates slice on 2026-11-20; each is a decision or a follow-up
 13. **(S2, spec 151) 87 pages set their browser title by hand, in five formats** ("‹page› — ‹module›", "‹page› · ‹module›", "‹page›" alone, "‹page› · ‹brand› hub", "‹page› — ‹brand›"). They were left as they are; their headers pass `documentTitle={false}`. Unifying them on "‹page› · ‹hub name›" means deleting those `<svelte:head>` blocks and the opt-outs, and changes 87 tab titles: an owner decision.
 14. **(S2) Pages without a header** (canvases, flow editor, workshop) get the hub name alone as their title.
 15. **(S2) axe's `landmark-*` and `region` rules are not gated** (best-practice tags; the gate runs WCAG A/AA tags). The shell's landmarks are covered by tests; findings inside individual pages are not.
+17. **(S3, spec 152 PR C) Boards have no order inside a column.** Keyboard drag moves a card between columns only; the owner's "Up/Down within a column" needs an order field and an `onreorder` write on `BoardView` and its three callers (Agenda board, catalog board, session tasks). `TODO(handoff)` at hub `src/lib/components/data-view/BoardView.svelte` (`cardKeydown`).
 16. **(S2) The skip link was not exercised in a browser against the running app**; it is asserted structurally and by the sweep's `bypass` rule.
 

@@ -116,7 +116,19 @@ Nothing changes to the eye: the remove button keeps its 14 px look and gains a 2
 | B3 | `ContextMenu`: Home / End / type-ahead through the helper, one tab stop across submenus, a disabled row is skipped, focus returns to what had it before the menu opened. | `assertPattern(menu, { opener, typeahead })` |
 | B4 | `MultiSelectFilter`: the list is a named `listbox` with one tab stop, arrows, Home / End and type-ahead; "Remove …" and the default "All" are translated; the remove target is 24 px. | `assertPattern(listbox, { typeahead })`; label test |
 
-PRs C–E get their own DELTA tables in this spec when they start.
+## DELTA (PR C — board moves)
+
+Open choice taken (closest to today that passes): **Space** picks a card up; **Enter** keeps opening the record on boards whose cards open one (Agenda, catalog), and picks up only where a card has nothing to open (session tasks). Cards have no order inside a column (the write is "row → column"), so Up / Down do nothing; the owner's "Up/Down within a column" needs an order field first and is logged in the proposal ledger.
+
+| # | Transition | Proof |
+|---|---|---|
+| C1 | One shared announcer, `$lib/a11y/announce` (`announce(text, politeness)`): one polite and one assertive live region for the page, moved inside the open modal dialog while one is open (the rest of the page is inert there). | `announce.mounted.test.ts` |
+| C2 | `BoardView`, `FieldsList` and `EditableGrid` speak through it; their private live regions are removed. All text was already translated. | their mounted tests |
+| C3 | `BoardView` keyboard drag: Space picks up, Left / Right choose the column (same highlight as a mouse drag), Space or Enter drops with the same single write as the menu, Escape or leaving the card cancels; each step is announced. A card with nothing to open becomes the pick-up control (`role="button"`, `aria-pressed`). | `board-view.mounted.test.ts` (4 tests) |
+
+**Demo (PR C)**: FigCraft `board-moves.figcraft` (page "Spec 152 · board moves"), exports in `demo/`, preview https://claude.ai/artifact/TvT1eRxdweFKmd1cZ7TtiK. Approved in advance by the owner 2026-11-26 (same quote as PR A).
+
+PRs D–E get their own DELTA tables in this spec when they start.
 
 ## Requirements
 
