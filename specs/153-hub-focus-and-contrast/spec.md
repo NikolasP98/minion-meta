@@ -50,7 +50,7 @@ Invariants: the accent colour itself, filled buttons, badges and backgrounds in 
 | 2 | Links in the accent colour, no underline | Links in a readable shade of the accent, underlined in running text |
 | 3 | Some fields show no focus indicator at all | Every focusable element shows one |
 
-**Demo**: FigCraft as-is / to-be for rows 1 and 2 on the worst and the default theme, before the hub PR; recorded here as approved in advance (quote above).
+**Demo (PR 1)**: FigCraft `focus-ring.figcraft` (page "Spec 153 · focus ring"), exports in `demo/`, preview https://claude.ai/artifact/SzVgjANWu1d7ktazLtFza4 — the default theme with blue, catppuccin-latte with rose and gruvbox-light with amber, as-is and to-be with the measured ratio. Approved in advance (quote above); the coordinator confirmed on 2026-11-26 that PR 1 merges under the standing approval and that PR 2 waits for the owner.
 
 ## Delivery: two hub PRs
 
@@ -66,7 +66,7 @@ Invariants: the accent colour itself, filled buttons, badges and backgrounds in 
 | D1 | `readableAccentFor(preset, accent, minimum)` beside `readableMutedFor` (same stepping, checked against every surface colour of the preset); `applyTheme` sets `--color-focus-ring` (3:1) and `--color-link` (4.5:1). | unit test over all 22 themes × 11 accents: every pair ≥ its threshold; unchanged where the accent already passes |
 | D2 | `:focus-visible` uses `--color-focus-ring`; `a` uses `--color-link`; links inside prose are underlined. | the same measurement script, now reading the new variables: 0 pairs below threshold |
 | D3 | The 22 bare `outline-none` sites fixed; design-lint rule `bare-outline-none`, baseline 0. | lint; real-key Tab through the changed fields on a Storybook build |
-| D4 | The 21 shadow-only focus styles also keep the outline. | forced-colours screenshot |
+| D4 | `applyTheme` sets `--shadow-focus` to a solid ring (`0 0 0 2px` page colour, `0 0 0 4px` ring colour), which is what the shared controls and 21 hub rules draw on focus; shadow-only focus rules stop removing the outline. | real browser on a Storybook build: the indicator's colour and its ratio against the page, per theme |
 | D5 | `@media (forced-colors: active)` block. | forced-colours emulation in a real browser: the ring is visible on a button, a field and a menu item |
 
 ## Requirements
