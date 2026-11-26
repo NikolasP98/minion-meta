@@ -1,9 +1,9 @@
 ---
 id: 2026-11-25-hub-synced-pages
 title: Synced pages — the agent builds a page in chat, connects its filters to the blocks, and applies it
-status: draft
+status: approved
 created: 2026-11-25
-updated: 2026-11-25
+updated: 2026-11-26
 repos: [minion_hub, minion-meta]
 tags: [ui, logic]
 value: 9
