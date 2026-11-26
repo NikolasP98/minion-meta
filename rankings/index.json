@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T10:47:43.708Z",
+	"generatedAt": "2026-11-26T11:17:34.931Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2083,6 +2083,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T07:48:50.521Z"
+		},
+		{
+			"key": "pr:minion_hub#740",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#740 fix(a11y): the command palette closes again — a bare dialog has no exit animation to wait for (hotfix for #737)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/740",
+			"sourceUpdatedAt": "2026-11-26T11:14:25Z",
+			"sourceFingerprint": "f14a5f1f359d1a5e8f50b9aef5df04a6b2b8e93ba58399f4e2387c0eaca4af8b",
+			"score": 72,
+			"band": "high",
+			"axes": {
+				"criticality": 8,
+				"importance": 6,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Production hotfix for a command palette that never closes, root-caused and verified with a test that fails on master and passes here.",
+			"evidence": [
+				"bug reproduced on production commit b9b263be",
+				"palette test fails on master, passes with fix",
+				"85 tests pass, bun run check 0 errors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T11:17:34.723Z"
 		},
 		{
 			"key": "pr:minion-meta#1095",
@@ -12887,41 +12920,6 @@
 			"scoredAt": "2026-11-23T04:17:25.801Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-7c314d7486da",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7c314d7486da.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "68e812ad226c969a85e77e597fff050f9d31f669e449650e2bc0f2abde5c64d2",
-			"score": 53,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:2026-10-15-hub-pos-shift-scoped-edits-followups"
-			],
-			"rationale": "Approved, single well-specified fix for an audit-trail gap where unlocking a POS period deletes its only record.",
-			"evidence": [
-				"status: approved",
-				"exact TODO(handoff) marker at pos.service.ts with definition of done",
-				"diagnosis names fix direction: audit record then soft-delete/archive"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T10:47:42.135Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-8b2d5d528651",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14270,6 +14268,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:32:18.244Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-7c314d7486da",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/services/pos.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7c314d7486da.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "68e812ad226c969a85e77e597fff050f9d31f669e449650e2bc0f2abde5c64d2",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:2026-10-15-hub-pos-shift-scoped-edits-followups"
+			],
+			"rationale": "Single bounded compliance-relevant audit-trail fix, but it is the same finding already listed as item 1 of the shift-scoped-edits followups ledger.",
+			"evidence": [
+				"TODO(handoff): an unlock deletes the row and leaves no audit trace",
+				"diagnosis cites SOX/PCI-DSS audit-log requirements",
+				"status approved, merged PR #536"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T11:17:34.723Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-9e33ef1698dc",
@@ -18430,41 +18463,6 @@
 			"scoredAt": "2026-11-22T01:17:31.665Z"
 		},
 		{
-			"key": "proposal:2026-10-15-hub-pos-shift-scoped-edits-followups",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "POS shift-scoped edits — open ends left by S1–S3 (hub #534, #535, #536)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-hub-pos-shift-scoped-edits-followups.md",
-			"sourceUpdatedAt": "2026-10-15",
-			"sourceFingerprint": "e1bd77fdeceda84a562806630791c53470d02e77c16a923c60f495789ffbaa75",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-7c314d7486da"
-			],
-			"rationale": "A draft ledger bundling eight mixed-priority open ends, one of which duplicates a separately filed, already-approved audit-trail fix.",
-			"evidence": [
-				"status: draft, 8 enumerated items of varying scope",
-				"item 1 (unlock audit trace) matches the postmerge finding for pos.service.ts",
-				"item 8 explicitly marked not started (spec S4)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T10:47:42.135Z"
-		},
-		{
 			"key": "proposal:2026-10-22-whatsapp-member-agents-followups",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -20959,6 +20957,41 @@
 			"scoredAt": "2026-11-26T05:47:38.169Z"
 		},
 		{
+			"key": "proposal:2026-10-15-hub-pos-shift-scoped-edits-followups",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "POS shift-scoped edits — open ends left by S1–S3 (hub #534, #535, #536)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-10-15-hub-pos-shift-scoped-edits-followups.md",
+			"sourceUpdatedAt": "2026-10-15",
+			"sourceFingerprint": "e1bd77fdeceda84a562806630791c53470d02e77c16a923c60f495789ffbaa75",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "group",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-7c314d7486da"
+			],
+			"rationale": "Ledger item 1 duplicates the audit-trail gap already tracked separately as an approved post-merge finding.",
+			"evidence": [
+				"item 1: unlocking a period leaves no audit row",
+				"overlaps postmerge-minion-hub-7c314d7486da TODO(handoff) in pos.service.ts",
+				"8 distinct items of varying size bundled as one ledger"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T11:17:34.723Z"
+		},
+		{
 			"key": "proposal:2026-11-11-hub-door-dni-trust",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23431,6 +23464,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T06:17:54.961Z"
+		},
+		{
+			"key": "pr:minion_hub#739",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#739 feat(a11y): move board cards with the keyboard; one shared screen-reader announcer (spec 152 PR C)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/739",
+			"sourceUpdatedAt": "2026-11-26T10:48:57Z",
+			"sourceFingerprint": "3cb5d46abab8cc39aebdc397fc38dc7c5f4088132d826c0291f16f74267d45dc",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Spec-linked accessibility slice with 153 passing tests and full lint/build gates green, ready to merge.",
+			"evidence": [
+				"153 tests across board/session/a11y suites pass",
+				"spec 152 PR C, approved in advance by owner 2026-11-26",
+				"a11y check shows no regression"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T11:17:34.723Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
@@ -26651,39 +26717,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T22:47:23.992Z"
-		},
-		{
-			"key": "pr:minion_hub#739",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#739 feat(a11y): move board cards with the keyboard; one shared screen-reader announcer (spec 152 PR C)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/739",
-			"sourceUpdatedAt": "2026-11-26T10:45:06Z",
-			"sourceFingerprint": "30f524b27d4628aadf0f7fc0345a59999d6a1d31979351914fb0e7189f99fa67",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Ready a11y PR with passing tests, clear scope, and owner pre-approval, so it can merge now with low risk.",
-			"evidence": [
-				"153 tests pass across board/session/a11y suites",
-				"bun run check 0 errors; a11y baseline not regressed",
-				"owner approved in advance on 2026-11-26"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T10:47:43.515Z"
 		},
 		{
 			"key": "pr:minion-meta#1066",
@@ -31268,6 +31301,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-26T02:55:48.025Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-5e55396",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ 5e55396",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5e55396.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "8b787c59d4aac4cd6c5c281d0251610de50252d13a52260b7d3f16a545deaf23",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 3
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Automated medium-severity findings mostly in test files with two production empty-catch cases that need triage before scheduling as work.",
+			"evidence": [
+				"6 of 8 findings are in *.test.ts files",
+				"empty-catch in message-ledger.ts:155 and bridge-ws.ts:118 swallow errors silently",
+				"auto-generated merge-scan, not individually scoped tasks"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T11:17:34.723Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-119942b6f8e8",
@@ -43427,39 +43493,6 @@
 			"scoredAt": "2026-11-23T15:24:13.858Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-ai-5e55396",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ 5e55396",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-5e55396.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "8b787c59d4aac4cd6c5c281d0251610de50252d13a52260b7d3f16a545deaf23",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Eight bounded, file:line-specific code-quality findings (empty catches, unchecked array access) are cheap to fix with low risk.",
-			"evidence": [
-				"8 findings each with exact file:line and category",
-				"two touch production paths (message-ledger.ts, bridge-ws.ts empty-catch)",
-				"rest are test-file unchecked-access, all rated medium"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T10:47:42.135Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-db09a2f",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -54255,38 +54288,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
-		},
-		{
-			"key": "run:minion_hub#45802860205",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45802860205",
-			"sourceUpdatedAt": "2026-11-26T10:36:20Z",
-			"sourceFingerprint": "33d7b60ca9f225dfcdf0c1a217b7e15e7bcd8a951fdd03134be54aed11c88537",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Transient in-progress CI run, not an actionable board goal.",
-			"evidence": [
-				"push on master",
-				"in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T10:38:59.336Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
