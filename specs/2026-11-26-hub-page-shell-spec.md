@@ -2,8 +2,8 @@
 id: 2026-11-26-hub-page-shell-spec
 title: Page shell — skip to the content, one main region, a title on every page (a11y program S2)
 stage: spec
-status: review
-verdict: pending
+status: implementing
+verdict: approved
 type: feature
 pass: 1
 created: 2026-11-26

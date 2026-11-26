@@ -1,6 +1,6 @@
 ---
-status: review
-verdict: pending
+status: implementing
+verdict: approved
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion_hub]
@@ -15,7 +15,7 @@ source_item: S2
 
 **Created**: 2026-11-26
 
-**Status**: Draft for review. Owner (2026-11-26): "start S2". The skip link is a VISIBLE change (on keyboard focus) and the page-title format is a product decision: implementation waits for the owner's approval of the demo and the format below.
+**Status**: Approved in advance. Owner (2026-11-26): "start S2", then, verbatim: "fold the S1 leftovers into S3, then implement all slices directly, your work is fully approved to go live." The skip link (a visible change on keyboard focus) and the page-title format below are therefore approved in advance by the owner on 2026-11-26; where a choice was open, the option closest to today's look and behaviour that passes WCAG 2.2 AA was taken.
 
 **Input**: "Slice S2 'Page shell' of the hub accessibility program: skip link + `<main id>` in `(app)/+layout.svelte`, with no nested `<main>` from PageShell; fallback `<title>`; PageHeader sets the page title; label the mobile `<nav>`. Acceptance: axe bypass, document-title and landmark-* rules pass on all swept routes; `bun run a11y` with baselines only decreasing."
 
@@ -23,7 +23,8 @@ source_item: S2
 
 - File: [`page-shell.figcraft`](page-shell.figcraft), page "Spec 151 · page shell".
 - Frames: [as-is](demo/as-is.png), [to-be: first Tab key](demo/to-be-first-tab.png), [to-be: after Enter](demo/to-be-after-enter.png).
-- Interactive preview: see the PR description.
+- Interactive preview: https://claude.ai/artifact/TX2RjSiWHu9RHTLpMcACz2 (private to the owner).
+- **Approved in advance by the owner on 2026-11-26** (quote in Status above). This approves the design; merging stays with the coordinator.
 
 ## AS-IS (hub master `c51c5b62`, read 2026-11-26)
 
