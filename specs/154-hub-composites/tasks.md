@@ -22,8 +22,8 @@
 
 ## PR C — workshop (`feat/154-workshop-keys`)
 
-- [ ] T013 Palette "Add to canvas"
-- [ ] T014 List: elements; Move / Link to… / Open / Remove, announced
-- [ ] T015 Toolbar zoom in / out / fit; canvas region focusable, arrows pan
-- [ ] T016 Context menu on the shared menu pattern; `assertPattern(menu)`
+- [x] T013 Palette "Add to canvas"
+- [x] T014 List: elements; Move / Link to… / Open / Remove, announced
+- [x] T015 Toolbar zoom in / out / reset view; canvas region focusable, arrows pan
+- [x] T016 Context menu on the shared menu pattern; `assertPattern(menu)`
 - [ ] T017 Mounted tests; demo; gates; real keys on the local QA stack; PR
