@@ -101,6 +101,10 @@ Invariants: no feature is removed; the Agenda, POS and session boards keep their
 | A4 | `CommandPalette` renders through `Dialog` (`bare`) with a `combobox` input. | `assertPattern(dialog)` and `assertPattern(combobox)`; focus returns |
 | A5 | `DraggableWindow` moves focus in on open and back on close. | mounted test |
 
+| A6 | Everything that found a confirmation by `role="dialog"` follows it: two mounted tests, the flow canvas' "is focus inside a dialog" guard, the component registry (`bare`). `Dialog` also states `aria-modal="true"` (it is always opened with `showModal()`). | the same tests; `route-design-contracts.test.ts` |
+
+**Demo (PR A, the one visible change)**: FigCraft `dialogs.figcraft` (page "Spec 152 · dialogs"), exports in `demo/`, preview https://claude.ai/artifact/LovomP1YjHjtuKhpQtNMBy. Approved in advance by the owner 2026-11-26: "fold the S1 leftovers into S3, then implement all slices directly, your work is fully approved to go live."
+
 PRs B–E get their own DELTA tables in this spec when they start.
 
 ## Requirements
