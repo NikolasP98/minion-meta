@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T16:54:24.816Z",
+	"generatedAt": "2026-11-26T17:17:18.128Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -31069,39 +31069,6 @@
 			"scoredAt": "2026-11-26T02:55:48.025Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "b4195acf7af054904b34780a3befce237ac2dce23059694e8667775a568428d5",
-			"score": 36,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This single proposal bundles 16+ unrelated one-line TODO markers scraped from a data file covering completely different subsystems, so it cannot be resolved as one bounded goal and needs to be split per marker.",
-			"evidence": [
-				"rankings/index.json:1612 ... postgres-js nextWrite null-socket crash",
-				"rankings/index.json:8591 ... fresh=1 is an uncached whole-org rank with no rate limit",
-				"rankings/index.json:14299 ... an unlock deletes the row and leaves no audit trace"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T16:47:46.579Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-ai-5e55396",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -50981,6 +50948,39 @@
 			"scoredAt": "2026-11-26T02:59:17.881Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "fece95bce39b54d3e51589bf58c60af63710981fba59df7c64ad4ba63bbcf2b3",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The flagged 'markers' are lines from rankings/index.json itself (the ranking output file, apparently containing other candidates' titles/summaries), not genuine TODO(handoff) defects in source code, making this a self-referential sweep artifact rather than actionable work.",
+			"evidence": [
+				"repo is minion-meta, file is rankings/index.json (the ranking index, not application source)",
+				"source: handoff-sweep bundles 15+ unrelated quoted fragments with no single verifiable outcome",
+				"quoted marker text reads like candidate summaries/titles (e.g. 'Qualify/fix postgres-js...') rather than code comments"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T17:17:17.901Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -53952,40 +53952,6 @@
 			"evidence": [
 				"status: in_progress",
 				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T16:54:24.570Z"
-		},
-		{
-			"key": "run:minion_hub#45862580941",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45862580941",
-			"sourceUpdatedAt": "2026-11-26T16:51:30Z",
-			"sourceFingerprint": "1f74e753dff9597724d864598574b7e6dbc47fa9b5f1cb733dd91a8ac9028e1c",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 0
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"run:minion_hub#45862580886"
-			],
-			"rationale": "An in-progress storybook deploy triggered by a routine push carries no indicated problem to act on.",
-			"evidence": [
-				"status: in_progress",
-				"storybook-deploy push on master"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
