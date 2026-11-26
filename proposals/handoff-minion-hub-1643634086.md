@@ -27,5 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-26)
 
-- `NikolasP98/minion_hub@master src/lib/components/ui/foundations/Dialog.svelte:206` — reopened mid-exit — cancel the pending close. The CSS
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/ui/foundations/Dialog.svelte#L206
+- `NikolasP98/minion_hub@master src/lib/components/ui/foundations/Dialog.svelte:221` — reopened mid-exit — cancel the pending close. The CSS
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/ui/foundations/Dialog.svelte#L221

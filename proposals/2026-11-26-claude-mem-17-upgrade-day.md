@@ -90,8 +90,11 @@ also applies to 16.2.1, except where the table below says otherwise.
   `/mcp` → reconnect or a restart gives them the 16.2.1 server. Once they all end, 16.2.1's sweep
   deletes the 12.4.7 folder (and the shims with it).
 - The wrapper's Codex hooks are inert on Codex 0.172 (`TODO(handoff)` in
-  `codex/plugins/claude-mem/hooks/claude-mem-forwarder.sh`); Codex capture is the transcript watch.
-  If plugin hooks return, turn `CLAUDE_MEM_CODEX_TRANSCRIPT_INGESTION` off.
+  `codex/plugins/claude-mem/hooks/claude-mem-forwarder.sh`, line 4:
+  https://github.com/NikolasP98/minion-meta/blob/dev/codex/plugins/claude-mem/hooks/claude-mem-forwarder.sh#L4
+  — flagged independently by the handoff-ledger sweep as handoff-minion-meta-73009062); Codex
+  capture is the transcript watch. If plugin hooks return, turn
+  `CLAUDE_MEM_CODEX_TRANSCRIPT_INGESTION` off, or Codex sessions get captured twice.
 - Codex sessions with no tool calls create no claude-mem row (seen on 12.4.7 and 16.2.1).
 - Stale `alias claude-mem=` (10.5.2) in `~/.bashrc` / `~/.zshrc` shadows the launcher in interactive
   shells; remove it by hand.

@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-1721485603
 title: Handoff marker — src/lib/components/ui/Dropdown.svelte (minion_hub)
-status: draft
+status: closed
+duplicate_candidate: postmerge-minion-hub-ac9f5b04f22d
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-hub]
@@ -28,3 +29,7 @@ automatically once the file carries no more markers.
 
 - `NikolasP98/minion_hub@master src/lib/components/ui/Dropdown.svelte:112` — items stay in the Tab order (no tabindex="-1"), so an open menu has
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/ui/Dropdown.svelte#L112
+
+## Closed (auto)
+
+No `TODO(handoff):` marker found in this file as of 2026-11-26; the sweep closed this proposal.
