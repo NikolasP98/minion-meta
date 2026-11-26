@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T09:17:54.509Z",
+	"generatedAt": "2026-11-26T09:48:00.205Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9060,41 +9060,6 @@
 			"scoredAt": "2026-11-25T05:48:25.801Z"
 		},
 		{
-			"key": "pr:minion-meta#1106",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1106 spec(152): primitive contracts — shared widgets keep the keyboard and say what they are (a11y S3)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1106",
-			"sourceUpdatedAt": "2026-11-26T09:03:27Z",
-			"sourceFingerprint": "50f693390fcc22d9bc5b1772d7b3384f1aa3413ae6ad253a8de2692760fcf9a2",
-			"score": 57,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"proposal:postmerge-minion-hub-cdd1413e5064"
-			],
-			"rationale": "Owner-approved a11y spec with clear widget-family slices (A-E) is scoped and ready to land as the referenced hub PRs complete.",
-			"evidence": [
-				"Approved in advance by the owner on 2026-11-26",
-				"Draft until the hub PRs are in",
-				"Five hub PRs by widget family"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T09:17:54.310Z"
-		},
-		{
 			"key": "proposal:2026-09-26-hub-custom-columns-next-phases",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13818,6 +13783,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
+		},
+		{
+			"key": "pr:minion_hub#737",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#737 feat(a11y): dialogs keep the keyboard — unsaved-changes prompt, command palette, confirmations, floating windows (spec 152 PR A)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/737",
+			"sourceUpdatedAt": "2026-11-26T09:32:21Z",
+			"sourceFingerprint": "52cd02d6661158844d4f59fb7674d03a5b3226fd071901769608d0c6d3adf98a",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1106"
+			],
+			"rationale": "Well-specified, tested a11y PR for the shared Dialog primitive, already approved in advance and green on CI/a11y checks.",
+			"evidence": [
+				"bun run a11y --ci: pass, suppressions 84→79",
+				"20 ConfirmDialog call sites covered, 6 new tests",
+				"Approved in advance by owner 2026-11-26"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T09:47:59.934Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -19421,6 +19421,41 @@
 			"scoredAt": "2026-11-23T14:49:32.623Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-bf5f7b17e469",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/synced-pages.spec.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bf5f7b17e469.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "6d8c752de395cbcd41cd84812817e07f86267a3f2d27a77faec1e4c79d82636e",
+			"score": 45,
+			"band": "low",
+			"axes": {
+				"criticality": 5,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-57e9726984bc"
+			],
+			"rationale": "An e2e test written for spec 150 was never actually executed, so its claimed UI coverage is illusory and could be masking regressions.",
+			"evidence": [
+				"written for spec 150 S1 but NOT executed in the authoring",
+				"status: approved",
+				"fix: run manually, then confirm CI workflow inclusion"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T09:47:59.934Z"
+		},
+		{
 			"key": "spec:2026-08-17-gw-nostr-dispatch-pipeline-spec",
 			"kind": "spec",
 			"stage": "spec",
@@ -19519,6 +19554,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-19T18:48:21.281Z"
+		},
+		{
+			"key": "pr:minion-meta#1106",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1106 spec(152): primitive contracts — shared widgets keep the keyboard and say what they are (a11y S3)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1106",
+			"sourceUpdatedAt": "2026-11-26T09:39:34Z",
+			"sourceFingerprint": "13c0afced4292416b29acbc1637d331f662c8990be679b9f4854779362c6ba05",
+			"score": 44,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 4
+			},
+			"confidence": 7,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#737"
+			],
+			"rationale": "Tracking spec for the five-PR a11y slice S3 is still draft and only gains status as each hub PR lands, so it is not independently actionable yet.",
+			"evidence": [
+				"Draft until the hub PRs are in",
+				"Five PRs by widget family A-E",
+				"Approved in advance by the owner"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T09:47:59.934Z"
 		},
 		{
 			"key": "pr:minion-meta#971",
@@ -21926,6 +21996,42 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T08:48:16.137Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-57e9726984bc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/blocks/query.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-57e9726984bc.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "672de7c4cc3fb4a0150e23f8574f3f7292ad95f0e793d6abb8e66d89b8cf7a34",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-ac3ddf3ee352",
+				"proposal:postmerge-minion-hub-bf5f7b17e469"
+			],
+			"rationale": "Approved finding with a concrete fix (server-side search/pagination) for a sandbox query block that silently hides choices beyond 200.",
+			"evidence": [
+				"UI only displays the first 200 choices",
+				"status: approved",
+				"fix direction: add search param + paginated results, 50 at a time"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T09:47:59.934Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-5c9adae4137a",
@@ -27444,6 +27550,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T23:47:06.492Z"
+		},
+		{
+			"key": "issue:minion-meta#1109",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1109 [monitor:unstick] run 1473dc69 (minion-meta rank board goals) - ranking catalog source unavailable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1109",
+			"sourceUpdatedAt": "2026-11-26T09:17:31Z",
+			"sourceFingerprint": "b0e247d6cb51b0057c8c7ce21ea18b59ade00498769bbbf7e074fa74f381e54c",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Monitor intake reporting the ranking-catalog data source itself refusing a partial catalog, with a reasonable classifier-fix suggestion but unconfirmed current outage status.",
+			"evidence": [
+				"board-ranking-catalog.mjs:107 refusing a partial catalog by design",
+				"near-identical failure in same job family 5 minutes earlier (different repo)",
+				"recommendation is to verify source availability before blind retry"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T09:47:59.934Z"
 		},
 		{
 			"key": "issue:minion-meta#327",
@@ -36414,38 +36553,6 @@
 			"scoredAt": "2026-11-24T07:17:24.934Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-bf5f7b17e469",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in tests/e2e/ui-audit/synced-pages.spec.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-bf5f7b17e469.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "c3eb4ab3e4358bf441069e45a8eb7ad9dabbf8edb7fd0b716997a0d3865383c2",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "An e2e test authored for spec 150 but never confirmed to run in CI means its coverage claim may be false, risking silent regressions.",
-			"evidence": [
-				"TODO(handoff): written for spec 150 S1 but NOT executed in the authoring",
-				"coverage it claims to provide is illusory per diagnosis"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T08:49:31.411Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-d5093998b234",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -43583,37 +43690,6 @@
 			"scoredAt": "2026-11-21T12:19:20.394Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-57e9726984bc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/blocks/query.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-57e9726984bc.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "a3f2a33532cb8d53690e29050365ddcbffe8914f8675afb40d112439b5c44528",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Server-side search is only needed once a dataset exceeds 200 choices, a real but non-urgent scalability gap.",
-			"evidence": [
-				"TODO(handoff): choices beyond the first 200 need a server-side search"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T08:49:31.411Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-58cff194d6b6",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -43907,6 +43983,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:25:22.596Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-ac3ddf3ee352",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/tools.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ac3ddf3ee352.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "2fe88a1f53cfefe8d7297583ccee5234e74e6d46fc482905bb9d5db0424608cd",
+			"score": 26,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-57e9726984bc"
+			],
+			"rationale": "Minor network-efficiency finding where the approved definition of done itself permits closing by either a code change or a formal rejection with rationale.",
+			"evidence": [
+				"adds a request per task T022",
+				"status: approved",
+				"fix direction explicitly allows formally rejecting the optimization instead"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T09:47:59.934Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b841c1438bbc",
@@ -51082,7 +51193,7 @@
 			"title": "Handoff marker — rankings/index.json (minion-meta)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
 			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "13f5cc1fc840d2836fd2aee920f27a1e962148d8e5339e752fa1fd26295e5bb9",
+			"sourceFingerprint": "ee75ddfbc12e16cafa1fc4b2e2cbbf0de4a67bbf0cfb01979e5cefd1e6860527",
 			"score": 20,
 			"band": "low",
 			"axes": {
@@ -51092,19 +51203,20 @@
 			},
 			"readiness": {
 				"specification": 2,
-				"implementation": 1
+				"implementation": 2
 			},
-			"confidence": 6,
-			"recommendation": "prune",
+			"confidence": 3,
+			"recommendation": "reframe",
 			"relatedKeys": [],
-			"rationale": "The quoted markers are text embedded inside the rankings/index.json data file itself (descriptions of other findings), not real code TODOs to resolve.",
+			"rationale": "Bundles 17+ unrelated marker lines scattered across a generated rankings/index.json file into a single proposal with no coherent single fix.",
 			"evidence": [
-				"all anchors point to rankings/index.json lines, the ranking data file itself",
-				"quoted text reads as catalog content (e.g. 'fresh=1 is an uncached whole-org rank') rather than source-code comments"
+				"17+ distinct marker lines quoted across rankings/index.json",
+				"definition of done requires clearing all markers before closing",
+				"markers span unrelated domains (postgres crash, booking, auth, byte bounds)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T08:49:31.411Z"
+			"scoredAt": "2026-11-26T09:47:59.934Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2757299434",
@@ -52551,37 +52663,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T06:49:26.004Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-ac3ddf3ee352",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/sandbox/tools.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ac3ddf3ee352.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "b7f2ffba3c922e48de475645224b76a6d0529012c707c184edeaef177a4d37ab",
-			"score": 16,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Avoiding one extra GET request is a minor efficiency tweak with no evidence of user-visible cost.",
-			"evidence": [
-				"TODO(handoff): tasks.md T022 asked for a GET of the elements first; that adds a request"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T08:49:31.411Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-b429bb5e2383",
@@ -54110,39 +54191,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
-		},
-		{
-			"key": "run:minion_hub#45782224955",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45782224955",
-			"sourceUpdatedAt": "2026-11-26T09:02:55Z",
-			"sourceFingerprint": "9f8d8afdd93b4a35c9535cd9c0369c7aa3c7c5db8a06e1eb7b54ebe4c7ef8bc5",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 8,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A routine in-progress CI run triggered by a push to master is a status event, not a work goal.",
-			"evidence": [
-				"CI",
-				"push on master",
-				"status: in_progress"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T09:17:54.310Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
