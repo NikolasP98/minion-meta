@@ -1,5 +1,5 @@
 ---
-status: implementing
+status: merged
 verdict: approved
 created: 2026-11-21
 updated: 2026-11-21

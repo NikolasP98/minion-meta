@@ -2,12 +2,12 @@
 id: 2026-11-21-hub-session-board-on-boardview-spec
 title: The session task board works without a mouse — it moves onto the shared board (a11y program S1)
 stage: spec
-status: implementing
+status: merged
 verdict: approved
 type: feature
 pass: 2
 created: 2026-11-21
-updated: 2026-11-23
+updated: 2026-11-26
 repos: [minion_hub, minion-meta]
 tags: [ui, test]
 proposal: 2026-11-20-hub-accessibility-program
