@@ -27,7 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-26)
 
-- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:119` — dataset/encode, mixed category axes and chart kinds without a builder
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L119
-- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:391` — effectScatter/lines effects need engine-specific reduced-motion
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L391
+- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:139` — dataset/encode, mixed category axes and chart kinds without a builder
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L139
+- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:407` — effectScatter/lines effects need engine-specific reduced-motion
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L407
