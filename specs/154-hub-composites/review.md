@@ -29,3 +29,7 @@ Reviewer: the implementing agent, against hub master `a845e693`. The AS-IS was r
 | 16 | The story contrast gate measures on a white page. | S5 changes no colour, so it is neutral here; recorded under Out of Scope. |
 | 17 | Found with real keys on the Storybook build: on an editable table the spreadsheet Tab kept the focus in the table at the last cell (no next cell to move to). | Tab moves only while the row has a next cell; at the edge it leaves the table. Test added. |
 | 18 | Found with real keys: a header holds a sort button and a resize handle, so "several controls" made Enter a two-step for the most common action. | The resize handle does not count; Enter sorts, F2 enters the cell. |
+| 19 | A scatter chart can hold thousands of points; a table of all of them is unusable. | First 200 rows, followed by "Showing the first 200 of N points". |
+| 20 | On a category axis a scatter point's number is the category's position, not a value. | The table prints the category. Test added. |
+| 21 | Found by the gates: a raw `z-index` and a date printed outside the house formatter. | The button row needs no z-index (it follows the canvas in the DOM); dates go through `formatDate`. |
+

@@ -66,8 +66,8 @@ source_item: S5
 ### 2. Charts: a name, the data, and the actions
 
 6. `ariaLabel` is required by type on `Chart`; the 24 unnamed charts get a translated name. Sparklines take either a name or `decorative` (hidden from assistive technology); the type requires one of the two.
-7. The data table behind the disclosure also exists for pie (name, value, share), sankey (from, to, value) and scatter (the point's name and its two values).
-8. Legend toggles and item actions become real buttons. Chosen as closest to today's look: the canvas legend stays; a matching row of toggle buttons (`aria-pressed`) sits directly after the chart and is visible only while it holds keyboard focus. Where a chart drills down on a click, each row of its data table carries a button that does the same.
+7. The data table behind the disclosure also exists for pie (name, value, share), sankey (from, to, value; node names as the chart labels them) and scatter (series or point name and its two values; positions on a category axis read as the category; the first 200 points, with a line saying so when there are more).
+8. Legend toggles and item actions become real buttons. Chosen as closest to today's look: the canvas legend stays; a matching row of toggle buttons (`aria-pressed`) lies over the chart's bottom edge and is visible only while it holds keyboard focus; pressing one sends the engine the same action a legend click does. Where a chart reacts to a click, the marks in its data table (bar values, pie slices, sankey nodes, scatter points) are buttons that call the same handler with the same fields.
 
 ### 3. Workshop: everything the pointer can do, from the list
 
@@ -92,7 +92,9 @@ Invariants: pointer behaviour, the look of tables, charts and the canvas at rest
 
 **Demo (PR A)**: FigCraft `table-grid.figcraft` (page "Spec 154 · table"), exports in `demo/`, preview https://claude.ai/artifact/19cyCSxqNDd2415C8SSF5a. Approved in advance (quote above).
 
-**Demos still to build** (FigCraft as-is / to-be + preview, one per PR, linked here when built): the active cell and the header cell with focus inside (PR A); the focus-revealed series buttons and the pie data table (PR B); the list rows with Move / Link, and the zoom buttons (PR C).
+**Demo (PR B)**: FigCraft `charts.figcraft` (page "Spec 154 · charts"), exports in `demo/`, preview https://claude.ai/artifact/DFswovcVdtkHhioQNUeujq. Approved in advance (quote above).
+
+**Demo still to build** (PR C): the list rows with Move / Link, and the zoom buttons.
 
 ## Delivery: three hub PRs, each mergeable alone
 
