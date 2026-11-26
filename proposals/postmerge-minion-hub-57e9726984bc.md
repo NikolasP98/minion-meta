@@ -42,3 +42,8 @@ Looking at the query.ts handoff finding:
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/735
 - file: `src/lib/sandbox/blocks/query.ts`
 - checked: 2026-11-26
+
+## Merged from handoff-minion-hub-2952577265 (handoff-sweep)
+
+Same marker, found independently by the handoff-ledger sweep. Direct line anchor:
+https://github.com/NikolasP98/minion_hub/blob/master/src/lib/sandbox/blocks/query.ts#L267

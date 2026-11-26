@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2568633052
 title: Handoff marker — src/lib/components/sandbox/filters/PickFilter.svelte (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-22e4caa87007
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-hub]

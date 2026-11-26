@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-meta-73009062
 title: Handoff marker — codex/plugins/claude-mem/hooks/claude-mem-forwarder.sh (minion-meta)
-status: draft
+status: merged
+merged_into: 2026-11-26-claude-mem-17-upgrade-day
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-meta]

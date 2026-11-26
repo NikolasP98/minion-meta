@@ -40,3 +40,8 @@ A test file exists but isn't being run — the test was written during spec 150'
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/735
 - file: `tests/e2e/ui-audit/synced-pages.spec.ts`
 - checked: 2026-11-26
+
+## Merged from handoff-minion-hub-2515417896 (handoff-sweep)
+
+Same marker, found independently by the handoff-ledger sweep. Direct line anchor:
+https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/synced-pages.spec.ts#L8

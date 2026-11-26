@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2515417896
 title: Handoff marker — tests/e2e/ui-audit/synced-pages.spec.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-bf5f7b17e469
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-hub]

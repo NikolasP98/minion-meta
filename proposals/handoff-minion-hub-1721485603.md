@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-1721485603
 title: Handoff marker — src/lib/components/ui/Dropdown.svelte (minion_hub)
-status: draft
+status: review
+duplicate_candidate: postmerge-minion-hub-ac9f5b04f22d
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-hub]

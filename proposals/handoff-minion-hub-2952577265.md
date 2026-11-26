@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-2952577265
 title: Handoff marker — src/lib/sandbox/blocks/query.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-57e9726984bc
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-hub]

@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-310141754
 title: Handoff marker — src/lib/components/sandbox/filters/PickFilter.mounted.test.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-cdd1413e5064
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-hub]

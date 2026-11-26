@@ -42,3 +42,8 @@ Looking at the finding: a task (T022) from spec planning requested optimizing a 
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/735
 - file: `src/lib/sandbox/tools.ts`
 - checked: 2026-11-26
+
+## Merged from handoff-minion-hub-3509732759 (handoff-sweep)
+
+Same marker, found independently by the handoff-ledger sweep. Direct line anchor:
+https://github.com/NikolasP98/minion_hub/blob/master/src/lib/sandbox/tools.ts#L530

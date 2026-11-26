@@ -40,3 +40,8 @@ The `TODO(handoff)` marker at `src/lib/components/sandbox/filters/PickFilter.mou
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/735
 - file: `src/lib/components/sandbox/filters/PickFilter.mounted.test.ts`
 - checked: 2026-11-26
+
+## Merged from handoff-minion-hub-310141754 (handoff-sweep)
+
+Same marker, found independently by the handoff-ledger sweep. Direct line anchor:
+https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/sandbox/filters/PickFilter.mounted.test.ts#L66
