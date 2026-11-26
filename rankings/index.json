@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T22:47:23.030Z",
+	"generatedAt": "2026-11-26T23:20:30.449Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -12859,6 +12859,38 @@
 			"scoredAt": "2026-11-25T08:48:16.137Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-4edb99019bc2",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/charts/Chart.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4edb99019bc2.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "de05619ed174db4e297b7149699f7583a0980bd7e3ef0919bc6f59f06f04050d",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A chart-rendering correctness gap (mixed category axes without a builder) can silently misalign data across multiple hub dashboards, and a concrete ChartEncoder fix direction is already outlined.",
+			"evidence": [
+				"TODO(handoff): dataset/encode, mixed category axes and chart kinds without a builder",
+				"diagnosis warns of category index drift causing data to plot against wrong labels in multi-series dashboards"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T23:20:30.254Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-519a349c5d17",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23234,6 +23266,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-26T19:48:38.319Z"
+		},
+		{
+			"key": "issue:minion-meta#1118",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1118 [monitor:unstick] Run 2df37b00 (rank board goals) failed: ranking catalog source unavailable",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1118",
+			"sourceUpdatedAt": "2026-11-26T23:17:21Z",
+			"sourceFingerprint": "a8cd378dd1e5600ffe212cc5810e053ae1d6faf7914f928ef1837758615cf45e",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A guard clause deliberately blocked the ranking catalog build because minion_hub failed to supply source data, and the diagnosis gives a concrete, bounded next step (inspect minion_hub repo/config and the upstream feed) rather than a blind retry.",
+			"evidence": [
+				"\"ranking catalog source unavailable for minion_hub; refusing a partial catalog\" guard clause, not a crash",
+				"clean clone (6719/6719 files updated OK), no network/timeout/OOM signatures"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T23:20:30.254Z"
 		},
 		{
 			"key": "issue:minion-meta#755",
@@ -35987,41 +36051,6 @@
 			"scoredAt": "2026-11-22T07:47:46.293Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-4edb99019bc2",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/charts/Chart.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-4edb99019bc2.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "c6006e8d69939b60275cdf87558e86bfe86224414ef18b05e09238640d6a9679",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"proposal:handoff-minion-hub-1431194768"
-			],
-			"rationale": "Shares the same file and dataset/encode marker as handoff-1431194768 and adds a concrete fix direction, so the two should be merged into a single Chart.svelte encoding goal.",
-			"evidence": [
-				"same marker 'dataset/encode, mixed category axes' at Chart.svelte",
-				"proposes ChartEncoder utility fix direction",
-				"draft status"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T22:47:22.814Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-551c45cff1cc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -41174,6 +41203,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-26T02:59:17.881Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-0c59fdd23fd5",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/assistant/pill-status.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0c59fdd23fd5.md",
+			"sourceUpdatedAt": "2026-11-19",
+			"sourceFingerprint": "87a1421f2d4b294b4d3911a25e94c07eef5f50c392ca1d27191b7fc03ca72c52",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A small, well-scoped UX gap (unmapped tool IDs shown raw) with a clear fallback-mapping fix direction confined to one hub component.",
+			"evidence": [
+				"TODO(handoff) marker in src/lib/assistant/pill-status.ts about readable tool ids",
+				"fix direction: audit tool-to-label mapping and add a fallback for unmapped tools"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T23:20:30.254Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-4f60d3413457",
@@ -47252,38 +47313,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:32:18.244Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-0c59fdd23fd5",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/assistant/pill-status.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0c59fdd23fd5.md",
-			"sourceUpdatedAt": "2026-11-19",
-			"sourceFingerprint": "87a1421f2d4b294b4d3911a25e94c07eef5f50c392ca1d27191b7fc03ca72c52",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Minor UX/maintenance polish item (tool-id label mapping) with no production or security consequence, so it's low urgency but reasonably well-scoped for future pickup.",
-			"evidence": [
-				"TODO(handoff) marker in src/lib/assistant/pill-status.ts",
-				"diagnosis notes missing fallback for unmapped tool labels"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T23:17:02.016Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-49f7f7c8dc6f",
@@ -53991,6 +54020,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
+		},
+		{
+			"key": "run:minion_hub#45910073571",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45910073571",
+			"sourceUpdatedAt": "2026-11-26T23:17:44Z",
+			"sourceFingerprint": "86f2efdfddad3a48e62d11f9240bab46aa75b7eeed7bd45aac6daa0b8d5ecef6",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI workflow run, not a discrete work item to rank or execute.",
+			"evidence": [
+				"status: in_progress",
+				"push on master, storybook-deploy workflow"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T23:20:30.254Z"
+		},
+		{
+			"key": "run:minion_hub#45910073623",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45910073623",
+			"sourceUpdatedAt": "2026-11-26T23:17:45Z",
+			"sourceFingerprint": "6e8fbff1752d15b6f0981bd9695259164ba41c78d4fb31b9c658a64afbae1eba",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI workflow run, not a discrete work item to rank or execute.",
+			"evidence": [
+				"status: in_progress",
+				"push on master, CI workflow"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T23:20:30.254Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
