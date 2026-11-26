@@ -127,7 +127,7 @@ Without the hint, the same sheet opens from the drawer's kebab, **"Corregir serv
 
 ## FigCraft demo
 
-Pending. The as-is/to-be frames (drawer hint, correction sheet, cart "Cambiar servicio", delete dialog) come from `design/figcraft/minion-hub.master.figcraft` into `specs/149-booking-service-correction/booking-service-correction.figcraft` before S1 UI work. An interactive HTML preview of the happy path is published for review now.
+Pending. The as-is/to-be frames (drawer hint, correction sheet, cart "Cambiar servicio", delete dialog) come from `design/figcraft/minion-hub.master.figcraft` into `specs/149-booking-service-correction/booking-service-correction.figcraft` before S1 UI work. Interactive happy-path preview for review now: https://claude.ai/artifact/DyL3j9GGmmro3fHwfW2qJ5 (source in the session scratchpad, `svc-fix/index.html`).
 
 ## Open questions for the owner
 
