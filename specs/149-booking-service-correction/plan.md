@@ -37,9 +37,10 @@
 
 ### UI
 
-- `BookingDetailDrawer.svelte`: hint row (from the preview's `link` suggestion, computed in the detail read) and a kebab item, "Corregir servicio…".
+- `BookingDetailDrawer.svelte`: hint row (from the preview's `link` suggestion, computed in the detail read) and a kebab item, "Corregir servicio…", which opens `Picker` (single, `serviceColumns()`), then the sheet.
+- Window setting: `pos_settings.service_correction_window_hours` (additive column, default 24). `pos_settings` has `pos_settings_lock_*` statement triggers, so check that the update trigger admits the new column. Add a field in POS settings (owner/admin) and set FACES to 168 in a one-row data step at deploy (owner-approved 2026-11-26).
 - New `BookingServiceCorrectionSheet.svelte` (house `Modal`/drawer, service picker = existing sellables picker filtered to services, reason chips, preview table). It reuses `CorrectionFlow.svelte` patterns for preview → confirm → receipt.
-- S2: `SellCart.svelte`, with a swap action on lines that have `bookingId` and a delete dialog for booked lines; `submitTicket` carries `bookingServiceChanges[]`, applied through case 1 inside the ticket transaction.
+- S2: `SellCart.svelte`, with a booking badge + swap button opening `Picker` on lines that have `bookingId`; trash keeps the appointment pending (toast only); `submitTicket` carries `bookingServiceChanges[]`, applied through case 1 inside the ticket transaction.
 
 ### i18n, a11y, design
 

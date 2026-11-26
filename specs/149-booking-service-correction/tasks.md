@@ -10,7 +10,7 @@ Owner approval of [spec.md](spec.md) comes before T010.
 - [ ] T011 `patchBooking` re-accrues on a service change before completion; refuses `use_service_correction` after completion (D2). Unit tests.
 - [ ] T012 `planBookingServiceCorrectionInTx` (cases 1/2/3, stock deltas, recipe choices, link candidate, window, refusals).
 - [ ] T013 `previewBookingServiceCorrection` / `applyBookingServiceCorrection` (D3). T002 passes.
-- [ ] T014 Window and capability matrix test (D4).
+- [ ] T014 `pos_settings.service_correction_window_hours` migration (default 24) + POS settings field + FACES = 168; window and capability matrix test (D4).
 - [ ] T015 Idempotency and concurrency test (D5).
 - [ ] T016 Routes `…/service-correction/preview` and `…/service-correction` with typed refusals and Spanish messages.
 - [ ] T017 Detail read adds a `serviceCorrectionHint` (exactly one linkable line for the same client and visit).
@@ -21,9 +21,9 @@ Owner approval of [spec.md](spec.md) comes before T010.
 
 ## S2, prevent at checkout
 
-- [ ] T030 `SellCart.svelte`: "Cambiar servicio" on booked lines keeps `bookingId` and takes the new price.
+- [ ] T030 `SellCart.svelte`: appointment badge + "Cambiar servicio" button on booked lines opening `Picker` (single, `serviceColumns()`, services only, current picked); line keeps `bookingId`, takes the new catalogue price.
 - [ ] T031 `submitTicket` applies `bookingServiceChanges[]` through case 1 in the ticket transaction. Integration test.
-- [ ] T032 Delete dialog on booked lines: keep pending (default) or cancel the appointment. Mounted test.
+- [ ] T032 Trash on a booked line removes it from the sale, keeps the appointment pending, and shows the toast. Mounted test.
 
 ## After S1 ships
 
