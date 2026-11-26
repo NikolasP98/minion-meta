@@ -29,6 +29,10 @@
 
 Implemented in hub PR #719 (`c5af325f`, base `master`): every check green on CI run 45135919669, including `a11y` and the `qa-stack` page gate. Not merged; the merge needs the owner's approval. Story baseline 799 → 790 (rows of the deleted stories); pages 329 and suppressions 84 unchanged.
 
+## Status (2026-11-26)
+
+Merged. The owner approved both merges ("merge both"): hub PR #719 was squash-merged to `master` as `c51c5b62`, and this spec (meta #1076) was merged into `dev` as `efb7e5a8`. Still open from this slice: the shared `Dropdown` tab stops (program ledger entry 10) and a check of the live Monitor tab with a real session.
+
 ## Dependencies
 
 T002 → T004 → T005/T006 → T007 → T008 → T009 → T010.
