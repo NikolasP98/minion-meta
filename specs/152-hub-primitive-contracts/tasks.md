@@ -15,6 +15,15 @@
 - [x] T009 Demo: FigCraft as-is / to-be + preview for the unsaved-changes prompt
 - [ ] T010 Gates in the foreground, signed commit, hub PR, every check green, baselines ratcheted
 
-## PR B — menus and lists · PR C — board moves · PR D — status and labels · PR E — hand-rolled modals
+## PR B — menus and lists (`feat/152-menus`)
+
+- [x] T011 [B1] `src/lib/a11y/roving.ts` + unit tests
+- [x] T012 [B2] `ui/Dropdown.svelte`: items `tabindex="-1"`; remove the waiver in `SessionKanban.mounted.test.ts` and the `TODO(handoff)`
+- [x] T013 [B3] `ui/ContextMenu.svelte`: helper keys, roving stop, skip disabled rows, focus return
+- [x] T014 [B4] `ui/MultiSelectFilter.svelte`: listbox keys and name, translated labels (`common_all`, `common_removeNamed` in en + es), 24 px remove target
+- [x] T015 Tests: `menus.a11y.mounted.test.ts`
+- [ ] T016 Gates in the foreground, signed commit, hub PR, every check green, baselines ratcheted
+
+## PR C — board moves · PR D — status and labels · PR E — hand-rolled modals
 
 Tasks are added here when each PR starts.

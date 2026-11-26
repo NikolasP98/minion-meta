@@ -105,7 +105,18 @@ Invariants: no feature is removed; the Agenda, POS and session boards keep their
 
 **Demo (PR A, the one visible change)**: FigCraft `dialogs.figcraft` (page "Spec 152 · dialogs"), exports in `demo/`, preview https://claude.ai/artifact/LovomP1YjHjtuKhpQtNMBy. Approved in advance by the owner 2026-11-26: "fold the S1 leftovers into S3, then implement all slices directly, your work is fully approved to go live."
 
-PRs B–E get their own DELTA tables in this spec when they start.
+## DELTA (PR B — menus and lists)
+
+Nothing changes to the eye: the remove button keeps its 14 px look and gains a 24 px pointer target through an invisible hit area, so no demo is needed.
+
+| # | Transition | Proof |
+|---|---|---|
+| B1 | One shared helper, `$lib/a11y/roving` (`rovingTarget`, `setRovingStop`): arrows wrap, Home / End, type-ahead, one tab stop. | unit tests |
+| B2 | `Dropdown` items leave the Tab order (`tabindex="-1"`); the menu is one tab stop. Closes proposal ledger item 10. | `assertPattern(menu)` on the session board menu, waiver removed |
+| B3 | `ContextMenu`: Home / End / type-ahead through the helper, one tab stop across submenus, a disabled row is skipped, focus returns to what had it before the menu opened. | `assertPattern(menu, { opener, typeahead })` |
+| B4 | `MultiSelectFilter`: the list is a named `listbox` with one tab stop, arrows, Home / End and type-ahead; "Remove …" and the default "All" are translated; the remove target is 24 px. | `assertPattern(listbox, { typeahead })`; label test |
+
+PRs C–E get their own DELTA tables in this spec when they start.
 
 ## Requirements
 
