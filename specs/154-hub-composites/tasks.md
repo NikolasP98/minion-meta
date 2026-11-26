@@ -4,14 +4,14 @@
 
 ## PR A — table (`feat/154-table-grid`)
 
-- [ ] T001 Active column beside the active row; `aria-activedescendant` names the cell; header row reachable
-- [ ] T002 Left / Right / Home / End / Ctrl+Home / Ctrl+End; editable tables: the active cell is the selection
-- [ ] T003 Attachment: in-grid focusables `tabindex=-1`, re-applied when rows mount
-- [ ] T004 Enter: activate a single control, enter a multi-control cell (Tab cycles, Escape returns)
-- [ ] T005 All grid keys stand down while a cell's control has focus
-- [ ] T006 Sort announcement (en + es)
-- [ ] T007 Tests: `assertPattern(grid)`, Tab count, header reach, Enter cases, virtualised remount; ledger rows of the grid story removed
-- [ ] T008 Demo; gates; real keys on a Storybook build; PR
+- [x] T001 Active column beside the active row; `aria-activedescendant` names the cell; header row reachable
+- [x] T002 Left / Right / Home / End / Ctrl+Home / Ctrl+End; editable tables: the active cell is the selection
+- [x] T003 Attachment: in-grid focusables `tabindex=-1`, re-applied when rows mount
+- [x] T004 Enter: activate a single control, enter a multi-control cell (Tab cycles, Escape returns)
+- [x] T005 All grid keys stand down while a cell's control has focus
+- [x] T006 Sort announcement (en + es)
+- [x] T007 Tests: `assertPattern(grid)`, Tab count, header reach, Enter cases, virtualised remount; ledger rows of the grid story removed
+- [x] T008 Demo; gates; real keys on a Storybook build; PR = hub #748
 
 ## PR B — charts (`feat/154-charts`)
 
