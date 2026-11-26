@@ -42,9 +42,9 @@ source_item: S2
 
 1. **Skip link.** The first Tab key on any signed-in page shows a "Skip to content" link at the top left. Activating it moves focus to the page content. It is invisible until it has keyboard focus, so nothing changes for mouse and touch users.
 2. **One main region.** The shell owns the single `<main id="main-content">`. `PageShell` and the six workforce pages no longer render their own inside it.
-3. **A title on every page.** Format: **`‹page title› · ‹hub name›`**, where the page title is the one the page already shows in its header and the hub name is the organisation's white-label name. Examples (English): "Developers · Minion Hub", "Sign-in & security · Minion Hub", "Costs · Minion Hub". `PageHeader` supplies it, so a page gets a title by having a header. A page with no header gets the hub name alone.
-4. **The 87 hand-written titles are not rewritten in this slice.** A page that sets its own title keeps it. Bringing them to the one format is a follow-up (recorded as an open end), because it changes 87 tab titles.
-5. **Named navigation.** The sidebar and the mobile menu are labelled "Main".
+3. **A title on every page.** Format: **`‹page title› · ‹hub name›`**, where the page title is the one the page already shows in its header and the hub name is the organisation's white-label name. Examples (English, default hub name "MINION Hub"): "Developers · MINION Hub", "Sign-in & security · MINION Hub", "Costs · MINION Hub". An organisation with its own hub name gets it: "Developers · Faces Hub". `PageHeader` supplies it, so a page gets a title by having a header. A page with no header gets the hub name alone. A header inside a record peek never sets the title.
+4. **The 87 hand-written titles are not rewritten in this slice.** A page that sets its own title keeps it: in Svelte the deepest `<title>` wins on the server and on the client (measured, see review), so those pages pass `documentTitle={false}` to their header and a test enforces it. Bringing them to the one format is a follow-up (recorded as an open end), because it changes 87 tab titles.
+5. **Named navigation.** The sidebar and the mobile menu are labelled with the existing string `nav_primaryAria` ("Primary" / "Principal").
 
 Invariants: exactly one `<main>` per signed-in page; exactly one `<title>` in the served HTML; the skip link is the first focusable element; public pages (`PublicTaskShell`) are untouched.
 
@@ -54,7 +54,7 @@ Invariants: exactly one `<main>` per signed-in page; exactly one `<title>` in th
 |---|---|---|
 | D1 | `(app)/+layout.svelte` renders the skip link first and wraps the route viewport content in `<main id="main-content" tabindex="-1">`. | mounted test: first focusable is the link, its target exists and takes focus; Chromium check on the built shell |
 | D2 | `PageShell` renders a `div` when it is inside the shell's main (context set by the layout); standalone use keeps `<main>`. The six workforce pages' `<main>` become `div`s. | mounted tests for both cases; a test that counts `main` elements per route file; `grep` |
-| D3 | The root layout sets the fallback title (hub name) through `<svelte:head>`; `PageHeader` sets "‹title› · ‹hub name›" through `<svelte:head>`; a page's own `<svelte:head><title>` still wins. | server-render test: one `<title>`, expected text, for header-only, header + own title, and neither |
+| D3 | The root layout sets the fallback title (hub name) through `<svelte:head>`; `PageHeader` sets "‹title› · ‹hub name›" through `<svelte:head>` unless `documentTitle={false}`; the 67 files that have both a hand-written title and a header pass `false` (plus `BookingsView`, whose two callers set their own). | mounted tests: header-only, own hub name, own title kept; a source test that fails when a file with its own `<title>` has a header that is not opted out |
 | D4 | Both primary `<nav>` elements get `aria-label`. | mounted test; ad hoc axe run with best-practice rules on the shell |
 | D5 | The page ledger's 63 `document-title` rows go to 0 and no row rises. | page gate in CI; baseline ratcheted from the PR's CI artifact |
 
@@ -108,7 +108,7 @@ A screen-reader user finds one main region and a named navigation.
 - **FR-004**: A title a page sets itself MUST keep winning; none of the 87 existing titles may change in this slice.
 - **FR-005**: The served HTML MUST contain exactly one `<title>`.
 - **FR-006**: The two primary navigation landmarks MUST have an accessible name.
-- **FR-007**: New user-facing strings ("Skip to content", "Main") MUST go through Paraglide in every locale the hub ships.
+- **FR-007**: The new user-facing string ("Skip to content" / "Saltar al contenido") MUST go through Paraglide in both locales; the navigation label reuses an existing string.
 - **FR-008**: No route, API, permission or data change; semantic tokens only; `lint:design && lint:tokens` pass.
 - **FR-009**: `bun run a11y` MUST pass with no baseline rising; the page baseline is ratcheted down to the measured counts.
 
