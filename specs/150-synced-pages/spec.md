@@ -1,8 +1,8 @@
 ---
-status: draft
-verdict: pending
+status: merged
+verdict: approved
 created: 2026-11-25
-updated: 2026-11-25
+updated: 2026-11-26
 repos: [minion_hub]
 tags: [ui, logic]
 source_proposal: 2026-11-25-hub-synced-pages
