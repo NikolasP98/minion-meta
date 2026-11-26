@@ -149,3 +149,13 @@ written by the agent. **Verified by:** the S1–S4 automated tests green on hub 
 
 S1 design: `specs/150-synced-pages/plan.md`; S1 tasks: `specs/150-synced-pages/tasks.md` (Spec Kit). The EGM review reports for this
 document live in meta `.local/egm/2026-11-25-synced-pages/` (untracked).
+
+## Open items ledger (S1 implementation, hub `feat/150-synced-pages-s1`)
+
+| # | Open end | Where (`TODO(handoff)`) | Next step |
+|---|---|---|---|
+| 1 | e2e `tests/e2e/ui-audit/synced-pages.spec.ts` written but never run (local QA stack unusable since 11-23: DB re-keyed, every page 500) | spec file header | Owner OK to reseed the shared QA stack, or run on prod with a temporary admin bump; proves SC-001 timing + SC-002 |
+| 2 | Picker choices beyond the first 200 need a server-side search | `src/lib/sandbox/blocks/query.ts` (`optionsQuery`) | S2 |
+| 3 | `sandbox.arrange` skips filters through an `isFilter(id)` callback instead of GETting elements (a GET broke three lease-timing tests) | `src/lib/sandbox/tools.ts` | Keep unless arrange is called outside `/sandbox`; then add the GET with the lease tests adjusted |
+| 4 | Shared `ui/MultiSelectFilter` popup fails the APG listbox pattern (no name, one tab stop per option, no arrow/End keys) | `PickFilter.svelte` + its test | Hub a11y program (meta #1060, S3 primitives) |
+| 5 | SC-003 agent trial (5 runs) | — | Post-merge (T026) |
