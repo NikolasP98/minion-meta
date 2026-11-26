@@ -7,6 +7,7 @@ updated: 2026-11-26
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+merged_from: handoff-minion-hub-726885937
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/components/data-view/BoardView.svelte`
@@ -40,3 +41,8 @@ The `TODO(handoff)` marker at `src/lib/components/data-view/BoardView.svelte` is
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/739
 - file: `src/lib/components/data-view/BoardView.svelte`
 - checked: 2026-11-26
+
+## Merged from handoff-minion-hub-726885937
+
+Same marker, found independently by the handoff-ledger sweep. Direct line link:
+https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/data-view/BoardView.svelte#L170

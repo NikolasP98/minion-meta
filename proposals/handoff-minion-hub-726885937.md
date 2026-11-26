@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-726885937
 title: Handoff marker — src/lib/components/data-view/BoardView.svelte (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-7dbabfa86c86
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-hub]
