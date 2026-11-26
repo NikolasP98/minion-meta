@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T11:17:34.931Z",
+	"generatedAt": "2026-11-26T11:47:23.587Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2083,39 +2083,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T07:48:50.521Z"
-		},
-		{
-			"key": "pr:minion_hub#740",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#740 fix(a11y): the command palette closes again — a bare dialog has no exit animation to wait for (hotfix for #737)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/740",
-			"sourceUpdatedAt": "2026-11-26T11:14:25Z",
-			"sourceFingerprint": "f14a5f1f359d1a5e8f50b9aef5df04a6b2b8e93ba58399f4e2387c0eaca4af8b",
-			"score": 72,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 6,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Production hotfix for a command palette that never closes, root-caused and verified with a test that fails on master and passes here.",
-			"evidence": [
-				"bug reproduced on production commit b9b263be",
-				"palette test fails on master, passes with fix",
-				"85 tests pass, bun run check 0 errors"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T11:17:34.723Z"
 		},
 		{
 			"key": "pr:minion-meta#1095",
@@ -4204,6 +4171,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T07:48:12.220Z"
+		},
+		{
+			"key": "pr:minion_hub#740",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#740 fix(a11y): the command palette closes again — a bare dialog has no exit animation to wait for (hotfix for #737)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/740",
+			"sourceUpdatedAt": "2026-11-26T11:17:39Z",
+			"sourceFingerprint": "9af0695d5c39beb29d7a009df83184105df8ce2a50b4fe945449e637ac518623",
+			"score": 65,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Production hotfix for a command palette that gets stuck open requiring a page reload, with a regression test and passing checks.",
+			"evidence": [
+				"production bug on b9b263be: palette never finishes closing until reload",
+				"new test fails on master and passes here; 85 tests pass, bun run check 0 errors"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T11:47:23.381Z"
 		},
 		{
 			"key": "pr:minion-meta#1090",
@@ -13849,41 +13848,6 @@
 			"scoredAt": "2026-11-23T14:26:41.054Z"
 		},
 		{
-			"key": "pr:minion_hub#738",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#738 feat(a11y): menus and lists are one tab stop with arrows, Home/End and type-ahead (spec 152 PR B)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/738",
-			"sourceUpdatedAt": "2026-11-26T10:13:25Z",
-			"sourceFingerprint": "5a03255436c976673738803759039277126037ee2cea6b061572c0195051bbee",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#737"
-			],
-			"rationale": "Second pre-approved independent a11y PR in the same spec slice with detailed proof and known limitations noted.",
-			"evidence": [
-				"Independent of #737, same spec 152",
-				"7 new unit tests, 136 tests across 12 files pass",
-				"bun run check 0 errors/warnings"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T10:17:24.213Z"
-		},
-		{
 			"key": "pr:minion_site#25",
 			"kind": "pr",
 			"stage": "development",
@@ -23466,14 +23430,14 @@
 			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
-			"key": "pr:minion_hub#739",
+			"key": "pr:minion_hub#738",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#739 feat(a11y): move board cards with the keyboard; one shared screen-reader announcer (spec 152 PR C)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/739",
-			"sourceUpdatedAt": "2026-11-26T10:48:57Z",
-			"sourceFingerprint": "3cb5d46abab8cc39aebdc397fc38dc7c5f4088132d826c0291f16f74267d45dc",
+			"title": "#738 feat(a11y): menus and lists are one tab stop with arrows, Home/End and type-ahead (spec 152 PR B)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/738",
+			"sourceUpdatedAt": "2026-11-26T11:39:57Z",
+			"sourceFingerprint": "b68c7ae50234986f57ac9ecf3bf44acfc5721a975ef9b951d3a3956612375597",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -23482,21 +23446,52 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 9
+				"specification": 8,
+				"implementation": 8
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Spec-linked accessibility slice with 153 passing tests and full lint/build gates green, ready to merge.",
+			"rationale": "Well-specified accessibility PR with a shared roving-focus helper, full test/check evidence, and ledger improvement, independent of sibling PRs.",
 			"evidence": [
-				"153 tests across board/session/a11y suites pass",
-				"spec 152 PR C, approved in advance by owner 2026-11-26",
-				"a11y check shows no regression"
+				"spec 152 PR B, independent of #737/#738 siblings",
+				"136 tests pass, bun run check 0 errors, a11y ledger 758 vs 761 baseline"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T11:17:34.723Z"
+			"scoredAt": "2026-11-26T11:47:23.381Z"
+		},
+		{
+			"key": "pr:minion_hub#739",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#739 feat(a11y): move board cards with the keyboard; one shared screen-reader announcer (spec 152 PR C)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/739",
+			"sourceUpdatedAt": "2026-11-26T11:39:23Z",
+			"sourceFingerprint": "c7266ca87cf1d14597bf8f0b731ce1a4e91aa73cfd0f1dd7ce0626c8d81dae23",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Keyboard drag-and-drop plus shared announcer is clearly scoped, independently tested, and documents its one known gap via TODO(handoff) per repo policy.",
+			"evidence": [
+				"153 tests pass across board/session/a11y suites, bun run check 0 errors",
+				"known gap (column reordering) explicitly ticketed as TODO(handoff) and ledger item 17"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T11:47:23.381Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
