@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-66d88ed81830
 title: "Post-merge finding — todo-handoff in src/lib/components/my-agent/ZenMode.svelte (minion_hub)"
-status: approved
+status: closed
 created: 2026-10-07
-updated: 2026-10-07
+updated: 2026-11-26
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/components/my-agent/ZenMode.svelte`
