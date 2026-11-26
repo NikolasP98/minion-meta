@@ -44,5 +44,6 @@
 ## PR E — hand-rolled modals
 
 - [x] T027 [E1] `layout/BugReporter`, `builder/SkillCreateWizard`, stories `Overlays/ConfirmDialog` and `Overlays/DraggableWindow`; real-key run; hub #742
-- [ ] T028 [E2] relationship prompt, prose editor, two agent wizards → `Dialog` (`bare`) + stories + demo
-- [ ] T029 [E3] agent settings drawer, easel board, zen mode
+- [x] T028a [E2a] relationship prompt → `Dialog` (`bare`, `backdrop="clear"`) + story + real-key run; hub #744
+- [x] T028b [E2b] prose editor, two agent wizards → `Dialog` (`bare`, size-neutral, `align`) + stories + real-key run
+- [x] T029 [E3] agent settings drawer, easel board, focus mode → `Dialog` (`bare`, clear backdrop) around their own fixed surfaces + stories + real-key run
