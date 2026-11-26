@@ -222,3 +222,13 @@ Left open by the S0 gates slice on 2026-11-20; each is a decision or a follow-up
 7. **No per-rule waiver mechanism.** Debt is carried by the baseline; the sweep's allow-list type is closed over its six rules.
 8. **Engineering bundle sync pending:** minion_plugins PR #2 adds the gate to `minion-engineering`; after it merges, run `scripts/sync-minion-engineering-skills.sh` in minion-meta.
 9. **`assertPattern` does not check** Tab trapping in dialogs (needs real Tab keys), right-to-left arrow keys, or screen-reader output (S6).
+
+10. **(S1, spec 146) The shared `Dropdown` leaves its menu items in the Tab order.** Items are buttons without `tabindex="-1"`, so an open menu has one tab stop per item instead of one for the menu (APG menu pattern). Found by `assertPattern` on the session board's "Move to…" menu; it affects every dropdown in the hub. `TODO(handoff)` at hub `src/lib/components/ui/Dropdown.svelte`; fix in the widget slice (S3).
+11. **(S1) Gaps 1 and 2 of S1 are still open:** NavigationGuardModal → `ConfirmDialog` and CommandPalette → `Dialog` + combobox. Spec 146 covers gap 11 (the session board) only.
+12. **(S1, spec 146) The session task panel on a phone-width screen** still shows four very narrow columns, as before the move; a phone layout is not designed.
+
+13. **(S2, spec 151) 87 pages set their browser title by hand, in five formats** ("‹page› — ‹module›", "‹page› · ‹module›", "‹page›" alone, "‹page› · ‹brand› hub", "‹page› — ‹brand›"). They were left as they are; their headers pass `documentTitle={false}`. Unifying them on "‹page› · ‹hub name›" means deleting those `<svelte:head>` blocks and the opt-outs, and changes 87 tab titles: an owner decision.
+14. **(S2) Pages without a header** (canvases, flow editor, workshop) get the hub name alone as their title.
+15. **(S2) axe's `landmark-*` and `region` rules are not gated** (best-practice tags; the gate runs WCAG A/AA tags). The shell's landmarks are covered by tests; findings inside individual pages are not.
+16. **(S2) The skip link was not exercised in a browser against the running app**; it is asserted structurally and by the sweep's `bypass` rule.
+
