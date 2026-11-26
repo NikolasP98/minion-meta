@@ -222,3 +222,7 @@ Left open by the S0 gates slice on 2026-11-20; each is a decision or a follow-up
 7. **No per-rule waiver mechanism.** Debt is carried by the baseline; the sweep's allow-list type is closed over its six rules.
 8. **Engineering bundle sync pending:** minion_plugins PR #2 adds the gate to `minion-engineering`; after it merges, run `scripts/sync-minion-engineering-skills.sh` in minion-meta.
 9. **`assertPattern` does not check** Tab trapping in dialogs (needs real Tab keys), right-to-left arrow keys, or screen-reader output (S6).
+
+10. **(S1, spec 146) The shared `Dropdown` leaves its menu items in the Tab order.** Items are buttons without `tabindex="-1"`, so an open menu has one tab stop per item instead of one for the menu (APG menu pattern). Found by `assertPattern` on the session board's "Move to…" menu; it affects every dropdown in the hub. `TODO(handoff)` at hub `src/lib/components/ui/Dropdown.svelte`; fix in the widget slice (S3).
+11. **(S1) Gaps 1 and 2 of S1 are still open:** NavigationGuardModal → `ConfirmDialog` and CommandPalette → `Dialog` + combobox. Spec 146 covers gap 11 (the session board) only.
+12. **(S1, spec 146) The session task panel on a phone-width screen** still shows four very narrow columns, as before the move; a phone layout is not designed.
