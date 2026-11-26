@@ -23,7 +23,7 @@
 - [x] T013 [B3] `ui/ContextMenu.svelte`: helper keys, roving stop, skip disabled rows, focus return
 - [x] T014 [B4] `ui/MultiSelectFilter.svelte`: listbox keys and name, translated labels (`common_all`, `common_removeNamed` in en + es), 24 px remove target
 - [x] T015 Tests: `menus.a11y.mounted.test.ts`
-- [ ] T016 Gates in the foreground, signed commit, hub PR, every check green, baselines ratcheted
+- [x] T016 Gates, real-key run (found: Tab did nothing in an open dropdown; fixed), signed commits, hub #738
 
 ## PR C — board moves (`feat/152-board-moves`)
 
@@ -31,7 +31,7 @@
 - [x] T018 [C2] `BoardView`, `scheduling/FieldsList`, `dashboard/EditableGrid` use it
 - [x] T019 [C3] `data-view/BoardView.svelte`: keyboard drag; 4 strings in en + es
 - [x] T020 Tests + demo
-- [ ] T021 Gates in the foreground, signed commit, hub PR, every check green
+- [x] T021 Gates, real-key run (found: a cancelled pick-up swallowed the next Enter; fixed), signed commits, hub #739
 
 ## PR D — status and labels (`feat/152-status-labels`)
 
@@ -39,8 +39,10 @@
 - [x] T023 [D2] `ui/Skeleton.svelte`: `label`
 - [x] T024 [D3] `scripts/design-lint.mjs`: `icon-button-unlabelled`, baseline 0
 - [x] T025 Tests
-- [ ] T026 Gates, real-key run, signed commit, hub PR, every check green
+- [x] T026 Gates, real-browser run (names read from the accessibility tree), signed commit, hub #741
 
 ## PR E — hand-rolled modals
 
-Tasks are added here when each PR starts.
+- [x] T027 [E1] `layout/BugReporter`, `builder/SkillCreateWizard`, stories `Overlays/ConfirmDialog` and `Overlays/DraggableWindow`; real-key run; hub #742
+- [ ] T028 [E2] relationship prompt, prose editor, two agent wizards → `Dialog` (`bare`) + stories + demo
+- [ ] T029 [E3] agent settings drawer, easel board, zen mode
