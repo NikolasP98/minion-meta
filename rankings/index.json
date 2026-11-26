@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T18:47:09.011Z",
+	"generatedAt": "2026-11-26T19:48:38.523Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1231,39 +1231,6 @@
 			"scoredAt": "2026-11-14T21:48:33.163Z"
 		},
 		{
-			"key": "pr:minion_hub#340",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#340 fix(pos): harden configurable invoice and appointment flows",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/340",
-			"sourceUpdatedAt": "2026-09-20T02:59:25Z",
-			"sourceFingerprint": "4f955cc25a51f6b78b2916c9be48b4e9be6ca33eaf643106b730baafec0dd604",
-			"score": 78,
-			"band": "high",
-			"axes": {
-				"criticality": 8,
-				"importance": 8,
-				"impact": 7
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Hardens core POS billing flows against duplicate charges and concurrency races with extensive verification and a reviewed migration, ready for release gates.",
-			"evidence": [
-				"atomic booking billing claims and duplicate-charge protection",
-				"4,305 tests passed, 213 skipped on release commit",
-				"additive migration 20260920000000_pos_workflow_policy.sql"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
 			"key": "pr:minion-meta#900",
 			"kind": "pr",
 			"stage": "development",
@@ -2281,6 +2248,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T17:17:37.742Z"
+		},
+		{
+			"key": "pr:minion_hub#340",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#340 fix(pos): harden configurable invoice and appointment flows",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/340",
+			"sourceUpdatedAt": "2026-09-20T02:59:25Z",
+			"sourceFingerprint": "4f955cc25a51f6b78b2916c9be48b4e9be6ca33eaf643106b730baafec0dd604",
+			"score": 71,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Core POS billing/scheduling hardening with duplicate-charge protection, extensive real-backend concurrency validation, and an already-identified migration-ownership fix awaiting CI rerun.",
+			"evidence": [
+				"505 test files, 4,305 tests passed in release clone",
+				"real concurrent-request races verified 201/409 and 200/409",
+				"migration ownership mismatch found and fixed in follow-up 29eea501"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "pr:minion_hub#679",
@@ -3332,6 +3332,39 @@
 			"scoredAt": "2026-11-23T10:17:22.934Z"
 		},
 		{
+			"key": "pr:minion_site#25",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_site",
+			"title": "#25 factory: approved spec: 2026-08-17-pkg-dev-crypto-failopen-spec",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/25",
+			"sourceUpdatedAt": "2026-08-31T02:44:46Z",
+			"sourceFingerprint": "a37aa3097eadf47e9ac54fee36af3bbe069cc3aaaf01da1da867424f0101c2e2",
+			"score": 68,
+			"band": "medium",
+			"axes": {
+				"criticality": 7,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Security-tagged crypto fail-open fix flagged high risk, but the catalog entry only shows an automated factory stub with full spec text elsewhere and gates not confirmed passed.",
+			"evidence": [
+				"title references pkg-dev-crypto-failopen-spec",
+				"tags include risk:high and topic:security",
+				"status draft, gated until gates pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:10.727Z"
+		},
+		{
 			"key": "pr:minion-meta#1055",
 			"kind": "pr",
 			"stage": "development",
@@ -4092,18 +4125,18 @@
 				"specification": 8,
 				"implementation": 5
 			},
-			"confidence": 6,
+			"confidence": 5,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Fixes a real SUNAT emission rejection with well-sourced regulatory justification, though the chosen affectation code may still need accountant sign-off.",
+			"rationale": "Addresses a real SUNAT emission rejection (fault 3105) with a well-sourced root-cause and chosen tax code, though explicit test/validation evidence is thinner than other PRs.",
 			"evidence": [
-				"two beta emissions rejected with fault 3105 on 2026-10-10",
-				"chosen code 31 matches SUNAT's own worked example in the official XML guide",
-				"PR status is draft"
+				"two beta emissions rejected 2026-10-10 with fault 3105",
+				"root cause traced to PR #459 making zero-price lines chargeable",
+				"affectation code 31 matches SUNAT's own worked example"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "pr:minion_hub#602",
@@ -5199,6 +5232,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T19:17:09.921Z"
+		},
+		{
+			"key": "pr:minion_site#29",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_site",
+			"title": "#29 train: promote dev → master (2026-09-05)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/29",
+			"sourceUpdatedAt": "2026-10-16T21:41:53Z",
+			"sourceFingerprint": "eea76c1f15c5e86b487145476828e0af5b3c84476c1905b52554a14bdb50a80e",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Weekly production-promotion gate bundling 12 ready commits with a clear merge checklist; review evidence exists in the factory pipeline though not independently re-verified here.",
+			"evidence": [
+				"12 commits ready for promotion",
+				"merging deploys to production",
+				"checklist requires PASS bound to final head SHA per PR"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "pr:minion-meta#1050",
@@ -10258,39 +10324,6 @@
 			"scoredAt": "2026-11-20T23:18:05.985Z"
 		},
 		{
-			"key": "pr:minion_site#29",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_site",
-			"title": "#29 train: promote dev → master (2026-09-05)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/29",
-			"sourceUpdatedAt": "2026-10-16T21:41:53Z",
-			"sourceFingerprint": "eea76c1f15c5e86b487145476828e0af5b3c84476c1905b52554a14bdb50a80e",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This weekly promotion train is dated 2026-09-05 and was last updated 2026-10-16, over a month stale relative to now, so it is very likely superseded by later promotion trains.",
-			"evidence": [
-				"title: train: promote dev -> master (2026-09-05)",
-				"updatedAt 2026-10-16T21:41:53Z",
-				"Weekly promotion train (Saturday 21:00)"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -11683,71 +11716,6 @@
 			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
-			"key": "issue:minion_hub#205",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion_hub",
-			"title": "#205 Salvage retained Hub WIP from PR #118 into current-base bounded slices",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/issues/205",
-			"sourceUpdatedAt": "2026-08-30T02:35:12Z",
-			"sourceFingerprint": "3d692c44c604643c5ddb529116e4a55a09f8e88f0da7c55ae37ad43b1f62f7c9",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 3
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Valuable multi-domain salvage program is well scoped but explicitly requires an upfront reconciliation deliverable before any bounded implementation slice can begin.",
-			"evidence": [
-				"96 changed files, 7,759 additions, three unaddressed High review findings",
-				"no product implementation is authorized until reconciliation is reviewed"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
-			"key": "pr:minion_hub#544",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#544 feat(whatsapp): let verified members reach their personal agents",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/544",
-			"sourceUpdatedAt": "2026-10-16T15:46:51Z",
-			"sourceFingerprint": "1b720a0a300f939691752d3821a12cb6d23e56b33ae5a39357521a7920421fd2",
-			"score": 54,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 4
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Significant cross-repo personal-agent routing feature with solid test evidence but explicitly incomplete capability parity before release.",
-			"evidence": [
-				"ordinary provisioned agents still lack shared isolated job/delegation integration",
-				"Docker job primitive locally tested but not wired into exec/process",
-				"no production migration, deployment, pairing, sends or activation occurred"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
 			"key": "pr:minion_hub#699",
 			"kind": "pr",
 			"stage": "development",
@@ -12362,6 +12330,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:16:32.528Z"
+		},
+		{
+			"key": "pr:minion_hub#580",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#580 fix(assistant): keep history notices readable after tool steps",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/580",
+			"sourceUpdatedAt": "2026-10-22T06:02:24Z",
+			"sourceFingerprint": "7b86c71059a362508b5c9b796fbd1482c9c098e7c9accf56084070be409ad377",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Well-scoped UI readability fix for the floating assistant with exhaustive CI validation (7,883 unit tests, ten jobs) and independent review passes.",
+			"evidence": [
+				"CI run passes all ten jobs including 7,883 unit tests",
+				"independent Standards and Spec reviews pass",
+				"regression coverage for EN/ES tool-only history and streaming provenance"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "pr:minion_hub#734",
@@ -13324,6 +13325,39 @@
 			"scoredAt": "2026-11-21T07:52:41.575Z"
 		},
 		{
+			"key": "pr:minion_hub#544",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#544 feat(whatsapp): let verified members reach their personal agents",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/544",
+			"sourceUpdatedAt": "2026-10-16T15:46:51Z",
+			"sourceFingerprint": "1b720a0a300f939691752d3821a12cb6d23e56b33ae5a39357521a7920421fd2",
+			"score": 52,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Strategic WhatsApp personal-agent capability with solid targeted test coverage, but explicitly incomplete capability parity and unfenced reconciliation gaps block it from being execution-ready as-is.",
+			"evidence": [
+				"73 unique focused tests passed, exact-head CI passed",
+				"ordinary provisioned agents still lack shared isolated job/delegation parity",
+				"unknown effects remain fenced for reconciliation until domain mutation and receipts share a transaction"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:10.727Z"
+		},
+		{
 			"key": "pr:minion-meta#775",
 			"kind": "pr",
 			"stage": "development",
@@ -13782,73 +13816,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
-		},
-		{
-			"key": "pr:minion_site#25",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_site",
-			"title": "#25 factory: approved spec: 2026-08-17-pkg-dev-crypto-failopen-spec",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/25",
-			"sourceUpdatedAt": "2026-08-31T02:44:46Z",
-			"sourceFingerprint": "a37aa3097eadf47e9ac54fee36af3bbe069cc3aaaf01da1da867424f0101c2e2",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Security-tagged fail-open fix in a dev crypto package is potentially important but the summary provides no verification evidence beyond gate status.",
-			"evidence": [
-				"risk:high and topic:security tags",
-				"draft until the gates pass",
-				"factory-generated manifest with no behavioral detail"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
-			"key": "pr:minion-meta#1114",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1114 spec(154): composites — tables, charts and the workshop canvas work from the keyboard (a11y S5)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1114",
-			"sourceUpdatedAt": "2026-11-26T18:10:54Z",
-			"sourceFingerprint": "ffc4ebd7d6e71730376efae602ce62451e65b7be57aa924ef540f21b23ca985e",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 4,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion-meta#1113"
-			],
-			"rationale": "Detailed, owner-approved multi-slice a11y spec with concrete before/after behavior but still draft pending first hub PR.",
-			"evidence": [
-				"owner approved in advance per quote in summary",
-				"three mergeable hub PRs planned, draft until first is up"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T18:47:08.808Z"
 		},
 		{
 			"key": "pr:minion-meta#836",
@@ -15583,6 +15550,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T19:17:36.235Z"
+		},
+		{
+			"key": "issue:minion_hub#205",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion_hub",
+			"title": "#205 Salvage retained Hub WIP from PR #118 into current-base bounded slices",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/issues/205",
+			"sourceUpdatedAt": "2026-08-30T02:35:12Z",
+			"sourceFingerprint": "3d692c44c604643c5ddb529116e4a55a09f8e88f0da7c55ae37ad43b1f62f7c9",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Large multi-domain salvage effort explicitly blocked on a file-by-file reconciliation before any implementation is authorized, so the current issue framing can't itself produce a mergeable outcome.",
+			"evidence": [
+				"96 changed files, 7,759 additions across unrelated domains in source PR #118",
+				"three unaddressed High review findings",
+				"no product implementation authorized until reconciliation is reviewed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "pr:minion (gateway)#257",
@@ -18233,39 +18233,6 @@
 			"scoredAt": "2026-11-21T08:10:20.558Z"
 		},
 		{
-			"key": "pr:minion_hub#580",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#580 fix(assistant): keep history notices readable after tool steps",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/580",
-			"sourceUpdatedAt": "2026-10-22T06:02:24Z",
-			"sourceFingerprint": "7b86c71059a362508b5c9b796fbd1482c9c098e7c9accf56084070be409ad377",
-			"score": 46,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 8,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Thoroughly verified fix for a concrete Assistant rendering regression, with full CI and independent review passing.",
-			"evidence": [
-				"CI run passes all ten jobs including 7,883 unit tests",
-				"independent Standards and Spec reviews pass",
-				"regression coverage added for EN/ES tool-only history"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
 			"key": "pr:minion-meta#1041",
 			"kind": "pr",
 			"stage": "development",
@@ -19522,14 +19489,14 @@
 			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
-			"key": "pr:minion_hub#279",
+			"key": "pr:minion-meta#1114",
 			"kind": "pr",
 			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#279 feat(artifacts): generated inline plugin-bridge region for built-in artifacts + qc build-trace tooling (14-07, 12-QC)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/279",
-			"sourceUpdatedAt": "2026-09-16T03:15:45Z",
-			"sourceFingerprint": "6a3e9dbab3ad440e240ce4c4dbec9192251d708c65c97816c9d293a142dda80b",
+			"repo": "minion-meta",
+			"title": "#1114 spec(154): composites — tables, charts and the workshop canvas work from the keyboard (a11y S5)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1114",
+			"sourceUpdatedAt": "2026-11-26T19:02:55Z",
+			"sourceFingerprint": "d16565bb454a9b678c0fd980f48a3c306b1d4e4f2274ac523c2310b8ffb8288e",
 			"score": 44,
 			"band": "low",
 			"axes": {
@@ -19539,20 +19506,20 @@
 			},
 			"readiness": {
 				"specification": 8,
-				"implementation": 8
+				"implementation": 6
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Well-specified parity port of generated bridge tooling with strong local verification evidence and no open blockers.",
+			"rationale": "Owner-pre-approved accessibility spec with a clear plan/tasks breakdown into three independently mergeable hub PRs, ready to move into implementation.",
 			"evidence": [
-				"bun run check 0 errors, 0 warnings",
-				"157 tests passing across 7 files",
-				"digest-pinned bridge region with provenance file"
+				"owner stated work is fully approved to go live 2026-11-26",
+				"spec, two-pass review, plan and tasks already produced",
+				"three hub PRs (table, charts, workshop) each mergeable alone"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "pr:minion-meta#971",
@@ -23267,6 +23234,38 @@
 			"scoredAt": "2026-11-20T10:47:27.769Z"
 		},
 		{
+			"key": "issue:minion-meta#1115",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1115 [monitor:promote-sweep] spec queue rejected for approved proposal",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1115",
+			"sourceUpdatedAt": "2026-11-26T19:15:46Z",
+			"sourceFingerprint": "308ce2c9a9b84b9005d94821d25908b4179bfafd0bd442cf235b38accac2d312",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 5,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "An approved proposal is stuck out of the spec queue due to an invalid topic declaration, a bounded fixable pipeline defect.",
+			"evidence": [
+				"approved proposal ref 1a86fa928978f872 stayed approved and was not queued",
+				"topic declaration is invalid"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:38.319Z"
+		},
+		{
 			"key": "issue:minion-meta#755",
 			"kind": "issue",
 			"stage": "proposal",
@@ -26409,6 +26408,39 @@
 			"scoredAt": "2026-11-21T08:20:28.477Z"
 		},
 		{
+			"key": "pr:minion_hub#279",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#279 feat(artifacts): generated inline plugin-bridge region for built-in artifacts + qc build-trace tooling (14-07, 12-QC)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/279",
+			"sourceUpdatedAt": "2026-09-16T03:15:45Z",
+			"sourceFingerprint": "6a3e9dbab3ad440e240ce4c4dbec9192251d708c65c97816c9d293a142dda80b",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A scoped tooling/sync PR porting an already-reviewed generated bridge region to master, with local verification already passing.",
+			"evidence": [
+				"bun run check 0 errors, 0 warnings",
+				"vitest 157 tests passing across 7 files",
+				"build-inline-bridge --check passed"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:10.727Z"
+		},
+		{
 			"key": "pr:minion_hub#626",
 			"kind": "pr",
 			"stage": "development",
@@ -26550,6 +26582,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-20T22:47:23.992Z"
+		},
+		{
+			"key": "pr:minion_site#28",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_site",
+			"title": "#28 factory: Implement the approved spec 2026-08-19-gateway-client-error-",
+			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/28",
+			"sourceUpdatedAt": "2026-08-31T04:08:40Z",
+			"sourceFingerprint": "b0493998fdd5b06665b919889bd95a13a92e978e1e5c73ef5d203c03f2f9d2ec",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 4,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Routine factory-generated adoption PR for a gateway client error hook with no stated urgency and gates not yet confirmed.",
+			"evidence": [
+				"topics deps,logic",
+				"draft until the gates pass",
+				"no incident or deadline cited"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "pr:minion-meta#1066",
@@ -30864,15 +30929,15 @@
 			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Isolated, inference-off shadow pilot is low risk but still draft pending independent review and a missing verified provider tokenizer cap.",
+			"rationale": "Low-risk isolated shadow pilot with inference off by default and no production mutation, but still a draft pending independent review before any rollout.",
 			"evidence": [
-				"inference defaults off pending acceptance of empirical policy",
-				"draft pending independent review",
-				"no app merge or Vercel release requested"
+				"predictions never mutate CRM tags or scores",
+				"inference defaults off pending acceptance of policy",
+				"source remains draft pending independent review"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -40645,39 +40710,6 @@
 			"scoredAt": "2026-11-20T20:48:35.267Z"
 		},
 		{
-			"key": "pr:minion_site#28",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_site",
-			"title": "#28 factory: Implement the approved spec 2026-08-19-gateway-client-error-",
-			"sourceUrl": "https://github.com/NikolasP98/minion-site/pull/28",
-			"sourceUpdatedAt": "2026-08-31T04:08:40Z",
-			"sourceFingerprint": "b0493998fdd5b06665b919889bd95a13a92e978e1e5c73ef5d203c03f2f9d2ec",
-			"score": 29,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Narrow error-hook adoption task with no verification evidence supplied in the summary.",
-			"evidence": [
-				"draft until the gates pass",
-				"Topics: deps,logic only",
-				"no test or validation detail given"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
 			"key": "pr:minion-meta#1048",
 			"kind": "pr",
 			"stage": "development",
@@ -40908,6 +40940,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-24T08:47:59.399Z"
+		},
+		{
+			"key": "proposal:2026-11-26-claude-mem-17-upgrade-day",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "claude-mem upgrade — 16.2.1 installed 2026-11-26; Chroma rebuild running; 17 later",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-26-claude-mem-17-upgrade-day.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "7024916739b5a156e05b9425ff2e9aea6b5d29901e982f9575ac851b9a792424",
+			"score": 29,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 7
+			},
+			"confidence": 6,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The proposal documents a claude-mem 16.2.1 upgrade that has already been completed and cut over, leaving no outstanding actionable work in this artifact.",
+			"evidence": [
+				"16.2.1 is now installed",
+				"Cutover: 12.4.7 worker shut down, 16.2.1 worker started"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:38.319Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-111011530",
@@ -42361,39 +42425,6 @@
 			"scoredAt": "2026-11-26T00:18:02.555Z"
 		},
 		{
-			"key": "run:minion (gateway)#31686911500",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion (gateway)",
-			"title": "Claude Code",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/31686911500",
-			"sourceUpdatedAt": "2026-09-12T09:31:57Z",
-			"sourceFingerprint": "08122e13e4c986b0a2c34dd42ccc1ad6458c9234ddd8151631e56ef9975fd17e",
-			"score": 28,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Bare CI failure record from 2026-09-12 carries no diagnostic detail and is too stale and underspecified to act on directly.",
-			"evidence": [
-				"status: failure",
-				"pull_request_review_comment on DEV",
-				"updatedAt 2026-09-12T09:31:57Z"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
-		},
-		{
 			"key": "issue:minion-meta#623",
 			"kind": "issue",
 			"stage": "proposal",
@@ -42871,39 +42902,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:21:17.361Z"
-		},
-		{
-			"key": "proposal:2026-11-26-claude-mem-17-upgrade-day",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "claude-mem 12.4.7 → 17 upgrade day (prep done, upgrade waits for 17 to be promoted)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/2026-11-26-claude-mem-17-upgrade-day.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "21ef3a2979f6e7e1506d97375c9872b25e9acb9dca61422c0efe72b8b0ffb8ba",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 5
-			},
-			"confidence": 7,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Upgrade prep is complete but execution is deliberately blocked on upstream promoting claude-mem 17 to its stable channel.",
-			"evidence": [
-				"waits for promoted-release.json to name 17.x (currently 16.2.1)",
-				"backup and project re-key already completed",
-				"settings pre-seeded for post-upgrade behavior"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T07:48:23.273Z"
 		},
 		{
 			"key": "proposal:handoff-minion-ai-4278431509",
@@ -46317,38 +46315,6 @@
 			"scoredAt": "2026-11-23T19:03:09.411Z"
 		},
 		{
-			"key": "pr:minion-meta#1110",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1110 docs(codex): mempalace skill for 3.12 + per-subproject room maps",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1110",
-			"sourceUpdatedAt": "2026-11-26T10:19:39Z",
-			"sourceFingerprint": "90559d203113b66090024b74df6fb7384443b2f967aa83e5a39b3fc23a95b3ad",
-			"score": 23,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Docs-only PR updating a memory-tooling skill for a version bump, low stakes but ready to merge.",
-			"evidence": [
-				"Docs only",
-				"commands it lists were run against the live palace on 2026-11-26"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T10:38:59.336Z"
-		},
-		{
 			"key": "pr:minion-meta#524",
 			"kind": "pr",
 			"stage": "development",
@@ -47993,15 +47959,15 @@
 			"confidence": 3,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Medium-severity cosmetic bug report lacks enough detail beyond a screenshot and generic description to be actionable.",
+			"rationale": "Self-tagged medium-severity UI overlap report with minimal description and no reproduction detail beyond a screenshot and console logs.",
 			"evidence": [
-				"Severity: medium",
-				"Description: texto sobrepuesto",
-				"no page element or reproduction detail beyond a screenshot"
+				"description text is only 'texto sobrepuesto'",
+				"severity self-tagged medium",
+				"single page/viewport snapshot, no steps to reproduce"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T18:48:21.281Z"
+			"scoredAt": "2026-11-26T19:48:10.727Z"
 		},
 		{
 			"key": "issue:minion-meta#1000",
@@ -48276,6 +48242,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T10:17:22.934Z"
+		},
+		{
+			"key": "issue:minion-meta#1116",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "#1116 [monitor:unstick] rank run f8fd16e3: both ranking providers failed on batch 1",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/issues/1116",
+			"sourceUpdatedAt": "2026-11-26T19:17:22Z",
+			"sourceFingerprint": "b5e9177d5b9795968d345d31fca4971f75ea719f0a9dba528fc841f106b43858",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 3,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "The alert diagnosis itself concludes this was a transient provider outage needing only a retry, not an actionable spec or code defect.",
+			"evidence": [
+				"transient/infra fault, not a spec or task failure",
+				"recommend retrying the run"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:38.319Z"
 		},
 		{
 			"key": "issue:minion-meta#322",
@@ -50535,39 +50533,6 @@
 			"scoredAt": "2026-11-25T06:48:13.717Z"
 		},
 		{
-			"key": "pr:minion-meta#1107",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1107 docs(proposal): claude-mem 16.2.1 installed — cutover, checks, Chroma rebuild ETA",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1107",
-			"sourceUpdatedAt": "2026-11-26T08:12:18Z",
-			"sourceFingerprint": "47eaa13345da7d3c996d8debc2f10c42620f590e73173fa06ec19020c887fbb3",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A detailed but docs-only ops record of local machine work explicitly held for owner review before merge, so it is not yet a product goal.",
-			"evidence": [
-				"\"Docs only, no code\"",
-				"\"Do not merge until the owner reviews\"",
-				"\"Spec stage skipped: this is an ops record\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T08:48:41.251Z"
-		},
-		{
 			"key": "pr:minion-meta#861",
 			"kind": "pr",
 			"stage": "development",
@@ -51529,6 +51494,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T10:18:31.689Z"
+		},
+		{
+			"key": "run:minion (gateway)#31686911500",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion (gateway)",
+			"title": "Claude Code",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/actions/runs/31686911500",
+			"sourceUpdatedAt": "2026-09-12T09:31:57Z",
+			"sourceFingerprint": "08122e13e4c986b0a2c34dd42ccc1ad6458c9234ddd8151631e56ef9975fd17e",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A single stale CI failure from over two months ago with no diagnostic detail is unlikely to still represent current actionable state.",
+			"evidence": [
+				"status: failure",
+				"updatedAt: 2026-09-12T09:31:57Z"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T19:48:38.319Z"
 		},
 		{
 			"key": "run:minion_site#31686953033",
