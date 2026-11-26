@@ -2,14 +2,11 @@
   "mcpServers": {
     "mcp-search": {
       "type": "stdio",
-      "command": "bun",
+      "command": "node",
       "args": [
-        "/home/nikolas/.claude/plugins/cache/thedotmack/claude-mem/12.4.7/scripts/mcp-server.cjs"
-      ],
-      "env": {
-        "CLAUDE_PLUGIN_ROOT": "/home/nikolas/.claude/plugins/cache/thedotmack/claude-mem/12.4.7",
-        "_R": "/home/nikolas/.claude/plugins/cache/thedotmack/claude-mem/12.4.7"
-      }
+        "-e",
+        "const f=require('fs'),p=require('path'),o=require('os'),c=require('child_process');const C=process.env.CLAUDE_CONFIG_DIR||p.join(o.homedir(),'.claude');const S=n=>{const q=n.split('-')[0].split('.');return[parseInt(q[0],10)||0,parseInt(q[1],10)||0,parseInt(q[2],10)||0]};const W=(a,b)=>{const x=S(a),y=S(b);return(y[0]-x[0])||(y[1]-x[1])||(y[2]-x[2])||((a.indexOf('-')<0?0:1)-(b.indexOf('-')<0?0:1))||(a<b?1:a>b?-1:0)};const L=x=>{try{return f.readdirSync(x).filter(n=>/^\\d/.test(n)).map(n=>p.join(x,n)).filter(z=>{try{return f.statSync(z).isDirectory()&&!f.existsSync(p.join(z,'.orphaned_at'))}catch{return false}}).sort((a,b)=>W(p.basename(a),p.basename(b)))}catch{return[]}};const K=[process.env.CLAUDE_MEM_PLUGIN_ROOT,...L(p.join(C,'plugins/cache/thedotmack/claude-mem')),p.join(C,'plugins/marketplaces/thedotmack/plugin')].filter(Boolean);const R=K.find(k=>f.existsSync(p.join(k,'scripts','mcp-server.cjs')));if(!R){process.stderr.write('claude-mem: mcp server not found\\n');process.exit(1)}let B=false;try{B=JSON.parse(f.readFileSync(p.join(R,'.mcp.json'),'utf8')).mcpServers['mcp-search'].command==='bun'}catch{}if(process.env.CLAUDE_MEM_RESOLVE_ONLY){console.log((B?'bun':'node')+' '+R);process.exit(0)}const h=c.spawn(B?'bun':process.execPath,[p.join(R,'scripts','mcp-server.cjs')],{stdio:'inherit',env:{...process.env,CLAUDE_PLUGIN_ROOT:R,_R:R}});for(const s of['SIGINT','SIGTERM','SIGHUP'])process.on(s,()=>h.kill(s));h.on('error',e=>{process.stderr.write('claude-mem: '+e.message+'\\n');process.exit(1)});h.on('exit',(code,sig)=>process.exit(code==null?1:code))"
+      ]
     }
   }
 }
