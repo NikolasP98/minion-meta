@@ -159,3 +159,20 @@ document live in meta `.local/egm/2026-11-25-synced-pages/` (untracked).
 | 3 | `sandbox.arrange` skips filters through an `isFilter(id)` callback instead of GETting elements (a GET broke three lease-timing tests) | `src/lib/sandbox/tools.ts` | Keep unless arrange is called outside `/sandbox`; then add the GET with the lease tests adjusted |
 | 4 | Shared `ui/MultiSelectFilter` popup fails the APG listbox pattern (no name, one tab stop per option, no arrow/End keys) | `PickFilter.svelte` + its test | Hub a11y program (meta #1060, S3 primitives) |
 | 5 | SC-003 agent trial (5 runs) | — | Post-merge (T026) |
+
+## Amendment 2026-11-26 — apps and template copies
+
+Owner direction 2026-11-26 (see `2026-11-26-hub-apps-clinic-package`): the modules built so far are
+the **Clinic** app; each module's main page becomes an editable copy of the app's template, and
+agents edit main pages only. For this program that means:
+
+- **S3 (draft in chat + Apply) is delivered as slice E1 of the apps proposal** (page registry, page
+  kinds, drafts, guarded apply). Its draft contract here is kept.
+- **Program order** becomes the "editable pages" track there: S1 → E1 → E2 (CRM main page) → S2 →
+  E3 → S4 → E4.
+- **Invariant narrowed:** "the sandbox stays admin-only" now reads "`/sandbox` stays the admin-only
+  scratch area; a module's main page follows that module's dashboard permission, and staff read
+  added blocks by element id with their own permissions".
+- **Agents write drafts only** on main pages; a person applies.
+- **Reserved link names** for S2 page values: `copy`, and each main page's own parameters
+  (`range`, `from`, `to`).
