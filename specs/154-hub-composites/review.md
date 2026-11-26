@@ -27,3 +27,5 @@ Reviewer: the implementing agent, against hub master `a845e693`. The AS-IS was r
 | 14 | "Move" for canvas items needs a step size and bounds. | One grid step per arrow, a larger step with Shift, clamped to the canvas bounds; the new position is announced. |
 | 15 | Constitution IV: new strings (yes, paraglide en + es), routes (none), API (none), permissions (none: every new control calls an action the pointer already has, behind the same checks). | Stated in the plan. |
 | 16 | The story contrast gate measures on a white page. | S5 changes no colour, so it is neutral here; recorded under Out of Scope. |
+| 17 | Found with real keys on the Storybook build: on an editable table the spreadsheet Tab kept the focus in the table at the last cell (no next cell to move to). | Tab moves only while the row has a next cell; at the edge it leaves the table. Test added. |
+| 18 | Found with real keys: a header holds a sort button and a resize handle, so "several controls" made Enter a two-step for the most common action. | The resize handle does not count; Enter sorts, F2 enters the cell. |

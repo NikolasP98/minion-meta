@@ -59,7 +59,7 @@ source_item: S5
 
 1. Tab enters the table once and leaves it with the next Tab. Controls inside the grid (header and body) leave the Tab order (`tabindex=-1`), kept so when rows remount. The toolbar above the table (search, pagination, export, columns) is outside the grid and stays as it is.
 2. The active position is a cell, not only a row: Left and Right move by column, Up and Down (and J, K) by row, Home and End to the row's ends, Ctrl+Home and Ctrl+End to the table's corners. Up from the first row reaches the header row. The active cell shows the focus ring.
-3. Enter on a cell acts on what is in it: one control → it is activated (a sort button sorts, a link opens, a checkbox toggles); several controls (a header with sort, filter and resize) → focus moves into the cell, Tab moves between its controls, Escape returns to the grid. An empty cell keeps today's row action. On editable tables the cell under the keyboard is the selected cell, so today's edit keys apply.
+3. Enter on a cell acts on what is in it: one control → it is activated (a sort button sorts, a link opens, a checkbox toggles); several controls → focus moves into the cell, Tab moves between its controls and then returns to the grid, Escape returns at once. A header's resize handle does not count as a second control: Enter on a header sorts, F2 goes into the cell and Tab reaches the handle. An empty cell keeps today's row action. On editable tables the cell under the keyboard is the selected cell, so today's edit keys apply; there Tab moves to the next cell and leaves the table at the end of the row (on other tables Tab always leaves).
 4. While focus is inside a cell's control, all of the grid's own keys stand down, not only Enter and Space.
 5. A change of order is announced through the shared announcer ("Sorted by Name, ascending" / "Sorting removed").
 
@@ -90,7 +90,9 @@ Invariants: pointer behaviour, the look of tables, charts and the canvas at rest
 | 4 | Chart legend and drill-down need a mouse | A row of series buttons appears on keyboard focus; table rows carry the drill-down button |
 | 5 | Workshop: adding, moving and linking need a mouse | The same from the list, plus zoom buttons in the toolbar |
 
-**Demos** (FigCraft as-is / to-be + preview, one per PR, linked here when built): the active cell and the header cell with focus inside (PR A); the focus-revealed series buttons and the pie data table (PR B); the list rows with Move / Link, and the zoom buttons (PR C).
+**Demo (PR A)**: FigCraft `table-grid.figcraft` (page "Spec 154 · table"), exports in `demo/`, preview https://claude.ai/artifact/19cyCSxqNDd2415C8SSF5a. Approved in advance (quote above).
+
+**Demos still to build** (FigCraft as-is / to-be + preview, one per PR, linked here when built): the active cell and the header cell with focus inside (PR A); the focus-revealed series buttons and the pie data table (PR B); the list rows with Move / Link, and the zoom buttons (PR C).
 
 ## Delivery: three hub PRs, each mergeable alone
 
@@ -134,6 +136,7 @@ Invariants: pointer behaviour, the look of tables, charts and the canvas at rest
 
 ## Out of Scope
 
+- The floating bulk-action bar that appears while rows are selected sits inside the table's scroll area and keeps its own Tab stops (it is a toolbar, not a cell).
 - Header drag-to-reorder by keyboard (the column menu already reorders); table mode (`interactionMode="table"`, no production caller).
 - Screen-reader spoken-output tests, hard-coded labels, toast roles (S6).
 - The story-test lane's missing Tailwind (proposal `2026-11-23-storybook-vitest-css-producer-parity`); S5 changes no colour.
