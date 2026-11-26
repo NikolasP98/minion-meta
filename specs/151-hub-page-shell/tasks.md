@@ -10,6 +10,11 @@
 - [x] T006 [US3] `aria-label` on the sidebar and mobile-menu `<nav>`
 - [x] T007 `a11y_skip_to_content` in `messages/en.json` and `messages/es.json`
 - [x] T008 Tests: `page-title.mounted.test.ts` (header title, own hub name, own title kept, opt-out guard, standalone vs in-shell landmark, layout starts with the skip link and has one main, navs named)
-- [ ] T009 Foreground gates: `bun run check`, unit suite, `lint:design && lint:tokens`, `bun run a11y`, `bun run build`
-- [ ] T010 Hub PR; ratchet the page baseline from the PR's CI artifact (`document-title` 63 → 0); every check green; never merge
-- [ ] T011 Open ends in the program ledger
+- [x] T009 Foreground gates: `bun run check`, unit suite, `lint:design && lint:tokens`, `bun run a11y`, `bun run build`
+- [x] T010 Hub PR; ratchet the page baseline from the PR's CI artifact (`document-title` 63 → 0); every check green; never merge
+- [x] T011 Open ends in the program ledger
+
+## Status (2026-11-26)
+
+Implemented in hub PR #736 (`941fc202`, base `master`): every check green on CI run 45775955969, including `a11y` and the `qa-stack` page gate (263 against a baseline of 263). Not merged; merging is the coordinator's. Baselines: pages 330 → 263 (`document-title` 63 → 0), stories 790 → 768 (rows that had already fallen on master), suppressions 84 unchanged.
+
