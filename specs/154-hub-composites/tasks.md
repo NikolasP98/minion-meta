@@ -26,4 +26,4 @@
 - [x] T014 List: elements; Move / Link to… / Open / Remove, announced
 - [x] T015 Toolbar zoom in / out / reset view; canvas region focusable, arrows pan
 - [x] T016 Context menu on the shared menu pattern; `assertPattern(menu)`
-- [ ] T017 Mounted tests; demo; gates; real keys on the local QA stack; PR
+- [x] T017 Mounted tests; demo; gates; real keys on a local build with the real renderer; PR = hub #751
