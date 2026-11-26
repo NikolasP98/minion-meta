@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T09:48:00.205Z",
+	"generatedAt": "2026-11-26T10:17:24.406Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -2674,20 +2674,20 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 6
+				"implementation": 4
 			},
 			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Approved ledger of concrete security and correctness defects in hub POS/auth flows with several fixes already in flight as PRs.",
+			"rationale": "Large approved findings ledger with several open security/correctness items (unauthenticated public booking, role-grant bug, insider-only org bypass) still unaddressed.",
 			"evidence": [
-				"join approvals grant manager role to every invitee via legacyRoleKey bug",
-				"dev:local leaks B2/Resend/GitHub/Sentry secrets to the DEV app",
-				"public booking endpoint is unauthenticated with no rate limit"
+				"item 8: public booking unauthenticated with no rate limit",
+				"item 10: walk-in partyId stamped without org check, insider-only, Open",
+				"item 5: join approvals defaulted every invitee to manager role"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T09:48:05.770Z"
+			"scoredAt": "2026-11-26T10:17:24.213Z"
 		},
 		{
 			"key": "spec:2026-08-28-shared-db-encryption-key-convergence-spec",
@@ -11224,6 +11224,39 @@
 			"scoredAt": "2026-11-21T08:33:43.235Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-f696097",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ f696097",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f696097.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "1153c4fc8268f5d1d7562333eb708872ec82a33f448a8ae2c4ffaf944d0f5cd4",
+			"score": 55,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Multiple high-severity unchecked-access findings in hr.service.ts risk runtime crashes on undefined destructuring in production paths.",
+			"evidence": [
+				"4 high unchecked-access findings in hr.service.ts (lines 230,315,370,564)",
+				"medium unvalidated-input findings across HR API routes",
+				"medium null-check crash risk in scheduling-slots.service.ts:189"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T10:17:24.213Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-0050a8290ce5",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -13791,8 +13824,8 @@
 			"repo": "minion_hub",
 			"title": "#737 feat(a11y): dialogs keep the keyboard — unsaved-changes prompt, command palette, confirmations, floating windows (spec 152 PR A)",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/737",
-			"sourceUpdatedAt": "2026-11-26T09:32:21Z",
-			"sourceFingerprint": "52cd02d6661158844d4f59fb7674d03a5b3226fd071901769608d0c6d3adf98a",
+			"sourceUpdatedAt": "2026-11-26T10:08:54Z",
+			"sourceFingerprint": "2e47ccb6330737513b5367d0c0ec28988d54797d743684f2da11eaec5642d8d0",
 			"score": 51,
 			"band": "medium",
 			"axes": {
@@ -13804,20 +13837,55 @@
 				"specification": 9,
 				"implementation": 9
 			},
-			"confidence": 8,
+			"confidence": 7,
 			"recommendation": "execute",
 			"relatedKeys": [
-				"pr:minion-meta#1106"
+				"pr:minion_hub#738"
 			],
-			"rationale": "Well-specified, tested a11y PR for the shared Dialog primitive, already approved in advance and green on CI/a11y checks.",
+			"rationale": "Owner pre-approved, well-tested a11y PR for shared Dialog widgets with clear proof and scoped not-covered list.",
 			"evidence": [
-				"bun run a11y --ci: pass, suppressions 84→79",
-				"20 ConfirmDialog call sites covered, 6 new tests",
-				"Approved in advance by owner 2026-11-26"
+				"Owner directive 2026-11-26 pre-approval",
+				"bun run a11y --ci pass, suppressions 84→79",
+				"0 errors/warnings on bun run check"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T09:47:59.934Z"
+			"scoredAt": "2026-11-26T10:17:24.213Z"
+		},
+		{
+			"key": "pr:minion_hub#738",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#738 feat(a11y): menus and lists are one tab stop with arrows, Home/End and type-ahead (spec 152 PR B)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/738",
+			"sourceUpdatedAt": "2026-11-26T10:13:25Z",
+			"sourceFingerprint": "5a03255436c976673738803759039277126037ee2cea6b061572c0195051bbee",
+			"score": 51,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 9
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#737"
+			],
+			"rationale": "Second pre-approved independent a11y PR in the same spec slice with detailed proof and known limitations noted.",
+			"evidence": [
+				"Independent of #737, same spec 152",
+				"7 new unit tests, 136 tests across 12 files pass",
+				"bun run check 0 errors/warnings"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T10:17:24.213Z"
 		},
 		{
 			"key": "pr:minion_site#25",
@@ -14949,39 +15017,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T04:17:13.430Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-hub-f696097",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ f696097",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-f696097.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "1153c4fc8268f5d1d7562333eb708872ec82a33f448a8ae2c4ffaf944d0f5cd4",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Multiple high-severity unchecked-access findings in production hr.service.ts risk crashes on undefined insert/update results, alongside several unvalidated query-parameter endpoints.",
-			"evidence": [
-				"hr.service.ts:230/315/370/564 return undefined destructured .returning()[0] without checks",
-				"multiple HR API routes pass unvalidated date/id query params to service calls",
-				"scheduling-slots.service.ts:189 calls dayOff.get() without a null check"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T09:48:05.770Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-20449cc8b981",
@@ -31314,7 +31349,7 @@
 			"title": "Post-merge finding — todo-handoff in src/lib/components/sandbox/filters/PickFilter.svelte (minion_hub)",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-22e4caa87007.md",
 			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "ad741e36fe30755c1f84926c18a565bb5ec8d688d8103f52d797c517bb67075f",
+			"sourceFingerprint": "2ceca4774cd1a7eb177f472bfe4e930d7a2ff822d48c6abbd384cc7bb1eda95a",
 			"score": 36,
 			"band": "low",
 			"axes": {
@@ -31324,21 +31359,22 @@
 			},
 			"readiness": {
 				"specification": 7,
-				"implementation": 5
+				"implementation": 6
 			},
 			"confidence": 6,
 			"recommendation": "group",
 			"relatedKeys": [
-				"proposal:postmerge-minion-hub-cdd1413e5064"
+				"pr:minion_hub#738"
 			],
-			"rationale": "Shared MultiSelectFilter popup lacks APG listbox accessibility semantics, affecting every consumer of this shared component.",
+			"rationale": "APG listbox compliance gap for PickFilter/MultiSelectFilter overlaps directly with the roving-focus listbox work already landing in PR #738.",
 			"evidence": [
-				"TODO(handoff): the shared MultiSelectFilter popup does not yet follow the APG listbox",
-				"component is shared across hub (and site) frontends"
+				"finding: shared MultiSelectFilter popup lacks APG listbox pattern",
+				"PR #738 already adds named listbox + roving focus helper to MultiSelectFilter",
+				"merged independently from two sweeps, confirming recurrence"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T08:49:31.411Z"
+			"scoredAt": "2026-11-26T10:17:24.213Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-2d7b4a1718f3",
@@ -32229,38 +32265,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T12:18:04.522Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-18215ee1e8fc",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-18215ee1e8fc.md",
-			"sourceUpdatedAt": "2026-09-17",
-			"sourceFingerprint": "2f8d6b5800f24d3b7155442494123184146032f69ebb563449b84e77e4a89f3e",
-			"score": 35,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Approved, well-diagnosed UX bug with a clear bounded fix for a Dialog that closes unexpectedly when reopened mid-close-animation.",
-			"evidence": [
-				"TODO(handoff) marker identifies dialog reopening mid-close-animation causing silent close failure",
-				"diagnosis gives a concrete fix direction: cancel pending transition and reset DOM state on reopen"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T09:48:05.770Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-559bcf211073",
@@ -35893,6 +35897,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:23:09.157Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-18215ee1e8fc",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-18215ee1e8fc.md",
+			"sourceUpdatedAt": "2026-09-17",
+			"sourceFingerprint": "2f8d6b5800f24d3b7155442494123184146032f69ebb563449b84e77e4a89f3e",
+			"score": 33,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Approved, narrowly-scoped UX glitch fix for Dialog reopen-during-close animation with clear fix direction.",
+			"evidence": [
+				"approved status, single component Dialog.svelte",
+				"clear fix direction: cancel pending CSS transition on reopen"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T10:17:24.213Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-249dc0b349bf",
@@ -47355,6 +47391,38 @@
 			"scoredAt": "2026-11-22T00:18:17.144Z"
 		},
 		{
+			"key": "proposal:merge-scan-minion-hub-0f5a066",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
+			"sourceUpdatedAt": "2026-09-03",
+			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
+			"score": 23,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 3,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Single medium-severity documentation-contract gap (missing TODO(handoff) marker) with low real-world consequence.",
+			"evidence": [
+				"medium missing-handoff finding on scheduling/resources page",
+				"single bullet finding, draft status"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T10:17:24.213Z"
+		},
+		{
 			"key": "proposal:merge-scan-minion-hub-29ee60e",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -51446,38 +51514,6 @@
 			"scoredAt": "2026-11-21T08:32:18.244Z"
 		},
 		{
-			"key": "proposal:merge-scan-minion-hub-0f5a066",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Merge-scan deficiencies — minion-hub @ 0f5a066",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-hub-0f5a066.md",
-			"sourceUpdatedAt": "2026-09-03",
-			"sourceFingerprint": "e645deaf10e6d7e308550f0f41bc1e46cd3c866f81a3ca082089aa03bbf5e599",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 5,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "Draft merge-scan finding is a missing in-code documentation marker for already-noted deferred work, not a functional defect.",
-			"evidence": [
-				"single medium finding is a missing-handoff documentation gap, not a bug",
-				"status draft; rooms/equipment deferral already documented in the referenced proposal"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T09:48:05.770Z"
-		},
-		{
 			"key": "proposal:merge-scan-minion-hub-1df0a92",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -51494,19 +51530,20 @@
 				"impact": 2
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 4
+				"specification": 6,
+				"implementation": 6
 			},
-			"confidence": 5,
+			"confidence": 6,
 			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "Single medium finding is an unchecked null-access in a Python test fixture helper with limited blast radius since it only runs during test execution.",
+			"rationale": "Minor unchecked-access bug confined to a test fixture helper, limited blast radius.",
 			"evidence": [
-				"click_selector calls getBoundingClientRect on a querySelector result without a null check in tests/fixtures/overlay-native/verify.py:20"
+				"finding is in tests/fixtures/overlay-native/verify.py",
+				"single medium unchecked-access bullet, draft status"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T09:48:05.770Z"
+			"scoredAt": "2026-11-26T10:17:24.213Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-9d8d4a8",
