@@ -91,8 +91,11 @@ Vector search works again and covers every row, including the re-keyed `minion-g
 ## Open ends
 
 - The wrapper's Codex hooks are inert on Codex 0.172 (`TODO(handoff)` in
-  `codex/plugins/claude-mem/hooks/claude-mem-forwarder.sh`). If a later Codex runs plugin hooks
-  again, turn `CLAUDE_MEM_CODEX_TRANSCRIPT_INGESTION` off, or Codex sessions get captured twice.
+  `codex/plugins/claude-mem/hooks/claude-mem-forwarder.sh`, line 4:
+  https://github.com/NikolasP98/minion-meta/blob/dev/codex/plugins/claude-mem/hooks/claude-mem-forwarder.sh#L4
+  — flagged independently by the handoff-ledger sweep as handoff-minion-meta-73009062). If a
+  later Codex runs plugin hooks again, turn `CLAUDE_MEM_CODEX_TRANSCRIPT_INGESTION` off, or Codex
+  sessions get captured twice.
 - The 12.4.7 transcript watcher picked up only the first of three back-to-back `codex exec`
   sessions on 2026-11-26 (the other two rollouts were not in `transcript-watch-state.json` minutes
   later). Re-check on 17 before relying on it.
