@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T15:25:13.315Z",
+	"generatedAt": "2026-11-26T15:47:51.861Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -9124,6 +9124,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T03:47:23.600Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "59b948ccff5161cd446f6b997e6c86d21a4bc22e5c695e89396f5b95d304ffbd",
+			"score": 57,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 5,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "This single proposal bundles 17 unrelated markers spanning security gating, audit-trail loss, data durability, and minor UI issues, so it cannot be specified or executed as one unit.",
+			"evidence": [
+				"17 distinct marker lines across rankings/index.json",
+				"spans 'Gate constrained capabilities before component mounting' to 'an unlock deletes the row and leaves no audit trace'",
+				"status: review"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T15:47:51.669Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-hub-25e2bb7",
@@ -28927,14 +28960,14 @@
 			"scoredAt": "2026-11-26T02:53:23.405Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
+			"key": "proposal:handoff-minion-hub-1643634086",
 			"kind": "proposal",
 			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"repo": "minion-hub",
+			"title": "Handoff marker — src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1643634086.md",
 			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "80438781c1e8a9e4e16f577203c6ce98e3e6f7de9f28492574e07ce5c6385dd5",
+			"sourceFingerprint": "136eab95bba4b7aeab533a044066da6f9667631effde7f3d89ff181d4d8c6385",
 			"score": 38,
 			"band": "low",
 			"axes": {
@@ -28943,21 +28976,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 2,
-				"implementation": 1
+				"specification": 5,
+				"implementation": 5
 			},
-			"confidence": 3,
-			"recommendation": "reframe",
+			"confidence": 4,
+			"recommendation": "reevaluate",
 			"relatedKeys": [],
-			"rationale": "This is an auto-generated meta-marker bundling 17+ unrelated TODO findings from a data file (rankings/index.json) with no individual scoping, so it needs to be split into separate specs before any can be actioned.",
+			"rationale": "A scoped single-file dialog-close bug marker, but the quoted description is truncated mid-sentence, leaving the actual fix underspecified.",
 			"evidence": [
-				"bundles 17 distinct markers spanning security, data integrity, and UI topics",
-				"no verifiable outcome or scope per marker, only line-number pointers into rankings/index.json",
-				"source is an automated handoff-sweep, not a reviewed problem statement"
+				"Dialog.svelte:217 — reopened mid-exit — cancel the pending close. The CSS",
+				"single marker, single file (foundations/Dialog.svelte)"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T15:17:10.444Z"
+			"scoredAt": "2026-11-26T15:47:51.669Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-base-1d2151b",
@@ -34892,8 +34924,8 @@
 			"repo": "minion-meta",
 			"title": "#1112 proposal(a11y): ledger — table cell controls ignored Enter/Space (fixed early, hub #743); E2 deltas to follow",
 			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1112",
-			"sourceUpdatedAt": "2026-11-26T14:23:05Z",
-			"sourceFingerprint": "8020c7cd18e8351067bcd25303931fe72629594d7ed253d32c54ea5ba1495e25",
+			"sourceUpdatedAt": "2026-11-26T15:25:14Z",
+			"sourceFingerprint": "c44c0f9b2474d179388e968fa0b79f2681a83c6166d97d290250e14b7718866f",
 			"score": 33,
 			"band": "low",
 			"axes": {
@@ -34903,22 +34935,20 @@
 			},
 			"readiness": {
 				"specification": 6,
-				"implementation": 5
+				"implementation": 4
 			},
 			"confidence": 6,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion_hub#743",
-				"pr:minion_hub#744"
-			],
-			"rationale": "This is a draft ledger entry tracking the same accessibility work as hub #743 and #744 and is still awaiting further deltas before leaving draft.",
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "The underlying bug was already fixed via hub #743; this draft PR is just pending ledger deltas, so it is low urgency bookkeeping.",
 			"evidence": [
-				"status: draft, deltas for PR E2 to be added before leaving draft",
-				"records ledger item 17 fixed by hub #743"
+				"fixed ahead of S5 by hub #743",
+				"status: draft",
+				"E2 deltas ... will be added here before this leaves draft"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T14:47:16.414Z"
+			"scoredAt": "2026-11-26T15:47:51.669Z"
 		},
 		{
 			"key": "pr:minion-meta#815",
@@ -50959,38 +50989,6 @@
 			"scoredAt": "2026-11-26T02:53:23.405Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1643634086",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/ui/foundations/Dialog.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1643634086.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "581a558842aba5b4d05a52cee4fb0c61ea942bc9a1fb3c0f0689d02dd215df64",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 3,
-				"implementation": 2
-			},
-			"confidence": 4,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "The single marker's description is truncated mid-sentence, leaving the actual defect and fix scope unclear for spec work.",
-			"evidence": [
-				"marker text cuts off at 'cancel the pending close. The CSS'",
-				"single-file, single-line marker in Dialog.svelte:213"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T10:47:43.515Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-1950695269",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -54150,38 +54148,6 @@
 			"evidence": [
 				"status: in_progress",
 				"push on master, CI workflow"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T15:25:13.102Z"
-		},
-		{
-			"key": "run:minion_hub#45848413111",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45848413111",
-			"sourceUpdatedAt": "2026-11-26T15:22:22Z",
-			"sourceFingerprint": "c8e3eda5e6c44ccdfee363debd65801fe040777c151dc2ad2a020c4b8bb0f2e7",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 7,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated in-progress CI run status, not a work goal to rank or execute.",
-			"evidence": [
-				"status: in_progress",
-				"push on master, storybook-deploy workflow"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
