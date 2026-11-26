@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-26T11:47:23.587Z",
+	"generatedAt": "2026-11-26T13:17:54.808Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -4171,38 +4171,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T07:48:12.220Z"
-		},
-		{
-			"key": "pr:minion_hub#740",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#740 fix(a11y): the command palette closes again — a bare dialog has no exit animation to wait for (hotfix for #737)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/740",
-			"sourceUpdatedAt": "2026-11-26T11:17:39Z",
-			"sourceFingerprint": "9af0695d5c39beb29d7a009df83184105df8ce2a50b4fe945449e637ac518623",
-			"score": 65,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Production hotfix for a command palette that gets stuck open requiring a page reload, with a regression test and passing checks.",
-			"evidence": [
-				"production bug on b9b263be: palette never finishes closing until reload",
-				"new test fails on master and passes here; 85 tests pass, bun run check 0 errors"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T11:47:23.381Z"
 		},
 		{
 			"key": "pr:minion-meta#1090",
@@ -23139,6 +23107,39 @@
 			"scoredAt": "2026-11-23T15:18:28.554Z"
 		},
 		{
+			"key": "pr:minion-meta#1111",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1111 spec(152): correction after PR A went live, real-key proof rule, PR D delta",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1111",
+			"sourceUpdatedAt": "2026-11-26T12:43:01Z",
+			"sourceFingerprint": "9c9af711d91490985a235ae120a3cd18c17dfaddd6dc30207a29a2fadbdea1d0",
+			"score": 42,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 6,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 5,
+				"implementation": 4
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Still a draft spec recording an already-hotfixed defect and awaiting PR E's delta before it can be considered complete, so it isn't actionable as a standalone goal yet.",
+			"evidence": [
+				"\"status\": \"draft\"",
+				"\"PR E's delta will be added here before this leaves draft\"",
+				"\"Records the production defect PR A shipped... and its hotfix hub #740\""
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T12:47:41.056Z"
+		},
+		{
 			"key": "proposal:2026-08-17-factory-workitem-handoff-schema",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23430,14 +23431,14 @@
 			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
-			"key": "pr:minion_hub#738",
+			"key": "pr:minion_hub#741",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#738 feat(a11y): menus and lists are one tab stop with arrows, Home/End and type-ahead (spec 152 PR B)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/738",
-			"sourceUpdatedAt": "2026-11-26T11:39:57Z",
-			"sourceFingerprint": "b68c7ae50234986f57ac9ecf3bf44acfc5721a975ef9b951d3a3956612375597",
+			"title": "#741 feat(a11y): remove buttons say what they remove; skeleton can be announced; icon-only buttons need a label (spec 152 PR D)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/741",
+			"sourceUpdatedAt": "2026-11-26T13:06:31Z",
+			"sourceFingerprint": "f3e976e197f6b8542aa412d905c14149be7e496317a85792b45c783aa750db9a",
 			"score": 41,
 			"band": "low",
 			"axes": {
@@ -23446,52 +23447,21 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 8,
-				"implementation": 8
+				"specification": 9,
+				"implementation": 9
 			},
-			"confidence": 7,
+			"confidence": 8,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Well-specified accessibility PR with a shared roving-focus helper, full test/check evidence, and ledger improvement, independent of sibling PRs.",
+			"rationale": "A spec-backed, owner-pre-approved a11y PR with concrete test/lint evidence and a bounded scope independent of sibling PRs.",
 			"evidence": [
-				"spec 152 PR B, independent of #737/#738 siblings",
-				"136 tests pass, bun run check 0 errors, a11y ledger 758 vs 761 baseline"
+				"Spec 152 PR D, approved in advance by owner 2026-11-26",
+				"bun run check 0 errors; 11212 unit tests passed; lint:design/tokens pass",
+				"New lint rule icon-button-unlabelled baseline 0, 250 buttons all labelled"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T11:47:23.381Z"
-		},
-		{
-			"key": "pr:minion_hub#739",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#739 feat(a11y): move board cards with the keyboard; one shared screen-reader announcer (spec 152 PR C)",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/739",
-			"sourceUpdatedAt": "2026-11-26T11:39:23Z",
-			"sourceFingerprint": "c7266ca87cf1d14597bf8f0b731ce1a4e91aa73cfd0f1dd7ce0626c8d81dae23",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Keyboard drag-and-drop plus shared announcer is clearly scoped, independently tested, and documents its one known gap via TODO(handoff) per repo policy.",
-			"evidence": [
-				"153 tests pass across board/session/a11y suites, bun run check 0 errors",
-				"known gap (column reordering) explicitly ticketed as TODO(handoff) and ledger item 17"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T11:47:23.381Z"
+			"scoredAt": "2026-11-26T13:17:54.574Z"
 		},
 		{
 			"key": "pr:minion-meta#827",
@@ -26714,6 +26684,39 @@
 			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
+			"key": "pr:minion_hub#742",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#742 feat(a11y): bug reporter stops claiming to be modal; skill wizard stays open while creating; stories for the confirmation and the floating window (spec 152 PR E1)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/742",
+			"sourceUpdatedAt": "2026-11-26T13:06:18Z",
+			"sourceFingerprint": "1e9da97d21e316ce9d095341dfe61ac5db4338b31ec68440a9032ea4f22dc424",
+			"score": 39,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Owner-pre-approved a11y PR with real-browser keyboard-interaction proof and passing checks, explicitly scoped as part 1 of 3 with remaining parts tracked separately.",
+			"evidence": [
+				"Spec 152 PR E1, approved in advance by owner 2026-11-26",
+				"Real keys in headless Chrome verified dialog/focus behavior for confirmation and floating window",
+				"bun run check 0 errors; a11y pass with no regression (758 vs baseline 759)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T13:17:54.574Z"
+		},
+		{
 			"key": "pr:minion-meta#1066",
 			"kind": "pr",
 			"stage": "development",
@@ -29314,6 +29317,39 @@
 			"scoredAt": "2026-11-21T03:47:15.280Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-7dbabfa86c86",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/lib/components/data-view/BoardView.svelte (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-7dbabfa86c86.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "6330054746a6b3e5dd3470d350f0e726078ffa798bd3291bab9ec0f136a5891b",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 3
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 5
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A specific, single-file keyboard-navigation gap with a clear owner-dated rationale and a concrete fix direction, ready to scope as a small dev slice.",
+			"evidence": [
+				"TODO(handoff) at BoardView.svelte referencing owner decision 2026-11-20 on Up/Down reorder",
+				"Merged PR #739 on minion_hub master pinpoints exact file/line",
+				"Diagnosis includes a bounded fix direction: per-column swap via keydown handlers"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T13:17:54.574Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -31329,6 +31365,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-26T11:17:34.723Z"
+		},
+		{
+			"key": "proposal:merge-scan-minion-ai-db09a2f",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-ai",
+			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
+			"sourceUpdatedAt": "2026-09-10",
+			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Automated scan gives precise file:line null-check defects in test code that are small, bounded, and immediately actionable.",
+			"evidence": [
+				"high unchecked-access at test/ci/labeler-workflow.test.ts:88,117,160,188",
+				"medium weakened-test: removed regression check file for review workflows"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T12:17:01.258Z"
 		},
 		{
 			"key": "proposal:postmerge-minion-hub-119942b6f8e8",
@@ -36410,39 +36478,6 @@
 			"scoredAt": "2026-11-23T05:26:15.405Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-ac9f5b04f22d",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/lib/components/ui/Dropdown.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-ac9f5b04f22d.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "886a389fba83207e6403d8090f8ed21f54acb40013b1d7fdc5d74d7e6c276e66",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Small, already-approved, clearly diagnosed accessibility fix scoped to one component's tab order.",
-			"evidence": [
-				"TODO(handoff) marker names missing tabindex toggle on closed dropdown items",
-				"diagnosis gives concrete fix direction (tabindex=-1 or aria-hidden)",
-				"status: approved"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T07:17:34.559Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-b37743db1fcc",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -39620,38 +39655,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-26T02:57:43.328Z"
-		},
-		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "4ee808f264b5e3ee323e3def253812a64d6501250e8f2d819c0f2b11398c8101",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "reframe",
-			"relatedKeys": [],
-			"rationale": "This proposal bundles dozens of unrelated TODO markers spanning unrelated domains into one item, so it has no coherent scope to execute as a single goal.",
-			"evidence": [
-				"markers span rankings/index.json lines 1612 through 17000+",
-				"topics include postgres crash, capability gating, booking commits, and a listbox a11y pattern with no shared theme"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T10:47:43.515Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2555247888",
@@ -43201,40 +43204,6 @@
 			"scoredAt": "2026-11-23T15:23:09.642Z"
 		},
 		{
-			"key": "proposal:handoff-minion-hub-1721485603",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Handoff marker — src/lib/components/ui/Dropdown.svelte (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-hub-1721485603.md",
-			"sourceUpdatedAt": "2026-11-26",
-			"sourceFingerprint": "a177474d9529160b4fee3814f1b559727190c6bc97d9a3976e1b136d710c17f5",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 5,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "group",
-			"relatedKeys": [
-				"pr:minion-meta#1106"
-			],
-			"rationale": "A keyboard-focus TODO on Dropdown.svelte falls squarely inside the already-approved a11y S3 \"menus and lists\" widget family and should be folded into that spec rather than tracked separately.",
-			"evidence": [
-				"marker at Dropdown.svelte:112 about Tab order",
-				"#1106 lists \"B: menus and lists (Dropdown, ContextMenu, MultiSelectFilter)\""
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-26T08:48:41.251Z"
-		},
-		{
 			"key": "proposal:handoff-minion-hub-2249203609",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -43486,38 +43455,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T15:24:13.858Z"
-		},
-		{
-			"key": "proposal:merge-scan-minion-ai-db09a2f",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-ai",
-			"title": "Merge-scan deficiencies — minion-ai @ db09a2f",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/merge-scan-minion-ai-db09a2f.md",
-			"sourceUpdatedAt": "2026-09-10",
-			"sourceFingerprint": "0884608e461e8ce6132b6049a562dd3cc57c4c5a103818a864d17a46ad2c2307",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 6
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "These are test-file-only null-check nits plus one removed regression test, none with production or security consequence, so the fixes are cheap but not urgent.",
-			"evidence": [
-				"high findings are all in test/ci/*.test.ts .find() unchecked access",
-				"medium finding is a removed test file for workflow file absence, not production code"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-19T11:47:17.717Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-ai-fb9a03f",
@@ -51342,6 +51279,39 @@
 			"scoredAt": "2026-11-26T02:59:17.881Z"
 		},
 		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-26",
+			"sourceFingerprint": "c4e41a5a0ab26631c4c8f99e4c58d69a105e990ecef5aa00763f78d333c39627",
+			"score": 20,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 2,
+				"impact": 2
+			},
+			"readiness": {
+				"specification": 1,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This bundles roughly twenty unrelated markers scraped from a generated ranking data file into a single proposal, so it has no coherent, verifiable scope as one unit of work.",
+			"evidence": [
+				"Markers span unrelated topics: postgres crash, brain-agent gateway binding, stock release, MultiSelectFilter, retry wrapper, unlock audit trace",
+				"Source file is rankings/index.json (a generated index), not application source code",
+				"No single problem/outcome statement ties the listed lines together"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T13:17:54.574Z"
+		},
+		{
 			"key": "proposal:handoff-minion-meta-2757299434",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -54442,6 +54412,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-26T03:03:56.331Z"
+		},
+		{
+			"key": "run:minion_hub#45823588938",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45823588938",
+			"sourceUpdatedAt": "2026-11-26T12:52:07Z",
+			"sourceFingerprint": "ba64823a707de305bc3ed28153f8f7e81212e0af51af88e17ded786a5a01d8b5",
+			"score": 0,
+			"band": "low",
+			"axes": {
+				"criticality": 0,
+				"importance": 0,
+				"impact": 0
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 8,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "This is a routine in-progress CI run, not a work item to rank or execute.",
+			"evidence": [
+				"status: in_progress",
+				"push on master",
+				"workflow: CI"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-26T12:53:56.368Z"
 		}
 	]
 }
