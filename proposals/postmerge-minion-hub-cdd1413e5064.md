@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-cdd1413e5064
 title: "Post-merge finding — todo-handoff in src/lib/components/sandbox/filters/PickFilter.mounted.test.ts (minion_hub)"
-status: draft
+status: approved
 created: 2026-11-26
 updated: 2026-11-26
 repos: [minion-hub]
