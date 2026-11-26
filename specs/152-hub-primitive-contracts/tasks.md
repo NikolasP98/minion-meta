@@ -13,7 +13,8 @@
 - [x] T007 [A6] Followers of the role change: `checkout-money.mounted.test.ts`, `secrets-recovery.mounted.test.ts`, `flow-editor/FlowCanvas.svelte`
 - [x] T008 Tests: `dialogs.a11y.mounted.test.ts`, `command-palette.a11y.mounted.test.ts`
 - [x] T009 Demo: FigCraft as-is / to-be + preview for the unsaved-changes prompt
-- [ ] T010 Gates in the foreground, signed commit, hub PR, every check green, baselines ratcheted
+- [x] T010 Gates, signed commit, hub #737, merged `b9b263be`
+- [x] T010a Hotfix hub #740: `bare` dialog closes without an exit animation; palette no-results is a status; story for the unsaved-changes prompt
 
 ## PR B — menus and lists (`feat/152-menus`)
 
@@ -22,7 +23,7 @@
 - [x] T013 [B3] `ui/ContextMenu.svelte`: helper keys, roving stop, skip disabled rows, focus return
 - [x] T014 [B4] `ui/MultiSelectFilter.svelte`: listbox keys and name, translated labels (`common_all`, `common_removeNamed` in en + es), 24 px remove target
 - [x] T015 Tests: `menus.a11y.mounted.test.ts`
-- [ ] T016 Gates in the foreground, signed commit, hub PR, every check green, baselines ratcheted
+- [x] T016 Gates, real-key run (found: Tab did nothing in an open dropdown; fixed), signed commits, hub #738
 
 ## PR C — board moves (`feat/152-board-moves`)
 
@@ -30,8 +31,18 @@
 - [x] T018 [C2] `BoardView`, `scheduling/FieldsList`, `dashboard/EditableGrid` use it
 - [x] T019 [C3] `data-view/BoardView.svelte`: keyboard drag; 4 strings in en + es
 - [x] T020 Tests + demo
-- [ ] T021 Gates in the foreground, signed commit, hub PR, every check green
+- [x] T021 Gates, real-key run (found: a cancelled pick-up swallowed the next Enter; fixed), signed commits, hub #739
 
-## PR D — status and labels · PR E — hand-rolled modals
+## PR D — status and labels (`feat/152-status-labels`)
 
-Tasks are added here when each PR starts.
+- [x] T022 [D1] Named remove buttons: `ui/Chip`, `tags/TagChip`, `data-table/FilterChip`, `my-agent/ChatInput`
+- [x] T023 [D2] `ui/Skeleton.svelte`: `label`
+- [x] T024 [D3] `scripts/design-lint.mjs`: `icon-button-unlabelled`, baseline 0
+- [x] T025 Tests
+- [x] T026 Gates, real-browser run (names read from the accessibility tree), signed commit, hub #741
+
+## PR E — hand-rolled modals
+
+- [x] T027 [E1] `layout/BugReporter`, `builder/SkillCreateWizard`, stories `Overlays/ConfirmDialog` and `Overlays/DraggableWindow`; real-key run; hub #742
+- [ ] T028 [E2] relationship prompt, prose editor, two agent wizards → `Dialog` (`bare`) + stories + demo
+- [ ] T029 [E3] agent settings drawer, easel board, zen mode
