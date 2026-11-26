@@ -13,7 +13,8 @@
 - [x] T007 [A6] Followers of the role change: `checkout-money.mounted.test.ts`, `secrets-recovery.mounted.test.ts`, `flow-editor/FlowCanvas.svelte`
 - [x] T008 Tests: `dialogs.a11y.mounted.test.ts`, `command-palette.a11y.mounted.test.ts`
 - [x] T009 Demo: FigCraft as-is / to-be + preview for the unsaved-changes prompt
-- [ ] T010 Gates in the foreground, signed commit, hub PR, every check green, baselines ratcheted
+- [x] T010 Gates, signed commit, hub #737, merged `b9b263be`
+- [x] T010a Hotfix hub #740: `bare` dialog closes without an exit animation; palette no-results is a status; story for the unsaved-changes prompt
 
 ## PR B — menus and lists (`feat/152-menus`)
 
@@ -32,6 +33,14 @@
 - [x] T020 Tests + demo
 - [ ] T021 Gates in the foreground, signed commit, hub PR, every check green
 
-## PR D — status and labels · PR E — hand-rolled modals
+## PR D — status and labels (`feat/152-status-labels`)
+
+- [x] T022 [D1] Named remove buttons: `ui/Chip`, `tags/TagChip`, `data-table/FilterChip`, `my-agent/ChatInput`
+- [x] T023 [D2] `ui/Skeleton.svelte`: `label`
+- [x] T024 [D3] `scripts/design-lint.mjs`: `icon-button-unlabelled`, baseline 0
+- [x] T025 Tests
+- [ ] T026 Gates, real-key run, signed commit, hub PR, every check green
+
+## PR E — hand-rolled modals
 
 Tasks are added here when each PR starts.

@@ -128,7 +128,31 @@ Open choice taken (closest to today that passes): **Space** picks a card up; **E
 
 **Demo (PR C)**: FigCraft `board-moves.figcraft` (page "Spec 152 · board moves"), exports in `demo/`, preview https://claude.ai/artifact/TvT1eRxdweFKmd1cZ7TtiK. Approved in advance by the owner 2026-11-26 (same quote as PR A).
 
-PRs D–E get their own DELTA tables in this spec when they start.
+## Correction after PR A went live (2026-11-26)
+
+PR A (hub #737, master `b9b263be`) shipped a defect: the command palette opened but never finished closing (Escape, a click outside, or picking a command). The shared `Dialog` closes on the exit animation's `animationend`; the new `bare` presentation has no exit animation. The mounted test dispatched `animationend` by hand, so it passed, and master CI was green. Found on production with real key presses; fixed by hub #740 (a `bare` dialog closes immediately; the palette's "no results" state is a status message, not an empty listbox, which the stuck palette had hidden from the story gate).
+
+**Proof rule from here on (coordinator, 2026-11-26):** every PR of this slice is exercised with real key presses in a real browser before it is reported ready — a Storybook built from the PR's commit, driven through the browser's input layer — and the report says what was pressed and seen. A test that fires the event a component is supposed to produce itself is not proof. The app on a Vercel preview is not reachable for this (Vercel login, then an app sign-in on another origin).
+
+What the real-key runs found that unit tests had passed:
+
+| PR | Found | Fix |
+|---|---|---|
+| A | palette never closed | hub #740 |
+| B | with items out of the Tab order, Tab did nothing in an open dropdown (the menu is portalled to the end of the page) | Tab closes the menu and returns to its trigger |
+| C | a cancelled Space pick-up swallowed the next Enter on the card (Chrome fires no click for a prevented Space) | the suppression ends when the key is released |
+
+## DELTA (PR D — status and labels)
+
+Nothing changes to the eye.
+
+| # | Transition | Proof |
+|---|---|---|
+| D1 | A chip's × is named "Remove <chip text>" (its own label plus the chip's label, by id): `Chip`, `TagChip` ("Remove tag <name>"), `FilterChip` ("Remove filter <field>"), and the chat composer's context and mention chips. No caller changes. | mounted test; real-key run |
+| D2 | The hub `Skeleton` adapter takes `label`: announced as a status with it, hidden from assistive technology without it. `CollectionState` already labels its loading region. `Spinner` already works this way. | mounted test |
+| D3 | New design-lint rule `icon-button-unlabelled`, baseline 0: an icon-only `<Button>` without `aria-label`, `aria-labelledby` or `title` fails the lint. Measured today: 250 icon-only buttons, all labelled. | `scripts/design-lint.test.ts` |
+
+PR E gets its own DELTA table in this spec when it starts.
 
 ## Requirements
 
