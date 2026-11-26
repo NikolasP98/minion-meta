@@ -5,7 +5,12 @@ description: Search, wake up, mine, and inspect project memory using the install
 
 # Mempalace Memory
 
-Use the installed `mempalace` CLI for repo/project memory. This repo has `mempalace.yaml` with wing `ai` and rooms for `minion`, `minion_hub`, `minion_site`, `paperclip_minion`, `pixel_agents`, `ai_studio`, `frontend`, `backend`, and related areas.
+Use the installed `mempalace` CLI (3.12 or later) for repo/project memory. Everything lands in wing `ai`, from two kinds of local, untracked `mempalace.yaml`:
+
+- The meta-repo root `mempalace.yaml` (gitignored) covers meta files only: rooms `specs`, `proposals`, `audits`, `packages`, `scripts`, `planning`, `research`, plus `exclude_patterns` for scratch (`.local/`), EGM per-round spec copies (`**/egm/**/*target*.md`), raw evidence (`**/evidence/`), audit data dumps (`audits/**/*.{json,csv,html,txt}`, `audits/**/deployed-source/`) and `rankings/`. Audit `.md` reports are still mined.
+- Each subproject (`minion`, `minion_hub`, `minion_site`, `minion_plugins`, `paperclip-minion`, `pixel-agents`, `Minion Docs`) has its own `mempalace.yaml` (hidden by that repo's `.git/info/exclude`), whose room is named after it (`minion`, `minion_hub`, `minion_site`, `minion_plugins`, `paperclip_minion`, `pixel_agents`, `documentation`).
+
+Subprojects are mined as separate projects because the meta-repo `.gitignore` ignores every subproject directory, and mempalace respects it. Mined separately, each repo's own `.gitignore` applies, so build output (`.vercel`, `.svelte-kit`, generated paraglide) stays out.
 
 ## Command resolution
 
@@ -43,19 +48,24 @@ If the room is uncertain, omit `--room` first, then narrow.
 Use when project files changed substantially or the user asks to refresh memory:
 
 ```bash
-mempalace mine .
+mempalace mine .            # meta files only
+mempalace mine minion_hub   # one subproject (repeat per subproject)
 ```
 
-For a subproject-only refresh:
+Never pass `--no-gitignore` or `--include-ignored <subproject>`: `--include-ignored` force-includes the whole subtree, nested `.gitignore` files included, so build output comes back.
+
+To drop drawers whose files are now gitignored or deleted, pass every root so each file is judged by its own repo's `.gitignore`. Run it as a dry run first:
 
 ```bash
-mempalace mine minion_hub
+mempalace sync --wing ai --root . --root minion_hub --root minion --root minion_site \
+  --root minion_plugins --root paperclip-minion --root pixel-agents --root "Minion Docs"   # add --apply after review
 ```
 
 ### Check status
 
 ```bash
-mempalace status
+mempalace status          # per-wing/room drawer counts
+mempalace repair-status   # vector index vs sqlite; if diverged: mempalace repair --mode from-sqlite --archive-existing
 ```
 
 ## Saving session context
