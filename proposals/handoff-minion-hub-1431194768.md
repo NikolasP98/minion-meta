@@ -27,9 +27,7 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-26)
 
-- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:104` — dataset/encode, tuple points, mixed category axes and non-Cartesian
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L104
-- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:184` — effectScatter/lines effects need engine-specific reduced-motion
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L184
-- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:281` — clickable filter and legend consumers still need keyboard action
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L281
+- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:139` — dataset/encode, mixed category axes and chart kinds without a builder
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L139
+- `NikolasP98/minion_hub@master src/lib/components/charts/Chart.svelte:407` — effectScatter/lines effects need engine-specific reduced-motion
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/charts/Chart.svelte#L407
