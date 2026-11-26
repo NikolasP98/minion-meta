@@ -152,7 +152,17 @@ Nothing changes to the eye.
 | D2 | The hub `Skeleton` adapter takes `label`: announced as a status with it, hidden from assistive technology without it. `CollectionState` already labels its loading region. `Spinner` already works this way. | mounted test |
 | D3 | New design-lint rule `icon-button-unlabelled`, baseline 0: an icon-only `<Button>` without `aria-label`, `aria-labelledby` or `title` fails the lint. Measured today: 250 icon-only buttons, all labelled. | `scripts/design-lint.test.ts` |
 
-PR E gets its own DELTA table in this spec when it starts.
+## DELTA (PR E — hand-rolled modals, in three parts)
+
+None of the eight components had a story, so none could be exercised in a real browser; several change their look when they move onto the shared dialog. The family ships in three hub PRs.
+
+| # | Transition | Proof |
+|---|---|---|
+| E1.1 | `BugReporter` is a named non-modal dialog (`aria-modal="false"`): the page stays usable by design. | one attribute; existing tests |
+| E1.2 | `SkillCreateWizard` cannot be dismissed (Escape, backdrop, ×) while it is creating. | two props on the shared `Dialog` |
+| E1.3 | Stories for `ConfirmDialog` and `DraggableWindow`, the two widgets PR A changed without real-key proof. | real-key run: alert dialog opens with focus on Cancel, Escape returns focus; the window takes focus and gives it back |
+| E2 | *(not started)* `workshop/RelationshipPrompt`, `agents/SectionProseEditor`, `builder/AgentCreateWizard`, `marketplace/AgentCreatorWizard` (no caller in the app today) render through `Dialog` (`bare`); a story each; demo where the look changes (the relationship prompt gains the dimmed backdrop). | — |
+| E3 | *(not started)* `agents/AgentSettingsPanel` (680 px drawer), `my-agent/EaselBoard`, `my-agent/ZenMode` (full-screen modes that claim `aria-modal`): real modal or drop the claim, decided per component. | — |
 
 ## Requirements
 
