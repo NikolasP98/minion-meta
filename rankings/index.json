@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-27T00:48:05.910Z",
+	"generatedAt": "2026-11-27T01:17:16.338Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8161,6 +8161,39 @@
 			"scoredAt": "2026-11-20T06:47:05.757Z"
 		},
 		{
+			"key": "pr:minion_hub#752",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#752 fix(gateway): the diagnostics retry timer stops when the page is gone",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/752",
+			"sourceUpdatedAt": "2026-11-27T00:48:25Z",
+			"sourceFingerprint": "6a1356179759da04a063539dd790ceb8b7b73581a8061065db90977d28c313f6",
+			"score": 58,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 5,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A timing-dependent teardown bug causes intermittent red CI runs across the whole test suite, and the fix ships with a regression test proving the failure and the repair.",
+			"evidence": [
+				"uncaught `window is not defined` in `gwFlush` failed a run where all 11243 tests passed",
+				"new test `gateway-rpc.trace-teardown.test.ts` fails without the fix and passes with it",
+				"PR body's unrelated note about needing a11y-program approval before merge is inconsistent with this PR's scope, lowering confidence in its merge-readiness claim"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-27T01:17:16.071Z"
+		},
+		{
 			"key": "pr:minion-meta#1030",
 			"kind": "pr",
 			"stage": "development",
@@ -11936,6 +11969,39 @@
 			"scoredAt": "2026-11-21T01:17:17.203Z"
 		},
 		{
+			"key": "pr:minion_hub#753",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#753 feat(a11y): every accessible name is translated and every table has a name (spec 155, S6 PR A)",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/753",
+			"sourceUpdatedAt": "2026-11-27T01:14:54Z",
+			"sourceFingerprint": "d82f3594ae806e243afb5a55c483ff65aada4a86730109fbdf6695456378daf1",
+			"score": 54,
+			"band": "medium",
+			"axes": {
+				"criticality": 4,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "A spec-backed, pre-approved accessibility slice replaces 43 hard-coded names with translations and enforces named tables across 56 callers, with Storybook evidence and passing local gates.",
+			"evidence": [
+				"spec minion-meta #1120 (spec 155, slice S6) with owner's advance approval to go live",
+				"43 hard-coded aria-label/alt values now translated (en+es) and DataTable requires ariaLabel across 56 callers",
+				"local gates pass except one known-unrelated failing test and one DataTable story that passes when run alone"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-27T01:17:16.071Z"
+		},
+		{
 			"key": "pr:minion-meta#1120",
 			"kind": "pr",
 			"stage": "development",
@@ -14239,41 +14305,6 @@
 			"scoredAt": "2026-11-23T14:26:41.054Z"
 		},
 		{
-			"key": "pr:minion_hub#752",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#752 fix(gateway): the diagnostics retry timer stops when the page is gone",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/752",
-			"sourceUpdatedAt": "2026-11-27T00:45:21Z",
-			"sourceFingerprint": "fc5883b0a491ca4fd1012ad2ebd5f044d58124fe67a8f6114d6c56ba58b29116",
-			"score": 51,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"run:minion_hub#45915362768"
-			],
-			"rationale": "A flaky master CI failure already has a root cause, a fix, and a passing regression test, so it is ready to land pending the noted sign-off.",
-			"evidence": [
-				"ReferenceError: window is not defined in gwFlush caused a timing-dependent failure on run 45915362768",
-				"New test gateway-rpc.trace-teardown.test.ts reproduces and verifies the fix",
-				"PR states it needs the owner's OK since it's outside the accessibility program's approval"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T00:48:05.708Z"
-		},
-		{
 			"key": "pr:minion-meta#836",
 			"kind": "pr",
 			"stage": "development",
@@ -15950,40 +15981,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T08:36:56.603Z"
-		},
-		{
-			"key": "run:minion_hub#45915362768",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/45915362768",
-			"sourceUpdatedAt": "2026-11-27T00:41:57Z",
-			"sourceFingerprint": "523bd0b9630e2e4fde2534a46b1ae0ddb4312353a6a428c9fdf08f5e4f76bb9c",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [
-				"pr:minion_hub#752"
-			],
-			"rationale": "This run entry carries no detail beyond 'push on master' and its underlying failure is already being addressed as a distinct, better-specified goal.",
-			"evidence": [
-				"Catalog summary is only 'push on master' with status in_progress and no failure detail",
-				"pr:minion_hub#752 already names this run (45915362768) and fixes the window-is-not-defined flake tied to it"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T00:48:05.708Z"
 		},
 		{
 			"key": "spec:2026-08-17-hub-distinct-visit-dates-spec",
