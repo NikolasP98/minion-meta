@@ -19,10 +19,10 @@
 
 ## PR C — workshop panels (`feat/155-workshop-dialogs`)
 
-- [ ] T010 Five panels on the shared `Dialog`; remove `overlayFocus`
-- [ ] T011 Demo; `assertPattern(dialog)`; real keys on the local real-renderer build; PR
+- [x] T010 Five panels on the shared `Dialog`; remove `overlayFocus`
+- [x] T011 Demo; `assertPattern(dialog)`; real keys on the local real-renderer build; PR — hub #755 (open)
 
 ## PR D — snapshot tests (`feat/155-aria-snapshots`)
 
-- [ ] T012 Fixture with DataTable, calendar, BoardView, Picker, command palette (fixed data and clock)
-- [ ] T013 Snapshots + suite in the specs gate; deliberate-break run; PR
+- [x] T012 Fixture with DataTable, calendar, BoardView, Picker, command palette (fixed data and clock)
+- [x] T013 Snapshots + suite in the specs gate; deliberate-break run; PR — hub #756 (open)
