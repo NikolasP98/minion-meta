@@ -3,7 +3,7 @@ id: handoff-minion-hub-1194287278
 title: Handoff marker — src/lib/components/scheduling/BookingCalendar.svelte (minion_hub)
 status: draft
 created: 2026-09-16
-updated: 2026-11-26
+updated: 2026-11-27
 repos: [minion-hub]
 tags: [handoff-sweep]
 ---
@@ -24,22 +24,22 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-11-26)
+## Markers (as of 2026-11-27)
 
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:284` — tagOptions is the FILTER's list — the event-scope registry
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L284
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1064` — the reported range is exactly what is ON SCREEN, while the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1064
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1438` — HC-017 — while a copy is being dragged only THAT copy
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1438
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:285` — tagOptions is the FILTER's list — the event-scope registry
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L285
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1065` — the reported range is exactly what is ON SCREEN, while the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1065
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1439` — HC-017 — while a copy is being dragged only THAT copy
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1439
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1815` — this counts appointments, so a visit drawn as ONE block with two
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1815
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1871` — this is a per-VIEWER preference, not an RBAC restriction —
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1871
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2258` — ondragover/ondrop live on .track, an ANCESTOR of the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2258
-- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3381` — a drop reclassifies only for a custom column (its
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3381
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:1872` — this is a per-VIEWER preference, not an RBAC restriction —
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L1872
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:2259` — ondragover/ondrop live on .track, an ANCESTOR of the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L2259
+- `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3382` — a drop reclassifies only for a custom column (its
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3382
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:3725` — the agenda lists every booking in bookings — the whole
   https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/scheduling/BookingCalendar.svelte#L3725
 - `NikolasP98/minion_hub@master src/lib/components/scheduling/BookingCalendar.svelte:4234` — dragging/dropping an event INTO a closure is not warned

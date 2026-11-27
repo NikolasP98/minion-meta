@@ -2,7 +2,7 @@
 id: 2026-11-26-hub-primitive-contracts-spec
 title: Primitive contracts — every shared widget keeps the keyboard and says what it is (a11y program S3)
 stage: spec
-status: implementing
+status: shipped
 verdict: approved
 type: feature
 pass: 1

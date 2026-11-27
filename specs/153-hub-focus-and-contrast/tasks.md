@@ -12,8 +12,12 @@
 - [x] T006 Demo (FigCraft + preview)
 - [ ] T007 Gates, real-browser proof on the final commit, signed commit, hub PR, every check green
 
-## PR 2 — accent as text (`feat/153-accent-text`) — held for the owner
+## Gate fix first (owner, 2026-11-27)
+
+- [ ] T007a Story lane renders with the app's real styles; story baseline re-measured once; guard that fails without them
+
+## PR 2 — accent as text (`feat/153-accent-text`) — approved by the owner on 2026-11-27
 
 - [ ] T008 `text-accent`, `color: var(--color-accent)` and `a` → `--color-link`
 - [ ] T009 Demo leading with the default theme and the Clinic themes; old vs new colour and ratio
-- [ ] T010 Gates, proof, PR; reported as ready, not for merge
+- [ ] T010 Remaining raw-accent text nodes traced; baseline ratcheted to the measured count; gates, proof, PR

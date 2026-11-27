@@ -52,12 +52,14 @@ Invariants: the accent colour itself, filled buttons, badges and backgrounds in 
 
 **Demo (PR 1)**: FigCraft `focus-ring.figcraft` (page "Spec 153 · focus ring"), exports in `demo/`, preview https://claude.ai/artifact/SzVgjANWu1d7ktazLtFza4 — the default theme with blue, catppuccin-latte with rose and gruvbox-light with amber, as-is and to-be with the measured ratio. Approved in advance (quote above); the coordinator confirmed on 2026-11-26 that PR 1 merges under the standing approval and that PR 2 waits for the owner.
 
+**Demo (PR 2)**: FigCraft `accent-text.figcraft`, preview https://claude.ai/artifact/THarDgNSPhUyecwQh3YNRs — the default theme with blue and the Clinic themes with rose and blue, today and proposed, old and new colour with the measured ratio. **Approved by the owner on 2026-11-27** (answers relayed by the coordinator, item 15): "Accent-coloured text: approve the new shades in the demo? -> Approve" and "Fix the story contrast gate first, re-setting its baseline once under real rendering? -> Yes, fix the gate first".
+
 ## Delivery: two hub PRs
 
 | PR | What | Who sees a change |
 |---|---|---|
 | 1 | Focus indicators (TO-BE 1, 3, 4, 5) | Everyone: the shared controls' focus indicator becomes a solid ring (see AS-IS: today it is a glow at 1.4–1.6:1). On the 48 failing combinations the ring is also a darker / lighter shade of the accent. Keyboard users regain the ring on the KPI tile and the assistant's mode buttons. |
-| 2 | Accent as text (TO-BE 2) | Accent-coloured text changes shade on 133 of 198 combinations, including the default theme with blue (`#2563eb` 3.43:1 → `#5182ef` 4.88:1). **Held for the owner's decision before merge** (coordinator, 2026-11-26). |
+| 2 | Accent as text (TO-BE 2) | Accent-coloured text changes shade on 146 of 180 theme and accent combinations, including the default theme with blue (`#2563eb` 3.43:1 → `#6692f1` 5.86:1; the shade also has to hold on accent-tinted chips, hence lighter than the first estimate). Held for the owner on 2026-11-26; **approved on 2026-11-27**. Goes up after the story contrast gate measures with the app's real styles (its own hub PR, with a one-time re-measured baseline). |
 
 ## DELTA
 
