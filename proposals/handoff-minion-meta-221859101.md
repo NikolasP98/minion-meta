@@ -89,35 +89,35 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27668
 - `NikolasP98/minion-meta@dev rankings/index.json:27702` — ${owner} is not implemented yet",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27702
-- `NikolasP98/minion-meta@dev rankings/index.json:30167` — if the router is not started yet the address keeps no view=day",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30167
-- `NikolasP98/minion-meta@dev rankings/index.json:30201` — if the router is not started yet the address keeps no view=day",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30201
-- `NikolasP98/minion-meta@dev rankings/index.json:32080` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32080
-- `NikolasP98/minion-meta@dev rankings/index.json:36602` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36602
-- `NikolasP98/minion-meta@dev rankings/index.json:36827` — Admit guarded formula/relation types and required-on-create only",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36827
-- `NikolasP98/minion-meta@dev rankings/index.json:36957` — same as crm.customers — numbered in part 2",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36957
-- `NikolasP98/minion-meta@dev rankings/index.json:37056` — only the launcher clears a reserved corner; the OPEN panel still anchors at",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37056
-- `NikolasP98/minion-meta@dev rankings/index.json:37227` — UUID-only today — part 2 adds a per-org sequence column",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37227
-- `NikolasP98/minion-meta@dev rankings/index.json:37430` — spec 2026-09-28 Bundle F asks for tags LAST inside",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37430
-- `NikolasP98/minion-meta@dev rankings/index.json:40977` — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40977
-- `NikolasP98/minion-meta@dev rankings/index.json:41727` — drop with A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41727
-- `NikolasP98/minion-meta@dev rankings/index.json:41759` — there is no DELIBERATE fixture for a not-yet-onboarded org",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41759
-- `NikolasP98/minion-meta@dev rankings/index.json:44437` — add-only; rename / deactivate / max-days edits need a modal over",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44437
-- `NikolasP98/minion-meta@dev rankings/index.json:44781` — delete this route in A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44781
-- `NikolasP98/minion-meta@dev rankings/index.json:48334` — no dedicated unit test for this function's memoisation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48334
-- `NikolasP98/minion-meta@dev rankings/index.json:52901` — the sideways-page overflow this card showed was fixed in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L52901
+- `NikolasP98/minion-meta@dev rankings/index.json:30135` — if the router is not started yet the address keeps no view=day",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30135
+- `NikolasP98/minion-meta@dev rankings/index.json:30169` — if the router is not started yet the address keeps no view=day",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30169
+- `NikolasP98/minion-meta@dev rankings/index.json:32048` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32048
+- `NikolasP98/minion-meta@dev rankings/index.json:36570` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36570
+- `NikolasP98/minion-meta@dev rankings/index.json:36795` — Admit guarded formula/relation types and required-on-create only",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36795
+- `NikolasP98/minion-meta@dev rankings/index.json:36925` — same as crm.customers — numbered in part 2",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36925
+- `NikolasP98/minion-meta@dev rankings/index.json:37024` — only the launcher clears a reserved corner; the OPEN panel still anchors at",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37024
+- `NikolasP98/minion-meta@dev rankings/index.json:37195` — UUID-only today — part 2 adds a per-org sequence column",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37195
+- `NikolasP98/minion-meta@dev rankings/index.json:37398` — spec 2026-09-28 Bundle F asks for tags LAST inside",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37398
+- `NikolasP98/minion-meta@dev rankings/index.json:40912` — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40912
+- `NikolasP98/minion-meta@dev rankings/index.json:41662` — drop with A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41662
+- `NikolasP98/minion-meta@dev rankings/index.json:41694` — there is no DELIBERATE fixture for a not-yet-onboarded org",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41694
+- `NikolasP98/minion-meta@dev rankings/index.json:44404` — add-only; rename / deactivate / max-days edits need a modal over",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44404
+- `NikolasP98/minion-meta@dev rankings/index.json:44748` — delete this route in A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44748
+- `NikolasP98/minion-meta@dev rankings/index.json:48301` — no dedicated unit test for this function's memoisation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L48301
+- `NikolasP98/minion-meta@dev rankings/index.json:52900` — the sideways-page overflow this card showed was fixed in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L52900
