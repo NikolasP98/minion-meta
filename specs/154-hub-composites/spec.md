@@ -75,8 +75,8 @@ Chosen: the equivalent list, not focusable canvas nodes (the nodes have no DOM, 
 
 9. The palette's agents and elements get an "Add to canvas" action (Enter); the item lands at the next free place in view and is announced.
 10. The list shows elements as well as agents. Each row offers: Move (arrow keys move it, Enter drops, Escape puts it back; announced, as on the boards), Link to… (agents; choose the other agent, then today's relationship prompt), Open and Remove (elements).
-11. The toolbar gains zoom in, zoom out and fit; the canvas region takes focus and pans with the arrow keys.
-12. The right-click menu follows the shared menu pattern (arrows, Home/End, Enter and Space, Escape returns focus) and opens from the list row as well (Shift+F10 or the row's "More" button).
+11. The toolbar gains zoom in, zoom out and reset view; the canvas takes focus (one Tab stop) and pans with the arrow keys, zooms with + and −, resets with 0. "Reset view" replaces the "fit" of the first draft: the canvas has no fit-to-content today, and a reset is the same in all three view modes.
+12. Both right-click menus (agent, element) become the house context menu (arrows, Home/End, Enter and Space, Right into a submenu, Escape returns focus); the two bespoke menus are deleted. The same actions are in each list row's "More actions" menu, so a keyboard user does not need the right-click at all.
 
 Invariants: pointer behaviour, the look of tables, charts and the canvas at rest, and all 57 table callers' props are unchanged; no new dependency; every new string through paraglide (en + es); semantic tokens only.
 
@@ -94,7 +94,7 @@ Invariants: pointer behaviour, the look of tables, charts and the canvas at rest
 
 **Demo (PR B)**: FigCraft `charts.figcraft` (page "Spec 154 · charts"), exports in `demo/`, preview https://claude.ai/artifact/DFswovcVdtkHhioQNUeujq. Approved in advance (quote above).
 
-**Demo still to build** (PR C): the list rows with Move / Link, and the zoom buttons.
+**Demo (PR C)**: FigCraft `workshop.figcraft` (page "Spec 154 · workshop"), exports in `demo/`, preview https://claude.ai/artifact/WZjzQDRQX2zpXMoy34GhKh. Approved in advance (quote above).
 
 ## Delivery: three hub PRs, each mergeable alone
 
@@ -102,7 +102,7 @@ Invariants: pointer behaviour, the look of tables, charts and the canvas at rest
 |---|---|---|
 | A | Table (TO-BE 1–5) | `assertPattern(grid)` on the mounted table; tests that fail on today's code for Tab count, header reach, Enter in single- and multi-control cells, virtualised remount; real keys on a Storybook build; the grid story's 8 ledger rows removed |
 | B | Charts (TO-BE 6–8) | type check (a caller without a name does not compile); chart a11y tests extended for the three new tables, the series buttons and the row buttons; real keys on a Storybook build |
-| C | Workshop (TO-BE 9–12) | `assertPattern(menu)` on the context menu; mounted tests for add, move, link, open, remove, zoom and pan; real keys on the local QA stack with the real renderer |
+| C | Workshop (TO-BE 9–12) | the house context menu is already covered by `assertPattern(menu)`; mounted tests for the list (move, link, open, remove); real keys on a local build that mounts the real toolbar, palette and canvas (Pixi renderer, physics) with two synthetic agents — the workshop needs gateway agents, which the local QA stack does not have |
 
 ## DELTA
 
@@ -138,6 +138,7 @@ Invariants: pointer behaviour, the look of tables, charts and the canvas at rest
 
 ## Out of Scope
 
+- Pixel view: dragging a character to another seat stays pointer-only (ledger item 19). Add, zoom, pan, select and assign work there from the keyboard.
 - The floating bulk-action bar that appears while rows are selected sits inside the table's scroll area and keeps its own Tab stops (it is a toolbar, not a cell).
 - Header drag-to-reorder by keyboard (the column menu already reorders); table mode (`interactionMode="table"`, no production caller).
 - Screen-reader spoken-output tests, hard-coded labels, toast roles (S6).

@@ -15,15 +15,15 @@
 
 ## PR B — charts (`feat/154-charts`)
 
-- [ ] T009 `ariaLabel` required; 24 call sites named (en + es); sparklines: name or `decorative`
-- [ ] T010 Data tables for pie, sankey, scatter
-- [ ] T011 Series buttons (focus-revealed, `aria-pressed`) and row buttons for drill-down
-- [ ] T012 Chart a11y tests extended; demo; gates; real keys; PR
+- [x] T009 `ariaLabel` required; 24 call sites named (en + es); sparklines: name or `decorative`
+- [x] T010 Data tables for pie, sankey, scatter
+- [x] T011 Series buttons (focus-revealed, `aria-pressed`) and row buttons for drill-down
+- [x] T012 Chart a11y tests extended; demo; gates; real keys; PR = hub #749
 
 ## PR C — workshop (`feat/154-workshop-keys`)
 
-- [ ] T013 Palette "Add to canvas"
-- [ ] T014 List: elements; Move / Link to… / Open / Remove, announced
-- [ ] T015 Toolbar zoom in / out / fit; canvas region focusable, arrows pan
-- [ ] T016 Context menu on the shared menu pattern; `assertPattern(menu)`
-- [ ] T017 Mounted tests; demo; gates; real keys on the local QA stack; PR
+- [x] T013 Palette "Add to canvas"
+- [x] T014 List: elements; Move / Link to… / Open / Remove, announced
+- [x] T015 Toolbar zoom in / out / reset view; canvas region focusable, arrows pan
+- [x] T016 Context menu on the shared menu pattern; `assertPattern(menu)`
+- [x] T017 Mounted tests; demo; gates; real keys on a local build with the real renderer; PR = hub #751

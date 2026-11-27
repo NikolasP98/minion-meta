@@ -11,11 +11,11 @@
 
 ## PR B — alerts and toasts (`feat/155-alerts`)
 
-- [ ] T005 Shared pieces: load errors and field messages → `status`; field messages tied to their field
-- [ ] T006 Call sites from the classification: on-load text, load panels
-- [ ] T007 Toasts spoken by the shared announcer (errors assertive); translated label
-- [ ] T008 Five private live regions → `announce()`
-- [ ] T009 Tests; gates; real-browser roles before / after; PR
+- [x] T005 Shared pieces: load errors and field messages → `status`; field messages tied to their field
+- [x] T006 Call sites from the classification: on-load text, load panels
+- [x] T007 Toasts spoken by the shared announcer (errors assertive); translated label
+- [x] T008 Five private live regions → `announce()`
+- [x] T009 Tests; gates; real-browser roles before / after; PR — hub #754, merged `75730745`
 
 ## PR C — workshop panels (`feat/155-workshop-dialogs`)
 
