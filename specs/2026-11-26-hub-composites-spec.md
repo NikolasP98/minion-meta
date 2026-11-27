@@ -2,7 +2,7 @@
 id: 2026-11-26-hub-composites-spec
 title: Composites — tables, charts and the workshop canvas work from the keyboard (a11y program S5)
 stage: spec
-status: implementing
+status: shipped
 verdict: approved
 type: feature
 pass: 1

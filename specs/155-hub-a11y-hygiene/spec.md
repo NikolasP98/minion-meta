@@ -1,5 +1,5 @@
 ---
-status: implementing
+status: shipped
 verdict: approved
 created: 2026-11-27
 updated: 2026-11-27
