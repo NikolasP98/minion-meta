@@ -1,12 +1,13 @@
 ---
 id: postmerge-minion-hub-c88692547140
 title: "Post-merge finding — todo-handoff in src/lib/components/workshop/WorkshopCanvas.svelte (minion_hub)"
-status: approved
+status: closed
 created: 2026-11-27
 updated: 2026-11-27
 repos: [minion-hub]
 tags: [logic]
 source: postmerge-discovery
+closed_reason: "marker is absent and proposal is still approved — closing"
 ---
 
 # Post-merge finding — todo-handoff in `src/lib/components/workshop/WorkshopCanvas.svelte`
