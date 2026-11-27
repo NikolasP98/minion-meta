@@ -1,7 +1,7 @@
 ---
 id: postmerge-minion-hub-6261ff26e819
 title: "Post-merge finding — todo-handoff in scripts/a11y.mjs (minion_hub)"
-status: draft
+status: approved
 created: 2026-11-27
 updated: 2026-11-27
 repos: [minion-hub]
