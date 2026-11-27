@@ -27,7 +27,5 @@ automatically once the file carries no more markers.
 
 ## Markers (as of 2026-11-27)
 
-- `NikolasP98/minion_hub@master src/lib/components/workshop/WorkshopCanvas.svelte:1962` — in the pixel view a character can be dragged to another seat with the
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/workshop/WorkshopCanvas.svelte#L1962
-- `NikolasP98/minion_hub@master src/lib/components/workshop/WorkshopCanvas.svelte:2162` — the five element overlays are hand-built layers, not the shared Dialog
-  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/workshop/WorkshopCanvas.svelte#L2162
+- `NikolasP98/minion_hub@master src/lib/components/workshop/WorkshopCanvas.svelte:1951` — in the pixel view a character can be dragged to another seat with the
+  https://github.com/NikolasP98/minion_hub/blob/master/src/lib/components/workshop/WorkshopCanvas.svelte#L1951
