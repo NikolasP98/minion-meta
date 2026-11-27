@@ -59,14 +59,14 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15779
 - `NikolasP98/minion-meta@dev rankings/index.json:15811` — Add an explicitly reviewed indeterminate recovery policy",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15811
-- `NikolasP98/minion-meta@dev rankings/index.json:16577` — logicalRowPresent ignores plan/grant facets of the client row",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16577
-- `NikolasP98/minion-meta@dev rankings/index.json:17632` — packageGrantId/paymentPlanId are drawn against the LEAD",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17632
-- `NikolasP98/minion-meta@dev rankings/index.json:17824` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17824
-- `NikolasP98/minion-meta@dev rankings/index.json:17859` — dragging/dropping an event INTO a closure is not warned",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17859
+- `NikolasP98/minion-meta@dev rankings/index.json:16544` — logicalRowPresent ignores plan/grant facets of the client row",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16544
+- `NikolasP98/minion-meta@dev rankings/index.json:17599` — packageGrantId/paymentPlanId are drawn against the LEAD",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17599
+- `NikolasP98/minion-meta@dev rankings/index.json:17791` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17791
+- `NikolasP98/minion-meta@dev rankings/index.json:17826` — dragging/dropping an event INTO a closure is not warned",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17826
 - `NikolasP98/minion-meta@dev rankings/index.json:19323` — no option-creation API exists for custom properties",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19323
 - `NikolasP98/minion-meta@dev rankings/index.json:19891` — this hasn't been exercised against a live local Supabase",
@@ -89,24 +89,24 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27668
 - `NikolasP98/minion-meta@dev rankings/index.json:27702` — ${owner} is not implemented yet",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27702
-- `NikolasP98/minion-meta@dev rankings/index.json:30135` — if the router is not started yet the address keeps no view=day",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30135
-- `NikolasP98/minion-meta@dev rankings/index.json:30169` — if the router is not started yet the address keeps no view=day",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30169
-- `NikolasP98/minion-meta@dev rankings/index.json:32048` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32048
-- `NikolasP98/minion-meta@dev rankings/index.json:36570` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36570
-- `NikolasP98/minion-meta@dev rankings/index.json:36795` — Admit guarded formula/relation types and required-on-create only",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36795
-- `NikolasP98/minion-meta@dev rankings/index.json:36925` — same as crm.customers — numbered in part 2",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36925
-- `NikolasP98/minion-meta@dev rankings/index.json:37024` — only the launcher clears a reserved corner; the OPEN panel still anchors at",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37024
-- `NikolasP98/minion-meta@dev rankings/index.json:37195` — UUID-only today — part 2 adds a per-org sequence column",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37195
-- `NikolasP98/minion-meta@dev rankings/index.json:37398` — spec 2026-09-28 Bundle F asks for tags LAST inside",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37398
+- `NikolasP98/minion-meta@dev rankings/index.json:30168` — if the router is not started yet the address keeps no view=day",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30168
+- `NikolasP98/minion-meta@dev rankings/index.json:30202` — if the router is not started yet the address keeps no view=day",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L30202
+- `NikolasP98/minion-meta@dev rankings/index.json:32081` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L32081
+- `NikolasP98/minion-meta@dev rankings/index.json:36603` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36603
+- `NikolasP98/minion-meta@dev rankings/index.json:36828` — Admit guarded formula/relation types and required-on-create only",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36828
+- `NikolasP98/minion-meta@dev rankings/index.json:36958` — same as crm.customers — numbered in part 2",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36958
+- `NikolasP98/minion-meta@dev rankings/index.json:37057` — only the launcher clears a reserved corner; the OPEN panel still anchors at",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37057
+- `NikolasP98/minion-meta@dev rankings/index.json:37228` — UUID-only today — part 2 adds a per-org sequence column",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37228
+- `NikolasP98/minion-meta@dev rankings/index.json:37431` — spec 2026-09-28 Bundle F asks for tags LAST inside",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L37431
 - `NikolasP98/minion-meta@dev rankings/index.json:40912` — the",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40912
 - `NikolasP98/minion-meta@dev rankings/index.json:41662` — drop with A4 (T054)",
