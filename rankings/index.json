@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-27T10:47:08.990Z",
+	"generatedAt": "2026-11-27T11:17:31.383Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -23790,20 +23790,20 @@
 				"impact": 3
 			},
 			"readiness": {
-				"specification": 5,
-				"implementation": 3
+				"specification": 7,
+				"implementation": 6
 			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
+			"confidence": 6,
+			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "The error is precisely located but the root cause (why the ranking source is absent for minion-meta) is undiagnosed, so this needs investigation before it's actionable work.",
+			"rationale": "A deliberate guard in board-ranking-catalog.mjs is blocking automated ranking for minion-meta due to a missing ranking-source input, with a clear diagnosis and next step already identified.",
 			"evidence": [
-				"scripts/board-ranking-catalog.mjs:107 throws 'ranking catalog source unavailable for minion-meta; refusing a partial catalog'",
-				"clone/checkout completed with no other errors, indicating a deliberate guard trip rather than infra failure"
+				"script throws 'ranking catalog source unavailable for minion-meta; refusing a partial catalog' at board-ranking-catalog.mjs:107",
+				"clone/checkout succeeded fully, ruling out a transient infra fault per the diagnosis"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T10:47:27.769Z"
+			"scoredAt": "2026-11-27T11:17:31.187Z"
 		},
 		{
 			"key": "issue:minion-meta#1115",
