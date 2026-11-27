@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-27T22:16:58.201Z",
+	"generatedAt": "2026-11-27T23:17:30.432Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -1685,6 +1685,39 @@
 			"scoredAt": "2026-11-25T11:18:32.545Z"
 		},
 		{
+			"key": "pr:minion_hub#696",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#696 feat(pos): tickets and payments can no longer be deleted, and stock ledger rows are final",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/696",
+			"sourceUpdatedAt": "2026-11-20T22:38:18Z",
+			"sourceFingerprint": "c56402f77ff94e5da7e933aa9552441233bb9a002b298fcf93102c6c70068d18",
+			"score": 73,
+			"band": "high",
+			"axes": {
+				"criticality": 7,
+				"importance": 8,
+				"impact": 7
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 6
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Closes a real production gap where RLS alone currently prevents API roles from deleting core financial ledger/ticket tables, though the new grants test could not be run locally.",
+			"evidence": [
+				"production audit: anon/authenticated/service_role/app_ledger all held DELETE on tickets and payments pre-merge",
+				"grants test requires native-Postgres CI lane, not run locally",
+				"6 of 6 related house-rules tests pass"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-27T23:17:30.185Z"
+		},
+		{
 			"key": "proposal:2026-09-08-platform-qc-remediation",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -3225,78 +3258,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T07:48:12.220Z"
-		},
-		{
-			"key": "pr:minion_hub#695",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#695 feat(stock): one live stock movement per sale or booking is enforced by the database",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/695",
-			"sourceUpdatedAt": "2026-11-20T22:38:02Z",
-			"sourceFingerprint": "68560716055cecdb7d8f20ce3fa187db62f775c7dd951a41df9a2ba1bec97a62",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1062",
-				"pr:minion_hub#697"
-			],
-			"rationale": "Production migration enforcing a data-integrity invariant on stock entries, pre-checked against prod with 0 duplicate rows and 29/29 tests passing.",
-			"evidence": [
-				"Result on production, 2026-11-20 (read-only): 0 rows",
-				"29 of 29 pass",
-				"Hub migrations run inside the production build"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
-		},
-		{
-			"key": "pr:minion_hub#696",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#696 feat(pos): tickets and payments can no longer be deleted, and stock ledger rows are final",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/696",
-			"sourceUpdatedAt": "2026-11-20T22:38:18Z",
-			"sourceFingerprint": "c56402f77ff94e5da7e933aa9552441233bb9a002b298fcf93102c6c70068d18",
-			"score": 68,
-			"band": "medium",
-			"axes": {
-				"criticality": 7,
-				"importance": 7,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1062",
-				"pr:minion_hub#695"
-			],
-			"rationale": "Production grant-revoke hardening deletion/truncation of financial ledger tables, with a key grants test not yet run locally.",
-			"evidence": [
-				"Not run locally: the new grants test",
-				"6 of 6 pass",
-				"changes grants only; no rows"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
 			"key": "pr:minion_hub#721",
@@ -4959,6 +4920,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T19:17:09.921Z"
+		},
+		{
+			"key": "pr:minion_hub#695",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#695 feat(stock): one live stock movement per sale or booking is enforced by the database",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/695",
+			"sourceUpdatedAt": "2026-11-20T22:38:02Z",
+			"sourceFingerprint": "68560716055cecdb7d8f20ce3fa187db62f775c7dd951a41df9a2ba1bec97a62",
+			"score": 63,
+			"band": "medium",
+			"axes": {
+				"criticality": 6,
+				"importance": 7,
+				"impact": 6
+			},
+			"readiness": {
+				"specification": 8,
+				"implementation": 8
+			},
+			"confidence": 8,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Production-verified DB-level backstop against duplicate stock postings, pre-merge integrity check already run clean with thorough test coverage.",
+			"evidence": [
+				"pre-merge duplicate-check query returned 0 rows on production",
+				"29 of 29 tests pass including duplicate-insert and edge cases",
+				"no application code changes, only a partial unique index"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-27T23:17:30.185Z"
 		},
 		{
 			"key": "pr:minion_site#29",
@@ -6791,42 +6785,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:18:22.792Z"
-		},
-		{
-			"key": "pr:minion_hub#697",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#697 feat(stock): every stock ledger row records when it was written",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/697",
-			"sourceUpdatedAt": "2026-11-20T22:40:02Z",
-			"sourceFingerprint": "a710195cd98a64f05684f38c56256fdce2bc5aef1d1c14471c458828b276b480",
-			"score": 60,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 6
-			},
-			"confidence": 5,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1062",
-				"pr:minion_hub#695"
-			],
-			"rationale": "Production migration adding a write-time column to stock ledger with owner-decided backfill value, verified on primary tests but two integration suites not run locally.",
-			"evidence": [
-				"Fill value, decided by the owner on 2026-11-20",
-				"28 of 28 pass",
-				"Not run locally: job-stock-concurrency... stock-corrections"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gateway-client-lifecycle-swallows-handoff",
@@ -12484,6 +12442,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-26T19:48:10.727Z"
+		},
+		{
+			"key": "pr:minion_hub#697",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#697 feat(stock): every stock ledger row records when it was written",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/697",
+			"sourceUpdatedAt": "2026-11-20T22:40:02Z",
+			"sourceFingerprint": "a710195cd98a64f05684f38c56256fdce2bc5aef1d1c14471c458828b276b480",
+			"score": 53,
+			"band": "medium",
+			"axes": {
+				"criticality": 5,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 6
+			},
+			"confidence": 6,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Adds a documented, owner-approved backfilled write-time column to the stock ledger for provenance, but some integration tests and the production RLS-bypass role assumption are unverified locally.",
+			"evidence": [
+				"owner-decided fill rule addresses 1,647 of 2,076 rows with backdated posted_at",
+				"28 of 28 service tests pass including fill-value cases",
+				"integration tests needing native-Postgres lane not run locally"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-27T23:17:30.185Z"
 		},
 		{
 			"key": "pr:minion_hub#734",
@@ -24004,6 +23995,38 @@
 			"scoredAt": "2026-11-23T06:17:54.961Z"
 		},
 		{
+			"key": "pr:minion_hub#694",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#694 test(house-rules): new tables must carry the organization",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/694",
+			"sourceUpdatedAt": "2026-11-20T22:39:28Z",
+			"sourceFingerprint": "001c4c0eadbe35f14b006242ebf77e8f3a3f48550524e4b405870e096d23c9ff",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [],
+			"rationale": "Clean, migration-free guardrail preventing future tenant-isolation bugs in new tables, verified passing with no runtime behavior change.",
+			"evidence": [
+				"4 of 4 tests pass, all 50 schema modules import cleanly",
+				"36 of 158 existing tables flagged as would-fail (frozen, untriaged)"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-27T23:17:30.185Z"
+		},
+		{
 			"key": "pr:minion-meta#825",
 			"kind": "pr",
 			"stage": "development",
@@ -27063,60 +27086,21 @@
 				"impact": 4
 			},
 			"readiness": {
-				"specification": 8,
+				"specification": 7,
 				"implementation": 7
 			},
-			"confidence": 6,
+			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1062",
-				"pr:minion_hub#698"
-			],
-			"rationale": "Low-risk convention-debt harness with passing tests and a named open question for the owner, ready to merge as slice 0 of an approved spec.",
+			"relatedKeys": [],
+			"rationale": "Low-risk test-only debt-tracking harness with one verified gap filled, ready to merge though browser/full-suite checks were skipped.",
 			"evidence": [
-				"20 of 20 pass",
-				"owner go-ahead for slices 0 to 2 on 2026-11-20",
-				"owner has been asked who calls /api/pulse/tick"
+				"20 of 20 targeted tests pass",
+				"no package.json change, test-only diff",
+				"open end: cron allow-list for /api/pulse/tick not confirmed"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
-		},
-		{
-			"key": "pr:minion_hub#694",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#694 test(house-rules): new tables must carry the organization",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/694",
-			"sourceUpdatedAt": "2026-11-20T22:39:28Z",
-			"sourceFingerprint": "001c4c0eadbe35f14b006242ebf77e8f3a3f48550524e4b405870e096d23c9ff",
-			"score": 39,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 7
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1062",
-				"pr:minion_hub#693"
-			],
-			"rationale": "Simple, verified test-only rule enforcing org_id on new tables, part of an owner-approved spec slice.",
-			"evidence": [
-				"4 of 4 pass",
-				"No runtime code changes",
-				"owner go-ahead for slices 0 to 2"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T22:47:23.992Z"
+			"scoredAt": "2026-11-27T23:17:30.185Z"
 		},
 		{
 			"key": "pr:minion_site#28",
