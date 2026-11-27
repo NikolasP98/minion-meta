@@ -25,3 +25,6 @@ Reviewer: the implementing agent, against hub master `49d4df6c`. The AS-IS count
 | 12 | The panels must keep their look inside `Dialog`. | `presentation="bare"` with today's card markup inside, as `RelationshipPrompt` did in spec 152; demo with PR C. |
 | 13 | A lint rule on literals must not flag non-text values. | The rule matches `aria-label="…"` / `ariaLabel="…"` / `alt="…"` with at least one letter; empty `alt=""` is allowed. |
 | 14 | Constitution IV: new strings (yes, en + es), routes (none), API (none), permissions (none). | Stated in the plan. |
+| 15 | The toast area is deferred on purpose (bundle size). Mounting it eagerly would undo that. | Move the announcement, not the mount: toasts are spoken by the shared announcer, which is already in the main bundle. |
+| 16 | Classifying the 119 call-site alerts by reading the code: 24 are load / connection / per-field messages, 8 are on the page when it loads, 9 cannot be decided because one variable carries both a load error and an action error. | 24 → `status`, 8 lose the role, 9 stay alerts and go to the ledger (item 22). |
+

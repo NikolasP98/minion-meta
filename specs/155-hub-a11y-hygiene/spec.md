@@ -45,7 +45,7 @@ source_item: S6
 
 4. `role="alert"` stays where an error follows the user's own action (a failed save, a rejected form). It becomes `role="status"` (announced politely) on load-error panels and field validation messages, and is removed from text that is already on the page when it loads. The change is made once in the five shared pieces; the remaining call sites are edited one by one from the classification.
 5. Field validation: the message is tied to its field (`aria-describedby`, `aria-invalid`), so it is read when the field takes focus; the form's own submit error stays an alert.
-6. The toast area is mounted with the page (no lazy gate). Error toasts are announced assertively, the rest politely. The area's label is translated.
+6. Every toast is spoken through the shared announcer, which exists from the first paint: a toast fired before the toast area has mounted is no longer lost. Error toasts are announced assertively, the rest politely. The toast area itself stops being a live region (one voice, not two) and its label is translated. The program's wording was "Toaster mounted eagerly"; the area is deferred on purpose to keep it out of the boot-critical bundle (`src/routes/+layout.svelte:52-54`), so the announcement is moved instead of the mount.
 7. The five private live regions use the shared announcer.
 
 ### 3. The workshop panels are real dialogs (PR C)
@@ -90,7 +90,7 @@ Sighted mouse users see no change in 1–4. For 5 the panels keep their look; a 
 | D3 | Two design-lint rules + baselines | lint self-test: a literal label added to a fixture string is counted |
 | D4 | Shared pieces: load errors and field messages → `status`; field messages tied to the field | mounted tests |
 | D5 | Call sites: on-load text loses the role; load panels → `status` | grep counts before / after in the PR; the a11y gate |
-| D6 | Toaster mounted eagerly; error toasts assertive; label translated | mounted test + real browser |
+| D6 | `toaster.create` / `update` announce through `announce()` (errors assertive); the toast group is `aria-live="off"` with a translated label | mounted test with no Toaster mounted; real browser |
 | D7 | Five private live regions → `announce()` | grep = 0 hidden announcers; existing tests of those components |
 | D8 | Five panels → `Dialog`; `overlayFocus` removed | `assertPattern(dialog)`; real keys |
 | D9 | Fixture + snapshots for five widgets; third suite in the specs gate | gate run; deliberate-break run |
@@ -116,4 +116,5 @@ Sighted mouse users see no change in 1–4. For 5 the panels keep their look; a 
 - The 95 literal `title` / `placeholder` strings beyond counting them (visible copy; they shrink under the new baseline).
 - Visible headings that are hard-coded English (e.g. in the LLM analytics panel): copy work, not an accessible-name defect.
 - Pixel view: moving a character to another seat by keyboard (ledger 19). Board order inside a column (ledger 17). The story-test lane's missing Tailwind and the accent-as-text PR (both waiting for the owner).
+- Nine alerts whose one error variable holds both a load failure and an action failure (ledger item 22): left as alerts until the two are split.
 - Firefox / WebKit runs of the a11y specs.
