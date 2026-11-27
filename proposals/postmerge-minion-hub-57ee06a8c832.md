@@ -40,3 +40,12 @@ The `TODO(handoff)` marker at `tests/e2e/ui-audit/aria-snapshots.spec.ts` is rem
 - merged PR: https://github.com/NikolasP98/minion_hub/pull/756
 - file: `tests/e2e/ui-audit/aria-snapshots.spec.ts`
 - checked: 2026-11-27
+
+## Merged from handoff-minion-hub-3020905694
+
+The handoff-ledger sweep independently filed the same marker the same day,
+with a direct line reference:
+
+- `NikolasP98/minion_hub@master tests/e2e/ui-audit/aria-snapshots.spec.ts:55` — this
+  snapshot pins the week view AS IT IS: no grid, row or column roles, a flat
+  https://github.com/NikolasP98/minion_hub/blob/master/tests/e2e/ui-audit/aria-snapshots.spec.ts#L55

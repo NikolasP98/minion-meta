@@ -1,7 +1,8 @@
 ---
 id: handoff-minion-hub-3020905694
 title: Handoff marker — tests/e2e/ui-audit/aria-snapshots.spec.ts (minion_hub)
-status: draft
+status: merged
+merged_into: postmerge-minion-hub-57ee06a8c832
 created: 2026-11-27
 updated: 2026-11-27
 repos: [minion-hub]
