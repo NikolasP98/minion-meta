@@ -2,7 +2,7 @@
 id: 2026-11-27-hub-a11y-hygiene-spec
 title: Hygiene — translated names, alerts that interrupt only when they must, named tables, real dialogs, pinned accessibility tree (a11y program S6)
 stage: spec
-status: implementing
+status: shipped
 verdict: approved
 type: feature
 pass: 1
