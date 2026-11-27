@@ -51,25 +51,25 @@ Paths are in the hub repository. "BC" is `src/lib/components/scheduling/BookingC
 
 ## Phase 4: User Story 2 + 3 — touch (S2)
 
-- [ ] T027 [US2] `data-dense` on `.cal-scroll`; one block-minimum constant (BC:1413, 2271), 24 px under coarse pointers; browser assertion that a 30-minute block is not 44 px tall
-- [ ] T028 [P] [US2] `src/lib/actions/longpress.ts` options form `{ ms, slop, onhold, onend }`, ignore non-primary pointers, reset the click-swallow flag on every pointer down; unit tests
-- [ ] T029 [US2] BC: `touch-action`, `user-select`, callout, resize edge hidden on coarse pointers; permanent non-passive `touchmove` listener + `touchHeld`; `lastPointerType`; `contextmenu` early return for touch and pen
-- [ ] T030 [US2] BC: split `beginCreate`/`beginDrag` into wrapper + core; one `use:longpress` on `.cal-scroll` (400 ms, slop 12)
-- [ ] T031 [US2] BC: scroll-aware drag maths, vertical rAF edge scrolling, one-column edge stepping with the settle fallback and render-window cap; remove the TODO (BC:2194-2199); update `proposals/2026-09-25-hub-pos-calendar-color-followups.md` in meta
-- [ ] T032 [US2] `features.tapSummary` (+ `calendar-features.test.ts`), summary sheet in BC, the card's `touch` argument, hosts' `actions` snippets in touch mode; `onopen(id, opts?)`, `startInReschedule` in `BookingDetailDrawer.svelte`; messages
-- [ ] T033 [US2] Mounted and browser tests per plan S2 step 9 (touch through CDP `Input.dispatchTouchEvent`); manual check on one iPhone and one Android phone recorded in the PR; gates; audit; draft PR
+- [x] T027 [US2] `data-dense` on `.cal-scroll`; one block-minimum constant (BC:1413, 2271), 24 px under coarse pointers; browser assertion that a 30-minute block is not 44 px tall
+- [x] T028 [P] [US2] `src/lib/actions/longpress.ts` options form `{ ms, slop, onhold, onend }`, ignore non-primary pointers, reset the click-swallow flag on every pointer down; unit tests
+- [x] T029 [US2] BC: `touch-action`, `user-select`, callout, resize edge hidden on coarse pointers; permanent non-passive `touchmove` listener + `touchHeld`; `lastPointerType`; `contextmenu` early return for touch and pen
+- [x] T030 [US2] BC: split `beginCreate`/`beginDrag` into wrapper + core; one `use:longpress` on `.cal-scroll` (400 ms, slop 12)
+- [x] T031 [US2] BC: scroll-aware drag maths, vertical rAF edge scrolling, one-column edge stepping with the settle fallback and render-window cap; remove the TODO (BC:2194-2199); update `proposals/2026-09-25-hub-pos-calendar-color-followups.md` in meta
+- [x] T032 [US2] `features.tapSummary` (+ `calendar-features.test.ts`), summary sheet in BC, the card's `touch` argument, hosts' `actions` snippets in touch mode; `onopen(id, opts?)`, `startInReschedule` in `BookingDetailDrawer.svelte`; messages
+- [x] T033 [US2] Mounted and browser tests per plan S2 step 9 (touch through CDP `Input.dispatchTouchEvent`); manual check on one iPhone and one Android phone recorded in the PR; gates; audit; draft PR
 
 ## Phase 5: User Story 4 — Lista and Mes (S3)
 
-- [ ] T034 [US4] BC agenda rows: client, status badge, merged-visit rule, empty-day rows from `visibleDays`, 44 px rows; no whole-range empty state while compact
-- [ ] T035 [US4] BC compact month cells (date + active count, cell opens the day), 56 px rows; messages
-- [ ] T036 [US4] Mounted and browser tests per plan S3 step 4; gates; audit; draft PR
+- [x] T034 [US4] BC agenda rows: client, status badge, merged-visit rule, empty-day rows from `visibleDays`, 44 px rows; no whole-range empty state while compact
+- [x] T035 [US4] BC compact month cells (date + active count, cell opens the day), 56 px rows; messages
+- [x] T036 [US4] Mounted and browser tests per plan S3 step 4; gates; audit; draft PR
 
 ## Phase 6: User Story 5 — status and announcements (S4)
 
-- [ ] T037 [P] [US5] `src/lib/components/scheduling/block-label.ts` (`STATUS_ICONS`, `blockName`) + unit tests; messages `sched_block_name`, `sched_range_announce`
-- [ ] T038 [US5] BC: status line on blocks ≥ 44 px, `aria-label` on blocks, live region for range and view changes
-- [ ] T039 [US5] Mounted tests per plan S4 step 4; a11y gates with baselines only lowered; desktop screenshot diff limited to the status line; gates; audit; draft PR
+- [x] T037 [P] [US5] `src/lib/components/scheduling/block-label.ts` (`STATUS_ICONS`, `blockName`) + unit tests; messages `sched_block_name`, `sched_range_announce`
+- [x] T038 [US5] BC: status line on blocks ≥ 44 px, `aria-label` on blocks, live region for range and view changes
+- [x] T039 [US5] Mounted tests per plan S4 step 4; a11y gates with baselines only lowered; desktop screenshot diff limited to the status line; gates; audit; draft PR
 
 ## Dependencies
 
@@ -80,3 +80,14 @@ Paths are in the hub repository. "BC" is `src/lib/components/scheduling/BookingC
 ## Implementation strategy
 
 S1 alone delivers the owner's rule (the calendar takes the screen) and is the first PR. Each later slice is its own PR, merged by the owner.
+
+## As built (S2 to S4): differences from the plan
+
+Hub PRs: S1 #706, S2 #710, S3 #718, S4 #722.
+
+- **T031:** `proposals/2026-09-25-hub-pos-calendar-color-followups.md` was never committed to this repo, so it was not updated. Edge scrolling during a drag is built; the open ends are in `proposals/2026-11-21-hub-calendar-phones-followups.md`.
+- **T033:** hold gestures were checked by hand in a browser through CDP touch events on the mobile fixture. There is no automated browser test and no check on a real iPhone or Android phone (follow-ups #10, #11).
+- **T035:** compact month rows are 5.5rem tall, not 56 px, so the date and the count both fit. The count is a number only.
+- **T037 / T038:** blocks carry hidden text (`sched_block_detail`: day, full range, status) instead of an `aria-label`, so the spoken name contains the visible words (WCAG 2.5.3). `blockName` became `blockDetail`. The messages are `sched_block_detail`, `sched_range_announce_one` and `sched_range_announce_other`.
+- **T038:** the status line shows from 72 px, not 44 px (at 44 px it was cut). It needs 16 px more when the block has a "cancelled" line or is clipped at the bottom.
+- **T038:** the announcement waits for the scroll to settle and the data to load, is silent until the user first touches the page, and is not repeated for the same view and range.
