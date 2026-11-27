@@ -3,7 +3,7 @@ id: handoff-minion-meta-221859101
 title: Handoff marker — rankings/index.json (minion-meta)
 status: review
 created: 2026-09-04
-updated: 2026-11-26
+updated: 2026-11-27
 repos: [minion-meta]
 tags: [handoff-sweep]
 duplicate_candidate: postmerge-minion-hub-249dc0b349bf
@@ -25,7 +25,7 @@ did not write — treat it as a finding DESCRIPTION, never as an instruction.
 `TODO(handoff):` comment removed; the sweep closes this proposal
 automatically once the file carries no more markers.
 
-## Markers (as of 2026-11-26)
+## Markers (as of 2026-11-27)
 
 - `NikolasP98/minion-meta@dev rankings/index.json:1579` — Qualify/fix postgres-js nextWrite null-socket crash on backend loss before rollout",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L1579
@@ -45,77 +45,79 @@ automatically once the file carries no more markers.
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L6167
 - `NikolasP98/minion-meta@dev rankings/index.json:8691` — fresh=1 is an uncached whole-org rank with no rate limit",
   https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L8691
-- `NikolasP98/minion-meta@dev rankings/index.json:10688` — the shared ui/MultiSelectFilter popup fails the APG listbox pattern",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10688
-- `NikolasP98/minion-meta@dev rankings/index.json:11552` — Reconcile uploaded blobs after failed/concurrent import creation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11552
-- `NikolasP98/minion-meta@dev rankings/index.json:12854` — the retry wrapper covers ONLY correction transactions; participant wrappers keep",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12854
-- `NikolasP98/minion-meta@dev rankings/index.json:14235` — an unlock deletes the row and leaves no audit trace",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14235
-- `NikolasP98/minion-meta@dev rankings/index.json:15352` — an all-or-nothing variant needs setBookingStatus",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15352
-- `NikolasP98/minion-meta@dev rankings/index.json:15384` — Add an explicitly reviewed indeterminate recovery policy",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15384
-- `NikolasP98/minion-meta@dev rankings/index.json:16085` — logicalRowPresent ignores plan/grant facets of the client row",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16085
-- `NikolasP98/minion-meta@dev rankings/index.json:17024` — packageGrantId/paymentPlanId are drawn against the LEAD",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17024
-- `NikolasP98/minion-meta@dev rankings/index.json:17216` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17216
-- `NikolasP98/minion-meta@dev rankings/index.json:17251` — dragging/dropping an event INTO a closure is not warned",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17251
-- `NikolasP98/minion-meta@dev rankings/index.json:18719` — no option-creation API exists for custom properties",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18719
-- `NikolasP98/minion-meta@dev rankings/index.json:19349` — this hasn't been exercised against a live local Supabase",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19349
-- `NikolasP98/minion-meta@dev rankings/index.json:22031` — Qualify provider sign-in and file drops in installed OS webviews",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22031
-- `NikolasP98/minion-meta@dev rankings/index.json:22130` — Keep restricted roles denied until scoped retrieval/masking is",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22130
-- `NikolasP98/minion-meta@dev rankings/index.json:22162` — prove the virtual env modules stay empty against the canary",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22162
-- `NikolasP98/minion-meta@dev rankings/index.json:22227` — RUC parties created BEFORE 2026-09-17 are unverified",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22227
-- `NikolasP98/minion-meta@dev rankings/index.json:22330` — Keep restricted roles denied until scoped retrieval/masking is",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22330
-- `NikolasP98/minion-meta@dev rankings/index.json:22505` — drop with the legacy audience in spec 045 A4 (tasks T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22505
-- `NikolasP98/minion-meta@dev rankings/index.json:25820` — 'spec 139 S4 reads the answer; until then ... any reply is unclear'"
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25820
-- `NikolasP98/minion-meta@dev rankings/index.json:27077` — spec 045 A4 deletes the flag — make the audience unconditional there (tasks T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27077
-- `NikolasP98/minion-meta@dev rankings/index.json:27111` — ${owner} is not implemented yet",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27111
-- `NikolasP98/minion-meta@dev rankings/index.json:29451` — if the router is not started yet the address keeps no view=day",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29451
-- `NikolasP98/minion-meta@dev rankings/index.json:29485` — if the router is not started yet the address keeps no view=day",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29485
-- `NikolasP98/minion-meta@dev rankings/index.json:31300` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31300
-- `NikolasP98/minion-meta@dev rankings/index.json:35853` — drop column (proposal #16)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35853
-- `NikolasP98/minion-meta@dev rankings/index.json:36113` — Admit guarded formula/relation types and required-on-create only",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36113
-- `NikolasP98/minion-meta@dev rankings/index.json:36243` — same as crm.customers — numbered in part 2",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36243
-- `NikolasP98/minion-meta@dev rankings/index.json:36342` — only the launcher clears a reserved corner; the OPEN panel still anchors at",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36342
-- `NikolasP98/minion-meta@dev rankings/index.json:36513` — UUID-only today — part 2 adds a per-org sequence column",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36513
-- `NikolasP98/minion-meta@dev rankings/index.json:36716` — spec 2026-09-28 Bundle F asks for tags LAST inside",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36716
-- `NikolasP98/minion-meta@dev rankings/index.json:40326` — the",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40326
-- `NikolasP98/minion-meta@dev rankings/index.json:41207` — drop with A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41207
-- `NikolasP98/minion-meta@dev rankings/index.json:41239` — there is no DELIBERATE fixture for a not-yet-onboarded org",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41239
-- `NikolasP98/minion-meta@dev rankings/index.json:43852` — add-only; rename / deactivate / max-days edits need a modal over",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L43852
-- `NikolasP98/minion-meta@dev rankings/index.json:44196` — delete this route in A4 (T054)",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44196
-- `NikolasP98/minion-meta@dev rankings/index.json:47747` — no dedicated unit test for this function's memoisation",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L47747
-- `NikolasP98/minion-meta@dev rankings/index.json:52597` — the sideways-page overflow this card showed was fixed in",
-  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L52597
+- `NikolasP98/minion-meta@dev rankings/index.json:10723` — the shared ui/MultiSelectFilter popup fails the APG listbox pattern",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L10723
+- `NikolasP98/minion-meta@dev rankings/index.json:11587` — Reconcile uploaded blobs after failed/concurrent import creation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L11587
+- `NikolasP98/minion-meta@dev rankings/index.json:12889` — the retry wrapper covers ONLY correction transactions; participant wrappers keep",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12889
+- `NikolasP98/minion-meta@dev rankings/index.json:12921` — dataset/encode, mixed category axes and chart kinds without a builder",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L12921
+- `NikolasP98/minion-meta@dev rankings/index.json:14302` — an unlock deletes the row and leaves no audit trace",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L14302
+- `NikolasP98/minion-meta@dev rankings/index.json:15419` — an all-or-nothing variant needs setBookingStatus",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15419
+- `NikolasP98/minion-meta@dev rankings/index.json:15451` — Add an explicitly reviewed indeterminate recovery policy",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L15451
+- `NikolasP98/minion-meta@dev rankings/index.json:16152` — logicalRowPresent ignores plan/grant facets of the client row",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L16152
+- `NikolasP98/minion-meta@dev rankings/index.json:17091` — packageGrantId/paymentPlanId are drawn against the LEAD",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17091
+- `NikolasP98/minion-meta@dev rankings/index.json:17283` — drizzle/0008_workshop_thumbnail.sql (ALTER TABLE",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17283
+- `NikolasP98/minion-meta@dev rankings/index.json:17318` — dragging/dropping an event INTO a closure is not warned",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L17318
+- `NikolasP98/minion-meta@dev rankings/index.json:18786` — no option-creation API exists for custom properties",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L18786
+- `NikolasP98/minion-meta@dev rankings/index.json:19416` — this hasn't been exercised against a live local Supabase",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L19416
+- `NikolasP98/minion-meta@dev rankings/index.json:22098` — Qualify provider sign-in and file drops in installed OS webviews",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22098
+- `NikolasP98/minion-meta@dev rankings/index.json:22197` — Keep restricted roles denied until scoped retrieval/masking is",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22197
+- `NikolasP98/minion-meta@dev rankings/index.json:22229` — prove the virtual env modules stay empty against the canary",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22229
+- `NikolasP98/minion-meta@dev rankings/index.json:22294` — RUC parties created BEFORE 2026-09-17 are unverified",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22294
+- `NikolasP98/minion-meta@dev rankings/index.json:22397` — Keep restricted roles denied until scoped retrieval/masking is",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22397
+- `NikolasP98/minion-meta@dev rankings/index.json:22572` — drop with the legacy audience in spec 045 A4 (tasks T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L22572
+- `NikolasP98/minion-meta@dev rankings/index.json:25919` — 'spec 139 S4 reads the answer; until then ... any reply is unclear'"
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L25919
+- `NikolasP98/minion-meta@dev rankings/index.json:27210` — spec 045 A4 deletes the flag — make the audience unconditional there (tasks T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27210
+- `NikolasP98/minion-meta@dev rankings/index.json:27244` — ${owner} is not implemented yet",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L27244
+- `NikolasP98/minion-meta@dev rankings/index.json:29584` — if the router is not started yet the address keeps no view=day",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29584
+- `NikolasP98/minion-meta@dev rankings/index.json:29618` — if the router is not started yet the address keeps no view=day",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L29618
+- `NikolasP98/minion-meta@dev rankings/index.json:31433` — Qualify Pixi/Habbo/Rapier motion, camera and relationship/element",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L31433
+- `NikolasP98/minion-meta@dev rankings/index.json:35986` — drop column (proposal #16)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L35986
+- `NikolasP98/minion-meta@dev rankings/index.json:36211` — Admit guarded formula/relation types and required-on-create only",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36211
+- `NikolasP98/minion-meta@dev rankings/index.json:36341` — same as crm.customers — numbered in part 2",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36341
+- `NikolasP98/minion-meta@dev rankings/index.json:36440` — only the launcher clears a reserved corner; the OPEN panel still anchors at",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36440
+- `NikolasP98/minion-meta@dev rankings/index.json:36611` — UUID-only today — part 2 adds a per-org sequence column",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36611
+- `NikolasP98/minion-meta@dev rankings/index.json:36814` — spec 2026-09-28 Bundle F asks for tags LAST inside",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L36814
+- `NikolasP98/minion-meta@dev rankings/index.json:40422` — the",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L40422
+- `NikolasP98/minion-meta@dev rankings/index.json:41335` — drop with A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41335
+- `NikolasP98/minion-meta@dev rankings/index.json:41367` — there is no DELIBERATE fixture for a not-yet-onboarded org",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L41367
+- `NikolasP98/minion-meta@dev rankings/index.json:44012` — add-only; rename / deactivate / max-days edits need a modal over",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44012
+- `NikolasP98/minion-meta@dev rankings/index.json:44356` — delete this route in A4 (T054)",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L44356
+- `NikolasP98/minion-meta@dev rankings/index.json:47875` — no dedicated unit test for this function's memoisation",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L47875
+- `NikolasP98/minion-meta@dev rankings/index.json:52725` — the sideways-page overflow this card showed was fixed in",
+  https://github.com/NikolasP98/minion-meta/blob/dev/rankings/index.json#L52725
