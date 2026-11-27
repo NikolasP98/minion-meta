@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-27T06:47:03.452Z",
+	"generatedAt": "2026-11-27T07:17:08.641Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -8078,21 +8078,20 @@
 				"impact": 5
 			},
 			"readiness": {
-				"specification": 9,
-				"implementation": 9
+				"specification": 8,
+				"implementation": 7
 			},
-			"confidence": 7,
+			"confidence": 6,
 			"recommendation": "execute",
 			"relatedKeys": [],
-			"rationale": "Adds timeouts and an in-flight guard to prevent gateway hangs when the Hub is degraded, with tests and lint/vitest passing though full tsgo/test suite has unrelated pre-existing failures.",
+			"rationale": "Adds timeouts/in-flight guard to prevent gateway hangs when Hub is degraded, with tests passing though author flags unrelated pre-existing failures and an incomplete full test run.",
 			"evidence": [
-				"AbortSignal.timeout added to ledger flusher and memory sink fetches",
-				"unit tests for timeout and in-flight guard pass (26 passed)",
-				"tsgo and full pnpm test have unrelated pre-existing failures noted by author"
+				"AbortSignal.timeout added to ledger flusher and memory sink requests",
+				"26 tests passed on touched files; unrelated tsgo/test failures noted as pre-existing"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T06:47:05.757Z"
+			"scoredAt": "2026-11-27T07:17:08.420Z"
 		},
 		{
 			"key": "pr:minion-meta#1030",
@@ -11277,38 +11276,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-22T06:16:58.546Z"
-		},
-		{
-			"key": "pr:minion_hub#757",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#757 ci(critical-journeys): cache the browser system packages so a slow apt mirror cannot cancel the job",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/757",
-			"sourceUpdatedAt": "2026-11-27T06:06:47Z",
-			"sourceFingerprint": "0dac60d94f4a93729f13dbae1cde68e032fe8010d74206b3cde764f0881579dc",
-			"score": 55,
-			"band": "medium",
-			"axes": {
-				"criticality": 6,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "PR addresses measured CI cancellations (4 of 171 runs) from a slow apt mirror with a scoped caching fix and documented proof-of-fix plan, with no changes to test scope.",
-			"evidence": [
-				"4 of 171 runs cancelled at 40-min limit, all stalled in the install step",
-				"proof section shows cache-miss then cache-restored verification plan"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T06:17:01.956Z"
 		},
 		{
 			"key": "pr:minion-meta#1097",
@@ -15152,37 +15119,38 @@
 			"scoredAt": "2026-11-21T08:15:10.986Z"
 		},
 		{
-			"key": "pr:minion_hub#758",
+			"key": "pr:minion_hub#757",
 			"kind": "pr",
 			"stage": "development",
 			"repo": "minion_hub",
-			"title": "#758 fix(a11y): prebundle the story runner's late dependencies so Vite never reloads it mid-run",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/758",
-			"sourceUpdatedAt": "2026-11-27T06:23:24Z",
-			"sourceFingerprint": "04e9e915b442b1a14125682b5b914fc457febf8f880403d8e51239f66e4ae68a",
+			"title": "#757 ci(critical-journeys): cache the browser system packages so a slow apt mirror cannot cancel the job",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/757",
+			"sourceUpdatedAt": "2026-11-27T07:14:04Z",
+			"sourceFingerprint": "c7c1102a560b91a5ffb3df8634ea11f708227458a5e004f64f830d221f960669",
 			"score": 50,
 			"band": "medium",
 			"axes": {
 				"criticality": 5,
-				"importance": 5,
-				"impact": 5
+				"importance": 4,
+				"impact": 6
 			},
 			"readiness": {
 				"specification": 9,
-				"implementation": 8
+				"implementation": 9
 			},
 			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Well-evidenced CI fix with measured before/after data that reduces flaky hangs and gate time regressions introduced by #745.",
+			"relatedKeys": [
+				"pr:minion_hub#758"
+			],
+			"rationale": "Caches browser system packages to eliminate measured CI job cancellations caused by slow apt mirror, with concrete before/after data.",
 			"evidence": [
-				"26 of 26 a11y runs since d7412f4a show the reload bug, 0 of 14 before",
-				"local repro shows 23/23 files pass with no reload after fix",
-				"gate time regression from ~4.3 to ~7 min tied to cache miss"
+				"4 of 171 runs cancelled at 40-min limit, all stalling in the install step",
+				"proof shows cache miss then restored cache with near-zero downloads"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T06:47:03.207Z"
+			"scoredAt": "2026-11-27T07:17:08.420Z"
 		},
 		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
@@ -21201,6 +21169,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:18:22.792Z"
+		},
+		{
+			"key": "pr:minion_hub#758",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#758 fix(a11y): prebundle the story runner's late dependencies so Vite never reloads it mid-run",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/758",
+			"sourceUpdatedAt": "2026-11-27T07:14:06Z",
+			"sourceFingerprint": "e6aa2f8a2e83d4456dcf4deace53348ed452ea87edd968ecd7dfbcb5589f5648",
+			"score": 43,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion_hub#757"
+			],
+			"rationale": "Prebundles late-loaded test dependencies to stop Vite mid-run reloads that caused a11y job slowdowns and two hangs, backed by measured before/after data.",
+			"evidence": [
+				"26 of 26 runs since #745 show reload-then-slowdown pattern vs 0 of 14 before",
+				"local repro table shows 23/23 story files pass with no reload after fix"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-27T07:17:08.420Z"
 		},
 		{
 			"key": "pr:minion-base#41",
@@ -48402,39 +48404,6 @@
 			"scoredAt": "2026-11-21T07:47:54.098Z"
 		},
 		{
-			"key": "issue:minion (gateway)#264",
-			"kind": "issue",
-			"stage": "proposal",
-			"repo": "minion (gateway)",
-			"title": "#264 Upstream sync: 117623 new commit(s) available",
-			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
-			"sourceUpdatedAt": "2026-11-20T06:17:24Z",
-			"sourceFingerprint": "601b37e78b5b927b3ca221e2cfc8e543c1528a6bd7c6b0eb593ed5a4b69236fb",
-			"score": 20,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 2,
-				"impact": 2
-			},
-			"readiness": {
-				"specification": 2,
-				"implementation": 1
-			},
-			"confidence": 3,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "This is an automated upstream-sync notification listing commits, not a scoped actionable goal.",
-			"evidence": [
-				"title indicates 117623 new commits detected",
-				"tags:upstream-sync",
-				"summary is a raw commit log with no defined task or outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-20T06:47:05.757Z"
-		},
-		{
 			"key": "issue:minion_hub#452",
 			"kind": "issue",
 			"stage": "proposal",
@@ -53554,6 +53523,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T20:17:10.562Z"
+		},
+		{
+			"key": "issue:minion (gateway)#264",
+			"kind": "issue",
+			"stage": "proposal",
+			"repo": "minion (gateway)",
+			"title": "#264 Upstream sync: 117623 new commit(s) available",
+			"sourceUrl": "https://github.com/NikolasP98/minion-ai/issues/264",
+			"sourceUpdatedAt": "2026-11-20T06:17:24Z",
+			"sourceFingerprint": "601b37e78b5b927b3ca221e2cfc8e543c1528a6bd7c6b0eb593ed5a4b69236fb",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "Automated upstream-sync notification listing commits, not a scoped actionable task.",
+			"evidence": [
+				"title says 'Upstream sync: 117623 new commit(s) available'",
+				"tagged upstream-sync with raw commit log dump, no defined scope or outcome"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-27T07:17:08.420Z"
 		},
 		{
 			"key": "issue:minion-meta#1006",
