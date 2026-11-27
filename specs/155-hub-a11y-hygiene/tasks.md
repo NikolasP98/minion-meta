@@ -4,16 +4,16 @@
 
 ## PR A — names (`feat/155-names`)
 
-- [ ] T001 Literal `aria-label` / `ariaLabel` / `alt` and English words in label expressions → messages (en + es)
-- [ ] T002 `DataTable.ariaLabel` required; 56 call sites named
-- [ ] T003 design-lint rules `hardcoded-a11y-name` (baseline 0) and `hardcoded-hint-text` (baseline = today's count)
-- [ ] T004 Gates; accessibility tree read in a real browser (es); PR
+- [x] T001 Literal `aria-label` / `ariaLabel` / `alt` and English words in label expressions → messages (en + es)
+- [x] T002 `DataTable.ariaLabel` required; 56 call sites named
+- [x] T003 design-lint rules `hardcoded-a11y-name` (baseline 0) and `hardcoded-hint-text` (baseline = today's count)
+- [x] T004 Gates; accessibility tree read in a real browser (es); PR — hub #753, merged `8b241b7f`
 
 ## PR B — alerts and toasts (`feat/155-alerts`)
 
 - [ ] T005 Shared pieces: load errors and field messages → `status`; field messages tied to their field
 - [ ] T006 Call sites from the classification: on-load text, load panels
-- [ ] T007 Toaster mounted eagerly; error toasts assertive; translated label
+- [ ] T007 Toasts spoken by the shared announcer (errors assertive); translated label
 - [ ] T008 Five private live regions → `announce()`
 - [ ] T009 Tests; gates; real-browser roles before / after; PR
 
