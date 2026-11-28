@@ -14,7 +14,7 @@
 
 ## Gate fix first (owner, 2026-11-27)
 
-- [ ] T007a Story lane renders with the app's real styles; story baseline re-measured once; guard that fails without them
+- [x] T007a Story lane renders with the app's real styles; story baseline re-measured once; guard that fails without them — hub #759 (open)
 
 ## PR 2 — accent as text (`feat/153-accent-text`) — approved by the owner on 2026-11-27
 
