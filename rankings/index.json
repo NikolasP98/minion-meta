@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-28T03:46:58.236Z",
+	"generatedAt": "2026-11-28T04:16:59.512Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -26045,6 +26045,40 @@
 			"scoredAt": "2026-11-21T08:34:33.316Z"
 		},
 		{
+			"key": "proposal:postmerge-minion-hub-76f26ce09e5c",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/mcp/oauth.service.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-76f26ce09e5c.md",
+			"sourceUpdatedAt": "2026-11-21",
+			"sourceFingerprint": "6520efdd9793d49a63f0937876b80c3c3f6f8f6b7b66e8d62efe7072356e221a",
+			"score": 40,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 5
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-fdcedcc97f88"
+			],
+			"rationale": "Unpruned stale OAuth apps are a hygiene/security concern but not urgent given no reported exploitation.",
+			"evidence": [
+				"TODO(handoff): apps that still have a connection are never pruned; add an unused-for-90-days",
+				"file: src/server/mcp/oauth.service.ts:265"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T04:16:59.320Z"
+		},
+		{
 			"key": "proposal:postmerge-minion-hub-802097b5127b",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -29407,38 +29441,6 @@
 			"scoredAt": "2026-11-22T04:17:13.430Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-76f26ce09e5c",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/mcp/oauth.service.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-76f26ce09e5c.md",
-			"sourceUpdatedAt": "2026-11-21",
-			"sourceFingerprint": "6520efdd9793d49a63f0937876b80c3c3f6f8f6b7b66e8d62efe7072356e221a",
-			"score": 38,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 5
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Stale OAuth connection pruning is a reasonable hygiene/security fix but has no evidence of active exploitation or deadline pressure.",
-			"evidence": [
-				"TODO(handoff) at oauth.service.ts:265 notes unused connections are never pruned",
-				"Diagnosis frames it as security/hygiene risk, not an active incident"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T03:47:15.280Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-8c6ed5b4021d",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -32013,6 +32015,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-25T09:18:48.120Z"
+		},
+		{
+			"key": "proposal:postmerge-minion-hub-fdcedcc97f88",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-hub",
+			"title": "Post-merge finding — todo-handoff in src/server/mcp/oauth-logic.ts (minion_hub)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fdcedcc97f88.md",
+			"sourceUpdatedAt": "2026-11-21",
+			"sourceFingerprint": "482916b976d1d1edd59c40731affcdc14f437b181a5db4b4674298972744ede4",
+			"score": 36,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 4
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"proposal:postmerge-minion-hub-76f26ce09e5c"
+			],
+			"rationale": "Lack of CIMD support may block strict OAuth clients but no concrete blocked integration is cited.",
+			"evidence": [
+				"TODO(handoff): Client ID Metadata Documents (CIMD) are not supported",
+				"file: src/server/mcp/oauth-logic.ts:86"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T04:16:59.320Z"
 		},
 		{
 			"key": "spec:2026-08-31-base-meta-status-revision-binding-required-spec",
@@ -36887,38 +36923,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:50:14.111Z"
-		},
-		{
-			"key": "proposal:postmerge-minion-hub-fdcedcc97f88",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in src/server/mcp/oauth-logic.ts (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-fdcedcc97f88.md",
-			"sourceUpdatedAt": "2026-11-21",
-			"sourceFingerprint": "482916b976d1d1edd59c40731affcdc14f437b181a5db4b4674298972744ede4",
-			"score": 33,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 4,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 4
-			},
-			"confidence": 4,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "Adding CIMD support improves OAuth interop/compliance but is a feature gap rather than an urgent defect.",
-			"evidence": [
-				"TODO(handoff) at oauth-logic.ts:86 states CIMD is not supported",
-				"Diagnosis frames this as blocking enterprise/strict OAuth providers, not current production issue"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-21T03:47:15.280Z"
 		},
 		{
 			"key": "proposal:handoff-minion-meta-2415696540",
