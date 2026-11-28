@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-28T05:16:49.834Z",
+	"generatedAt": "2026-11-28T05:49:51.181Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -10137,39 +10137,6 @@
 			"scoredAt": "2026-11-21T08:11:22.704Z"
 		},
 		{
-			"key": "pr:minion-meta#1113",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1113 spec(153): focus and contrast — the focus ring and links are visible in every theme (a11y S4)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1113",
-			"sourceUpdatedAt": "2026-11-27T05:23:32Z",
-			"sourceFingerprint": "0f7617d22a2325cff02a87f17d1bcbd9f0458ac507c5a14c3aa849f5ca71efc1",
-			"score": 56,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 6,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 8,
-				"implementation": 5
-			},
-			"confidence": 6,
-			"recommendation": "reevaluate",
-			"relatedKeys": [],
-			"rationale": "A draft a11y spec with concrete measured contrast/focus failures but still pending review, plan, tasks and demo before leaving draft.",
-			"evidence": [
-				"255/968 focus-ring combos below 3:1",
-				"609 link-text combos below 4.5:1",
-				"status: draft"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T05:47:03.115Z"
-		},
-		{
 			"key": "proposal:2026-08-23-factory-containment-effect-ledger-integration",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -14645,40 +14612,6 @@
 			"scoredAt": "2026-11-21T08:15:10.986Z"
 		},
 		{
-			"key": "pr:minion_hub#757",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#757 ci(critical-journeys): cache the browser system packages so a slow apt mirror cannot cancel the job",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/757",
-			"sourceUpdatedAt": "2026-11-27T07:14:04Z",
-			"sourceFingerprint": "c7c1102a560b91a5ffb3df8634ea11f708227458a5e004f64f830d221f960669",
-			"score": 50,
-			"band": "medium",
-			"axes": {
-				"criticality": 5,
-				"importance": 4,
-				"impact": 6
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 9
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#758"
-			],
-			"rationale": "Caches browser system packages to eliminate measured CI job cancellations caused by slow apt mirror, with concrete before/after data.",
-			"evidence": [
-				"4 of 171 runs cancelled at 40-min limit, all stalling in the install step",
-				"proof shows cache miss then restored cache with near-zero downloads"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T07:17:08.420Z"
-		},
-		{
 			"key": "proposal:2026-08-17-gw-nostr-dispatch-pipeline",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -15675,6 +15608,41 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T07:47:54.098Z"
+		},
+		{
+			"key": "pr:minion_hub#759",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion_hub",
+			"title": "#759 fix(a11y): the story contrast gate measures stories with the app's real styles",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/759",
+			"sourceUpdatedAt": "2026-11-28T05:48:03Z",
+			"sourceFingerprint": "e6b1bc300c365c1bb11e8a8c40f3bf5bbd5f8de325f2549e20004af2576a9402",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 9,
+				"implementation": 8
+			},
+			"confidence": 7,
+			"recommendation": "execute",
+			"relatedKeys": [
+				"pr:minion-meta#1113"
+			],
+			"rationale": "A detailed, already-implemented fix to the a11y gate's rendering parity with measured proof and passing checks, unblocking accurate downstream contrast work.",
+			"evidence": [
+				"story baseline re-measured: 749→1091 violations, 1226/0 measured/unmeasured",
+				"guard story + before/after real-browser contrast checks confirm correctness",
+				"notes #758 touches same config block, needing merge coordination"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T05:49:50.998Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -20838,40 +20806,6 @@
 			"scoredAt": "2026-11-23T14:18:22.792Z"
 		},
 		{
-			"key": "pr:minion_hub#758",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion_hub",
-			"title": "#758 fix(a11y): prebundle the story runner's late dependencies so Vite never reloads it mid-run",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/758",
-			"sourceUpdatedAt": "2026-11-27T07:14:06Z",
-			"sourceFingerprint": "e6aa2f8a2e83d4456dcf4deace53348ed452ea87edd968ecd7dfbcb5589f5648",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 4,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 9,
-				"implementation": 8
-			},
-			"confidence": 7,
-			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion_hub#757"
-			],
-			"rationale": "Prebundles late-loaded test dependencies to stop Vite mid-run reloads that caused a11y job slowdowns and two hangs, backed by measured before/after data.",
-			"evidence": [
-				"26 of 26 runs since #745 show reload-then-slowdown pattern vs 0 of 14 before",
-				"local repro table shows 23/23 story files pass with no reload after fix"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T07:17:08.420Z"
-		},
-		{
 			"key": "pr:minion-base#41",
 			"kind": "pr",
 			"stage": "development",
@@ -23736,6 +23670,40 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-27T23:17:30.185Z"
+		},
+		{
+			"key": "pr:minion-meta#1113",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1113 spec(153): focus and contrast — the focus ring and links are visible in every theme (a11y S4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1113",
+			"sourceUpdatedAt": "2026-11-28T05:48:34Z",
+			"sourceFingerprint": "f05a1372081387c2e9aa693483afa3ef6b7be04654edd007f9208ac2fcbf84a5",
+			"score": 41,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 5,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 5,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#759"
+			],
+			"rationale": "A clear as-is/to-be spec for a broad focus/link contrast problem but still in draft with no plan, tasks, or demo yet.",
+			"evidence": [
+				"255/968 focus-ring combos and 609 link-text combos below contrast thresholds",
+				"status: draft, review/plan/tasks explicitly pending in this PR"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T05:49:50.998Z"
 		},
 		{
 			"key": "pr:minion-meta#825",
@@ -29180,6 +29148,38 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-28T01:58:54.733Z"
+		},
+		{
+			"key": "proposal:handoff-minion-meta-221859101",
+			"kind": "proposal",
+			"stage": "proposal",
+			"repo": "minion-meta",
+			"title": "Handoff marker — rankings/index.json (minion-meta)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
+			"sourceUpdatedAt": "2026-11-28",
+			"sourceFingerprint": "065db7dc49ab757b777a61089d494292bdad00617df4a875de19cc7b0404520d",
+			"score": 38,
+			"band": "low",
+			"axes": {
+				"criticality": 3,
+				"importance": 4,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 2,
+				"implementation": 1
+			},
+			"confidence": 3,
+			"recommendation": "reframe",
+			"relatedKeys": [],
+			"rationale": "Bundles over a dozen unrelated TODO markers spanning unrelated subsystems into one ticket, so it cannot be executed as a single scoped goal despite some individually serious-sounding items.",
+			"evidence": [
+				"markers span postgres-js crash handling, booking stock release, audit trails, chart builders, and more",
+				"definition of done requires resolving every listed marker before closing"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T05:49:50.998Z"
 		},
 		{
 			"key": "proposal:merge-scan-minion-base-1d2151b",
@@ -39726,38 +39726,6 @@
 			"scoredAt": "2026-11-28T02:00:43.363Z"
 		},
 		{
-			"key": "proposal:handoff-minion-meta-221859101",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-meta",
-			"title": "Handoff marker — rankings/index.json (minion-meta)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/handoff-minion-meta-221859101.md",
-			"sourceUpdatedAt": "2026-11-28",
-			"sourceFingerprint": "e40fe000f7b5dc02d412312addedacb12980658303e2224a689744e056758a73",
-			"score": 30,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 1,
-				"implementation": 1
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "The quoted markers come from rankings/index.json, the ranking pipeline's own output artifact, not application source, so this is sweep noise rather than one actionable item.",
-			"evidence": [
-				"target file is rankings/index.json, this system's own data file",
-				"16+ unrelated quoted fragments bundled into one proposal with no single scoped outcome"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-28T02:00:43.363Z"
-		},
-		{
 			"key": "proposal:handoff-minion-meta-43187394",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -42897,38 +42865,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T07:47:54.098Z"
-		},
-		{
-			"key": "pr:minion-meta#1124",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1124 docs(codex): mempalace skill — subproject excludes + hook refresh behaviour",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1124",
-			"sourceUpdatedAt": "2026-11-27T08:14:33Z",
-			"sourceFingerprint": "7fef13a79bccf1ee52c8ad5920213b8d8f1c0281b3bce91a3be8367ffbd421be",
-			"score": 26,
-			"band": "low",
-			"axes": {
-				"criticality": 2,
-				"importance": 3,
-				"impact": 3
-			},
-			"readiness": {
-				"specification": 7,
-				"implementation": 8
-			},
-			"confidence": 6,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Docs-only PR documenting mempalace hook behavior is low risk, bounded, and already has evidence of a live test run.",
-			"evidence": [
-				"Docs only: codex/skills/mempalace-memory/SKILL.md",
-				"transcript backfill filed 2,827 drawers in 2 minutes 12 seconds"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T08:17:05.714Z"
 		},
 		{
 			"key": "pr:minion-meta#555",
@@ -54208,6 +54144,70 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
+		},
+		{
+			"key": "run:minion_hub#46113684463",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "storybook-deploy",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/46113684463",
+			"sourceUpdatedAt": "2026-11-28T05:47:51Z",
+			"sourceFingerprint": "1a42a04223992253079c107d8016090aa843656e183f992dcd490cce437c597f",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A routine in-progress CI deploy run, not a decision-worthy goal.",
+			"evidence": [
+				"status: in_progress",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T05:49:50.998Z"
+		},
+		{
+			"key": "run:minion_hub#46113684574",
+			"kind": "run",
+			"stage": "testing",
+			"repo": "minion_hub",
+			"title": "CI",
+			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/46113684574",
+			"sourceUpdatedAt": "2026-11-28T05:47:51Z",
+			"sourceFingerprint": "a8d3a6d2987ba3e520bbefa92e8867380f1ce9cdfb13d7d5e9aaee8a99022003",
+			"score": 10,
+			"band": "low",
+			"axes": {
+				"criticality": 1,
+				"importance": 1,
+				"impact": 1
+			},
+			"readiness": {
+				"specification": 0,
+				"implementation": 0
+			},
+			"confidence": 2,
+			"recommendation": "prune",
+			"relatedKeys": [],
+			"rationale": "A routine queued CI run with no content requiring ranking.",
+			"evidence": [
+				"status: queued",
+				"push on master"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T05:49:50.998Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
