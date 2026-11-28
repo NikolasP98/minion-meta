@@ -34,4 +34,4 @@ Source handoff: the Storybook project plugins in `minion_hub/vitest.config.ts`. 
 
 ## Outcome (2026-11-27)
 
-Implemented in hub #759 after the owner's answer "Yes, fix the gate first": Tailwind in the Storybook Vitest project, a browser-host guard story, and the story baseline re-measured once (749 → 1091; details in the accessibility program's ledger, item 26). DELTA 3's row-by-row audit was not done as a separate step: the largest group, the raw accent as text on dark themes (`#2563eb`, 3.2–3.84:1), is fixed by spec 153's second PR, and the rest stays in the baseline as debt that may only fall.
+Implemented in hub #759 after the owner's answer "Yes, fix the gate first": Tailwind in the Storybook Vitest project, a browser-host guard story, and the story baseline re-measured once (749 → 1095; details in the accessibility program's ledger, item 26). DELTA 3's row-by-row audit was not done as a separate step: the largest group, the raw accent as text on dark themes (`#2563eb`, 3.2–3.84:1), is fixed by spec 153's second PR, and the rest stays in the baseline as debt that may only fall.
