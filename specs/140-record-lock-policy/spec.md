@@ -1,18 +1,24 @@
 ---
 id: 140-record-lock-policy
 title: Record lock policy — each org decides when past records stop being editable (after X days, after a webhook, after SUNAT/period close)
-stage: spec
-status: draft
+stage: deploy
+status: shipped
 verdict: approved
 pass: 1
 created: 2026-11-20
-updated: 2026-11-20
+updated: 2026-11-25
 repos: [minion_hub]
 tags: [data, security]
 related: [135-stock-checkpoints, 124-stock-correction-workflow]
 ---
 
 # Feature Specification: Record lock policy
+
+> **Shipped 2026-11-25 (S1–S4), hub master `133c4154`.**
+> - The slices: S1 #723 (tables), S2 #731 (policy, refusals, audit, cancel guard), S3 #732 (owner one-shot unlock), S4 #733 (webhook + `locks` key scope, per-key lock indexes, migration `20261125120000`).
+> - Three Opus audit rounds were run; the last was clean.
+> - S5 (sales/SUNAT) and S6 (manual entries) are NOT built: each needs owner confirmation, as the Assumptions section says.
+> - Open ends: `proposals/2026-11-25-specs-139-140-open-ends.md`.
 
 **Feature Branch**: `feat/140-record-lock-policy` (hub, base `master`)
 
