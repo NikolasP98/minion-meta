@@ -1,7 +1,7 @@
 {
 	"schemaVersion": 1,
 	"rubricVersion": "board-goal-v2",
-	"generatedAt": "2026-11-28T05:49:51.181Z",
+	"generatedAt": "2026-11-28T06:17:11.602Z",
 	"rankings": [
 		{
 			"key": "proposal:2026-08-17-factory-worker-containment",
@@ -15616,8 +15616,8 @@
 			"repo": "minion_hub",
 			"title": "#759 fix(a11y): the story contrast gate measures stories with the app's real styles",
 			"sourceUrl": "https://github.com/NikolasP98/minion_hub/pull/759",
-			"sourceUpdatedAt": "2026-11-28T05:48:03Z",
-			"sourceFingerprint": "e6b1bc300c365c1bb11e8a8c40f3bf5bbd5f8de325f2549e20004af2576a9402",
+			"sourceUpdatedAt": "2026-11-28T06:15:33Z",
+			"sourceFingerprint": "155a204a46eb8d1b6a5499b363f3be21880e48bc48baa0f3564117ea2cd6a59b",
 			"score": 49,
 			"band": "low",
 			"axes": {
@@ -15627,22 +15627,55 @@
 			},
 			"readiness": {
 				"specification": 9,
-				"implementation": 8
+				"implementation": 9
 			},
 			"confidence": 7,
 			"recommendation": "execute",
-			"relatedKeys": [
-				"pr:minion-meta#1113"
-			],
-			"rationale": "A detailed, already-implemented fix to the a11y gate's rendering parity with measured proof and passing checks, unblocking accurate downstream contrast work.",
+			"relatedKeys": [],
+			"rationale": "Test-only fix with measured before/after baselines, repeatability runs, and passing local checks makes this ready to merge now.",
 			"evidence": [
-				"story baseline re-measured: 749→1091 violations, 1226/0 measured/unmeasured",
-				"guard story + before/after real-browser contrast checks confirm correctness",
-				"notes #758 touches same config block, needing merge coordination"
+				"baseline re-measured from 749 to 1095 violations with repeatability across 3 runs",
+				"guard story and local check/lint/test all pass",
+				"conflicts with #758 on same config block but that PR is outside this batch"
 			],
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-28T05:49:50.998Z"
+			"scoredAt": "2026-11-28T06:17:11.404Z"
+		},
+		{
+			"key": "pr:minion-meta#1113",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1113 spec(153): focus and contrast — the focus ring and links are visible in every theme (a11y S4)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1113",
+			"sourceUpdatedAt": "2026-11-28T06:16:09Z",
+			"sourceFingerprint": "9f6f16c8127449141eb36ec7dd941391a1344c65f05f83119d356c4c2800c25a",
+			"score": 49,
+			"band": "low",
+			"axes": {
+				"criticality": 4,
+				"importance": 6,
+				"impact": 5
+			},
+			"readiness": {
+				"specification": 7,
+				"implementation": 3
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [
+				"pr:minion_hub#759"
+			],
+			"rationale": "As-is contrast measurements are clear but the PR itself states review, plan, tasks, and demo are still pending before it leaves draft.",
+			"evidence": [
+				"255/968 focus-ring and 609 link combinations below contrast thresholds on hub master",
+				"PR explicitly in draft status awaiting plan/tasks/demo",
+				"depends on an accurate contrast-measurement gate like the one in pr:minion_hub#759"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T06:17:11.404Z"
 		},
 		{
 			"key": "pr:minion-meta#839",
@@ -21732,39 +21765,6 @@
 			"scoredAt": "2026-11-25T05:28:27.071Z"
 		},
 		{
-			"key": "proposal:postmerge-minion-hub-0796114152c3",
-			"kind": "proposal",
-			"stage": "proposal",
-			"repo": "minion-hub",
-			"title": "Post-merge finding — todo-handoff in scripts/a11y.mjs (minion_hub)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/blob/dev/proposals/postmerge-minion-hub-0796114152c3.md",
-			"sourceUpdatedAt": "2026-11-27",
-			"sourceFingerprint": "34926215ec3c052ba0fd8cde845c5e4d2fa55ffe09ae58ae35f5fe27cc474b6b",
-			"score": 43,
-			"band": "low",
-			"axes": {
-				"criticality": 4,
-				"importance": 5,
-				"impact": 4
-			},
-			"readiness": {
-				"specification": 4,
-				"implementation": 3
-			},
-			"confidence": 4,
-			"recommendation": "execute",
-			"relatedKeys": [],
-			"rationale": "Status is already approved and tied to a named accessibility program proposal item, so it is positioned to proceed through the spec pipeline next.",
-			"evidence": [
-				"status: approved",
-				"file: scripts/a11y.mjs references proposals/2026-11-20-hub-accessibility-program.md item 25",
-				"merged PR #756 on minion_hub master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-27T05:23:50.070Z"
-		},
-		{
 			"key": "proposal:postmerge-minion-hub-12f7ab774cda",
 			"kind": "proposal",
 			"stage": "proposal",
@@ -23670,40 +23670,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-27T23:17:30.185Z"
-		},
-		{
-			"key": "pr:minion-meta#1113",
-			"kind": "pr",
-			"stage": "development",
-			"repo": "minion-meta",
-			"title": "#1113 spec(153): focus and contrast — the focus ring and links are visible in every theme (a11y S4)",
-			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1113",
-			"sourceUpdatedAt": "2026-11-28T05:48:34Z",
-			"sourceFingerprint": "f05a1372081387c2e9aa693483afa3ef6b7be04654edd007f9208ac2fcbf84a5",
-			"score": 41,
-			"band": "low",
-			"axes": {
-				"criticality": 3,
-				"importance": 5,
-				"impact": 5
-			},
-			"readiness": {
-				"specification": 6,
-				"implementation": 2
-			},
-			"confidence": 5,
-			"recommendation": "reevaluate",
-			"relatedKeys": [
-				"pr:minion_hub#759"
-			],
-			"rationale": "A clear as-is/to-be spec for a broad focus/link contrast problem but still in draft with no plan, tasks, or demo yet.",
-			"evidence": [
-				"255/968 focus-ring combos and 609 link-text combos below contrast thresholds",
-				"status: draft, review/plan/tasks explicitly pending in this PR"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-28T05:49:50.998Z"
 		},
 		{
 			"key": "pr:minion-meta#825",
@@ -32652,6 +32618,39 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-21T15:16:56.624Z"
+		},
+		{
+			"key": "pr:minion-meta#1126",
+			"kind": "pr",
+			"stage": "development",
+			"repo": "minion-meta",
+			"title": "#1126 proposal: make hub components readable by agents (Astryx comparison)",
+			"sourceUrl": "https://github.com/NikolasP98/minion-meta/pull/1126",
+			"sourceUpdatedAt": "2026-11-28T06:06:07Z",
+			"sourceFingerprint": "cf7b089850b9b5cb8e6982562472783a3c479b0f282438c6717144578f2d45b9",
+			"score": 34,
+			"band": "low",
+			"axes": {
+				"criticality": 2,
+				"importance": 5,
+				"impact": 4
+			},
+			"readiness": {
+				"specification": 6,
+				"implementation": 2
+			},
+			"confidence": 6,
+			"recommendation": "reevaluate",
+			"relatedKeys": [],
+			"rationale": "Proposal is well-documented but explicitly flags unresolved owner decisions and has no code changes yet, so it isn't actionable as paid work.",
+			"evidence": [
+				"no hub code changes; Astryx site not rendered to confirm comparison",
+				"owner decisions on llms.txt and new Zag dependencies explicitly flagged as pending",
+				"proposal-index check and unslop audit pass but these only validate doc structure"
+			],
+			"evaluator": "factory-ranking-agent",
+			"rubricVersion": "board-goal-v2",
+			"scoredAt": "2026-11-28T06:17:11.404Z"
 		},
 		{
 			"key": "proposal:2026-10-02-hub-calendar-time-scale-subcolumns",
@@ -54144,70 +54143,6 @@
 			"evaluator": "factory-ranking-agent",
 			"rubricVersion": "board-goal-v2",
 			"scoredAt": "2026-11-23T14:26:41.054Z"
-		},
-		{
-			"key": "run:minion_hub#46113684463",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "storybook-deploy",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/46113684463",
-			"sourceUpdatedAt": "2026-11-28T05:47:51Z",
-			"sourceFingerprint": "1a42a04223992253079c107d8016090aa843656e183f992dcd490cce437c597f",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A routine in-progress CI deploy run, not a decision-worthy goal.",
-			"evidence": [
-				"status: in_progress",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-28T05:49:50.998Z"
-		},
-		{
-			"key": "run:minion_hub#46113684574",
-			"kind": "run",
-			"stage": "testing",
-			"repo": "minion_hub",
-			"title": "CI",
-			"sourceUrl": "https://github.com/NikolasP98/minion_hub/actions/runs/46113684574",
-			"sourceUpdatedAt": "2026-11-28T05:47:51Z",
-			"sourceFingerprint": "a8d3a6d2987ba3e520bbefa92e8867380f1ce9cdfb13d7d5e9aaee8a99022003",
-			"score": 10,
-			"band": "low",
-			"axes": {
-				"criticality": 1,
-				"importance": 1,
-				"impact": 1
-			},
-			"readiness": {
-				"specification": 0,
-				"implementation": 0
-			},
-			"confidence": 2,
-			"recommendation": "prune",
-			"relatedKeys": [],
-			"rationale": "A routine queued CI run with no content requiring ranking.",
-			"evidence": [
-				"status: queued",
-				"push on master"
-			],
-			"evaluator": "factory-ranking-agent",
-			"rubricVersion": "board-goal-v2",
-			"scoredAt": "2026-11-28T05:49:50.998Z"
 		},
 		{
 			"key": "issue:minion-meta#779",
