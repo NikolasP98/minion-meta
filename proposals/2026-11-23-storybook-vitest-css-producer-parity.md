@@ -1,7 +1,7 @@
 ---
 id: 2026-11-23-storybook-vitest-css-producer-parity
 title: Process real theme CSS in Storybook tests and requalify the baseline
-status: implementing
+status: approved
 created: 2026-11-23
 updated: 2026-11-27
 repos: [minion_hub]
